@@ -1,5 +1,7 @@
 "use client";
 
+
+
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -11,7 +13,7 @@ import StatsDashboard from "../../components/StatsDashboard";
 import type { ChoiceKey, Question, Theme } from "../../src/data/questions";
 import { loadUser, userKeyByEmail } from "../../src/lib/qcmUser"; // ajuste le chemin
 
-
+export const dynamic = "force-dynamic";
 // -----------------------------
 // Helpers: stats + score expert
 // -----------------------------
