@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { loadUser, userKeyByEmail } from "../../src/lib/qcmUser"; // ajuste le chemin
+import { saveResultToSupabase } from "../../src/lib/saveResult";
 
 
 import type { ChoiceKey, Level, Theme, Question } from "../../src/data/questions";
@@ -221,32 +222,60 @@ const score = useMemo(() => {
     if (idx < questions.length - 1) setIdx(idx + 1);
   }
 
-  function submit() {
-  const result = scoreQuiz({ questions, answers });
+// REMPLACE la fonction submit() dans app/quiz/page.tsx
+// Et ajoute l'import en haut du fichier
 
-  // 1) construire l'objet résultat (unique)
+// ============ IMPORT À AJOUTER EN HAUT ============
+// import { saveResultToSupabase } from "../../src/lib/saveResult";
+
+// ============ NOUVELLE FONCTION submit() ============
+async function submit() {
+  if (submittedRef.current) return;
+  submittedRef.current = true;
+
+  if (tickRef.current) window.clearInterval(tickRef.current);
+  if (globalRef.current) window.clearInterval(globalRef.current);
+
+  const result = scoreQuiz({ questions, answers });
   const payload = { meta, questions, answers, result };
 
-  // 2) lire l'utilisateur (email)
   const rawUser = localStorage.getItem("qcm_user");
   const u = rawUser ? JSON.parse(rawUser) : null;
   const email = u?.email ? String(u.email).trim().toLowerCase() : "";
+  const pseudo = u?.pseudo ?? "";
 
-  // 3) déterminer le mode (train/exam) avec fallback
-  // - si meta a "mode", on l'utilise
-  // - sinon on considère "train"
-  const mode: "train" | "exam" =
+  const currentMode: "train" | "exam" =
     meta && (meta as any).mode === "exam" ? "exam" : "train";
 
-  // 4) stocker par mode + email
+  // 1) Sauvegarde localStorage (fallback offline)
   if (email) {
-    localStorage.setItem(`last_result:${mode}:${email}`, JSON.stringify(payload));
+    localStorage.setItem(`last_result:${currentMode}:${email}`, JSON.stringify(payload));
   }
-
-  // 5) fallback ancien (optionnel mais utile pour compat)
   localStorage.setItem("last_result", JSON.stringify(payload));
 
-  // 6) navigation / affichage résultats
+  // 2) Sauvegarde Supabase (sync multi-appareils)
+  if (email) {
+    const { correct, total } = result;
+    const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
+    const passed = correct >= 32;
+
+    await saveResultToSupabase({
+      email,
+      pseudo,
+      mode: currentMode,
+      score_correct: correct,
+      score_total: total,
+      score_percent: percent,
+      passed,
+      level: meta?.level ?? 1,
+      themes: meta?.themes ?? [],
+      answers,
+      questions,
+      details: result.details,
+    });
+  }
+
+  // 3) Navigation
   setGoResults(true);
 }
         if (error) {

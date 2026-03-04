@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { hasAnyResult } from "../../src/lib/saveResult";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -64,18 +65,24 @@ export default function ExamPage() {
   const [pseudoDraft, setPseudoDraft] = useState("");
   const [emailDraft, setEmailDraft] = useState("");
 
-  useEffect(() => {
-    const u = loadUser();
-    if (u) {
-      setUser(u);
-      setPseudoDraft(u.pseudo ?? "");
-      setEmailDraft(u.email ?? "");
-      const key = u.email ? userKeyByEmail(u.email) : null;
-      setHasLastResult(!!(key && localStorage.getItem(`last_result:exam:${key}`)));
-    } else {
-      setHasLastResult(false);
-    }
-  }, []);
+useEffect(() => {
+  const u = loadUser();
+  if (!u) { setHasLastResult(false); return; }
+
+  const email = u.email?.trim().toLowerCase() ?? "";
+  if (!email) { setHasLastResult(false); return; }
+
+  async function check() {
+    // 1) Vérifier Supabase
+    const remote = await hasAnyResult(email);
+    if (remote) { setHasLastResult(true); return; }
+
+    // 2) Fallback localStorage
+    setHasLastResult(!!localStorage.getItem(`last_result:exam:${email}`));
+  }
+
+  check();
+}, []);
 
   function openIdentityModal() {
     const u = loadUser();

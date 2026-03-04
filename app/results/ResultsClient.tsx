@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import StatsDashboard from "../../components/StatsDashboard";
+import { loadLastResultFromSupabase } from "../../src/lib/saveResult";
 
 import type { ChoiceKey, Question, Theme } from "../../src/data/questions";
 import { loadUser } from "../../src/lib/qcmUser";
@@ -96,17 +97,48 @@ export default function ResultsClient() {
     } catch {}
   }, []);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const u = loadUser();
-    const email = u?.email ? u.email.trim().toLowerCase() : "";
+useEffect(() => {
+  if (typeof window === "undefined") return;
+
+  const u = loadUser();
+  const email = u?.email ? u.email.trim().toLowerCase() : "";
+
+  async function fetchResult() {
+    // 1) Supabase en priorité (multi-appareils)
+    if (email) {
+      const remote = await loadLastResultFromSupabase(email, mode);
+      if (remote) {
+        setData({
+          meta: {
+            level: remote.level,
+            themes: remote.themes,
+            count: remote.score_total,
+            mode: remote.mode,
+          },
+          questions: remote.questions,
+          answers: remote.answers,
+          result: {
+            correct: remote.score_correct,
+            total: remote.score_total,
+            details: remote.details,
+          },
+        });
+        return;
+      }
+    }
+
+    // 2) Fallback localStorage
     const storageKey = email ? `last_result:${mode}:${email}` : null;
     const raw =
       (storageKey ? localStorage.getItem(storageKey) : null) ||
       localStorage.getItem("last_result");
+
     if (!raw) { setData(null); return; }
     try { setData(JSON.parse(raw)); } catch { setData(null); }
-  }, [mode]);
+  }
+
+  fetchResult();
+}, [mode]);
 
   useEffect(() => { if (!wantRate) return; setOpenFeedback(true); }, [wantRate]);
 

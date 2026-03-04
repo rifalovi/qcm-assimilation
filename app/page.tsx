@@ -5,6 +5,7 @@ import Card from "../components/Card";
 import Button from "../components/Button";
 import { useEffect, useMemo, useState } from "react";
 import { loadUser, userKeyByEmail } from "../src/lib/qcmUser"; // ajuste le chemin
+import { hasAnyResult } from "../src/lib/saveResult";
 
 type Level = 1 | 2 | 3;
 type Theme = "Valeurs" | "Institutions" | "Histoire" | "Société";
@@ -130,17 +131,22 @@ const [hasLastResult, setHasLastResult] = useState(false);
 
 useEffect(() => {
   const u = loadUser();
-  if (!u?.email) {
-    setHasLastResult(false);
-    return;
-  }
+  if (!u?.email) { setHasLastResult(false); return; }
+
   const email = u.email.trim().toLowerCase();
-  
-  // ✅ Vérifie les deux modes (train ET exam)
-  const hasTrain = !!localStorage.getItem(`last_result:train:${email}`);
-  const hasExam = !!localStorage.getItem(`last_result:exam:${email}`);
-  
-  setHasLastResult(hasTrain || hasExam);
+
+  async function check() {
+    // 1) Vérifier Supabase
+    const remote = await hasAnyResult(email);
+    if (remote) { setHasLastResult(true); return; }
+
+    // 2) Fallback localStorage
+    const hasTrain = !!localStorage.getItem(`last_result:train:${email}`);
+    const hasExam  = !!localStorage.getItem(`last_result:exam:${email}`);
+    setHasLastResult(hasTrain || hasExam);
+  }
+
+  check();
 }, [pseudo, email]);
 
 {hasLastResult && (
