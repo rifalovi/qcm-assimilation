@@ -134,9 +134,14 @@ useEffect(() => {
     setHasLastResult(false);
     return;
   }
-  const key = userKeyByEmail(u.email);
-  setHasLastResult(!!localStorage.getItem(`last_result:${key}`));
-}, [pseudo, email]); // ou [] si tu veux juste au chargement
+  const email = u.email.trim().toLowerCase();
+  
+  // ✅ Vérifie les deux modes (train ET exam)
+  const hasTrain = !!localStorage.getItem(`last_result:train:${email}`);
+  const hasExam = !!localStorage.getItem(`last_result:exam:${email}`);
+  
+  setHasLastResult(hasTrain || hasExam);
+}, [pseudo, email]);
 
 {hasLastResult && (
   <Button variant="secondary" onClick={() => router.push("/results")}>

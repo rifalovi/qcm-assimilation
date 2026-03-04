@@ -71,7 +71,7 @@ export default function ExamPage() {
       setPseudoDraft(u.pseudo ?? "");
       setEmailDraft(u.email ?? "");
       const key = u.email ? userKeyByEmail(u.email) : null;
-      setHasLastResult(!!(key && localStorage.getItem(`last_result:${key}`)));
+      setHasLastResult(!!(key && localStorage.getItem(`last_result:exam:${key}`)));
     } else {
       setHasLastResult(false);
     }
@@ -104,7 +104,7 @@ export default function ExamPage() {
     setUser(u);
 
     const key = userKeyByEmail(u.email);
-    setHasLastResult(!!localStorage.getItem(`last_result:${key}`));
+    setHasLastResult(!!localStorage.getItem(`last_result:exam:${key}`));
 
     setPseudoOpen(false);
     action();
