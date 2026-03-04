@@ -84,7 +84,7 @@ export default function ResultsClient() {
   const [sentFeedback, setSentFeedback] = useState(false);
   const [sendingFeedback, setSendingFeedback] = useState(false);
 
-  const PUBLIC_URL = "https://TON-DOMAINE-OU-URL-NETLIFY";
+  const PUBLIC_URL = "https://qcm-assimilation-fr.netlify.app";
 
   useEffect(() => {
     if (typeof window === "undefined") return;
