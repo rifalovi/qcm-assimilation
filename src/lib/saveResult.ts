@@ -89,3 +89,20 @@ export async function loadLastResultsFromSupabase(
     return [];
   }
 }
+export async function loadLeaderboard(mode: "train" | "exam", limit = 10) {
+  try {
+    const { data, error } = await supabase
+      .from("results")
+      .select("pseudo, email, score_correct, score_total, score_percent, passed, level, created_at")
+      .eq("mode", mode)
+      .eq("passed", true)
+      .order("score_percent", { ascending: false })
+      .order("created_at", { ascending: true })
+      .limit(limit);
+
+    if (error || !data) return [];
+    return data;
+  } catch {
+    return [];
+  }
+}

@@ -391,6 +391,9 @@ useEffect(() => {
           <Button variant="secondary" onClick={() => { const el = document.getElementById("feedback"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }}>
             Noter l'expérience
           </Button>
+          <Button variant="secondary" onClick={() => router.push("/leaderboard")}>
+  🏆 Classement
+</Button>
           <Button variant="secondary" onClick={share}>Partager le lien</Button>
         </div>
 
@@ -455,7 +458,7 @@ useEffect(() => {
 
       {/* History */}
       <HistoryCard entries={history} mode={mode} />
-      
+
       {/* Progression */}
       <ProgressionChart entries={history} />
 
