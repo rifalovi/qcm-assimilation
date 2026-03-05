@@ -52,3 +52,20 @@ export async function hasAnyResult(email: string): Promise<boolean> {
     return false;
   }
 }
+type SaveFeedbackPayload = {
+  email?: string;
+  pseudo?: string;
+  rating: number;
+  comment?: string;
+  page: string;
+  score_percent?: number;
+};
+
+export async function saveFeedbackToSupabase(payload: SaveFeedbackPayload) {
+  try {
+    const { error } = await supabase.from("feedbacks").insert([payload]);
+    if (error) console.error("Supabase feedback error:", error.message);
+  } catch (e) {
+    console.error("Supabase feedback unreachable:", e);
+  }
+}

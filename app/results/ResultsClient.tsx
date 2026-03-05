@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { saveFeedbackToSupabase } from "../../src/lib/saveResult";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -274,25 +275,27 @@ useEffect(() => {
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   }
 
-  async function sendFeedback() {
-    if (!rating || sendingFeedback) return;
-    setSendingFeedback(true);
-    try {
-      const payload = {
-        pseudo: pseudo || "Anonyme", rating: String(rating),
-        comment: comment?.trim() ?? "", createdAt: new Date().toISOString(),
-        page: "results", score: JSON.stringify(score), meta: JSON.stringify(data?.meta ?? null),
-      };
-      const res = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encode({ "form-name": "feedback", ...payload }),
-      });
-      if (!res.ok) throw new Error("Netlify form submission failed");
-      setSentFeedback(true);
-    } catch { alert("Impossible d'envoyer l'avis. Réessaie."); }
-    finally { setSendingFeedback(false); }
+ async function sendFeedback() {
+  if (!rating || sendingFeedback) return;
+  setSendingFeedback(true);
+
+  try {
+    const u = loadUser();
+    await saveFeedbackToSupabase({
+      email: u?.email ?? "",
+      pseudo: pseudo || "Anonyme",
+      rating,
+      comment: comment?.trim() ?? "",
+      page: "results",
+      score_percent: score?.percent,
+    });
+    setSentFeedback(true);
+  } catch {
+    alert("Impossible d'envoyer l'avis. Réessaie.");
+  } finally {
+    setSendingFeedback(false);
   }
+}
 
   if (!data || !score || !stats || !rank || expertScore === null) {
     return (
