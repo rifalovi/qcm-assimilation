@@ -101,10 +101,22 @@ export async function loadLeaderboard(mode: "train" | "exam", limit = 10) {
       .eq("passed", true)
       .order("score_percent", { ascending: false })
       .order("created_at", { ascending: true })
-      .limit(limit);
+      .limit(50);
 
     if (error || !data) return [];
-    return data;
+
+    // Garder seulement le meilleur score par email
+    const best = new Map<string, typeof data[0]>();
+    for (const row of data) {
+      const existing = best.get(row.email);
+      if (!existing || row.score_percent > existing.score_percent) {
+        best.set(row.email, row);
+      }
+    }
+
+    return Array.from(best.values())
+      .sort((a, b) => b.score_percent - a.score_percent)
+      .slice(0, limit);
   } catch {
     return [];
   }

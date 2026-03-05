@@ -108,9 +108,11 @@ export default function LeaderboardPage() {
                     Niveau {e.level}
                   </td>
                   <td className="px-4 py-3 text-slate-400">
-                    {new Date(e.created_at).toLocaleDateString("fr-FR", {
-                      day: "numeric",
-                      month: "short",
+                  {new Date(e.created_at).toLocaleDateString("fr-FR", {
+  day: "numeric",
+  month: "short",
+  hour: "2-digit",
+  minute: "2-digit",
                     })}
                   </td>
                 </tr>

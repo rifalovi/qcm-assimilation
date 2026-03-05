@@ -134,7 +134,7 @@ useEffect(() => {
 
 useEffect(() => {
   if (!goResults) return;
-  router.push("/results");
+  router.push(`/results?mode=${mode}`);
 }, [goResults, router]);
 
   const current = questions[idx];
