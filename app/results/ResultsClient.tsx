@@ -198,13 +198,20 @@ useEffect(() => {
     return getRank(score.percent);
   }, [score]);
 
-  function replaySame() {
-    if (!data?.meta) { router.push("/"); return; }
-    localStorage.setItem("quiz_settings", JSON.stringify(data.meta));
-    router.push("/quiz");
+function replaySame() {
+  if (!data?.meta) {
+    router.push(mode === "exam" ? "/exam" : "/");
+    return;
   }
+  localStorage.setItem("quiz_settings", JSON.stringify(data.meta));
+  router.push("/quiz");
+}
 
-  function newTest() { router.push("/"); }
+function newTest() {
+  router.push(mode === "exam" ? "/exam" : "/");
+}
+
+
 
   function share() {
     if (!score) return;

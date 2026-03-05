@@ -23,7 +23,7 @@ export default function QuizPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [idx, setIdx] = useState(0);
   const [remaining, setRemaining] = useState(PER_QUESTION_SECONDS);
-  const [meta, setMeta] = useState<{ level: Level; themes: Theme[]; count: number } | null>(null);
+  const [meta, setMeta] = useState<{ level: Level; themes: Theme[]; count: number; mode?: "train" | "exam" } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [goResults, setGoResults] = useState(false);
 
@@ -89,7 +89,7 @@ useEffect(() => {
   }
 
   // Meta (pour affichage + results)
-  setMeta({ level: parsed.level, themes: parsed.themes, count: parsed.count });
+  setMeta({ level: parsed.level, themes: parsed.themes, count: parsed.count, mode: m });
 
   try {
     const quiz = generateQuiz({
@@ -244,8 +244,7 @@ async function submit() {
   const email = u?.email ? String(u.email).trim().toLowerCase() : "";
   const pseudo = u?.pseudo ?? "";
 
-  const currentMode: "train" | "exam" =
-    meta && (meta as any).mode === "exam" ? "exam" : "train";
+const currentMode: "train" | "exam" = mode === "exam" ? "exam" : "train";
 
   // 1) Sauvegarde localStorage (fallback offline)
   if (email) {
