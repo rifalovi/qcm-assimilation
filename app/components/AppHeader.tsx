@@ -9,8 +9,8 @@ export default function AppHeader() {
   if (pathname === "/") return null;
 
   return (
-    <header className="bg-white shadow-sm border-b">
-  
+    <header className="bg-white dark:bg-slate-800 shadow-sm border-b border-slate-200 dark:border-slate-700">
+
     </header>
   );
 }

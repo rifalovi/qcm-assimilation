@@ -1,6 +1,12 @@
-export default function Card({ children }: { children: React.ReactNode }) {
+// components/Card.tsx
+type CardProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+export default function Card({ children, className = "" }: CardProps) {
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-slate-200/70 p-6 transition hover:shadow-xl">
+    <div className={`rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 text-slate-900 dark:text-slate-100 ${className}`}>
       {children}
     </div>
   );

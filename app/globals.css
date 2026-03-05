@@ -1,43 +1,128 @@
 @import "tailwindcss";
 
+/* ================================================
+   VARIABLES — Light mode (défaut)
+   ================================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Fonds */
+  --background: #f8fafc;        /* page entière */
+  --surface: #ffffff;           /* cards, panneaux */
+  --surface-muted: #f1f5f9;     /* fond secondaire (stats, heatmap) */
+
+  /* Textes */
+  --foreground: #0f172a;        /* texte principal */
+  --foreground-muted: #64748b;  /* texte secondaire */
+
+  /* Bordures */
+  --border: #e2e8f0;
+
+  /* Accents */
+  --accent-primary: #2563eb;    /* bleu */
+  --accent-success: #16a34a;    /* vert */
+  --accent-error: #dc2626;      /* rouge */
+
+  /* Bouton principal */
+  --btn-primary-bg: #2563eb;
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #f1f5f9;
+  --btn-secondary-text: #0f172a;
+  --btn-secondary-border: #e2e8f0;
 }
 
-
+/* ================================================
+   VARIABLES — Dark mode (automatique via OS)
+   ================================================ */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Fonds */
+    --background: #0f172a;
+    --surface: #1e293b;
+    --surface-muted: #334155;
+
+    /* Textes */
+    --foreground: #f1f5f9;
+    --foreground-muted: #94a3b8;
+
+    /* Bordures */
+    --border: #334155;
+
+    /* Accents (inchangés) */
+    --accent-primary: #3b82f6;
+    --accent-success: #22c55e;
+    --accent-error: #f87171;
+
+    /* Boutons */
+    --btn-primary-bg: #3b82f6;
+    --btn-primary-text: #ffffff;
+    --btn-secondary-bg: #334155;
+    --btn-secondary-text: #f1f5f9;
+    --btn-secondary-border: #475569;
   }
 }
 
+/* ================================================
+   BASE
+   ================================================ */
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-/* --- Animation titre (subtile) --- */
-@keyframes titleReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-    filter: blur(2px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
+
+/* ================================================
+   CLASSES UTILITAIRES (utilisées dans les composants)
+   ================================================ */
+
+/* Card / Surface */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
 }
 
-.animate-title-reveal {
-  animation: titleReveal 700ms ease-out both;
+.surface-muted {
+  background: var(--surface-muted);
 }
+
+/* Textes */
+.text-main   { color: var(--foreground); }
+.text-muted  { color: var(--foreground-muted); }
+
+/* Bordures */
+.border-theme { border-color: var(--border); }
+
+/* Boutons */
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.88; }
+
+.btn-secondary {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border: 1px solid var(--btn-secondary-border);
+  border-radius: 0.75rem;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-secondary:hover { opacity: 0.85; }
+
+/* ================================================
+   ANIMATIONS
+   ================================================ */
 @keyframes titleReveal {
-  0% { opacity: 0; transform: translateY(6px); filter: blur(2px); }
-  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+  0%   { opacity: 0; transform: translateY(6px); filter: blur(2px); }
+  100% { opacity: 1; transform: translateY(0);   filter: blur(0);   }
 }
 .animate-title-reveal {
   animation: titleReveal 700ms ease-out both;
