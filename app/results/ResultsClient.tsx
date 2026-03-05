@@ -109,20 +109,15 @@ useEffect(() => {
   const email = u?.email ? u.email.trim().toLowerCase() : "";
 
   async function fetchResult() {
-    // 1) localStorage EN PRIORITÉ (résultat frais juste après un quiz)
+    // 1) localStorage avec clé précise mode+email EN PRIORITÉ
     const storageKey = email ? `last_result:${mode}:${email}` : null;
-    const raw =
-      (storageKey ? localStorage.getItem(storageKey) : null) ||
-      localStorage.getItem("last_result");
+    const raw = storageKey ? localStorage.getItem(storageKey) : null;
 
     if (raw) {
-      try {
-        setData(JSON.parse(raw));
-        return;
-      } catch {}
+      try { setData(JSON.parse(raw)); return; } catch {}
     }
 
-    // 2) Supabase en fallback (autre appareil, localStorage vide)
+    // 2) Supabase (autre appareil)
     if (email) {
       const remote = await loadLastResultFromSupabase(email, mode);
       if (remote) {
