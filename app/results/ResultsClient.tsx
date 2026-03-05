@@ -109,37 +109,31 @@ useEffect(() => {
   const email = u?.email ? u.email.trim().toLowerCase() : "";
 
   async function fetchResult() {
-    // 1) Supabase en priorité
-    if (email) {
-      const remote = await loadLastResultFromSupabase(email, mode);
-      if (remote) {
-        setData({
-          meta: {
-            level: remote.level,
-            themes: remote.themes,
-            count: remote.score_total,
-            mode: remote.mode,
-          },
-          questions: remote.questions,
-          answers: remote.answers,
-          result: {
-            correct: remote.score_correct,
-            total: remote.score_total,
-            details: remote.details,
-          },
-        });
-        return;
-      }
-    }
-
-    // 2) Fallback localStorage
+    // 1) localStorage EN PRIORITÉ (résultat frais juste après un quiz)
     const storageKey = email ? `last_result:${mode}:${email}` : null;
     const raw =
       (storageKey ? localStorage.getItem(storageKey) : null) ||
       localStorage.getItem("last_result");
 
-    if (!raw) { setData(null); return; }
-    try { setData(JSON.parse(raw)); } catch { setData(null); }
+    if (raw) {
+      try {
+        setData(JSON.parse(raw));
+        return;
+      } catch {}
+    }
+
+    // 2) Supabase en fallback (autre appareil, localStorage vide)
+    if (email) {
+      const remote = await loadLastResultFromSupabase(email, mode);
+      if (remote) {
+        setData({
+          meta: { level: remote.level, themes: remote.themes, count: remote.score_total, mode: remote.mode },
+          questions: remote.questions,
+          answers: remote.answers,
+          result: { correct: remote.score_correct, total: remote.score_total, details: remote.details },
+        });
+      }
+    }
   }
 
   fetchResult();
