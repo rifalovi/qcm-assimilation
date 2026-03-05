@@ -167,9 +167,8 @@ useEffect(() => {
   }, [data]);
 
   const modeLabel = useMemo(() => {
-    const lvl = data?.meta?.level;
-    return lvl === 3 ? "Mode examen blanc" : "Mode entraînement";
-  }, [data]);
+  return mode === "exam" ? "Mode examen blanc" : "Mode entraînement";
+}, [mode]);
 
   const stats = useMemo(() => {
     if (!data) return null;
