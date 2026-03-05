@@ -109,7 +109,7 @@ useEffect(() => {
   const email = u?.email ? u.email.trim().toLowerCase() : "";
 
   async function fetchResult() {
-    // 1) Supabase en priorité (multi-appareils)
+    // 1) Supabase en priorité
     if (email) {
       const remote = await loadLastResultFromSupabase(email, mode);
       if (remote) {
@@ -131,13 +131,6 @@ useEffect(() => {
         return;
       }
     }
-    useEffect(() => {
-  const u = loadUser();
-  if (!u?.email) return;
-  const email = u.email.trim().toLowerCase();
-
-  loadLastResultsFromSupabase(email, mode).then(setHistory);
-}, [mode]);
 
     // 2) Fallback localStorage
     const storageKey = email ? `last_result:${mode}:${email}` : null;
@@ -150,6 +143,15 @@ useEffect(() => {
   }
 
   fetchResult();
+}, [mode]);
+
+// ✅ Séparé — historique des 5 derniers
+useEffect(() => {
+  const u = loadUser();
+  if (!u?.email) return;
+  const email = u.email.trim().toLowerCase();
+
+  loadLastResultsFromSupabase(email, mode).then(setHistory);
 }, [mode]);
 
   useEffect(() => { if (!wantRate) return; setOpenFeedback(true); }, [wantRate]);
