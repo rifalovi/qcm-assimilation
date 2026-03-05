@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { saveFeedbackToSupabase } from "../../src/lib/saveResult";
+import { loadLastResultsFromSupabase } from "../../src/lib/saveResult";
+import HistoryCard from "../../components/HistoryCard";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -85,6 +87,7 @@ export default function ResultsClient() {
   const [comment, setComment] = useState("");
   const [sentFeedback, setSentFeedback] = useState(false);
   const [sendingFeedback, setSendingFeedback] = useState(false);
+  const [history, setHistory] = useState<any[]>([]);
 
   const PUBLIC_URL = "https://qcm-assimilation-fr.netlify.app";
 
@@ -127,6 +130,13 @@ useEffect(() => {
         return;
       }
     }
+    useEffect(() => {
+  const u = loadUser();
+  if (!u?.email) return;
+  const email = u.email.trim().toLowerCase();
+
+  loadLastResultsFromSupabase(email, mode).then(setHistory);
+}, [mode]);
 
     // 2) Fallback localStorage
     const storageKey = email ? `last_result:${mode}:${email}` : null;
@@ -441,6 +451,9 @@ useEffect(() => {
           )}
         </Card>
       </div>
+
+      {/* History */}
+      <HistoryCard entries={history} mode={mode} />
 
       {/* Erreurs */}
       <Card>

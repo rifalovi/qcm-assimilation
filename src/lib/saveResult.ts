@@ -69,3 +69,23 @@ export async function saveFeedbackToSupabase(payload: SaveFeedbackPayload) {
     console.error("Supabase feedback unreachable:", e);
   }
 }
+export async function loadLastResultsFromSupabase(
+  email: string,
+  mode: "train" | "exam",
+  limit = 5
+) {
+  try {
+    const { data, error } = await supabase
+      .from("results")
+      .select("id, score_correct, score_total, score_percent, passed, level, themes, created_at")
+      .eq("email", email.trim().toLowerCase())
+      .eq("mode", mode)
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (error || !data) return [];
+    return data;
+  } catch {
+    return [];
+  }
+}
