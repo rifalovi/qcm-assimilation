@@ -51,8 +51,8 @@ export default function ProgressionChart({ entries }: Props) {
         Évolution de ton score sur tes derniers tests
       </p>
 
-      <div className="mt-6 h-48">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="mt-6" style={{ width: "100%", height: 200 }}>
+  <ResponsiveContainer width="100%" height={200}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
             <XAxis
