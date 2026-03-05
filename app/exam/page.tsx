@@ -69,15 +69,17 @@ useEffect(() => {
   const u = loadUser();
   if (!u) { setHasLastResult(false); return; }
 
+  // ✅ Mettre à jour le state user
+  setUser(u);
+  setPseudoDraft(u.pseudo ?? "");
+  setEmailDraft(u.email ?? "");
+
   const email = u.email?.trim().toLowerCase() ?? "";
   if (!email) { setHasLastResult(false); return; }
 
   async function check() {
-    // 1) Vérifier Supabase
     const remote = await hasAnyResult(email);
     if (remote) { setHasLastResult(true); return; }
-
-    // 2) Fallback localStorage
     setHasLastResult(!!localStorage.getItem(`last_result:exam:${email}`));
   }
 
