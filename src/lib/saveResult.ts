@@ -24,7 +24,10 @@ export async function saveResultToSupabase(payload: SaveResultPayload) {
   }
 }
 
-export async function loadLastResultFromSupabase(email: string, mode: "train" | "exam") {
+export async function loadLastResultFromSupabase(
+  email: string,
+  mode: "train" | "exam"
+) {
   try {
     const { data, error } = await supabase
       .from("results")
@@ -32,10 +35,10 @@ export async function loadLastResultFromSupabase(email: string, mode: "train" | 
       .eq("email", email.trim().toLowerCase())
       .eq("mode", mode)
       .order("created_at", { ascending: false })
-      .limit(1)
-      .single();
-    if (error || !data) return null;
-    return data;
+      .limit(1);
+
+    if (error || !data || data.length === 0) return null;
+    return data[0]; // ✅ premier résultat au lieu de .single()
   } catch {
     return null;
   }
