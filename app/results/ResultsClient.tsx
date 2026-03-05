@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { saveFeedbackToSupabase } from "../../src/lib/saveResult";
 import { loadLastResultsFromSupabase } from "../../src/lib/saveResult";
 import HistoryCard from "../../components/HistoryCard";
+import ProgressionChart from "../../components/ProgressionChart";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -454,6 +455,9 @@ useEffect(() => {
 
       {/* History */}
       <HistoryCard entries={history} mode={mode} />
+      
+      {/* Progression */}
+      <ProgressionChart entries={history} />
 
       {/* Erreurs */}
       <Card>
