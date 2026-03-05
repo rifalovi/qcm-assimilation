@@ -444,15 +444,14 @@ function confirmIdentity() {
 {/* Titre + sous-texte (centré, compact) */}
 <div className="mt-6 text-center">
   <h1 className="text-3xl sm:text-4xl lg:text-4xl font-extrabold tracking-tight text-slate-900">
-    Bienvenue au QCM Assimilation <span className="text-blue-700">FR</span>
+    Préparez votre parcours en France <span className="text-blue-700">FR</span>
   </h1>
 
   <p className="mt-3 text-slate-600 max-w-3xl mx-auto">
-    40 questions • 20 secondes par question • Validation si{" "}
-    <strong className="text-slate-900">≥ 32</strong> bonnes réponses.
+    Testez vos connaissances sur les valeurs de la République, les institutions françaises et la vie en société • Entraînement progressif • Explications pédagogiques •
     <span className="text-red-600/80">
       {" "}
-      Une banque de plus de 350 questions-réponses
+      Une banque de plus de 400 questions-réponses
     </span>{" "}
     conformes aux exigences de l’examen civique 2026.
   </p>

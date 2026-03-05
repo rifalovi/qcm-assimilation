@@ -246,11 +246,11 @@ useEffect(() => {
           {/* Titre centré */}
           <div className="mt-6 text-center">
             <h1 className="text-3xl sm:text-4xl lg:text-4xl font-extrabold tracking-tight text-slate-900">
-              Examen blanc | QCM Assimilation <span className="text-blue-700">FR</span>
+              Examen blanc | Simulation du test civique français <span className="text-blue-700">FR</span>
             </h1>
 
             <p className="mt-3 text-slate-600 max-w-3xl mx-auto">
-              40 questions • 30 secondes par question • Validation si{" "}
+             Basé sur les thèmes officiels du test civique utilisé dans les démarches administratives en France • 40 questions • 30 secondes par question • Validation si{" "}
               <strong className="text-slate-900">≥ 32</strong> bonnes réponses.
             </p>
 

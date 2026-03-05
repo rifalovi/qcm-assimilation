@@ -197,7 +197,13 @@ function replaySame() {
     router.push(mode === "exam" ? "/exam" : "/");
     return;
   }
-  localStorage.setItem("quiz_settings", JSON.stringify(data.meta));
+  // ✅ Forcer le mode correct dans quiz_settings
+  localStorage.setItem("quiz_settings", JSON.stringify({
+    ...data.meta,
+    mode: mode,
+    perQuestion: mode === "exam" ? 30 : 20,
+    maxDuration: mode === "exam" ? 900 : undefined,
+  }));
   router.push("/quiz");
 }
 
