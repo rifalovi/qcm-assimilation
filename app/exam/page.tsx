@@ -164,7 +164,7 @@ export default function ExamPage() {
             </div>
           </div>
 
-          {/* Titre */}
+          {/* Titre + boutons */}
           <div className="mt-6 text-center">
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
               Examen blanc | Simulation du test civique français <span className="text-blue-700 dark:text-blue-400">FR</span>
@@ -175,17 +175,29 @@ export default function ExamPage() {
             </p>
 
             <div className="mt-6 flex flex-wrap justify-center gap-3">
+
+              {/* ✅ /info — page d'information */}
+              <Button variant="secondary" onClick={() => router.push("/info")}>
+                📖 Comprendre l'examen
+              </Button>
+
+              {/* ✅ /results — dernier résultat (visible uniquement si résultat existe) */}
               {hasLastResult && (
-                <Button variant="secondary" onClick={() => router.push("/results?mode=exam")}>
+                <Button variant="secondary" onClick={() => router.push("/results")}>
                   Voir le dernier résultat
                 </Button>
               )}
+
+              {/* ✅ smartStartExam → /quiz en mode exam */}
               <Button variant="secondary" onClick={smartStartExam}>
                 Essayer et laisser un avis
               </Button>
+
+              {/* ✅ / — page entraînement */}
               <Button variant="secondary" onClick={() => router.push("/")}>
                 Mode entraînement
               </Button>
+
             </div>
           </div>
         </div>
