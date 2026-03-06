@@ -247,7 +247,6 @@ export default function HomePage() {
                     className="ml-2 text-xs text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:underline transition">
                     Ajouter un pseudo
                   </button>
-             
                 </div>
               )}
             </div>
@@ -267,29 +266,20 @@ export default function HomePage() {
           </div>
 
           {/* BOUTONS HERO */}
-          {/* BOUTONS HERO */}
-<div className="mt-6 flex flex-wrap justify-center gap-3">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
 
-  <Button
-    variant="secondary"
-    onClick={() => router.push("/info")}
-  >
+  <Button variant="secondary" onClick={() => router.push("/info")}>
     📖 Comprendre l'examen
   </Button>
 
   {hasLastResult && (
-    <Button
-      variant="secondary"
-      onClick={() => router.push("/results")}
-    >
+    <Button variant="secondary" onClick={() => router.push("/results")}>
+      {/* ✅ /results — pas /info */}
       Voir le dernier résultat
     </Button>
   )}
 
-  <Button
-    variant="secondary"
-    onClick={smartStart}
-  >
+  <Button variant="secondary" onClick={smartStart}>
     Essayer et laisser un avis
   </Button>
 
