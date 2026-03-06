@@ -183,7 +183,7 @@ export default function ExamPage() {
 
               {/* ✅ /results — dernier résultat (visible uniquement si résultat existe) */}
               {hasLastResult && (
-                <Button variant="secondary" onClick={() => router.push("/results")}>
+                <Button variant="secondary" onClick={() => router.push("/results?mode=exam")}>
                   Voir le dernier résultat
                 </Button>
               )}
