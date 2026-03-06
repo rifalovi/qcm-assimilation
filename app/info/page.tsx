@@ -78,7 +78,7 @@ export default function InfoPage() {
   }, []);
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+    <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
 
       {/* ===== HERO — même style que les autres pages ===== */}
       <div className={`relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
