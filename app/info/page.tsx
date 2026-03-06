@@ -3,6 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+type QcmUser = { pseudo: string; email: string };
+
+function loadUser(): QcmUser | null {
+  if (typeof window === "undefined") return null;
+  try { const raw = localStorage.getItem("qcm_user"); return raw ? (JSON.parse(raw) as QcmUser) : null; }
+  catch { return null; }
+}
+
 const SECTIONS = [
   {
     icon: "📋",
@@ -71,31 +79,37 @@ const SITUATIONS = [
 export default function InfoPage() {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
+  const [user, setUser] = useState<QcmUser | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 50);
+    setUser(loadUser());
     return () => clearTimeout(t);
   }, []);
 
-  return (
-    <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+  function clearIdentity() {
+    localStorage.removeItem("qcm_user");
+    setUser(null);
+  }
 
-      {/* ===== HERO — même style que les autres pages ===== */}
+  return (
+    <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+
+      {/* ===== HERO ===== */}
       <div className={`relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-        {/* Tricolore top */}
         <div className="h-1.5 w-full flex">
           <div className="flex-1 bg-blue-600" />
           <div className="flex-1 bg-white dark:bg-slate-200" />
           <div className="flex-1 bg-red-600" />
         </div>
-
-        {/* Halos décoratifs */}
         <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-blue-100/50 dark:bg-blue-900/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-red-100/40 dark:bg-red-900/20 blur-3xl" />
 
-        <div className="relative p-6 sm:p-8">
-          {/* Top bar */}
+        <div className="relative p-8 sm:p-10">
+
+          {/* ===== TOP BAR avec identité ===== */}
           <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
+            {/* Logo gauche */}
             <div className="flex items-center gap-3">
               <div className="h-11 w-11 rounded-2xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 flex items-center justify-center">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-slate-700 dark:text-slate-300">
@@ -113,10 +127,29 @@ export default function InfoPage() {
                 </div>
               </div>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 px-3 py-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-xs font-semibold text-green-700 dark:text-green-300">En vigueur depuis le 1er janvier 2026</span>
-            </div>
+
+            {/* Identité droite */}
+            {user?.pseudo?.trim() ? (
+              <div className="text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <span>Bonjour <span className="font-semibold">{user.pseudo.trim()}</span> 👋</span>
+                <span className="text-slate-400">(</span>
+                <button onClick={() => router.push("/")}
+                  className="text-xs text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:underline transition">
+                  Changer
+                </button>
+                <span className="text-slate-400">|</span>
+                <button onClick={clearIdentity}
+                  className="text-xs text-slate-400 hover:text-red-600 hover:underline transition">
+                  Déconnexion
+                </button>
+                <span className="text-slate-400">)</span>
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 rounded-full bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 px-3 py-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-xs font-semibold text-green-700 dark:text-green-300">En vigueur depuis le 1er janvier 2026</span>
+              </div>
+            )}
           </div>
 
           {/* Titre */}
@@ -151,15 +184,14 @@ export default function InfoPage() {
         </div>
       </div>
 
-      {/* ===== STATS — même style Card que les autres pages ===== */}
+      {/* ===== STATS ===== */}
       <div className={`grid grid-cols-3 gap-4 sm:gap-6 transition-all duration-700 delay-100 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
         {[
           { value: "40", label: "Questions", icon: "❓" },
           { value: "80%", label: "Score requis", icon: "🎯" },
           { value: "45 min", label: "Durée max", icon: "⏱️" },
         ].map(({ value, label, icon }) => (
-          <div key={label}
-            className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 sm:p-5 text-center shadow-sm">
+          <div key={label} className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 sm:p-5 text-center shadow-sm">
             <div className="text-xl mb-1">{icon}</div>
             <div className="text-2xl sm:text-3xl font-extrabold text-blue-700 dark:text-blue-400">{value}</div>
             <div className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">{label}</div>
@@ -170,8 +202,7 @@ export default function InfoPage() {
       {/* ===== FORMAT / THÈMES / QUI ===== */}
       <div className={`grid gap-5 sm:grid-cols-3 transition-all duration-700 delay-150 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
         {SECTIONS.map((s) => (
-          <div key={s.title}
-            className={`rounded-2xl border ${s.border} ${s.bg} p-5 shadow-sm hover:shadow-md transition-shadow`}>
+          <div key={s.title} className={`rounded-2xl border ${s.border} ${s.bg} p-5 shadow-sm hover:shadow-md transition-shadow`}>
             <div className={`inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${s.color} text-white text-lg shadow-md mb-4`}>
               {s.icon}
             </div>
@@ -199,8 +230,7 @@ export default function InfoPage() {
         </div>
         <div className="space-y-4">
           {SITUATIONS.map((s) => (
-            <div key={s.title}
-              className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-start gap-4">
+            <div key={s.title} className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-start gap-4">
               <div className="shrink-0 flex flex-col items-center gap-1">
                 <div className="text-2xl">{s.icon}</div>
                 <div className="text-xs font-black text-slate-300 dark:text-slate-600">{s.num}</div>
