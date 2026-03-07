@@ -59,6 +59,21 @@ function choiceLabel(q: { choices: { key: ChoiceKey; label: string }[] }, key?: 
 }
 
 // ─────────────────────────────────────────────────────────────
+// Mapping : noms courts du QCM local → noms complets Supabase
+// ─────────────────────────────────────────────────────────────
+const THEME_MAPPING: Record<string, string> = {
+  "Institutions":   "Système institutionnel et politique",
+  "Valeurs":        "Principes et valeurs de la République",
+  "Histoire":       "Histoire, géographie et culture",
+  "Société":        "Vivre dans la société française",
+  // Noms complets : déjà corrects, pas de transformation nécessaire
+  "Système institutionnel et politique":    "Système institutionnel et politique",
+  "Principes et valeurs de la République": "Principes et valeurs de la République",
+  "Histoire, géographie et culture":       "Histoire, géographie et culture",
+  "Vivre dans la société française":        "Vivre dans la société française",
+};
+
+// ─────────────────────────────────────────────────────────────
 // Composant carte thème avec bouton Réviser
 // ─────────────────────────────────────────────────────────────
 function ThemeRevisionCard({
@@ -72,6 +87,8 @@ function ThemeRevisionCard({
 }) {
   const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
   const isPoor = pct < 70;
+  // Traduit le nom court ("Valeurs") en nom Supabase complet
+  const supabaseTheme = THEME_MAPPING[theme] ?? theme;
 
   return (
     <div
@@ -102,9 +119,9 @@ function ThemeRevisionCard({
         {pct}%
       </span>
 
-      {/* Bouton Réviser — toujours visible */}
+      {/* Bouton Réviser — utilise le nom Supabase complet */}
       <Link
-        href={`/scroll?theme=${encodeURIComponent(theme)}`}
+        href={`/scroll?theme=${encodeURIComponent(supabaseTheme)}`}
         className="shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition-opacity hover:opacity-80"
         style={{
           background: isPoor ? "#ef4444" : "#34d399",
