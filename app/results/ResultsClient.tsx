@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { saveFeedbackToSupabase } from "../../src/lib/saveResult";
 import { loadLastResultsFromSupabase } from "../../src/lib/saveResult";
 import HistoryCard from "../../components/HistoryCard";
@@ -57,6 +58,68 @@ function choiceLabel(q: { choices: { key: ChoiceKey; label: string }[] }, key?: 
   return q.choices.find((c) => c.key === key)?.label ?? "(Choix introuvable)";
 }
 
+// ─────────────────────────────────────────────────────────────
+// Composant carte thème avec bouton Réviser
+// ─────────────────────────────────────────────────────────────
+function ThemeRevisionCard({
+  theme,
+  correct,
+  total,
+}: {
+  theme: string;
+  correct: number;
+  total: number;
+}) {
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const isPoor = pct < 70;
+
+  return (
+    <div
+      className="flex items-center justify-between gap-3 rounded-2xl p-4"
+      style={{
+        background: isPoor ? "rgba(239,68,68,0.07)" : "rgba(52,211,153,0.07)",
+        border: `1px solid ${isPoor ? "rgba(239,68,68,0.2)" : "rgba(52,211,153,0.2)"}`,
+      }}
+    >
+      {/* Nom + score */}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
+          {theme}
+        </p>
+        <p
+          className="text-xs mt-0.5"
+          style={{ color: isPoor ? "#fca5a5" : "#6ee7b7" }}
+        >
+          {correct}/{total} correct{correct > 1 ? "s" : ""} · {pct}%
+        </p>
+      </div>
+
+      {/* Badge % */}
+      <span
+        className="text-base font-bold shrink-0"
+        style={{ color: isPoor ? "#ef4444" : "#34d399", minWidth: "44px", textAlign: "center" }}
+      >
+        {pct}%
+      </span>
+
+      {/* Bouton Réviser — toujours visible */}
+      <Link
+        href={`/scroll?theme=${encodeURIComponent(theme)}`}
+        className="shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition-opacity hover:opacity-80"
+        style={{
+          background: isPoor ? "#ef4444" : "#34d399",
+          color: isPoor ? "#fff" : "#0b1a14",
+        }}
+      >
+        Réviser →
+      </Link>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Composant principal
+// ─────────────────────────────────────────────────────────────
 export default function ResultsClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -271,7 +334,26 @@ export default function ResultsClient() {
       <Card>
         <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Performance par thème</h2>
         <p className="mt-1 text-slate-600 dark:text-slate-400">Analyse stratégique de tes résultats.</p>
-        <div className="mt-6"><StatsDashboard themeStats={stats.themeStats} /></div>
+
+        {/* Graphique existant */}
+        <div className="mt-6">
+          <StatsDashboard themeStats={stats.themeStats} />
+        </div>
+
+        {/* ── NOUVEAU : cartes thème + bouton Réviser ── */}
+        <div className="mt-6 space-y-3">
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            📚 Révise un thème en mode flash-cards
+          </p>
+          {Object.entries(stats.themeStats).map(([theme, { correct, total }]) => (
+            <ThemeRevisionCard
+              key={theme}
+              theme={theme}
+              correct={correct}
+              total={total}
+            />
+          ))}
+        </div>
       </Card>
 
       {/* ===== HEATMAP ===== */}
