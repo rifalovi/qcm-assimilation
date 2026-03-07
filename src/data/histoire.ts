@@ -99,7 +99,111 @@ export const HISTOIRE_L1: Question[] = [
   makeQuestion("h1-020",1,"Histoire","La Révolution de 1848 en France conduit à :",
     "La fin de la Vᵉ République","La IIᵉ République","La monarchie absolue","La création de l’euro","B",
     "La Révolution de 1848 conduit à la proclamation de la Deuxième République."
+  ),];
+
+
+  export const HISTOIRE_L2: Question[] = [
+
+  makeQuestion("h2-001",2,"Histoire","En quelle année a été adoptée la loi de séparation des Églises et de l’État ?",
+    "1789","1848","1905","1958","C",
+    "La loi de 1905 établit la séparation des Églises et de l’État. Elle garantit la liberté de conscience et marque une étape essentielle dans la construction de la laïcité en France."
   ),
+
+  makeQuestion("h2-002",2,"Histoire","La Vᵉ République a été instaurée sous :",
+    "Napoléon","Charles de Gaulle","Jules Ferry","Louis XIV","B",
+    "La Vᵉ République est instaurée en 1958 dans un contexte de crise politique. Le général Charles de Gaulle revient alors au pouvoir et propose une nouvelle Constitution."
+  ),
+
+  makeQuestion("h2-003",2,"Histoire","Le 11 novembre commémore :",
+    "La fin de la Seconde Guerre mondiale","L’armistice de 1918","La prise de la Bastille","La loi de 1905","B",
+    "Le 11 novembre 1918 marque l’armistice qui met fin aux combats de la Première Guerre mondiale sur le front occidental."
+  ),
+
+  makeQuestion("h2-004",2,"Histoire","Le 8 mai 1945 correspond à :",
+    "La fin de la Première Guerre mondiale","La victoire en Europe contre l’Allemagne nazie","La création de l’euro","La Révolution française","B",
+    "Le 8 mai 1945 marque la capitulation de l’Allemagne nazie et la fin de la Seconde Guerre mondiale en Europe."
+  ),
+
+  makeQuestion("h2-005",2,"Histoire","La Déclaration des droits de l’homme et du citoyen est liée à :",
+    "La Révolution française","La Seconde Guerre mondiale","La loi de 1905","La construction européenne","A",
+    "Adoptée en 1789 pendant la Révolution française, elle affirme les principes fondamentaux de liberté, d’égalité et de souveraineté nationale."
+  ),
+
+  makeQuestion("h2-006",2,"Histoire","Quel événement est associé à l’année 1789 ?",
+    "Le quinquennat","La prise de la Bastille","La loi de 1905","Le traité de Maastricht","B",
+    "La prise de la Bastille le 14 juillet 1789 est un symbole majeur du début de la Révolution française."
+  ),
+
+  makeQuestion("h2-007",2,"Histoire","La Première Guerre mondiale a duré :",
+    "1914-1918","1939-1945","1870-1871","1962-1968","A",
+    "La Première Guerre mondiale se déroule de 1914 à 1918. Elle oppose notamment les puissances européennes et cause des millions de morts."
+  ),
+
+  makeQuestion("h2-008",2,"Histoire","La Seconde Guerre mondiale a duré :",
+    "1914-1918","1939-1945","1958-1962","1789-1799","B",
+    "La Seconde Guerre mondiale se déroule de 1939 à 1945 et implique de nombreux pays à l’échelle mondiale."
+  ),
+
+  makeQuestion("h2-009",2,"Histoire","L’appel du 18 juin est associé à :",
+    "1940","1918","1958","1905","A",
+    "Le 18 juin 1940, le général de Gaulle lance depuis Londres un appel à poursuivre le combat contre l’Allemagne nazie. Cet appel marque le début de la France libre."
+  ),
+
+  makeQuestion("h2-010",2,"Histoire","Napoléon Bonaparte devient empereur en :",
+    "1804","1789","1848","1918","A",
+    "Napoléon Bonaparte est sacré empereur des Français en 1804 sous le nom de Napoléon Ier."
+  ),
+
+  makeQuestion("h2-011",2,"Histoire","L’abolition de l’esclavage en 1848 est associée à :",
+    "Victor Schœlcher","Charles de Gaulle","Louis XIV","Robespierre","A",
+    "Victor Schœlcher joue un rôle déterminant dans l’abolition définitive de l’esclavage dans les colonies françaises en 1848."
+  ),
+
+  makeQuestion("h2-012",2,"Histoire","La Commune de Paris date de :",
+    "1871","1914","1905","1945","A",
+    "La Commune de Paris a lieu en 1871 après la guerre franco-prussienne. Elle constitue une expérience politique et sociale importante."
+  ),
+
+  makeQuestion("h2-013",2,"Histoire","Le traité de Maastricht (1992) est lié à :",
+    "La Révolution française","La construction européenne","La loi de 1905","La Première Guerre mondiale","B",
+    "Le traité de Maastricht renforce la construction européenne et crée notamment la citoyenneté européenne."
+  ),
+
+  makeQuestion("h2-014",2,"Histoire","Le quinquennat présidentiel de 5 ans est adopté en :",
+    "2000","1958","1905","1789","A",
+    "Le quinquennat présidentiel est adopté par référendum en 2000. Il remplace le mandat présidentiel de sept ans."
+  ),
+
+  makeQuestion("h2-015",2,"Histoire","La Révolution de 1848 aboutit à :",
+    "La IIᵉ République","La Vᵉ République","L’Empire romain","La loi de 1905","A",
+    "La Révolution de 1848 met fin à la monarchie de Juillet et conduit à la proclamation de la Deuxième République."
+  ),
+
+  makeQuestion("h2-016",2,"Histoire","La devise « Liberté, Égalité, Fraternité » est héritée de :",
+    "La Révolution française","Le Moyen Âge","La Renaissance","La monarchie absolue","A",
+    "La devise « Liberté, Égalité, Fraternité » apparaît pendant la Révolution française et devient un symbole fondamental de la République."
+  ),
+
+  makeQuestion("h2-017",2,"Histoire","Quel symbole représente la République française ?",
+    "Marianne","La couronne royale","Le sceptre","Le trône","A",
+    "Marianne est une figure symbolique de la République française. Elle représente la liberté et la République."
+  ),
+
+  makeQuestion("h2-018",2,"Histoire","La IIIᵉ République débute en :",
+    "1870","1958","1789","1905","A",
+    "La Troisième République commence en 1870 après la chute du Second Empire."
+  ),
+
+  makeQuestion("h2-019",2,"Histoire","Les lois de Jules Ferry sont associées à :",
+    "L’école gratuite, laïque et obligatoire","La séparation des Églises et de l’État","La création de l’euro","Le quinquennat","A",
+    "Les lois de Jules Ferry à la fin du XIXᵉ siècle rendent l’école primaire gratuite, laïque et obligatoire."
+  ),
+
+   makeQuestion("h2-020",2,"Histoire","La fête nationale française est :",
+    "Le 11 novembre","Le 8 mai","Le 14 juillet","Le 1er janvier","C",
+    "Le 14 juillet est la fête nationale française. Elle commémore la prise de la Bastille et l’unité de la nation."
+  ),
+
   makeQuestion("h2-021", 2, "Histoire", "Quel événement marque traditionnellement la naissance de la France en tant que royaume chrétien ?", "La signature du traité de Verdun en 843", "La conquête romaine par Jules César en 52 avant J.-C.", "La victoire de Charles Martel à Poitiers en 732", "Le baptême de Clovis, roi des Francs, vers 496", "D", "Le baptême de Clovis à Reims, vers 496, marque la conversion du roi des Francs au christianisme catholique. Cet acte fondateur unit le pouvoir politique et religieux et jette les bases du royaume de France. Clovis est considéré comme le premier roi de France."),
 
 makeQuestion("h2-022", 2, "Histoire", "Quel titre Charlemagne reçoit-il le 25 décembre 800 à Rome, et quelle en est la signification ?", "Celui d'Empereur d'Occident, symbolisant la renaissance de l'Empire romain en Europe chrétienne", "Celui de Roi de France, fondant officiellement le royaume capétien", "Celui de Défenseur de la foi, lui conférant l'autorité sur toutes les Églises d'Europe", "Celui de Consul romain, rattachant son règne à l'Antiquité classique", "A", "Le pape Léon III couronne Charlemagne Empereur d'Occident le jour de Noël 800. Cet acte consacre l'alliance entre le pouvoir temporel et l'Église, et refonde l'idée d'un empire chrétien universel en Europe occidentale. Charlemagne développe aussi l'instruction et réorganise l'administration."),
@@ -198,7 +302,18 @@ makeQuestion("h2-068", 2, "Histoire", "Qui est Simone Veil et pourquoi est-elle 
 
 makeQuestion("h2-069", 2, "Histoire", "Quel mouvement intellectuel du XVIIIe siècle, dont Voltaire, Rousseau et Montesquieu sont les principaux représentants, prépare idéologiquement la Révolution française ?", "Le Romantisme, courant artistique et littéraire exaltant la liberté individuelle et la nature", "Le Classicisme, mouvement prônant l'ordre, la raison et l'imitation de l'Antiquité gréco-romaine", "Les Lumières, mouvement philosophique fondé sur la raison, la critique de l'absolutisme et la défense des libertés", "Le Positivisme, courant philosophique appliquant la méthode scientifique à l'organisation de la société", "C", "Les Lumières (XVIIIe siècle) sont un mouvement intellectuel qui promeut la raison, la tolérance et le progrès contre l'obscurantisme et l'absolutisme. Voltaire combat le fanatisme religieux, Montesquieu théorise la séparation des pouvoirs, Rousseau développe le contrat social. L'Encyclopédie de Diderot et d'Alembert en est la grande œuvre collective. Les Lumières inspirent directement la Révolution de 1789."),
 
-makeQuestion("h2-070", 2, "Histoire", "Quelle est la signification de la Francophonie pour la France dans le monde et combien de personnes parlent français ?", "La Francophonie désigne uniquement les habitants de France métropolitaine et des DROM-COM, soit environ 70 millions de personnes", "La Francophonie est une organisation militaire regroupant les pays ayant combattu aux côtés de la France lors des deux guerres mondiales", "La Francophonie désigne l'ensemble des pays et des peuples utilisant le français, soit environ 300 millions de locuteurs dans le monde répartis sur 5 continents", "La Francophonie est un traité économique liant exclusivement les anciennes colonies françaises d'Afrique à la France", "C", "La Francophonie regroupe les pays et communautés qui utilisent le français. L'Organisation internationale de la Francophonie (OIF) compte 88 États membres et observateurs. Environ 300 millions de personnes dans le monde parlent français, sur 5 continents. La langue française est la 5e langue la plus parlée au monde et langue officielle de nombreuses organisations internationales."),
+makeQuestion(
+  "h2-070",
+  2,
+  "Histoire",
+  "Quelle est la signification de la Francophonie pour la France dans le monde et combien de personnes parlent français ?",
+  "La Francophonie désigne uniquement les habitants de France métropolitaine et des DROM-COM, soit environ 70 millions de personnes",
+  "La Francophonie est une organisation militaire regroupant les pays ayant combattu aux côtés de la France lors des deux guerres mondiales",
+  "La Francophonie désigne l'ensemble des pays et des peuples utilisant le français, soit environ 300 millions de locuteurs dans le monde répartis sur 5 continents",
+  "La Francophonie est un traité économique liant exclusivement les anciennes colonies françaises d'Afrique à la France",
+  "C",
+  "La Francophonie regroupe les pays et communautés qui utilisent le français. L'Organisation internationale de la Francophonie (OIF) compte 88 États et gouvernements membres, associés ou observateurs. Environ 320 millions de personnes parlent français dans le monde, sur 5 continents. Le français est l’une des grandes langues internationales."
+),
 
 ];
 export const HISTOIRE_L3: Question[] = [
@@ -419,7 +534,14 @@ makeQuestion("h3-051", 3, "Histoire", "Quelle est la signification historique de
 
 makeQuestion("h3-052", 3, "Histoire", "En quoi la 'grandeur' selon de Gaulle est-elle une doctrine politique cohérente plutôt qu'un simple nationalisme de prestige ?", "C'est un nationalisme de prestige sans cohérence doctrinale, fondé sur la fierté personnelle de de Gaulle et sans continuation après lui", "La 'grandeur' gaullienne est une doctrine articulée autour de l'indépendance nationale, du rang de la France dans le monde et de sa vocation à incarner des valeurs universelles, dépassant le nationalisme étroit par son ambition civilisationnelle", "La 'grandeur' est une doctrine économique visant à faire de la France la première puissance industrielle d'Europe par la planification étatique", "La 'grandeur' gaullienne est un concept purement militaire désignant la nécessité pour la France de maintenir une armée de premier rang", "B", "Pour de Gaulle, la 'grandeur' est une doctrine cohérente : la France n'est vraiment elle-même que lorsqu'elle occupe un rang éminent dans le monde. Cette grandeur n'est pas un nationalisme étroit mais une ambition universaliste : la France porte des valeurs (liberté, dignité humaine) que le monde a besoin d'entendre. Elle implique l'indépendance stratégique (force nucléaire, sortie du commandement OTAN), la réconciliation avec l'Allemagne pour peser en Europe, et le 'non-alignement' dans la Guerre froide."),
 
-makeQuestion("h3-053", 3, "Histoire", "Comment la France a-t-elle géré l'articulation entre sa souveraineté nationale et son engagement dans la construction européenne depuis 1957 ?", "La France a abandonné sa souveraineté nationale dès 1957 en adhérant à la CEE, acceptant la primauté absolue du droit européen sur le droit français", "La France a maintenu une conception de l'Europe comme union d'États-nations souverains, résistant aux tendances fédéralistes et négociant chaque transfert de souveraineté, tout en étant un moteur de l'intégration économique et politique", "La France a toujours préféré le modèle intergouvernemental à toute institution supranationale, s'opposant à la création du Parlement européen et de la Cour de justice", "La France a adopté une attitude schizophrène sans cohérence, alternant entre pro-européanisme et euroscepticisme selon les gouvernements en place", "B", "La position française dans la construction européenne est complexe. Pays fondateur et moteur de l'intégration, la France a néanmoins toujours défendu une vision de l'Europe des nations (de Gaulle) plutôt que fédérale. Elle a bloqué l'entrée du Royaume-Uni (1963, 1967), pratiqué la 'politique de la chaise vide' (1965), refusé la Constitution européenne par référendum (2005). Elle concilie souveraineté et intégration : moteur économique de l'UE, mais résistante aux transferts de souveraineté politique."),
+makeQuestion("h3-053", 3, "Histoire", "Quelle déclaration, signée le 9 mai 1950 par Robert Schuman, est considérée comme l'acte fondateur de la construction européenne ?",
+  "La déclaration de l'Atlantique Nord fondant l'OTAN et la défense collective de l'Europe occidentale",
+  "La déclaration de Paris créant la Communauté européenne du charbon et de l'acier (CECA) entre 6 nations",
+  "La déclaration Schuman proposant de mettre en commun les productions franco-allemandes de charbon et d'acier sous une haute autorité commune",
+  "La déclaration de Rome fixant les objectifs du marché commun européen pour les vingt années suivantes",
+  "C",
+  "La déclaration Schuman du 9 mai 1950, inspirée par Jean Monnet, propose de placer les productions françaises et allemandes de charbon et d'acier sous une haute autorité commune. Cette initiative est considérée comme le point de départ de la construction européenne. Le 9 mai est célébré comme la 'Journée de l'Europe'."
+),
 
 makeQuestion("h3-054", 3, "Histoire", "Quel est l'apport spécifique de la France à la théorie et à la pratique des droits de l'homme dans l'histoire mondiale ?", "La France a uniquement contribué par son modèle juridique, sans influence réelle sur la pratique concrète des droits de l'homme dans le monde", "La contribution française est exclusive : les droits de l'homme sont une invention purement française sans précédent intellectuel étranger", "La France a contribué l'universalisme — l'idée que les droits appartiennent à tout être humain indépendamment de sa nationalité — que la DDHC de 1789 formule pour la première fois dans un texte juridiquement contraignant, même si l'influence américaine et philosophique est également déterminante", "La France a uniquement influencé les pays francophones, la Common Law anglo-saxonne étant le vrai fondement des droits de l'homme dans le monde", "C", "La contribution française tient à l'universalisme : quand la Déclaration des droits de 1789 affirme que 'les hommes' (et non les citoyens français) naissent libres et égaux, elle proclame l'universalité des droits. Cette rupture avec les traditions de droits particuliers (Magna Carta britannique, Bill of Rights américain) fait de la DDHC un texte mondial. Elle influence directement la Déclaration universelle des droits de l'homme de l'ONU (1948) dont la rédactrice principale, Eleanor Roosevelt, s'en est inspirée."),
 
