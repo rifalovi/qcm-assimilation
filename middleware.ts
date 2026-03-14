@@ -1,48 +1,34 @@
-// S'exécute à chaque requête AVANT que la page se charge
-// Rafraîchit automatiquement les tokens de session expirés
+// middleware.ts — version compatible Netlify Edge Functions
+// On évite d'importer @supabase/ssr directement dans le middleware
+// car les Edge Functions Netlify ont des restrictions sur les modules Node.js
 
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
+  const { pathname } = request.nextUrl
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          )
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        },
-      },
+  // Pages protégées : uniquement /account pour l'instant
+  if (pathname.startsWith('/account')) {
+    // Vérifie la présence du cookie de session Supabase
+    // Supabase nomme ses cookies "sb-*-auth-token"
+    const hasCookie = request.cookies.getAll().some(
+      cookie => cookie.name.startsWith('sb-') && cookie.name.endsWith('-auth-token')
+    )
+
+    if (!hasCookie) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      url.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(url)
     }
-  )
-
-  // Récupère l'utilisateur connecté (ne pas utiliser getSession ici)
-  const { data: { user } } = await supabase.auth.getUser()
-
-  // Redirige vers /login si on tente d'accéder à /account sans être connecté
-  if (!user && request.nextUrl.pathname.startsWith('/account')) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
   }
 
-  return supabaseResponse
+  return NextResponse.next()
 }
 
 export const config = {
   matcher: [
+    // Exclut les fichiers statiques et les routes internes Next.js
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
