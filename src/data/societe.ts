@@ -1,177 +1,373 @@
 import { makeQuestion, Question } from "./types";
 
 export const SOCIETE_L1: Question[] = [
-  makeQuestion("s1-001",1,"Société","Quel est l’âge légal minimum pour voter en France ?",
-    "16 ans","17 ans","18 ans","21 ans","C","En France, on vote à partir de 18 ans."
-  ),
-  makeQuestion("s1-002",1,"Société","L’école est obligatoire en France :",
-    "De 3 à 16 ans","De 6 à 18 ans","De 0 à 12 ans","Uniquement au collège","A",
-    "L’instruction est obligatoire de 3 à 16 ans (cadre légal actuel)."
-  ),
-  makeQuestion("s1-003",1,"Société","Les services publics, c’est par exemple :",
-    "Hôpitaux, écoles, police","Uniquement les banques","Uniquement les entreprises","Les réseaux sociaux","A",
-    "Les services publics répondent aux besoins collectifs (santé, éducation, sécurité…)."
-  ),
-  makeQuestion("s1-004",1,"Société","L’Assurance maladie sert à :",
-    "Financer uniquement le sport","Rembourser une partie des soins","Payer les impôts","Remplacer le salaire","B",
-    "L’Assurance maladie participe au remboursement des soins de santé."
-  ),
-  makeQuestion("s1-005",1,"Société","Le SMIC est :",
-    "Un impôt","Le salaire minimum légal","Une aide au logement","Un contrat de travail","B",
-    "Le SMIC est le salaire minimum interprofessionnel de croissance."
-  ),
-  makeQuestion("s1-006",1,"Société","La carte Vitale sert à :",
-    "Payer le transport","Faciliter le remboursement des soins","Voter aux élections","Prouver la nationalité","B",
-    "Elle sert pour l’Assurance maladie et la prise en charge des soins."
-  ),
-  makeQuestion("s1-007",1,"Société","La CAF est un organisme lié :",
-    "Aux allocations familiales et aides sociales","À la police","À l’armée","Au Sénat","A",
-    "La CAF gère des aides comme allocations familiales, logement (selon conditions)."
-  ),
-  makeQuestion("s1-008",1,"Société","Le permis de conduire est :",
-    "Obligatoire pour marcher","Nécessaire pour conduire un véhicule","Un diplôme universitaire","Un document de vote","B",
-    "Il est nécessaire pour conduire des véhicules nécessitant un permis."
-  ),
-  makeQuestion("s1-009",1,"Société","La protection sociale française comprend :",
-    "Santé, retraite, chômage (selon règles)","Uniquement la police","Uniquement les écoles","Uniquement les impôts","A",
-    "La protection sociale couvre des risques : maladie, retraite, famille, chômage selon conditions."
-  ),
-  makeQuestion("s1-010",1,"Société","En France, le mariage civil se fait à :",
-    "La préfecture","La mairie","Le tribunal","L’école","B",
-    "Le mariage civil est célébré par l’officier d’état civil en mairie."
-  ),
-  makeQuestion("s1-011",1,"Société","Le respect du code de la route concerne :",
-    "Uniquement les policiers","Tous les usagers (piétons, cyclistes, conducteurs)","Uniquement les conducteurs","Uniquement les bus","B",
-    "Le code de la route s’applique à tous les usagers, chacun selon sa situation."
-  ),
-  makeQuestion("s1-012",1,"Société","Un contrat de travail définit :",
-    "Les règles de l’école","La relation employeur-salarié","La nationalité","Les lois du Parlement","B",
-    "Il encadre les conditions d’emploi (poste, salaire, horaires…)."
-  ),
-  makeQuestion("s1-013",1,"Société","Le droit de grève est :",
-    "Interdit","Reconnu par la Constitution","Réservé aux patrons","Obligatoire","B",
-    "Le droit de grève est un droit constitutionnel encadré."
-  ),
-  makeQuestion("s1-014",1,"Société","Le RSA est :",
-    "Une taxe","Un revenu minimum sous conditions","Une assurance voiture","Un diplôme","B",
-    "Le RSA est une prestation sociale visant un revenu minimum, sous conditions."
-  ),
-  makeQuestion("s1-015",1,"Société","La retraite correspond :",
-    "À un congé annuel","À la fin d’activité professionnelle avec pension (selon règles)","À une amende","À un examen","B",
-    "La retraite est liée à la fin de carrière et au versement d’une pension selon cotisations/conditions."
-  ),
-  makeQuestion("s1-016",1,"Société","Les urgences (15/112) servent à :",
-    "Commander une pizza","Appeler les secours","Réserver un hôtel","Voter","B",
-    "15 (SAMU) et 112 (numéro d’urgence européen) servent à joindre les secours."
-  ),
-  makeQuestion("s1-017",1,"Société","La scolarité en France est :",
-    "Toujours payante","Gratuite dans l’enseignement public (hors frais annexes)","Réservée aux nationaux","Interdite aux filles","B",
-    "L’école publique est gratuite (inscription), même s’il peut y avoir des frais annexes."
-  ),
-  makeQuestion("s1-018",1,"Société","La Sécurité sociale a pour but :",
-    "De vendre des produits","De protéger contre certains risques (maladie, etc.)","De remplacer la justice","De faire les lois","B",
-    "Elle vise la protection sociale : maladie, famille, retraite (selon branches)."
-  ),
-  makeQuestion("s1-019",1,"Société","Le respect de l’égalité femmes-hommes implique :",
-    "Des droits et devoirs identiques devant la loi","Un salaire différent selon le sexe","Des droits réservés aux hommes","Une règle facultative","A",
-    "Le principe d’égalité s’applique à tous, y compris dans le travail et la vie publique."
-  ),
-  makeQuestion("s1-020",1,"Société","La police et la gendarmerie ont pour mission :",
-    "Rendre les jugements","Assurer la sécurité et l’ordre public","Voter les lois","Diriger les mairies","B",
-    "Elles assurent la sécurité, l’ordre public et la protection des personnes et biens."
-  ),
+
+makeQuestion("s1-001",1,"Société","Quel est l’âge minimum pour voter en France ?",
+"16 ans","17 ans","18 ans","21 ans","C",
+"En France, le droit de vote est accordé aux citoyens à partir de 18 ans."
+),
+
+makeQuestion("s1-002",1,"Société","L’école est obligatoire en France :",
+"De 3 à 16 ans",
+"De 6 à 18 ans",
+"De 0 à 12 ans",
+"Uniquement au collège",
+"A",
+"L’instruction est obligatoire de 3 à 16 ans."
+),
+
+makeQuestion("s1-003",1,"Société","Un service public est par exemple :",
+"Un réseau social",
+"Un hôpital public",
+"Une entreprise privée",
+"Une banque commerciale",
+"B",
+"Les services publics répondent à des besoins essentiels comme la santé, l’éducation ou la sécurité."
+),
+
+makeQuestion("s1-004",1,"Société","L’Assurance maladie sert à :",
+"Payer les impôts",
+"Rembourser une partie des soins",
+"Financer les élections",
+"Payer les loyers",
+"B",
+"L’Assurance maladie rembourse une partie des dépenses de santé."
+),
+
+makeQuestion("s1-005",1,"Société","Le SMIC est :",
+"Un impôt",
+"Le salaire minimum légal",
+"Une aide au logement",
+"Un contrat de travail",
+"B",
+"Le SMIC est le salaire minimum interprofessionnel de croissance."
+),
+
+makeQuestion("s1-006",1,"Société","La carte Vitale sert à :",
+"Payer les transports",
+"Faciliter le remboursement des soins",
+"Voter",
+"Payer les impôts",
+"B",
+"La carte Vitale facilite les démarches avec l’Assurance maladie."
+),
+
+makeQuestion("s1-007",1,"Société","La CAF est un organisme qui :",
+"Verse certaines aides sociales",
+"Gère la police",
+"Organise les élections",
+"Dirige les écoles",
+"A",
+"La CAF verse des aides comme les allocations familiales ou les aides au logement."
+),
+
+makeQuestion("s1-008",1,"Société","Le permis de conduire est nécessaire pour :",
+"Conduire un véhicule",
+"Travailler dans une école",
+"Voter aux élections",
+"Payer ses impôts",
+"A",
+"Le permis de conduire autorise à conduire certains véhicules."
+),
+
+makeQuestion("s1-009",1,"Société","La protection sociale française comprend notamment :",
+"La santé et la retraite",
+"Uniquement les impôts",
+"Uniquement la police",
+"Uniquement l’école",
+"A",
+"La protection sociale couvre la santé, la famille, la retraite et parfois le chômage."
+),
+
+makeQuestion("s1-010",1,"Société","Le mariage civil en France se célèbre :",
+"À la préfecture",
+"À la mairie",
+"Au tribunal",
+"À l’église uniquement",
+"B",
+"Le mariage civil est célébré à la mairie par l’officier d’état civil."
+),
+
+makeQuestion("s1-011",1,"Société","Le code de la route concerne :",
+"Uniquement les policiers",
+"Tous les usagers de la route",
+"Uniquement les conducteurs",
+"Uniquement les cyclistes",
+"B",
+"Le code de la route concerne tous les usagers : piétons, cyclistes et conducteurs."
+),
+
+makeQuestion("s1-012",1,"Société","Un contrat de travail définit :",
+"La nationalité",
+"La relation entre employeur et salarié",
+"Les lois du Parlement",
+"Les règles de vote",
+"B",
+"Le contrat de travail fixe les conditions de travail."
+),
+
+makeQuestion("s1-013",1,"Société","Le droit de grève est :",
+"Interdit",
+"Reconnu par la Constitution",
+"Réservé aux patrons",
+"Obligatoire",
+"B",
+"Le droit de grève est un droit reconnu dans la Constitution."
+),
+
+makeQuestion("s1-014",1,"Société","Le RSA est :",
+"Une taxe",
+"Un revenu minimum sous conditions",
+"Une assurance voiture",
+"Un diplôme",
+"B",
+"Le RSA garantit un revenu minimum aux personnes ayant peu ou pas de ressources."
+),
+
+makeQuestion("s1-015",1,"Société","La retraite correspond :",
+"À la fin de la vie active",
+"À un congé annuel",
+"À une sanction",
+"À un examen",
+"A",
+"La retraite est la période après la vie professionnelle avec une pension."
+),
+
+makeQuestion("s1-016",1,"Société","Quel numéro peut-on appeler en cas d’urgence en Europe ?",
+"112",
+"200",
+"999",
+"300",
+"A",
+"Le 112 est le numéro d’urgence européen."
+),
+
+makeQuestion("s1-017",1,"Société","L’école publique en France est :",
+"Payante",
+"Gratuite",
+"Réservée aux Français",
+"Interdite aux filles",
+"B",
+"L’école publique est gratuite, même si certains frais peuvent exister."
+),
+
+makeQuestion("s1-018",1,"Société","La Sécurité sociale sert à :",
+"Protéger contre certains risques comme la maladie",
+"Remplacer la justice",
+"Faire les lois",
+"Diriger les écoles",
+"A",
+"La Sécurité sociale protège contre certains risques comme la maladie ou la vieillesse."
+),
+
+makeQuestion("s1-019",1,"Société","L’égalité femmes-hommes signifie :",
+"Les mêmes droits devant la loi",
+"Des salaires différents",
+"Des droits réservés aux hommes",
+"Une règle facultative",
+"A",
+"L’égalité femmes-hommes est un principe fondamental."
+),
+
+makeQuestion("s1-020",1,"Société","La police et la gendarmerie ont pour mission :",
+"Rendre la justice",
+"Assurer la sécurité et l’ordre public",
+"Voter les lois",
+"Diriger les mairies",
+"B",
+"Elles assurent la sécurité et la protection des personnes."
+),
+
+makeQuestion("s1-021",1,"Société","Les impôts servent notamment à :",
+"Financer les services publics",
+"Financer les entreprises privées",
+"Payer uniquement les députés",
+"Supprimer les écoles",
+"A",
+"Les impôts financent l’école, les hôpitaux, la sécurité ou les infrastructures."
+),
+
+makeQuestion("s1-022",1,"Société","La liberté de religion signifie :",
+"Pouvoir pratiquer ou ne pas pratiquer une religion",
+"Imposer une religion",
+"Interdire toutes les religions",
+"Obliger les citoyens à croire",
+"A",
+"La liberté de religion fait partie des libertés fondamentales."
+),
+
+makeQuestion("s1-023",1,"Société","Respecter la loi signifie :",
+"Respecter les règles communes",
+"Choisir les lois que l’on veut",
+"Refuser les institutions",
+"Suivre uniquement ses opinions",
+"A",
+"Le respect des lois permet le fonctionnement de la société."
+),
+
+makeQuestion("s1-024",1,"Société","L’école permet notamment :",
+"D’apprendre et se former",
+"Uniquement jouer",
+"Uniquement travailler",
+"Uniquement voter",
+"A",
+"L’école transmet des connaissances et prépare à la vie citoyenne."
+),
+
+makeQuestion("s1-025",1,"Société","Être citoyen en France signifie notamment :",
+"Participer à la vie démocratique",
+"Ne jamais voter",
+"Être au-dessus des lois",
+"Refuser les institutions",
+"A",
+"Un citoyen a des droits mais aussi des devoirs dans la société."
+)
+
 ];
 export const SOCIETE_L2: Question[] = [
-  makeQuestion("s2-001",2,"Société","L’école publique en France est :",
-    "Religieuse","Laïque","Réservée aux nationaux","Payante obligatoirement","B",
-    "L’école publique est laïque : neutralité, respect des convictions, pas d’enseignement religieux imposé."
+  makeQuestion("s2-001",2,"Société","Pourquoi l’école publique en France est-elle dite laïque ?",
+    "Parce qu’elle impose une religion","Parce qu’elle respecte la neutralité religieuse","Parce qu’elle est réservée aux nationaux","Parce qu’elle est obligatoirement payante","B",
+    "L’école publique est laïque : elle respecte la neutralité religieuse, garantit la liberté de conscience et n’impose aucun enseignement religieux."
   ),
-  makeQuestion("s2-002",2,"Société","La carte Vitale sert principalement à :",
-    "Payer en magasin","Faciliter la prise en charge des soins","Voter","Passer un examen","B",
-    "Elle sert pour l’Assurance maladie : droits et remboursement."
+
+  makeQuestion("s2-002",2,"Société","À quoi sert principalement la carte Vitale ?",
+    "À payer en magasin","À faciliter la prise en charge et le remboursement des soins","À voter","À passer un examen","B",
+    "La carte Vitale sert dans le cadre de l’Assurance maladie. Elle facilite la prise en charge et le remboursement des soins."
   ),
-  makeQuestion("s2-003",2,"Société","Le SMIC correspond :",
-    "Au salaire minimum légal","À une prime unique","À une aide au logement","Au salaire maximum","A",
-    "Le SMIC est le minimum légal en salaire horaire/mensuel."
+
+  makeQuestion("s2-003",2,"Société","Que représente le SMIC en France ?",
+    "Le salaire minimum légal","Une prime exceptionnelle","Une aide au logement","Le salaire maximum autorisé","A",
+    "Le SMIC est le salaire minimum interprofessionnel de croissance. Il fixe le minimum légal de rémunération."
   ),
-  makeQuestion("s2-004",2,"Société","Les allocations familiales (CAF) dépendent :",
-    "Toujours du hasard","De règles et conditions (situation, ressources, etc.)","Uniquement du maire","Uniquement des employeurs","B",
-    "Les aides de la CAF répondent à des règles selon situation et parfois ressources."
+
+  makeQuestion("s2-004",2,"Société","Les aides de la CAF sont attribuées :",
+    "Au hasard","Selon des règles et conditions prévues par la loi","Uniquement par décision du maire","Uniquement par les employeurs","B",
+    "Les aides versées par la CAF dépendent de règles précises liées à la situation familiale, aux revenus ou à d’autres critères prévus par les textes."
   ),
-  makeQuestion("s2-005",2,"Société","Le mariage civil se fait :",
+
+  makeQuestion("s2-005",2,"Société","Où le mariage civil est-il célébré en France ?",
     "À l’église","À la mairie","Au commissariat","À l’hôpital","B",
-    "Le mariage civil est célébré en mairie par l’officier d’état civil."
+    "Le mariage civil est célébré à la mairie par l’officier d’état civil. C’est lui qui produit les effets juridiques reconnus par l’État."
   ),
-  makeQuestion("s2-006",2,"Société","Le droit de grève est :",
-    "Interdit","Un droit reconnu (encadré)","Obligatoire","Réservé aux patrons","B",
-    "La grève est un droit constitutionnel, mais encadré (services, conditions)."
+
+  makeQuestion("s2-006",2,"Société","Le droit de grève en France est :",
+    "Interdit","Un droit reconnu mais encadré","Obligatoire pour les salariés","Réservé aux employeurs","B",
+    "Le droit de grève est un droit reconnu en France. Il est encadré par des règles, notamment dans certains services publics."
   ),
-  makeQuestion("s2-007",2,"Société","Le numéro d’urgence européen est :",
+
+  makeQuestion("s2-007",2,"Société","Quel est le numéro d’urgence européen ?",
     "112","15","17","18","A",
-    "112 est le numéro d’urgence européen (redirige selon besoin)."
+    "Le 112 est le numéro d’urgence européen. Il permet de joindre les secours dans l’ensemble de l’Union européenne."
   ),
-  makeQuestion("s2-008",2,"Société","Le 15 correspond à :",
-    "Police","SAMU (urgence médicale)","Pompiers","Enfance en danger","B",
-    "Le 15 est le SAMU pour les urgences médicales."
+
+  makeQuestion("s2-008",2,"Société","En France, le numéro 15 permet de joindre :",
+    "La police","Le SAMU pour les urgences médicales","Les pompiers","La mairie","B",
+    "Le 15 correspond au SAMU, qui intervient pour les urgences médicales."
   ),
-  makeQuestion("s2-009",2,"Société","Le 17 correspond à :",
-    "Police","Pompiers","SAMU","Urgence gaz","A",
-    "Le 17 permet de joindre la police."
+
+  makeQuestion("s2-009",2,"Société","En France, le numéro 17 permet de joindre :",
+    "La police","Les pompiers","Le SAMU","Les urgences sociales","A",
+    "Le 17 permet de joindre la police ou la gendarmerie en cas d’urgence liée à la sécurité."
   ),
-  makeQuestion("s2-010",2,"Société","Le 18 correspond à :",
-    "Police","Pompiers","SAMU","Mairie","B",
-    "Le 18 permet de joindre les pompiers."
+
+  makeQuestion("s2-010",2,"Société","En France, le numéro 18 permet de joindre :",
+    "La police","Les pompiers","Le SAMU","La préfecture","B",
+    "Le 18 permet de joindre les pompiers, notamment en cas d’incendie ou d’accident."
   ),
+
   makeQuestion("s2-011",2,"Société","Le RSA est :",
-    "Une aide sous conditions","Une taxe","Un diplôme","Une assurance voiture","A",
-    "Le RSA est un minimum social sous conditions."
+    "Une aide sociale sous conditions","Une taxe","Un diplôme","Une assurance automobile","A",
+    "Le RSA est un revenu minimum destiné à certaines personnes sous conditions de ressources et de situation."
   ),
+
   makeQuestion("s2-012",2,"Société","La retraite dépend notamment :",
-    "Des cotisations et règles en vigueur","Du maire","Du hasard","Du permis de conduire","A",
-    "La retraite dépend des cotisations, durée de carrière, règles légales."
+    "Des cotisations et des règles en vigueur","Du maire de la commune","Du hasard","Du permis de conduire","A",
+    "La retraite dépend notamment des cotisations versées, de la durée d’activité et des règles légales applicables."
   ),
-  makeQuestion("s2-013",2,"Société","Un contrat de travail indique notamment :",
-    "Le poste et le salaire","La nationalité","Le vote","Le passeport","A",
-    "Il encadre la relation employeur-salarié (poste, rémunération, horaires...)."
+
+  makeQuestion("s2-013",2,"Société","Un contrat de travail précise notamment :",
+    "Le poste occupé et la rémunération","La nationalité de la personne","Le droit de vote","Le passeport","A",
+    "Le contrat de travail encadre la relation entre employeur et salarié. Il précise notamment le poste, le salaire, les horaires ou la durée du travail."
   ),
-  makeQuestion("s2-014",2,"Société","La discrimination dans le logement est :",
-    "Autorisé","Interdite","Obligatoire","Sans règle","B",
-    "La loi interdit la discrimination (origine, situation, handicap…)."
+
+  makeQuestion("s2-014",2,"Société","La discrimination dans l’accès au logement est :",
+    "Autorisée","Interdite par la loi","Obligatoire dans certains cas","Sans règle particulière","B",
+    "La loi interdit la discrimination dans l’accès au logement, notamment en raison de l’origine, du handicap, de la situation familiale ou d’autres critères protégés."
   ),
-  makeQuestion("s2-015",2,"Société","La Sécurité sociale protège contre :",
-    "Certains risques (maladie, famille, vieillesse selon branches)","Uniquement les amendes","Uniquement l’école","Uniquement le sport","A",
-    "Protection sociale : maladie, famille, retraite, etc. selon cadres."
+
+  makeQuestion("s2-015",2,"Société","La Sécurité sociale protège principalement contre :",
+    "Certains risques comme la maladie, la famille ou la vieillesse","Uniquement les amendes","Uniquement les dépenses scolaires","Uniquement les activités sportives","A",
+    "La Sécurité sociale protège contre plusieurs risques de la vie, selon les différentes branches : maladie, famille, vieillesse, etc."
   ),
-  makeQuestion("s2-016",2,"Société","La carte d’identité sert à :",
+
+  makeQuestion("s2-016",2,"Société","La carte nationale d’identité sert principalement à :",
     "Prouver son identité","Payer des impôts","Conduire une voiture","Remplacer un diplôme","A",
-    "C’est un document officiel d’identification."
+    "La carte nationale d’identité est un document officiel qui permet de prouver son identité."
   ),
-  makeQuestion("s2-017",2,"Société","Le permis de conduire :",
-    "Est un document d’identité universel","Autorise la conduite selon catégories","Remplace la carte Vitale","Permet de voter","B",
-    "Il autorise la conduite de véhicules selon les catégories obtenues."
+
+  makeQuestion("s2-017",2,"Société","Le permis de conduire permet :",
+    "De servir de document d’identité universel","De conduire certains véhicules selon les catégories obtenues","De remplacer la carte Vitale","De voter aux élections","B",
+    "Le permis de conduire autorise la conduite de certaines catégories de véhicules, selon les droits obtenus."
   ),
+
   makeQuestion("s2-018",2,"Société","Les services publics sont financés notamment par :",
-    "Les impôts et cotisations","Les jeux vidéo","Les publicités uniquement","Aucune ressource","A",
-    "Ils sont financés principalement par des recettes publiques (impôts/cotisations)."
+    "Les impôts et les cotisations","Les jeux vidéo","La publicité uniquement","Aucune ressource publique","A",
+    "Les services publics sont financés principalement par des ressources publiques, notamment les impôts et certaines cotisations."
   ),
-  makeQuestion("s2-019",2,"Société","Le principe d’égalité implique :",
-    "Des droits différents selon l’origine","Les mêmes droits et devoirs devant la loi","Des privilèges héréditaires","Un traitement spécial obligatoire","B",
-    "Égalité devant la loi : mêmes droits/devoirs."
+
+  makeQuestion("s2-019",2,"Société","Le principe d’égalité dans la société française implique :",
+    "Des droits différents selon l’origine","Les mêmes droits et devoirs devant la loi","Des privilèges héréditaires","Un traitement spécial obligatoire pour certains groupes","B",
+    "Le principe d’égalité signifie que chacun a les mêmes droits et devoirs devant la loi, sans privilège fondé sur l’origine ou la naissance."
   ),
+
   makeQuestion("s2-020",2,"Société","Être citoyen signifie aussi :",
-    "Respecter les lois et participer à la vie civique","Être au-dessus des règles","Ne jamais voter","Interdire les opinions","A",
-    "Citoyenneté = droits + devoirs (respect des lois, participation civique…)."
+    "Respecter les lois et participer à la vie civique","Être au-dessus des règles","Ne jamais voter","Interdire les opinions différentes","A",
+    "Être citoyen signifie avoir des droits, mais aussi des devoirs, comme respecter les lois, participer à la vie démocratique et contribuer à la vie civique."
   ),
-  makeQuestion("s2-021", 2, "Société", "Par quoi la Sécurité sociale française est-elle principalement financée ?", "Par les cotisations sociales prélevées sur les salaires et par la CSG (Contribution sociale généralisée) prélevée sur tous les revenus", "Par l'impôt sur le revenu, intégralement reversé à la Sécurité sociale par l'État chaque année", "Par les cotisations des seuls employeurs, les salariés n'ayant aucune contribution directe au financement", "Par les recettes de la TVA et des droits de douane, sans prélèvement direct sur les salaires", "A", "La Sécurité sociale est financée par deux grands mécanismes : les cotisations sociales (prélevées sur les salaires, partagées entre employeurs et salariés) et la CSG créée en 1991, prélevée sur l'ensemble des revenus — salaires, retraites, revenus du capital. La CSG représente aujourd'hui la principale recette de la Sécurité sociale, traduisant un glissement du financement 'contributif' vers un financement plus universel."),
+makeQuestion("s2-021", 2, "Société", "Par quoi la Sécurité sociale française est-elle principalement financée ?",
+  "Par les cotisations sociales et la CSG",
+  "Par l’impôt sur le revenu uniquement",
+  "Par les seules cotisations des employeurs",
+  "Par la TVA uniquement",
+  "A",
+  "La Sécurité sociale est principalement financée par les cotisations sociales et par la CSG. Cela permet de financer la protection contre certains risques comme la maladie, la vieillesse ou la famille."
+),
 
-makeQuestion("s2-022", 2, "Société", "Jusqu'à quel âge la scolarité est-elle obligatoire en France ?", "Jusqu'à 14 ans, fin du collège", "Jusqu'à 16 ans, depuis 1959, étendue à 3 ans dès la rentrée 2019 (école obligatoire dès 3 ans)", "Jusqu'à 18 ans, tous les jeunes Français devant obtenir le baccalauréat", "Jusqu'à 15 ans, fin de la classe de 3e", "B", "La scolarité est obligatoire en France de 3 à 16 ans (loi de 1959 pour la fin à 16 ans, loi de 2019 pour le début à 3 ans). Cette obligation signifie que tout enfant doit être inscrit dans un établissement scolaire public, privé sous contrat, ou suivre une instruction en famille. Le non-respect de cette obligation est sanctionné pénalement pour les parents."),
+makeQuestion("s2-022", 2, "Société", "Jusqu’à quel âge l’instruction est-elle obligatoire en France ?",
+  "Jusqu’à 14 ans",
+  "Jusqu’à 16 ans",
+  "Jusqu’à 18 ans",
+  "Jusqu’à 15 ans",
+  "B",
+  "En France, l’instruction est obligatoire de 3 à 16 ans. Cette obligation peut être remplie dans un établissement scolaire public ou privé, ou dans certains cas par l’instruction en famille."
+),
 
-makeQuestion("s2-023", 2, "Société", "Quel est le rôle du médecin traitant dans le système de santé français ?", "Il est le seul médecin autorisé à prescrire des médicaments remboursables en France, les spécialistes ne pouvant que diagnostiquer", "Il est une option facultative sans conséquence sur le remboursement, chaque patient pouvant consulter n'importe quel médecin avec le même taux de remboursement", "Il est la porte d'entrée du parcours de soins coordonnés : le consulter en premier garantit un meilleur remboursement et oriente vers les spécialistes si nécessaire", "Il remplace intégralement l'hôpital pour tous les soins courants, le patient ne pouvant accéder aux urgences qu'après son accord", "C", "Le médecin traitant, choisi librement par l'assuré et déclaré à l'Assurance maladie, est le pivot du 'parcours de soins coordonnés' instauré par la réforme de 2004. Le consulter en premier garantit un taux de remboursement plus élevé (70% contre 30% hors parcours). Il oriente vers les spécialistes ('médecin correspondant'). Ce système vise à éviter les consultations inutiles et à améliorer la coordination des soins."),
+makeQuestion("s2-023", 2, "Société", "Quel est le rôle du médecin traitant dans le système de santé français ?",
+  "Il est le seul médecin autorisé à prescrire",
+  "Il n’a aucun effet sur le remboursement",
+  "Il est la porte d’entrée du parcours de soins coordonnés",
+  "Il remplace l’hôpital pour tous les soins",
+  "C",
+  "Le médecin traitant joue un rôle central dans le parcours de soins coordonnés. Le consulter en priorité permet en général un meilleur remboursement et une meilleure orientation vers les spécialistes si nécessaire."
+),
 
-makeQuestion("s2-024", 2, "Société", "Quelle est la durée légale du travail hebdomadaire en France pour un salarié à temps plein ?", "40 heures, depuis la grande réforme du travail de Pompidou en 1969", "39 heures, depuis les lois Auroux de 1982", "32 heures, depuis la réforme expérimentale des quatre jours de 2023", "35 heures, depuis les lois Aubry de 1998 et 2000", "D", "La durée légale du travail est fixée à 35 heures par semaine depuis les lois Aubry (1998-2000). C'est un seuil de déclenchement des heures supplémentaires, non un maximum absolu : les salariés peuvent travailler plus, mais les heures au-delà des 35h doivent être majorées ou compensées. Des dérogations existent par accord de branche ou d'entreprise, notamment via les 'forfaits jours' pour les cadres."),
+makeQuestion("s2-024", 2, "Société", "Quelle est la durée légale du travail hebdomadaire en France pour un salarié à temps plein ?",
+  "40 heures",
+  "39 heures",
+  "32 heures",
+  "35 heures",
+  "D",
+  "La durée légale du travail en France est de 35 heures par semaine pour un salarié à temps plein. Au-delà, il peut y avoir des heures supplémentaires selon les règles applicables."
+),
 
-makeQuestion("s2-025", 2, "Société", "Qu'est-ce que le PACS (Pacte civil de solidarité) ?", "Un contrat civil d'union entre deux personnes (quel que soit leur sexe) leur ouvrant des droits fiscaux, sociaux et patrimoniaux communs, distinct du mariage", "Un contrat réservé aux couples hétérosexuels souhaitant bénéficier des avantages du mariage sans en avoir le statut religieux", "Un accord de cohabitation administrative qui ne crée aucun droit particulier mais permet de justifier d'un domicile commun", "Un régime matrimonial particulier qui remplace le mariage et confère exactement les mêmes droits, y compris l'adoption", "A", "Le PACS, créé par la loi du 15 novembre 1999, est un contrat entre deux personnes majeures, de sexe différent ou de même sexe. Il ouvre des droits en matière fiscale (imposition commune), successorale (limitée), sociale et patrimoniale. Il diffère du mariage sur des points importants : pas d'adoption automatique, régime successoral moins protecteur pour le survivant, dissolution plus simple. Il a été adopté après un débat parlementaire très houleux et a largement été plébiscité (plus de 190 000 PACS par an)."),
-
+makeQuestion("s2-025", 2, "Société", "Qu’est-ce que le PACS ?",
+  "Un contrat civil d’union entre deux personnes",
+  "Un mariage religieux simplifié",
+  "Une simple déclaration de domicile commun",
+  "Un régime identique au mariage sur tous les points",
+  "A",
+  "Le PACS est un pacte civil de solidarité conclu entre deux personnes majeures. Il organise leur vie commune et ouvre certains droits, mais il reste distinct du mariage."
+),
 makeQuestion("s2-026", 2, "Société", "Qu'est-ce que le 'droit du sol' en matière de nationalité française ?", "Le principe selon lequel tout enfant né sur le territoire français acquiert automatiquement la nationalité française dès sa naissance, sans condition", "Le principe permettant à un enfant né en France de parents étrangers d'acquérir la nationalité française à sa majorité ou avant sous certaines conditions, notamment de résidence", "Un droit qui s'applique uniquement aux enfants nés dans les DOM-TOM et non en métropole", "Un droit historiquement français mais abandonné en 1993, remplacé entièrement par le droit du sang", "B", "En France, le droit du sol n'est pas pur : un enfant né en France de parents étrangers n'est pas automatiquement français à la naissance. Il peut acquérir la nationalité française à sa majorité s'il réside en France depuis au moins 5 ans depuis ses 11 ans (acquisition automatique) ou avant la majorité sur demande des parents. Ce droit du sol 'différé' est distinct du droit du sang (nationalité transmise par un parent français), et la France pratique en réalité une combinaison des deux."),
 
 makeQuestion("s2-027", 2, "Société", "Quelle est la langue officielle de la République française selon la Constitution ?", "Le français et les langues régionales reconnues (breton, alsacien, occitan), toutes ayant le statut de co-officielles", "Le français uniquement, selon l'article 2 de la Constitution de 1958, modifié par la révision de 1992", "La France n'a pas de langue officielle constitutionnelle, le français s'imposant par l'usage sans texte normatif", "Le français et l'anglais, depuis l'adhésion à la Communauté européenne", "C", "L'article 2 de la Constitution dispose : 'La langue de la République est le français.' Cette disposition a été introduite par la révision constitutionnelle de 1992 (avant la ratification du traité de Maastricht). Elle fonde la loi Toubon de 1994 qui impose l'usage du français dans les actes officiels, la publicité et l'enseignement. Le Conseil constitutionnel a interprété cet article comme s'imposant aussi aux personnes de droit privé dans leur usage public."),
@@ -264,241 +460,256 @@ makeQuestion("s2-070", 2, "Société", "Qu'est-ce qu'un 'désert de services' da
 
 ];
 export const SOCIETE_L3: Question[] = [
-  makeQuestion("s3-001",3,"Société","L’Union européenne est créée en :",
+
+  makeQuestion("s3-001",3,"Société","L’Union européenne naît officiellement avec le traité de Maastricht en :",
     "1957","1992","2000","2010","B",
-    "1992 : création de l’UE (association plus étroite). Piège : 1957 = CEE. Source : Livret, p.20."
+    "L’Union européenne est créée avec le traité de Maastricht en 1992. Il ne faut pas confondre cette date avec 1957, qui correspond au traité de Rome et à la CEE."
   ),
+
   makeQuestion("s3-002",3,"Société","Aujourd’hui, l’Union européenne compte :",
     "25 États membres","26 États membres","27 États membres","28 États membres","C",
-    "UE : 27 États membres. Piège : 28 (ancienne valeur fréquente). Source : Livret, p.20."
+    "L’Union européenne compte aujourd’hui 27 États membres."
   ),
+
   makeQuestion("s3-003",3,"Société","Depuis 1992, les citoyens français sont aussi :",
     "Citoyens américains","Citoyens européens","Citoyens de l’ONU","Citoyens du Commonwealth","B",
-    "Depuis 1992 : citoyenneté européenne. Piège : confondre organisations. Source : Livret, p.20."
+    "Avec la citoyenneté européenne instaurée par le traité de Maastricht, les citoyens français sont aussi citoyens de l’Union européenne."
   ),
+
   makeQuestion("s3-004",3,"Société","Les élections du Parlement européen ont lieu :",
     "Tous les ans","Tous les 3 ans","Tous les 5 ans","Tous les 7 ans","C",
-    "Élections européennes : tous les 5 ans. Piège : confondre avec mandats locaux (6). Source : Livret, p.20."
+    "Les élections européennes ont lieu tous les 5 ans."
   ),
-  makeQuestion("s3-005",3,"Société","La Charte des droits fondamentaux de l’UE est adoptée en :",
+
+  makeQuestion("s3-005",3,"Société","La Charte des droits fondamentaux de l’Union européenne est proclamée en :",
     "1958","1992","2000","2004","C",
-    "Charte : 2000. Piège : 2004 = autre repère (signes religieux à l’école). Source : Livret, p.20."
+    "La Charte des droits fondamentaux de l’Union européenne est proclamée en 2000."
   ),
-    makeQuestion("s3-006", 3, "Société", "Depuis 2000, la France partage une monnaie unique :",
-    "Le franc",
-    "L’euro",
-    "La livre",
-    "Le dollar",
-    "B",
-    "La monnaie unique est l’euro (mise en circulation en 2002, souvent associée au passage à la monnaie unique au début des années 2000 dans le livret). Piège : répondre « franc » par habitude. Source : Livret, p.20."
+
+  makeQuestion("s3-006",3,"Société","Depuis le début des années 2000, la France partage comme monnaie commune :",
+    "Le franc","L’euro","La livre","Le dollar","B",
+    "La monnaie commune est l’euro. Il ne faut pas la confondre avec l’ancien franc."
   ),
-  makeQuestion("s3-007", 3, "Société", "Le drapeau européen (12 étoiles) symbolise :",
+
+  makeQuestion("s3-007",3,"Société","Le drapeau européen avec 12 étoiles symbolise surtout :",
     "Le nombre d’États membres",
-    "Les idéaux d’unité et d’harmonie entre Européens",
+    "Les idéaux d’unité et d’harmonie entre les peuples européens",
     "Les 12 mois de l’année",
     "Les 12 régions françaises",
     "B",
-    "Les 12 étoiles symbolisent l’unité et l’harmonie, pas le nombre d’États membres. Piège classique. Source : Livret, p.17."
+    "Les 12 étoiles ne représentent pas le nombre d’États membres, mais un idéal d’unité, de solidarité et d’harmonie."
   ),
-  makeQuestion("s3-008", 3, "Société", "Selon le livret, la France est membre permanent du Conseil de sécurité de :",
-    "L’Union européenne",
-    "L’ONU",
-    "L’UNESCO",
-    "L’OTAN",
-    "B",
-    "La France est membre permanent du Conseil de sécurité de l’ONU. Piège : confondre ONU/UNESCO. Source : Livret, p.20."
+
+  makeQuestion("s3-008",3,"Société","La France est membre permanent du Conseil de sécurité de :",
+    "L’Union européenne","L’ONU","L’UNESCO","L’OTAN","B",
+    "La France est membre permanent du Conseil de sécurité de l’Organisation des Nations unies."
   ),
-  makeQuestion("s3-009", 3, "Société", "Le français est parlé couramment par environ :",
-    "50 millions de personnes",
-    "100 millions de personnes",
-    "200 millions de personnes",
-    "700 millions de personnes",
-    "C",
-    "Le livret indique ~200 millions de locuteurs courants. Piège : surestimer fortement. Source : Livret, p.20."
+
+  makeQuestion("s3-009",3,"Société","Le français est une langue internationale parlée couramment par environ :",
+    "50 millions de personnes","100 millions de personnes","200 millions de personnes","700 millions de personnes","C",
+    "Le livret présente le français comme une grande langue internationale, parlée couramment par environ 200 millions de personnes."
   ),
-  makeQuestion("s3-010", 3, "Société", "Selon le livret, les Français représentent environ :",
-    "1% de la population mondiale",
-    "5% de la population mondiale",
-    "10% de la population mondiale",
-    "20% de la population mondiale",
-    "A",
-    "Les Français représentent environ 1% de la population mondiale. Piège : surestimer. Source : Livret, p.20."
+
+  makeQuestion("s3-010",3,"Société","Les Français représentent environ :",
+    "1 % de la population mondiale","5 % de la population mondiale","10 % de la population mondiale","20 % de la population mondiale","A",
+    "Les Français représentent environ 1 % de la population mondiale."
   ),
-  makeQuestion("s3-011", 3, "Société", "La France est présentée comme :",
+
+  makeQuestion("s3-011",3,"Société","La France est souvent présentée comme :",
     "La première destination touristique au monde",
     "Un pays sans tourisme",
     "Un pays sans monuments",
     "Une économie uniquement agricole",
     "A",
-    "La France est présentée comme la première destination touristique au monde. Piège : minimiser le tourisme. Source : Livret, p.21."
+    "La France est souvent présentée comme la première destination touristique au monde."
   ),
-  makeQuestion("s3-012", 3, "Société", "La tour Eiffel est construite pour :",
+
+  makeQuestion("s3-012",3,"Société","La tour Eiffel a été construite pour :",
     "Le sacre de Napoléon",
     "L’Exposition universelle de 1889",
-    "La fête de la Fédération (1790)",
-    "La création de l’UE (1992)",
+    "La Fête de la Fédération de 1790",
+    "La création de l’Union européenne",
     "B",
-    "La tour Eiffel est construite pour l’Exposition universelle de 1889. Piège : associer à une date révolutionnaire. Source : Livret, p.21."
+    "La tour Eiffel a été construite pour l’Exposition universelle de 1889."
   ),
-  makeQuestion("s3-013", 3, "Société", "Le plus long fleuve français est :",
-    "La Seine",
-    "Le Rhône",
-    "La Loire",
-    "La Garonne",
-    "C",
-    "Le plus long fleuve français est la Loire. Piège : répondre Rhône (souvent cité). Source : Livret, p.22."
+
+  makeQuestion("s3-013",3,"Société","Le plus long fleuve français est :",
+    "La Seine","Le Rhône","La Loire","La Garonne","C",
+    "Le plus long fleuve français est la Loire."
   ),
-  makeQuestion("s3-014", 3, "Société", "La plus haute montagne d’Europe (selon le livret) est :",
-    "Le Mont-Blanc (4 810 m)",
-    "Le Puy de Dôme",
-    "Le Mont-Saint-Michel",
-    "Le Cervin (mentionné en France)",
-    "A",
-    "Le Mont-Blanc est présenté comme la plus haute montagne d’Europe (4 810 m). Piège : confondre site touristique et montagne. Source : Livret, p.22."
+
+  makeQuestion("s3-014",3,"Société","Le Mont-Blanc est présenté comme :",
+    "La plus haute montagne d’Europe","Le plus haut volcan de France","Le plus grand fleuve d’Europe","Le plus haut monument de Paris","A",
+    "Le Mont-Blanc est présenté dans le livret comme la plus haute montagne d’Europe."
   ),
-  makeQuestion("s3-015", 3, "Société", "Le Mont-Saint-Michel est situé :",
-    "En Bretagne",
-    "En Normandie",
-    "En Île-de-France",
-    "En Provence",
-    "B",
-    "Le Mont-Saint-Michel est situé en Normandie. Piège : confusion Bretagne/Normandie (débat fréquent). Source : Livret, p.22."
+
+  makeQuestion("s3-015",3,"Société","Le Mont-Saint-Michel est situé :",
+    "En Bretagne","En Normandie","En Île-de-France","En Provence","B",
+    "Le Mont-Saint-Michel est situé en Normandie."
   ),
-  makeQuestion("s3-016", 3, "Société", "Selon le livret, la France compte (2021) environ :",
-    "47 millions d’habitants",
-    "57,4 millions d’habitants",
-    "67,4 millions d’habitants",
-    "77,4 millions d’habitants",
-    "C",
-    "Le livret cite ~67,4 millions d’habitants (2021). Piège : décaler de 10 millions. Source : Livret, p.22."
+
+  makeQuestion("s3-016",3,"Société","Selon les données de référence du livret, la France compte environ :",
+    "47 millions d’habitants","57,4 millions d’habitants","67,4 millions d’habitants","77,4 millions d’habitants","C",
+    "Le livret retient environ 67,4 millions d’habitants. Il s’agit d’un grand ordre de grandeur à connaître."
   ),
-  makeQuestion("s3-017", 3, "Société", "Le territoire français (métropole + outre-mer) est d’environ :",
-    "275 000 km²",
-    "475 000 km²",
-    "675 000 km²",
-    "875 000 km²",
-    "C",
-    "Le territoire (métropole + outre-mer) est d’environ 675 000 km². Piège : confondre avec la métropole seule. Source : Livret, p.22."
+
+  makeQuestion("s3-017",3,"Société","Le territoire français, métropole et outre-mer compris, représente environ :",
+    "275 000 km²","475 000 km²","675 000 km²","875 000 km²","C",
+    "Le territoire français, en incluant la métropole et l’outre-mer, représente environ 675 000 km²."
   ),
-  makeQuestion("s3-018", 3, "Société", "Le livret indique environ combien d’agglomérations de +500 000 habitants ?",
-    "7",
-    "12",
-    "17",
-    "27",
-    "C",
-    "Le livret indique 17 agglomérations de +500 000 habitants. Piège : répondre 27 (réflexe UE). Source : Livret, p.22."
+
+  makeQuestion("s3-018",3,"Société","Le livret indique environ combien d’agglomérations de plus de 500 000 habitants ?",
+    "7","12","17","27","C",
+    "Le livret mentionne environ 17 agglomérations de plus de 500 000 habitants."
   ),
-  makeQuestion("s3-019", 3, "Société", "Parmi les dix métropoles les plus importantes citées, on trouve :",
+
+  makeQuestion("s3-019",3,"Société","Parmi les grandes métropoles françaises souvent citées, on trouve :",
     "Paris, Lyon, Marseille",
     "Paris, Nice, Ajaccio",
     "Paris, Bordeaux, Brest",
     "Paris, Lille, Nancy",
     "A",
-    "Le livret cite notamment Paris, Lyon, Marseille (avec Toulouse, Lille, Bordeaux, Nice, Nantes, Strasbourg, Rennes). Piège : glisser Ajaccio/Brest/Nancy. Source : Livret, p.22."
-  ),
-  makeQuestion("s3-020", 3, "Société", "Le livret rappelle que l’école publique est devenue gratuite et laïque dans :",
-    "Les années 1780",
-    "Les années 1880",
-    "Les années 1950",
-    "Les années 2000",
-    "B",
-    "L’école publique devient gratuite et laïque dans les années 1880 (lois de Jules Ferry). Piège : confondre avec 1905 (laïcité Églises/État). Source : Livret, p.4-15."
+    "Parmi les grandes métropoles françaises, on trouve notamment Paris, Lyon et Marseille."
   ),
 
-  makeQuestion("s3-021", 3, "Société", "Le modèle de protection sociale français repose sur deux logiques historiquement distinctes. Comment les articuler ?", "Il combine une logique bismarckienne (droits liés au travail et aux cotisations) et une logique beveridgienne (droits universels financés par l'impôt), formant un système hybride aux tensions de financement permanentes, révélées notamment par la création de la CSG en 1991", "Il est entièrement beveridgien depuis 1945, tous les droits sociaux étant universels et financés par l'impôt, sans aucune cotisation liée au travail", "Il est entièrement bismarckien, les droits sociaux n'étant accordés qu'aux personnes ayant suffisamment cotisé, excluant structurellement les non-actifs", "Il a abandonné la logique contributive en 2000 avec la création de la CMU, adoptant un modèle universel pur sans cotisations", "A", "Le modèle social français est hybride. La Sécurité sociale de 1945 est bismarckienne (droits liés au travail, cotisations patronales et salariales). Mais des éléments beveridgiens se sont greffés : allocations familiales universelles, CMU/CSS pour tous, RSA. La CSG (1991), prélevée sur tous les revenus, marque un glissement vers l'universalisme. Cette dualité génère des tensions : qui cotise, qui reçoit, et selon quelle logique ? Ces questions structurent les réformes sociales depuis 30 ans."),
+  makeQuestion("s3-020",3,"Société","L’école publique est devenue gratuite et laïque dans :",
+    "Les années 1780","Les années 1880","Les années 1950","Les années 2000","B",
+    "L’école publique devient gratuite et laïque dans les années 1880, notamment avec les lois associées à Jules Ferry."
+  ),
 
-makeQuestion("s3-022", 3, "Société", "Pourquoi la loi de 2004 interdisant les signes religieux ostensibles à l'école publique continue-t-elle de susciter des débats philosophiques et juridiques ?", "Parce qu'elle est inconstitutionnelle et a été censurée par le Conseil constitutionnel, mais maintenue par décision politique sans valeur légale", "Parce qu'elle révèle la tension entre la neutralité de l'espace scolaire comme outil d'émancipation républicaine et la liberté individuelle de conscience et d'expression religieuse, soulevant aussi des questions d'application asymétrique entre religions", "Parce qu'elle n'est appliquée que dans certaines académies, créant des inégalités territoriales dans l'application du principe de laïcité", "Parce qu'elle interdit tous les signes religieux y compris dans les espaces privés des établissements scolaires et à l'université", "B", "La loi du 15 mars 2004 génère des débats durables. D'un côté, l'espace scolaire comme 'sanctuaire laïque' où l'élève se détache de ses appartenances communautaires pour devenir citoyen — vision républicaine classique. De l'autre, une liberté de conscience qui inclut le droit d'afficher ses convictions pour ceux qui n'y voient pas une contrainte. La question de l'application asymétrique (la loi touche principalement les jeunes filles musulmanes) et son extension aux sorties scolaires et à l'abaya (2023) entretiennent ce débat."),
+  makeQuestion("s3-021", 3, "Société", "Le modèle de protection sociale français repose historiquement sur :",
+  "Un système hybride mêlant logique contributive et logique plus universelle",
+  "Un système entièrement universel financé uniquement par l’impôt",
+  "Un système réservé aux seuls actifs cotisants",
+  "Un modèle purement assistanciel depuis 2000",
+  "A",
+  "Le modèle social français combine une logique contributive, liée au travail et aux cotisations, et une logique plus universelle financée en partie par l’impôt et la solidarité nationale. Cela explique de nombreux débats sur son financement et ses réformes."
+),
 
-makeQuestion("s3-023", 3, "Société", "La réforme des retraites de 2023 a été adoptée via l'article 49-3. Quelle tension institutionnelle fondamentale cela révèle-t-il ?", "Elle révèle que le gouvernement n'avait pas le droit constitutionnel de faire passer une réforme sociale par cette procédure, réservée aux seules lois de finances", "Elle révèle uniquement un déficit de courage politique, le gouvernement ayant préféré éviter un vote dont il connaissait le résultat favorable", "Elle illustre la tension entre l'efficacité gouvernementale — le 49-3 permet d'adopter une loi sans vote final en engageant la responsabilité du gouvernement — et la légitimité démocratique d'une réforme structurelle contestée par une majorité de citoyens et de parlementaires", "Elle confirme que le 49-3 est anticonstitutionnel et a provoqué la dissolution immédiate de l'Assemblée nationale par le Président de la République", "C", "L'article 49-3 permet au gouvernement d'adopter un texte en engageant sa responsabilité : si aucune motion de censure n'est adoptée dans les 24h, le texte est considéré adopté. En 2023, la motion de censure a échoué de neuf voix. Ce mécanisme pose une question démocratique : peut-on imposer une réforme majeure (retraite à 64 ans, touchant toute la population active) en contournant le vote majoritaire, par un outil conçu pour assurer la stabilité gouvernementale dans un régime parlementaire ? Cette tension est constitutive de la Ve République."),
+makeQuestion("s3-022", 3, "Société", "Pourquoi la loi de 2004 sur les signes religieux ostensibles à l’école publique continue-t-elle à susciter des débats ?",
+  "Parce qu’elle a été annulée par le Conseil constitutionnel",
+  "Parce qu’elle met en tension la neutralité de l’école publique et la liberté de conscience des élèves",
+  "Parce qu’elle n’est appliquée que dans certaines académies",
+  "Parce qu’elle interdit toute référence religieuse jusqu’à l’université",
+  "B",
+  "Cette loi est débattue parce qu’elle touche à l’équilibre entre la laïcité scolaire, la neutralité de l’institution publique et la liberté de conscience des élèves."
+),
 
-makeQuestion("s3-024", 3, "Société", "Pourquoi la 'discrimination positive' est-elle si controversée dans la tradition républicaine française, contrairement aux modèles anglo-saxons ?", "Parce qu'une décision du Conseil constitutionnel de 1975 en fait une violation absolue du principe d'égalité, interdisant toute action positive en faveur de groupes défavorisés", "Parce que les politiques de discrimination positive ont prouvé leur inefficacité en France, ne bénéficiant qu'aux classes aisées de chaque groupe minoritaire", "Parce que la France l'applique déjà massivement via des quotas ethniques dans l'accès aux concours, rendant tout débat sur son introduction superflu", "Parce qu'elle repose sur la reconnaissance de groupes différenciés par leur origine ou ethnie, ce qui contredit le principe républicain d'universalisme ne reconnaissant que des citoyens individuels égaux, indépendamment de leur appartenance communautaire", "D", "Le modèle républicain refuse de reconnaître des droits collectifs fondés sur l'appartenance ethnique ou religieuse. Accorder des avantages à une 'communauté noire' ou 'musulmane' présupposerait de catégoriser les citoyens par leur origine — ce que le Conseil constitutionnel censure. La France pratique des formes 'géographiques' de discrimination positive (ZEP, Sciences Po conventions) mais rejette les quotas ethniques. Ce débat structurant oppose deux conceptions de l'égalité : formelle (mêmes règles pour tous) vs substantielle (corriger les inégalités réelles)."),
+makeQuestion("s3-023", 3, "Société", "L’usage de l’article 49-3 pour faire adopter une réforme très contestée révèle surtout :",
+  "Que cette procédure est interdite pour les réformes sociales",
+  "Que le Gouvernement n’avait aucune majorité",
+  "La tension entre l’efficacité institutionnelle et la légitimité démocratique du vote parlementaire",
+  "Que l’Assemblée nationale est automatiquement dissoute",
+  "C",
+  "L’article 49-3 permet au Gouvernement de faire adopter un texte en engageant sa responsabilité. Son usage souligne souvent la tension entre stabilité gouvernementale et attente d’un vote parlementaire pleinement assumé."
+),
 
-makeQuestion("s3-025", 3, "Société", "En quoi le PACS (1999) a-t-il constitué une étape décisive vers le mariage pour tous (2013) dans l'évolution du droit de la famille français ?", "Le PACS a accordé aux couples de même sexe exactement les mêmes droits que le mariage dès 1999, rendant la loi de 2013 purement symbolique et superflue", "En créant pour la première fois un statut légal reconnaissant les unions entre personnes de même sexe et en normalisant progressivement cette reconnaissance dans l'opinion publique et le droit, le PACS a rendu politiquement et socialement possible le passage vers le mariage égalitaire", "Le PACS n'a aucun lien avec la loi de 2013, ayant été conçu uniquement pour les couples hétérosexuels refusant le mariage civil", "Le PACS a représenté un recul car le concubinage antérieur offrait déjà plus de protections aux couples non mariés de même sexe", "A", "Le PACS (loi du 15 novembre 1999) est une étape intermédiaire décisive : il reconnaît pour la première fois les unions entre personnes de même sexe dans le droit français, ouvrant des droits fiscaux et sociaux. Il normalise progressivement ces unions dans l'opinion (en 1999, 53% des Français y sont opposés ; en 2013, 60% soutiennent le mariage pour tous). Ce chemin par paliers illustre comment le droit anticipe puis accompagne l'évolution des mentalités : chaque réforme rendant la suivante socialement plus acceptable."),
+makeQuestion("s3-024", 3, "Société", "Pourquoi la discrimination positive à fondement ethnique est-elle controversée dans la tradition républicaine française ?",
+  "Parce qu’elle est appliquée massivement en France",
+  "Parce qu’elle a totalement remplacé l’égalité devant la loi",
+  "Parce qu’elle n’a jamais suscité de débat en France",
+  "Parce qu’elle suppose de distinguer les citoyens selon leur appartenance d’origine, ce qui entre en tension avec l’universalisme républicain",
+  "D",
+  "La tradition républicaine française repose sur l’idée que la loi s’adresse à des citoyens égaux, et non à des communautés définies par l’origine ou l’ethnie. C’est ce qui rend cette question particulièrement sensible."
+),
 
-makeQuestion("s3-026", 3, "Société", "Quelle tension fondamentale le modèle d'intégration républicain révèle-t-il face aux réalités de l'immigration contemporaine en France ?", "Il révèle que la France a renoncé à tout modèle d'intégration depuis 2000, laissant les immigrants s'organiser communautairement sans politique publique structurée", "Il révèle la tension entre un idéal universaliste — l'individu intégré par l'école, la langue et le travail indépendamment de son origine — et des réalités de discrimination, de ségrégation territoriale et d'inégalités structurelles qui empêchent cet idéal d'être pleinement effectif", "Il confirme que le modèle républicain d'intégration fonctionne parfaitement, la France ne connaissant pas de problèmes d'intégration significatifs par rapport à ses voisins européens", "Il révèle uniquement un problème culturel : les immigrants récents refusant l'intégration, contrairement aux vagues migratoires précédentes qui s'y sont parfaitement conformées", "B", "Le modèle républicain postule que l'école, la langue et le travail permettent l'intégration de tout individu, quelle que soit son origine. Mais les études (INED, INSEE, Défenseur des droits) montrent des discriminations persistantes à l'embauche (testing), au logement et dans les services publics pour les personnes à nom à consonance étrangère ou maghrébine. La ségrégation scolaire et résidentielle concentre ces populations dans les quartiers défavorisés. L'idéal universaliste coexiste avec des inégalités structurelles qui questionnent son effectivité réelle."),
+makeQuestion("s3-025", 3, "Société", "En quoi le PACS a-t-il préparé le terrain au mariage pour tous ?",
+  "Il accordait déjà exactement les mêmes droits que le mariage",
+  "Il a constitué une première reconnaissance juridique des couples de même sexe, rendant plus acceptable l’évolution vers le mariage pour tous",
+  "Il ne concernait que les couples hétérosexuels",
+  "Il offrait moins de droits que le concubinage",
+  "B",
+  "Le PACS a constitué une étape importante dans la reconnaissance juridique des couples de même sexe. Il n’était pas équivalent au mariage, mais il a préparé une évolution du droit et des mentalités."
+),
+makeQuestion("s3-026", 3, "Société", "Quelle tension fondamentale le modèle d'intégration républicain révèle-t-il face aux réalités de l'immigration contemporaine en France ?", "Il révèle que la France a renoncé à tout modèle d'intégration depuis 2000, laissant les immigrants s'organiser communautairement sans politique publique structurée", "Il révèle la tension entre un idéal universaliste — l'individu intégré par l'école, la langue et le travail indépendamment de son origine — et des réalités de discrimination, de ségrégation territoriale et d'inégalités structurelles qui empêchent cet idéal d'être pleinement effectif", "Il confirme que le modèle républicain d'intégration fonctionne parfaitement, la France ne connaissant pas de problèmes d'intégration significatifs par rapport à ses voisins européens", "Il révèle uniquement un problème culturel : les immigrants récents refusant l'intégration contrairement aux vagues migratoires précédentes", "B", "Le modèle républicain repose sur l'idée que l'école, la langue et le travail permettent l'intégration de tout individu, quelle que soit son origine. Cependant, de nombreuses études de l'INSEE, de l'INED et du Défenseur des droits montrent la persistance de discriminations à l'embauche, au logement et dans l'accès aux services publics pour certaines populations. La ségrégation résidentielle et scolaire renforce ces inégalités. L'idéal universaliste coexiste donc avec des obstacles structurels qui limitent son application concrète."),
 
-makeQuestion("s3-027", 3, "Société", "Quelles limites la politique d'exception culturelle française révèle-t-elle à l'ère des plateformes numériques mondiales ?", "Elle a totalement disparu depuis 2015, les plateformes numériques américaines ayant obtenu l'exemption complète de toute régulation française et européenne", "Elle révèle uniquement que la France dépense trop dans la culture par rapport à ses voisins, sans résultat probant en termes de rayonnement mondial", "Elle révèle la difficulté de protéger la création nationale face à des plateformes mondiales (Netflix, Spotify) qui diffusent sans frontières, obligeant la France à adapter ses outils — quotas de production locale, chronologie des médias, contribution au CNC — dans un rapport de force asymétrique", "L'exception culturelle est pleinement efficace à l'ère numérique, les plateformes mondiales étant entièrement soumises aux quotas culturels français sans aucune résistance", "C", "L'exception culturelle, conçue pour protéger le cinéma français via les chaînes TV et le CNC, doit s'adapter aux plateformes mondiales. La directive SMA (2018) et sa transposition française ont imposé aux plateformes (Netflix, Disney+, Amazon Prime) de contribuer au financement de la création européenne et française (25% de leur CA en France au CNC) et de respecter des quotas de contenus européens. Mais ces outils restent partiels : les plateformes peuvent privilégier leurs propres productions et les habitudes culturelles des jeunes générations évoluent vers une consommation mondiale."),
+makeQuestion("s3-027", 3, "Société", "Quelles limites la politique d'exception culturelle française révèle-t-elle à l'ère des plateformes numériques mondiales ?", "Elle a totalement disparu depuis 2015 face aux plateformes américaines", "Elle montre uniquement que la France dépense trop pour la culture", "Elle révèle la difficulté de protéger la création nationale face aux plateformes mondiales, obligeant la France à adapter ses outils comme les quotas de production et les contributions financières au CNC", "Elle reste totalement efficace car les plateformes respectent toutes les règles françaises", "C", "L'exception culturelle française vise à protéger la création nationale face à la concurrence internationale. Historiquement appliquée aux chaînes de télévision, elle a dû être adaptée aux plateformes numériques. La directive européenne SMA de 2018 impose désormais aux plateformes comme Netflix ou Disney+ de financer la production européenne et française. Toutefois, ces régulations restent limitées face à des acteurs mondiaux puissants et à l'évolution des habitudes culturelles."),
 
-makeQuestion("s3-028", 3, "Société", "En quoi la constitutionnalisation de la Charte de l'environnement en 2005 a-t-elle enrichi et complexifié la hiérarchie des droits en France ?", "Elle est purement symbolique : les principes de la Charte n'ont aucune valeur normative et ne peuvent pas être invoqués devant les tribunaux français", "Elle subordonne désormais tous les droits économiques et sociaux aux droits environnementaux, la protection de l'environnement primant sur tout autre droit constitutionnel", "Elle ne change rien à l'ordre constitutionnel existant, la Charte n'étant qu'une déclaration de principes sans effet sur le droit positif applicable", "En intégrant le droit à un environnement sain et le principe de précaution dans le bloc de constitutionnalité, elle crée de nouveaux droits opposables pouvant entrer en tension avec des droits économiques et de propriété, enrichissant les arbitrages normatifs du Conseil constitutionnel et du Conseil d'État", "D", "La Charte de l'environnement (adossée à la Constitution en 2005) a pleine valeur constitutionnelle. Le Conseil constitutionnel l'a mobilisée pour contrôler des lois (autorisation d'OGM, normes d'émission). Le Conseil d'État l'utilise pour contrôler des actes administratifs et a condamné l'État pour inaction climatique (affaire Grande-Synthe, 2021). Elle crée des tensions réelles avec d'autres droits constitutionnels : liberté d'entreprendre, droit de propriété, liberté du commerce. Ces tensions s'incarnent dans des contentieux concrets sur les pesticides, l'artificialisation des sols, ou les projets d'infrastructure."),
+makeQuestion("s3-028", 3, "Société", "En quoi la constitutionnalisation de la Charte de l'environnement en 2005 a-t-elle enrichi la hiérarchie des droits en France ?", "Elle est purement symbolique et sans effet juridique", "Elle subordonne tous les droits économiques aux droits environnementaux", "Elle n'a rien changé à l'ordre constitutionnel", "Elle introduit de nouveaux droits constitutionnels comme le droit à un environnement sain et le principe de précaution pouvant entrer en tension avec d'autres libertés", "D", "La Charte de l'environnement a été intégrée au bloc de constitutionnalité en 2005. Elle reconnaît notamment le droit de vivre dans un environnement équilibré et le principe de précaution. Le Conseil constitutionnel et le Conseil d'État l'utilisent pour contrôler les lois et décisions administratives. Cela crée parfois des tensions avec d'autres libertés constitutionnelles comme la liberté d'entreprendre ou le droit de propriété."),
 
-makeQuestion("s3-029", 3, "Société", "Quelle est la nature structurelle du déficit de la Sécurité sociale française et pourquoi est-il si difficile à résorber durablement ?", "Le déficit est entièrement dû à la fraude sociale, qui représente la quasi-totalité des dépenses non financées selon les rapports de la Cour des comptes", "La Sécurité sociale est en excédent structurel depuis 2010, les déficits passés ayant été entièrement remboursés grâce aux réformes successives", "Le déficit résulte du vieillissement démographique et du coût croissant de l'innovation médicale dans un contexte où les recettes (cotisations et CSG) ne suivent pas la dynamique des dépenses de santé et de retraite", "Le déficit est uniquement lié aux dépenses exceptionnelles du Covid-19 et sera intégralement résorbé d'ici 2027 selon les projections officielles", "C", "Le déficit de la Sécurité sociale est structurel, pas conjoncturel. Il résulte de deux dynamiques longues : le vieillissement démographique (papy-boom, espérance de vie à 85 ans pour les femmes) qui multiplie les retraités et les soins aux personnes âgées, et l'innovation médicale (biothérapies, médicaments innovants) qui améliore la santé mais à des coûts croissants. La base de cotisations (masse salariale) ne progresse pas aussi vite. La CADES gère la 'dette sociale' transférée aux générations futures — une tension intergénérationnelle structurante."),
+makeQuestion("s3-029", 3, "Société", "Quelle est la nature structurelle du déficit de la Sécurité sociale française ?", "Il provient principalement de la fraude sociale", "La Sécurité sociale est structurellement excédentaire depuis 2010", "Il résulte du vieillissement démographique et de l'augmentation des dépenses de santé dans un système où les recettes progressent moins vite", "Il est uniquement lié à la crise du Covid-19", "C", "Le déficit de la Sécurité sociale est lié à des évolutions structurelles : vieillissement de la population, augmentation de l'espérance de vie et innovation médicale coûteuse. Les dépenses progressent plus vite que les recettes basées sur la masse salariale. La dette sociale est gérée par la CADES, ce qui pose la question de l'équilibre intergénérationnel du système."),
 
-makeQuestion("s3-030", 3, "Société", "Quelles limites le droit positif français impose-t-il au droit de grève dans les services publics, et comment les justifie-t-il constitutionnellement ?", "Le droit de grève est totalement illimité en France, aucune restriction ne pouvant être imposée par le législateur sans violer le bloc de constitutionnalité", "Dans les services publics essentiels (transports, éducation, hôpitaux), des règles de service minimum et un préavis obligatoire de 5 jours limitent le droit de grève pour concilier ce droit avec le principe de continuité du service public, sans le supprimer", "Le droit de grève est interdit dans tous les services publics depuis 1963, seuls les salariés du secteur privé pouvant légalement se mettre en grève en France", "Le droit de grève est réglementé uniquement par les conventions collectives sectorielles, l'État n'ayant aucune compétence législative pour l'encadrer dans les services publics", "B", "Le Préambule de 1946 reconnaît le droit de grève 'dans le cadre des lois qui le réglementent'. La continuité du service public (valeur constitutionnelle) justifie des restrictions : préavis de 5 jours (transport, éducation), déclaration individuelle d'intention de grève (depuis 2007 pour les transports), service minimum garanti. Le Conseil constitutionnel valide ces restrictions si elles ne vident pas le droit de grève de sa substance : ni interdiction totale, ni obligation de travailler pendant une grève légitime. C'est la conciliation entre deux valeurs constitutionnelles antagonistes."),
+makeQuestion("s3-030", 3, "Société", "Quelles limites le droit français impose-t-il au droit de grève dans les services publics ?", "Aucune limite n'est possible", "Des règles comme le préavis obligatoire et le service minimum dans certains secteurs concilient le droit de grève avec la continuité du service public", "Le droit de grève est interdit dans les services publics", "Il dépend uniquement des conventions collectives", "B", "Le droit de grève est reconnu par le préambule de 1946 mais peut être encadré par la loi. Dans certains services publics essentiels, comme les transports ou l'éducation, un préavis de cinq jours et des obligations de service minimum peuvent être imposés. Ces règles cherchent à concilier le droit de grève avec le principe constitutionnel de continuité du service public."),
 
-makeQuestion("s3-031", 3, "Société", "Que révèle la fracture numérique sur les limites de la promesse républicaine d'égalité d'accès aux droits et aux services publics ?", "La fracture numérique est entièrement résolue depuis le déploiement de la fibre optique, tous les Français ayant désormais un accès équivalent au numérique", "Elle révèle uniquement un retard générationnel, seules les personnes âgées étant concernées par l'exclusion numérique, les jeunes générations étant parfaitement à l'aise", "Elle révèle comment une inégalité d'accès à des outils devenus essentiels pour exercer ses droits (services administratifs dématérialisés, emploi, santé) reproduit et amplifie les inégalités sociales, économiques et géographiques existantes, contredisant la promesse d'égalité réelle", "La fracture numérique est uniquement géographique, opposant les villes équipées à la fibre aux zones rurales sans connexion, sans dimension sociale ou générationnelle", "C", "La fracture numérique est multiple : géographique (zones rurales sans débit suffisant), générationnelle (13 millions de Français en situation d'illectronisme selon l'INSEE), sociale (personnes précaires sans équipement ni compétences). Elle devient critique avec la dématérialisation des services publics (CAF, Pôle emploi/France Travail, impôts, prise de rendez-vous médicaux). Ceux qui sont déjà exclus socialement sont aussi exclus numériquement, dans une double vulnérabilité. Les 'Maisons France Services' tentent d'y remédier, mais l'écart reste préoccupant."),
+makeQuestion("s3-031", 3, "Société", "Que révèle la fracture numérique dans la société française ?", "Elle est totalement résolue grâce à la fibre optique", "Elle concerne uniquement les personnes âgées", "Elle montre que l'accès inégal aux outils numériques reproduit et amplifie les inégalités sociales et territoriales", "Elle est uniquement géographique", "C", "La fracture numérique concerne plusieurs dimensions : accès au réseau, accès aux équipements et compétences numériques. Environ 13 millions de Français sont en difficulté avec les outils numériques. La dématérialisation des services publics renforce cette problématique car l'accès aux droits dépend désormais souvent d'une maîtrise minimale d'Internet."),
 
-makeQuestion("s3-032", 3, "Société", "Quelle distinction le féminisme contemporain établit-il entre égalité formelle et égalité réelle entre les femmes et les hommes en France ?", "Il n'y a pas de distinction pertinente : la France a atteint l'égalité réelle depuis l'adoption du principe de parité en 1999, les inégalités résiduelles étant marginales", "Le féminisme contemporain dénonce que malgré des droits formellement égaux, les femmes restent victimes d'inégalités salariales (environ 16% d'écart), de plafond de verre, de violences conjugales (220 000 victimes/an) et d'une répartition inégale du travail domestique révélant l'écart entre droit et réalité", "L'égalité formelle et l'égalité réelle sont identiques : dès lors que la loi garantit les mêmes droits, l'égalité réelle est automatiquement assurée sans intervention supplémentaire", "Le féminisme contemporain rejette toute politique d'égalité légale, estimant que seule une révolution économique radicale permettra l'émancipation des femmes", "D", "La France garantit formellement l'égalité (Constitution, Code du travail, loi pénale). Mais l'égalité réelle reste inachevée : écart salarial de 16% (28% sur l'ensemble de la carrière selon Eurostat), sous-représentation dans les conseils d'administration malgré la loi Copé-Zimmermann (2011), 220 000 femmes victimes de violences conjugales annuellement, et charge mentale et domestique majoritairement portée par les femmes (études de l'INSEE). L'index d'égalité professionnelle (2018) et la loi sur les violences conjugales (2019) témoignent que l'État reconnaît cet écart entre droit formel et réalité vécue."),
+makeQuestion("s3-032", 3, "Société", "Quelle distinction existe entre égalité formelle et égalité réelle entre les femmes et les hommes ?", "Il n'existe aucune distinction", "L'égalité formelle garantit les droits mais l'égalité réelle suppose que ces droits soient effectivement appliqués dans la société", "Les deux notions sont identiques", "Le féminisme contemporain rejette toute égalité juridique", "B", "L'égalité formelle signifie que la loi reconnaît les mêmes droits aux femmes et aux hommes. Cependant, l'égalité réelle dépend de la manière dont ces droits se traduisent dans la pratique. Les écarts de salaires, les violences conjugales et la sous-représentation dans certains postes de pouvoir montrent que cette égalité reste incomplète malgré les avancées juridiques."),
 
-makeQuestion("s3-033", 3, "Société", "Quels débats la loi 'mariage pour tous' de 2013 a-t-elle laissés ouverts concernant les droits des familles homoparentales ?", "Elle a ouvert le débat sur la procréation médicalement assistée (PMA, étendue aux femmes seules et aux couples de femmes par la loi bioéthique de 2021) et sur la gestation pour autrui (GPA), toujours interdite en France mais dont les effets pour les enfants nés à l'étranger sont partiellement reconnus, créant des tensions juridiques", "La loi de 2013 a tout résolu, aucune question relative aux droits des familles homoparentales n'étant en suspens dans le droit français", "Elle a uniquement ouvert le droit à l'adoption simple, sans modifier aucune autre règle relative à la filiation, à la PMA ou à la procréation", "La GPA a été discrètement légalisée dans la même loi de 2013, sans faire l'objet d'un vote explicite du Parlement français", "A", "La loi de 2013 a ouvert deux débats durables. D'abord la PMA : ouverte uniquement aux couples hétérosexuels jusqu'à la loi de bioéthique de 2021 qui l'étend aux femmes seules et aux couples de femmes. Ensuite la GPA : interdite en France (non-patrimonialité du corps), mais les enfants nés à l'étranger via GPA légale voient leur filiation progressivement reconnue par la Cour de cassation et la CEDH, créant une jurisprudence complexe. Ces débats révèlent que le droit de la filiation évolue encore, entre droits de l'enfant et éthique médicale."),
+makeQuestion("s3-033", 3, "Société", "Quels débats la loi 'mariage pour tous' de 2013 a-t-elle laissés ouverts ?", "La PMA et la GPA", "Aucun débat n'est resté ouvert", "Elle n'a concerné que l'adoption simple", "La GPA a été légalisée", "A", "La loi de 2013 a ouvert le mariage et l'adoption aux couples de même sexe. Elle a également relancé les débats sur la procréation médicalement assistée, finalement ouverte aux couples de femmes en 2021, ainsi que sur la gestation pour autrui qui reste interdite en France mais dont les situations internationales soulèvent des questions juridiques."),
 
-makeQuestion("s3-034", 3, "Société", "Pierre Bourdieu décrivait l'école française comme un 'appareil de reproduction sociale'. En quoi cette critique reste-t-elle pertinente dans les débats éducatifs contemporains ?", "La thèse de Bourdieu est dépassée : les politiques d'éducation prioritaire ont entièrement éliminé les inégalités scolaires liées au milieu social en France", "Les études contemporaines montrent que le milieu socio-économique reste le principal facteur prédictif de la réussite scolaire en France, malgré les politiques d'éducation prioritaire, révélant que l'école tend davantage à reproduire les inégalités sociales qu'à les corriger", "La thèse de Bourdieu a été démentie par les données PISA, qui classent la France parmi les pays où le diplôme des parents influe le moins sur la réussite scolaire des enfants", "Les inégalités scolaires en France sont uniquement d'ordre géographique et n'ont aucun lien avec le capital culturel ou économique des familles", "B", "Bourdieu et Passeron (La Reproduction, 1970) montraient que l'école, en valorisant implicitement la culture des classes dominantes, avantage structurellement les enfants de milieux favorisés. Les données contemporaines confirment cette pertinence : la France est l'un des pays de l'OCDE où le milieu social prédit le plus la réussite scolaire (PISA 2022). Les politiques d'éducation prioritaire (REP, REP+) n'ont pas suffi à renverser cette tendance. La ségrégation scolaire et le déterminisme social restent des défis centraux du système éducatif républicain."),
+makeQuestion("s3-034", 3, "Société", "Pourquoi la critique de Pierre Bourdieu sur la reproduction sociale à l'école reste-t-elle pertinente ?", "Elle a été totalement invalidée", "Le milieu social reste un facteur majeur de réussite scolaire malgré les politiques d'éducation prioritaire", "Les données PISA contredisent totalement cette thèse", "Les inégalités scolaires sont uniquement géographiques", "B", "Les recherches contemporaines montrent que la réussite scolaire reste fortement corrélée à l'origine sociale. Les enfants issus de milieux favorisés disposent souvent d'un capital culturel et social qui facilite leur réussite. Les politiques d'éducation prioritaire tentent de corriger ces inégalités mais n'ont pas totalement inversé cette tendance."),
 
-makeQuestion("s3-035", 3, "Société", "Quelles sont les causes structurelles de la désertification médicale en France, et pourquoi les politiques incitatives peinent-elles à les résoudre ?", "La désertification médicale est causée exclusivement par un numerus clausus trop restrictif depuis 1972, rendant toute autre analyse inutile", "Elle est uniquement due au refus des jeunes médecins de s'installer en zone rurale par manque d'intérêt pour la médecine générale de proximité", "Elle résulte de la convergence de plusieurs dynamiques : liberté d'installation conduisant à la concentration dans les zones attractives, effets différés de la baisse du numerus clausus des années 1980-2000, féminisation de la profession (aspiration à des conditions d'exercice équilibrées), fin du modèle du médecin de campagne solitaire, et vieillissement des médecins en exercice non remplacés", "La désertification médicale ne concerne que les spécialistes libéraux, les médecins généralistes étant uniformément répartis sur l'ensemble du territoire français", "C", "Les causes de la désertification médicale sont multiples et enchevêtrées : la liberté d'installation (principe libéral protégé) qui concentre les médecins dans les zones attractives ; les effets décalés du numerus clausus restrictif des années 1980-2000 (aujourd'hui remplacé par le 'numerus apertus') ; la féminisation de la profession (60% des étudiants en médecine sont des femmes) qui modifie les modes d'exercice ; la préférence des jeunes médecins pour l'exercice en groupe (maisons de santé) plutôt qu'en cabinet isolé. Les aides à l'installation ont eu des effets limités car elles ne résolvent pas les facteurs d'attractivité territoriale."),
+makeQuestion("s3-035", 3, "Société", "Quelles sont les causes structurelles de la désertification médicale en France ?", "Le numerus clausus uniquement", "Le manque d'intérêt des jeunes médecins", "La combinaison de plusieurs facteurs : liberté d'installation, vieillissement des médecins, évolution des modes d'exercice et effets du numerus clausus passé", "Elle ne concerne que les spécialistes", "C", "La désertification médicale résulte de plusieurs facteurs : la liberté d'installation des médecins, la réduction du numerus clausus dans les années 1980-2000, le vieillissement des praticiens et l'évolution des attentes professionnelles des jeunes médecins. Les politiques incitatives n'ont que partiellement corrigé ces déséquilibres territoriaux."),
 
-makeQuestion("s3-036", 3, "Société", "Quel enjeu philosophique et politique soulève le débat sur le 'communautarisme' dans la société française ?", "Le communautarisme désigne en France un modèle officiellement adopté par l'État pour organiser les relations entre groupes culturels, sur le modèle britannique du multiculturalisme institutionnalisé", "Le terme 'communautarisme' n'a aucune réalité sociologique en France, étant une construction des médias conservateurs sans fondement empirique ni usage académique", "Le communautarisme est un phénomène entièrement résolu depuis les lois de laïcité de 2004 et 2010, qui ont mis fin aux regroupements communautaires dans l'espace public", "Le terme 'communautarisme' — souvent appliqué aux communautés perçues comme repliées sur elles-mêmes — soulève la tension entre la liberté d'association et de pratique religieuse (droits individuels garantis) et le modèle républicain universel, ce concept étant parfois mobilisé comme stigmate désignant des pratiques légales mais jugées contraires à l'intégration", "D", "Le terme 'communautarisme' est polysémique et chargé politiquement en France. Il désigne dans le débat public des pratiques collectives de groupes ethniques ou religieux jugées incompatibles avec le modèle républicain. Mais il est souvent appliqué de façon asymétrique aux seules communautés issues de l'immigration. Des pratiques légales — porter un voile, fréquenter une association confessionnelle, vivre dans un quartier ethniquement homogène — peuvent être stigmatisées comme 'communautaristes'. Ce débat révèle la difficulté d'articuler libertés individuelles (association, religion) et idéal collectif républicain."),
+makeQuestion("s3-036", 3, "Société", "Quel débat philosophique soulève la notion de 'communautarisme' en France ?", "La France a officiellement adopté le communautarisme", "Le concept n'existe pas", "Il a disparu avec la loi de 2004", "Il reflète la tension entre libertés individuelles et idéal républicain universaliste", "D", "Le terme 'communautarisme' désigne dans le débat public des pratiques perçues comme un repli identitaire. Il renvoie à la tension entre la liberté d'association et de religion, garanties par la Constitution, et le modèle républicain fondé sur l'universalisme et l'égalité entre citoyens indépendamment de leurs appartenances."),
 
-makeQuestion("s3-037", 3, "Société", "Pourquoi la crise du logement constitue-t-elle un révélateur des tensions entre droits fondamentaux et réalités du marché dans la France contemporaine ?", "Elle révèle la tension entre le droit au logement opposable (DALO, 2007) — droit garanti par l'État — et la réalité d'un marché immobilier tendu où l'offre abordable est structurellement insuffisante, pénalisant les ménages modestes et renforçant la ségrégation sociale dans les zones les plus dynamiques", "La crise du logement est entièrement résolue depuis la loi SRU de 2000, qui a imposé 25% de logements sociaux dans toutes les communes", "La crise du logement ne concerne que Paris et Lyon, les autres villes françaises offrant suffisamment de logements abordables pour tous les ménages", "Le droit au logement en France est uniquement une aspiration morale sans valeur juridique, le DALO n'ayant jamais produit de condamnation de l'État devant un tribunal administratif", "A", "La crise du logement révèle un paradoxe : la France a le DALO (droit subjectif au logement depuis 2007) mais des dizaines de milliers de ménages prioritaires attendent encore un logement. Dans les zones tendues (Paris, Lyon, Bordeaux), la hausse des prix exclut les ménages modestes, renforçant la ségrégation sociale et territoriale. La loi SRU impose 25% de logements sociaux mais 1 000 communes persistent dans leur refus. La crise du logement articule des enjeux de droit, de fiscalité foncière, d'aménagement et de lutte contre les inégalités territoriales."),
+makeQuestion("s3-037", 3, "Société", "Pourquoi la crise du logement est-elle un révélateur des tensions entre droits et marché ?", "Elle révèle l'écart entre le droit au logement et un marché immobilier insuffisant pour répondre à la demande", "Elle est totalement résolue", "Elle concerne uniquement Paris", "Le droit au logement n'existe pas", "A", "La France reconnaît un droit au logement opposable depuis 2007. Cependant, dans les zones tendues, l'offre de logements abordables reste insuffisante face à la demande. Cette situation crée une tension entre les droits reconnus par la loi et les réalités économiques du marché immobilier."),
 
-makeQuestion("s3-038", 3, "Société", "Comment expliquer le paradoxe du syndicalisme français : taux de syndicalisation parmi les plus bas d'Europe, mais syndicats très influents ?", "Ce paradoxe n'existe pas : la France a l'un des taux de syndicalisation les plus élevés d'Europe (plus de 30%), mais ses syndicats sont peu combatifs par culture politique consensuelle", "Les syndicats français tirent leur légitimité non de leurs effectifs (moins de 10% de taux de syndicalisation) mais de leur représentativité légale fondée sur les élections professionnelles, de leur rôle institutionnel dans la gestion paritaire de la Sécurité sociale et des retraites, et du droit de grève constitutionnel qui amplifie leur capacité de pression", "Les syndicats français sont influents uniquement dans le secteur public, n'ayant aucun poids dans le secteur privé où le taux de syndicalisation est proche de zéro absolu", "L'influence des syndicats français vient de leur lien organique avec les partis politiques de gauche, qui leur accordent un droit de veto légal sur toute réforme sociale", "B", "Avec moins de 10% de taux de syndicalisation (contre 67% au Danemark, 25% en Allemagne), la France semble paradoxale. Mais les syndicats y exercent une influence institutionnelle massive : gestion paritaire de l'UNEDIC (chômage), de l'ARRCO-AGIRC (retraites), présence dans les conseils d'administration des entreprises (ordonnances Macron). Leur légitimité est légale, fondée sur les résultats aux élections professionnelles, et non sur les adhésions. Le droit de grève constitutionnel leur donne aussi un pouvoir de blocage redouté."),
+makeQuestion("s3-038", 3, "Société", "Pourquoi les syndicats français sont-ils influents malgré un faible taux d'adhésion ?", "Parce que le taux d'adhésion est élevé", "Parce que leur légitimité repose sur la représentativité électorale et leur rôle institutionnel", "Parce qu'ils sont liés aux partis politiques", "Parce qu'ils ne représentent que le secteur public", "B", "Le taux de syndicalisation en France est inférieur à 10%. Toutefois, les syndicats conservent une influence importante grâce à leur rôle dans les négociations collectives, leur participation à la gestion de certains organismes sociaux et leur capacité de mobilisation."),
 
-makeQuestion("s3-039", 3, "Société", "Quel débat philosophique et pratique la condition d'assimilation pour la naturalisation française soulève-t-elle ?", "La naturalisation française n'impose aucune condition d'assimilation, étant accordée automatiquement après 5 ans de résidence légale sans aucun critère qualitatif d'intégration", "L'assimilation exigée pour la naturalisation est entièrement objective et mesurable, ne soulevant aucun débat sur ses critères ou sur l'équité de son application préfectorale", "La notion d'assimilation pour la naturalisation soulève une tension entre la conception républicaine (adhésion aux valeurs communes, maîtrise de la langue, intégration dans la société) et le risque de subjectivité dans l'appréciation préfectorale, pouvant conduire à des décisions arbitraires ou discriminatoires selon les dossiers", "La condition d'assimilation pour la naturalisation a été entièrement supprimée par la loi de 2024 au profit d'un simple test linguistique standardisé", "C", "La naturalisation française requiert une 'assimilation à la communauté française', concept défini par le Code civil mais dont l'appréciation relève des préfectures. Au-delà de la maîtrise de la langue (niveau B2 depuis 2024), l'administration évalue l'adhésion aux valeurs républicaines, la régularité fiscale, la continuité de résidence. Cette appréciation discrétionnaire soulève des questions : comment mesurer objectivement l'adhésion à des valeurs ? Les décisions sont-elles équitables entre préfectures et entre catégories de demandeurs ? Le Conseil d'État encadre ce pouvoir discrétionnaire mais ne l'élimine pas."),
+makeQuestion("s3-039", 3, "Société", "Quel débat soulève la condition d'assimilation pour la naturalisation ?", "La naturalisation est automatique", "Les critères sont totalement objectifs", "Elle pose la question de la subjectivité administrative dans l'évaluation de l'intégration", "Elle a été supprimée", "C", "La naturalisation exige une assimilation à la communauté française, incluant la maîtrise de la langue et l'adhésion aux valeurs républicaines. Cependant, l'appréciation de ces critères repose en partie sur le jugement de l'administration, ce qui peut soulever des interrogations sur l'équité des décisions."),
 
-makeQuestion("s3-040", 3, "Société", "Pourquoi le débat sur l'identité nationale en France est-il particulièrement sensible et révèle-t-il des tensions profondes dans la conception de la nation ?", "Parce que l'identité nationale est définie dans la Constitution, tout débat public sur ce sujet constituant une infraction au droit républicain", "Parce que la France a une identité nationale consensuelle parfaitement définie, tout débat artificiel étant uniquement le produit de manipulations politiques", "Parce que l'identité nationale est un concept exclusivement sociologique, la politique n'ayant aucun rôle légitime à jouer dans sa définition", "Parce que le concept d'identité nationale renvoie à des questions sur ce qui définit le 'vrai Français', questions pouvant glisser vers l'exclusion de certaines catégories (immigrés, binationaux, musulmans) et contredire la conception civique et universaliste de la nation républicaine fondée sur l'adhésion aux valeurs et non sur l'origine", "D", "Le débat sur l'identité nationale (lancé par le ministère de l'Immigration en 2009) a rapidement glissé vers des définitions excluantes, révélant la tension entre deux conceptions de la nation française : la nation civique (Renan : 'un plébiscite de tous les jours', adhésion aux valeurs communes) et la nation ethnique ou culturelle (définition par l'origine, la religion, les traditions). Cette tension est constitutive de la République française, dont l'universalisme proclamé se heurte aux réalités de discrimination et de hiérarchies sociales non dites."),
+makeQuestion("s3-040", 3, "Société", "Pourquoi le débat sur l'identité nationale est-il sensible en France ?", "Parce qu'il est interdit", "Parce que l'identité nationale est consensuelle", "Parce que la politique n'y joue aucun rôle", "Parce qu'il oppose conception civique et conception culturelle de la nation", "D", "La nation française peut être définie selon deux conceptions : civique, fondée sur l'adhésion aux valeurs républicaines, ou culturelle, liée à l'histoire et aux traditions. Le débat sur l'identité nationale révèle cette tension et soulève la question de l'inclusion et de l'exclusion dans la définition du corps national."),
 
-makeQuestion("s3-041", 3, "Société", "Quelles sont les limites et les critiques structurelles du RSA comme outil de lutte contre la pauvreté ?", "Le RSA est critiqué pour créer une 'trappe à inactivité' (la reprise d'un emploi peut réduire les revenus nets), pour son taux de non-recours élevé (environ 30% des ayants droit n'y recourent pas) et pour un montant insuffisant pour couvrir les besoins essentiels, révélant les limites d'un filet de sécurité mal articulé avec l'accompagnement vers l'emploi", "Le RSA est unanimement considéré comme un outil parfaitement efficace dans sa lutte contre la pauvreté, sans aucune critique significative de sa conception ou de son application sur le terrain", "Le RSA est critiqué uniquement pour son coût excessif pour les finances publiques, les spécialistes s'accordant sur son efficacité sociale totale pour les bénéficiaires", "Le RSA a été supprimé en 2022 et remplacé par un revenu universel de base accordé à tous les résidents en France, résolvant les problèmes de pauvreté structurelle", "A", "Le RSA (environ 600€/mois pour une personne seule) souffre de plusieurs critiques : la 'trappe à inactivité' (un emploi à temps partiel peut réduire les revenus nets, décourageant la reprise d'activité) ; le non-recours très élevé (environ 30% des ayants droit ne demandent pas le RSA par méconnaissance, complexité ou stigmatisation) ; un montant jugé insuffisant pour vivre dignement (sous le seuil de pauvreté à 60%). La réforme de France Travail (2023) conditionne davantage le RSA à des actions d'insertion, générant un nouveau débat entre obligation et accompagnement."),
+makeQuestion("s3-041", 3, "Société", "Quelles critiques sont adressées au RSA ?", "Trappe à inactivité, non-recours élevé et montant insuffisant", "Il est parfaitement efficace", "Il est seulement trop coûteux", "Il a été supprimé", "A", "Le RSA vise à garantir un revenu minimum et à favoriser l'insertion professionnelle. Toutefois, plusieurs critiques existent : certaines personnes renoncent à le demander, son montant reste faible et il peut parfois créer des effets de désincitation à la reprise d'activité lorsque les revenus du travail restent proches des allocations."),
 
-makeQuestion("s3-042", 3, "Société", "Comment la ségrégation scolaire persiste-t-elle malgré l'existence de la carte scolaire et quelles inégalités génère-t-elle ?", "La ségrégation scolaire a été entièrement éliminée par la suppression de la carte scolaire en 2007, tous les élèves ayant désormais le libre choix de leur établissement", "La ségrégation scolaire — concentration des élèves défavorisés dans les mêmes établissements — persiste malgré la carte scolaire par les stratégies d'évitement des familles favorisées (privé, dérogations), la ségrégation résidentielle et les effets de réputation des établissements, produisant un système éducatif à plusieurs vitesses", "La ségrégation scolaire en France est uniquement géographique, sans aucune dimension sociale liée aux stratégies des familles ou à la réputation des établissements", "La carte scolaire, maintenue intégralement depuis 1963 sans aucune modification, empêche totalement toute forme de ségrégation scolaire en France", "B", "La ségrégation scolaire est un phénomène paradoxal : la carte scolaire vise l'égalité géographique, mais les familles des classes moyennes et supérieures contournent le système (inscription dans le privé, dérogations, fausses adresses, déménagements stratégiques). Résultat : les établissements REP+ concentrent les élèves défavorisés et les difficultés pédagogiques. Les études du CNESCO montrent que la France est l'un des pays de l'OCDE où la composition sociale des établissements est la plus ségrégée, amplifiant les inégalités de réussite."),
+makeQuestion("s3-042", 3, "Société", "Pourquoi la ségrégation scolaire persiste-t-elle en France ?", "Elle a disparu", "Les stratégies d'évitement des familles et la ségrégation résidentielle maintiennent des inégalités entre établissements", "Elle est uniquement géographique", "La carte scolaire l'empêche totalement", "B", "La carte scolaire vise à équilibrer la composition sociale des établissements. Toutefois, certaines familles utilisent des stratégies d'évitement comme l'inscription dans le privé ou des dérogations. La ségrégation résidentielle renforce également ces écarts."),
 
-makeQuestion("s3-043", 3, "Société", "Quelles tensions la mise en œuvre de l'objectif 'Zéro artificialisation nette' (ZAN) crée-t-elle avec les besoins de développement des collectivités locales ?", "Le ZAN est un objectif purement symbolique sans valeur juridique contraignante, que les communes peuvent ignorer sans aucune conséquence légale ou financière", "Le ZAN ne crée aucune tension : toutes les communes françaises disposent de suffisamment de friches et de foncier déjà urbanisé pour répondre à leurs besoins sans toucher aux espaces naturels", "Le ZAN crée une tension réelle entre l'impératif environnemental de stopper l'étalement urbain et la nécessité pour les communes rurales et périurbaines de se développer économiquement, construire des logements et attirer des habitants, générant des conflits entre l'État, les régions et les élus locaux sur la répartition des enveloppes d'artificialisation", "Le ZAN a été entièrement abandonné par le gouvernement Lecornu en 2025 après les protestations des maires ruraux, sans qu'aucun objectif de limitation de l'artificialisation ne subsiste", "C", "Le ZAN (loi Climat et Résilience, 2021) impose de réduire de moitié la consommation d'espaces naturels entre 2021 et 2031, puis zéro artificialisation nette en 2050. Pour les communes rurales et périurbaines, cela signifie moins de possibilités de ZAC, zones commerciales ou lotissements — leur principal outil de développement économique. La loi de 2023 a assoupli le dispositif (garantie communale minimale), mais la tension reste vive entre les objectifs nationaux et climatiques et les projets locaux de développement. Le ZAN illustre la difficulté de gouverner la transition écologique dans un État décentralisé."),
+makeQuestion("s3-043", 3, "Société", "Quel conflit le Zéro Artificialisation Nette (ZAN) crée-t-il ?", "Aucun conflit", "Il est symbolique", "Il oppose impératif écologique et développement territorial", "Il a été abandonné", "C", "Le ZAN vise à réduire l'étalement urbain pour préserver les espaces naturels. Cependant, certaines collectivités locales craignent que ces restrictions limitent leur développement économique et la construction de logements."),
 
-makeQuestion("s3-044", 3, "Société", "Pourquoi les inégalités entre territoires en France sont-elles qualifiées de 'structurelles' plutôt que de simplement conjoncturelles ?", "Elles sont uniquement conjoncturelles : la politique de décentralisation de 1982 a entièrement résolu les inégalités territoriales structurelles héritées de l'Ancien Régime et de la centralisation napoléonienne", "Les inégalités territoriales n'existent pas en France, le maillage uniforme des services publics assurant une égalité parfaite de traitement entre tous les citoyens quel que soit leur lieu de résidence", "Elles sont structurelles car liées à des dynamiques économiques (métropolisation et concentration des emplois qualifiés), démographiques (vieillissement des zones rurales) et politiques (concentration des services publics dans les zones denses), que les politiques d'aménagement du territoire peinent à inverser durablement faute de moyens et de cohérence temporelle", "Les inégalités territoriales sont exclusivement une création politique des gouvernements régionaux, qui concentrent délibérément les ressources dans les chefs-lieux au détriment des communes rurales", "D", "Les inégalités territoriales résultent de dynamiques de long terme : la métropolisation (concentration des emplois qualifiés et des services dans 10 grandes métropoles), le vieillissement démographique des zones rurales dépeuplées (spirale de la désertification : moins de jeunes, moins de services, moins d'attractivité), et les effets de la désindustrialisation (bassins miniers, textiles, sidérurgiques). Ces dynamiques sont renforcées par le décrochage des services publics (fermetures de maternités, tribunaux, gares). Les politiques d'ANCT (Agence nationale de cohésion des territoires) ne peuvent corriger que marginalement des tendances économiques profondes."),
+makeQuestion("s3-044", 3, "Société", "Pourquoi parle-t-on d'inégalités territoriales structurelles ?", "Elles ont disparu", "Il n'y en a pas", "Elles sont liées à des dynamiques économiques et démographiques durables", "Elles sont créées uniquement par les régions", "C", "Les inégalités territoriales résultent de tendances profondes comme la métropolisation, la désindustrialisation de certains territoires et le vieillissement démographique dans les zones rurales. Ces phénomènes rendent difficile une correction rapide par les politiques publiques."),
 
-makeQuestion("s3-045", 3, "Société", "Quel bilan nuancé peut-on dresser du modèle républicain d'intégration à l'aune des défis de la société française contemporaine ?", "Le modèle républicain d'intégration reste une référence idéale puissante — école commune, citoyenneté universelle, laïcité — mais il est mis à l'épreuve par des discriminations structurelles persistantes, une ségrégation territoriale et scolaire réelle, et la montée des identités communautaires, révélant l'écart entre ses principes et leur application effective", "Le modèle républicain a parfaitement fonctionné et continue de fonctionner sans difficulté significative, les critiques n'étant que des constructions intellectuelles sans fondement empirique ou statistique", "Le modèle républicain a totalement échoué et doit être remplacé par un modèle multiculturel qui reconnaisse formellement les communautés et leurs droits collectifs spécifiques", "Le modèle républicain d'intégration est entièrement périmé depuis les années 1990 et n'est plus appliqué par aucun acteur institutionnel sérieux en France", "A", "Le modèle républicain d'intégration offre un cadre idéal fort (école de la République comme creuset, citoyenneté universelle, laïcité comme espace commun). Mais les données empiriques révèlent des écarts : discriminations à l'embauche et au logement, ségrégation scolaire et résidentielle, sentiment d'exclusion de jeunes de la troisième génération. Ce modèle n'a pas échoué — des millions de parcours d'intégration réussie en témoignent — mais il est mis en tension par des inégalités structurelles qui nécessitent plus que la neutralité formelle : une politique active d'égalité réelle."),
+makeQuestion("s3-045", 3, "Société", "Quel bilan peut-on dresser du modèle républicain d'intégration ?", "Il reste une référence mais rencontre des difficultés face aux discriminations et aux inégalités", "Il fonctionne parfaitement", "Il a totalement échoué", "Il a disparu", "A", "Le modèle républicain d'intégration repose sur l'égalité des citoyens et la neutralité de l'État. Toutefois, certaines discriminations persistantes et des inégalités territoriales mettent en évidence un écart entre les principes et leur application concrète."),
 
-makeQuestion("s3-046", 3, "Société", "Comment la dette sociale gérée par la CADES illustre-t-elle les tensions intergénérationnelles dans le financement de l'État-providence français ?", "La CADES a entièrement remboursé la dette sociale en 2024, la France n'ayant plus aucune dette liée aux déficits cumulés de la Sécurité sociale", "La CADES illustre le transfert d'une charge financière née des dépenses sociales actuelles vers les générations futures qui devront la rembourser, posant la question de la justice intergénérationnelle dans le financement de l'État-providence", "La dette sociale est intégralement à la charge des entreprises via une cotisation patronale spéciale, sans impact sur les ménages ni sur les finances publiques de l'État", "La CADES est financée par l'Union européenne dans le cadre du mécanisme de solidarité du Fonds de cohésion, la France n'ayant pas à rembourser ses déficits sociaux sur ses propres ressources", "B", "La CADES (Caisse d'amortissement de la dette sociale), créée en 1996, a pour mission de rembourser les déficits cumulés de la Sécurité sociale via la CRDS (Contribution au remboursement de la dette sociale). Elle prélevait environ 17 milliards €/an, avec une date de fin de remboursement sans cesse repoussée (initialement 2009, reportée à 2033). Le transfert de dettes nées de dépenses sociales passées sur des cotisations futures pose une question de justice intergénérationnelle : les actifs d'aujourd'hui et de demain remboursent des dépenses dont ont bénéficié les générations précédentes."),
+makeQuestion("s3-046", 3, "Société", "Comment la CADES illustre-t-elle les tensions intergénérationnelles ?", "La dette est remboursée", "Elle transfère les déficits sociaux aux générations futures", "Elle est financée par les entreprises", "Elle est financée par l'UE", "B", "La CADES rembourse la dette sociale accumulée par les déficits de la Sécurité sociale grâce à la CRDS. Ce mécanisme reporte le financement de dépenses passées sur les générations futures, ce qui pose la question de l'équité intergénérationnelle."),
 
-makeQuestion("s3-047", 3, "Société", "En quoi la politique d'école inclusive pour les élèves en situation de handicap révèle-t-elle un écart entre le droit formel et les moyens de sa mise en œuvre ?", "La France est le pays européen le mieux doté pour l'inclusion scolaire des élèves handicapés, sans aucun problème significatif de mise en œuvre", "La politique d'école inclusive a été abandonnée en 2022, tous les enfants handicapés étant désormais scolarisés dans des établissements spécialisés séparés de l'école ordinaire", "La loi de 2005 garantit à tout enfant handicapé le droit à la scolarisation en milieu ordinaire, mais sa mise en œuvre est entravée par l'insuffisance des AESH, des locaux inadaptés et une formation insuffisante des enseignants, créant un droit formel sans toujours les moyens de l'effectivité réelle", "L'inclusion scolaire est entièrement assurée par le secteur privé sous contrat, l'Éducation nationale n'ayant aucune obligation légale en la matière", "C", "La loi du 11 février 2005 pour l'égalité des droits des personnes handicapées consacre leur droit à la scolarisation en milieu ordinaire. Mais sa mise en œuvre bute sur des obstacles concrets : les AESH (accompagnants d'élèves en situation de handicap) sont souvent insuffisants en nombre et en formation (statut précaire, temps partiel imposé) ; les locaux ne sont pas toujours adaptés ; les enseignants se sentent peu préparés à gérer des classes inclusives. Environ 430 000 élèves en situation de handicap sont scolarisés, mais les familles signalent régulièrement des défaillances. Ce cas illustre la distance entre droit proclamé et droit effectif."),
+makeQuestion("s3-047", 3, "Société", "Quel problème révèle l'école inclusive ?", "Elle fonctionne parfaitement", "Elle a été abandonnée", "Le droit à la scolarisation existe mais les moyens restent parfois insuffisants", "Elle est gérée par le privé", "C", "La loi de 2005 garantit la scolarisation des élèves en situation de handicap en milieu ordinaire. Cependant, le manque d'accompagnants spécialisés et les difficultés d'adaptation des établissements rendent parfois cette inclusion difficile."),
 
-makeQuestion("s3-048", 3, "Société", "Quel débat éthique, juridique et philosophique la gestation pour autrui (GPA) soulève-t-elle dans le contexte du droit français ?", "La GPA est légale et encadrée en France depuis la loi de bioéthique de 2021, qui l'a autorisée pour les couples homosexuels masculins ne pouvant pas bénéficier de la PMA", "La GPA est légale uniquement pour les couples hétérosexuels infertiles avec prescription médicale, mais reste interdite pour les couples homosexuels masculins", "La GPA est pratiquée massivement en France dans des cliniques privées sous surveillance médicale, malgré une interdiction formelle maintenue pour des raisons politiques", "La GPA est interdite en France au nom de la non-patrimonialité du corps humain et de l'indisponibilité de l'état des personnes, mais les enfants nés à l'étranger via GPA légale voient leur filiation progressivement reconnue, créant une tension entre l'interdiction nationale et la réalité des familles concernées", "D", "La GPA est prohibée en France par les articles 16-7 et 16-9 du Code civil (nullité des conventions de mère porteuse). La prohibition repose sur des principes forts : non-patrimonialité du corps (le corps humain ne peut pas faire l'objet d'un contrat rémunéré), indisponibilité de l'état des personnes (on ne peut pas s'engager à remettre un enfant). Mais la Cour de cassation (2015) et la CEDH ont obligé la France à reconnaître la filiation des enfants nés à l'étranger de GPA légale, pour ne pas pénaliser ces enfants. Cette jurisprudence crée une tension entre l'interdiction de principe et la protection des droits de l'enfant."),
+makeQuestion("s3-048", 3, "Société", "Quel débat soulève la gestation pour autrui en France ?", "Elle est légale", "Elle est légale pour certains couples", "Elle est pratiquée en France", "Elle est interdite mais reconnue indirectement pour les enfants nés à l'étranger", "D", "La GPA est interdite en France au nom du principe de non-patrimonialité du corps humain. Cependant, les juridictions reconnaissent la filiation d'enfants nés par GPA à l'étranger afin de protéger les droits de l'enfant."),
 
-makeQuestion("s3-049", 3, "Société", "En quoi l'essor des plateformes numériques et la 'ubérisation' du travail remettent-ils en cause les fondements du droit du travail français ?", "L'essor des plateformes (Uber, Deliveroo) crée une zone grise entre salariat (protections sociales complètes) et indépendance (liberté mais absence de protections), obligeant le droit à redéfinir le lien de subordination et à imaginer de nouvelles protections pour les travailleurs de plateformes sans les assimiler aux salariés ordinaires", "La 'ubérisation' renforce en réalité le salariat, la Cour de cassation ayant systématiquement requalifié en salariés tous les livreurs et chauffeurs depuis 2018", "La 'ubérisation' est un phénomène marginal concernant moins de 50 000 personnes et sans impact significatif sur le modèle social français", "Le droit du travail français protège entièrement les travailleurs de plateforme depuis la loi de 2016, qui les a reclassés comme salariés de plein droit", "A", "Les travailleurs de plateforme (environ 300 000 en France) sont en majorité des auto-entrepreneurs indépendants : ils n'ont pas droit aux congés payés, au chômage, à la protection contre le licenciement. La Cour de cassation a requalifié en contrat de travail certaines relations (arrêt Take Eat Easy, 2018 ; arrêt Uber, 2020), en reconnaissant le lien de subordination économique. Mais la grande majorité reste en dehors du salariat. Le débat porte sur comment créer un 'troisième statut' entre salarié et indépendant, offrant une protection sans contraindre la flexibilité — enjeu structurant du droit du travail du XXIe siècle."),
+makeQuestion("s3-049", 3, "Société", "Que remet en cause l'ubérisation du travail ?", "Elle crée une zone intermédiaire entre salariat et indépendance", "Elle renforce le salariat", "Elle est marginale", "Elle est déjà résolue", "A", "Les plateformes numériques ont développé un modèle où les travailleurs sont juridiquement indépendants mais dépendants économiquement. Cette situation remet en cause la distinction classique entre salarié et indépendant et pousse à repenser certaines protections sociales."),
 
-makeQuestion("s3-050", 3, "Société", "Quelles lacunes juridiques et sociales le droit français révèle-t-il concernant les familles recomposées, qui représentent environ un tiers des foyers ?", "Les familles recomposées bénéficient d'un statut juridique complet et clairement défini depuis 2007, le beau-parent ayant les mêmes droits et devoirs que le parent biologique", "Le droit français ne reconnaît pas de statut juridique au beau-parent — ni autorité parentale automatique ni obligation alimentaire légale — laissant une zone d'incertitude juridique qui fragilise ces familles lors des séparations ou du décès d'un parent", "Les familles recomposées sont inexistantes en droit français, qui ne reconnaît que les couples mariés avec leurs enfants biologiques comme structure familiale légitime", "La loi impose automatiquement au beau-parent une obligation alimentaire envers les enfants du conjoint, assurant une équité totale avec les parents biologiques dans toutes les situations", "B", "Environ 1,5 million d'enfants vivent dans une famille recomposée en France. Mais le droit français reste lacunaire : le beau-parent n'a aucun statut légal automatique (pas d'autorité parentale sans démarche, pas d'obligation alimentaire sauf adoption ou convention). Si le parent décède ou si le couple se sépare, le beau-parent peut perdre tout contact légal avec les enfants qu'il a élevés. La délégation partielle d'autorité parentale (art. 377-1 du Code civil) offre une solution partielle mais méconnue. Cette lacune contraste avec la réalité sociale de millions de familles et alimente les propositions de réforme du droit de la filiation."),
+makeQuestion("s3-050", 3, "Société", "Quelle lacune juridique concerne les familles recomposées ?", "Le beau-parent a les mêmes droits que le parent", "Le beau-parent n'a pas de statut juridique automatique", "Les familles recomposées n'existent pas", "Le beau-parent a une obligation alimentaire", "B", "Le droit français ne prévoit pas de statut spécifique pour le beau-parent. En cas de séparation ou de décès du parent biologique, les liens juridiques avec l'enfant peuvent être fragiles malgré la réalité affective et éducative de ces relations."),
 
-makeQuestion("s3-051", 3, "Société", "Quelles tensions le fonctionnement du droit d'asile révèle-t-il dans le système juridique et humanitaire français contemporain ?", "Le droit d'asile en France fonctionne parfaitement, tous les demandeurs étant traités équitablement et dans des délais raisonnables conformément aux obligations de la Convention de Genève", "La France a entièrement délégué son système d'asile à l'Union européenne depuis le règlement Dublin III, n'ayant plus aucune compétence nationale sur les demandes d'asile individuelles", "Il révèle la tension entre l'obligation juridique internationale d'examiner toute demande (Convention de Genève de 1951, CEDH) et des capacités d'accueil limitées, des délais d'instruction longs à l'OFPRA (parfois 18 mois), des conditions de vie précaires pour les demandeurs et une pression politique constante sur les flux migratoires", "Le droit d'asile en France ne concerne qu'un nombre marginal de personnes, les demandes étant quasi-exclusivement déposées dans les pays de première entrée en Europe selon Dublin III", "C", "La France reçoit environ 130 000 demandes d'asile par an (2024). Mais le système est sous tension : les délais d'instruction atteignent parfois 18 mois à l'OFPRA et à la CNDA (Cour nationale du droit d'asile). Pendant ce temps, les demandeurs survivent souvent dans des conditions précaires (CADA saturés, campements de rue). Le règlement Dublin III oblige à traiter la demande dans le pays de première entrée, mais est contourné en pratique. Le taux d'accord global (protection accordée) est d'environ 35%. Ce système illustre la tension entre le droit international des réfugiés et les limites politiques et administratives des États."),
+makeQuestion("s3-051", 3, "Société", "Quelle tension révèle le droit d'asile en France ?", "Il fonctionne parfaitement", "Il est entièrement géré par l'UE", "Il oppose obligations internationales et capacités d'accueil limitées", "Il concerne peu de personnes", "C", "La France doit respecter la Convention de Genève sur les réfugiés et examiner les demandes d'asile. Cependant, les capacités d'accueil, les délais d'instruction et les tensions politiques sur la question migratoire rendent ce système complexe et souvent critiqué."),
 
-makeQuestion("s3-052", 3, "Société", "Quel enjeu éthique, culturel et diplomatique soulève la question de la restitution des œuvres d'art et objets acquis pendant la période coloniale française ?", "La France a déjà restitué l'intégralité de ses collections coloniales aux pays d'origine, aucune œuvre liée à la période coloniale ne subsistant dans les musées nationaux français", "La restitution est juridiquement impossible, la loi française interdisant toute aliénation des collections nationales, aucun débat ni exception n'étant envisageable", "Les œuvres présentes dans les musées français sont toutes des achats légaux et légitimes, la question de la restitution ne présentant aucune justification éthique ou historique", "Elle soulève la tension entre la valeur universelle des grandes collections encyclopédiques françaises (accessibles à tous au Louvre ou au Quai Branly) et le droit des peuples à retrouver leur patrimoine culturel spolié, avec un début de réponse par la loi de 2022 permettant des restitutions ponctuelles au Bénin et au Sénégal", "D", "Le rapport Savoy-Sarr (2018) a estimé que 90% du patrimoine subsaharien se trouve hors d'Afrique, principalement en France. La loi du 22 décembre 2022 permet la restitution de 26 œuvres au Bénin et de restes humains au Sénégal, en dérogeant au principe d'inaliénabilité des collections. Mais ce début de réponse pose des questions : comment distinguer les acquisitions légitimes des spoliations ? Qui représente légitimement les peuples d'origine ? Quelles œuvres restituer en priorité ? La France s'engage sur la voie des restitutions ponctuelles mais refuse une loi générale."),
+makeQuestion("s3-052", 3, "Société", "Quel débat soulève la restitution des œuvres coloniales ?", "Toutes les œuvres ont été restituées", "C'est juridiquement impossible", "Elles sont toutes légitimes", "Elle oppose patrimoine universel et restitution aux pays d'origine", "D", "La restitution d'œuvres acquises pendant la période coloniale soulève un débat entre la préservation des collections universelles dans les grands musées et le droit des peuples à récupérer leur patrimoine culturel. La France a commencé certaines restitutions ponctuelles."),
 
-makeQuestion("s3-053", 3, "Société", "Quel débat politique et scientifique la décision de relancer la filière nucléaire française (2022-2024) soulève-t-elle ?", "La décision de relancer le nucléaire (6 à 14 nouveaux EPR2 annoncés) soulève des débats sur la gestion des déchets radioactifs à très longue durée de vie, le coût des nouveaux réacteurs, la sûreté post-Fukushima et la place du nucléaire dans la transition énergétique entre partisans du 'nucléaire bas-carbone' et défenseurs d'un scénario 100% renouvelables", "La relance du nucléaire est consensuelle, toutes les forces politiques et les associations environnementales s'accordant sur sa nécessité pour atteindre la neutralité carbone en 2050 sans réduire le niveau de vie", "La France a décidé d'abandonner totalement le nucléaire en 2022, suivant le modèle de l'Allemagne qui fermait ses dernières centrales la même année", "Le débat sur le nucléaire en France est purement économique et n'a aucune dimension environnementale, le nucléaire étant unanimement reconnu comme la seule énergie compatible avec la neutralité carbone", "A", "Emmanuel Macron a annoncé en février 2022 la construction de 6 nouveaux EPR2 (avec option pour 8 supplémentaires). Cette décision divise : les pro-nucléaires soulignent la faible empreinte carbone (4g CO2/kWh) et la sécurité d'approvisionnement ; les opposants pointent le coût des nouveaux réacteurs (l'EPR de Flamanville a coûté 20 milliards au lieu de 3,3), la question non résolue des déchets (CIGÉO à Bure), les risques d'accident et l'incompatibilité avec un scénario 100% renouvelables défendu par certains. Ce débat structurant pour la politique énergétique française oppose deux visions de la transition écologique."),
+makeQuestion("s3-053", 3, "Société", "Pourquoi la relance du nucléaire fait-elle débat ?", "Elle oppose visions différentes de la transition énergétique", "Elle est consensuelle", "La France abandonne le nucléaire", "Elle est uniquement économique", "A", "Le nucléaire produit une électricité très faiblement carbonée mais soulève des questions sur les déchets, les coûts des nouvelles centrales et les risques d'accident. Le débat oppose partisans du nucléaire et défenseurs d'un système fondé principalement sur les énergies renouvelables."),
 
-makeQuestion("s3-054", 3, "Société", "En quoi le défi du financement des retraites est-il d'abord un problème démographique avant d'être un problème financier ou politique ?", "Le problème des retraites est exclusivement financier : il suffit d'augmenter les cotisations sociales sans toucher à l'âge de départ pour garantir l'équilibre du système par répartition", "Le système de retraite par répartition repose sur le ratio actifs/retraités : le vieillissement démographique réduit mécaniquement ce ratio (de 4 actifs par retraité en 1960 à 1,7 aujourd'hui), rendant inévitable une combinaison de mesures — hausse des cotisations, recul de l'âge, baisse relative des pensions — dont l'arbitrage est politique mais la contrainte démographique est objective", "Le problème des retraites est entièrement résolu par la capitalisation individuelle, que la France a adoptée comme mode principal de financement des retraites", "Le vieillissement démographique n'a aucun impact sur le financement des retraites françaises, financées par l'impôt et non par des cotisations liées au travail", "B", "Le système français de retraite par répartition ('les actifs d'aujourd'hui financent les retraites d'aujourd'hui') est mécaniquement fragilisé par le vieillissement : en 1960, 4 actifs finançaient la retraite d'1 retraité ; en 2023, le ratio est de 1,7. L'espérance de vie à 85 ans pour les femmes allonge la durée de perception des pensions. Cette contrainte démographique objective impose des choix douloureux : cotiser plus longtemps, partir à la retraite plus tard ou accepter des pensions plus faibles. L'arbitrage entre ces options est politique (réforme de 2023 : 64 ans) mais la pression démographique est inévitable."),
+makeQuestion("s3-054", 3, "Société", "Pourquoi le financement des retraites est-il d'abord un problème démographique ?", "Il suffit d'augmenter les cotisations", "Le ratio actifs/retraités diminue avec le vieillissement", "La capitalisation domine", "Les retraites sont financées par l'impôt", "B", "Le système par répartition dépend du nombre d'actifs qui financent les pensions. Le vieillissement de la population réduit ce ratio, ce qui impose des ajustements comme l'augmentation de l'âge de départ ou des cotisations."),
 
-makeQuestion("s3-055", 3, "Société", "Quel défi les réseaux sociaux et la désinformation posent-ils à la démocratie française, et comment y répondre sans restreindre la liberté d'expression ?", "Les réseaux sociaux ont entièrement supprimé la désinformation grâce à leurs algorithmes de modération automatique, rendant inutile toute intervention réglementaire de l'État", "La France a résolu le problème de la désinformation en 2018 par la loi contre la manipulation de l'information, qui a totalement éliminé les fausses nouvelles en période électorale", "Les réseaux sociaux permettent la diffusion rapide de fausses informations qui concurrencent les médias vérifiés, fragilisent la confiance dans les institutions et imposent de nouveaux outils réglementaires (DSA européen, éducation aux médias) devant être conciliés avec la liberté d'expression", "La désinformation sur les réseaux sociaux ne concerne que les sujets extrêmes et n'a aucun impact sur les comportements électoraux ou la confiance institutionnelle en France", "C", "La désinformation en ligne crée des défis inédits : rapidité de propagation (une fausse information se diffuse 6 fois plus vite qu'une vraie selon le MIT), effets de chambre d'écho des algorithmes, délégitimation des institutions. La loi contre la manipulation de l'information (2018) permet de saisir le juge en urgence en période électorale. Le DSA européen (2023) responsabilise les plateformes. Mais tout encadrement soulève la question des limites : qui définit ce qui est 'faux' ? Ces outils ne substituent pas à l'éducation aux médias, identifiée comme la réponse structurelle la plus solide."),
+makeQuestion("s3-055", 3, "Société", "Quel défi les réseaux sociaux posent-ils à la démocratie ?", "Ils ont supprimé la désinformation", "La loi de 2018 a tout résolu", "Ils facilitent la diffusion rapide de fausses informations", "Ils n'ont aucun impact", "C", "Les réseaux sociaux permettent une diffusion très rapide d'informations, vraies ou fausses. Cela peut fragiliser la confiance dans les institutions et influencer le débat public. Les régulations et l'éducation aux médias sont des réponses envisagées."),
 
-makeQuestion("s3-056", 3, "Société", "Quelle distinction économique le droit et la politique de l'emploi font-ils entre chômage 'structurel' et chômage 'frictionnel', et quelles politiques en découlent ?", "La distinction est purement théorique et sans conséquence sur les politiques d'emploi effectivement conduites par les gouvernements français successifs", "Le chômage frictionnel est le plus grave en France, résultant de la désindustrialisation et de la destruction permanente d'emplois dans des secteurs entiers sans reconversion possible", "Il n'y a pas de distinction pertinente car le chômage en France est uniquement volontaire, les personnes sans emploi préférant les allocations au travail", "Le chômage frictionnel (délai de transition entre deux emplois) peut être réduit par de meilleures politiques d'intermédiation et de formation courte, tandis que le chômage structurel (inadéquation durable entre compétences disponibles et emplois offerts) nécessite des politiques industrielles et éducatives de long terme — une distinction qui guide les réformes successives du marché du travail", "D", "Le chômage frictionnel (3-4% environ) est inhérent à toute économie dynamique : il représente le temps nécessaire entre deux emplois lors d'une transition volontaire ou d'une mise à pied ponctuelle. Des politiques efficaces de placement (France Travail) et de formation courte le réduisent. Le chômage structurel (inadéquation entre les compétences disponibles et celles demandées) est plus résistant : il nécessite des politiques industrielles (développer des secteurs pourvoyeurs d'emplois), des réformes de l'orientation scolaire et de la formation professionnelle sur 10-20 ans. Cette distinction guide les réformes depuis les lois Pénicaud (2018) jusqu'à France 2030."),
+makeQuestion("s3-056", 3, "Société", "Pourquoi distingue-t-on chômage frictionnel et chômage structurel ?", "Parce qu'ils désignent deux causes différentes du chômage et appellent des réponses différentes", "Parce qu'ils ont exactement les mêmes causes", "Parce que le chômage en France est uniquement volontaire", "Parce que cette distinction n'a aucun intérêt pour les politiques publiques", "A", "Le chômage frictionnel correspond au temps de transition entre deux emplois. Le chômage structurel est plus profond : il vient d'un décalage durable entre les compétences disponibles et les emplois offerts. Cette distinction est utile car elle oriente les politiques publiques : accompagnement rapide pour l'un, réformes de long terme pour l'autre."),
 
-makeQuestion("s3-057", 3, "Société", "Comment le reste à charge dans le système de santé crée-t-il des inégalités d'accès aux soins, malgré l'universalité formelle de l'Assurance maladie ?", "Malgré la CSS pour les plus précaires, une partie de la population est sous-assurée ou sans mutuelle complémentaire suffisante, conduisant à des renoncements aux soins pour raisons financières — particulièrement pour les soins dentaires, optiques et auditifs — révélant que l'universalité formelle ne suffit pas à garantir l'accès effectif aux soins pour tous", "Le reste à charge est nul en France pour tous les soins médicaux, l'Assurance maladie remboursant 100% de tous les actes sans exception ni dépassement possible", "Les inégalités d'accès aux soins sont uniquement géographiques (déserts médicaux) et n'ont aucun lien avec le niveau de revenus ou la qualité de la couverture complémentaire des patients", "La réforme '100% santé' de 2019 a entièrement résolu les inégalités d'accès, garantissant le remboursement intégral de tous les soins dentaires, optiques et auditifs pour tous sans exception", "A", "L'Assurance maladie ne rembourse qu'une partie des soins : 70% des consultations de médecins de secteur 1, moins pour les spécialistes en secteur 2 ou 3 (dépassements d'honoraires). Le reste à charge est théoriquement couvert par les mutuelles complémentaires, mais environ 4 millions de Français n'en ont pas. Les études montrent que 30% des Français ont renoncé à des soins pour des raisons financières. La réforme '100% santé' (2019) garantit un panier de soins sans reste à charge pour certains soins dentaires, optiques et auditifs, mais ne couvre pas tous les soins. L'égalité formelle d'accès à l'Assurance maladie masque une inégalité réelle d'accès aux soins."),
+makeQuestion("s3-057", 3, "Société", "Pourquoi le reste à charge peut-il créer des inégalités d'accès aux soins en France ?", "Parce que tous les soins sont remboursés à 100 %", "Parce que certaines personnes renoncent à des soins faute de complémentaire suffisante ou à cause du coût restant", "Parce que seules les zones rurales sont concernées", "Parce que la réforme du 100 % santé a supprimé tout problème", "B", "L'Assurance maladie ne rembourse pas toujours l'intégralité des dépenses. Sans mutuelle adaptée, certains patients renoncent à des soins, surtout en dentaire, optique ou pour certains dépassements d'honoraires. Cela montre qu'une couverture universelle de principe ne garantit pas toujours un accès réel et égal aux soins."),
 
-makeQuestion("s3-058", 3, "Société", "Comment la laïcité dans l'espace public a-t-elle évolué au-delà de sa définition initiale de neutralité de l'État vis-à-vis des cultes ?", "La laïcité dans l'espace public signifie uniquement que les bâtiments de l'État ne peuvent pas afficher de symboles religieux, sans aucune implication pour les comportements individuels des citoyens", "La laïcité a connu un glissement sémantique : de neutralité de l'État (1905) vers une exigence de neutralité plus large dans l'espace public pour les individus — voile intégral (2010), débats sur l'abaya (2023), le 'voile à l'université' ou dans les sorties scolaires — soulevant des questions sur les frontières constitutionnellement légitimes de cette laïcité élargie", "La laïcité française s'est entièrement alignée sur le modèle américain de 'wall of separation', interdisant toute mention de la religion dans tout espace financé ou contrôlé par l'État", "La laïcité a été abandonnée par le Conseil constitutionnel en 2015 comme incompatible avec la CEDH, qui garantit la liberté de manifester sa religion dans l'espace public", "B", "La laïcité de 1905 porte sur la neutralité de l'État et la liberté de conscience. Mais depuis les années 2000, un 'nouveau laïcisme' étend l'exigence de neutralité aux individus dans l'espace public. L'interdiction du voile intégral (2010) s'applique à toutes les personnes dans tout l'espace public. L'interdiction de l'abaya à l'école (2023) étend la loi de 2004. Ces évolutions sont défendues au nom de la laïcité mais soulèvent des questions constitutionnelles : la liberté de conscience s'arrête-t-elle à la porte de l'école ? La laïcité peut-elle légalement interdire des tenues non-religieuses mais perçues comme telles ?"),
+makeQuestion("s3-058", 3, "Société", "Comment la laïcité a-t-elle évolué dans les débats récents sur l'espace public ?", "Elle est restée strictement limitée à la neutralité de l'État sans aucun débat nouveau", "Elle a parfois été interprétée au-delà de la seule neutralité de l'État, en soulevant des débats sur les comportements et tenues dans certains espaces", "Elle a été supprimée par le Conseil constitutionnel", "Elle interdit désormais toute expression religieuse dans toute la société", "B", "À l'origine, la laïcité signifie surtout neutralité de l'État et liberté de conscience. Mais, dans les débats récents, certains défendent une lecture plus large, appliquée à davantage de situations dans l'espace public ou scolaire. Cela crée des tensions entre liberté individuelle, neutralité des institutions et interprétation du principe républicain."),
 
-makeQuestion("s3-059", 3, "Société", "Quelle tension la sélection à l'entrée de l'enseignement supérieur via Parcoursup révèle-t-elle dans le système éducatif républicain ?", "Parcoursup a entièrement résolu les inégalités d'accès à l'enseignement supérieur en garantissant une place dans la filière de son choix à chaque bachelier, quelle que soit son origine sociale", "La loi ORE de 2018 a supprimé toute forme de sélection à l'université, tous les bacheliers pouvant s'inscrire librement dans la filière de leur choix sans condition de dossier", "Elle révèle la tension entre le principe républicain d'accès universel à l'enseignement supérieur (le baccalauréat comme 'passeport' universel) et la nécessité de gérer des filières saturées, Parcoursup étant critiqué pour introduire une sélection qui peut avantager les dossiers des milieux favorisés et les lycéens du privé, reproduisant les inégalités de départ", "La sélection universitaire en France est entièrement déterminée par les seuls résultats du baccalauréat, sans aucune appréciation qualitative des dossiers par les établissements d'enseignement supérieur", "C", "Avant 2018, le tirage au sort (APB) régulait l'accès aux filières saturées — absurde démocratiquement. Parcoursup sélectionne sur dossier, mais génère d'autres critiques : les lycéens des milieux favorisés maîtrisent mieux les codes de la 'bonne candidature', les lycées privés seraient avantagés par leurs réseaux, et les algorithmes des établissements manquent de transparence. Des études montrent que l'origine sociale continue de déterminer significativement la filière obtenue. La tension entre accès universel et gestion des flux reste une contradiction fondamentale du système éducatif républicain."),
+makeQuestion("s3-059", 3, "Société", "Quelle tension Parcoursup révèle-t-il dans l'enseignement supérieur français ?", "Aucune, car chaque étudiant obtient toujours la filière de son choix", "Il montre la tension entre accès de tous à l'enseignement supérieur et sélection dans les filières les plus demandées", "Il a supprimé toute sélection", "Il repose uniquement sur les notes du baccalauréat", "B", "Parcoursup cherche à mieux répartir les étudiants dans l'enseignement supérieur, surtout dans les filières très demandées. Mais il révèle une tension entre l'idéal d'accès ouvert grâce au baccalauréat et la nécessité de classer les candidatures quand les places sont limitées. Cela alimente des débats sur l'égalité des chances et la transparence des critères."),
 
-makeQuestion("s3-060", 3, "Société", "Comment la France articule-t-elle surveillance sécuritaire et protection des libertés numériques dans son droit, et quelles tensions persistent ?", "La France ne dispose d'aucun cadre légal sur la surveillance numérique, laissant les services de renseignement agir sans aucun contrôle juridique indépendant", "La CNIL a le pouvoir d'interdire toute forme de surveillance numérique par l'État, y compris pour des raisons de sécurité nationale, rendant impossible tout renseignement électronique légal en France", "La France a adopté les mêmes règles que les États-Unis, permettant une collecte massive de données par les services de renseignement sans contrôle judiciaire indépendant", "La loi sur le renseignement de 2015 légalise des techniques de surveillance électronique (algorithmes, IMSI-catchers) sous le contrôle de la CNCTR, créant une tension permanente entre efficacité des services de renseignement et protection de la vie privée, que le Conseil constitutionnel et la CEDH encadrent sans la supprimer", "D", "La loi sur le renseignement du 24 juillet 2015 encadre les techniques de surveillance — écoutes, algorithmes de détection de comportements suspects sur les réseaux, balises, IMSI-catchers — au nom de la prévention du terrorisme. Elle crée la CNCTR (Commission nationale de contrôle des techniques de renseignement), autorité de contrôle indépendante. Mais la critique persiste : les algorithmes peuvent viser des millions de personnes non-suspectes ; le contrôle de la CNCTR est a posteriori ; le Conseil d'État valide largement ces dispositifs. La tension entre sécurité nationale et libertés individuelles est au cœur du droit contemporain."),
+makeQuestion("s3-060", 3, "Société", "Comment la France cherche-t-elle à concilier sécurité et libertés numériques ?", "Elle laisse les services de renseignement agir sans aucun cadre", "Elle interdit toute surveillance numérique", "Elle a adopté un cadre légal de surveillance encadré, mais les débats restent vifs sur la protection de la vie privée", "Elle applique exactement le modèle américain sans adaptation", "C", "La France a encadré certaines techniques de renseignement par la loi, notamment depuis 2015. Ces outils sont justifiés par la lutte contre le terrorisme et les menaces graves. Mais ils soulèvent des inquiétudes sur la vie privée et les libertés individuelles. Le débat porte donc sur le bon équilibre entre sécurité nationale et État de droit."),
 
-makeQuestion("s3-061", 3, "Société", "Quelles sont les limites structurelles de l'application du DALO (Droit au logement opposable) depuis son adoption en 2007 ?", "Le DALO consacre un droit fondamental mais son application reste défaillante : des dizaines de milliers de ménages reconnus prioritaires attendent encore un logement social, l'État étant condamné à des astreintes financières sans que la pénurie structurelle de logements abordables soit résolue dans les zones tendues", "Le DALO est pleinement appliqué depuis 2010, tous les ménages reconnus prioritaires recevant un logement dans les trois mois suivant la décision de la commission de médiation", "Le DALO a été déclaré inconstitutionnel par le Conseil constitutionnel en 2015, le droit au logement n'ayant pas de valeur constitutionnelle opposable à l'État", "Le DALO ne s'applique qu'en Île-de-France et dans les grandes métropoles, les zones rurales étant légalement exemptées de son application", "A", "Le DALO (loi du 5 mars 2007) crée un droit subjectif au logement : les personnes reconnues prioritaires par les commissions de médiation doivent recevoir une offre de logement social dans des délais légaux (3 à 6 mois selon les zones). En cas de manquement, elles peuvent saisir le tribunal administratif pour condamner l'État à une astreinte financière. Mais l'application reste lacunaire : en Île-de-France, plus de 60 000 ménages prioritaires attendent encore un logement. L'astreinte financière n'accroît pas le parc social disponible. Le DALO révèle la limite d'un droit subjectif sans les moyens de le rendre effectif."),
+makeQuestion("s3-061", 3, "Société", "Quelle limite majeure le DALO révèle-t-il dans la politique du logement ?", "Le droit au logement opposable existe, mais il reste difficile à rendre effectif faute de logements disponibles", "Le DALO garantit toujours un logement immédiat", "Le DALO a été supprimé", "Le DALO ne concerne que Paris", "A", "Le DALO reconnaît juridiquement un droit au logement pour certaines personnes prioritaires. Mais un droit reconnu par la loi ne suffit pas si l'offre de logements sociaux reste insuffisante, surtout dans les zones tendues. Cela montre l'écart possible entre un droit proclamé et son application réelle."),
 
-makeQuestion("s3-062", 3, "Société", "Quel enjeu la politique de défense de la langue française révèle-t-elle dans un contexte de mondialisation et de domination de l'anglais ?", "La politique linguistique française est uniquement tournée vers la promotion du français à l'étranger, sans aucune mesure de protection sur le territoire national", "La politique linguistique française (loi Toubon, article 2 de la Constitution) vise à protéger le français comme langue de la République dans la vie publique, dans un contexte de mondialisation où l'anglais domine les affaires, la recherche et le numérique, créant une tension entre identité nationale et compétitivité internationale", "La France a officiellement adopté l'anglais comme langue de travail dans ses institutions depuis 2016, la loi Toubon ne s'appliquant plus qu'aux administrations locales", "La politique linguistique française a été abandonnée en 2010, la loi Toubon ayant été déclarée inconstitutionnelle comme atteinte à la liberté d'expression commerciale", "B", "La loi Toubon (1994) impose l'usage du français dans les services publics, la publicité, les contrats de travail, l'enseignement. L'article 2 de la Constitution en fait la 'langue de la République'. Mais cette politique se heurte à des réalités économiques : les grandes entreprises françaises font leurs réunions en anglais, les chercheurs publient en anglais, les startups lèvent des fonds en anglais. Les universités débattent de l'enseignement en anglais pour attirer des étudiants étrangers. La tension entre protection identitaire de la langue et attractivité internationale illustre plus largement le dilemme entre souveraineté nationale et compétitivité globale."),
+makeQuestion("s3-062", 3, "Société", "Quel enjeu révèle la défense de la langue française dans la mondialisation ?", "La France a renoncé à défendre sa langue", "Elle montre la tension entre la protection du français comme langue commune et la domination croissante de l'anglais dans certains domaines", "Le français n'a plus aucun statut juridique", "La loi Toubon a été annulée", "B", "La France protège le français comme langue de la République et de la vie publique. Mais, dans la recherche, l'économie ou le numérique, l'anglais occupe une place croissante. Cela crée une tension entre identité linguistique, souveraineté culturelle et adaptation à la mondialisation."),
 
-makeQuestion("s3-063", 3, "Société", "Pourquoi le 'testing' est-il devenu un outil central dans la lutte contre les discriminations, et quelles sont ses limites ?", "Le testing est illégal en France car il constitue une provocation à la discrimination, son utilisation par des associations ou l'État étant sanctionnée pénalement depuis 2005", "Le testing n'est utilisé qu'à titre expérimental par quelques associations et n'a jamais été reconnu comme preuve valide par les juridictions françaises", "Le testing — envoi de candidatures similaires avec des noms à consonance différente — est reconnu comme preuve dans les procédures judiciaires et par le Défenseur des droits car il permet d'objectiver des discriminations difficiles à prouver autrement, mais il ne peut établir l'intentionnalité discriminatoire d'un employeur précis dans toutes les situations", "Le testing est obligatoire pour toutes les entreprises de plus de 50 salariés depuis 2017, qui doivent le pratiquer annuellement et publier leurs résultats", "C", "Le testing de discrimination consiste à envoyer des CV identiques avec des noms à consonance différente (française vs maghrébine, par exemple) pour mesurer les inégalités de traitement. Il a été consacré comme élément de preuve par la Cour de cassation et le Défenseur des droits. Le gouvernement a lancé des campagnes de testing sur les entreprises du CAC40 (2021). Ses limites : il prouve une discrimination statistique mais pas toujours l'intention discriminatoire d'un recruteur précis ; il peut être contourné (appel téléphonique, entretien). Il reste cependant un outil puissant pour rendre visibles des discriminations systémiques."),
+makeQuestion("s3-063", 3, "Société", "Pourquoi le testing est-il un outil important contre les discriminations ?", "Parce qu'il permet d'objectiver des différences de traitement difficiles à prouver autrement", "Parce qu'il est interdit par la loi", "Parce qu'il remplace tous les procès", "Parce qu'il est obligatoire dans toutes les entreprises", "A", "Le testing consiste à comparer des candidatures très proches, ne différant que par un critère comme le nom ou l'adresse. Il permet de mettre en évidence des discriminations qui restent souvent invisibles. C'est donc un outil utile pour révéler des pratiques inégalitaires, même s'il ne suffit pas à lui seul à prouver toute l'intention discriminatoire."),
 
-makeQuestion("s3-064", 3, "Société", "Comment la France gère-t-elle la contradiction entre ses besoins économiques et démographiques d'immigration et la pression politique pour réduire les flux ?", "La France n'a aucun besoin économique ou démographique d'immigration, sa population active étant suffisante pour assurer la croissance et le financement des retraites sans apport migratoire", "La France a adopté depuis 2010 une politique de 'zéro immigration' ayant tari la quasi-totalité des flux migratoires, ne laissant entrer que les conjoints de ressortissants français", "L'immigration économique représente 70% des titres de séjour accordés, la France ayant su concilier besoins économiques et politique migratoire cohérente", "La France fait face à une contradiction entre ses besoins économiques (métiers en tension : santé, BTP, agriculture, numérique) et démographiques (solde naturel légèrement négatif compensé par l'immigration) d'une part, et la pression politique pour réduire les flux migratoires d'autre part, conduisant à des politiques complexes et parfois contradictoires", "D", "La France a des besoins réels : 100 000 postes non pourvus dans la santé, pénurie dans le BTP et l'agriculture, solde naturel négatif depuis 2023 (plus de décès que de naissances). Mais politiquement, la question migratoire est sous très forte pression (résultats du RN, crises gouvernementales). La loi de 2024 crée un titre de séjour 'métiers en tension' tout en durcissant les conditions de régularisation et de naturalisation. Cette ambivalence révèle que la France a besoin de migrants mais ne peut le dire clairement dans le contexte politique actuel — tension structurante entre nécessité économique et discours politique."),
+makeQuestion("s3-064", 3, "Société", "Quelle contradiction la France rencontre-t-elle sur l'immigration ?", "Elle n'a aucun besoin d'immigration", "Elle accueille uniquement une immigration économique massive", "Elle combine des besoins économiques réels avec une forte pression politique pour limiter les flux", "Elle a supprimé toute politique migratoire", "C", "La France a besoin de main-d'œuvre dans plusieurs secteurs comme la santé, le bâtiment ou l'agriculture. Dans le même temps, l'immigration est un sujet très sensible dans le débat public. Cette situation crée une contradiction entre besoins économiques, exigences administratives et pressions politiques pour réduire les arrivées."),
 
-makeQuestion("s3-065", 3, "Société", "En quoi la loi El Khomri (2016) et les ordonnances Macron (2017) ont-elles transformé l'architecture du droit du travail français ?", "Elles ont instauré une primauté accrue de l'accord d'entreprise sur l'accord de branche et sur la loi pour de nombreuses dispositions, au nom de la flexibilité et de l'adaptation locale, ce qui a suscité de vives oppositions syndicales arguant que cela fragilisait les garanties collectives des salariés", "Elles ont entièrement supprimé le Code du travail, remplacé par des conventions collectives librement négociées entreprise par entreprise sans aucun plancher légal ou conventionnel minimum", "Elles ont uniquement remanié les procédures de licenciement économique, sans toucher à la hiérarchie des normes ni à la place de la négociation collective", "Les ordonnances Macron ont renforcé la primauté de la loi sur les accords d'entreprise, protégeant les salariés contre les accords moins-disants négociés localement", "A", "La loi El Khomri (2016) et les ordonnances Macron (2017) ont 'inversé' partiellement la hiérarchie des normes en droit du travail : certaines dispositions peuvent désormais être moins favorables dans un accord d'entreprise que dans l'accord de branche (dans des domaines définis). Les CSE (Comités sociaux et économiques) remplacent les anciennes instances représentatives. La barémisation des indemnités prud'homales plafonne les dommages et intérêts pour licenciement abusif. Ces réformes visent à flexibiliser le mar­ché du travail en adaptant les règles à la réalité de chaque entreprise, au prix d'une plus grande disparité entre salariés selon leur entreprise et leur secteur."),
-makeQuestion("s3-066", 3, "Société", "Que révèle l'augmentation du nombre de sans-abri en France sur les limites des politiques de lutte contre l'exclusion ?", "Le nombre de sans-abri est en déclin constant depuis 2000 grâce aux politiques de 'Housing First' généralisées dans tout le territoire français depuis 2015", "L'augmentation du nombre de sans-abri (environ 330 000 personnes sans logement personnel selon la Fondation Abbé Pierre en 2024) révèle que les politiques de 'fin de nuit à la rue' et de DALO peinent face à la pénurie de logements très sociaux, à la désinstitutionnalisation psychiatrique non accompagnée et à la précarité croissante de certains publics", "Les sans-abri en France sont uniquement des personnes ayant refusé les solutions d'hébergement d'urgence proposées, le problème étant un problème de volonté individuelle et non de politique publique", "Le nombre de sans-abri est entièrement comptabilisé et maîtrisé par les services de l'État, aucune personne ne restant à la rue plus de 72 heures grâce au dispositif '115'", "B", "La Fondation Abbé Pierre estimait à environ 330 000 le nombre de personnes sans logement personnel en France en 2024 (hébergées chez des tiers, en hôtels sociaux, en CADA, en bidonvilles ou à la rue). Ce chiffre révèle plusieurs défaillances : la pénurie de logements très sociaux (PLAI) dans les zones tendues ; la désinstitutionnalisation psychiatrique des années 1970-1990 sans création de structures alternatives suffisantes (beaucoup de sans-abri souffrent de troubles psychiatriques) ; la précarité économique croissante. Le '115' (numéro d'urgence) est saturé chaque hiver. Le DALO crée des droits mais ne crée pas les logements nécessaires."),
-makeQuestion("s3-067", 3, "Société", "Pourquoi la loi contre les 'fausses nouvelles' de 2018 soulève-t-elle des questions sur les limites de la lutte contre la désinformation dans un État de droit ?", "Parce qu'elle est inefficace : aucune procédure n'a jamais abouti depuis son adoption, les juges refusant systématiquement de la mettre en œuvre", "Parce qu'elle permet à l'État de censurer n'importe quel contenu critique à son égard, sous couvert de lutte contre les fausses nouvelles, sans contrôle juridictionnel", "Parce qu'elle confie à un juge la définition de la 'fausse nouvelle', risque d'interprétation extensive menaçant la liberté de la presse, bien que limitée à la période électorale et aux 'allégations manifestement inexactes' susceptibles d'altérer la sincérité du scrutin", "La loi de 2018 a été entièrement annulée par le Conseil constitutionnel comme atteinte disproportionnée à la liberté d'expression, sans jamais entrer en vigueur", "C", "La loi du 22 décembre 2018 contre la manipulation de l'information permet à un candidat ou un parti de saisir le juge des référés pendant les 3 mois précédant une élection pour faire retirer des 'allégations ou imputations inexactes ou trompeuses' susceptibles d'altérer la sincérité du scrutin. Le Conseil constitutionnel l'a validée car limitée dans le temps et dans son champ. Mais les critiques persistent : qui définit ce qui est 'inexact' ? Le risque de bâillonnement du débat politique. En pratique, les saisines sont rares et majoritairement rejetées par les juges, qui appliquent la loi de façon restrictive."),
-makeQuestion("s3-068", 3, "Société", "En quoi la politique de désinstitutionnalisation psychiatrique en France a-t-elle produit des effets ambivalents sur les personnes souffrant de troubles mentaux sévères ?", "La désinstitutionnalisation a entièrement amélioré la situation des personnes souffrant de troubles mentaux, qui bénéficient désormais d'une meilleure qualité de vie dans la communauté qu'en institution", "La désinstitutionnalisation (fermetures de lits en hôpital psychiatrique) n'a été accompagnée d'un développement insuffisant des structures ambulatoires et des dispositifs de soins en milieu ordinaire, laissant certains patients sévèrement malades sans suivi structuré, contribuant à la précarité et à la surreprésentation des personnes souffrant de troubles mentaux parmi les sans-abri", "La psychiatrie française a maintenu son parc hospitalier intact depuis 1980, aucune désinstitutionnalisation n'ayant eu lieu, à la différence des pays anglo-saxons", "La désinstitutionnalisation psychiatrique en France n'a concerné que les troubles légers, les patients souffrant de troubles sévères étant toujours pris en charge en hôpital psychiatrique à temps plein", "B", "La France a réduit de moitié son parc de lits en psychiatrie entre 1970 et 2020 (de 170 000 à environ 55 000 lits). Cette désinstitutionnalisation, inspirée des principes de secteur psychiatrique (soins dans la communauté), était philosophiquement juste mais mal accompagnée : le développement des CMP (Centres médico-psychologiques), des équipes mobiles et des appartements thérapeutiques n'a pas suivi le rythme des fermetures de lits. Résultat : des patients sévèrement malades se retrouvent sans suivi structuré, contribuant à la surreprésentation des troubles psychiatriques chez les sans-abri (estimée à 30-40% des personnes à la rue)."),
-makeQuestion("s3-069", 3, "Société", "Quelles tensions le statut de fonctionnaire révèle-t-il entre protection légitime des agents publics et besoins d'adaptation de l'administration française ?", "Le statut de fonctionnaire est un privilège sans contrepartie fonctionnelle, devenu intenable financièrement et systématiquement défendu par des syndicats corporatistes contre l'intérêt général", "Le statut de fonctionnaire garantit l'indépendance et la neutralité des agents publics (ils ne peuvent pas être licenciés pour déplaire à un élu) et assure la continuité du service public, mais est critiqué pour sa rigidité face aux mutations des missions de l'État, conduisant à des réformes d'assouplissement via le recours accru aux contractuels", "Le statut de fonctionnaire a été entièrement supprimé en 2019, tous les agents de l'État étant désormais employés sous contrat de droit privé", "Le statut de fonctionnaire est identique dans tous les pays de l'UE, aucune spécificité française ne le distinguant du régime applicable aux agents publics des autres États membres", "B", "Le statut général de la fonction publique (loi du 13 juillet 1983) garantit l'inamovibilité des fonctionnaires titulaires (sécurité de l'emploi) en contrepartie d'un devoir de neutralité et d'obéissance hiérarchique. Cette protection vise à les mettre à l'abri des pressions politiques. Mais la rigidité du statut est critiquée : mobilité fonctionnelle limitée, gestion des effectifs rigide, décalage entre compétences disponibles et compétences nécessaires. La loi de transformation de la fonction publique (2019) a facilité le recours aux contractuels (jusqu'au grade A), créant une voie de flexibilisation sans supprimer le statut."),
-makeQuestion("s3-070", 3, "Société", "Que révèle la persistance des inégalités sociales en France, malgré un État-providence parmi les plus développés du monde, sur la nature des politiques sociales et leurs limites ?", "Les inégalités persistent uniquement à cause des politiques fiscales insuffisantes, un renforcement de l'impôt sur la fortune suffisant à les résorber entièrement sans réforme structurelle", "Les inégalités persistent parce que les politiques sociales françaises sont entièrement inefficaces et gaspilleuses, sans aucun effet redistributif réel sur les revenus et les patrimoines des ménages", "La France n'a pas d'inégalités sociales significatives, les données sur la persistance des inégalités étant des constructions idéologiques sans fondement statistique", "La persistance des inégalités malgré 32% du PIB consacrés aux dépenses sociales révèle que les politiques sociales corrigent les inégalités de revenus mais peinent à agir sur les inégalités de patrimoine, d'accès aux grandes écoles et de transmission intergénérationnelle du capital culturel et social — des inégalités structurelles que la redistribution monétaire seule ne peut pas résoudre", "D", "La France consacre environ 32% de son PIB aux dépenses sociales (retraites, santé, chômage, logement, famille), parmi les plus élevés de l'OCDE. Ces dépenses réduisent significativement la pauvreté monétaire. Mais les inégalités persistent sur d'autres dimensions : le coefficient de Gini reste à 0,29-0,30, les 10% les plus riches détiennent 50% du patrimoine, et l'accès aux grandes écoles (ENA/INSP, Polytechnique) reste très inégalement réparti selon l'origine sociale. Les politiques sociales universelles corrigent les revenus mais laissent largement intactes les inégalités de destin que produisent le capital culturel (Bourdieu) et le capital social transmis intergénérationnellement."),
+makeQuestion("s3-065", 3, "Société", "Qu'ont changé les réformes du droit du travail de 2016 et 2017 ?", "Elles ont renforcé la place de l'accord d'entreprise dans plusieurs domaines", "Elles ont supprimé tout le Code du travail", "Elles n'ont changé que le licenciement économique", "Elles ont supprimé toute négociation collective", "A", "Les réformes du droit du travail de 2016 et 2017 ont donné plus de place à la négociation au niveau de l'entreprise. L'idée était d'adapter davantage les règles à la réalité locale. Mais cela a aussi suscité des critiques, certains estimant que cela pouvait fragiliser les garanties collectives des salariés."),
+
+makeQuestion("s3-066", 3, "Société", "Que révèle l'augmentation du nombre de sans-abri en France ?", "Que les politiques publiques ont entièrement résolu la question", "Qu'il existe des limites fortes dans les politiques de lutte contre l'exclusion et dans l'accès au logement", "Que toutes les personnes à la rue refusent l'aide proposée", "Que le 115 permet toujours une solution immédiate", "B", "L'augmentation du nombre de personnes sans logement montre les limites des dispositifs existants. La pénurie de logements très sociaux, la saturation de l'hébergement d'urgence, certaines situations de grande précarité ou de troubles psychiques rendent la sortie de rue difficile. Cela révèle l'écart entre les objectifs affichés et les moyens réellement disponibles."),
+
+makeQuestion("s3-067", 3, "Société", "Pourquoi la loi de 2018 contre les fausses nouvelles suscite-t-elle un débat ?", "Parce qu'elle a supprimé toute désinformation", "Parce qu'elle permet une censure sans juge", "Parce qu'elle cherche à lutter contre la manipulation de l'information sans porter atteinte de manière excessive à la liberté d'expression", "Parce qu'elle a été annulée avant d'entrer en vigueur", "C", "La loi de 2018 vise surtout les périodes électorales et permet au juge d'intervenir en urgence contre certaines manipulations manifestes. Mais cette logique soulève une question délicate : comment lutter contre la désinformation sans risquer de restreindre abusivement la liberté d'expression et le débat démocratique ?" ),
+
+makeQuestion("s3-068", 3, "Société", "Quel effet ambivalent la désinstitutionnalisation psychiatrique a-t-elle eu en France ?", "Elle a tout résolu pour les personnes souffrant de troubles sévères", "Elle a réduit l'hospitalisation sans toujours développer assez les alternatives de suivi, ce qui a laissé certaines personnes en grande vulnérabilité", "Elle n'a jamais eu lieu en France", "Elle n'a concerné que les troubles légers", "B", "La réduction du nombre de lits psychiatriques s'inscrivait dans l'idée de mieux soigner dans la communauté plutôt qu'en institution. Mais, dans la pratique, les structures de suivi, les équipes mobiles et l'accompagnement n'ont pas toujours été suffisants. Cela a pu laisser certaines personnes très fragiles sans prise en charge adaptée, notamment parmi les publics précaires."),
+
+makeQuestion("s3-069", 3, "Société", "Que révèle le statut de fonctionnaire dans le débat public français ?", "Qu'il ne sert plus à rien", "Qu'il cherche à concilier indépendance des agents publics et adaptation de l'administration", "Qu'il a été supprimé", "Qu'il est identique dans toute l'Europe", "B", "Le statut de fonctionnaire protège les agents publics afin de garantir leur neutralité, leur indépendance et la continuité du service public. Mais il est aussi critiqué pour sa rigidité dans un contexte où les missions de l'administration évoluent rapidement. Le débat porte donc sur l'équilibre entre protection légitime et besoin de modernisation."),
+
+makeQuestion("s3-070", 3, "Société", "Que révèle la persistance des inégalités sociales en France malgré un État-providence développé ?", "Que les politiques sociales sont inutiles", "Qu'il n'existe pas d'inégalités sociales significatives", "Que les dépenses sociales suffisent à tout corriger", "Que les politiques sociales réduisent certaines inégalités de revenus mais agissent moins sur les inégalités de patrimoine, de réussite scolaire et de transmission sociale", "D", "La France consacre une part élevée de sa richesse nationale à la protection sociale, ce qui réduit effectivement la pauvreté monétaire et certaines inégalités. Mais cela ne suffit pas à corriger entièrement les écarts de patrimoine, les différences de capital culturel ou les inégalités de parcours scolaire et professionnel. Cela montre les limites d'une redistribution surtout monétaire face à des inégalités plus profondes et durables.")
 
 
 

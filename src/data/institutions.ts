@@ -1,178 +1,379 @@
 import { makeQuestion, Question } from "./types";
 
 export const INSTITUTIONS_L1: Question[] = [
-  makeQuestion("i1-001",1,"Institutions","Qui vote les lois en France ?",
-    "Le Président de la République","Le Gouvernement","Le Parlement","Le Conseil constitutionnel","C",
-    "Les lois sont votées par le Parlement : Assemblée nationale et Sénat."
-  ),
-  makeQuestion("i1-002",1,"Institutions","Le Parlement est composé de :",
-    "L’Assemblée nationale et le Sénat","Le Gouvernement et le Sénat","Le Président et le Premier ministre","Le Conseil d’État et la Cour de cassation","A",
-    "Le Parlement comprend deux chambres : Assemblée nationale + Sénat."
-  ),
-  makeQuestion("i1-003",1,"Institutions","Le Président de la République est élu pour :",
-    "3 ans","5 ans","7 ans","10 ans","B",
-    "Depuis 2000, le mandat présidentiel est de 5 ans (quinquennat)."
-  ),
-  makeQuestion("i1-004",1,"Institutions","Le Premier ministre :",
-    "Dirige le Gouvernement","Dirige l’Assemblée nationale","Dirige le Conseil constitutionnel","Dirige les mairies","A",
-    "Le Premier ministre dirige l’action du Gouvernement."
-  ),
-  makeQuestion("i1-005",1,"Institutions","Le maire est élu par :",
-    "Le Président","Les conseillers municipaux","Le préfet","Un tirage au sort","B",
-    "Après les élections municipales, les conseillers municipaux élisent le maire."
-  ),
-  makeQuestion("i1-006",1,"Institutions","Le préfet représente :",
-    "Le Gouvernement dans le département/région","Le Sénat","La commune","Un parti politique","A",
-    "Le préfet est le représentant de l’État dans le département (et souvent la région)."
-  ),
-  makeQuestion("i1-007",1,"Institutions","La commune est dirigée par :",
-    "Le maire","Le député","Le préfet","Le juge","A",
-    "La commune est une collectivité territoriale dirigée par un maire et un conseil municipal."
-  ),
-  makeQuestion("i1-008",1,"Institutions","À quoi sert le Conseil constitutionnel ?",
-    "Voter les lois","Contrôler la constitutionnalité des lois","Diriger la police","Nommer les maires","B",
-    "Le Conseil constitutionnel vérifie que les lois respectent la Constitution."
-  ),
-  makeQuestion("i1-009",1,"Institutions","Les élections municipales servent à élire :",
-    "Le Président","Les conseillers municipaux","Les sénateurs","Les préfets","B",
-    "On élit d’abord les conseillers municipaux ; ensuite, ils élisent le maire."
-  ),
-  makeQuestion("i1-010",1,"Institutions","Le Sénat représente principalement :",
-    "Les entreprises","Les collectivités territoriales","Les ministères","Les syndicats","B",
-    "Le Sénat représente les collectivités territoriales."
-  ),
-  makeQuestion("i1-011",1,"Institutions","Le siège du Gouvernement est à :",
-    "Marseille","Paris","Lyon","Strasbourg","B",
-    "Le Gouvernement siège à Paris."
-  ),
-  makeQuestion("i1-012",1,"Institutions","Le siège du Parlement européen est à :",
-    "Strasbourg","Nice","Toulouse","Lille","A",
-    "Le Parlement européen tient notamment ses sessions plénières à Strasbourg."
-  ),
-  makeQuestion("i1-013",1,"Institutions","La justice en France est rendue au nom :",
-    "Du Président","Du peuple français","Du Premier ministre","Du Parlement","B",
-    "La justice est rendue au nom du peuple français."
-  ),
-  makeQuestion("i1-014",1,"Institutions","Quel document fixe les règles fondamentales de la République ?",
-    "La Constitution","Le règlement intérieur","Le code de la route","Un décret municipal","A",
-    "La Constitution est la norme suprême de l’organisation politique."
-  ),
-  makeQuestion("i1-015",1,"Institutions","Les députés siègent à :",
-    "L’Assemblée nationale","Le Sénat","Le Conseil constitutionnel","La mairie","A",
-    "Les députés siègent à l’Assemblée nationale."
-  ),
-  makeQuestion("i1-016",1,"Institutions","Les sénateurs siègent au :",
-    "Conseil d’État","Sénat","Conseil constitutionnel","Conseil régional","B",
-    "Les sénateurs siègent au Sénat."
-  ),
-  makeQuestion("i1-017",1,"Institutions","Le Président de la République nomme :",
-    "Le Premier ministre","Les maires","Les préfets uniquement","Les députés","A",
-    "Le Président nomme le Premier ministre (et, sur proposition, les ministres)."
-  ),
-  makeQuestion("i1-018",1,"Institutions","Une loi est proposée par :",
-    "Le Parlement ou le Gouvernement","Uniquement le Président","Uniquement les préfets","Uniquement les maires","A",
-    "Initiative des lois : projets (Gouvernement) et propositions (parlementaires)."
-  ),
-  makeQuestion("i1-019",1,"Institutions","Une région est une :",
-    "Collectivité territoriale","Entreprise publique","Association","Société privée","A",
-    "La région est une collectivité territoriale avec un conseil régional."
-  ),
-  makeQuestion("i1-020",1,"Institutions","Le Conseil d’État est surtout :",
-    "Une juridiction administrative et conseiller du Gouvernement","Une chambre du Parlement","Une mairie","Un tribunal pénal","A",
-    "Le Conseil d’État est la plus haute juridiction administrative et conseille aussi le Gouvernement."
-  ),
+
+makeQuestion("i1-001",1,"Institutions","Qui vote les lois en France ?",
+"Le Président de la République",
+"Le Gouvernement",
+"Le Parlement",
+"Le Conseil constitutionnel",
+"C",
+"Les lois sont votées par le Parlement, composé de l’Assemblée nationale et du Sénat."
+),
+
+makeQuestion("i1-002",1,"Institutions","Le Parlement français est composé de :",
+"L’Assemblée nationale et le Sénat",
+"Le Gouvernement et le Sénat",
+"Le Président et le Premier ministre",
+"Le Conseil d’État et la Cour de cassation",
+"A",
+"Le Parlement comprend deux chambres : l’Assemblée nationale et le Sénat."
+),
+
+makeQuestion("i1-003",1,"Institutions","Le Président de la République est élu pour :",
+"3 ans",
+"5 ans",
+"7 ans",
+"10 ans",
+"B",
+"Depuis 2000, le mandat présidentiel est de 5 ans. On parle de quinquennat."
+),
+
+makeQuestion("i1-004",1,"Institutions","Qui dirige l’action du Gouvernement ?",
+"Le Président",
+"Le Premier ministre",
+"Le Sénat",
+"Le préfet",
+"B",
+"Le Premier ministre dirige l’action du Gouvernement et coordonne les ministres."
+),
+
+makeQuestion("i1-005",1,"Institutions","Qui élit le maire dans une commune ?",
+"Les citoyens directement",
+"Les conseillers municipaux",
+"Le préfet",
+"Le Président",
+"B",
+"Après les élections municipales, les conseillers municipaux élisent le maire."
+),
+
+makeQuestion("i1-006",1,"Institutions","Le préfet représente :",
+"Le Gouvernement et l’État dans le territoire",
+"Le Parlement",
+"La commune",
+"Un parti politique",
+"A",
+"Le préfet est le représentant de l’État dans les départements et les régions."
+),
+
+makeQuestion("i1-007",1,"Institutions","Qui dirige une commune ?",
+"Le député",
+"Le maire",
+"Le préfet",
+"Le sénateur",
+"B",
+"La commune est dirigée par le maire et le conseil municipal."
+),
+
+makeQuestion("i1-008",1,"Institutions","Quel organisme vérifie que les lois respectent la Constitution ?",
+"Le Sénat",
+"Le Conseil constitutionnel",
+"La Cour de cassation",
+"Le Conseil d’État",
+"B",
+"Le Conseil constitutionnel contrôle la conformité des lois à la Constitution."
+),
+
+makeQuestion("i1-009",1,"Institutions","Les élections municipales servent à élire :",
+"Le Président",
+"Les conseillers municipaux",
+"Les préfets",
+"Les juges",
+"B",
+"Les citoyens élisent les conseillers municipaux qui éliront ensuite le maire."
+),
+
+makeQuestion("i1-010",1,"Institutions","Le Sénat représente principalement :",
+"Les entreprises",
+"Les collectivités territoriales",
+"Les syndicats",
+"Les ministères",
+"B",
+"Le Sénat représente les collectivités territoriales comme les communes et les régions."
+),
+
+makeQuestion("i1-011",1,"Institutions","Le siège du Gouvernement français est situé à :",
+"Paris",
+"Lyon",
+"Strasbourg",
+"Bordeaux",
+"A",
+"Le Gouvernement exerce ses fonctions depuis Paris."
+),
+
+makeQuestion("i1-012",1,"Institutions","Le Parlement européen siège notamment à :",
+"Strasbourg",
+"Nice",
+"Marseille",
+"Toulouse",
+"A",
+"Les sessions plénières du Parlement européen se tiennent à Strasbourg."
+),
+
+makeQuestion("i1-013",1,"Institutions","La justice en France est rendue au nom :",
+"Du Président",
+"Du peuple français",
+"Du Parlement",
+"Du Gouvernement",
+"B",
+"La justice est rendue au nom du peuple français."
+),
+
+makeQuestion("i1-014",1,"Institutions","Quel texte fixe les règles fondamentales de la République ?",
+"La Constitution",
+"Le code de la route",
+"Le règlement municipal",
+"Une ordonnance",
+"A",
+"La Constitution est la norme juridique la plus importante."
+),
+
+makeQuestion("i1-015",1,"Institutions","Où siègent les députés ?",
+"À l’Assemblée nationale",
+"Au Sénat",
+"Au Conseil constitutionnel",
+"À la mairie",
+"A",
+"Les députés siègent à l’Assemblée nationale."
+),
+
+makeQuestion("i1-016",1,"Institutions","Où siègent les sénateurs ?",
+"Au Sénat",
+"À l’Assemblée nationale",
+"Au Conseil d’État",
+"À la Cour de cassation",
+"A",
+"Les sénateurs siègent au Sénat."
+),
+
+makeQuestion("i1-017",1,"Institutions","Qui nomme le Premier ministre ?",
+"Le Président de la République",
+"Le Parlement",
+"Le Sénat",
+"Le préfet",
+"A",
+"Le Président nomme le Premier ministre."
+),
+
+makeQuestion("i1-018",1,"Institutions","Qui peut proposer une loi en France ?",
+"Le Gouvernement ou les parlementaires",
+"Uniquement le Président",
+"Les préfets",
+"Les maires",
+"A",
+"L’initiative des lois appartient au Gouvernement et aux parlementaires."
+),
+
+makeQuestion("i1-019",1,"Institutions","Une région est :",
+"Une collectivité territoriale",
+"Une entreprise publique",
+"Un ministère",
+"Un tribunal",
+"A",
+"La région est une collectivité territoriale dirigée par un conseil régional."
+),
+
+makeQuestion("i1-020",1,"Institutions","Le Conseil d’État est principalement :",
+"Une juridiction administrative",
+"Une chambre du Parlement",
+"Un tribunal pénal",
+"Une mairie",
+"A",
+"Le Conseil d’État est la plus haute juridiction administrative."
+),
+
+makeQuestion("i1-021",1,"Institutions","Qui applique les lois votées par le Parlement ?",
+"Le Gouvernement",
+"Le Sénat",
+"Les maires uniquement",
+"Les citoyens",
+"A",
+"Le Gouvernement applique les lois et dirige l’administration."
+),
+
+makeQuestion("i1-022",1,"Institutions","Les citoyens participent à la vie démocratique notamment par :",
+"Le vote",
+"La nomination directe des juges",
+"Le tirage au sort obligatoire",
+"Les décisions de l’armée",
+"A",
+"Le vote permet aux citoyens de choisir leurs représentants."
+),
+
+makeQuestion("i1-023",1,"Institutions","Qui représente l’État dans un département ?",
+"Le préfet",
+"Le maire",
+"Le sénateur",
+"Le député",
+"A",
+"Le préfet représente l’État dans le département."
+),
+
+makeQuestion("i1-024",1,"Institutions","Une commune est :",
+"Une collectivité territoriale de base",
+"Un tribunal",
+"Un ministère",
+"Une région",
+"A",
+"La commune est la plus petite collectivité territoriale."
+),
+
+makeQuestion("i1-025",1,"Institutions","Quel est le rôle principal du Parlement ?",
+"Voter les lois et contrôler le Gouvernement",
+"Diriger la police",
+"Nommer les maires",
+"Appliquer les décisions de justice",
+"A",
+"Le Parlement vote les lois et contrôle l’action du Gouvernement."
+)
+
 ];
 export const INSTITUTIONS_L2: Question[] = [
-  makeQuestion("i2-001",2,"Institutions","Qui promulgue les lois une fois votées ?",
+  makeQuestion("i2-001",2,"Institutions","Qui promulgue les lois une fois qu’elles ont été votées ?",
     "Le Président de la République","Le maire","Le Conseil constitutionnel","Le préfet","A",
-    "Une fois votée et éventuellement contrôlée, la loi est promulguée par le Président de la République."
+    "Une fois la loi votée par le Parlement et, le cas échéant, contrôlée selon les procédures prévues, elle est promulguée par le Président de la République."
   ),
-  makeQuestion("i2-002",2,"Institutions","Quel est le rôle principal de l’Assemblée nationale ?",
+
+  makeQuestion("i2-002",2,"Institutions","Quel est le rôle essentiel de l’Assemblée nationale dans la démocratie française ?",
     "Voter la loi et contrôler le Gouvernement","Nommer les maires","Contrôler les frontières","Rendre la justice","A",
-    "L’Assemblée nationale vote la loi et contrôle l’action du Gouvernement."
+    "L’Assemblée nationale vote les lois et contrôle l’action du Gouvernement. Elle représente directement les citoyens à travers les députés."
   ),
-  makeQuestion("i2-003",2,"Institutions","Le Sénat est élu principalement par :",
-    "Les citoyens au suffrage universel direct","Les grands électeurs","Le Président","Les préfets","B",
-    "Les sénateurs sont élus au suffrage indirect par des grands électeurs (élus locaux)."
+
+  makeQuestion("i2-003",2,"Institutions","Comment les sénateurs sont-ils principalement élus ?",
+    "Par les citoyens au suffrage universel direct","Par les grands électeurs","Par le Président de la République","Par les préfets","B",
+    "Les sénateurs sont élus au suffrage indirect par un collège de grands électeurs composé principalement d’élus locaux."
   ),
-  makeQuestion("i2-004",2,"Institutions","Le Gouvernement est composé :",
+
+  makeQuestion("i2-004",2,"Institutions","De qui se compose le Gouvernement en France ?",
     "Du Président uniquement","Du Premier ministre et des ministres","Des députés","Des juges","B",
-    "Le Gouvernement regroupe le Premier ministre et les ministres."
+    "Le Gouvernement est composé du Premier ministre et des ministres. Il met en œuvre la politique de la nation."
   ),
-  makeQuestion("i2-005",2,"Institutions","Le Conseil constitutionnel peut :",
-    "Annuler une loi contraire à la Constitution","Créer une loi","Condamner pénalement","Élire le Président","A",
-    "Il contrôle la constitutionnalité : une loi non conforme ne peut pas être appliquée."
+
+  makeQuestion("i2-005",2,"Institutions","Quel est le rôle du Conseil constitutionnel face à une loi contraire à la Constitution ?",
+    "Empêcher son application","Créer une nouvelle loi","Condamner pénalement les responsables","Élire le Président","A",
+    "Le Conseil constitutionnel contrôle la conformité des lois à la Constitution. Une disposition contraire à la Constitution ne peut pas être appliquée."
   ),
-  makeQuestion("i2-006",2,"Institutions","Une commune est une collectivité :",
-    "Dirigée par un conseil municipal","Dirigée par le Sénat","Dirigée par un préfet élu","Dirigée par le Président","A",
-    "La commune est gérée par un conseil municipal et un maire."
+
+  makeQuestion("i2-006",2,"Institutions","Pourquoi dit-on qu’une commune est une collectivité territoriale de proximité ?",
+    "Parce qu’elle est dirigée par un conseil municipal et gère des services locaux","Parce qu’elle dépend du Sénat","Parce qu’elle est dirigée par un préfet élu","Parce qu’elle est administrée par le Président","A",
+    "La commune est la collectivité la plus proche des habitants. Elle est administrée par un maire et un conseil municipal."
   ),
-  makeQuestion("i2-007",2,"Institutions","Le Président de la République est élu :",
+
+  makeQuestion("i2-007",2,"Institutions","Comment le Président de la République est-il élu en France ?",
     "Par les députés","Au suffrage universel direct","Par le Sénat","Par les maires","B",
-    "Le Président est élu par les citoyens (suffrage universel direct)."
+    "Le Président de la République est élu directement par les citoyens au suffrage universel direct."
   ),
-  makeQuestion("i2-008",2,"Institutions","Quel est le rôle du Premier ministre ?",
+
+  makeQuestion("i2-008",2,"Institutions","Quelle est la mission principale du Premier ministre ?",
     "Diriger l’action du Gouvernement","Voter les lois","Diriger le Sénat","Diriger les régions","A",
-    "Le Premier ministre dirige l’action du Gouvernement."
+    "Le Premier ministre dirige l’action du Gouvernement et coordonne le travail des ministres."
   ),
-  makeQuestion("i2-009",2,"Institutions","Le Conseil d’État est la plus haute juridiction :",
-    "Pénale","Administrative","Commerciale","Constitutionnelle","B",
-    "Le Conseil d’État est la plus haute juridiction administrative."
+
+  makeQuestion("i2-009",2,"Institutions","Le Conseil d’État est la plus haute juridiction de quel ordre ?",
+    "Pénal","Administratif","Commercial","Constitutionnel","B",
+    "Le Conseil d’État est la plus haute juridiction de l’ordre administratif. Il juge les litiges entre l’administration et les administrés."
   ),
-  makeQuestion("i2-010",2,"Institutions","La Cour de cassation est la plus haute juridiction :",
-    "Administrative","Judiciaire","Européenne","Municipale","B",
-    "La Cour de cassation est la plus haute juridiction de l’ordre judiciaire."
+
+  makeQuestion("i2-010",2,"Institutions","La Cour de cassation est la plus haute juridiction de quel ordre ?",
+    "Administratif","Judiciaire","Européen","Municipal","B",
+    "La Cour de cassation est la plus haute juridiction de l’ordre judiciaire. Elle vérifie la bonne application du droit par les tribunaux."
   ),
-  makeQuestion("i2-011",2,"Institutions","Le préfet est nommé par :",
-    "Le maire","Le Gouvernement","Les citoyens","Le Sénat","B",
-    "Le préfet est un haut fonctionnaire nommé par le Gouvernement."
+
+  makeQuestion("i2-011",2,"Institutions","Par qui le préfet est-il nommé ?",
+    "Par le maire","Par le Gouvernement","Par les citoyens","Par le Sénat","B",
+    "Le préfet est un haut fonctionnaire nommé par le Gouvernement. Il représente l’État dans le territoire."
   ),
-  makeQuestion("i2-012",2,"Institutions","Les régions gèrent notamment :",
-    "Les écoles maternelles","Les lycées et les transports régionaux (exemples)","La défense nationale","La justice","B",
-    "Les régions ont des compétences comme les lycées, transports, développement économique (selon cadre)."
+
+  makeQuestion("i2-012",2,"Institutions","Parmi ces compétences, laquelle relève principalement de la région ?",
+    "Les écoles maternelles","Les lycées et les transports régionaux","La défense nationale","La justice","B",
+    "La région exerce notamment des compétences en matière de lycées, de transports régionaux et de développement économique."
   ),
-  makeQuestion("i2-013",2,"Institutions","Les départements gèrent notamment :",
-    "Les collèges et l’action sociale (exemples)","Les universités","La politique étrangère","La monnaie","A",
-    "Le département intervient souvent sur collèges, routes départementales, action sociale."
+
+  makeQuestion("i2-013",2,"Institutions","Parmi ces compétences, laquelle relève principalement du département ?",
+    "Les collèges et l’action sociale","Les universités","La politique étrangère","La monnaie","A",
+    "Le département exerce notamment des compétences en matière d’action sociale, de collèges et de routes départementales."
   ),
-  makeQuestion("i2-014",2,"Institutions","Les communes gèrent notamment :",
-    "La monnaie","L’état civil et des services de proximité","La défense","Les frontières","B",
-    "La commune gère l’état civil (naissance, mariage) et des services locaux."
+
+  makeQuestion("i2-014",2,"Institutions","Quel exemple correspond à une compétence de la commune ?",
+    "La monnaie","L’état civil et des services de proximité","La défense nationale","La gestion des frontières","B",
+    "La commune gère notamment l’état civil, certains équipements publics locaux et des services de proximité."
   ),
-  makeQuestion("i2-015",2,"Institutions","La justice en France est :",
-    "Indépendante","Dirigée par les maires","Soumise aux entreprises","Inexistante","A",
-    "Le principe d’indépendance de la justice est fondamental dans l’État de droit."
+
+  makeQuestion("i2-015",2,"Institutions","Pourquoi l’indépendance de la justice est-elle un principe fondamental ?",
+    "Parce qu’elle garantit une justice impartiale","Parce qu’elle permet aux maires de juger","Parce qu’elle soumet les juges aux entreprises","Parce qu’elle supprime les lois","A",
+    "L’indépendance de la justice garantit que les décisions de justice sont rendues sans pression politique ou privée, dans le respect du droit."
   ),
-  makeQuestion("i2-016",2,"Institutions","Une motion de censure vise à :",
+
+  makeQuestion("i2-016",2,"Institutions","Quel est l’effet politique d’une motion de censure adoptée ?",
     "Renverser le Gouvernement","Élire le Président","Annuler une élection municipale","Nommer un préfet","A",
-    "La motion de censure est un outil parlementaire contre le Gouvernement."
+    "La motion de censure est un moyen pour l’Assemblée nationale de mettre en cause la responsabilité du Gouvernement. Si elle est adoptée, le Gouvernement doit démissionner."
   ),
-  makeQuestion("i2-017",2,"Institutions","Le Parlement européen représente :",
+
+  makeQuestion("i2-017",2,"Institutions","Qui le Parlement européen représente-t-il ?",
     "Uniquement la France","Les citoyens de l’Union européenne","Les maires européens","Les préfets","B",
-    "Le Parlement européen représente les citoyens de l’UE."
+    "Le Parlement européen représente les citoyens des États membres de l’Union européenne."
   ),
-  makeQuestion("i2-018",2,"Institutions","Le Conseil municipal est élu par :",
-    "Le préfet","Les citoyens (élections municipales)","Le Président","Le Sénat","B",
-    "Les conseillers municipaux sont élus par les citoyens lors des municipales."
+
+  makeQuestion("i2-018",2,"Institutions","Comment les conseillers municipaux sont-ils élus ?",
+    "Par le préfet","Par les citoyens lors des élections municipales","Par le Président de la République","Par le Sénat","B",
+    "Les conseillers municipaux sont élus par les citoyens lors des élections municipales. Ils élisent ensuite le maire."
   ),
-  makeQuestion("i2-019",2,"Institutions","La Constitution actuelle (Vᵉ République) date de :",
-    "1905","1958","1789","2002","B",
-    "La Constitution de 1958 fonde la Vᵉ République."
+
+  makeQuestion("i2-019",2,"Institutions","Pourquoi l’année 1958 est-elle importante pour les institutions françaises ?",
+    "Parce qu’elle correspond à la loi de 1905","Parce qu’elle marque la naissance de la Constitution actuelle","Parce qu’elle renvoie au début de la Révolution française","Parce qu’elle correspond au passage à l’euro","B",
+    "La Constitution de 1958 fonde la Vᵉ République, qui organise encore aujourd’hui les institutions françaises."
   ),
-  makeQuestion("i2-020",2,"Institutions","Le Conseil constitutionnel peut être saisi pour :",
-    "Contrôler une loi avant sa promulgation (selon procédure)","Créer un ministère","Élire le Sénat","Nommer un maire","A",
-    "Il peut contrôler une loi avant promulgation selon les procédures prévues."
+
+  makeQuestion("i2-020",2,"Institutions","Dans quel but le Conseil constitutionnel peut-il être saisi avant la promulgation d’une loi ?",
+    "Pour contrôler sa conformité à la Constitution","Pour créer un ministère","Pour élire le Sénat","Pour nommer un maire","A",
+    "Le Conseil constitutionnel peut être saisi, selon les procédures prévues, pour vérifier qu’une loi respecte la Constitution avant sa promulgation."
   ),
-  makeQuestion("i2-021", 2, "Institutions", "Qui est le Premier ministre de la France depuis septembre 2025 ?", "François Bayrou", "Michel Barnier", "Gabriel Attal", "Sébastien Lecornu", "D", "Sébastien Lecornu a été nommé Premier ministre le 9 septembre 2025 par Emmanuel Macron, après la chute du gouvernement Bayrou suite à un vote de confiance négatif. Il forme son second gouvernement le 12 octobre 2025, le 48e de la Ve République."),
 
-makeQuestion("i2-022", 2, "Institutions", "Qui préside l'Assemblée nationale depuis juillet 2024 ?", "Yaël Braun-Pivet", "Richard Ferrand", "Gérard Larcher", "Bruno Le Maire", "A", "Yaël Braun-Pivet (groupe Ensemble pour la République) a été réélue présidente de l'Assemblée nationale en juillet 2024, lors de l'ouverture de la XVIIe législature issue des élections législatives anticipées."),
 
-makeQuestion("i2-023", 2, "Institutions", "En quelle année la Constitution de la Ve République a-t-elle été adoptée ?", "1946", "1954", "1958", "1968", "C", "La Constitution de la Ve République a été adoptée par référendum le 28 septembre 1958, sous l'impulsion du général de Gaulle. Elle remplace la Constitution de la IVe République et renforce considérablement le pouvoir exécutif."),
+makeQuestion("i2-021", 2, "Institutions", "Qui peut dissoudre l’Assemblée nationale sous la Vᵉ République ?",
+  "Le Président de la République",
+  "Le Premier ministre",
+  "Le Président du Sénat",
+  "Le Conseil constitutionnel",
+  "A",
+  "Sous la Vᵉ République, le Président de la République peut dissoudre l’Assemblée nationale dans les conditions prévues par la Constitution."
+),
 
-makeQuestion("i2-024", 2, "Institutions", "Combien de députés composent l'Assemblée nationale française ?", "350", "490", "626", "577", "D", "Depuis 1986, l'Assemblée nationale est composée de 577 députés élus au suffrage universel direct, au scrutin uninominal majoritaire à deux tours, pour un mandat de 5 ans. La majorité absolue est atteinte à 289 sièges."),
+makeQuestion("i2-022", 2, "Institutions", "Qui élit le président ou la présidente de l’Assemblée nationale ?",
+  "Les députés",
+  "Le Président de la République",
+  "Les sénateurs",
+  "Les citoyens au suffrage universel direct",
+  "A",
+  "Le président ou la présidente de l’Assemblée nationale est élu(e) par les députés au début de la législature."
+),
 
-makeQuestion("i2-025", 2, "Institutions", "Quelle réforme a réduit le mandat présidentiel de 7 à 5 ans en France ?", "La révision constitutionnelle de 1962 instaurant l'élection au suffrage universel", "Le référendum de 2000 instaurant le quinquennat", "La loi organique de 1995 sous Chirac", "La révision constitutionnelle de 2008", "B", "Le quinquennat a été adopté par référendum le 24 septembre 2000. Il ramène le mandat présidentiel de 7 ans à 5 ans, en l'alignant sur la durée de la législature pour réduire les risques de cohabitation."),
+makeQuestion("i2-023", 2, "Institutions", "En quelle année la Constitution de la Vᵉ République a-t-elle été adoptée ?",
+  "1946",
+  "1954",
+  "1958",
+  "1968",
+  "C",
+  "La Constitution de la Vᵉ République a été adoptée en 1958. Elle fonde les institutions actuelles de la France."
+),
 
+makeQuestion("i2-024", 2, "Institutions", "Combien de députés composent l’Assemblée nationale française ?",
+  "350",
+  "490",
+  "626",
+  "577",
+  "D",
+  "L’Assemblée nationale française compte 577 députés. Ils sont élus au suffrage universel direct."
+),
+
+makeQuestion("i2-025", 2, "Institutions", "Quelle réforme a ramené le mandat présidentiel de 7 à 5 ans ?",
+  "La révision constitutionnelle de 1962",
+  "Le référendum de 2000 instaurant le quinquennat",
+  "La loi organique de 1995",
+  "La révision constitutionnelle de 2008",
+  "B",
+  "Le quinquennat a été instauré par référendum en 2000. Il a réduit la durée du mandat présidentiel de 7 à 5 ans."
+),
 makeQuestion("i2-026", 2, "Institutions", "Qu'est-ce qu'une motion de censure à l'Assemblée nationale ?", "Un texte par lequel le gouvernement engage sa responsabilité devant les députés", "Un recours constitutionnel contre une loi votée", "Un vote par lequel les députés renversent le gouvernement en lui retirant leur confiance", "Une procédure permettant de dissoudre le Sénat", "C", "La motion de censure (article 49 alinéa 3) permet aux députés de renverser le gouvernement. Elle doit être signée par au moins 1/10e des membres et adoptée à la majorité absolue. Depuis 1958, deux seulement ont abouti : en 1962 contre Pompidou, et en décembre 2024 contre Barnier."),
 
 makeQuestion("i2-027", 2, "Institutions", "Quelle est la mission constitutionnelle principale du Sénat ?", "Élire le Président de la République en cas de vacance du pouvoir", "Contrôler la constitutionnalité des lois votées par l'Assemblée nationale", "Nommer les membres du Conseil constitutionnel", "Représenter les collectivités territoriales et participer à la fonction législative", "D", "L'article 24 de la Constitution dispose que 'le Sénat assure la représentation des collectivités territoriales de la République'. Ses 348 membres sont élus au suffrage universel indirect par un collège de grands électeurs composé principalement d'élus locaux."),
@@ -265,100 +466,215 @@ makeQuestion("i2-070", 2, "Institutions", "Qu'est-ce que le référendum d'initi
 
 ];
 export const INSTITUTIONS_L3: Question[] = [
-  makeQuestion("i3-001",3,"Institutions","Le Président de la République est élu pour :",
+  makeQuestion("i3-001",3,"Institutions","Le Président de la République est élu pour un mandat de :",
     "4 ans","5 ans","6 ans","7 ans","B",
-    "Mandat présidentiel : 5 ans. Piège : confondre avec ancien septennat. Source : Livret, p.9-10."
+    "Le mandat du Président de la République est de 5 ans. Il ne faut pas le confondre avec l’ancien septennat."
   ),
-  makeQuestion("i3-002",3,"Institutions","Le Président nomme :",
+
+  makeQuestion("i3-002",3,"Institutions","Le Président de la République nomme :",
     "Le Président du Sénat","Le Premier ministre","Le maire","Les députés","B",
-    "Le Président nomme le Premier ministre. Piège : confondre nomination et élection. Source : Livret, p.9-10."
+    "Le Président de la République nomme le Premier ministre. Il ne l’élit pas : la nomination et l’élection sont deux choses différentes."
   ),
-  makeQuestion("i3-003",3,"Institutions","Le Parlement est composé de :",
-    "Conseil constitutionnel + Conseil d’État","Assemblée nationale + Sénat","Président + Gouvernement","Régions + Départements","B",
-    "Parlement = Assemblée nationale + Sénat. Source : Livret, p.9."
+
+  makeQuestion("i3-003",3,"Institutions","Le Parlement français est composé de :",
+    "Conseil constitutionnel et Conseil d’État",
+    "Assemblée nationale et Sénat",
+    "Président de la République et Gouvernement",
+    "Régions et départements",
+    "B",
+    "Le Parlement est composé de deux chambres : l’Assemblée nationale et le Sénat."
   ),
-  makeQuestion("i3-004",3,"Institutions","Les députés sont élus pour :",
+
+  makeQuestion("i3-004",3,"Institutions","Les députés sont élus pour un mandat de :",
     "4 ans","5 ans","6 ans","9 ans","B",
-    "Députés : 5 ans. Piège : confondre avec sénateurs (6). Source : Livret, p.9."
+    "Les députés sont élus pour 5 ans, sauf dissolution de l’Assemblée nationale avant la fin du mandat."
   ),
+
   makeQuestion("i3-005",3,"Institutions","Les sénateurs sont élus :",
-    "Au suffrage universel direct","Au suffrage universel indirect","Par le Président","Par tirage au sort","B",
-    "Sénateurs : suffrage indirect. Piège : croire que tout est direct. Source : Livret, p.9."
+    "Au suffrage universel direct",
+    "Au suffrage universel indirect",
+    "Par le Président de la République",
+    "Par tirage au sort",
+    "B",
+    "Les sénateurs sont élus au suffrage universel indirect, notamment par un collège de grands électeurs."
   ),
+
   makeQuestion("i3-006",3,"Institutions","Le mandat des sénateurs est de :",
     "5 ans","6 ans","7 ans","10 ans","B",
-    "Mandat : 6 ans. Source : Livret, p.9."
-  ),
-  makeQuestion("i3-007",3,"Institutions","Le Parlement a notamment pour rôle de :",
-    "Voter les lois et contrôler le Gouvernement","Rendre la justice","Nommer les maires","Diriger les régions","A",
-    "Vote de la loi + contrôle du Gouvernement. Source : Livret, p.9."
-  ),
-  makeQuestion("i3-008",3,"Institutions","La Constitution actuelle (Ve République) a été adoptée en :",
-    "1789","1875","1958","1992","C",
-    "Constitution de 1958. Piège : 1875 = IIIe République. Source : Livret, p.9-16."
-  ),
-  makeQuestion("i3-009",3,"Institutions","La séparation des pouvoirs concerne :",
-    "Exécutif, législatif et autorité judiciaire","Police et gendarmerie","Commune et région","École et religion","A",
-    "Séparation : exécutif / législatif / autorité judiciaire. Piège : confondre avec laïcité. Source : Livret, p.9."
-  ),
-  makeQuestion("i3-010",3,"Institutions","Au niveau local, les trois collectivités principales sont :",
-    "Commune, département, région","Commune, canton, préfecture","Région, État, UE","Sénat, Assemblée, Conseil d’État","A",
-    "Collectivités : commune, département, région. Piège : ‘préfecture’ (c’est l’État). Source : Livret, p.11."
+    "Le mandat des sénateurs est de 6 ans."
   ),
 
-  makeQuestion("i3-011",3,"Institutions","La France compte (au 1er janvier 2021) environ :",
-    "9 000 communes","15 000 communes","34 965 communes","101 communes","C",
-    "Le livret cite 34 965 communes. Piège : confondre avec départements. Source : Livret, p.11."
+  makeQuestion("i3-007",3,"Institutions","Le Parlement a notamment pour rôle de :",
+    "Voter les lois et contrôler le Gouvernement",
+    "Rendre la justice",
+    "Nommer les maires",
+    "Diriger les régions",
+    "A",
+    "Le Parlement vote les lois et contrôle l’action du Gouvernement."
   ),
+
+  makeQuestion("i3-008",3,"Institutions","La Constitution actuelle de la Ve République a été adoptée en :",
+    "1789","1875","1958","1992","C",
+    "La Constitution actuelle date de 1958. Elle fonde les institutions de la Ve République."
+  ),
+
+  makeQuestion("i3-009",3,"Institutions","La séparation des pouvoirs concerne principalement :",
+    "Le pouvoir exécutif, le pouvoir législatif et l’autorité judiciaire",
+    "La police et la gendarmerie",
+    "La commune et la région",
+    "L’école et la religion",
+    "A",
+    "La séparation des pouvoirs distingue principalement l’exécutif, le législatif et l’autorité judiciaire."
+  ),
+
+  makeQuestion("i3-010",3,"Institutions","Au niveau territorial, les trois grandes collectivités sont :",
+    "La commune, le département et la région",
+    "La commune, le canton et la préfecture",
+    "La région, l’État et l’Union européenne",
+    "Le Sénat, l’Assemblée nationale et le Conseil d’État",
+    "A",
+    "Les trois principales collectivités territoriales sont la commune, le département et la région."
+  ),
+
+  makeQuestion("i3-011",3,"Institutions","La France compte, selon les données du livret, environ :",
+    "9 000 communes",
+    "15 000 communes",
+    "34 965 communes",
+    "101 communes",
+    "C",
+    "Le livret mentionne environ 34 965 communes. Il ne faut pas confondre ce chiffre avec celui des départements."
+  ),
+
   makeQuestion("i3-012",3,"Institutions","Les communes sont notamment responsables :",
-    "Des lycées","Des écoles maternelles et primaires, et de l’état civil","Des collèges","Des universités","B",
-    "Commune : écoles maternelles/primaires + état civil. Piège : collèges/lycées. Source : Livret, p.11."
+    "Des lycées",
+    "Des écoles maternelles et primaires ainsi que de l’état civil",
+    "Des collèges",
+    "Des universités",
+    "B",
+    "Les communes gèrent notamment les écoles maternelles et primaires ainsi que l’état civil."
   ),
+
   makeQuestion("i3-013",3,"Institutions","Les départements sont notamment responsables :",
-    "Des transports publics régionaux","Des collèges et de la protection de l’enfance","Des écoles maternelles","De la monnaie","B",
-    "Département : collèges + aide sociale/protection de l’enfance. Piège : transports = région. Source : Livret, p.11."
+    "Des transports publics régionaux",
+    "Des collèges et de la protection de l’enfance",
+    "Des écoles maternelles",
+    "De la monnaie",
+    "B",
+    "Les départements interviennent notamment dans les collèges et l’action sociale, y compris la protection de l’enfance."
   ),
+
   makeQuestion("i3-014",3,"Institutions","Les régions sont notamment chargées :",
-    "De construire et entretenir les lycées","De tenir l’état civil","De voter les lois","De rendre la justice","A",
-    "Région : lycées, transports, développement. Piège : état civil = commune. Source : Livret, p.11."
+    "De construire et entretenir les lycées",
+    "De tenir l’état civil",
+    "De voter les lois",
+    "De rendre la justice",
+    "A",
+    "Les régions exercent notamment des compétences en matière de lycées, de transports et de développement économique."
   ),
+
   makeQuestion("i3-015",3,"Institutions","La France compte :",
-    "96 départements","100 départements","101 départements","110 départements","C",
-    "Le livret cite 101 départements (métropole + outre-mer). Piège : 96 (métropole seule). Source : Livret, p.11."
+    "96 départements",
+    "100 départements",
+    "101 départements",
+    "110 départements",
+    "C",
+    "Le livret mentionne 101 départements, en comptant la métropole et l’outre-mer."
   ),
-  makeQuestion("i3-016",3,"Institutions","L’État est représenté dans les départements et régions par :",
-    "Les maires","Les préfets (ou hauts-commissaires dans certaines collectivités d’outre-mer)","Les sénateurs","Les présidents de région","B",
-    "Représentant de l’État : préfet. Piège : confondre élu local et représentant de l’État. Source : Livret, p.11."
+
+  makeQuestion("i3-016",3,"Institutions","L’État est représenté dans les départements et les régions par :",
+    "Les maires",
+    "Les préfets, ou parfois des hauts-commissaires dans certaines collectivités d’outre-mer",
+    "Les sénateurs",
+    "Les présidents de région",
+    "B",
+    "Dans les départements et régions, l’État est représenté par les préfets."
   ),
+
   makeQuestion("i3-017",3,"Institutions","Les conseillers municipaux, départementaux et régionaux sont élus pour :",
     "4 ans","5 ans","6 ans","7 ans","C",
-    "Mandats locaux : 6 ans (selon schéma du livret). Piège : 5 ans (président/députés). Source : Livret, p.10."
+    "Les élus locaux sont en principe élus pour 6 ans. Il ne faut pas confondre avec les mandats présidentiel et législatif."
   ),
-  makeQuestion("i3-018",3,"Institutions","La justice, selon le livret, sert notamment à :",
-    "Voter des lois","Sanctionner les infractions et régler les litiges","Organiser les élections","Nommer les sénateurs","B",
-    "Justice : litiges + sanctions. Piège : confondre avec rôle du Parlement. Source : Livret, p.9."
+
+  makeQuestion("i3-018",3,"Institutions","La justice a notamment pour mission de :",
+    "Voter les lois",
+    "Sanctionner les infractions et régler les litiges",
+    "Organiser les élections",
+    "Nommer les sénateurs",
+    "B",
+    "La justice sanctionne les infractions et règle les litiges. Elle ne vote pas les lois."
   ),
-  makeQuestion("i3-019",3,"Institutions","La France est un État de droit : cela signifie que :",
-    "Le pouvoir politique est soumis à la loi (Constitution + lois)","Le Président peut décider sans contrôle","La justice dépend du Gouvernement","Les lois diffèrent selon l’origine","A",
-    "État de droit : pouvoir soumis à la loi, garanties, égalité devant la loi. Piège : imaginer un pouvoir sans limites. Source : Livret, p.9."
+
+  makeQuestion("i3-019",3,"Institutions","Dire que la France est un État de droit signifie que :",
+    "Le pouvoir politique est soumis à la loi",
+    "Le Président peut décider sans contrôle",
+    "La justice dépend du Gouvernement",
+    "Les lois changent selon l’origine des personnes",
+    "A",
+    "Dans un État de droit, le pouvoir politique est soumis à la Constitution et aux lois."
   ),
+
   makeQuestion("i3-020",3,"Institutions","Le suffrage universel signifie que peuvent voter :",
-    "Uniquement les hommes","Tous les citoyens de 18 ans disposant de leurs droits civils et politiques","Toute personne résidant en France","Les personnes mariées uniquement","B",
-    "Vote : citoyens, 18 ans, droits civils et politiques. Piège : confondre citoyen et résident. Source : Livret, p.4 et p.8."
+    "Uniquement les hommes",
+    "Tous les citoyens de 18 ans disposant de leurs droits civils et politiques",
+    "Toute personne résidant en France",
+    "Les personnes mariées uniquement",
+    "B",
+    "Le suffrage universel signifie que les citoyens majeurs disposant de leurs droits civils et politiques peuvent voter."
   ),
 
-  makeQuestion("i3-021", 3, "Institutions", "Qu'est-ce que le 'parlementarisme rationalisé' instauré par la Constitution de 1958 ?", "Un système où le Parlement vote toutes les lois sans exception", "Un régime où les partis politiques sont encadrés par la loi pour éviter leur fragmentation", "Un ensemble de mécanismes constitutionnels visant à stabiliser le gouvernement face à un Parlement potentiellement hostile", "Un mode d'organisation des débats parlementaires fondé sur des règles de procédure strictes", "C", "Tirant les leçons de l'instabilité de la IVe République (21 gouvernements en 12 ans), les rédacteurs de 1958 ont rationalisé le parlementarisme : vote bloqué (art. 44-3), 49-3, irrecevabilité financière (art. 40), ordre du jour prioritaire du gouvernement. Ces mécanismes encadrent le Parlement pour protéger la stabilité gouvernementale."),
+makeQuestion("i3-021", 3, "Institutions", "Le parlementarisme rationalisé de la Constitution de 1958 désigne :",
+  "Un système où le Parlement vote toutes les lois sans limite",
+  "Un encadrement des partis politiques",
+  "Un ensemble de mécanismes destinés à renforcer la stabilité du Gouvernement face au Parlement",
+  "Un mode d’organisation purement interne des débats parlementaires",
+  "C",
+  "Le parlementarisme rationalisé de 1958 regroupe plusieurs mécanismes conçus pour éviter l’instabilité gouvernementale connue sous la IVe République."
+),
 
-makeQuestion("i3-022", 3, "Institutions", "Quelle avancée majeure la révision constitutionnelle de 2008 a-t-elle apportée en matière de droits des citoyens face à la loi ?", "Elle a supprimé la possibilité pour le gouvernement d'utiliser l'article 49-3", "Elle a rendu obligatoire le référendum pour toute révision constitutionnelle", "Elle a transféré au Parlement le pouvoir de nommer les membres du Conseil constitutionnel", "Elle a créé la Question Prioritaire de Constitutionnalité permettant à tout justiciable de contester une loi inconstitutionnelle", "A", "La révision de 2008, dite 'de modernisation des institutions', a introduit la QPC (art. 61-1), transformant le contrôle de constitutionnalité de préventif en répressif. Elle a aussi renforcé les pouvoirs du Parlement (ordre du jour partagé, création de commissions d'enquête facilitée) et introduit le référendum d'initiative partagée."),
+makeQuestion("i3-022", 3, "Institutions", "La grande avancée de la révision constitutionnelle de 2008 en matière de droits des citoyens est :",
+  "La suppression du 49-3",
+  "Le référendum obligatoire pour toute révision",
+  "Le transfert complet des nominations au Parlement",
+  "La création de la QPC permettant à un justiciable de contester une loi déjà en vigueur",
+  "D",
+  "La révision de 2008 a introduit la question prioritaire de constitutionnalité, qui permet à un justiciable de contester la constitutionnalité d’une loi applicable à son affaire."
+),
 
-makeQuestion("i3-023", 3, "Institutions", "Quelle est la portée juridique de la distinction entre domaine de la loi (art. 34) et domaine du règlement (art. 37) en droit constitutionnel français ?", "Elle permet au Parlement de légiférer dans tous les domaines sans restriction", "Elle oblige le gouvernement à soumettre tous ses décrets à l'Assemblée nationale", "Elle supprime tout contrôle parlementaire sur l'action réglementaire du gouvernement", "Elle opère une délimitation matérielle des compétences normatives entre Parlement et exécutif, rompant avec la tradition de la loi à compétence illimitée", "D", "Avant 1958, le Parlement pouvait légiférer sur tout. La Constitution de 1958 rompt avec cette tradition en fixant un domaine de la loi (art. 34 : liste limitative) et en réservant tout le reste au règlement (art. 37). Cette innovation vise à rationaliser la production normative et à renforcer le gouvernement face au Parlement."),
+makeQuestion("i3-023", 3, "Institutions", "La distinction entre domaine de la loi et domaine du règlement signifie surtout que :",
+  "Le Parlement peut légiférer sur tout",
+  "Le Gouvernement doit faire voter tous ses décrets",
+  "Le Parlement ne contrôle plus rien",
+  "La Constitution répartit certaines compétences normatives entre Parlement et pouvoir exécutif",
+  "D",
+  "La Constitution de 1958 limite le domaine de la loi et laisse le reste au pouvoir réglementaire, ce qui renforce la capacité d’action du Gouvernement."
+),
 
-makeQuestion("i3-024", 3, "Institutions", "Pourquoi le Président de la République est-il irresponsable politiquement sous la Ve République, sauf dans le cadre de la Haute Cour ?", "Parce qu'il est élu directement par le peuple et ne peut rendre compte qu'à lui par le référendum", "Parce que ses actes les plus importants sont contresignés par le Premier ministre qui en assume la responsabilité devant le Parlement", "Parce que la Constitution lui confère une immunité totale pendant et après son mandat", "Parce que le Conseil constitutionnel valide ses décisions avant leur mise en œuvre", "B", "Le contreseing, prévu par l'article 19 de la Constitution, est le mécanisme central de l'irresponsabilité présidentielle : les actes du Président qui nécessitent la contresignature du Premier ministre voient leur responsabilité politique assumée par ce dernier devant l'Assemblée. Seuls quelques actes (dissolution, article 16, QPC...) sont dispensés de contreseing."),
+makeQuestion("i3-024", 3, "Institutions", "Sous la Ve République, l’irresponsabilité politique du Président s’explique en grande partie par :",
+  "Le fait qu’il ne rende compte qu’au peuple par référendum",
+  "Le contreseing du Premier ministre sur la plupart de ses actes",
+  "Une immunité absolue après son mandat",
+  "Le contrôle préalable du Conseil constitutionnel sur toutes ses décisions",
+  "B",
+  "Le contreseing du Premier ministre permet de faire porter la responsabilité politique de nombreux actes présidentiels sur le Gouvernement."
+),
 
-makeQuestion("i3-025", 3, "Institutions", "En quoi la dualité fonctionnelle du Conseil d'État crée-t-elle une tension institutionnelle régulièrement soulignée ?", "Il cumule fonctions législative et exécutive, violant la séparation des pouvoirs", "Il est simultanément conseiller du gouvernement sur les textes qu'il est ensuite susceptible de juger, ce qui questionne son impartialité", "Il dispose d'un droit de veto sur les ordonnances et les décrets, limitant le pouvoir exécutif", "Il peut annuler les lois votées par le Parlement, empiétant sur les compétences du Conseil constitutionnel", "C", "Le Conseil d'État examine en amont les projets de loi et décrets (section consultative) et peut ensuite être amené à juger des litiges nés de leur application (section contentieuse). Cette position rend son indépendance sujette à débat, même si la séparation interne entre les deux sections vise à garantir l'impartialité des formations de jugement."),
+makeQuestion("i3-025", 3, "Institutions", "La dualité fonctionnelle du Conseil d’État soulève un débat parce qu’il :",
+  "Cumule fonctions législative et exécutive",
+  "Conseille le Gouvernement sur des textes qu’il peut ensuite être amené à juger",
+  "Dispose d’un droit de veto sur les décrets",
+  "Annule les lois comme le Conseil constitutionnel",
+  "B",
+  "Le Conseil d’État exerce à la fois une fonction consultative auprès du Gouvernement et une fonction juridictionnelle dans l’ordre administratif, ce qui alimente parfois un débat sur son impartialité."
+),
 
-makeQuestion("i3-026", 3, "Institutions", "Quelle est la hiérarchie des normes applicables en France selon la jurisprudence des juridictions suprêmes ?", "Constitution > lois ordinaires > traités > règlements", "Traités européens > Constitution > lois organiques > lois ordinaires", "Droit de l'UE > Constitution > tout le reste, sans exception", "Constitution > traités internationaux > lois organiques > lois ordinaires > règlements", "A", "La hiérarchie des normes en France place la Constitution au sommet (Conseil constitutionnel, décision de 1971). Les traités sont supérieurs aux lois (art. 55) mais inférieurs à la Constitution (Conseil d'État, Sarran, 1998 ; Cour de cassation, Fraisse, 2000). Les lois organiques sont intermédiaires entre Constitution et lois ordinaires."),
-
+makeQuestion("i3-026", 3, "Institutions", "En droit français, la hiérarchie des normes s’organise principalement comme suit :",
+  "Constitution > lois ordinaires > traités > règlements",
+  "Traités européens > Constitution > lois organiques > lois ordinaires",
+  "Droit de l’Union européenne > Constitution en toute hypothèse",
+  "Constitution > traités internationaux > lois organiques > lois ordinaires > règlements",
+  "D",
+  "En droit interne français, la Constitution est au sommet. Les traités sont supérieurs aux lois, mais restent inférieurs à la Constitution."
+),
 makeQuestion("i3-027", 3, "Institutions", "Quelles sont les deux conditions cumulatives pour qu'une QPC soit transmise au Conseil constitutionnel ?", "Que la loi soit postérieure à 1958 et que le requérant soit de nationalité française", "Que la disposition soit applicable au litige et n'ait pas déjà été déclarée conforme, sauf changement de circonstances", "Que le litige soit en cours devant une juridiction pénale et que la peine encourue soit supérieure à un an", "Que la QPC soit soutenue par au moins dix avocats et déposée dans les 30 jours de l'audience", "D", "Pour être transmise, une QPC doit remplir trois conditions : la disposition doit être applicable au litige ou à la procédure ; elle ne doit pas avoir déjà été déclarée conforme, sauf changement de circonstances ; la question doit être nouvelle ou présenter un caractère sérieux. Le filtre est assuré par la Cour de cassation ou le Conseil d'État selon l'ordre de juridiction."),
 
 makeQuestion("i3-028", 3, "Institutions", "Quelle différence fondamentale distingue l'article 49 alinéa 1 de l'article 49 alinéa 3 dans la logique constitutionnelle de la Ve République ?", "Le 49-1 s'applique uniquement aux lois de finances, le 49-3 à toutes les lois", "Le 49-1 est un acte de légitimation politique volontaire du gouvernement, le 49-3 est un outil offensif pour faire adopter un texte sans vote", "Le 49-1 peut être utilisé plusieurs fois par an, le 49-3 est limité à une seule utilisation par session", "Le 49-1 nécessite un vote à la majorité qualifiée, le 49-3 à la majorité simple", "B", "L'article 49-1 engage la responsabilité du gouvernement sur son programme ou une déclaration de politique générale : c'est un acte de confiance volontaire. Le 49-3 engage la responsabilité sur un texte précis pour le faire adopter sans vote, sauf si une motion de censure est déposée et adoptée. Ces deux mécanismes révèlent deux logiques différentes : légitimation vs efficacité législative."),

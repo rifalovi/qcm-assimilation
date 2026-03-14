@@ -1,485 +1,1002 @@
 import { makeQuestion, Question } from "./types";
 
 export const HISTOIRE_L1: Question[] = [
-  makeQuestion("h1-001",1,"Histoire","En quelle année commence la Révolution française ?",
-    "1848","1789","1905","1958","B",
-    "La Révolution française commence en 1789. Elle marque la fin de l’Ancien Régime et ouvre une période de profondes transformations politiques et sociales. Elle conduit notamment à l’adoption de la Déclaration des droits de l’homme et du citoyen."
+
+makeQuestion("h1-001",1,"Histoire","En quelle année commence la Révolution française ?",
+"1776","1789","1815","1905","B",
+"La Révolution française commence en 1789. Elle met fin à l’Ancien Régime et marque le début d’une transformation politique majeure."
+),
+
+makeQuestion("h1-002",1,"Histoire","Que célèbre-t-on le 14 juillet en France ?",
+"La victoire de 1918",
+"La prise de la Bastille et la fête nationale",
+"La fin de la monarchie en 1958",
+"La création de l’euro",
+"B",
+"Le 14 juillet est la fête nationale française. Elle rappelle la prise de la Bastille en 1789."
+),
+
+makeQuestion("h1-003",1,"Histoire","La Déclaration des droits de l’homme et du citoyen est adoptée en :",
+"1789","1815","1914","1945","A",
+"La Déclaration des droits de l’homme et du citoyen est adoptée en août 1789 pendant la Révolution française."
+),
+
+makeQuestion("h1-004",1,"Histoire","La loi de 1905 concerne :",
+"La liberté de vote",
+"La séparation des Églises et de l’État",
+"La création de l’ONU",
+"La fondation de la Vᵉ République",
+"B",
+"La loi de 1905 établit la séparation des Églises et de l’État et fonde la laïcité."
+),
+
+makeQuestion("h1-005",1,"Histoire","La Vᵉ République est fondée en :",
+"1946",
+"1958",
+"1968",
+"1981",
+"B",
+"La Constitution de 1958 fonde la Vᵉ République."
+),
+
+makeQuestion("h1-006",1,"Histoire","Quelle date marque la fin de la Seconde Guerre mondiale en Europe ?",
+"8 mai 1945",
+"11 novembre 1918",
+"14 juillet 1789",
+"1 janvier 2002",
+"A",
+"Le 8 mai 1945 marque la capitulation de l’Allemagne nazie."
+),
+
+makeQuestion("h1-007",1,"Histoire","Napoléon Bonaparte devient empereur en :",
+"1804",
+"1789",
+"1870",
+"1914",
+"A",
+"Napoléon Bonaparte devient empereur des Français en 1804."
+),
+
+makeQuestion("h1-008",1,"Histoire","La Première Guerre mondiale a eu lieu :",
+"1914-1918",
+"1939-1945",
+"1789-1799",
+"1962-1968",
+"A",
+"La Première Guerre mondiale se déroule de 1914 à 1918."
+),
+
+makeQuestion("h1-009",1,"Histoire","La Seconde Guerre mondiale a eu lieu :",
+"1914-1918",
+"1939-1945",
+"1958-1962",
+"2001-2005",
+"B",
+"La Seconde Guerre mondiale s’est déroulée de 1939 à 1945."
+),
+
+makeQuestion("h1-010",1,"Histoire","L’abolition définitive de l’esclavage en France en 1848 est associée à :",
+"Victor Hugo",
+"Victor Schœlcher",
+"Charles de Gaulle",
+"Jules Ferry",
+"B",
+"Victor Schœlcher joue un rôle central dans l’abolition de l’esclavage en 1848."
+),
+
+makeQuestion("h1-011",1,"Histoire","La France est un pays fondateur de :",
+"L’Union africaine",
+"La construction européenne",
+"L’ASEAN",
+"Le Mercosur",
+"B",
+"La France est un des pays fondateurs de la construction européenne."
+),
+
+makeQuestion("h1-012",1,"Histoire","La Commune de Paris date de :",
+"1871",
+"1789",
+"1917",
+"1992",
+"A",
+"La Commune de Paris est un épisode politique important survenu en 1871."
+),
+
+makeQuestion("h1-013",1,"Histoire","Le 11 novembre commémore :",
+"La fin de la Seconde Guerre mondiale",
+"L’armistice de 1918",
+"La prise de la Bastille",
+"La loi de 1905",
+"B",
+"Le 11 novembre 1918 marque la fin des combats de la Première Guerre mondiale."
+),
+
+makeQuestion("h1-014",1,"Histoire","Pendant la Seconde Guerre mondiale, la Résistance :",
+"S’oppose à l’occupation nazie",
+"Soutient l’occupation",
+"Interdit les libertés",
+"N’existe pas en France",
+"A",
+"La Résistance regroupe les mouvements qui luttent contre l’occupation allemande."
+),
+
+makeQuestion("h1-015",1,"Histoire","Charles de Gaulle est :",
+"Un empereur",
+"Un chef de la France libre",
+"Un roi de France",
+"Un sénateur du XIXe siècle",
+"B",
+"De Gaulle dirige la France libre pendant la Seconde Guerre mondiale."
+),
+
+makeQuestion("h1-016",1,"Histoire","La Révolution française met fin :",
+"À la République",
+"À l’Ancien Régime",
+"À l’Union européenne",
+"À la laïcité",
+"B",
+"La Révolution met fin à la monarchie absolue."
+),
+
+makeQuestion("h1-017",1,"Histoire","La Marseillaise est composée en :",
+"1792",
+"1871",
+"1914",
+"1945",
+"A",
+"La Marseillaise est composée pendant la Révolution française."
+),
+
+makeQuestion("h1-018",1,"Histoire","La construction européenne s’accélère après :",
+"1789",
+"1945",
+"1905",
+"2000",
+"B",
+"Après la guerre, les pays européens cherchent à construire la paix."
+),
+
+makeQuestion("h1-019",1,"Histoire","L’appel du 18 juin est lancé par :",
+"Napoléon",
+"Charles de Gaulle",
+"Victor Hugo",
+"Jean Moulin",
+"B",
+"L’appel du 18 juin 1940 encourage les Français à continuer la résistance."
+),
+
+makeQuestion("h1-020",1,"Histoire","La Révolution de 1848 conduit à :",
+"La IIᵉ République",
+"La monarchie absolue",
+"La Vᵉ République",
+"La création de l’euro",
+"A",
+"La révolution de 1848 conduit à la proclamation de la Deuxième République."
+),
+
+makeQuestion("h1-021",1,"Histoire","Jean Moulin est connu pour :",
+"Unifier la Résistance",
+"Être un empereur",
+"Écrire la Constitution",
+"Diriger l’ONU",
+"A",
+"Jean Moulin joue un rôle majeur dans l’organisation de la Résistance."
+),
+
+makeQuestion("h1-022",1,"Histoire","La France devient une République pour la première fois en :",
+"1792",
+"1789",
+"1871",
+"1905",
+"A",
+"La Première République est proclamée en 1792."
+),
+
+makeQuestion("h1-023",1,"Histoire","Qui est le premier président de la Vᵉ République ?",
+"Charles de Gaulle",
+"François Mitterrand",
+"Jacques Chirac",
+"Georges Pompidou",
+"A",
+"Charles de Gaulle devient le premier président de la Vᵉ République."
+),
+
+makeQuestion("h1-024",1,"Histoire","La Déclaration des droits de l’homme affirme notamment :",
+"La liberté et l’égalité",
+"La monarchie absolue",
+"La fin du Parlement",
+"La suppression du vote",
+"A",
+"Elle affirme les droits fondamentaux comme la liberté et l’égalité."
+),
+
+makeQuestion("h1-025",1,"Histoire","La devise Liberté, Égalité, Fraternité apparaît pendant :",
+"La Révolution française",
+"La Première Guerre mondiale",
+"La IIIᵉ République",
+"La Vᵉ République",
+"A",
+"La devise apparaît pendant la Révolution et devient symbole républicain."
+)
+
+];
+
+
+export const HISTOIRE_L2: Question[] = [
+
+  makeQuestion("h2-001",2,"Histoire","Pourquoi la loi de 1905 est-elle importante dans l’histoire de France ?",
+    "Elle instaure le quinquennat","Elle sépare les Églises et l’État","Elle crée l’Union européenne","Elle met fin à la Première Guerre mondiale","B",
+    "La loi de 1905 établit la séparation des Églises et de l’État. Elle garantit la liberté de conscience et constitue un texte majeur dans l’histoire de la laïcité en France."
   ),
 
-  makeQuestion("h1-002",1,"Histoire","Que célèbre-t-on le 14 juillet en France ?",
-    "La victoire de 1918","La fête nationale française","La fin de la monarchie en 1958","La création de l’euro","B",
-    "Le 14 juillet est la fête nationale française. Elle rappelle la prise de la Bastille en 1789 et la Fête de la Fédération de 1790, symbole d’unité nationale."
+  makeQuestion("h2-002",2,"Histoire","Pourquoi Charles de Gaulle est-il une figure majeure de la Vᵉ République ?",
+    "Parce qu’il a créé l’euro","Parce qu’il a fondé la Vᵉ République","Parce qu’il a écrit la loi de 1905","Parce qu’il a dirigé la Commune de Paris","B",
+    "Charles de Gaulle revient au pouvoir en 1958 dans un contexte de crise politique. Il porte la nouvelle Constitution qui fonde la Vᵉ République."
   ),
 
-  makeQuestion("h1-003",1,"Histoire","La Déclaration des droits de l’homme et du citoyen est adoptée en :",
-    "1789","1815","1914","1945","A",
-    "La Déclaration des droits de l’homme et du citoyen est adoptée en août 1789 pendant la Révolution française. Elle affirme des principes fondamentaux comme la liberté, l’égalité devant la loi et la souveraineté du peuple."
+  makeQuestion("h2-003",2,"Histoire","Que rappelle le 11 novembre en France ?",
+    "La victoire de 1945","L’armistice de 1918","La prise de la Bastille","La Révolution de 1848","B",
+    "Le 11 novembre commémore l’armistice signé en 1918, qui met fin aux combats de la Première Guerre mondiale sur le front occidental."
   ),
 
-  makeQuestion("h1-004",1,"Histoire","La loi de 1905 concerne :",
-    "Le droit de vote des femmes","La séparation des Églises et de l’État","La création de l’ONU","La fondation de la Vᵉ République","B",
-    "La loi de 1905 établit la séparation des Églises et de l’État. Elle garantit la liberté de conscience et constitue l’un des fondements de la laïcité en France."
-  ),
-
-  makeQuestion("h1-005",1,"Histoire","La Vᵉ République date de :",
-    "1946","1958","1968","1981","B",
-    "La Constitution de 1958 fonde la Vᵉ République. Elle renforce notamment le rôle du Président de la République dans les institutions françaises."
-  ),
-
-  makeQuestion("h1-006",1,"Histoire","Quel événement marque la fin de la Seconde Guerre mondiale en Europe ?",
-    "8 mai 1945","11 novembre 1918","14 juillet 1789","1er janvier 2002","A",
+  makeQuestion("h2-004",2,"Histoire","Pourquoi le 8 mai 1945 est-il une date importante ?",
+    "Parce qu’il marque la fin de la Première Guerre mondiale","Parce qu’il marque la victoire contre l’Allemagne nazie en Europe","Parce qu’il correspond à la création de l’euro","Parce qu’il inaugure la Vᵉ République","B",
     "Le 8 mai 1945 marque la capitulation de l’Allemagne nazie et la fin de la Seconde Guerre mondiale en Europe."
   ),
 
-  makeQuestion("h1-007",1,"Histoire","Napoléon Bonaparte a été :",
-    "Président de la Vᵉ République","Empereur des Français","Roi d’Angleterre","Premier ministre","B",
-    "Napoléon Bonaparte devient empereur des Français en 1804 sous le nom de Napoléon Ier. Il joue un rôle majeur dans l’histoire européenne."
+  makeQuestion("h2-005",2,"Histoire","Pourquoi la Déclaration des droits de l’homme et du citoyen de 1789 est-elle un texte fondamental ?",
+    "Parce qu’elle affirme des droits et libertés essentiels","Parce qu’elle crée la Sécurité sociale","Parce qu’elle organise les élections municipales","Parce qu’elle met fin à la monarchie en 1958","A",
+    "Adoptée pendant la Révolution française, elle affirme des principes fondamentaux comme la liberté, l’égalité devant la loi et la souveraineté nationale."
   ),
 
-  makeQuestion("h1-008",1,"Histoire","La Première Guerre mondiale a eu lieu :",
-    "1914-1918","1939-1945","1789-1799","1962-1968","A",
-    "La Première Guerre mondiale s’est déroulée de 1914 à 1918. Elle a profondément marqué l’Europe et la société française."
+  makeQuestion("h2-006",2,"Histoire","Pourquoi la prise de la Bastille est-elle restée un symbole fort ?",
+    "Parce qu’elle marque symboliquement le début de la Révolution française","Parce qu’elle met fin à la Seconde Guerre mondiale","Parce qu’elle crée la République européenne","Parce qu’elle instaure le suffrage universel","A",
+    "La prise de la Bastille, le 14 juillet 1789, symbolise la contestation de l’absolutisme royal et le début de la Révolution française."
   ),
 
-  makeQuestion("h1-009",1,"Histoire","La Seconde Guerre mondiale a eu lieu :",
-    "1914-1918","1939-1945","1958-1962","2001-2005","B",
-    "La Seconde Guerre mondiale s’est déroulée de 1939 à 1945. Elle a opposé les Alliés aux puissances de l’Axe."
+  makeQuestion("h2-007",2,"Histoire","Que faut-il retenir de la Première Guerre mondiale pour la France ?",
+    "Elle se déroule de 1914 à 1918","Elle se déroule de 1939 à 1945","Elle a lieu uniquement hors d’Europe","Elle conduit directement à la loi de 1905","A",
+    "La Première Guerre mondiale dure de 1914 à 1918. Elle marque profondément la société française par son ampleur humaine, militaire et mémorielle."
   ),
 
-  makeQuestion("h1-010",1,"Histoire","L’abolition définitive de l’esclavage en France en 1848 est associée à :",
-    "Victor Hugo","Victor Schœlcher","Charles de Gaulle","Jules Ferry","B",
-    "Victor Schœlcher est une figure majeure de l’abolition définitive de l’esclavage en France en 1848."
+  makeQuestion("h2-008",2,"Histoire","Que faut-il retenir de la Seconde Guerre mondiale pour la France ?",
+    "Elle se déroule de 1789 à 1799","Elle se déroule de 1939 à 1945","Elle met fin à la monarchie absolue","Elle correspond au traité de Maastricht","B",
+    "La Seconde Guerre mondiale se déroule de 1939 à 1945. La France connaît l’occupation, la Résistance et la Libération."
   ),
 
-  makeQuestion("h1-011",1,"Histoire","La France a participé dès l’origine à :",
-    "L’Union africaine","La construction européenne","L’ASEAN","Le Mercosur","B",
-    "La France est l’un des États fondateurs de la construction européenne qui aboutira plus tard à l’Union européenne."
+  makeQuestion("h2-009",2,"Histoire","Pourquoi l’appel du 18 juin 1940 est-il resté célèbre ?",
+    "Parce qu’il marque l’entrée dans l’Union européenne","Parce qu’il appelle à poursuivre le combat contre l’occupation","Parce qu’il annonce la loi de 1905","Parce qu’il fonde la IIIᵉ République","B",
+    "L’appel du 18 juin 1940 lancé par le général de Gaulle depuis Londres encourage les Français à continuer la lutte contre l’Allemagne nazie."
   ),
 
-  makeQuestion("h1-012",1,"Histoire","La Commune de Paris date de :",
-    "1871","1789","1917","1992","A",
-    "La Commune de Paris a lieu en 1871. C’est un épisode politique et social important de l’histoire française."
+  makeQuestion("h2-010",2,"Histoire","Pourquoi Napoléon Bonaparte reste-t-il une figure importante de l’histoire de France ?",
+    "Parce qu’il devient empereur en 1804","Parce qu’il signe le traité de Maastricht","Parce qu’il crée la loi de 1905","Parce qu’il fonde la Vᵉ République","A",
+    "Napoléon Bonaparte devient empereur des Français en 1804. Il marque durablement l’histoire de France et de l’Europe."
   ),
 
-  makeQuestion("h1-013",1,"Histoire","Le 11 novembre commémore :",
-    "La fin de la Seconde Guerre mondiale","L’armistice de 1918","La prise de la Bastille","La loi de 1905","B",
-    "Le 11 novembre commémore l’armistice signé en 1918 qui met fin aux combats de la Première Guerre mondiale."
-  ),
-
-  makeQuestion("h1-014",1,"Histoire","La Résistance pendant la Seconde Guerre mondiale :",
-    "S’oppose à l’occupation et au nazisme","Soutient l’occupation","Interdit la liberté","N’existe pas en France","A",
-    "La Résistance regroupe des mouvements et des réseaux qui s’opposent à l’occupation allemande et au régime nazi."
-  ),
-
-  makeQuestion("h1-015",1,"Histoire","Charles de Gaulle est notamment :",
-    "Un écrivain du XIXe siècle","Un chef de la France libre et Président de la République","Un roi de France","Un empereur","B",
-    "Charles de Gaulle dirige la France libre pendant la guerre puis devient le premier président de la Vᵉ République."
-  ),
-
-  makeQuestion("h1-016",1,"Histoire","La Révolution française met fin à :",
-    "La République","L’Ancien Régime","L’Union européenne","La laïcité","B",
-    "La Révolution française met fin à l’Ancien Régime et à la monarchie absolue."
-  ),
-
-  makeQuestion("h1-017",1,"Histoire","La Marseillaise est créée pendant :",
-    "La Révolution française","La Première Guerre mondiale","La Vᵉ République","La guerre d’Algérie","A",
-    "La Marseillaise est composée en 1792 et devient plus tard l’hymne national français."
-  ),
-
-  makeQuestion("h1-018",1,"Histoire","La construction européenne s’accélère après :",
-    "1789","1945","1905","2000","B",
-    "Après la Seconde Guerre mondiale, les pays européens cherchent à construire la paix et la coopération."
-  ),
-
-  makeQuestion("h1-019",1,"Histoire","La date de l’appel du 18 juin est :",
-    "1940","1918","1958","1789","A",
-    "L’appel du 18 juin 1940 lancé par le général de Gaulle encourage les Français à continuer le combat contre l’occupation."
-  ),
-
-  makeQuestion("h1-020",1,"Histoire","La Révolution de 1848 en France conduit à :",
-    "La fin de la Vᵉ République","La IIᵉ République","La monarchie absolue","La création de l’euro","B",
-    "La Révolution de 1848 conduit à la proclamation de la Deuxième République."
-  ),];
-
-
-  export const HISTOIRE_L2: Question[] = [
-
-  makeQuestion("h2-001",2,"Histoire","En quelle année a été adoptée la loi de séparation des Églises et de l’État ?",
-    "1789","1848","1905","1958","C",
-    "La loi de 1905 établit la séparation des Églises et de l’État. Elle garantit la liberté de conscience et marque une étape essentielle dans la construction de la laïcité en France."
-  ),
-
-  makeQuestion("h2-002",2,"Histoire","La Vᵉ République a été instaurée sous :",
-    "Napoléon","Charles de Gaulle","Jules Ferry","Louis XIV","B",
-    "La Vᵉ République est instaurée en 1958 dans un contexte de crise politique. Le général Charles de Gaulle revient alors au pouvoir et propose une nouvelle Constitution."
-  ),
-
-  makeQuestion("h2-003",2,"Histoire","Le 11 novembre commémore :",
-    "La fin de la Seconde Guerre mondiale","L’armistice de 1918","La prise de la Bastille","La loi de 1905","B",
-    "Le 11 novembre 1918 marque l’armistice qui met fin aux combats de la Première Guerre mondiale sur le front occidental."
-  ),
-
-  makeQuestion("h2-004",2,"Histoire","Le 8 mai 1945 correspond à :",
-    "La fin de la Première Guerre mondiale","La victoire en Europe contre l’Allemagne nazie","La création de l’euro","La Révolution française","B",
-    "Le 8 mai 1945 marque la capitulation de l’Allemagne nazie et la fin de la Seconde Guerre mondiale en Europe."
-  ),
-
-  makeQuestion("h2-005",2,"Histoire","La Déclaration des droits de l’homme et du citoyen est liée à :",
-    "La Révolution française","La Seconde Guerre mondiale","La loi de 1905","La construction européenne","A",
-    "Adoptée en 1789 pendant la Révolution française, elle affirme les principes fondamentaux de liberté, d’égalité et de souveraineté nationale."
-  ),
-
-  makeQuestion("h2-006",2,"Histoire","Quel événement est associé à l’année 1789 ?",
-    "Le quinquennat","La prise de la Bastille","La loi de 1905","Le traité de Maastricht","B",
-    "La prise de la Bastille le 14 juillet 1789 est un symbole majeur du début de la Révolution française."
-  ),
-
-  makeQuestion("h2-007",2,"Histoire","La Première Guerre mondiale a duré :",
-    "1914-1918","1939-1945","1870-1871","1962-1968","A",
-    "La Première Guerre mondiale se déroule de 1914 à 1918. Elle oppose notamment les puissances européennes et cause des millions de morts."
-  ),
-
-  makeQuestion("h2-008",2,"Histoire","La Seconde Guerre mondiale a duré :",
-    "1914-1918","1939-1945","1958-1962","1789-1799","B",
-    "La Seconde Guerre mondiale se déroule de 1939 à 1945 et implique de nombreux pays à l’échelle mondiale."
-  ),
-
-  makeQuestion("h2-009",2,"Histoire","L’appel du 18 juin est associé à :",
-    "1940","1918","1958","1905","A",
-    "Le 18 juin 1940, le général de Gaulle lance depuis Londres un appel à poursuivre le combat contre l’Allemagne nazie. Cet appel marque le début de la France libre."
-  ),
-
-  makeQuestion("h2-010",2,"Histoire","Napoléon Bonaparte devient empereur en :",
-    "1804","1789","1848","1918","A",
-    "Napoléon Bonaparte est sacré empereur des Français en 1804 sous le nom de Napoléon Ier."
-  ),
-
-  makeQuestion("h2-011",2,"Histoire","L’abolition de l’esclavage en 1848 est associée à :",
-    "Victor Schœlcher","Charles de Gaulle","Louis XIV","Robespierre","A",
+  makeQuestion("h2-011",2,"Histoire","Pourquoi Victor Schœlcher est-il une figure importante de l’histoire française ?",
+    "Parce qu’il joue un rôle dans l’abolition de l’esclavage en 1848","Parce qu’il lance l’appel du 18 juin","Parce qu’il fonde la IIIᵉ République","Parce qu’il rédige la Constitution de 1958","A",
     "Victor Schœlcher joue un rôle déterminant dans l’abolition définitive de l’esclavage dans les colonies françaises en 1848."
   ),
 
-  makeQuestion("h2-012",2,"Histoire","La Commune de Paris date de :",
-    "1871","1914","1905","1945","A",
-    "La Commune de Paris a lieu en 1871 après la guerre franco-prussienne. Elle constitue une expérience politique et sociale importante."
+  makeQuestion("h2-012",2,"Histoire","Pourquoi la Commune de Paris reste-t-elle un épisode marquant ?",
+    "Parce qu’elle correspond à une expérience politique et sociale de 1871","Parce qu’elle crée la Vᵉ République","Parce qu’elle marque la fin de la Seconde Guerre mondiale","Parce qu’elle instaure la loi de 1905","A",
+    "La Commune de Paris a lieu en 1871 dans un contexte de crise politique et sociale. Elle reste un épisode important de l’histoire française."
   ),
 
-  makeQuestion("h2-013",2,"Histoire","Le traité de Maastricht (1992) est lié à :",
-    "La Révolution française","La construction européenne","La loi de 1905","La Première Guerre mondiale","B",
-    "Le traité de Maastricht renforce la construction européenne et crée notamment la citoyenneté européenne."
+  makeQuestion("h2-013",2,"Histoire","Pourquoi le traité de Maastricht est-il important dans l’histoire récente ?",
+    "Parce qu’il met fin à la Première Guerre mondiale","Parce qu’il renforce la construction européenne","Parce qu’il instaure la monarchie constitutionnelle","Parce qu’il crée la IIIᵉ République","B",
+    "Le traité de Maastricht, signé en 1992, approfondit la construction européenne et crée notamment la citoyenneté européenne."
   ),
 
-  makeQuestion("h2-014",2,"Histoire","Le quinquennat présidentiel de 5 ans est adopté en :",
-    "2000","1958","1905","1789","A",
-    "Le quinquennat présidentiel est adopté par référendum en 2000. Il remplace le mandat présidentiel de sept ans."
+  makeQuestion("h2-014",2,"Histoire","Pourquoi parle-t-on de quinquennat présidentiel ?",
+    "Parce que le mandat du Président dure cinq ans","Parce que le Sénat est élu pour cinq ans","Parce que le Parlement se réunit tous les cinq ans","Parce que les communes changent tous les cinq ans","A",
+    "Le quinquennat présidentiel est adopté par référendum en 2000. Il fixe à cinq ans la durée du mandat du Président de la République."
   ),
 
-  makeQuestion("h2-015",2,"Histoire","La Révolution de 1848 aboutit à :",
-    "La IIᵉ République","La Vᵉ République","L’Empire romain","La loi de 1905","A",
+  makeQuestion("h2-015",2,"Histoire","Quel changement politique majeur suit la Révolution de 1848 ?",
+    "La IIᵉ République","La Vᵉ République","Le Second Empire romain","La séparation des Églises et de l’État","A",
     "La Révolution de 1848 met fin à la monarchie de Juillet et conduit à la proclamation de la Deuxième République."
   ),
 
-  makeQuestion("h2-016",2,"Histoire","La devise « Liberté, Égalité, Fraternité » est héritée de :",
-    "La Révolution française","Le Moyen Âge","La Renaissance","La monarchie absolue","A",
-    "La devise « Liberté, Égalité, Fraternité » apparaît pendant la Révolution française et devient un symbole fondamental de la République."
+  makeQuestion("h2-016",2,"Histoire","Pourquoi la devise « Liberté, Égalité, Fraternité » est-elle liée à la Révolution française ?",
+    "Parce qu’elle naît de l’héritage révolutionnaire","Parce qu’elle est inventée sous Napoléon III","Parce qu’elle apparaît au Moyen Âge","Parce qu’elle date de Maastricht","A",
+    "La devise « Liberté, Égalité, Fraternité » apparaît pendant la Révolution française et devient un symbole majeur de la République."
   ),
 
-  makeQuestion("h2-017",2,"Histoire","Quel symbole représente la République française ?",
-    "Marianne","La couronne royale","Le sceptre","Le trône","A",
-    "Marianne est une figure symbolique de la République française. Elle représente la liberté et la République."
+  makeQuestion("h2-017",2,"Histoire","Pourquoi Marianne est-elle un symbole de la République française ?",
+    "Parce qu’elle représente la liberté et la République","Parce qu’elle symbolise la monarchie","Parce qu’elle représente l’armée","Parce qu’elle est un personnage historique réel","A",
+    "Marianne est une figure symbolique de la République française. Elle incarne la liberté, le peuple et les valeurs républicaines."
   ),
 
-  makeQuestion("h2-018",2,"Histoire","La IIIᵉ République débute en :",
-    "1870","1958","1789","1905","A",
-    "La Troisième République commence en 1870 après la chute du Second Empire."
+  makeQuestion("h2-018",2,"Histoire","Que représente le début de la IIIᵉ République en 1870 ?",
+    "La fin du Second Empire","La création de l’euro","La séparation des Églises et de l’État","La fondation de la Vᵉ République","A",
+    "La Troisième République commence en 1870 après la chute du Second Empire. Elle s’installe progressivement dans la durée."
   ),
 
-  makeQuestion("h2-019",2,"Histoire","Les lois de Jules Ferry sont associées à :",
-    "L’école gratuite, laïque et obligatoire","La séparation des Églises et de l’État","La création de l’euro","Le quinquennat","A",
-    "Les lois de Jules Ferry à la fin du XIXᵉ siècle rendent l’école primaire gratuite, laïque et obligatoire."
+  makeQuestion("h2-019",2,"Histoire","Pourquoi les lois de Jules Ferry sont-elles importantes ?",
+    "Parce qu’elles rendent l’école gratuite, laïque et obligatoire","Parce qu’elles mettent fin à la guerre de 1914","Parce qu’elles instaurent le quinquennat","Parce qu’elles créent la citoyenneté européenne","A",
+    "Les lois de Jules Ferry, à la fin du XIXᵉ siècle, rendent l’école primaire gratuite, laïque et obligatoire. Elles marquent une étape majeure de l’histoire scolaire française."
   ),
 
-   makeQuestion("h2-020",2,"Histoire","La fête nationale française est :",
-    "Le 11 novembre","Le 8 mai","Le 14 juillet","Le 1er janvier","C",
-    "Le 14 juillet est la fête nationale française. Elle commémore la prise de la Bastille et l’unité de la nation."
+  makeQuestion("h2-020",2,"Histoire","Pourquoi le 14 juillet est-il une date importante pour la République ?",
+    "Parce qu’il s’agit de la fête nationale française","Parce qu’il correspond à l’armistice de 1918","Parce qu’il marque la fin de la Seconde Guerre mondiale","Parce qu’il inaugure la loi de 1905","A",
+    "Le 14 juillet est la fête nationale française. Il rappelle la prise de la Bastille et l’unité de la nation."
   ),
 
-  makeQuestion("h2-021", 2, "Histoire", "Quel événement marque traditionnellement la naissance de la France en tant que royaume chrétien ?", "La signature du traité de Verdun en 843", "La conquête romaine par Jules César en 52 avant J.-C.", "La victoire de Charles Martel à Poitiers en 732", "Le baptême de Clovis, roi des Francs, vers 496", "D", "Le baptême de Clovis à Reims, vers 496, marque la conversion du roi des Francs au christianisme catholique. Cet acte fondateur unit le pouvoir politique et religieux et jette les bases du royaume de France. Clovis est considéré comme le premier roi de France."),
+ makeQuestion("h2-021", 2, "Histoire", "Quel événement est traditionnellement associé à la naissance du royaume des Francs devenu plus tard la France chrétienne ?",
+  "Le traité de Verdun en 843",
+  "La conquête romaine en 52 avant J.-C.",
+  "La bataille de Poitiers en 732",
+  "Le baptême de Clovis vers 496",
+  "D",
+  "Le baptême de Clovis, vers 496, est souvent présenté comme un événement fondateur dans l’histoire de la monarchie française chrétienne."
+),
 
-makeQuestion("h2-022", 2, "Histoire", "Quel titre Charlemagne reçoit-il le 25 décembre 800 à Rome, et quelle en est la signification ?", "Celui d'Empereur d'Occident, symbolisant la renaissance de l'Empire romain en Europe chrétienne", "Celui de Roi de France, fondant officiellement le royaume capétien", "Celui de Défenseur de la foi, lui conférant l'autorité sur toutes les Églises d'Europe", "Celui de Consul romain, rattachant son règne à l'Antiquité classique", "A", "Le pape Léon III couronne Charlemagne Empereur d'Occident le jour de Noël 800. Cet acte consacre l'alliance entre le pouvoir temporel et l'Église, et refonde l'idée d'un empire chrétien universel en Europe occidentale. Charlemagne développe aussi l'instruction et réorganise l'administration."),
+makeQuestion("h2-022", 2, "Histoire", "Quel titre Charlemagne reçoit-il en 800 ?",
+  "Empereur d’Occident",
+  "Roi de France",
+  "Défenseur de la foi",
+  "Consul romain",
+  "A",
+  "Charlemagne est couronné empereur en 800. Cet événement symbolise la renaissance d’un empire chrétien en Europe occidentale."
+),
 
-makeQuestion("h2-023", 2, "Histoire", "Pour quelle mission historique Jeanne d'Arc est-elle surtout connue ?", "Avoir négocié la paix avec l'Angleterre au traité de Troyes", "Avoir conduit les armées françaises à la victoire contre les Anglais et fait sacrer Charles VII à Reims en 1429", "Avoir rédigé la première Constitution du royaume de France", "Avoir fondé l'ordre des chevaliers de Saint-Michel au XVe siècle", "B", "Jeanne d'Arc, jeune paysanne lorraine guidée par des 'voix', convainc le dauphin Charles de lui confier une armée. Elle libère Orléans en 1429, fait sacrer Charles VII à Reims et redresse le moral des Français pendant la guerre de Cent Ans. Capturée par les Bourguignons, elle est brûlée vive à Rouen en 1431."),
+makeQuestion("h2-023", 2, "Histoire", "Pourquoi Jeanne d’Arc est-elle une figure majeure de l’histoire de France ?",
+  "Parce qu’elle négocie le traité de Troyes",
+  "Parce qu’elle contribue au redressement français pendant la guerre de Cent Ans et au sacre de Charles VII",
+  "Parce qu’elle rédige la première Constitution",
+  "Parce qu’elle fonde un ordre de chevalerie",
+  "B",
+  "Jeanne d’Arc contribue au redressement militaire et symbolique du royaume de France pendant la guerre de Cent Ans, notamment avec la levée du siège d’Orléans et le sacre de Charles VII."
+),
 
-makeQuestion("h2-024", 2, "Histoire", "Quelle formule résume le pouvoir absolu de Louis XIV et quel palais symbolise son règne ?", "L'État, c'est moi — le palais des Tuileries à Paris", "Dieu et mon droit — le château de Chambord en Loire", "Un roi, une loi, une foi — le palais du Louvre agrandi", "L'État, c'est moi — le château de Versailles", "D", "Louis XIV, dit le Roi-Soleil, règne de 1643 à 1715. La formule 'L'État, c'est moi' (bien que discutée historiquement) résume son pouvoir absolu. Il installe la cour à Versailles en 1682, transformant le château en symbole de la grandeur royale française et de la centralisation du pouvoir."),
+makeQuestion("h2-024", 2, "Histoire", "Quel lieu symbolise particulièrement le règne de Louis XIV ?",
+  "Le palais des Tuileries",
+  "Le château de Chambord",
+  "Le Louvre",
+  "Le château de Versailles",
+  "D",
+  "Le château de Versailles symbolise le règne de Louis XIV et la centralisation du pouvoir monarchique."
+),
 
-makeQuestion("h2-025", 2, "Histoire", "Quel événement déclenche symboliquement la Révolution française le 14 juillet 1789 ?", "La prise de la Bastille par le peuple de Paris, symbole de l'absolutisme royal", "L'exécution de Louis XVI sur la place de la Révolution", "La fuite de la famille royale à Varennes", "La réunion des États généraux à Versailles", "A", "Le 14 juillet 1789, le peuple de Paris prend d'assaut la forteresse de la Bastille, prison royale symbole du despotisme. Cet événement marque le début de la Révolution française et est célébré depuis 1880 comme fête nationale. Il incarne le soulèvement du peuple contre l'Ancien Régime."),
+makeQuestion("h2-025", 2, "Histoire", "Quel événement du 14 juillet 1789 marque symboliquement le début de la Révolution française ?",
+  "La prise de la Bastille",
+  "L’exécution de Louis XVI",
+  "La fuite à Varennes",
+  "La réunion des États généraux",
+  "A",
+  "La prise de la Bastille, le 14 juillet 1789, est devenue le symbole du début de la Révolution française et de la contestation de l’absolutisme."
+),
 
-makeQuestion("h2-026", 2, "Histoire", "Que proclame la Déclaration des droits de l'homme et du citoyen adoptée en août 1789 ?", "La séparation de la France en départements égaux", "L'abolition de la royauté et la proclamation de la République", "La liberté de la presse et l'obligation scolaire pour tous", "Les droits naturels et imprescriptibles de tout être humain : liberté, propriété, sûreté et résistance à l'oppression", "D", "La DDHC du 26 août 1789 proclame les droits naturels universels de l'homme. Son article 1er affirme que 'les hommes naissent et demeurent libres et égaux en droits'. Ce texte fondateur, intégré aujourd'hui au bloc de constitutionnalité, reste l'un des documents les plus influents de l'histoire politique mondiale."),
+makeQuestion("h2-026", 2, "Histoire", "Que dit surtout la Déclaration des droits de l’homme et du citoyen de 1789 ?",
+"Que le roi garde tous les pouvoirs",
+"Que les hommes naissent libres et égaux en droits",
+"Que seuls les nobles ont des droits politiques",
+"Que l’école devient obligatoire pour tous",
+"B",
+"La Déclaration de 1789 affirme les libertés et l’égalité en droits. C’est un texte fondamental de la tradition républicaine française."
+),
 
-makeQuestion("h2-027", 2, "Histoire", "En quelle année la France abolit-elle l'esclavage de manière définitive et sous quelle République ?", "En 1789, sous la Révolution, par décret de l'Assemblée constituante", "En 1848, sous la IIe République, grâce au décret de Victor Schœlcher", "En 1815, sous la Restauration, par ordonnance royale de Louis XVIII", "En 1871, sous la IIIe République naissante, par loi du Parlement", "B", "L'esclavage est aboli définitivement par le décret du 27 avril 1848, sous la IIe République, à l'initiative de Victor Schœlcher, sous-secrétaire d'État aux Colonies. Une première abolition avait eu lieu en 1794 sous la Révolution, mais Napoléon l'avait rétablie en 1802. La loi Taubira de 2001 reconnaît l'esclavage comme crime contre l'humanité."),
+makeQuestion("h2-027", 2, "Histoire", "En France, l’abolition définitive de l’esclavage date de :",
+"1789",
+"1848",
+"1815",
+"1905",
+"B",
+"L’esclavage est définitivement aboli en 1848 sous la IIe République. Victor Schœlcher a joué un rôle majeur dans cette décision."
+),
 
-makeQuestion("h2-028", 2, "Histoire", "Quel code juridique napoléonien, toujours en vigueur dans ses grandes lignes, uniformise le droit civil en France ?", "Le Code pénal de 1791, héritier de la Révolution", "Le Statut des personnes de 1796, premier texte unifié post-révolutionnaire", "Le Code civil de 1804, dit Code Napoléon", "Le Code commercial de 1807, fondant le droit des affaires moderne", "C", "Le Code civil de 1804, dit 'Code Napoléon', unifie pour la première fois le droit privé français en remplaçant les multiples coutumes locales. Il pose les principes d'égalité civile, de propriété privée, de liberté contractuelle et d'état civil. Il a influencé les systèmes juridiques de nombreux pays dans le monde entier."),
+makeQuestion("h2-028", 2, "Histoire", "Quel grand texte de Napoléon a durablement organisé le droit civil en France ?",
+"Le Code civil",
+"Le Code pénal",
+"La Constitution de 1791",
+"Le Code du travail",
+"A",
+"Le Code civil de 1804, aussi appelé Code Napoléon, a unifié de nombreuses règles de la vie civile en France."
+),
 
-makeQuestion("h2-029", 2, "Histoire", "Quelle bataille met fin au Premier Empire de Napoléon Bonaparte en 1815 ?", "La bataille de Waterloo, en Belgique actuelle, face aux forces britanniques et prussiennes", "La bataille de Leipzig en 1813, dite 'bataille des Nations'", "La bataille de Trafalgar en 1805, où la marine française est détruite", "La bataille d'Austerlitz en 1805, pourtant la plus grande victoire de Napoléon", "A", "La bataille de Waterloo, le 18 juin 1815, voit Napoléon Bonaparte défait par les armées coalisées britannique (Wellington) et prussienne (Blücher). Cette défaite entraîne sa seconde abdication et son exil à Sainte-Hélène, mettant fin définitivement au Premier Empire et à l'ère napoléonienne."),
+makeQuestion("h2-029", 2, "Histoire", "Quelle défaite marque la fin définitive de Napoléon en 1815 ?",
+"Austerlitz",
+"Trafalgar",
+"Waterloo",
+"Verdun",
+"C",
+"La bataille de Waterloo, en 1815, met fin au pouvoir de Napoléon Bonaparte."
+),
 
-makeQuestion("h2-030", 2, "Histoire", "Quel régime politique la France adopte-t-elle en 1870, après la défaite contre la Prusse et la chute du Second Empire ?", "La monarchie constitutionnelle, avec le retour des Orléans", "La IIe République, proclamée par Gambetta depuis Paris assiégé", "La IIIe République, régime parlementaire qui durera jusqu'en 1940", "Le Directoire, restauré comme régime de transition", "C", "La défaite de Sedan (1870) et la capture de Napoléon III entraînent la proclamation de la IIIe République le 4 septembre 1870. Ce régime parlementaire, le plus long de l'histoire républicaine française, durera 70 ans jusqu'à la défaite de 1940 et l'armistice de Pétain."),
+makeQuestion("h2-030", 2, "Histoire", "Après la chute du Second Empire en 1870, quel régime s’installe en France ?",
+"La IIIe République",
+"La monarchie absolue",
+"La IVe République",
+"Le Consulat",
+"A",
+"La IIIe République est proclamée en 1870 après la défaite contre la Prusse et la chute de Napoléon III."
+),
 
-makeQuestion("h2-031", 2, "Histoire", "Que commémore le 11 novembre en France et depuis quelle année est-il jour férié national ?", "La libération de Paris en août 1944, fêtée chaque année depuis 1945", "La victoire de Napoléon à Austerlitz, célébrée depuis 1806", "La proclamation de la IIIe République en 1870, jour de fête républicaine depuis 1872", "L'armistice du 11 novembre 1918 mettant fin à la Première Guerre mondiale, jour férié depuis 1922", "D", "Le 11 novembre marque la signature de l'armistice à Rethondes en 1918, qui met fin aux combats de la Première Guerre mondiale. La France a perdu environ 1,4 million de soldats dans ce conflit. Ce jour est férié depuis 1922 et dédié au souvenir de tous les soldats morts pour la France."),
+makeQuestion("h2-031", 2, "Histoire", "Que commémore le 11 novembre en France ?",
+"La fin de la Seconde Guerre mondiale",
+"L’armistice de 1918",
+"La prise de la Bastille",
+"La libération de Paris",
+"B",
+"Le 11 novembre rappelle l’armistice de 1918, qui met fin aux combats de la Première Guerre mondiale."
+),
 
-makeQuestion("h2-032", 2, "Histoire", "Qu'est-ce que l'affaire Dreyfus (1894-1906) et quel impact a-t-elle eu sur la société française ?", "Un scandale financier impliquant des banquiers protestants, ayant conduit à la séparation de l'Église et de l'État", "Une crise diplomatique avec l'Allemagne ayant failli déclencher une guerre préventive", "Une affaire d'espionnage mal jugée qui divisa profondément la France entre dreyfusards et antidreyfusards, révélant l'antisémitisme et les failles de la justice militaire", "Un conflit entre républicains et royalistes ayant conduit à l'exil du prétendant au trône", "C", "Alfred Dreyfus, officier juif accusé à tort d'espionnage au profit de l'Allemagne, est condamné en 1894. L'affaire divise la France : les dreyfusards (dont Zola avec son 'J'accuse') réclament la vérité, les antidreyfusards défendent l'armée. Dreyfus est réhabilité en 1906. L'affaire accélère la laïcisation de la France et la loi de 1905."),
+makeQuestion("h2-032", 2, "Histoire", "L’affaire Dreyfus a surtout montré :",
+"Une crise agricole majeure",
+"Un conflit entre le roi et le Parlement",
+"Une erreur judiciaire qui a divisé profondément la France",
+"Une guerre coloniale oubliée",
+"C",
+"L’affaire Dreyfus est une grande erreur judiciaire. Elle a révélé de fortes divisions politiques, militaires et sociales en France."
+),
 
-makeQuestion("h2-033", 2, "Histoire", "Quelle loi fondatrice de la laïcité française est adoptée en 1905 et que stipule-t-elle ?", "La loi Ferry instaurant l'instruction publique gratuite, laïque et obligatoire dans toutes les écoles", "La loi de séparation des Églises et de l'État, mettant fin au Concordat de 1801 et supprimant le financement public des cultes", "La loi Falloux autorisant l'enseignement religieux dans les écoles publiques les jours sans classe", "La loi Combes interdisant toute procession religieuse sur la voie publique en France", "B", "La loi du 9 décembre 1905 de séparation des Églises et de l'État est le texte fondateur de la laïcité française. Elle affirme que 'la République ne reconnaît, ne salarie ni ne subventionne aucun culte', garantit la liberté de conscience et met fin au Concordat de 1801. Elle reste aujourd'hui le texte de référence de la laïcité."),
+makeQuestion("h2-033", 2, "Histoire", "La grande loi de 1905 est celle :",
+"de l’école obligatoire",
+"de la séparation des Églises et de l’État",
+"du droit de vote des femmes",
+"de la création de la Sécurité sociale",
+"B",
+"La loi de 1905 fonde la séparation des Églises et de l’État. Elle est un repère essentiel de la laïcité en France."
+),
 
-makeQuestion("h2-034", 2, "Histoire", "Combien de soldats français environ ont péri durant la Première Guerre mondiale (1914-1918) ?", "Environ 300 000 morts", "Environ 600 000 morts", "Environ 1,4 million de morts", "Environ 3 millions de morts", "C", "La France a perdu environ 1,4 million de soldats lors de la Première Guerre mondiale, soit près de 10% de la population masculine active. Des batailles comme Verdun (1916), qui firent des centaines de milliers de morts des deux côtés, symbolisent l'horreur de cette guerre de tranchées. Ce conflit traumatisa profondément la société française."),
+makeQuestion("h2-034", 2, "Histoire", "La Première Guerre mondiale a causé en France :",
+"Très peu de pertes humaines",
+"Environ 1,4 million de morts français",
+"Uniquement des pertes civiles",
+"Moins de 100 000 morts",
+"B",
+"La Première Guerre mondiale a profondément marqué la France, avec environ 1,4 million de morts français."
+),
 
-makeQuestion("h2-035", 2, "Histoire", "Qu'est-ce que le Front populaire de 1936 et quelles réformes sociales majeures a-t-il introduites ?", "Une coalition de partis de droite ayant instauré le service militaire obligatoire et la ligne Maginot", "Une alliance de gauche (socialistes, radicaux, communistes) qui instaure notamment les congés payés et la semaine de 40 heures", "Un mouvement de résistance anti-fasciste fondé après l'occupation allemande de la Rhénanie", "Un gouvernement d'union nationale formé pour répondre à la crise économique de 1929", "B", "Le Front populaire, coalition de gauche menée par Léon Blum, remporte les élections de mai 1936. Il instaure des réformes sociales historiques : les congés payés (15 jours), la semaine de 40 heures, la liberté syndicale étendue et les conventions collectives. Ces avancées sociales restent des acquis fondamentaux du droit du travail français."),
+makeQuestion("h2-035", 2, "Histoire", "Le Front populaire de 1936 est surtout connu pour avoir instauré :",
+"Le service militaire obligatoire",
+"Les congés payés et la semaine de 40 heures",
+"La peine de mort",
+"Le droit de vote à 18 ans",
+"B",
+"Le Front populaire a permis de grandes avancées sociales, notamment les congés payés et la réduction du temps de travail."
+),
 
-makeQuestion("h2-036", 2, "Histoire", "Que représente l'appel du 18 juin 1940, lancé depuis Londres par le général de Gaulle ?", "La signature d'un armistice secret avec l'Angleterre pour poursuivre la guerre en Afrique du Nord", "Le discours fondateur de la France libre refusant la capitulation et appelant les Français à continuer le combat", "La proclamation de la IVe République en exil, avec de Gaulle comme président provisoire", "L'annonce de l'entrée en guerre des États-Unis aux côtés de la France vaincue", "B", "Le 18 juin 1940, trois jours après l'armistice demandé par Pétain, le général de Gaulle lance depuis la BBC son appel historique refusant la défaite : 'La France a perdu une bataille, mais la France n'a pas perdu la guerre.' Cet appel fonde la France libre et la Résistance. Il est considéré comme l'un des discours les plus importants de l'histoire de France."),
+makeQuestion("h2-036", 2, "Histoire", "Que représente l’appel du 18 juin 1940 du général de Gaulle ?",
+"Un appel à arrêter la guerre",
+"Un appel à poursuivre le combat contre l’occupation",
+"Une déclaration de victoire",
+"Un traité de paix avec l’Allemagne",
+"B",
+"L’appel du 18 juin symbolise le refus de la défaite et le début de la France libre."
+),
 
-makeQuestion("h2-037", 2, "Histoire", "Qu'est-ce que le régime de Vichy (1940-1944) et quelle politique a-t-il menée contre les Juifs de France ?", "Un gouvernement républicain de coalition contraint à l'armistice mais ayant maintenu les lois de la République", "Un gouvernement militaire allemand d'occupation directe remplaçant toutes les institutions françaises", "Le gouvernement français collaborationniste qui a adopté des lois antisémites, procédé à des rafles et déporté des Juifs vers les camps d'extermination nazis", "Un gouvernement provisoire français dirigé depuis Vichy en attendant la libération du territoire", "C", "Le régime de Vichy, dirigé par le maréchal Pétain, collabore avec l'Allemagne nazie. Il adopte des 'statuts des Juifs' dès octobre 1940, les excluant de la vie publique. La rafle du Vél d'Hiv (juillet 1942) voit 13 000 Juifs, dont 4 000 enfants, arrêtés par la police française. Au total, environ 76 000 Juifs de France sont déportés, dont 2 500 survivent."),
+makeQuestion("h2-037", 2, "Histoire", "Le régime de Vichy pendant la Seconde Guerre mondiale est :",
+"Un régime républicain de résistance",
+"Un régime de collaboration avec l’Allemagne nazie",
+"Un gouvernement installé à Londres",
+"Une période sans gouvernement français",
+"B",
+"Le régime de Vichy a collaboré avec l’Allemagne nazie et a participé à des politiques antisémites."
+),
 
-makeQuestion("h2-038", 2, "Histoire", "Que commémore le 8 mai en France et quelle est sa signification pour la mémoire nationale ?", "La victoire de Napoléon à la bataille d'Iéna contre la Prusse en 1806", "La libération de Paris par le général Leclerc et la 2e Division Blindée en août 1944", "La signature du traité de l'Atlantique Nord (OTAN) à Washington en 1949", "La capitulation de l'Allemagne nazie en 1945, mettant fin à la Seconde Guerre mondiale en Europe", "D", "Le 8 mai 1945, l'Allemagne nazie signe sa capitulation inconditionnelle, mettant fin à la guerre en Europe. La France, qui avait été occupée de 1940 à 1944, célèbre ce jour comme une victoire sur le nazisme et la libération. Le 8 mai est jour férié en France depuis 1953, rétabli définitivement en 1981."),
+makeQuestion("h2-038", 2, "Histoire", "Que célèbre le 8 mai en France ?",
+"La fin de la Première Guerre mondiale",
+"La capitulation de l’Allemagne nazie en 1945",
+"La création de la Ve République",
+"La libération de Paris",
+"B",
+"Le 8 mai commémore la victoire de 1945 en Europe et la fin de la Seconde Guerre mondiale sur le continent européen."
+),
 
-makeQuestion("h2-039", 2, "Histoire", "Quel système de protection sociale universel est créé en France par les ordonnances d'octobre 1945 ?", "Le Revenu minimum d'insertion (RMI), ancêtre du RSA actuel", "Le système de retraite par répartition, fondé sur la solidarité entre générations actives et retraitées", "La Sécurité sociale, système de couverture obligatoire contre la maladie, les accidents du travail et la vieillesse", "Le Code du travail, unification de toutes les protections des salariés en un seul texte", "C", "La Sécurité sociale est créée par les ordonnances du 4 et 19 octobre 1945, sous l'impulsion d'Ambroise Croizat et Pierre Laroque. Elle institue une couverture obligatoire de tous les travailleurs contre les risques sociaux : maladie, accidents du travail, maternité, vieillesse. Elle traduit le programme du Conseil national de la Résistance et reste l'un des piliers du modèle social français."),
+makeQuestion("h2-039", 2, "Histoire", "Quel grand système social est créé en 1945 en France ?",
+"La Sécurité sociale",
+"Le RSA",
+"L’Union européenne",
+"Le suffrage universel",
+"A",
+"La Sécurité sociale est créée en 1945 pour mieux protéger les personnes contre la maladie, la vieillesse et d’autres risques sociaux."
+),
 
-makeQuestion("h2-040", 2, "Histoire", "Quel traité de 1957 fonde la Communauté économique européenne (CEE) et pose les bases de l'Union européenne actuelle ?", "Le traité de Maastricht, signé par 12 pays fondateurs dont la France et l'Allemagne", "Le traité de l'Atlantique Nord, créant une alliance militaire entre l'Europe et les États-Unis", "Le traité de Rome, signé par six pays fondateurs dont la France, l'Allemagne, l'Italie et le Benelux", "Le traité de Paris de 1951, créant la Communauté européenne du charbon et de l'acier (CECA)", "C", "Le traité de Rome du 25 mars 1957, signé par la France, l'Allemagne, l'Italie, la Belgique, les Pays-Bas et le Luxembourg, crée la Communauté économique européenne (CEE). Il pose les bases d'un marché commun et d'une coopération politique approfondie. Ce traité fondateur est l'acte de naissance de ce qui deviendra l'Union européenne."),
+makeQuestion("h2-040", 2, "Histoire", "Quel traité de 1957 est un texte fondateur de la construction européenne ?",
+"Le traité de Versailles",
+"Le traité de Maastricht",
+"Le traité de Rome",
+"Le traité de l’Élysée",
+"C",
+"Le traité de Rome de 1957 crée la Communauté économique européenne et constitue une étape majeure de la construction européenne."
+),
 
-makeQuestion("h2-041", 2, "Histoire", "Quel événement de mai 1958 conduit au retour au pouvoir du général de Gaulle et à la fondation de la Ve République ?", "Une révolution populaire à Paris renversant le gouvernement de la IVe République par les urnes", "Une crise politique liée à la guerre d'Algérie, avec la menace d'un coup d'État militaire, qui force l'Assemblée à rappeler de Gaulle", "La victoire écrasante du RPF gaulliste aux élections législatives lui donnant une majorité absolue", "La démission collective du gouvernement Pflimlin sous la pression des syndicats et des partis de gauche", "B", "En mai 1958, la crise algérienne provoque un putsch à Alger. Menacée d'un coup d'État militaire, l'Assemblée nationale investit de Gaulle comme président du Conseil. Il fait adopter une nouvelle Constitution en septembre 1958 (approuvée par référendum), fondant la Ve République avec un exécutif renforcé."),
+makeQuestion("h2-041", 2, "Histoire", "La Ve République naît en 1958 dans le contexte :",
+"de la guerre d’Algérie",
+"de la Révolution française",
+"de la Première Guerre mondiale",
+"de la chute du mur de Berlin",
+"A",
+"La crise liée à la guerre d’Algérie provoque le retour du général de Gaulle et l’adoption de la Constitution de 1958."
+),
 
-makeQuestion("h2-042", 2, "Histoire", "En quelle année la France reconnaît-elle l'indépendance de l'Algérie et à quelle suite d'événements cela met-il fin ?", "En 1954, par les accords de Genève mettant fin à la guerre d'Indochine", "En 1956, par le protocole de Tunis actant la décolonisation de l'Afrique du Nord française", "En 1962, par les accords d'Évian mettant fin à la guerre d'Algérie", "En 1960, lors de la 'l'année de l'Afrique', quand 17 colonies africaines accèdent à l'indépendance", "C", "Les accords d'Évian du 19 mars 1962, signés entre le gouvernement français et le FLN algérien, mettent fin à la guerre d'Algérie (1954-1962). Ce conflit, qui fit plus de 300 000 morts, est l'une des pages les plus douloureuses de l'histoire franco-algérienne. L'indépendance de l'Algérie est proclamée le 5 juillet 1962."),
+makeQuestion("h2-042", 2, "Histoire", "L’indépendance de l’Algérie est reconnue par la France en :",
+"1945",
+"1958",
+"1962",
+"1968",
+"C",
+"L’indépendance de l’Algérie intervient en 1962, après la guerre d’Algérie et les accords d’Évian."
+),
 
-makeQuestion("h2-043", 2, "Histoire", "Que symbolisent les événements de mai 1968 en France et quelles en furent les principales conséquences ?", "Une tentative de coup d'État communiste déjouée par l'armée fidèle à de Gaulle", "Un mouvement de grève générale uniquement économique, aboutissant aux accords de Grenelle sur les salaires", "Une crise politique, sociale et culturelle majeure mêlant révolte étudiante et grève générale ouvrière, remettant en cause les hiérarchies établies et transformant les mœurs de la société française", "Un référendum sur la régionalisation perdu par de Gaulle, entraînant sa démission immédiate", "C", "Mai 1968 combine une révolte étudiante contre l'université traditionnelle et une grève générale de 10 millions de travailleurs. Si de Gaulle reprend la main politiquement, mai 68 transforme durablement la société française : libéralisation des mœurs, remise en cause de l'autorité, féminisme, droits individuels. De Gaulle démissionne un an plus tard, en avril 1969, après un référendum perdu."),
+makeQuestion("h2-043", 2, "Histoire", "Mai 1968 en France correspond surtout à :",
+"Une simple réforme scolaire",
+"Une crise étudiante, sociale et ouvrière majeure",
+"Une guerre entre la France et l’Allemagne",
+"Une élection présidentielle anticipée",
+"B",
+"Mai 1968 est un grand mouvement de contestation étudiante et sociale qui a profondément marqué la société française."
+),
 
-makeQuestion("h2-044", 2, "Histoire", "Quel événement historique majeur a lieu le 9 novembre 1989 et quel impact symbolique a-t-il pour l'Europe ?", "La réunification officielle de l'Allemagne, célébrée à Berlin devant les chefs d'État européens", "La signature du traité de Maastricht instaurant la citoyenneté européenne et l'euro", "La dissolution de l'Union soviétique et la fin du pacte de Varsovie", "La chute du mur de Berlin, symbole de la fin de la Guerre froide et de la division de l'Europe", "D", "Le 9 novembre 1989, le mur de Berlin, qui séparait l'Est et l'Ouest depuis 1961, est ouvert sous la pression de la foule est-allemande. Cet événement symbolise la fin de la Guerre froide, l'effondrement des régimes communistes d'Europe de l'Est et ouvre la voie à la réunification allemande (1990) et à l'élargissement de l'Union européenne."),
+makeQuestion("h2-044", 2, "Histoire", "La chute du mur de Berlin en 1989 symbolise :",
+"La fin de la monarchie en Europe",
+"La fin de la Guerre froide",
+"La naissance de l’euro",
+"La création de l’ONU",
+"B",
+"La chute du mur de Berlin marque la fin de la division de l’Europe et symbolise la fin de la Guerre froide."
+),
 
-makeQuestion("h2-045", 2, "Histoire", "Quand l'euro est-il devenu la monnaie unique utilisée quotidiennement par les Français dans leurs achats ?", "Le 1er janvier 1999, au moment de l'entrée en vigueur du traité de Maastricht", "Le 1er janvier 2002, lors du passage aux pièces et billets en euros remplaçant le franc", "Le 1er janvier 1995, lors de l'entrée de la France dans l'espace Schengen", "Le 1er janvier 2004, après une période de transition de 5 ans avec le franc", "B", "Le 1er janvier 2002, les pièces et billets en euros entrent en circulation dans 12 pays de l'Union européenne, dont la France. Le franc, monnaie française depuis le XIVe siècle, cesse d'avoir cours légal le 17 février 2002. L'euro avait été introduit comme monnaie scripturale dès le 1er janvier 1999."),
+makeQuestion("h2-045", 2, "Histoire", "Les Français commencent à utiliser les pièces et billets en euro en :",
+"1992",
+"1999",
+"2002",
+"2005",
+"C",
+"L’euro devient concret dans la vie quotidienne en 2002 avec l’arrivée des pièces et billets."
+),
 
-makeQuestion("h2-046", 2, "Histoire", "Quel roi franc est baptisé à Reims au Ve siècle, posant les bases du royaume de France chrétien ?", "Pépin le Bref, père de Charlemagne, sacré roi des Francs par le pape Étienne II", "Vercingétorix, chef gaulois unifiant les tribus contre l'envahisseur romain avant sa capitulation", "Childéric Ier, roi mérovingien fondateur de la première grande monarchie franque", "Clovis Ier, roi des Francs, baptisé vers 496 à Reims par saint Remi", "D", "Clovis Ier, roi des Francs saliens, est baptisé vers 496 à Reims par l'évêque saint Remi. Sa conversion au christianisme catholique est un acte politique fondateur : il s'allie à l'Église romaine, renforçant son pouvoir sur les autres royaumes barbares. Il est souvent présenté comme le 'premier roi de France'."),
+makeQuestion("h2-046", 2, "Histoire", "Quel roi franc, baptisé à Reims, est souvent présenté comme une figure fondatrice de la France ?",
+"Charlemagne",
+"Hugues Capet",
+"Clovis",
+"Louis XIV",
+"C",
+"Clovis, baptisé à Reims, est souvent retenu comme une figure fondatrice de l’histoire de France."
+),
 
-makeQuestion("h2-047", 2, "Histoire", "Quel roi capétien, dit 'le Bref', est sacré roi des Francs en 751 avec le soutien du pape, fondant la dynastie carolingienne ?", "Louis le Pieux, fils de Charlemagne et premier roi de France officiellement", "Pépin le Bref, qui dépose le dernier roi mérovingien avec l'appui papal", "Hugues Capet, qui fonde la troisième grande dynastie royale française en 987", "Charles Martel, qui arrête les Arabes à Poitiers et fonde l'Empire carolingien", "B", "Pépin le Bref, maire du palais, renverse le dernier roi mérovingien Childéric III avec l'accord du pape Zacharie. Sacré roi en 751, il fonde la dynastie carolingienne. Son fils Charlemagne en sera le représentant le plus illustre. Ce sacre royal est une innovation politique : le roi tient son pouvoir de Dieu par l'intermédiaire de l'Église."),
+makeQuestion("h2-047", 2, "Histoire", "Qui est Pépin le Bref ?",
+"Le roi qui fonde la dynastie carolingienne",
+"Le dernier roi capétien",
+"Le chef gaulois vaincu à Alésia",
+"Le premier président de la République",
+"A",
+"Pépin le Bref fonde la dynastie carolingienne. Il est aussi le père de Charlemagne."
+),
 
-makeQuestion("h2-048", 2, "Histoire", "Qu'est-ce que l'édit de Nantes de 1598 et qui le proclame pour mettre fin aux guerres de religion ?", "Un traité de paix avec l'Espagne signé par Louis XIII, accordant la liberté de culte aux protestants des Pays-Bas", "La loi de tolérance religieuse de Richelieu supprimant les places de sûreté huguenotes après le siège de La Rochelle", "L'édit royal signé par Henri IV accordant aux protestants (huguenots) la liberté de culte et des droits civiques", "Le décret du Parlement de Paris interdisant les procès pour hérésie et mettant fin à l'Inquisition en France", "C", "L'édit de Nantes, signé par Henri IV le 13 avril 1598, met fin aux guerres de religion (1562-1598). Il accorde aux protestants la liberté de culte, des droits civiques égaux et des 'places de sûreté'. C'est un acte de tolérance remarquable pour l'époque. Il sera révoqué par Louis XIV en 1685, entraînant l'exode de 200 000 protestants."),
+makeQuestion("h2-048", 2, "Histoire", "L’édit de Nantes, signé par Henri IV en 1598, visait surtout à :",
+"Organiser l’école publique",
+"Mettre fin aux guerres de religion",
+"Créer la République",
+"Supprimer la monarchie",
+"B",
+"L’édit de Nantes cherche à rétablir la paix entre catholiques et protestants après les guerres de religion."
+),
 
-makeQuestion("h2-049", 2, "Histoire", "Comment Louis XVI meurt-il et quelle date marque son exécution lors de la Révolution française ?", "Il est tué lors de la prise de la Bastille le 14 juillet 1789 en défendant la forteresse", "Il s'exile en Angleterre en 1792 après la prise des Tuileries par les révolutionnaires", "Il meurt de maladie en prison au Temple en janvier 1793 avant son jugement", "Il est guillotiné le 21 janvier 1793 sur la place de la Révolution à Paris, après sa condamnation par la Convention", "D", "Louis XVI est jugé par la Convention nationale comme 'citoyen Louis Capet'. Reconnu coupable de trahison, il est condamné à mort à une courte majorité et guillotiné le 21 janvier 1793 sur la place de la Révolution (aujourd'hui place de la Concorde). Son exécution choque les monarchies européennes et intensifie les guerres de la Révolution."),
+makeQuestion("h2-049", 2, "Histoire", "Comment meurt Louis XVI pendant la Révolution française ?",
+"Il abdique et s’exile",
+"Il est guillotiné en 1793",
+"Il meurt au combat",
+"Il meurt en prison de maladie",
+"B",
+"Louis XVI est jugé puis guillotiné en 1793 pendant la Révolution française."
+),
 
-makeQuestion("h2-050", 2, "Histoire", "Quel est le bilan humain approximatif de la France lors de la Seconde Guerre mondiale (1939-1945) ?", "Environ 150 000 morts, essentiellement des civils victimes des bombardements alliés", "Environ 600 000 morts, dont des soldats, des résistants, des déportés et des civils", "Environ 2 millions de morts, dont la majorité lors de la bataille de France de mai-juin 1940", "Environ 50 000 morts, la France ayant été rapidement occupée sans combats prolongés", "B", "La France déplore environ 600 000 morts pendant la Seconde Guerre mondiale : soldats tombés au combat (dont la bataille de France de 1940), résistants fusillés, 76 000 Juifs déportés vers les camps d'extermination (dont la grande majorité ne revient pas), travailleurs forcés en Allemagne et victimes des bombardements. Ce bilan est bien inférieur à celui de la Première Guerre mondiale."),
+makeQuestion("h2-050", 2, "Histoire", "La Seconde Guerre mondiale a causé en France environ :",
+"50 000 morts",
+"150 000 morts",
+"600 000 morts",
+"2 millions de morts",
+"C",
+"La Seconde Guerre mondiale a fait environ 600 000 morts en France, militaires et civils confondus."
+),
 
-makeQuestion("h2-051", 2, "Histoire", "Qui est Jean Moulin et quel rôle joue-t-il dans la Résistance française ?", "Le chef militaire des Forces françaises libres qui libère Paris en août 1944 à la tête de la 2e Division Blindée", "Le fondateur du journal clandestin 'Combat', figure intellectuelle de la Résistance intérieure", "L'envoyé de de Gaulle qui unifie les mouvements de Résistance intérieure en créant le Conseil national de la Résistance en 1943", "Le général commandant les troupes françaises lors du débarquement en Normandie le 6 juin 1944", "C", "Jean Moulin, ancien préfet, est envoyé par de Gaulle en France occupée pour unifier les réseaux de résistance. Il crée le Conseil national de la Résistance (CNR) en mai 1943, réunissant pour la première fois tous les mouvements. Arrêté par la Gestapo en juin 1943, il meurt sous la torture sans parler. Ses cendres sont transférées au Panthéon en 1964."),
+makeQuestion("h2-051", 2, "Histoire", "Qui est Jean Moulin ?",
+"Un chef gaulois",
+"Un roi de France",
+"Un grand unificateur de la Résistance intérieure",
+"Un ministre de Napoléon",
+"C",
+"Jean Moulin a joué un rôle essentiel dans l’unification de la Résistance intérieure autour du général de Gaulle."
+),
 
-makeQuestion("h2-052", 2, "Histoire", "Quel débarquement allié en France, le 6 juin 1944, marque le début de la libération du territoire ?", "Le débarquement de Provence en août 1944, dit Opération Dragoon, sur les côtes de la Méditerranée", "Le débarquement de Normandie (Opération Overlord), la plus grande opération amphibie de l'histoire", "Le débarquement de Dunkerque, où les Alliés reprennent pied après l'évacuation de 1940", "Le débarquement de Bretagne en juillet 1944, ouvrant un second front à l'ouest de la France", "B", "Le 6 juin 1944 (Jour J), les forces alliées débarquent en Normandie sur 5 plages (Utah, Omaha, Gold, Juno, Sword). C'est l'opération Overlord, la plus grande opération amphibie de l'histoire : 150 000 soldats le premier jour. Des unités françaises sous Leclerc participent. Paris est libéré le 25 août 1944, et la France entière en mai 1945."),
+makeQuestion("h2-052", 2, "Histoire", "Quel grand débarquement du 6 juin 1944 lance la libération de la France ?",
+"Le débarquement de Provence",
+"Le débarquement de Normandie",
+"Le débarquement de Dunkerque",
+"Le débarquement de Calais",
+"B",
+"Le débarquement de Normandie, le 6 juin 1944, marque une étape décisive dans la libération de la France."
+),
 
-makeQuestion("h2-053", 2, "Histoire", "Quelle déclaration, signée le 9 mai 1950 par Robert Schuman, est considérée comme l'acte fondateur de la construction européenne ?", "La déclaration de l'Atlantique Nord fondant l'OTAN et la défense collective de l'Europe occidentale", "La déclaration de Paris créant la Communauté européenne du charbon et de l'acier (CECA) entre 6 nations", "La déclaration Schuman proposant de mettre en commun les productions franco-allemandes de charbon et d'acier sous une haute autorité commune", "La déclaration de Rome fixant les objectifs du marché commun européen pour les vingt années suivantes", "A", "La déclaration Schuman du 9 mai 1950, inspirée par Jean Monnet, propose de placer les productions françaises et allemandes de charbon et d'acier sous une haute autorité commune. Cette initiative est considérée comme le point de départ de la construction européenne. Le 9 mai est célébré comme la 'Journée de l'Europe'."),
+makeQuestion("h2-053", 2, "Histoire", "La déclaration de Robert Schuman du 9 mai 1950 est importante parce qu’elle :",
+"lance une coopération européenne entre anciens pays ennemis",
+"met fin à la Ve République",
+"crée directement l’euro",
+"annonce la fin de l’ONU",
+"A",
+"La déclaration Schuman est un texte fondateur de la construction européenne. Elle propose une coopération entre la France et l’Allemagne pour construire la paix."
+),
 
-makeQuestion("h2-054", 2, "Histoire", "Quel Président de la République française, premier élu au suffrage universel direct en 1965, est resté au pouvoir le plus longtemps sous la Ve République ?", "François Mitterrand, élu en 1981 et réélu en 1988, soit 14 ans de présidence", "Charles de Gaulle, fondateur de la Ve République, qui reste au pouvoir de 1958 à 1969", "Georges Pompidou, qui succède à de Gaulle et modernise la France jusqu'à sa mort en 1974", "Jacques Chirac, élu en 1995 et réélu en 2002, dont le mandat de 7 ans fut le plus long", "A", "François Mitterrand, premier président socialiste de la Ve République, est élu le 10 mai 1981 et réélu en 1988. Il gouverne pendant 14 ans jusqu'en 1995, ce qui en fait le président de la Ve République ayant exercé le plus long mandat. Il est notamment à l'origine de l'abolition de la peine de mort (1981) et des nationalisations."),
+makeQuestion("h2-054", 2, "Histoire", "Quel président de la Ve République est resté le plus longtemps en fonction ?",
+"Charles de Gaulle",
+"François Mitterrand",
+"Jacques Chirac",
+"Georges Pompidou",
+"B",
+"François Mitterrand a exercé la présidence pendant 14 ans, de 1981 à 1995."
+),
 
-makeQuestion("h2-055", 2, "Histoire", "En quelle année la peine de mort est-elle abolie en France et qui en est le principal artisan ?", "En 1968, par le gouvernement de Georges Pompidou après les événements de mai", "En 1974, par Valéry Giscard d'Estaing qui l'avait promis lors de sa campagne électorale", "En 1981, par la loi portée par le garde des Sceaux Robert Badinter sous la présidence Mitterrand", "En 1995, par Jacques Chirac qui constitutionnalise l'abolition lors d'une révision", "C", "La peine de mort est abolie en France par la loi du 9 octobre 1981, portée par le garde des Sceaux Robert Badinter, sous la présidence de François Mitterrand. La guillotine, utilisée pour la dernière fois en 1977 pour Hamida Djandoubi, est ainsi définitivement abandonnée. L'abolition est constitutionnalisée en 2007 à l'article 66-1 de la Constitution."),
+makeQuestion("h2-055", 2, "Histoire", "La peine de mort est abolie en France en :",
+"1968",
+"1974",
+"1981",
+"1995",
+"C",
+"La peine de mort est abolie en 1981, notamment grâce au combat de Robert Badinter."
+),
 
-makeQuestion("h2-056", 2, "Histoire", "Quel traité de 1992 transforme la Communauté économique européenne en Union européenne et introduit la citoyenneté européenne ?", "Le traité de Rome de 1957, qui fonde la CEE et définit ses premières institutions", "Le traité de Lisbonne de 2007, qui donne à l'UE sa personnalité juridique et réforme ses institutions", "Le traité de Nice de 2001, qui prépare l'élargissement à dix nouveaux membres d'Europe de l'Est", "Le traité de Maastricht, signé le 7 février 1992 aux Pays-Bas, instituant l'Union européenne et l'euro", "D", "Le traité de Maastricht, signé le 7 février 1992 et ratifié en France par référendum en septembre 1992 (à 51,05%), transforme la CEE en Union européenne. Il crée la citoyenneté européenne, fixe le calendrier de l'union monétaire menant à l'euro et renforce la coopération politique. C'est le traité fondateur de l'UE telle que nous la connaissons."),
+makeQuestion("h2-056", 2, "Histoire", "Quel traité de 1992 crée l’Union européenne ?",
+"Le traité de Rome",
+"Le traité de Nice",
+"Le traité de Lisbonne",
+"Le traité de Maastricht",
+"D",
+"Le traité de Maastricht, signé en 1992, crée l’Union européenne et introduit la citoyenneté européenne."
+),
 
-makeQuestion("h2-057", 2, "Histoire", "Que représentent les 'Trente Glorieuses' (1945-1975) dans l'histoire économique et sociale de la France ?", "La période de reconstruction difficile après la Seconde Guerre mondiale, marquée par les pénuries et le rationnement", "Trente ans de croissance économique forte, de modernisation, d'urbanisation et d'élévation du niveau de vie de la population française", "La période coloniale française en Afrique subsaharienne, marquée par trente ans d'expansion territoriale", "La période de la IIIe République (1875-1905) caractérisée par la stabilité et la prospérité économique", "B", "L'expression 'Trente Glorieuses', forgée par l'économiste Jean Fourastié, désigne la période 1945-1975 : trente ans de croissance économique forte (environ 5% par an), de plein emploi, de développement de la consommation de masse, de l'exode rural et de l'essor des services publics. Cette période transforme profondément le mode de vie des Français."),
+makeQuestion("h2-057", 2, "Histoire", "Les 'Trente Glorieuses' désignent en France :",
+"Une période de forte croissance économique et d’amélioration du niveau de vie",
+"Une guerre de trente ans",
+"Une période de monarchie stable",
+"Une phase de crise économique continue",
+"A",
+"Les Trente Glorieuses correspondent à une période de forte croissance, de modernisation et de transformation de la société française après 1945."
+),
 
-makeQuestion("h2-058", 2, "Histoire", "Quel accord franco-allemand de 1963, dit traité de l'Élysée, symbolise la réconciliation entre les deux pays ?", "Le traité de Paris de 1947, mettant fin à l'état de guerre entre la France et l'Allemagne après 1945", "Le traité de Aix-la-Chapelle de 1748, première alliance défensive franco-allemande de l'histoire moderne", "Le traité de l'Élysée signé par de Gaulle et Adenauer, fondant l'amitié franco-allemande et la coopération bilatérale", "Le Pacte rhénan de 1925, garantissant les frontières franco-allemandes après la Première Guerre mondiale", "C", "Le traité de l'Élysée, signé le 22 janvier 1963 par le général de Gaulle et le chancelier Konrad Adenauer, symbolise la réconciliation franco-allemande après des siècles de guerres. Il instaure une coopération bilatérale dans les domaines de la défense, de l'éducation et de la jeunesse. Le couple franco-allemand devient le moteur de la construction européenne."),
+makeQuestion("h2-058", 2, "Histoire", "Le traité de l’Élysée de 1963 symbolise :",
+"La victoire française de 1945",
+"La réconciliation franco-allemande",
+"La création de l’euro",
+"La fin de la colonisation",
+"B",
+"Le traité de l’Élysée marque l’amitié entre la France et l’Allemagne et renforce leur coopération."
+),
 
-makeQuestion("h2-059", 2, "Histoire", "Quel monument parisien, érigé entre 1887 et 1889 pour l'Exposition universelle, est devenu le symbole mondial de la France ?", "Le Louvre, dont la pyramide de verre a été construite en 1989 par l'architecte I. M. Pei", "L'Arc de Triomphe, construit sur ordre de Napoléon Ier pour célébrer ses victoires militaires", "La tour Eiffel, construite par Gustave Eiffel et inaugurée le 31 mars 1889", "La basilique du Sacré-Cœur, construite à Montmartre en mémoire des victimes de la guerre de 1870", "C", "La tour Eiffel est construite par Gustave Eiffel pour l'Exposition universelle de 1889 commémorant le centenaire de la Révolution. Haute de 330 mètres, initialement décriée, elle devient le symbole de Paris et de la France dans le monde. Avec environ 7 millions de visiteurs par an, c'est le monument le plus visité au monde."),
+makeQuestion("h2-059", 2, "Histoire", "Quel monument construit pour l’Exposition universelle de 1889 est devenu un symbole de la France ?",
+"L’Arc de Triomphe",
+"Le Sacré-Cœur",
+"La tour Eiffel",
+"Le Panthéon",
+"C",
+"La tour Eiffel, construite pour l’Exposition universelle de 1889, est devenue un symbole mondial de la France."
+),
 
-makeQuestion("h2-060", 2, "Histoire", "Qui était Vercingétorix et quel événement historique l'a rendu célèbre dans l'histoire de France ?", "Un général romain qui a conquis la Gaule pour Jules César entre 58 et 50 avant J.-C.", "Un roi mérovingien qui a unifié les tribus gauloises contre les invasions germaniques au Ve siècle", "Le chef gaulois arverne qui unifia les tribus gauloises contre l'envahisseur romain et fut vaincu à Alésia en 52 av. J.-C.", "Un druide gaulois dont les écrits ont transmis la culture et la langue des Gaulois jusqu'au Moyen Âge", "C", "Vercingétorix, chef de la tribu arverne (Auvergne actuelle), unit les tribus gauloises en 52 av. J.-C. contre l'occupation romaine de Jules César. Vaincu lors du siège d'Alésia, il se rend à César et est conduit à Rome où il est exécuté. Il est devenu un symbole de la résistance nationale gauloise, ancêtre mythique des Français."),
+makeQuestion("h2-060", 2, "Histoire", "Qui est Vercingétorix ?",
+"Un roi mérovingien",
+"Un chef gaulois opposé à Jules César",
+"Un empereur romain",
+"Un ministre de Louis XIV",
+"B",
+"Vercingétorix est le chef gaulois qui a résisté à Jules César avant d’être vaincu à Alésia."
+),
 
-makeQuestion("h2-061", 2, "Histoire", "Quel roi fonde la dynastie capétienne en 987 et inaugure mille ans de royauté française presque ininterrompue ?", "Louis VI le Gros, qui renforce l'autorité royale contre les grands seigneurs féodaux au XIIe siècle", "Philippe II Auguste, qui double le domaine royal et bat les Anglais à Bouvines en 1214", "Hugues Capet, élu roi des Francs en 987, fondant la troisième grande dynastie royale", "Saint Louis (Louis IX), qui incarne l'idéal du roi chrétien et juste au XIIIe siècle", "C", "Hugues Capet est élu roi des Francs en 987 par les grands seigneurs, fondant la dynastie capétienne. Sa lignée directe règne jusqu'en 1328, puis ses descendants (Valois, Bourbon) jusqu'en 1792 et 1830. La continuité dynastique capétienne — père en fils pendant 341 ans — est unique dans l'histoire européenne."),
+makeQuestion("h2-061", 2, "Histoire", "Qui fonde la dynastie capétienne en 987 ?",
+"Clovis",
+"Hugues Capet",
+"Saint Louis",
+"François Ier",
+"B",
+"Hugues Capet est élu roi en 987. Il fonde la dynastie capétienne, très importante dans l’histoire de France."
+),
 
-makeQuestion("h2-062", 2, "Histoire", "Qu'est-ce que la guerre de Cent Ans (1337-1453) et quel en est le résultat pour la France ?", "Un siècle de guerres civiles françaises entre Armagnacs et Bourguignons, terminé par l'édit de Nantes", "Un conflit entre la France et l'Espagne pour la domination de l'Italie, remporté par François Ier", "Une longue guerre franco-anglaise pour la succession au trône de France, conclue par la victoire française et l'expulsion des Anglais du territoire", "Un siècle de guerres de religion entre catholiques et protestants, précédant l'édit de Nantes de 1598", "C", "La guerre de Cent Ans (1337-1453) oppose la France et l'Angleterre pour la succession au trône de France. Après de graves défaites françaises (Crécy, Azincourt) et l'occupation anglaise de Paris, le retournement de situation est notamment dû à Jeanne d'Arc (1429). À l'issue du conflit, les Anglais ne conservent que Calais. La guerre forge le sentiment national français."),
+makeQuestion("h2-062", 2, "Histoire", "La guerre de Cent Ans oppose principalement :",
+"La France et l’Espagne",
+"La France et l’Angleterre",
+"La France et l’Allemagne",
+"La France et l’Italie",
+"B",
+"La guerre de Cent Ans oppose surtout la France et l’Angleterre. Elle contribue à renforcer le sentiment national français."
+),
 
-makeQuestion("h2-063", 2, "Histoire", "Quelle figure révolutionnaire, femme de lettres guillotinée en 1793, rédige la Déclaration des droits de la femme et de la citoyenne en 1791 ?", "Marie Curie, première femme à obtenir le droit de vote en France en 1944 après des années de militantisme", "Simone de Beauvoir, philosophe féministe auteure du 'Deuxième Sexe' en 1949", "Germaine de Staël, romancière et salonnière ayant théorisé les droits politiques des femmes", "Olympe de Gouges, auteure de la Déclaration des droits de la femme et de la citoyenne, exigeant l'égalité des droits entre hommes et femmes", "D", "Olympe de Gouges (1748-1793) rédige en 1791 la Déclaration des droits de la femme et de la citoyenne, en miroir de celle de 1789, pour revendiquer l'égalité politique des femmes. Elle est guillotinée en novembre 1793 pour ses opinions politiques. Figure pionnière du féminisme, elle est aujourd'hui reconnue comme l'une des grandes voix de la Révolution."),
+makeQuestion("h2-063", 2, "Histoire", "Qui a écrit la Déclaration des droits de la femme et de la citoyenne ?",
+"George Sand",
+"Olympe de Gouges",
+"Simone Veil",
+"Marie Curie",
+"B",
+"Olympe de Gouges réclame l’égalité des droits entre les femmes et les hommes pendant la Révolution française."
+),
 
-makeQuestion("h2-064", 2, "Histoire", "Quel est le rôle de la France dans la construction de l'Union européenne depuis les années 1950 ?", "La France a toujours été un membre réticent, préférant une Europe des nations à toute intégration supranationale", "La France a été un pays fondateur de la CEE et un moteur de la construction européenne, notamment dans le couple franco-allemand", "La France a rejoint la CEE en 1973 seulement, après le Royaume-Uni et l'Irlande", "La France s'est opposée au traité de Maastricht, le rejetant par référendum en 1992", "B", "La France est l'un des six pays fondateurs de la Communauté européenne du charbon et de l'acier (1951) et de la CEE (1957). Elle a joué un rôle moteur dans la construction européenne, notamment à travers le couple franco-allemand (de Gaulle/Adenauer, Mitterrand/Kohl, Chirac/Schröder). La France est l'un des membres permanents du Conseil de sécurité de l'ONU et l'un des États les plus influents de l'UE."),
+makeQuestion("h2-064", 2, "Histoire", "Dans la construction européenne, la France est :",
+"Un pays fondateur",
+"Un pays entré très tardivement",
+"Un pays toujours opposé à l’Union européenne",
+"Un pays non concerné",
+"A",
+"La France fait partie des pays fondateurs de la construction européenne et y joue un rôle important."
+),
 
-makeQuestion("h2-065", 2, "Histoire", "Quel personnage historique féminin est commémoré comme symbole de la résistance française et figure nationale ?", "Louise Michel, figure de la Commune de Paris, déportée en Nouvelle-Calédonie en 1871", "Simone Veil, ancienne déportée et femme politique, qui fait adopter la loi sur l'IVG en 1975", "Jeanne d'Arc, héroïne nationale dont la fête est célébrée le deuxième dimanche de mai", "Marie Curie, première femme à entrer au Panthéon de son propre mérite en 1995", "C", "Jeanne d'Arc, la 'Pucelle d'Orléans', est la figure héroïque nationale par excellence. Elle est fêtée le deuxième dimanche de mai comme symbole de la résistance et de l'unité nationale. En 1920, l'Église catholique la canonise, et en 1920 aussi, la France déclare sa fête nationale. Elle incarne la défense de la patrie dans l'imaginaire collectif français."),
+makeQuestion("h2-065", 2, "Histoire", "Quelle héroïne nationale française est associée à la résistance et à l’unité du pays ?",
+"Simone Veil",
+"Jeanne d’Arc",
+"Marie Curie",
+"Louise Michel",
+"B",
+"Jeanne d’Arc est l’une des grandes figures nationales françaises. Elle symbolise le courage, la résistance et l’unité."
+),
 
-makeQuestion("h2-066", 2, "Histoire", "Qu'est-ce que la décolonisation française des années 1950-1960 et quels en sont les principaux territoires concernés ?", "La rétrocession de l'Alsace-Moselle à la France après la Première Guerre mondiale", "Le retour à la France de ses territoires d'outre-mer après la Seconde Guerre mondiale en échange de leur aide militaire", "Le processus par lequel les colonies françaises d'Afrique, d'Asie et d'Océanie accèdent à l'indépendance, notamment en 1960 pour l'Afrique subsaharienne", "La réforme de 1946 transformant les colonies en départements d'outre-mer pour les intégrer à la République", "C", "La décolonisation française est un processus progressif et parfois violent. En 1954, la défaite de Diên Biên Phu met fin à la guerre d'Indochine. En 1956, le Maroc et la Tunisie obtiennent l'indépendance. En 1960, 14 pays d'Afrique subsaharienne accèdent à l'indépendance. La guerre d'Algérie (1954-1962) est la décolonisation la plus douloureuse, conclue par les accords d'Évian."),
+makeQuestion("h2-066", 2, "Histoire", "La décolonisation française des années 1950-1960 correspond :",
+"au retour des colonies dans l’Empire",
+"à l’accès à l’indépendance de nombreuses colonies françaises",
+"à la création des départements français en Europe",
+"à la fin de la Révolution française",
+"B",
+"La décolonisation correspond à l’indépendance progressive de nombreux territoires autrefois colonisés par la France."
+),
 
-makeQuestion("h2-067", 2, "Histoire", "Quelle est la signification historique du discours de Robert Schuman du 9 mai 1950 pour la France et l'Europe ?", "Il annonce le plan Marshall américain d'aide à la reconstruction de l'Europe occidentale après 1945", "Il propose une réconciliation franco-allemande par le partage des ressources industrielles comme premier pas vers une Europe unie", "Il proclame la création de l'OTAN et l'engagement américain dans la défense de l'Europe", "Il annonce le retrait de la France de l'Alliance atlantique et la création d'une défense européenne autonome", "B", "La déclaration Schuman du 9 mai 1950 propose de placer les productions de charbon et d'acier franco-allemandes sous une haute autorité commune, rendant toute nouvelle guerre entre les deux pays 'non seulement impensable, mais matériellement impossible'. C'est le point de départ de la construction européenne. Le 9 mai est depuis lors la Journée de l'Europe."),
+makeQuestion("h2-067", 2, "Histoire", "Le discours de Robert Schuman du 9 mai 1950 propose surtout :",
+"une alliance militaire contre l’URSS",
+"une mise en commun franco-allemande de productions essentielles pour construire la paix",
+"la sortie de la France de l’Europe",
+"la création immédiate d’un Parlement européen élu",
+"B",
+"Ce discours propose de rapprocher la France et l’Allemagne par une coopération concrète. C’est un acte fondateur de l’Europe."
+),
 
-makeQuestion("h2-068", 2, "Histoire", "Qui est Simone Veil et pourquoi est-elle une figure historique majeure de la France contemporaine ?", "Une résistante française, compagne de Jean Moulin, qui a coordonné les réseaux de renseignement en zone occupée", "Une scientifique française, première femme à recevoir le prix Nobel de chimie en 1963 pour ses travaux sur les antibiotiques", "Une philosophe et romancière, compagne de Sartre, dont l'œuvre a profondément influencé le féminisme des années 1970", "Une ancienne déportée à Auschwitz, femme politique et présidente du Parlement européen, qui fait adopter la loi dépénalisant l'IVG en 1975", "D", "Simone Veil (1927-2017) est déportée à Auschwitz à 16 ans. Rescapée, elle devient ministre de la Santé et fait adopter en 1975 la loi dépénalisant l'interruption volontaire de grossesse (IVG) malgré une opposition virulente. Elle préside le Parlement européen (1979-1982). En 2018, ses cendres sont transférées au Panthéon aux côtés de son mari."),
+makeQuestion("h2-068", 2, "Histoire", "Pourquoi Simone Veil est-elle une grande figure de l’histoire française contemporaine ?",
+"Parce qu’elle a dirigé la Résistance en 1940",
+"Parce qu’elle a fondé la Ve République",
+"Parce qu’elle a fait adopter la loi sur l’IVG et porté une mémoire forte de la déportation",
+"Parce qu’elle a rédigé la Déclaration des droits de l’homme",
+"C",
+"Simone Veil est une grande figure morale et politique française. Rescapée de la Shoah, elle a porté la loi sur l’IVG et incarné l’engagement européen."
+),
 
-makeQuestion("h2-069", 2, "Histoire", "Quel mouvement intellectuel du XVIIIe siècle, dont Voltaire, Rousseau et Montesquieu sont les principaux représentants, prépare idéologiquement la Révolution française ?", "Le Romantisme, courant artistique et littéraire exaltant la liberté individuelle et la nature", "Le Classicisme, mouvement prônant l'ordre, la raison et l'imitation de l'Antiquité gréco-romaine", "Les Lumières, mouvement philosophique fondé sur la raison, la critique de l'absolutisme et la défense des libertés", "Le Positivisme, courant philosophique appliquant la méthode scientifique à l'organisation de la société", "C", "Les Lumières (XVIIIe siècle) sont un mouvement intellectuel qui promeut la raison, la tolérance et le progrès contre l'obscurantisme et l'absolutisme. Voltaire combat le fanatisme religieux, Montesquieu théorise la séparation des pouvoirs, Rousseau développe le contrat social. L'Encyclopédie de Diderot et d'Alembert en est la grande œuvre collective. Les Lumières inspirent directement la Révolution de 1789."),
+makeQuestion("h2-069", 2, "Histoire", "Quel courant du XVIIIe siècle a préparé la Révolution française ?",
+"Le romantisme",
+"Le classicisme",
+"Les Lumières",
+"Le surréalisme",
+"C",
+"Les philosophes des Lumières défendent la raison, la liberté et la critique de l’absolutisme. Ils ont influencé la Révolution française."
+),
 
 makeQuestion(
   "h2-070",
   2,
   "Histoire",
-  "Quelle est la signification de la Francophonie pour la France dans le monde et combien de personnes parlent français ?",
-  "La Francophonie désigne uniquement les habitants de France métropolitaine et des DROM-COM, soit environ 70 millions de personnes",
-  "La Francophonie est une organisation militaire regroupant les pays ayant combattu aux côtés de la France lors des deux guerres mondiales",
-  "La Francophonie désigne l'ensemble des pays et des peuples utilisant le français, soit environ 300 millions de locuteurs dans le monde répartis sur 5 continents",
-  "La Francophonie est un traité économique liant exclusivement les anciennes colonies françaises d'Afrique à la France",
-  "C",
-  "La Francophonie regroupe les pays et communautés qui utilisent le français. L'Organisation internationale de la Francophonie (OIF) compte 88 États et gouvernements membres, associés ou observateurs. Environ 320 millions de personnes parlent français dans le monde, sur 5 continents. Le français est l’une des grandes langues internationales."
+  "Quand on parle de Francophonie, on parle surtout :",
+  "d’un ancien empire colonial français",
+  "de l’ensemble des pays et des peuples qui ont le français en partage",
+  "uniquement des habitants de France métropolitaine",
+  "d’une alliance militaire entre États francophones",
+  "B",
+  "La Francophonie désigne les pays, peuples et institutions qui ont en commun l’usage de la langue française ou un lien avec elle. C’est aussi un espace culturel et politique."
 ),
+
 
 ];
 export const HISTOIRE_L3: Question[] = [
-  makeQuestion("h3-001",3,"Histoire","La date de la fête nationale (14 juillet) est liée à :",
+  makeQuestion("h3-001",3,"Histoire","La date de la fête nationale du 14 juillet renvoie principalement à :",
     "La proclamation de la Ve République",
-    "La prise de la Bastille (1789) et la fête de la Fédération (1790)",
+    "La prise de la Bastille en 1789 et la Fête de la Fédération en 1790",
     "La fin de la Première Guerre mondiale",
     "Le traité de Rome",
     "B",
-    "Le 14/07 renvoie à 1789 (Bastille) et 1790 (Fête de la Fédération). Piège : confondre avec 11 novembre ou 8 mai. Source : Livret, p.4."
+    "Le 14 juillet renvoie à la fois à la prise de la Bastille en 1789, symbole de la Révolution française, et à la Fête de la Fédération de 1790, symbole de l’unité nationale."
   ),
-  makeQuestion("h3-002",3,"Histoire","La Ière République est proclamée en :",
+
+  makeQuestion("h3-002",3,"Histoire","La Première République est proclamée en :",
     "1789","1792","1804","1875","B",
-    "1792 : proclamation de la Ière République. Piège : 1789 = Révolution mais pas encore République. Source : Livret, p.14."
+    "La Première République est proclamée en 1792. L’année 1789 marque le début de la Révolution française, mais pas encore la proclamation de la République."
   ),
-  makeQuestion("h3-003",3,"Histoire","Les philosophes des Lumières (Rousseau, Voltaire, Diderot) défendent :",
+
+  makeQuestion("h3-003",3,"Histoire","Les philosophes des Lumières, comme Rousseau, Voltaire et Diderot, défendent surtout :",
     "La monarchie absolue",
     "La tolérance et la liberté de pensée",
     "Le pouvoir militaire",
     "La censure",
     "B",
-    "Les Lumières défendent tolérance et liberté de pensée. Piège : inverser le sens. Source : Livret, p.14."
+    "Les philosophes des Lumières défendent la raison, la tolérance, la liberté de pensée et la critique de l’arbitraire."
   ),
-  makeQuestion("h3-004",3,"Histoire","Le règne de Louis XIV est caractérisé par :",
+
+  makeQuestion("h3-004",3,"Histoire","Le règne de Louis XIV est surtout associé à :",
     "Une monarchie absolue centralisée",
     "Une république parlementaire",
     "L’Union européenne",
     "La décentralisation moderne",
     "A",
-    "Louis XIV : monarchie absolue, État centralisé. Piège : confondre avec un régime républicain. Source : Livret, p.14."
+    "Louis XIV incarne la monarchie absolue et la centralisation du pouvoir royal."
   ),
-  makeQuestion("h3-005",3,"Histoire","La République est installée de façon stable en :",
+
+  makeQuestion("h3-005",3,"Histoire","La République s’installe durablement en France à partir de :",
     "1792","1875","1958","1992","B",
-    "République stable : 1875 (IIIe République). Piège : 1958 = institutions actuelles. Source : Livret, p.4-15."
+    "Même si la Première République est proclamée en 1792, c’est avec la Troisième République, à partir de 1875, que le régime républicain s’installe durablement."
   ),
-    makeQuestion("h3-006", 3, "Histoire", "Jules Ferry est associé principalement à :",
-    "L’enseignement public, gratuit et laïc",
+
+  makeQuestion("h3-006",3,"Histoire","Jules Ferry est principalement associé à :",
+    "L’enseignement public, gratuit et laïque",
     "Le Code civil",
     "Le traité de Rome",
     "La création de la Sécurité sociale",
     "A",
-    "Jules Ferry est associé à l’école publique, gratuite et laïque (années 1880). Piège : confondre avec Napoléon (Code civil). Source : Livret, p.15."
+    "Jules Ferry est associé aux grandes lois scolaires des années 1880 qui rendent l’école publique gratuite, laïque et obligatoire."
   ),
-  makeQuestion("h3-007", 3, "Histoire", "Napoléon Ier est notamment associé à :",
+
+  makeQuestion("h3-007",3,"Histoire","Napoléon Ier est notamment associé à :",
     "La loi de 1905",
     "Le Code civil",
     "Mai 68",
-    "L’abolition de la peine de mort (1981)",
+    "L’abolition de la peine de mort en 1981",
     "B",
-    "Napoléon Ier est associé au Code civil. Piège : mélanger les grandes lois d’autres époques. Source : Livret, p.15."
+    "Napoléon Ier est notamment associé au Code civil, qui a profondément influencé le droit français."
   ),
-  makeQuestion("h3-008", 3, "Histoire", "Le régime de Vichy (1940-1944) est décrit comme :",
+
+  makeQuestion("h3-008",3,"Histoire","Le régime de Vichy entre 1940 et 1944 est :",
     "Un régime démocratique exemplaire",
-    "Un régime non démocratique qui collabore avec l’Allemagne nazie",
-    "Un régime de la Ve République",
+    "Un régime autoritaire qui collabore avec l’Allemagne nazie",
+    "Le début de la Ve République",
     "Un mouvement étudiant",
     "B",
-    "Le régime de Vichy (1940-1944) n’est pas démocratique et collabore avec l’Allemagne nazie, avec responsabilité dans la déportation des Juifs. Piège : minimiser/confondre les périodes. Source : Livret, p.16."
+    "Le régime de Vichy est un régime autoritaire qui collabore avec l’Allemagne nazie pendant l’Occupation."
   ),
-  makeQuestion("h3-009", 3, "Histoire", "Le 8 mai est férié en commémoration :",
+
+  makeQuestion("h3-009",3,"Histoire","Le 8 mai est un jour férié en mémoire :",
     "De la fin de la Première Guerre mondiale",
-    "De la fin de la Seconde Guerre mondiale",
+    "De la fin de la Seconde Guerre mondiale en Europe",
     "De la prise de la Bastille",
     "Du traité de Rome",
     "B",
-    "Le 8 mai commémore la fin de la Seconde Guerre mondiale. Piège : inversion avec le 11 novembre. Source : Livret, p.16."
+    "Le 8 mai commémore la victoire de 1945 et la fin de la Seconde Guerre mondiale en Europe."
   ),
-  makeQuestion("h3-010", 3, "Histoire", "Le 11 novembre commémore :",
+
+  makeQuestion("h3-010",3,"Histoire","Le 11 novembre commémore :",
     "La fin de la Seconde Guerre mondiale",
-    "La fin de la Première Guerre mondiale",
+    "L’armistice mettant fin aux combats de la Première Guerre mondiale",
     "La Révolution française",
     "La décolonisation",
     "B",
-    "Le 11 novembre commémore la fin de la Première Guerre mondiale. Piège : inversion avec le 8 mai. Source : Livret, p.16."
+    "Le 11 novembre commémore l’armistice de 1918, qui met fin aux combats de la Première Guerre mondiale."
   ),
-  makeQuestion("h3-011", 3, "Histoire", "Le débarquement des alliés en Normandie a eu lieu le :",
+
+  makeQuestion("h3-011",3,"Histoire","Le débarquement allié en Normandie a lieu le :",
     "6 juin 1944",
     "8 mai 1945",
     "11 novembre 1918",
     "14 juillet 1789",
     "A",
-    "Le débarquement en Normandie a lieu le 6 juin 1944. Piège : confondre avec les dates de fin de guerre. Source : Livret, p.16."
+    "Le débarquement allié en Normandie a lieu le 6 juin 1944. Il constitue une étape décisive dans la Libération de la France."
   ),
-  makeQuestion("h3-012", 3, "Histoire", "Charles de Gaulle est présenté comme :",
-    "Chef de la résistance et acteur des institutions de 1958 (Ve République)",
+
+  makeQuestion("h3-012",3,"Histoire","Charles de Gaulle est surtout connu comme :",
+    "Chef de la Résistance et acteur majeur de la Ve République",
     "Auteur de la loi de 1905",
     "Philosophe des Lumières",
     "Ministre de l’instruction publique des années 1880",
     "A",
-    "Charles de Gaulle est présenté comme chef de la Résistance et acteur de la Ve République (1958). Piège : l’associer à 1905 ou à Jules Ferry. Source : Livret, p.16."
+    "Charles de Gaulle est une figure majeure de la Résistance et de la fondation de la Ve République."
   ),
-  makeQuestion("h3-013", 3, "Histoire", "Le traité de Rome (1957) instaure :",
-    "La Charte des droits fondamentaux (2000)",
-    "La Communauté économique européenne (CEE)",
-    "La Ve République",
+
+  makeQuestion("h3-013",3,"Histoire","Le traité de Rome de 1957 est principalement lié à :",
+    "La Charte des droits fondamentaux de 2000",
+    "La création de la Communauté économique européenne",
+    "La naissance de la Ve République",
     "La loi de 2004 sur les signes religieux",
     "B",
-    "Le traité de Rome (1957) instaure la CEE. Piège : confondre avec 1992 (UE) ou 2000 (Charte). Source : Livret, p.17-20."
+    "Le traité de Rome de 1957 crée la Communauté économique européenne, étape essentielle de la construction européenne."
   ),
-  makeQuestion("h3-014", 3, "Histoire", "La décolonisation française (selon le livret) se situe surtout entre :",
-    "1789-1792",
-    "1950-1962",
-    "1875-1880",
-    "2000-2020",
+
+  makeQuestion("h3-014",3,"Histoire","La décolonisation française se situe surtout entre :",
+    "1789 et 1792",
+    "1950 et 1962",
+    "1875 et 1880",
+    "2000 et 2020",
     "B",
-    "La décolonisation française est située surtout entre 1950 et 1962 (Indochine, Algérie). Piège : confondre avec la Révolution française. Source : Livret, p.17."
+    "La décolonisation française se situe principalement entre les années 1950 et 1962, notamment avec l’Indochine et l’Algérie."
   ),
-  makeQuestion("h3-015", 3, "Histoire", "L’abolition de la peine de mort en France date de :",
+
+  makeQuestion("h3-015",3,"Histoire","L’abolition de la peine de mort en France date de :",
     "1974",
     "1975",
     "1981",
     "1992",
     "C",
-    "L’abolition de la peine de mort date de 1981. Piège : confondre avec 1974 (majorité à 18 ans) ou 1975 (IVG). Source : Livret, p.17."
+    "La peine de mort est abolie en France en 1981."
   ),
-  makeQuestion("h3-016", 3, "Histoire", "La loi sur l’IVG (interruption volontaire de grossesse) citée dans le livret date de :",
+
+  makeQuestion("h3-016",3,"Histoire","La loi relative à l’IVG, portée par Simone Veil, date de :",
     "1958",
     "1975",
     "1981",
     "2004",
     "B",
-    "La loi IVG date de 1975 (Simone Veil). Piège : confondre avec 1981 (peine de mort). Source : Livret, p.17."
+    "La loi légalisant l’interruption volontaire de grossesse date de 1975 et est associée à Simone Veil."
   ),
-  makeQuestion("h3-017", 3, "Histoire", "L’âge de la majorité est fixé à 18 ans en :",
+
+  makeQuestion("h3-017",3,"Histoire","L’âge de la majorité civile est fixé à 18 ans en :",
     "1968",
     "1974",
     "1975",
     "1981",
     "B",
-    "La majorité civile est fixée à 18 ans en 1974. Piège : confondre avec 1975 (IVG). Source : Livret, p.17."
+    "La majorité civile est abaissée à 18 ans en 1974."
   ),
-  makeQuestion("h3-018", 3, "Histoire", "Mai 68 est décrit comme :",
+
+  makeQuestion("h3-018",3,"Histoire","Mai 68 est avant tout :",
     "Un traité européen",
-    "Un mouvement social initié par des étudiants puis étendu aux salariés",
-    "La proclamation de la Ière République",
+    "Un grand mouvement social parti des étudiants puis élargi au monde du travail",
+    "La proclamation de la Première République",
     "La loi de séparation des Églises et de l’État",
     "B",
-    "Mai 68 : mouvement social initié par les étudiants puis étendu aux salariés/ouvriers. Piège : le réduire à « étudiants seulement ». Source : Livret, p.17."
+    "Mai 68 est un grand mouvement social et culturel qui commence chez les étudiants avant de s’étendre à une large partie de la société."
   ),
-  makeQuestion("h3-019", 3, "Histoire", "Henri IV est associé à :",
-    "L’édit de Nantes (1598) favorisant la paix religieuse",
-    "La DDHC (1789)",
-    "La Ve République (1958)",
-    "Le traité de Maastricht (1992)",
+
+  makeQuestion("h3-019",3,"Histoire","Henri IV est notamment associé à :",
+    "L’édit de Nantes de 1598, destiné à rétablir la paix religieuse",
+    "La Déclaration des droits de l’homme et du citoyen",
+    "La Ve République",
+    "Le traité de Maastricht",
     "A",
-    "Henri IV est associé à l’édit de Nantes (1598), visant la paix religieuse. Piège : l’associer à 1789. Source : Livret, p.13."
+    "Henri IV est associé à l’édit de Nantes de 1598, qui vise à apaiser les conflits religieux."
   ),
-  makeQuestion("h3-020", 3, "Histoire", "Jeanne d’Arc est présentée comme :",
+
+  makeQuestion("h3-020",3,"Histoire","Jeanne d’Arc est surtout connue comme :",
     "Une reine de France",
     "Une héroïne nationale liée à la guerre de Cent Ans",
     "Une philosophe des Lumières",
     "Une résistante de 1944",
     "B",
-    "Jeanne d’Arc est présentée comme une héroïne nationale liée à la guerre de Cent Ans. Piège : la confondre avec la Seconde Guerre mondiale. Source : Livret, p.13."
+    "Jeanne d’Arc est une grande figure de l’histoire de France, associée à la guerre de Cent Ans et au redressement du royaume."
   ),
 
-  makeQuestion("h3-021", 3, "Histoire", "Pourquoi la bataille d'Alésia (52 av. J.-C.) est-elle considérée comme un tournant dans la romanisation de la Gaule plutôt que comme une simple défaite militaire ?", "Parce qu'elle permet à Vercingétorix de négocier un traité garantissant l'autonomie culturelle des Gaulois", "Parce qu'elle provoque un soulèvement populaire qui durera un siècle contre l'occupation romaine", "Parce qu'elle marque la fin de la résistance gauloise organisée et ouvre la voie à une fusion culturelle qui donnera naissance à la civilisation gallo-romaine", "Parce qu'elle entraîne l'extermination complète de la population gauloise et son remplacement par des colons romains", "C", "La reddition de Vercingétorix à Alésia ne marque pas seulement une défaite militaire : elle ouvre trois siècles de paix romaine (Pax Romana) pendant lesquels la Gaule s'intègre à l'Empire. Le latin se diffuse, les villes se développent (Lugdunum/Lyon), et une civilisation gallo-romaine originale émerge, mêlant traditions gauloises et apports romains — socle de la future France."),
+makeQuestion("h3-021", 3, "Histoire", "Pourquoi la bataille d’Alésia est-elle un tournant historique ?",
+  "Parce qu’elle garantit l’autonomie gauloise",
+  "Parce qu’elle provoque un siècle de guerre continue",
+  "Parce qu’elle marque la fin de la résistance gauloise organisée et ouvre la voie à la romanisation de la Gaule",
+  "Parce qu’elle entraîne la disparition complète des Gaulois",
+  "C",
+  "La défaite d’Alésia marque la fin de la résistance gauloise unifiée et ouvre une longue période de romanisation, essentielle dans l’histoire ancienne du territoire français."
+),
 
-makeQuestion("h3-022", 3, "Histoire", "En quoi le traité de Verdun (843) est-il fondateur pour l'histoire de France et de l'Europe ?", "Il met fin aux invasions vikings en échange d'une rançon versée par les petits-fils de Charlemagne", "Il divise l'empire carolingien en trois royaumes distincts, posant les bases territoriales de la France, de l'Allemagne et d'une zone médiane", "Il unifie pour la première fois sous une seule couronne les territoires francs, bourguignons et aquitains", "Il crée la première alliance défensive entre les royaumes chrétiens d'Europe contre les invasions sarrasines", "B", "Le traité de Verdun partage l'empire de Charlemagne entre ses trois petits-fils : Charles le Chauve reçoit la Francie occidentale (future France), Louis le Germanique la Francie orientale (future Allemagne), et Lothaire la Francie médiane (Lotharingie). Cette division préfigure les frontières de l'Europe occidentale et inaugure des identités nationales distinctes qui se consolideront sur plusieurs siècles."),
+makeQuestion("h3-022", 3, "Histoire", "Le traité de Verdun de 843 est important parce qu’il :",
+  "Met fin aux invasions vikings",
+  "Partage l’empire carolingien et préfigure la formation de grands ensembles européens distincts",
+  "Unifie durablement tous les royaumes francs",
+  "Crée la première alliance européenne",
+  "B",
+  "Le traité de Verdun partage l’empire de Charlemagne entre ses héritiers et constitue un repère majeur dans l’histoire politique de l’Europe occidentale."
+),
 
-makeQuestion("h3-023", 3, "Histoire", "Quelle tension fondamentale la révocation de l'édit de Nantes (1685) par Louis XIV révèle-t-elle dans la conception de l'unité nationale française ?", "Elle révèle la faiblesse de la monarchie absolue face aux pressions des États protestants européens comme les Provinces-Unies", "Elle illustre la volonté d'uniformisation religieuse comme condition de l'unité politique, au prix de la persécution d'une minorité et d'une hémorragie démographique", "Elle traduit uniquement des calculs diplomatiques vis-à-vis de l'Espagne catholique, sans lien avec la conception de la nation", "Elle marque l'aboutissement d'un processus de sécularisation progressive de l'État royal, préfigurant la laïcité de 1905", "B", "La révocation de l'édit de Nantes par l'édit de Fontainebleau (1685) contraint environ 200 000 protestants à fuir la France (les 'dragonnades'). Elle révèle une conception de l'unité nationale fondée sur l'homogénéité religieuse — 'Un roi, une loi, une foi' — qui s'oppose à la pluralité. Cette logique d'exclusion de la minorité au nom de l'unité sera radicalement renversée par la Révolution et la laïcité."),
+makeQuestion("h3-023", 3, "Histoire", "La révocation de l’édit de Nantes en 1685 révèle surtout :",
+  "La faiblesse de la monarchie absolue",
+  "Une politique de sécularisation proche de la laïcité",
+  "La volonté d’imposer l’unité religieuse au nom de l’unité politique",
+  "Une stratégie sans effet sur la société",
+  "C",
+  "La révocation de l’édit de Nantes traduit la volonté de rétablir l’uniformité religieuse dans le royaume, au prix d’une forte répression des protestants."
+),
 
-makeQuestion("h3-024", 3, "Histoire", "Quel rôle la pensée des Lumières joue-t-elle dans la Révolution française, et en quoi leur héritage est-il ambigu ?", "Les Lumières fournissent la légitimité intellectuelle de la Révolution, mais leur universalisme abstrait masque les contradictions entre proclamation des droits et maintien de l'esclavage colonial", "Les Lumières sont essentiellement un mouvement conservateur qui cherche à réformer la monarchie sans la détruire, la Révolution les ayant trahis", "Les Lumières prônent explicitement la révolution violente comme seule voie de progrès, ce que la Révolution accomplit fidèlement", "Les Lumières n'ont qu'une influence marginale sur la Révolution, dont les causes sont exclusivement économiques et sociales", "A", "Les philosophes des Lumières (Voltaire, Rousseau, Montesquieu) fournissent le cadre conceptuel de la Révolution : contrat social, séparation des pouvoirs, droits naturels. Mais leur héritage est ambigu : Rousseau théorise la 'volonté générale' qui peut justifier la Terreur ; l'universalisme de la DDHC coexiste avec le maintien de l'esclavage jusqu'en 1794 puis 1848 ; les droits 'de l'homme' excluent les femmes selon Olympe de Gouges."),
+makeQuestion("h3-024", 3, "Histoire", "L’héritage des Lumières dans la Révolution française est dit ambigu parce que :",
+  "Les Lumières étaient opposées à toute réforme",
+  "Les idées de liberté et d’égalité ont aussi coexisté avec de fortes contradictions historiques",
+  "Les Lumières n’ont eu aucun rôle dans la Révolution",
+  "Les Lumières défendaient exclusivement la monarchie absolue",
+  "B",
+  "Les Lumières inspirent les principes révolutionnaires, mais leur héritage est complexe, car l’universalisme proclamé a coexisté avec des exclusions et des contradictions."
+),
 
-makeQuestion("h3-025", 3, "Histoire", "En quoi le régime napoléonien représente-t-il à la fois une continuité et une rupture avec la Révolution française ?", "Il représente une rupture totale : Napoléon rétablit la monarchie absolue et efface toutes les réformes révolutionnaires", "Il perpétue certains acquis révolutionnaires (égalité civile, Code civil, méritocratie) tout en rétablissant un pouvoir autoritaire, l'esclavage et la prééminence de l'Église", "Il représente une pure continuité révolutionnaire, Napoléon n'étant que le bras armé de la République jacobine", "Il constitue une rupture uniquement diplomatique, la politique intérieure restant fidèle aux principes de 1789", "B", "Le régime napoléonien perpétue des acquis révolutionnaires : Code civil (égalité juridique), Légion d'honneur (méritocratie), lycées, Banque de France, préfets. Mais il y rompt aussi : rétablissement de l'esclavage (1802), concordat avec l'Église (1801), sacre impérial (1804), censure, police politique. Napoléon est à la fois héritier et fossoyeur de la Révolution, incarnant ce que les historiens nomment sa 'consolidation autoritaire'."),
-
+makeQuestion("h3-025", 3, "Histoire", "Le régime napoléonien représente à la fois une continuité et une rupture avec la Révolution française parce que :",
+  "Il efface complètement tous les acquis révolutionnaires",
+  "Il conserve certains acquis de la Révolution tout en restaurant un pouvoir autoritaire",
+  "Il est une pure continuation de la République révolutionnaire",
+  "Il ne change que la diplomatie extérieure",
+  "B",
+  "Le régime napoléonien prolonge certains acquis révolutionnaires, comme l’égalité civile, tout en réintroduisant un pouvoir fortement autoritaire."
+),
 makeQuestion("h3-026", 3, "Histoire", "Comment la Commune de Paris de 1871 s'inscrit-elle dans la longue histoire des tensions sociales et politiques françaises du XIXe siècle ?", "La Commune est un soulèvement nationaliste contre l'occupation prussienne de Paris, sans dimension sociale particulière", "La Commune représente l'aboutissement du bonapartisme populaire cherchant à restaurer l'Empire face à la République bourgeoise", "La Commune est une insurrection ouvrière et républicaine radicale contre le gouvernement de Versailles, réprimée dans un bain de sang qui marque durablement les rapports entre classes sociales et mémoires politiques françaises", "La Commune est un mouvement régionaliste parisien contre la centralisation de la IIIe République naissante", "C", "La Commune de Paris (18 mars-28 mai 1871) naît du refus d'une paix humiliante avec la Prusse et d'une insurrection sociale. Pendant 72 jours, un gouvernement révolutionnaire gère Paris. Sa répression par l'armée de Versailles (la 'Semaine sanglante', 20 000 à 30 000 morts) creuse un fossé durable entre la gauche ouvrière et les républicains modérés, structurant la culture politique française jusqu'au XXe siècle."),
 
 makeQuestion("h3-027", 3, "Histoire", "Quelle est la portée historique de l'affaire Dreyfus au-delà du cas judiciaire individuel ?", "Elle conduit directement à la révision de la Constitution et à la création du Conseil constitutionnel pour protéger les individus contre l'arbitraire de l'État", "Elle polarise durablement la société française entre deux camps — une France laïque, républicaine et progressiste contre une France nationaliste, antisémite et cléricale — accélérant la séparation des Églises et de l'État", "Elle reste un événement secondaire dans l'histoire politique française, rapidement oublié après la réhabilitation de Dreyfus en 1906", "Elle provoque une révolution socialiste avortée qui échoue à renverser la IIIe République malgré le soutien de Jaurès et du mouvement ouvrier", "B", "L'affaire Dreyfus (1894-1906) transcende le cas individuel : elle révèle l'antisémitisme institutionnel, la puissance de l'armée sur la justice, et la fragilité de la République. Elle crée deux France durablement opposées. Le 'J'accuse' de Zola (1898) devient un modèle d'engagement intellectuel. Ses conséquences politiques directes sont la coalition des gauches et l'accélération de la loi de 1905 sur la séparation des Églises et de l'État."),

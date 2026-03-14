@@ -1,419 +1,498 @@
 import { makeQuestion, Question } from "./types";
 
 export const VALEURS_L1: Question[] = [
-  makeQuestion(
-    "v1-001", 1, "Valeurs",
-    "Que signifie la laïcité en France ?",
-    "L’interdiction de toute religion",
-    "La neutralité de l’État et la liberté de conscience",
-    "La préférence d’une religion majoritaire",
-    "L’obligation d’afficher sa religion",
-    "B",
-    "La laïcité garantit la neutralité de l’État vis-à-vis des religions et la liberté de conscience (croire ou ne pas croire)."
-  ),
-  makeQuestion(
-    "v1-002", 1, "Valeurs",
-    "Quelle est la devise de la République française ?",
-    "Honneur et Patrie",
-    "Liberté, Égalité, Fraternité",
-    "Unité, Travail, Progrès",
-    "Paix, Justice, Solidarité",
-    "B",
-    "La devise officielle est « Liberté, Égalité, Fraternité », associée aux valeurs républicaines."
-  ),
-  makeQuestion(
-    "v1-003", 1, "Valeurs",
-    "Que garantit la liberté d’expression ?",
-    "Dire n’importe quoi sans limites",
-    "Exprimer ses idées dans le respect de la loi",
-    "Interdire les opinions opposées",
-    "Se taire en public",
-    "B",
-    "La liberté d’expression est un droit fondamental, mais elle s’exerce dans le cadre de la loi (diffamation, incitation à la haine, etc.)."
-  ),
-  makeQuestion(
-    "v1-004", 1, "Valeurs",
-    "L’égalité devant la loi signifie :",
-    "Une loi différente selon l’origine",
-    "Les mêmes règles pour tous",
-    "Des privilèges pour certains",
-    "Une loi différente selon la religion",
-    "B",
-    "L’égalité devant la loi implique que les règles juridiques s’appliquent de la même manière à tous."
-  ),
-  makeQuestion(
-    "v1-005", 1, "Valeurs",
-    "Le droit de vote en France est :",
-    "Obligatoire",
-    "Un droit et un devoir civique (mais non obligatoire)",
-    "Interdit aux citoyens",
-    "Réservé aux salariés",
-    "B",
-    "Voter n’est pas obligatoire en France, mais c’est un droit majeur et un acte civique important."
-  ),
-  makeQuestion(
-    "v1-006", 1, "Valeurs",
-    "Quelle est la langue officielle de la République française ?",
-    "L’anglais",
-    "Le français",
-    "Le latin",
-    "Aucune langue officielle",
-    "B",
-    "La langue de la République est le français (Constitution)."
-  ),
-  makeQuestion(
-    "v1-007", 1, "Valeurs",
-    "Que signifie « Fraternité » dans la devise républicaine ?",
-    "La loi du plus fort",
-    "La solidarité et l’entraide entre citoyens",
-    "L’isolement de chacun",
-    "Le refus de la vie collective",
-    "B",
-    "La fraternité renvoie à l’idée de solidarité, d’entraide et de cohésion sociale."
-  ),
-  makeQuestion(
-    "v1-008", 1, "Valeurs",
-    "La République française est :",
-    "Une monarchie",
-    "Une démocratie",
-    "Un empire",
-    "Une dictature",
-    "B",
-    "La France est une République démocratique : les citoyens participent à la vie politique (élections, institutions)."
-  ),
-  makeQuestion(
-    "v1-009", 1, "Valeurs",
-    "L’école publique est principalement :",
-    "Religieuse",
-    "Laïque",
-    "Privée",
-    "Réservée aux garçons",
-    "B",
-    "L’école publique respecte la laïcité : neutralité religieuse et égalité d’accès."
-  ),
-  makeQuestion(
-    "v1-010", 1, "Valeurs",
-    "Dans une République, la souveraineté appartient :",
-    "Au Roi",
-    "Au peuple",
-    "À l’armée",
-    "Aux entreprises",
-    "B",
-    "La souveraineté nationale appartient au peuple, qui l’exerce notamment par ses représentants élus."
-  ),
-  makeQuestion(
-    "v1-011", 1, "Valeurs",
-    "La discrimination est :",
-    "Autorisé si elle est “justifiée”",
-    "Interdite par la loi",
-    "Obligatoire dans les recrutements",
-    "Un droit constitutionnel",
-    "B",
-    "La loi interdit les discriminations (sexe, origine, religion, handicap, etc.)."
-  ),
-  makeQuestion(
-    "v1-012", 1, "Valeurs",
-    "La liberté de conscience, c’est :",
-    "Le droit d’imposer sa religion",
-    "Le droit de croire ou ne pas croire",
-    "Le devoir d’être religieux",
-    "L’interdiction de toute conviction",
-    "B",
-    "La liberté de conscience protège le choix intime des convictions religieuses ou philosophiques."
-  ),
-  makeQuestion(
-    "v1-013", 1, "Valeurs",
-    "Le drapeau français est :",
-    "Bleu-blanc-rouge",
-    "Vert-blanc-rouge",
-    "Rouge-blanc-noir",
-    "Bleu-jaune-rouge",
-    "A",
-    "Le drapeau national est tricolore bleu, blanc, rouge."
-  ),
-  makeQuestion(
-    "v1-014", 1, "Valeurs",
-    "L’hymne national de la France est :",
-    "La Marseillaise",
-    "L’Internationale",
-    "God Save the King",
-    "Le Chant du départ",
-    "A",
-    "L’hymne national est « La Marseillaise »."
-  ),
-  makeQuestion(
-    "v1-015", 1, "Valeurs",
-    "Le principe de “neutralité” de l’État signifie :",
-    "Favoriser une religion",
-    "Ne pas favoriser une religion et traiter tous les cultes de façon égale",
-    "Interdire toute pratique privée",
-    "Imposer une croyance officielle",
-    "B",
-    "L’État ne privilégie aucun culte : c’est un pilier de la laïcité."
-  ),
-  makeQuestion(
-    "v1-016", 1, "Valeurs",
-    "L’égalité femmes-hommes en France est :",
-    "Une opinion",
-    "Un principe soutenu par la loi",
-    "Interdite",
-    "Facultative selon les régions",
-    "B",
-    "L’égalité femmes-hommes est un objectif constitutionnel et légal, soutenu par des politiques publiques."
-  ),
-  makeQuestion(
-    "v1-017", 1, "Valeurs",
-    "La Déclaration des droits de l’homme et du citoyen date de :",
-    "1689",
-    "1789",
-    "1905",
-    "1958",
-    "B",
-    "Adoptée en 1789, elle fonde une partie des principes et libertés modernes en France."
-  ),
-  makeQuestion(
-    "v1-018", 1, "Valeurs",
-    "L’impôt sert notamment à :",
-    "Financer les services publics",
-    "Payer uniquement les députés",
-    "Financer les religions",
-    "Supprimer les écoles",
-    "A",
-    "L’impôt finance l’action publique : écoles, routes, hôpitaux, sécurité, justice, etc."
-  ),
-  makeQuestion(
-    "v1-019", 1, "Valeurs",
-    "La liberté de circulation permet :",
-    "De se déplacer sans jamais respecter la loi",
-    "De circuler librement sous réserve des règles (contrôles, sécurité)",
-    "D’interdire le transport public",
-    "De voyager sans documents à l’étranger",
-    "B",
-    "La liberté de circulation existe, mais reste encadrée par des règles de sécurité et d’ordre public."
-  ),
-  makeQuestion(
-    "v1-020", 1, "Valeurs",
-    "Être citoyen, c’est notamment :",
-    "Avoir uniquement des droits",
-    "Avoir des droits et des devoirs",
-    "Être au-dessus des lois",
-    "Ne jamais participer à la vie publique",
-    "B",
-    "La citoyenneté implique des droits (vote, libertés) et des devoirs (respect des lois, participation civique)."
-  ),
+
+makeQuestion("v1-001",1,"Valeurs","Que signifie la laïcité en France ?",
+"L’interdiction de toute religion",
+"La neutralité de l’État et la liberté de conscience",
+"La préférence pour une religion majoritaire",
+"L’obligation d’afficher sa religion",
+"B",
+"La laïcité signifie que l’État est neutre vis-à-vis des religions et garantit la liberté de croire ou de ne pas croire."
+),
+
+makeQuestion("v1-002",1,"Valeurs","Quelle est la devise de la République française ?",
+"Honneur et Patrie",
+"Liberté, Égalité, Fraternité",
+"Travail, Famille, Patrie",
+"Paix et Progrès",
+"B",
+"La devise républicaine est « Liberté, Égalité, Fraternité ». Elle exprime les valeurs fondamentales de la République."
+),
+
+makeQuestion("v1-003",1,"Valeurs","Que garantit la liberté d’expression ?",
+"Exprimer ses idées dans le respect de la loi",
+"Dire n’importe quoi sans limites",
+"Interdire les opinions opposées",
+"Se taire en public",
+"A",
+"La liberté d’expression permet d’exprimer ses opinions, mais elle doit respecter la loi et les droits des autres."
+),
+
+makeQuestion("v1-004",1,"Valeurs","L’égalité devant la loi signifie :",
+"Des lois différentes selon l’origine",
+"Les mêmes règles pour tous",
+"Des privilèges pour certaines religions",
+"Une loi différente selon la richesse",
+"B",
+"L’égalité devant la loi signifie que les mêmes règles s’appliquent à tous."
+),
+
+makeQuestion("v1-005",1,"Valeurs","Le droit de vote en France est :",
+"Un droit et un devoir civique",
+"Obligatoire",
+"Réservé aux salariés",
+"Interdit aux jeunes",
+"A",
+"Le vote est un droit fondamental qui permet aux citoyens de participer à la démocratie."
+),
+
+makeQuestion("v1-006",1,"Valeurs","Quelle est la langue officielle de la République française ?",
+"Le latin",
+"Le français",
+"L’anglais",
+"Aucune langue officielle",
+"B",
+"La Constitution précise que la langue de la République est le français."
+),
+
+makeQuestion("v1-007",1,"Valeurs","Que signifie la fraternité dans la devise républicaine ?",
+"La compétition entre citoyens",
+"La solidarité et l’entraide",
+"L’obligation de penser pareil",
+"L’isolement des individus",
+"B",
+"La fraternité renvoie à l’idée d’entraide, de solidarité et de respect entre les citoyens."
+),
+
+makeQuestion("v1-008",1,"Valeurs","La République française est :",
+"Une monarchie",
+"Une démocratie",
+"Un empire",
+"Une dictature",
+"B",
+"La France est une République démocratique où les citoyens participent à la vie politique."
+),
+
+makeQuestion("v1-009",1,"Valeurs","L’école publique française est :",
+"Laïque",
+"Religieuse",
+"Privée",
+"Réservée aux garçons",
+"A",
+"L’école publique est laïque : elle respecte la neutralité religieuse."
+),
+
+makeQuestion("v1-010",1,"Valeurs","Dans une République, la souveraineté appartient :",
+"Au roi",
+"Au peuple",
+"À l’armée",
+"Aux entreprises",
+"B",
+"La souveraineté nationale appartient au peuple, qui l’exerce notamment par le vote."
+),
+
+makeQuestion("v1-011",1,"Valeurs","La discrimination est :",
+"Autorisé dans certains cas",
+"Interdite par la loi",
+"Un droit constitutionnel",
+"Un principe de la République",
+"B",
+"La loi française interdit les discriminations fondées sur l’origine, le sexe, la religion ou le handicap."
+),
+
+makeQuestion("v1-012",1,"Valeurs","La liberté de conscience signifie :",
+"Le droit de croire ou ne pas croire",
+"L’obligation d’avoir une religion",
+"L’interdiction des convictions personnelles",
+"L’obligation de pratiquer une religion",
+"A",
+"La liberté de conscience protège les convictions religieuses ou philosophiques de chacun."
+),
+
+makeQuestion("v1-013",1,"Valeurs","Quel est le drapeau de la France ?",
+"Bleu-blanc-rouge",
+"Vert-blanc-rouge",
+"Rouge-noir-blanc",
+"Bleu-jaune-rouge",
+"A",
+"Le drapeau français est tricolore : bleu, blanc et rouge."
+),
+
+makeQuestion("v1-014",1,"Valeurs","Quel est l’hymne national de la France ?",
+"La Marseillaise",
+"L’Internationale",
+"Le Chant du départ",
+"Le Chant des partisans",
+"A",
+"La Marseillaise est l’hymne national français."
+),
+
+makeQuestion("v1-015",1,"Valeurs","La neutralité de l’État signifie :",
+"Favoriser une religion",
+"Traiter tous les cultes de façon égale",
+"Interdire toute pratique religieuse",
+"Imposer une religion officielle",
+"B",
+"L’État ne favorise aucune religion et respecte toutes les convictions."
+),
+
+makeQuestion("v1-016",1,"Valeurs","L’égalité femmes-hommes en France est :",
+"Une simple opinion",
+"Un principe soutenu par la loi",
+"Interdite",
+"Facultative",
+"B",
+"L’égalité entre les femmes et les hommes est un principe fondamental de la République."
+),
+
+makeQuestion("v1-017",1,"Valeurs","La Déclaration des droits de l’homme et du citoyen date de :",
+"1789",
+"1815",
+"1905",
+"1958",
+"A",
+"Adoptée en 1789, elle affirme les droits fondamentaux comme la liberté et l’égalité."
+),
+
+makeQuestion("v1-018",1,"Valeurs","L’impôt sert notamment à :",
+"Financer les services publics",
+"Payer uniquement les députés",
+"Financer les religions",
+"Supprimer les écoles",
+"A",
+"L’impôt finance l’action publique : écoles, hôpitaux, sécurité, justice, infrastructures."
+),
+
+makeQuestion("v1-019",1,"Valeurs","La liberté de circulation permet :",
+"De circuler librement dans le respect de la loi",
+"De ne jamais respecter les règles",
+"D’interdire les transports publics",
+"De voyager sans documents",
+"A",
+"La liberté de circulation existe mais elle est encadrée par la loi."
+),
+
+makeQuestion("v1-020",1,"Valeurs","Être citoyen signifie :",
+"Avoir des droits et des devoirs",
+"Avoir seulement des droits",
+"Être au-dessus des lois",
+"Ne jamais voter",
+"A",
+"La citoyenneté implique à la fois des droits et des devoirs."
+),
+
+makeQuestion("v1-021",1,"Valeurs","Dans une démocratie, les citoyens choisissent leurs représentants par :",
+"Le vote",
+"L’hérédité",
+"La nomination par l’armée",
+"Le tirage au sort obligatoire",
+"A",
+"Le vote permet aux citoyens de choisir leurs représentants."
+),
+
+makeQuestion("v1-022",1,"Valeurs","Le racisme et l’antisémitisme sont :",
+"Tolérés",
+"Punissables par la loi",
+"Encouragés",
+"Autorisés dans certains cas",
+"B",
+"La loi française sanctionne les propos et actes racistes ou antisémites."
+),
+
+makeQuestion("v1-023",1,"Valeurs","La liberté en République signifie :",
+"Faire ce que l’on veut sans règle",
+"Exercer ses droits dans le respect de la loi",
+"Imposer ses idées aux autres",
+"Refuser toutes les lois",
+"B",
+"La liberté s’exerce dans le respect de la loi et des autres."
+),
+
+makeQuestion("v1-024",1,"Valeurs","Respecter les lois de la République signifie :",
+"Choisir les lois que l’on veut appliquer",
+"Respecter les règles communes",
+"Suivre uniquement les lois locales",
+"Ignorer les institutions",
+"B",
+"Respecter les lois garantit la vie en société."
+),
+
+makeQuestion("v1-025",1,"Valeurs","Le principe d’égalité signifie :",
+"Tous les citoyens sont égaux devant la loi",
+"Les lois changent selon l’origine",
+"Certaines personnes ont plus de droits",
+"Les règles dépendent de la religion",
+"A",
+"L’égalité signifie que la loi s’applique de la même manière à tous."
+)
+
 ];
 export const VALEURS_L2: Question[] = [
-  makeQuestion(
+ makeQuestion(
     "v2-001", 2, "Valeurs",
-    "La laïcité impose-t-elle aux citoyens d’être neutres religieusement dans l’espace public ?",
-    "Oui, pour tous les citoyens partout",
+    "La laïcité impose-t-elle aux citoyens d’être neutres religieusement dans tout l’espace public ?",
+    "Oui, partout et en toute circonstance",
     "Non, la neutralité s’impose surtout à l’État et à certains agents publics",
     "Oui, uniquement dans la rue",
-    "Non, la religion est interdite en France",
+    "Non, parce que toute religion est interdite en France",
     "B",
-    "La neutralité religieuse s’impose à l’État et, selon les missions, à des agents publics. Les citoyens gardent la liberté de manifester leurs convictions dans le respect de la loi."
+    "La laïcité impose d’abord la neutralité à l’État et, selon leurs fonctions, à certains agents publics. Les citoyens, eux, conservent la liberté d’exprimer leurs convictions dans le respect de la loi et de l’ordre public."
   ),
+
   makeQuestion(
     "v2-002", 2, "Valeurs",
-    "La liberté d’expression peut être limitée notamment en cas :",
-    "De critique politique",
-    "D’opinion personnelle",
-    "D’incitation à la haine ou à la violence",
-    "De désaccord avec un voisin",
+    "Dans quels cas la liberté d’expression peut-elle être légalement limitée ?",
+    "Lorsqu’on critique une décision politique",
+    "Lorsqu’on exprime un désaccord personnel",
+    "En cas d’incitation à la haine, à la violence ou de diffamation",
+    "Lorsqu’on donne une opinion dans un débat",
     "C",
-    "En France, la liberté d’expression est protégée, mais des limites existent (ex : incitation à la haine, diffamation, menaces)."
+    "En France, la liberté d’expression est protégée, mais elle connaît des limites fixées par la loi, notamment en cas de diffamation, d’injure, de menaces ou d’incitation à la haine ou à la violence."
   ),
+
   makeQuestion(
     "v2-003", 2, "Valeurs",
-    "Quel principe est au cœur de l’égalité républicaine ?",
-    "La loi s’applique de la même façon à tous",
+    "Quel principe résume le mieux l’égalité républicaine ?",
+    "La loi s’applique de la même manière à tous",
     "Les règles changent selon l’origine",
     "Les droits dépendent de la religion",
-    "Les droits dépendent du revenu",
+    "Les droits varient selon le revenu",
     "A",
-    "L’égalité républicaine implique que la loi s’applique à tous sans distinction."
+    "L’égalité républicaine signifie que tous les citoyens sont soumis aux mêmes règles de droit, sans distinction injustifiée."
   ),
+
   makeQuestion(
     "v2-004", 2, "Valeurs",
-    "La “fraternité” dans la devise républicaine peut aussi se traduire par :",
+    "Dans la devise républicaine, la fraternité renvoie surtout à :",
     "L’indifférence envers les autres",
     "La solidarité et l’aide aux personnes en difficulté",
-    "Le rejet des étrangers",
+    "Le rejet des personnes différentes",
     "La suppression des associations",
     "B",
-    "La fraternité renvoie à l’entraide, au lien social et à la solidarité."
+    "La fraternité exprime l’idée d’entraide, de lien social et de solidarité entre les citoyens."
   ),
+
   makeQuestion(
     "v2-005", 2, "Valeurs",
-    "Quel document fondamental pose les droits et libertés en 1789 ?",
+    "Quel texte fondateur affirme les droits et libertés en 1789 ?",
     "La Constitution de 1958",
     "La loi de 1905",
     "La Déclaration des droits de l’homme et du citoyen",
-    "Le Code civil uniquement",
+    "Le Code civil",
     "C",
-    "La Déclaration de 1789 est un texte fondateur des droits et libertés."
+    "La Déclaration des droits de l’homme et du citoyen, adoptée en 1789, est un texte fondamental de l’histoire des libertés publiques en France."
   ),
+
   makeQuestion(
     "v2-006", 2, "Valeurs",
-    "Le principe de laïcité garantit :",
-    "La supériorité d’un culte",
+    "Le principe de laïcité garantit principalement :",
+    "La supériorité d’un culte sur les autres",
     "La liberté de conscience et la neutralité de l’État",
-    "L’interdiction de toute croyance",
+    "L’interdiction de toute croyance religieuse",
     "La suppression des fêtes religieuses",
     "B",
-    "La laïcité protège la liberté de conscience et impose la neutralité à l’État."
+    "La laïcité protège la liberté de conscience de chacun et impose la neutralité à l’État."
   ),
+
   makeQuestion(
     "v2-007", 2, "Valeurs",
-    "Quel comportement est compatible avec les valeurs républicaines ?",
-    "Refuser un service à cause de l’origine",
+    "Quel comportement correspond aux valeurs de la République ?",
+    "Refuser un service à quelqu’un à cause de son origine",
     "Respecter la loi et l’égalité entre les citoyens",
     "Interdire les opinions différentes",
-    "Accepter la violence comme solution",
+    "Accepter la violence comme moyen normal de régler les conflits",
     "B",
-    "Respect de la loi, égalité, liberté, refus des discriminations : cœur des valeurs républicaines."
+    "Les valeurs républicaines reposent notamment sur le respect de la loi, l’égalité, la liberté et le refus des discriminations."
   ),
+
   makeQuestion(
     "v2-008", 2, "Valeurs",
-    "La discrimination à l’embauche est :",
-    "Autorisé si l’entreprise le veut",
+    "En France, la discrimination à l’embauche est :",
+    "Autorisée si l’entreprise le décide",
     "Interdite par la loi",
-    "Obligatoire",
-    "Autorisé si la personne est étrangère",
+    "Obligatoire dans certains secteurs",
+    "Autorisée lorsqu’elle vise un étranger",
     "B",
-    "La loi interdit toute discrimination (origine, sexe, handicap, religion, etc.)."
+    "La loi interdit les discriminations à l’embauche, notamment en raison de l’origine, du sexe, du handicap, de la religion ou de l’état de santé."
   ),
+
   makeQuestion(
     "v2-009", 2, "Valeurs",
-    "En France, l’égalité femmes-hommes :",
-    "Est un principe reconnu et protégé",
-    "N’existe pas dans la loi",
-    "S’applique seulement dans l’école",
+    "En France, l’égalité entre les femmes et les hommes :",
+    "Est un principe reconnu et protégé par la loi",
+    "N’existe pas dans le droit français",
+    "S’applique seulement à l’école",
     "S’applique seulement dans la famille",
     "A",
-    "L’égalité femmes-hommes est un objectif légal et politique publique."
+    "L’égalité entre les femmes et les hommes est un principe fondamental de la République, protégé par la loi et soutenu par les politiques publiques."
   ),
+
   makeQuestion(
     "v2-010", 2, "Valeurs",
-    "Le droit de vote est :",
-    "Un privilège réservé à certains",
+    "Le droit de vote est avant tout :",
+    "Un privilège réservé à certaines catégories",
     "Un droit civique accordé aux citoyens majeurs",
     "Une obligation pénale",
     "Un droit réservé aux fonctionnaires",
     "B",
-    "Le vote est un droit civique majeur (à partir de 18 ans)."
+    "Le vote est un droit civique fondamental accordé aux citoyens majeurs. Il permet de participer à la vie démocratique."
   ),
+
   makeQuestion(
     "v2-011", 2, "Valeurs",
-    "L’État est dit “neutre” car :",
-    "Il favorise une religion",
-    "Il ne privilégie aucun culte",
-    "Il interdit toute croyance",
-    "Il impose une morale religieuse",
+    "Pourquoi dit-on que l’État est neutre en matière religieuse ?",
+    "Parce qu’il favorise une religion dominante",
+    "Parce qu’il ne privilégie aucun culte",
+    "Parce qu’il interdit toute croyance",
+    "Parce qu’il impose une morale religieuse",
     "B",
-    "Neutralité : l’État ne favorise aucune religion."
+    "La neutralité de l’État signifie qu’il ne favorise ni ne combat aucune religion et traite tous les cultes de manière égale."
   ),
+
   makeQuestion(
     "v2-012", 2, "Valeurs",
-    "La République française est :",
+    "La République française est définie par la Constitution comme :",
     "Laïque, démocratique et sociale",
     "Religieuse et monarchique",
-    "Une dictature",
-    "Un empire",
+    "Une dictature centralisée",
+    "Un empire parlementaire",
     "A",
     "La Constitution qualifie la France de République indivisible, laïque, démocratique et sociale."
   ),
+
   makeQuestion(
     "v2-013", 2, "Valeurs",
     "La liberté d’association signifie :",
     "Qu’on ne peut jamais créer d’association",
-    "Qu’on peut se regrouper pour un projet commun, dans le cadre de la loi",
-    "Qu’une association peut faire n’importe quoi",
-    "Qu’il faut une autorisation du voisinage",
+    "Qu’on peut se regrouper pour un projet commun dans le cadre de la loi",
+    "Qu’une association peut agir sans respecter la loi",
+    "Qu’il faut l’accord du voisinage pour s’associer",
     "B",
-    "Les associations sont libres mais doivent respecter la loi."
+    "La liberté d’association permet aux personnes de se regrouper pour poursuivre un objectif commun, à condition de respecter la loi."
   ),
+
   makeQuestion(
     "v2-014", 2, "Valeurs",
     "La liberté de culte signifie :",
-    "Le droit de pratiquer une religion dans le cadre des lois",
+    "Le droit de pratiquer une religion dans le respect des lois",
     "L’obligation d’avoir une religion",
-    "L’interdiction de toute pratique",
-    "Le droit d’imposer sa religion",
+    "L’interdiction de toute pratique religieuse",
+    "Le droit d’imposer sa religion aux autres",
     "A",
-    "La liberté de culte est garantie, dans le respect de l’ordre public."
+    "La liberté de culte garantit à chacun le droit de pratiquer sa religion, dans le respect de la loi et de l’ordre public."
   ),
+
   makeQuestion(
     "v2-015", 2, "Valeurs",
-    "Qu’est-ce qui est interdit en France ?",
+    "Lequel de ces comportements est interdit par la loi ?",
     "Critiquer une décision politique",
     "Diffamer quelqu’un publiquement",
-    "Exprimer une opinion",
-    "Créer une association",
+    "Exprimer une opinion personnelle",
+    "Créer une association déclarée",
     "B",
-    "La diffamation est interdite : accuser quelqu’un publiquement sans preuve porte atteinte à son honneur."
+    "La diffamation consiste à porter atteinte à l’honneur ou à la réputation d’une personne en l’accusant publiquement sans preuve."
   ),
+
   makeQuestion(
     "v2-016", 2, "Valeurs",
-    "Le respect de la dignité humaine implique :",
-    "Tolérer la violence",
+    "Le respect de la dignité humaine implique de :",
+    "Tolérer les violences et humiliations",
     "Refuser les humiliations et traitements dégradants",
-    "Accepter les discriminations",
+    "Accepter certaines discriminations",
     "Ignorer les droits fondamentaux",
     "B",
-    "La dignité humaine est un principe central : pas d’humiliation, pas de violence, pas de traitement inhumain."
+    "La dignité humaine est un principe essentiel : elle interdit les humiliations, les violences et les traitements inhumains ou dégradants."
   ),
+
   makeQuestion(
     "v2-017", 2, "Valeurs",
     "La solidarité nationale se manifeste notamment par :",
-    "Les impôts et cotisations finançant des services et protections",
+    "Les impôts et cotisations qui financent des services et protections",
     "La suppression des services publics",
     "Le refus de toute aide sociale",
-    "La privatisation obligatoire de tout",
+    "La privatisation obligatoire de tous les services",
     "A",
-    "Impôts/cotisations financent services publics et protection sociale : logique de solidarité."
+    "La solidarité nationale se traduit notamment par les impôts, les cotisations sociales et le financement des services publics et de la protection sociale."
   ),
+
   makeQuestion(
     "v2-018", 2, "Valeurs",
-    "Le principe “indivisible” de la République signifie :",
+    "Le caractère indivisible de la République signifie :",
     "Des lois différentes selon les régions",
     "Une seule communauté nationale et une même loi pour tous",
-    "Chaque ville a ses lois",
-    "La France est divisée en deux États",
+    "Chaque ville dispose de ses propres lois nationales",
+    "La France est divisée en plusieurs États souverains",
     "B",
-    "Indivisible : unité du peuple français et de la loi sur l’ensemble du territoire."
+    "L’indivisibilité de la République signifie l’unité du peuple français, du territoire et de la loi."
   ),
+
   makeQuestion(
     "v2-019", 2, "Valeurs",
-    "Le respect de la loi signifie :",
-    "Obéir seulement si on est d’accord",
-    "Respecter les règles communes, même en cas de désaccord, tout en pouvant les contester légalement",
-    "Ignorer la loi",
-    "Remplacer la loi par la violence",
+    "Respecter la loi dans une démocratie signifie :",
+    "Obéir seulement lorsqu’on est d’accord",
+    "Respecter les règles communes tout en pouvant les contester légalement",
+    "Ignorer les lois jugées injustes",
+    "Remplacer la loi par la force",
     "B",
-    "On peut contester une loi (débats, recours), mais on doit la respecter tant qu’elle s’applique."
+    "Dans une démocratie, on peut critiquer ou contester une loi par des moyens légaux, mais on doit la respecter tant qu’elle s’applique."
   ),
+
   makeQuestion(
     "v2-020", 2, "Valeurs",
-    "Le principe de fraternité est souvent associé à :",
-    "L’isolement",
+    "Le principe de fraternité est souvent lié à l’idée de :",
+    "L’isolement des individus",
     "La cohésion sociale",
-    "La censure",
+    "La censure politique",
     "La monarchie",
     "B",
-    "Fraternité = cohésion sociale, solidarité, vivre ensemble."
+    "La fraternité est associée au vivre-ensemble, à la solidarité et à la cohésion sociale."
   ),
 
-  makeQuestion("v2-021", 2, "Valeurs", "Quel article de la Constitution du 4 octobre 1958 proclame que la France est une République 'laïque' ?", "L'article premier, qui dispose que la France est une République indivisible, laïque, démocratique et sociale", "L'article 2, qui définit la devise, la langue et le drapeau national", "L'article 3, consacrant la souveraineté nationale appartenant au peuple", "L'article 34, qui énumère les matières relevant du domaine de la loi", "A", "L'article premier de la Constitution dispose : 'La France est une République indivisible, laïque, démocratique et sociale.' Ce même article affirme que la République assure l'égalité devant la loi, respecte toutes les croyances et favorise l'égal accès des femmes et des hommes aux mandats. La laïcité est donc un principe constitutionnel fondamental depuis 1958."),
+makeQuestion("v2-021", 2, "Valeurs", "Quel article de la Constitution de 1958 affirme que la France est une République laïque ?",
+  "L’article 1er",
+  "L’article 2",
+  "L’article 3",
+  "L’article 34",
+  "A",
+  "L’article 1er de la Constitution affirme que la France est une République indivisible, laïque, démocratique et sociale. La laïcité est donc un principe constitutionnel."
+),
 
-makeQuestion("v2-022", 2, "Valeurs", "Quelle est la valeur juridique de la Déclaration des droits de l'homme et du citoyen (DDHC) de 1789 dans l'ordre juridique français actuel ?", "Elle n'a aucune valeur juridique contraignante, étant un simple texte historique symbolique sans effet normatif", "Elle fait partie du bloc de constitutionnalité depuis la décision du Conseil constitutionnel de 1971, lui conférant une pleine valeur constitutionnelle", "Elle a une valeur législative ordinaire, pouvant être modifiée par une loi ordinaire votée au Parlement", "Elle a une valeur supra-constitutionnelle, s'imposant même au pouvoir constituant lors des révisions", "B", "La décision du Conseil constitutionnel du 16 juillet 1971 a intégré dans le bloc de constitutionnalité le Préambule de la Constitution de 1946, qui renvoie lui-même à la DDHC de 1789. Depuis lors, la DDHC a pleine valeur constitutionnelle et les lois qui la méconnaissent peuvent être censurées. Ses 17 articles — liberté, égalité, sûreté, résistance à l'oppression — sont des normes juridiques contraignantes."),
+makeQuestion("v2-022", 2, "Valeurs", "Quelle est aujourd’hui la valeur juridique de la Déclaration des droits de l’homme et du citoyen de 1789 ?",
+  "Aucune valeur juridique",
+  "Une valeur constitutionnelle",
+  "Une simple valeur législative",
+  "Une valeur inférieure à la loi",
+  "B",
+  "La Déclaration des droits de l’homme et du citoyen de 1789 a aujourd’hui une valeur constitutionnelle. Elle fait partie des textes de référence utilisés pour protéger les droits et libertés fondamentaux."
+),
 
-makeQuestion("v2-023", 2, "Valeurs", "En quoi consiste le principe d'égalité devant la loi tel que proclamé par la DDHC de 1789 ?", "Il interdit absolument toute distinction entre les individus, y compris dans les textes de loi eux-mêmes, sans aucune exception possible", "Il garantit que tous les citoyens français ont les mêmes revenus grâce à la redistribution sociale et fiscale", "Il interdit les discriminations arbitraires mais permet des distinctions fondées sur des critères objectifs et rationnels liés à l'intérêt général", "Il ne s'applique qu'aux relations entre les citoyens et l'administration, excluant les rapports entre personnes privées", "C", "L'article 1er de la DDHC proclame que 'les hommes naissent et demeurent libres et égaux en droits'. Le Conseil constitutionnel a précisé que ce principe n'interdit pas toute différence de traitement mais exige que toute distinction repose sur des critères objectifs et rationnels en rapport avec le but de la loi. Les distinctions arbitraires ou fondées sur l'origine, la religion ou le sexe sont inconstitutionnelles."),
+makeQuestion("v2-023", 2, "Valeurs", "Que signifie le principe d’égalité devant la loi ?",
+  "Toute différence de traitement est interdite en toutes circonstances",
+  "Tous les citoyens doivent avoir exactement les mêmes revenus",
+  "Les différences arbitraires sont interdites, mais certaines distinctions peuvent être justifiées par l’intérêt général",
+  "Ce principe ne concerne que les relations avec l’administration",
+  "C",
+  "L’égalité devant la loi interdit les discriminations arbitraires. Mais elle n’empêche pas toute différence de traitement lorsque celle-ci repose sur des critères objectifs et justifiés."
+),
 
-makeQuestion("v2-024", 2, "Valeurs", "Que garantit la liberté de conscience dans la tradition républicaine française ?", "Uniquement la liberté de pratiquer une religion dans le cadre d'un culte reconnu par l'État français", "Le droit de choisir librement sa religion parmi les cultes reconnus par le Concordat de 1801", "Exclusivement le droit à l'athéisme et à l'agnosticisme, la République laïque ne reconnaissant pas les religions", "Le droit de toute personne de choisir ou non une religion, de la pratiquer ou de la changer, sans contrainte de l'État ni de la société", "D", "La liberté de conscience — héritée des Lumières et consacrée par la loi de 1905 — garantit à chacun le droit d'avoir ou de ne pas avoir de convictions religieuses ou philosophiques, de les changer et de les exprimer dans la sphère privée. Elle est garantie par l'article 10 de la DDHC ('nul ne doit être inquiété pour ses opinions, même religieuses') et par l'article 9 de la CEDH. C'est un droit individuel, non collectif."),
+makeQuestion("v2-024", 2, "Valeurs", "Que garantit la liberté de conscience ?",
+  "Uniquement la pratique d’une religion reconnue",
+  "Le choix d’une religion imposée par l’État",
+  "Le droit à l’athéisme seulement",
+  "Le droit de croire, de ne pas croire ou de changer de conviction",
+  "D",
+  "La liberté de conscience garantit à chacun le droit d’avoir une religion, de ne pas en avoir, ou d’en changer, sans contrainte de l’État."
+),
 
-makeQuestion("v2-025", 2, "Valeurs", "Quel organisme est chargé en France de contrôler la constitutionnalité des lois et de garantir le respect des droits fondamentaux ?", "Le Conseil constitutionnel, créé par la Constitution de 1958, qui contrôle la conformité des lois à la Constitution avant ou après promulgation", "La Cour de cassation, qui annule les décisions contraires aux droits fondamentaux dans les litiges entre particuliers", "Le Conseil d'État, seul compétent pour contrôler le respect des droits constitutionnels par toutes les autorités publiques", "Le Défenseur des droits, autorité constitutionnelle qui censure toute loi attentatoire aux libertés", "A", "Le Conseil constitutionnel, créé par la Constitution de 1958, contrôle la conformité des lois à la Constitution. Depuis la réforme de 2008, il peut être saisi a posteriori via la Question prioritaire de constitutionnalité (QPC). Il est composé de 9 membres nommés pour 9 ans non renouvelables. Sa décision s'impose à toutes les autorités publiques. Il est le gardien des droits fondamentaux dans l'ordre interne."),
-
+makeQuestion("v2-025", 2, "Valeurs", "Quel organisme contrôle en France la conformité des lois à la Constitution ?",
+  "Le Conseil constitutionnel",
+  "La Cour de cassation",
+  "Le Conseil d’État",
+  "Le Défenseur des droits",
+  "A",
+  "Le Conseil constitutionnel contrôle la conformité des lois à la Constitution. Il joue un rôle essentiel dans la protection de l’ordre constitutionnel et des droits fondamentaux."
+),
 makeQuestion("v2-026", 2, "Valeurs", "Qu'est-ce que le principe de 'fraternité' dans la devise républicaine française 'Liberté, Égalité, Fraternité' ?", "Un principe sans valeur juridique contraignante, de nature purement symbolique, sans effet sur le droit positif français", "Une valeur constitutionnelle impliquant la solidarité entre citoyens, consacrée par le Conseil constitutionnel comme fondement d'une liberté d'aide à autrui en 2018", "Un devoir légal imposant à chaque citoyen d'aider financièrement les plus démunis sous peine de sanction pénale", "Un principe exclusivement applicable aux membres de la nation française, excluant les étrangers en situation régulière", "B", "Le Conseil constitutionnel, dans sa décision du 6 juillet 2018, a consacré la fraternité comme principe à valeur constitutionnelle et en a déduit une liberté d'aider autrui. Il a ainsi déclaré inconstitutionnelle la pénalisation de l'aide humanitaire aux étrangers en situation irrégulière. C'est la première fois que la fraternité produisait directement des effets juridiques contraignants."),
 
 makeQuestion("v2-027", 2, "Valeurs", "Comment l'article 4 de la DDHC de 1789 définit-il la liberté ?", "Comme le droit de faire tout ce que l'on veut, sans aucune limite ni contrainte imposée par la société ou l'État", "Comme l'absence de toute loi contraignante, la liberté étant l'état naturel de l'homme antérieur à toute organisation sociale", "Comme le droit de résister à l'oppression, seule forme de liberté reconnue par les rédacteurs révolutionnaires de la Déclaration", "Comme le pouvoir de faire tout ce qui ne nuit pas à autrui — ses limites ne pouvant être déterminées que par la loi", "D", "L'article 4 de la DDHC dispose : 'La liberté consiste à pouvoir faire tout ce qui ne nuit pas à autrui. Ainsi, l'exercice des droits naturels de chaque homme n'a de bornes que celles qui assurent aux autres membres de la société la jouissance de ces mêmes droits. Ces bornes ne peuvent être déterminées que par la loi.' Cette définition fonde le libéralisme classique et le principe que seule la loi peut restreindre la liberté."),
@@ -511,82 +590,90 @@ export const VALEURS_L3: Question[] = [
     "v3-001", 3, "Valeurs",
     "La liberté d’expression en France est :",
     "Totale, sans aucune limite",
-    "Un droit fondamental mais encadré par des limites pour protéger autrui",
+    "Un droit fondamental encadré par la loi pour protéger autrui",
     "Réservée aux citoyens français uniquement",
     "Interdite sur internet",
     "B",
-    "La liberté d’expression est un droit fondamental, mais elle a des limites (injure, diffamation, haine, apologie de crimes). Piège : croire que c’est illimité. Source : Livret du citoyen (févr. 2022), p.4."
+    "La liberté d’expression est un droit fondamental, mais elle connaît des limites prévues par la loi, notamment en cas d’injure, de diffamation ou d’incitation à la haine."
   ),
+
   makeQuestion(
     "v3-002", 3, "Valeurs",
     "La laïcité signifie principalement que :",
     "L’État favorise une religion majoritaire",
     "Les affaires religieuses et les affaires publiques sont séparées",
-    "La religion est interdite",
+    "La religion est interdite en France",
     "Les croyants ont plus de droits civiques",
     "B",
-    "La laïcité = séparation des affaires religieuses et publiques. Piège : confondre laïcité et interdiction de religion. Source : Livret, p.7."
+    "La laïcité repose sur la séparation des affaires religieuses et des affaires publiques, ainsi que sur la neutralité de l’État."
   ),
+
   makeQuestion(
     "v3-003", 3, "Valeurs",
-    "La loi de 1905 est associée à :",
+    "La loi de 1905 est principalement associée à :",
     "L’abolition de l’esclavage",
     "La séparation des Églises et de l’État",
     "La création de l’Union européenne",
     "La création du Code civil",
     "B",
-    "La loi de 1905 consacre la séparation des Églises et de l’État. Piège : confondre les grandes dates. Source : Livret, p.7."
+    "La loi de 1905 affirme la séparation des Églises et de l’État et constitue un repère majeur de la laïcité française."
   ),
+
   makeQuestion(
     "v3-004", 3, "Valeurs",
-    "Selon le livret, il est interdit à quiconque :",
+    "Selon les principes républicains, il est interdit à quiconque :",
     "De pratiquer une religion",
     "De critiquer une religion",
     "De se prévaloir de ses croyances pour s’affranchir des règles communes",
     "De voter s’il est croyant",
     "C",
-    "On ne peut pas invoquer ses croyances pour échapper aux règles communes. Piège : croire que la laïcité vise les croyants. Source : Livret, p.7."
+    "Nul ne peut invoquer ses croyances pour se soustraire aux règles communes de la République."
   ),
+
   makeQuestion(
     "v3-005", 3, "Valeurs",
-    "L’égalité femmes-hommes :",
-    "Est une option personnelle sans impact administratif",
-    "N’est pas prise en compte lors d’une demande de nationalité",
-    "Fait partie des valeurs essentielles évaluées pendant l’entretien",
-    "Ne concerne que le travail",
+    "L’égalité entre les femmes et les hommes :",
+    "Est une opinion personnelle sans effet concret",
+    "N’est pas prise en compte dans l’évaluation de l’assimilation",
+    "Fait partie des valeurs essentielles de la République",
+    "Ne concerne que le monde du travail",
     "C",
-    "Le livret indique que le non-respect de l’égalité femmes-hommes peut être un motif de refus. Piège : minimiser ce point. Source : Livret, p.5."
+    "L’égalité entre les femmes et les hommes est une valeur fondamentale de la République et un élément important de l’assimilation."
   ),
+
   makeQuestion(
     "v3-006", 3, "Valeurs",
-    "Une discrimination au travail est définie comme :",
-    "Traiter moins favorablement quelqu’un pour un motif personnel (origine, sexe, religion, etc.)",
-    "Donner une prime au plus ancien",
-    "Choisir un candidat plus compétent",
-    "Refuser un poste pour manque de diplôme",
+    "Une discrimination au travail consiste à :",
+    "Traiter moins favorablement une personne pour un motif interdit",
+    "Donner une prime au salarié le plus ancien",
+    "Choisir un candidat plus qualifié",
+    "Refuser un poste faute de diplôme requis",
     "A",
-    "Une discrimination = traitement défavorable fondé sur un critère interdit. Piège : confondre compétence et discrimination. Source : Livret, p.6."
+    "Une discrimination est un traitement défavorable fondé sur un critère interdit par la loi, comme l’origine, le sexe ou la religion."
   ),
+
   makeQuestion(
     "v3-007", 3, "Valeurs",
-    "La fraternité, dans le livret, est illustrée notamment par :",
+    "La fraternité peut être illustrée notamment par :",
     "Le service militaire obligatoire en temps de paix",
-    "La sécurité sociale (depuis 1945) financée par cotisations et impôts",
+    "La Sécurité sociale financée par la solidarité collective",
     "La suppression des impôts",
     "La création des régions en 1958",
     "B",
-    "La Sécurité sociale est citée comme exemple de solidarité/fraternité. Piège : mélanger fraternité et défense. Source : Livret, p.6."
+    "La fraternité s’exprime notamment à travers la solidarité nationale, dont la Sécurité sociale est un exemple."
   ),
+
   makeQuestion(
     "v3-008", 3, "Valeurs",
-    "« Nul n’est censé ignorer la loi » signifie :",
+    "« Nul n’est censé ignorer la loi » signifie que :",
     "Seuls les juristes doivent connaître la loi",
     "La loi s’applique à tous, même si on ne la connaît pas",
-    "La loi s’applique uniquement aux citoyens",
+    "La loi s’applique seulement aux citoyens français",
     "On peut refuser une règle si elle n’a pas été expliquée",
     "B",
-    "L’ignorance de la loi n’empêche pas son application. Piège : croire que l’ignorance excuse. Source : Livret, p.8."
+    "L’ignorance de la loi n’empêche pas son application."
   ),
+
   makeQuestion(
     "v3-009", 3, "Valeurs",
     "Les lois et codes officiels sont consultables notamment sur :",
@@ -595,198 +682,261 @@ export const VALEURS_L3: Question[] = [
     "facebook.com",
     "leboncoin.fr",
     "A",
-    "Légifrance est la source officielle pour lois et codes. Piège : prendre une source non officielle. Source : Livret, p.7."
+    "Légifrance est la source officielle de consultation des lois, décrets et codes français."
   ),
+
   makeQuestion(
     "v3-010", 3, "Valeurs",
-    "Dans la Déclaration de 1789, le principe de souveraineté réside :",
-    "Dans le Président",
+    "Dans la Déclaration des droits de l’homme et du citoyen de 1789, la souveraineté réside principalement :",
+    "Dans le Président de la République",
     "Dans la Nation",
     "Dans le Sénat",
     "Dans le Gouvernement",
     "B",
-    "DDHC art.3 : la souveraineté réside essentiellement dans la Nation. Piège : confondre avec un organe. Source : Livret, p.24."
+    "La Déclaration de 1789 affirme que la souveraineté réside essentiellement dans la Nation."
   ),
 
-  // DDHC (adaptée)
   makeQuestion(
     "v3-011", 3, "Valeurs",
-    "DDHC art.6 : la loi est :",
+    "Selon l’article 6 de la DDHC, la loi est :",
     "Une décision du Président",
     "L’expression de la volonté générale",
     "Une coutume locale",
     "Une règle religieuse",
     "B",
-    "DDHC art.6 : la loi est l’expression de la volonté générale. Piège : confondre loi et règles religieuses. Source : Livret, p.24."
+    "L’article 6 de la DDHC affirme que la loi est l’expression de la volonté générale."
   ),
+
   makeQuestion(
     "v3-012", 3, "Valeurs",
-    "DDHC art.4 : la liberté consiste à :",
-    "Faire tout ce que l’on veut, même si cela nuit",
+    "Selon l’article 4 de la DDHC, la liberté consiste à :",
+    "Faire tout ce que l’on veut, même si cela nuit aux autres",
     "Faire tout ce qui ne nuit pas à autrui",
     "Obéir au plus fort",
-    "Suivre uniquement ses opinions",
+    "Suivre uniquement ses propres opinions",
     "B",
-    "DDHC art.4 : liberté = faire tout ce qui ne nuit pas à autrui. Piège : croire à l’absence totale de limites. Source : Livret, p.24."
+    "La liberté consiste à pouvoir faire tout ce qui ne nuit pas à autrui."
   ),
+
   makeQuestion(
     "v3-013", 3, "Valeurs",
-    "DDHC art.16 associe l’existence d’une Constitution à :",
+    "Selon l’article 16 de la DDHC, l’existence d’une Constitution suppose :",
     "L’existence d’un roi",
-    "La liberté religieuse",
+    "La liberté religieuse uniquement",
     "La garantie des droits et la séparation des pouvoirs",
-    "La richesse économique",
+    "La richesse économique du pays",
     "C",
-    "DDHC art.16 : pas de Constitution sans garantie des droits + séparation des pouvoirs. Source : Livret, p.25."
+    "L’article 16 affirme qu’il n’y a pas de Constitution sans garantie des droits et sans séparation des pouvoirs."
   ),
+
   makeQuestion(
     "v3-014", 3, "Valeurs",
-    "DDHC art.10 : nul ne doit être inquiété pour ses opinions (même religieuses), à condition que :",
+    "Selon l’article 10 de la DDHC, nul ne doit être inquiété pour ses opinions, même religieuses, à condition que :",
     "Il demande l’autorisation au préfet",
     "Leur manifestation ne trouble pas l’ordre public établi par la loi",
     "Il soit né en France",
     "Il ne parle pas de politique",
     "B",
-    "DDHC art.10 : opinions ok si pas de trouble à l’ordre public. Piège : croire que c’est sans condition. Source : Livret, p.25."
+    "La liberté d’opinion, y compris religieuse, est garantie tant que son expression ne trouble pas l’ordre public."
   ),
+
   makeQuestion(
     "v3-015", 3, "Valeurs",
-    "DDHC art.11 : la libre communication des pensées est :",
-    "Un droit précieux, sauf abus sanctionnés par la loi",
+    "Selon l’article 11 de la DDHC, la libre communication des pensées et des opinions est :",
+    "Un droit précieux, sous réserve de répondre des abus prévus par la loi",
     "Interdite en période électorale",
     "Réservée à la presse",
     "Une obligation de parler",
     "A",
-    "DDHC art.11 : droit précieux, mais responsabilité en cas d’abus. Source : Livret, p.25."
+    "La libre communication des pensées est un droit précieux, mais les abus peuvent être sanctionnés par la loi."
   ),
+
   makeQuestion(
     "v3-016", 3, "Valeurs",
-    "DDHC art.13 : l’impôt doit être :",
+    "Selon l’article 13 de la DDHC, l’impôt doit être :",
     "Le même montant pour tous",
-    "Réparti selon les facultés (moyens) de chacun",
-    "Uniquement pour les salariés",
-    "Uniquement pour les propriétaires",
+    "Réparti selon les facultés de chacun",
+    "Réservé aux salariés",
+    "Réservé aux propriétaires",
     "B",
-    "DDHC art.13 : contribution commune répartie selon les facultés. Piège : ‘égalité’ ≠ même somme. Source : Livret, p.25."
+    "La contribution commune doit être répartie selon les facultés de chacun, et non être identique en montant pour tous."
   ),
+
   makeQuestion(
     "v3-017", 3, "Valeurs",
-    "DDHC art.9 : une personne est présumée innocente :",
+    "Selon l’article 9 de la DDHC, une personne est présumée innocente :",
     "Jusqu’à ce qu’elle avoue",
     "Jusqu’à ce qu’elle soit déclarée coupable",
     "Uniquement si elle est française",
-    "Uniquement au tribunal administratif",
+    "Uniquement devant le tribunal administratif",
     "B",
-    "DDHC art.9 : présomption d’innocence jusqu’à déclaration de culpabilité. Source : Livret, p.25."
+    "La présomption d’innocence signifie qu’une personne est innocente tant qu’elle n’a pas été déclarée coupable."
   ),
+
   makeQuestion(
     "v3-018", 3, "Valeurs",
-    "DDHC art.2 : droits naturels et imprescriptibles =",
-    "Liberté, propriété, sûreté, résistance à l’oppression",
-    "Travail, repos, vacances, logement",
-    "Santé, retraite, école",
-    "Vote, mariage, divorce, adoption",
+    "Selon l’article 2 de la DDHC, les droits naturels et imprescriptibles de l’homme sont :",
+    "La liberté, la propriété, la sûreté et la résistance à l’oppression",
+    "Le travail, le repos, les vacances et le logement",
+    "La santé, la retraite, l’école et l’emploi",
+    "Le vote, le mariage, le divorce et l’adoption",
     "A",
-    "DDHC art.2 : liberté, propriété, sûreté, résistance à l’oppression. Piège : confondre avec droits sociaux modernes. Source : Livret, p.24."
+    "L’article 2 de la DDHC énumère quatre droits naturels et imprescriptibles : liberté, propriété, sûreté et résistance à l’oppression."
   ),
+
   makeQuestion(
     "v3-019", 3, "Valeurs",
-    "DDHC art.17 qualifie la propriété comme :",
+    "Selon l’article 17 de la DDHC, la propriété est :",
     "Un droit secondaire",
     "Un droit inviolable et sacré",
     "Un privilège religieux",
     "Un droit réservé aux nationaux",
     "B",
-    "DDHC art.17 : propriété = droit inviolable et sacré (privation possible sous conditions). Source : Livret, p.25."
+    "La propriété est qualifiée par la DDHC de droit inviolable et sacré, même si elle peut faire l’objet de limites dans les conditions prévues par la loi."
   ),
+
   makeQuestion(
     "v3-020", 3, "Valeurs",
-    "Le livret insiste : l’adhésion aux valeurs républicaines s’exprime :",
-    "Uniquement pendant l’entretien",
-    "Par le respect et la mise en œuvre au quotidien (famille et société)",
+    "L’adhésion aux valeurs de la République se manifeste surtout :",
+    "Uniquement pendant l’entretien de naturalisation",
+    "Par le respect et la mise en pratique de ces valeurs dans la vie quotidienne",
     "Par l’appartenance à un parti politique",
     "Par l’origine de naissance",
     "B",
-    "L’adhésion se voit dans la vie quotidienne. Piège : croire que c’est seulement un discours. Source : Livret, p.3."
+    "L’adhésion aux valeurs de la République se vérifie dans les comportements du quotidien, dans la famille comme dans la société."
   ),
 
-  makeQuestion("v3-021", 3, "Valeurs", "Pourquoi la décision du Conseil constitutionnel du 16 juillet 1971 est-elle considérée comme une révolution juridique dans l'histoire du droit français ?", "Parce qu'elle a accordé pour la première fois aux citoyens le droit de saisir directement le Conseil constitutionnel par voie de QPC sans attendre un procès", "Parce qu'elle a abrogé la loi de 1905 sur la séparation des Églises et de l'État, la jugeant contraire aux principes fondamentaux de la Révolution", "Parce qu'elle a intégré le Préambule de la Constitution de 1946 et la DDHC de 1789 dans le bloc de constitutionnalité, transformant le Conseil constitutionnel de gardien des compétences en protecteur des droits fondamentaux", "Parce qu'elle a accordé au Conseil constitutionnel le droit de contrôler les traités internationaux avant leur ratification", "C", "Avant 1971, le Conseil constitutionnel était conçu comme un simple régulateur des compétences entre pouvoirs, non comme un protecteur des droits. La décision du 16 juillet 1971 sur la liberté d'association intègre le Préambule de 1958 (qui renvoie à celui de 1946 et à la DDHC de 1789) dans les normes de contrôle constitutionnel. Cette révolution copernicienne transforme le Conseil en véritable juge des libertés fondamentales, ancêtre de la QPC créée en 2008."),
+makeQuestion("v3-021", 3, "Valeurs", "Pourquoi la décision du Conseil constitutionnel du 16 juillet 1971 est-elle une date majeure ?",
+  "Parce qu’elle crée directement la QPC",
+  "Parce qu’elle annule la loi de 1905",
+  "Parce qu’elle fait des droits et libertés de 1789 et du Préambule de 1946 de véritables normes de référence constitutionnelle",
+  "Parce qu’elle donne au Conseil constitutionnel le contrôle exclusif des traités",
+  "C",
+  "La décision de 1971 sur la liberté d’association marque un tournant majeur : elle fait du bloc de constitutionnalité un véritable instrument de protection des droits et libertés fondamentaux."
+),
 
-makeQuestion("v3-022", 3, "Valeurs", "Quelle tension fondamentale la jurisprudence de la Cour EDH révèle-t-elle concernant la laïcité française ?", "La Cour sanctionne systématiquement la France pour violation de la liberté religieuse, estimant que toute législation laïque est contraire à la CEDH", "La Cour considère que la laïcité française est entièrement conforme à la CEDH, ayant validé toutes les lois restreignant les signes religieux dans l'espace public", "La Cour n'a jamais eu à examiner des affaires mettant en cause la laïcité française, les requêtes étant toujours déclarées irrecevables", "La Cour accorde aux États une marge nationale d'appréciation pour définir leur modèle de laïcité, mais contrôle que les restrictions à la liberté religieuse ne soient pas disproportionnées — créant une tension entre l'universalisme de la CEDH et le particularisme français", "D", "La Cour EDH a validé l'interdiction du voile intégral (S.A.S. c. France, 2014) et du voile à l'école (Dogru c. France, 2008) en utilisant la doctrine de la 'marge d'appréciation nationale' : chaque État peut définir son modèle de laïcité si la restriction poursuit un but légitime ('vivre ensemble') et n'est pas disproportionnée. Mais cette marge n'est pas illimitée : la Cour contrôle que les mesures ne violent pas le noyau dur de la liberté religieuse, créant une tension persistante avec le modèle français."),
+makeQuestion("v3-022", 3, "Valeurs", "La jurisprudence de la Cour européenne des droits de l’homme à propos de la laïcité française montre surtout que :",
+  "La France est systématiquement condamnée",
+  "Toutes les restrictions françaises sont toujours validées sans contrôle",
+  "La Cour refuse toujours d’examiner ces affaires",
+  "Les États disposent d’une marge d’appréciation, mais les restrictions doivent rester proportionnées",
+  "D",
+  "La Cour européenne des droits de l’homme admet qu’un État organise son propre modèle de laïcité, mais elle vérifie que les restrictions à la liberté religieuse restent proportionnées."
+),
 
-makeQuestion("v3-023", 3, "Valeurs", "Sur quels fondements philosophiques l'universalisme des droits de l'homme tel que proclamé en France peut-il être critiqué ?", "Des auteurs comme Alasdair MacIntyre ou Charles Taylor soutiennent que les droits 'universels' reflètent en réalité les valeurs d'une tradition particulière (libérale, occidentale, individualiste) présentées faussement comme universelles, ce qui constitue une forme de domination culturelle", "L'universalisme des droits de l'homme est inattaquable philosophiquement car il repose sur une logique formelle pure, indépendante de tout contexte culturel particulier", "La seule critique valide de l'universalisme est économique : les droits sociaux ne peuvent être universels que dans les pays suffisamment riches", "L'universalisme a été définitivement établi par la Déclaration universelle de l'ONU de 1948, qui fait l'objet d'un consensus mondial total rendant toute critique illégitime", "A", "Le courant communautarien (MacIntyre, Taylor, Sandel) critique l'universalisme libéral : les droits 'naturels' de 1789 reflèteraient une vision particulière de l'être humain — atomisé, individuel, séparé de ses communautés d'appartenance — qui est propre à la tradition libérale occidentale et non universellement partagée. Les cultures non-occidentales opposent à cet universalisme leurs propres conceptions du droit et de la dignité. Ce relativisme culturel challenge la prétention universelle de la DDHC."),
+makeQuestion("v3-023", 3, "Valeurs", "Une critique philosophique classique de l’universalisme des droits de l’homme consiste à dire que :",
+  "Il peut refléter une vision particulière du monde présentée comme universelle",
+  "Il est impossible à discuter philosophiquement",
+  "Il ne pose qu’un problème économique",
+  "Il fait l’objet d’un consensus absolu et définitif",
+  "A",
+  "Certains auteurs estiment que l’universalisme des droits peut porter l’empreinte d’une tradition culturelle particulière, notamment libérale et occidentale."
+),
 
-makeQuestion("v3-024", 3, "Valeurs", "Comment le Conseil constitutionnel a-t-il interprété le principe de fraternité dans sa décision du 6 juillet 2018 ?", "Il a jugé que la fraternité n'est qu'un principe moral sans valeur juridique contraignante, ne pouvant pas fonder de droits ou de libertés", "Il a consacré la fraternité comme principe à valeur constitutionnelle et en a déduit une liberté d'aider autrui, déclarant inconstitutionnelle la pénalisation de l'aide humanitaire aux étrangers en situation irrégulière", "Il a interprété la fraternité comme imposant à l'État l'obligation de financer toutes les associations caritatives sans distinction de statut", "Il a limité la fraternité à l'espace national, estimant qu'elle ne peut fonder aucun droit au bénéfice des étrangers présents sur le territoire", "B", "Saisi d'une QPC soulevée par Cédric Herrou (poursuivi pour avoir aidé des migrants à la frontière), le Conseil constitutionnel décide le 6 juillet 2018 que la fraternité est un principe à valeur constitutionnelle. Il en déduit une 'liberté d'aider autrui, dans un but humanitaire, sans considération de la régularité de son séjour sur le territoire national.' La pénalisation de cette aide (le 'délit de solidarité') est censurée, sauf pour une aide constituant une aide à l'entrée irrégulière."),
+makeQuestion("v3-024", 3, "Valeurs", "Dans sa décision du 6 juillet 2018, le Conseil constitutionnel a jugé que la fraternité :",
+  "N’a qu’une valeur morale",
+  "Est un principe à valeur constitutionnelle permettant de protéger la liberté d’aider autrui dans un but humanitaire",
+  "Oblige l’État à financer toute action associative",
+  "Ne s’applique qu’aux nationaux",
+  "B",
+  "En 2018, le Conseil constitutionnel a reconnu que le principe de fraternité a une valeur constitutionnelle et peut fonder la liberté d’aider autrui dans un but humanitaire."
+),
 
-makeQuestion("v3-025", 3, "Valeurs", "En quoi le principe de laïcité crée-t-il une tension avec les droits des élèves à exprimer leur identité religieuse dans les établissements scolaires publics ?", "Il n'y a aucune tension car la laïcité interdit absolument toute référence religieuse dans les établissements scolaires publics, y compris dans les programmes d'histoire et de philosophie", "La tension est entièrement résolue depuis la loi de 2004 qui a harmonisé toutes les questions relatives à la religion dans l'espace scolaire public", "La laïcité impose la neutralité de l'État et de ses agents, mais doit respecter la liberté de conscience des élèves — la tension porte sur la frontière entre instruction sur les religions et prosélytisme, et sur la distinction entre convictions intimes et signes ostensibles", "La laïcité scolaire impose à tous les élèves, quelle que soit leur religion, un cours hebdomadaire d'éducation laïque pour combattre les influences religieuses familiales", "C", "La loi de 2004 interdit les signes 'ostensibles' mais pas discrets. La liberté de conscience des élèves reste pleinement garantie : ils peuvent avoir des convictions religieuses, prier en silence, refuser de consommer certains aliments à la cantine, s'absenter pour les fêtes religieuses. La tension porte sur la définition du 'signe ostensible' (abaya en 2023) et sur l'équilibre entre protection de l'espace scolaire comme 'sanctuaire laïque' et respect de la liberté de conscience constitutionnellement garantie."),
+makeQuestion("v3-025", 3, "Valeurs", "Dans les établissements scolaires publics, la laïcité crée une tension principalement entre :",
+  "L’interdiction totale de parler des religions et l’enseignement de l’histoire",
+  "Une règle définitivement stabilisée sans débat",
+  "La neutralité de l’institution scolaire et la liberté de conscience des élèves",
+  "L’obligation d’un enseignement laïque contre les familles",
+  "C",
+  "À l’école publique, la laïcité impose la neutralité de l’institution, mais elle doit aussi respecter la liberté de conscience des élèves. C’est cet équilibre qui suscite les débats les plus sensibles."
+),
+makeQuestion("v3-026", 3, "Valeurs", "Que reprochent surtout les approches communautaristes au modèle républicain français ?", "De trop valoriser l’histoire nationale", "D’ignorer les appartenances culturelles ou religieuses dans la manière de penser l’égalité", "D’accorder trop de place aux communautés dans la vie publique", "De refuser toute citoyenneté commune", "B", "Les approches communautaristes estiment que le modèle républicain traite les individus comme abstraitement égaux, sans toujours prendre en compte leurs appartenances réelles ni certaines discriminations liées à ces appartenances."),
 
-makeQuestion("v3-026", 3, "Valeurs", "Quelle critique le courant communautariste adresse-t-il au modèle républicain d'intégration fondé sur l'universalisme individuel ?", "Le communautarisme critique le modèle républicain pour son excessive tolérance envers les différences culturelles, empêchant l'intégration dans les valeurs nationales partagées", "Le communautarisme n'a aucun fondement philosophique sérieux et constitue uniquement un discours politique visant à fragmenter la société française", "Il critique uniquement la conception économique du modèle républicain, sans remettre en cause son universalisme philosophique", "Le communautarisme soutient que l'identité individuelle est constitutionnellement liée à l'appartenance à une communauté culturelle et que le modèle universaliste français, en ignorant ces appartenances, prive les individus d'une partie de leur identité et nie des inégalités réelles fondées sur l'appartenance groupale", "D", "Les penseurs communautariens (Taylor, Sandel, Walzer) soutiennent que le sujet libéral de la tradition française — individu abstrait, séparé de ses appartenances — est une fiction philosophique. Chaque individu est constitué par ses communautés d'appartenance (famille, religion, ethnie). Ignorer ces appartenances dans l'espace républicain revient à nier des identités réelles et des discriminations systémiques fondées sur l'appartenance de groupe. Ce défi théorique au républicanisme reste central dans les sciences politiques françaises."),
+makeQuestion("v3-027", 3, "Valeurs", "En droit français, le principe de dignité humaine signifie notamment que :", "Certaines atteintes peuvent être interdites même avec le consentement de la personne", "Chacun peut toujours renoncer librement à sa dignité", "La dignité ne concerne que le droit international", "La dignité ne protège que les citoyens français", "A", "Le principe de dignité humaine protège une valeur fondamentale. Le juge admet donc que certaines pratiques puissent être interdites même si la personne concernée y consent."),
 
-makeQuestion("v3-027", 3, "Valeurs", "Quelle est la portée juridique du principe de dignité humaine dégagé par le Conseil constitutionnel en 1994 ?", "Le Conseil constitutionnel a consacré la dignité humaine comme principe à valeur constitutionnelle, qui s'impose même quand l'individu souhaite y renoncer librement — l'ordre public protège la dignité objective contre le consentement subjectif de la personne concernée", "La dignité humaine est uniquement garantie par la CEDH et ne dispose d'aucune assise dans le droit constitutionnel interne français", "Le Conseil constitutionnel a reconnu la dignité humaine comme un droit disponible : chaque individu peut y renoncer librement, l'État n'ayant pas à s'y substituer dans ses choix personnels", "La dignité humaine est garantie uniquement pour les ressortissants français, les étrangers relevant de conventions internationales spécifiques", "A", "En 1994, examinant les lois de bioéthique, le Conseil constitutionnel déduit du Préambule de 1946 le principe de sauvegarde de la dignité humaine. En 1995, le Conseil d'État (arrêt Commune de Morsang-sur-Orge) juge que la dignité humaine constitue une composante de l'ordre public : un spectacle de lancer de nain peut être interdit même si le nain y consent, car la dignité n'est pas un droit individuel disponible. Elle protège une valeur objective, opposable même à la volonté de son titulaire."),
+makeQuestion("v3-028", 3, "Valeurs", "Comment le droit français cherche-t-il à concilier liberté de la presse et vie privée ?", "La presse l’emporte toujours", "La vie privée l’emporte toujours", "Le juge cherche un équilibre selon les circonstances", "Le Parlement décide seul sans contrôle du juge", "C", "La liberté de la presse et le respect de la vie privée sont deux droits importants. Le juge vérifie au cas par cas si l’atteinte à l’un est justifiée et proportionnée par rapport à l’autre."),
 
-makeQuestion("v3-028", 3, "Valeurs", "Comment le Conseil constitutionnel concilie-t-il la liberté de la presse et la protection de la vie privée dans sa jurisprudence ?", "Il considère que la liberté de la presse prime systématiquement sur la vie privée, toute restriction à la liberté d'expression étant inconstitutionnelle", "Il opère une conciliation au cas par cas, admettant que la liberté de la presse peut être limitée pour protéger la vie privée si la restriction est nécessaire et proportionnée — aucun des deux droits ne l'emportant a priori sur l'autre", "Il a établi une hiérarchie fixe : la vie privée prime toujours sur la presse pour les personnalités publiques, tandis que la presse prime toujours pour les personnes privées", "Il considère que la conciliation entre ces deux droits relève exclusivement du Parlement, le juge constitutionnel ne pouvant pas s'y substituer", "B", "Le Conseil constitutionnel reconnaît ces deux droits de valeur constitutionnelle et procède à une conciliation contextuelle. La liberté d'expression d'intérêt public (informer sur les actions d'un élu) peut justifier une atteinte à la vie privée proportionnée. Inversement, la curiosité du public ne justifie pas toutes les intrusions. La Cour EDH (arrêts Von Hannover c. Allemagne) a développé une jurisprudence similaire, distinguant le 'droit à l'information' de la 'satisfaction de la curiosité'."),
+makeQuestion("v3-029", 3, "Valeurs", "Que change l’arrêt Nicolo du Conseil d’État de 1989 ?", "Il supprime la Constitution", "Il permet au juge d’écarter une loi française contraire à un traité international", "Il interdit tout contrôle du droit international", "Il donne au Parlement le dernier mot sur les traités", "B", "L’arrêt Nicolo marque une étape importante : le juge administratif accepte désormais d’écarter une loi incompatible avec un traité régulièrement ratifié."),
 
-makeQuestion("v3-029", 3, "Valeurs", "En quoi l'arrêt Nicolo du Conseil d'État (1989) a-t-il modifié les rapports entre droit national et droit international en France ?", "Il a consacré la supériorité de la Constitution française sur tous les traités internationaux, affirmant la souveraineté absolue du droit national", "Il a confié au Parlement le soin de définir la hiérarchie entre droit international et droit interne, le Conseil d'État refusant de se prononcer", "Il a consacré l'obligation pour le juge administratif d'écarter une loi française contraire à un traité international régulièrement ratifié, reconnaissant la primauté du droit international sur la loi sans remettre en cause la suprématie constitutionnelle", "Il a accordé à tous les ressortissants étrangers le droit de saisir le Conseil d'État pour faire appliquer directement des traités de droits de l'homme", "C", "Avant l'arrêt Nicolo (20 octobre 1989), le Conseil d'État refusait d'écarter une loi postérieure contraire à un traité (théorie de la loi-écran). L'arrêt Nicolo abandonne cette position : le juge administratif accepte désormais d'écarter la loi nationale incompatible avec un traité international régulièrement ratifié. Ce revirement aligne la jurisprudence administrative sur celle de la Cour de cassation (arrêt Jacques Vabre, 1975) et sur l'article 55 de la Constitution."),
+makeQuestion("v3-030", 3, "Valeurs", "Dans une entreprise privée, que dit en substance la jurisprudence européenne sur les signes religieux ?", "Toute interdiction est illégale", "Toute interdiction est automatiquement légale", "L’employeur peut interdire un signe religieux seulement si cela correspond à une règle générale de neutralité", "Seul le client décide", "C", "La jurisprudence européenne admet qu’une entreprise privée puisse imposer une règle de neutralité, mais pas simplement céder à la préférence d’un client ou viser une seule religion."),
 
-makeQuestion("v3-030", 3, "Valeurs", "Quelle tension la jurisprudence de la Cour de justice de l'UE révèle-t-elle avec la conception française de la laïcité dans les entreprises privées ?", "La CJUE a condamné la France pour violation du droit de l'UE en maintenant une conception restrictive de la laïcité contraire aux directives anti-discrimination", "La CJUE a validé intégralement la conception française de la laïcité, estimant qu'elle est pleinement compatible avec le droit de l'UE en toutes ses applications", "Il n'existe aucune tension entre la jurisprudence de la CJUE et la laïcité française, les deux systèmes ayant des sphères d'application entièrement distinctes", "La CJUE a jugé que l'interdiction du voile islamique par un employeur privé peut être justifiée par une politique de neutralité religieuse cohérente, mais que cette règle ne peut pas résulter d'une injonction du client — créant une tension avec les attentes françaises de laïcité dans les entreprises", "D", "Dans les arrêts Achbita (2017) et Bougnaoui (2017), la CJUE a jugé qu'une entreprise privée peut interdire les signes religieux si cette règle s'applique à tous les signes de façon neutre dans le cadre d'une politique de neutralité. Mais un employeur ne peut pas interdire le voile uniquement pour satisfaire la volonté d'un client (pas de laïcité 'commerciale'). Cette nuance est plus restrictive que ce qu'attendaient certains employeurs français, créant une tension entre droit européen de non-discrimination et pratiques françaises."),
+makeQuestion("v3-031", 3, "Valeurs", "Dans la pensée de Rawls, que signifie surtout la neutralité de l’État ?", "L’État doit justifier ses décisions par des raisons accessibles à tous, et non par une religion particulière", "L’État doit interdire toute religion visible dans la société", "L’État doit reconnaître une religion majoritaire", "L’État doit ignorer toute question morale", "A", "Rawls défend l’idée d’une raison publique : dans une démocratie, les décisions collectives doivent pouvoir être justifiées par des arguments compréhensibles par tous."),
 
-makeQuestion("v3-031", 3, "Valeurs", "Quelle critique la pensée de John Rawls permet-elle d'adresser au modèle républicain français de la neutralité de l'État en matière religieuse ?", "Rawls développe l'idée de 'raison publique' : les décisions politiques doivent être justifiables par des arguments accessibles à tous indépendamment de leur religion — ce qui justifie une neutralité de l'État, mais pas nécessairement l'interdiction pour les citoyens d'afficher leurs convictions dans la société civile", "Rawls soutient que la religion est la seule source légitime des valeurs morales en démocratie et critique donc toute forme de neutralité de l'État vis-à-vis des cultes", "Rawls est entièrement favorable au modèle républicain français qu'il cite comme le seul modèle de neutralité libérale pleinement cohérent avec sa théorie de la justice", "Rawls ne s'est jamais intéressé à la laïcité et son œuvre est sans pertinence pour analyser les débats français sur la neutralité de l'État", "A", "Rawls (Théorie de la justice, 1971 ; Libéralisme politique, 1993) développe la 'raison publique' : dans une société pluraliste, les institutions publiques doivent utiliser des arguments accessibles à tous les citoyens, indépendamment de leurs convictions religieuses particulières. Cette neutralité institutionnelle justifie la laïcité de l'État. Mais Rawls ne va pas jusqu'à interdire aux individus d'afficher leurs convictions dans la société civile — nuance qui diverge de la laïcité française appliquée à l'espace scolaire ou aux agents publics."),
+makeQuestion("v3-032", 3, "Valeurs", "Que montre la constitutionnalisation de la liberté de recourir à l’IVG en 2024 ?", "Que la Constitution française ne change jamais", "Que certains droits peuvent être renforcés au plus haut niveau juridique", "Que la loi ordinaire suffit toujours", "Que les droits sociaux remplacent désormais tous les autres droits", "B", "L’inscription de cette liberté dans la Constitution montre que les droits fondamentaux peuvent évoluer et être davantage protégés quand la société le juge nécessaire."),
 
-makeQuestion("v3-032", 3, "Valeurs", "En quoi la constitutionnalisation de la liberté d'avorter en 2024 illustre-t-elle l'évolution du contenu des droits fondamentaux en France ?", "Elle illustre un recul des droits : en constitutionnalisant un droit législatif, le constituant a affaibli la protection parlementaire classique au profit d'une rigidité excessive", "Elle illustre que les droits fondamentaux ne sont pas figés : la France devient le premier pays à constitutionnaliser la liberté de recourir à l'IVG, transformant un droit légal (loi Veil, 1975) en liberté constitutionnelle non susceptible d'être remise en cause par une loi ordinaire", "Elle illustre que la Constitution est devenue un code de morale progressiste, le constituant ayant abandonné la conception classique des droits fondamentaux", "Elle n'illustre aucune évolution, la France ayant toujours constitutionnalisé les grandes avancées sociales, la loi Veil ayant toujours eu une valeur constitutionnelle implicite", "B", "Le 4 mars 2024, le Congrès réuni à Versailles inscrit à l'article 34 de la Constitution que 'la loi détermine les conditions dans lesquelles s'exerce la liberté garantie à la femme d'avoir recours à une interruption volontaire de grossesse.' C'est une première mondiale. Cette constitutionnalisation protège le droit contre toute remise en cause législative future, à l'image de ce qu'a subi Roe v. Wade aux États-Unis en 2022. Elle illustre que les sociétés démocratiques font évoluer leur corpus de droits fondamentaux."),
+makeQuestion("v3-033", 3, "Valeurs", "Quelle tension existe dans l’héritage révolutionnaire entre volonté générale et droits individuels ?", "La volonté générale peut conduire à limiter certaines libertés au nom de l’intérêt commun", "Les droits individuels interdisent toute loi commune", "Les deux notions sont toujours identiques", "La Révolution a supprimé toute liberté individuelle", "A", "La tradition française cherche un équilibre entre les droits de chacun et la loi commune. Cette tension est au cœur de l’histoire constitutionnelle française."),
 
-makeQuestion("v3-033", 3, "Valeurs", "Quelle est la signification philosophique de la tension entre 'volonté générale' rousseauiste et droits naturels dans la DDHC de 1789 ?", "La volonté générale signifie que la majorité peut toujours restreindre les droits des minorités, la démocratie majoritaire n'ayant pas à respecter les droits individuels fondamentaux", "La volonté générale et les droits individuels sont deux concepts entièrement incompatibles dans la pensée de Rousseau, ce qui explique pourquoi la France n'a jamais pu avoir de véritable culture des droits fondamentaux", "La conception rousseauiste pose une tension entre la volonté générale — qui peut imposer des limites aux libertés au nom de l'intérêt commun — et les droits naturels imprescriptibles de la DDHC, tension qui structure le débat entre liberté individuelle et bien commun dans la tradition républicaine française", "La volonté générale de Rousseau garantit l'exercice sans restriction de tous les droits individuels, l'État n'ayant aucun titre pour limiter les libertés au nom de la collectivité", "C", "La DDHC contient une tension interne : l'article 1er proclame des droits naturels imprescriptibles (tradition jusnaturaliste de Locke) mais l'article 4 dispose que les limites à la liberté sont déterminées par la loi, expression de la volonté générale (Rousseau). Cette dualité a des effets concrets : la 'Terreur' a pu se réclamer de la volonté générale tout en bafouant les droits naturels. Ce paradoxe républicain — la liberté garantie par la loi qui peut aussi la restreindre — est constitutif du constitutionnalisme français."),
+makeQuestion("v3-034", 3, "Valeurs", "Pourquoi les PFRLR sont-ils une notion originale du droit constitutionnel français ?", "Parce qu’ils sont écrits noir sur blanc dans la Constitution", "Parce qu’ils ne peuvent venir que de la Ve République", "Parce qu’ils sont dégagés par le juge à partir de grandes lois républicaines antérieures", "Parce qu’ils n’ont aucune valeur juridique", "C", "Les principes fondamentaux reconnus par les lois de la République ne sont pas listés dans la Constitution. Le juge constitutionnel les identifie à partir de grandes traditions républicaines."),
 
-makeQuestion("v3-034", 3, "Valeurs", "En quoi la notion de 'principes fondamentaux reconnus par les lois de la République' (PFRLR) est-elle juridiquement originale ?", "Les PFRLR sont des principes explicitement énumérés dans la Constitution de 1958, qui en donne une liste exhaustive à l'article 34", "Les PFRLR n'ont pas de valeur constitutionnelle : ce sont des principes généraux de droit d'origine jurisprudentielle ne pouvant pas fonder le contrôle de constitutionnalité", "Les PFRLR sont uniquement issus des lois de la IIIe République et ne peuvent plus être dégagés de textes législatifs plus récents", "Les PFRLR sont des principes constitutionnels non écrits que le Conseil constitutionnel dégage lui-même des lois républicaines antérieures à 1946 — méthode créatrice qui permet d'enrichir le bloc de constitutionnalité sans révision formelle de la Constitution", "D", "Le Préambule de 1958 évoque les 'principes fondamentaux reconnus par les lois de la République' sans les citer. Le Conseil constitutionnel les dégage lui-même de l'esprit des lois républicaines antérieures à 1946 : liberté de l'enseignement (1977), libertés de l'enseignement supérieur (1984), droits de la défense (1976), indépendance de la juridiction administrative (1980). Cette méthode créatrice lui permet de constitutionnaliser des principes sans révision de la Constitution, mais suscite des critiques sur le gouvernement des juges."),
+makeQuestion("v3-035", 3, "Valeurs", "Comment le juge constitutionnel traite-t-il le conflit entre liberté d’entreprendre et droit au travail ?", "Il fait toujours primer l’entreprise", "Il fait toujours primer l’emploi", "Il refuse de trancher", "Il cherche à concilier les deux en vérifiant que les restrictions sont justifiées et proportionnées", "D", "Le Conseil constitutionnel ne fait pas primer automatiquement un droit sur l’autre. Il vérifie si les limitations apportées sont justifiées par l’intérêt général et restent proportionnées."),
 
-makeQuestion("v3-035", 3, "Valeurs", "Comment la jurisprudence du Conseil constitutionnel traite-t-elle les conflits entre liberté d'entreprendre et droit au travail ?", "Le Conseil constitutionnel reconnaît ces deux droits de valeur constitutionnelle et procède à leur conciliation, admettant des restrictions à la liberté d'entreprendre si elles sont justifiées par la protection de l'emploi et proportionnées à cet objectif", "Le Conseil considère que la liberté d'entreprendre prime toujours sur le droit au travail, les deux droits ne pouvant pas être conciliés mais seulement hiérarchisés en faveur de la liberté économique", "Le Conseil estime que le droit au travail prime toujours sur la liberté d'entreprendre, l'État ayant l'obligation constitutionnelle de maintenir l'emploi quelles qu'en soient les conséquences", "Le Conseil refuse de trancher ces conflits, estimant qu'ils relèvent du pouvoir discrétionnaire du Parlement, souverain en matière économique", "A", "Le Conseil constitutionnel reconnaît la liberté d'entreprendre comme découlant de l'article 4 de la DDHC et le droit au travail du Préambule de 1946. En cas de conflit, il procède à une conciliation : une loi restreignant la liberté d'entreprendre pour protéger des emplois peut être constitutionnelle si la restriction est nécessaire, proportionnée et ne vide pas la liberté de sa substance. Il a ainsi validé des contraintes sur les plans de sauvegarde de l'emploi tout en censurant des restrictions excessives à la liberté de licencier."),
+makeQuestion("v3-036", 3, "Valeurs", "Pourquoi les lois mémorielles suscitent-elles un débat en France ?", "Parce qu’elles posent la question de l’équilibre entre lutte contre certains discours et liberté d’expression", "Parce qu’elles ont toutes été annulées", "Parce qu’elles interdisent tout travail d’historien", "Parce qu’elles n’ont aucun effet juridique", "A", "Ces lois visent notamment à lutter contre le négationnisme ou à reconnaître certains crimes historiques. Elles soulèvent toutefois la question des limites de la loi dans le domaine de la mémoire et du débat public."),
 
-makeQuestion("v3-036", 3, "Valeurs", "Quelle tension la multiplication des lois mémorielles en France (loi Gayssot 1990, loi Taubira 2001) révèle-t-elle entre liberté d'expression et vérité historique ?", "Ces lois prouvent que la liberté d'expression n'a aucune valeur dans la tradition républicaine française, le Parlement pouvant définir librement des vérités officielles sans contrainte constitutionnelle", "Elles révèlent la tension entre la liberté de la recherche historique et du débat d'idées, et la lutte contre le négationnisme et les discriminations — le Conseil constitutionnel admettant des restrictions à la liberté d'expression à condition qu'elles soient justifiées et proportionnées", "Ces lois n'ont aucune portée juridique réelle, le juge pénal n'ayant jamais condamné quiconque sur leur fondement depuis leur adoption", "Elles constituent une violation manifeste de la Constitution et ont toutes été annulées par le Conseil constitutionnel dès leur adoption pour atteinte à la liberté d'expression", "B", "La loi Gayssot (1990) pénalise la contestation des crimes contre l'humanité reconnus par le tribunal de Nuremberg. La loi Taubira (2001) reconnaît la traite négrière comme crime contre l'humanité. Ces lois soulèvent la tension entre la liberté de l'historien (droit au débat historique) et la lutte contre la diffusion de discours haineux et négationnistes. Le Conseil constitutionnel a validé la loi Gayssot en 2015 (QPC), estimant que la restriction est proportionnée. Des historiens comme Pierre Vidal-Naquet dénoncent le risque de 'vérités d'État' judiciaires."),
+makeQuestion("v3-037", 3, "Valeurs", "Pourquoi la non-discrimination peut-elle entrer en tension avec l’égalité strictement formelle ?", "Parce qu’aider certains groupes vulnérables peut sembler introduire un traitement différent", "Parce que la non-discrimination supprime l’égalité", "Parce que l’égalité interdit toute protection particulière", "Parce que le droit français refuse toute lutte contre les discriminations", "A", "Traiter tout le monde de manière identique ne suffit pas toujours à corriger des inégalités réelles. La lutte contre les discriminations peut donc justifier des mesures spécifiques."),
 
-makeQuestion("v3-037", 3, "Valeurs", "En quoi le principe de non-discrimination peut-il être mis en tension avec le principe d'égalité formelle dans le droit constitutionnel français ?", "Le principe de non-discrimination implique de traiter tous les individus de façon strictement identique, ce qui est exactement l'objet du principe d'égalité formelle — les deux notions sont donc parfaitement synonymes sans aucune tension", "La non-discrimination et l'égalité formelle sont deux notions entièrement opposées : l'une protège les groupes, l'autre les individus, rendant toute conciliation impossible dans le cadre républicain", "L'égalité formelle impose les mêmes règles pour tous mais peut perpétuer des inégalités réelles ; la non-discrimination introduit des protections spécifiques pour des groupes vulnérables — la tension porte sur la compatibilité de ces protections différenciées avec l'universalisme républicain", "Le Conseil constitutionnel a définitivement tranché que le principe de non-discrimination est inconstitutionnel car contraire au principe d'égalité — aucune loi anti-discrimination ne pouvant être adoptée légalement", "C", "L'égalité formelle (mêmes règles pour tous) peut perpétuer des inégalités réelles : appliquer la même règle à des personnes qui ne sont pas dans la même situation produit des inégalités. La non-discrimination introduit des protections spécifiques (pour les femmes, les handicapés, les minorités ethniques) qui traitent différemment pour produire une égalité réelle. Cette tension entre égalité formelle et égalité substantielle est l'une des plus profondes en droit constitutionnel français, le modèle républicain universaliste résistant aux droits différenciés."),
+makeQuestion("v3-038", 3, "Valeurs", "Quel effet principal la Charte de l’environnement a-t-elle eu en France ?", "Elle a supprimé le droit de propriété", "Elle a ajouté des exigences environnementales au bloc de constitutionnalité", "Elle n’a qu’une portée symbolique", "Elle ne concerne que les entreprises privées", "B", "Depuis 2005, la Charte de l’environnement a valeur constitutionnelle. Elle permet au juge de prendre en compte des principes comme le droit à un environnement sain ou le principe de précaution."),
 
-makeQuestion("v3-038", 3, "Valeurs", "Quelle est la portée de la constitutionnalisation de la Charte de l'environnement (2005) sur le régime des droits fondamentaux en France ?", "La Charte n'a aucune portée normative : ses dispositions sont de simples déclarations d'intention politique insusceptibles d'être invoquées devant les juridictions", "Elle crée uniquement des obligations à la charge des seules entreprises privées, l'État et les collectivités étant exemptés de ses exigences", "Elle constitue un retour au droit naturel : les droits environnementaux antérieurs à l'État s'imposent à toutes les autorités sans possibilité de restrictions proportionnées", "Elle enrichit le bloc de constitutionnalité de nouveaux droits (droit à l'environnement sain, principe de précaution) qui peuvent entrer en tension avec des droits économiques classiques (propriété, liberté d'entreprendre) — tensions que le Conseil constitutionnel et le Conseil d'État arbitrent régulièrement", "D", "Depuis son adossement à la Constitution (révision de mars 2005), la Charte de l'environnement a pleine valeur constitutionnelle. Le Conseil constitutionnel l'utilise pour contrôler les lois (autorisation des OGM, utilisation des pesticides). Le Conseil d'État l'a mobilisée dans l'affaire Grande-Synthe (2021) pour condamner l'insuffisance de l'action climatique de l'État. Ces droits environnementaux créent des tensions réelles avec la liberté d'entreprendre et le droit de propriété, le juge devant arbitrer entre intérêt économique et protection de l'environnement."),
+makeQuestion("v3-039", 3, "Valeurs", "Que dirait un positiviste juridique comme Kelsen face à l’idée de droits 'naturels' ?", "Que les droits naturels sont supérieurs à toutes les lois", "Que seuls les droits inscrits dans des normes juridiques valent juridiquement", "Que la morale religieuse fonde tout le droit", "Que la DDHC n’a aucune importance", "B", "Pour Kelsen, un droit vaut parce qu’il est reconnu dans un ordre juridique, non parce qu’il existerait naturellement en dehors du droit."),
 
-makeQuestion("v3-039", 3, "Valeurs", "En quoi la théorie du droit de Kelsen s'oppose-t-elle à la conception jusnaturaliste de la DDHC de 1789 ?", "Kelsen soutient qu'il n'existe pas de droits 'naturels' antérieurs au droit positif : les droits ne sont valides que parce qu'une norme positive les consacre, et non parce qu'ils existent en dehors du droit — ce qui s'oppose à la DDHC qui présente les droits comme 'naturels, inaliénables et sacrés'", "Kelsen est entièrement d'accord avec la conception française des droits naturels et a explicitement cité la DDHC comme la meilleure illustration de sa théorie pure du droit", "Kelsen soutient que les droits naturels existent mais que seule l'Église catholique peut en être la garante légitime, s'opposant ainsi à la conception laïque de la DDHC", "La pensée de Kelsen n'a aucune pertinence pour analyser la DDHC, ses travaux portant exclusivement sur le droit international public", "A", "Hans Kelsen, fondateur du positivisme juridique (Théorie pure du droit, 1934), soutient que le droit est un système de normes positives hiérarchisées, sans fondement moral ou naturel. Pour Kelsen, la validité d'une norme ne tient pas à sa conformité à un droit naturel mais à sa dérivation d'une norme supérieure. La DDHC de 1789, en affirmant que les droits sont 'naturels et imprescriptibles', adopte une position jusnaturaliste radicalement opposée au positivisme kelsenien, qui pose la question : les droits sont-ils valides parce que naturels ou parce que consacrés par la Constitution ?"),
+makeQuestion("v3-040", 3, "Valeurs", "Comment le juge constitutionnel aborde-t-il les lois antiterroristes ?", "Il valide automatiquement toute mesure de sécurité", "Il les refuse toujours au nom des libertés", "Il vérifie que les atteintes aux libertés restent nécessaires et proportionnées", "Il s’en déclare incompétent", "C", "Le Conseil constitutionnel admet que la sécurité peut justifier certaines restrictions, mais il contrôle que ces restrictions ne portent pas une atteinte excessive aux libertés."),
 
-makeQuestion("v3-040", 3, "Valeurs", "Comment la jurisprudence constitutionnelle française traite-t-elle la tension entre sécurité et libertés individuelles dans le contexte antiterroriste ?", "Le Conseil constitutionnel considère que la sécurité nationale prime absolument sur toutes les libertés dès lors qu'une menace terroriste est caractérisée", "Le Conseil opère une conciliation : il admet que des mesures sécuritaires peuvent restreindre certaines libertés (liberté d'aller et venir, vie privée) mais uniquement si elles sont nécessaires, adaptées à la menace et ne créent pas un régime permanent — il a censuré plusieurs dispositions de lois antiterroristes", "Le Conseil a refusé de contrôler les lois antiterroristes, estimant qu'elles relèvent du domaine régalien où le pouvoir politique a une discrétion totale", "Le Conseil a validé intégralement toutes les lois antiterroristes depuis 2001, considérant qu'aucune restriction sécuritaire ne peut constitutionnellement porter atteinte aux libertés fondamentales", "B", "Le Conseil constitutionnel a dégagé de l'article 2 de la DDHC (droit à la sûreté) un objectif de valeur constitutionnelle de sauvegarde de l'ordre public, qui peut justifier des restrictions aux libertés. Mais ces restrictions doivent rester proportionnées. Il a ainsi validé l'état d'urgence de 2015-2017 mais a censuré certaines mesures des lois antiterroristes jugées disproportionnées (perquisitions administratives sans contrôle judiciaire suffisant). La pérennisation de mesures d'exception dans le droit commun par la loi SILT (2017) a fait l'objet d'un contrôle rigoureux."),
+makeQuestion("v3-041", 3, "Valeurs", "Pourquoi le droit à l’oubli numérique pose-t-il des difficultés nouvelles ?", "Parce qu’il oppose la protection de la vie privée à la liberté d’information et à la mémoire collective", "Parce qu’il n’existe pas juridiquement", "Parce qu’il efface automatiquement tout le passé", "Parce qu’il est interdit par le RGPD", "A", "Le droit à l’oubli numérique permet de demander l’effacement ou le déréférencement de certaines données, mais il peut entrer en conflit avec l’intérêt du public à être informé."),
 
-makeQuestion("v3-041", 3, "Valeurs", "Pourquoi le droit à l'oubli numérique soulève-t-il des tensions inédites entre droits fondamentaux à l'ère d'internet ?", "Il est entièrement réglé par le RGPD de 2018, qui a supprimé toute tension entre vie privée et mémoire collective, les deux droits étant désormais parfaitement équilibrés", "Il ne soulève aucune question juridique nouvelle : les règles de la diffamation et de la prescription pénale offrent déjà une protection suffisante", "Le droit à l'effacement des données personnelles passées crée une tension entre la réhabilitation et la vie privée d'un côté, et la liberté d'information et la mémoire collective de l'autre — le RGPD l'admet sous conditions, le juge arbitrant cette tension au cas par cas selon le droit public à l'information", "Il est inconstitutionnel en France car il viole la liberté d'expression et d'information, le Conseil d'État ayant définitivement interdit aux juges de l'appliquer en droit interne", "C", "Le RGPD (article 17) consacre un 'droit à l'effacement' (droit à l'oubli). Mais ce droit entre en conflit avec la liberté d'information et la mémoire collective : faut-il permettre à un ancien condamné d'effacer ses antécédents des résultats de recherche ? À un homme politique de faire disparaître ses anciennes déclarations ? La CJUE (Google Spain, 2014) a reconnu le droit au déréférencement sous conditions. Le juge arbitre entre l'intérêt public à l'information et le droit de la personne à sa réhabilitation et à sa vie privée."),
+makeQuestion("v3-042", 3, "Valeurs", "Pourquoi la reconnaissance faciale et la biométrie soulèvent-elles des questions sensibles ?", "Parce qu’elles n’ont aucun lien avec les libertés", "Parce qu’elles peuvent porter atteinte à la vie privée et à la liberté d’aller et venir", "Parce qu’elles sont interdites partout sans exception", "Parce qu’elles ne concernent que le droit commercial", "B", "Ces technologies permettent de collecter et traiter des données très sensibles. Elles posent donc la question du contrôle, de la proportionnalité et de la protection des libertés individuelles."),
 
-makeQuestion("v3-042", 3, "Valeurs", "Quel enjeu constitutionnel la biométrie et la reconnaissance faciale soulèvent-elles dans le droit français des libertés fondamentales ?", "La biométrie n'est soumise à aucun contrôle constitutionnel particulier en France, étant considérée comme un simple outil administratif sans rapport avec les droits fondamentaux", "La reconnaissance faciale est entièrement interdite en France par la Charte de l'environnement de 2004, qui protège l'identité naturelle de la personne contre toute numérisation", "La biométrie est constitutionnellement obligatoire depuis l'adoption du passeport biométrique en 2006, le Conseil constitutionnel ayant établi son caractère de nécessité publique", "La biométrie soulève des questions constitutionnelles liées à la vie privée, à la liberté d'aller et venir et à la présomption d'innocence — la loi JO 2024 a autorisé la vidéosurveillance algorithmique dans l'espace public sous conditions strictes, suscitant un contrôle constitutionnel attentif", "D", "La biométrie touche au plus intime de l'identité physique d'une personne. Son utilisation par les pouvoirs publics soulève des questions constitutionnelles : atteinte à la vie privée (article 8 CEDH), à la liberté d'aller et venir (article 2 DDHC), et à la présomption d'innocence (article 9 DDHC) si elle conduit à surveiller des populations entières. La loi relative aux Jeux olympiques 2024 a autorisé pour la première fois la vidéosurveillance algorithmique en espace public, sans reconnaissance faciale mais avec identification de comportements suspects — une frontière fragile."),
+makeQuestion("v3-043", 3, "Valeurs", "Que montre l’évolution de la jurisprudence sur la parité femmes-hommes ?", "Que le principe d’égalité interdit toujours toute mesure de parité", "Que la Constitution a été adaptée pour permettre des mesures favorisant une représentation plus équilibrée", "Que la parité est automatiquement obligatoire partout", "Que le Conseil constitutionnel n’a jamais traité cette question", "B", "Le droit français est passé d’une vision très formelle de l’égalité à une approche permettant certaines mesures de correction, notamment après la révision constitutionnelle de 1999."),
 
-makeQuestion("v3-043", 3, "Valeurs", "Quelle est la portée de la jurisprudence constitutionnelle sur l'égalité entre les femmes et les hommes ?", "Le Conseil constitutionnel a évolué : il admettait que le principe d'égalité interdisait les quotas de sexe, mais depuis la révision de 1999, il valide les mesures favorisant la parité comme compatibles avec l'égalité — distinguant discrimination interdite et mesures visant à corriger des inégalités structurelles", "Le Conseil constitutionnel a toujours interprété l'égalité entre hommes et femmes comme strictement formelle, censurant toute mesure de parité ou de discrimination positive fondée sur le sexe", "Le Conseil constitutionnel n'a jamais eu à examiner des questions relatives à l'égalité entre hommes et femmes, ces questions relevant exclusivement des juridictions civiles et pénales ordinaires", "Le Conseil constitutionnel a consacré dès 1958 l'égalité réelle entre hommes et femmes, imposant des mesures de parité dans tous les domaines sans attendre la révision de 1999", "A", "En 1982, le Conseil constitutionnel avait censuré un quota de 25% de femmes sur les listes électorales au nom de l'indivisibilité du corps électoral et du principe d'égalité. La révision constitutionnelle de 1999 a modifié l'article 3 pour permettre la parité. Depuis lors, le Conseil admet que les mesures favorisant l'égal accès des femmes aux mandats électoraux et fonctions électives ne violent pas le principe d'égalité. Cette évolution illustre comment le droit constitutionnel peut s'adapter aux réalités sociales par révision."),
+makeQuestion("v3-044", 3, "Valeurs", "Pourquoi l’interdiction du voile intégral dans l’espace public a-t-elle fait débat ?", "Parce qu’elle n’a aucun lien avec les libertés fondamentales", "Parce qu’elle a été immédiatement annulée", "Parce qu’elle oppose liberté individuelle et conception du vivre ensemble", "Parce qu’elle ne concerne que l’espace privé", "C", "La loi de 2010 a été justifiée par des motifs liés à l’ordre public et au vivre ensemble. Mais elle a aussi été critiquée comme une atteinte réelle à la liberté personnelle et religieuse."),
 
-makeQuestion("v3-044", 3, "Valeurs", "Pourquoi l'interdiction du voile intégral dans l'espace public (loi de 2010) pose-t-elle des questions difficiles de droit constitutionnel et conventionnel ?", "Cette loi est unanimement considérée par les juristes constitutionnels et la Cour de Strasbourg comme pleinement conforme à toutes les normes de droits fondamentaux sans aucune difficulté", "Cette loi a été déclarée inconstitutionnelle par le Conseil constitutionnel pour atteinte disproportionnée à la liberté de conscience, mais maintenue par une décision politique exceptionnelle du Parlement", "Elle soulève une tension entre la liberté individuelle de se vêtir et de manifester ses convictions religieuses, et la notion de 'vivre ensemble' — le Conseil constitutionnel l'a validée, et la Cour de Strasbourg a accepté cette marge d'appréciation tout en reconnaissant que l'atteinte à la liberté religieuse est réelle", "Cette loi ne pose aucune question de droits fondamentaux car elle s'applique à une tenue vestimentaire laïque, sans aucun lien avec la liberté religieuse ou de conscience", "C", "Le Conseil constitutionnel a validé la loi du 11 octobre 2010 interdisant la dissimulation du visage dans l'espace public, en invoquant notamment la 'protection de l'ordre public' et les 'exigences minimales de la vie en société'. La Cour EDH (S.A.S. c. France, grande chambre, 2014) a admis que la France peut invoquer le 'vivre ensemble' comme but légitime, reconnaissant une large marge d'appréciation, mais a noté que l'atteinte à la liberté de religion est réelle et que l'argument sécuritaire ne suffisait pas seul à la justifier."),
+makeQuestion("v3-045", 3, "Valeurs", "Pourquoi la tradition républicaine française se méfie-t-elle souvent de l’accommodement raisonnable ?", "Parce qu’elle privilégie la règle commune applicable à tous plutôt que des dérogations liées aux appartenances religieuses ou culturelles", "Parce qu’elle interdit toute diversité religieuse", "Parce qu’elle adopte le multiculturalisme canadien", "Parce qu’elle n’a pas de conception de l’égalité", "A", "Le modèle républicain français insiste sur l’universalité de la règle commune. Il accepte mal l’idée de dérogations accordées selon les convictions particulières, contrairement à d’autres démocraties libérales."),
 
-makeQuestion("v3-045", 3, "Valeurs", "Quelle tension le modèle républicain d'intégration crée-t-il avec les demandes d'accommodement raisonnable développées dans d'autres démocraties libérales ?", "L'accommodement raisonnable est entièrement compatible avec la laïcité française, de nombreuses juridictions administratives l'appliquant discrètement depuis les années 1990", "L'accommodement raisonnable — aménagement des règles générales pour les personnes dont les convictions religieuses s'y heurtent — est rejeté par la tradition républicaine française qui postule que la règle commune s'applique à tous sans dérogation fondée sur l'appartenance religieuse, à la différence des démocraties libérales qui l'admettent", "L'accommodement raisonnable a été adopté en France par des circulaires ministérielles depuis 2005, rendant le modèle français quasi-identique au modèle canadien", "La notion d'accommodement raisonnable est interdite par le droit de l'UE qui impose à tous les États membres le modèle français de laïcité stricte dans les services publics", "B", "L'accommodement raisonnable, développé par la Cour suprême du Canada (arrêt Central Alberta Dairy Pool, 1990) et institutionnalisé au Québec (rapport Bouchard-Taylor, 2007), consiste à aménager une règle générale pour permettre à une personne de pratiquer sa religion sans trop désavantager l'organisation. La France refuse ce principe dans ses services publics : la règle laïque s'applique à tous sans dérogation. Cette différence reflète deux conceptions opposées de la gestion du pluralisme religieux dans une démocratie libérale."),
+makeQuestion("v3-046", 3, "Valeurs", "Que signifie l’idée de 'noyau dur' d’un droit fondamental ?", "Qu’un droit ne peut jamais être limité", "Qu’un droit peut être encadré sans que son contenu essentiel disparaisse", "Qu’un droit ne vaut que pour certaines catégories", "Qu’un droit n’existe que s’il est absolu", "B", "Un droit fondamental peut faire l’objet de restrictions, mais celles-ci ne doivent pas aller jusqu’à vider ce droit de sa substance."),
 
-makeQuestion("v3-046", 3, "Valeurs", "Que signifie la théorie du 'noyau dur' ou 'essence' des droits fondamentaux en droit constitutionnel contemporain ?", "Une théorie selon laquelle certains droits fondamentaux sont absolus et ne peuvent faire l'objet d'aucune restriction, quel qu'en soit le motif", "Une théorie qui désigne l'ensemble des droits économiques et sociaux formant le cœur incompressible de l'État-providence, insusceptibles de suppression par le législateur", "Une conception selon laquelle les droits fondamentaux n'ont qu'un contenu minimal, tout le reste pouvant être librement défini ou supprimé par le législateur ordinaire", "La théorie selon laquelle toute restriction à un droit fondamental ne doit pas atteindre son contenu essentiel — un droit peut être limité dans certaines circonstances, mais son 'noyau dur' doit toujours être préservé sous peine de vider le droit de sa substance", "D", "La théorie du noyau dur (Wesensgehalt en droit allemand, reprise par la CJUE et implicitement par le Conseil constitutionnel) signifie que même des restrictions proportionnées et justifiées ne peuvent pas anéantir un droit fondamental. La liberté d'expression peut être limitée (diffamation, incitation à la haine) mais ne peut pas être supprimée en son principe. La propriété peut être encadrée (expropriation) mais non confisquée en totalité. Cette notion protège les droits contre leur évidement progressif par le législateur."),
+makeQuestion("v3-047", 3, "Valeurs", "Que veut dire l’idée de la CEDH comme 'instrument vivant' ?", "Que la Convention doit être interprétée en tenant compte des évolutions de la société", "Que chaque État peut la modifier seul", "Que la Convention ne protège plus que des droits anciens", "Qu’elle interdit toute évolution jurisprudentielle", "A", "La Cour européenne des droits de l’homme considère que les textes doivent être lus à la lumière des réalités actuelles. Cela permet d’étendre ou d’adapter la protection de certains droits."),
 
-makeQuestion("v3-047", 3, "Valeurs", "En quoi la doctrine du 'living instrument' développée par la Cour EDH remet-elle en cause une lecture figée des droits fondamentaux ?", "La Cour EDH considère que la CEDH est un 'instrument vivant' à interpréter à la lumière des conditions actuelles et du consensus européen — ce qui lui permet d'élargir la protection des droits (orientation sexuelle, environnement) sans révision textuelle, au risque de créer des obligations nouvelles non acceptées par les États contractants", "Cette doctrine signifie que les États peuvent modifier librement les droits garantis par la CEDH en fonction de l'évolution de leurs sociétés, sans accord des autres membres du Conseil de l'Europe", "Il s'agit d'une doctrine purement académique sans aucune influence sur la jurisprudence réelle de la Cour de Strasbourg, qui interprète la Convention de façon strictement textuelle et historique", "Cette doctrine autorise les États à déroger temporairement à la CEDH en cas de crise grave, cette dérogation pouvant être maintenue indéfiniment si la menace persiste", "A", "La Cour EDH a posé dès 1978 (arrêt Tyrer c. Royaume-Uni) que la Convention est un 'instrument vivant' à interpréter à la lumière des conditions de vie actuelles. Cette méthode lui a permis d'étendre la protection de l'article 8 (vie privée) à l'orientation sexuelle (Dudgeon, 1981), les droits de l'article 6 aux procédures administratives, et d'intégrer implicitement des droits environnementaux. Cette interprétation évolutive est contestée par des États qui estiment qu'elle dépasse le mandat initial du Conseil de l'Europe."),
+makeQuestion("v3-048", 3, "Valeurs", "Pourquoi Isaiah Berlin est-il important dans la réflexion sur les libertés ?", "Parce qu’il rejette toute liberté individuelle", "Parce qu’il montre qu’il existe plusieurs conceptions de la liberté qui peuvent entrer en tension", "Parce qu’il défend un État sans droits fondamentaux", "Parce qu’il supprime toute distinction entre liberté et égalité", "B", "Berlin distingue notamment la liberté négative, c’est-à-dire l’absence d’entrave, et la liberté positive, c’est-à-dire la capacité d’agir réellement. Cette distinction reste importante dans les débats contemporains."),
 
-makeQuestion("v3-048", 3, "Valeurs", "Quel problème philosophique Isaiah Berlin pose-t-il sur la pluralité des libertés et des droits fondamentaux ?", "Berlin soutient que le pluralisme est entièrement compatible avec les droits fondamentaux car il partage les mêmes valeurs universalistes — il n'existe donc aucune tension entre pluralisme et système de droits", "Isaiah Berlin distingue la 'liberté négative' (absence d'interférence) et la 'liberté positive' (capacité réelle d'agir) et soutient que les valeurs peuvent entrer en conflit irréductible — rendant toute hiérarchisation universelle des valeurs illégitime et toute théorie unitaire des droits fondamentaux philosophiquement discutable", "Le pluralisme de Berlin implique que les droits fondamentaux ne peuvent pas être garantis par l'État, chaque individu étant seul responsable de la définition de ses propres droits", "La pluralité des valeurs justifie l'abandon des droits fondamentaux 'universels' au profit de droits entièrement relatifs, déterminés par chaque culture selon ses propres conceptions du bien", "B", "Isaiah Berlin (Deux conceptions de la liberté, 1958) distingue la liberté négative (ne pas être empêché) de la liberté positive (avoir les moyens d'agir). Il avertit que la liberté positive peut conduire au paternalisme ou au totalitarisme si l'État prétend libérer les individus de leurs propres contraintes. Son pluralisme des valeurs (valeurs incommensurables, pas de hiérarchie universelle) challenge les théories qui prétendent déduire un système cohérent de droits d'un principe unique (utilité, liberté, dignité)."),
+makeQuestion("v3-049", 3, "Valeurs", "Quelle différence importante existe entre la France et les États-Unis sur la liberté d’expression ?", "La France protège souvent moins largement certains discours, notamment les discours de haine, que le Premier amendement américain", "La France protège toujours plus la liberté d’expression que les États-Unis", "Les deux systèmes sont strictement identiques", "Les États-Unis interdisent davantage les discours politiques radicaux", "A", "Le droit américain protège très largement la liberté d’expression, y compris pour des propos choquants. En France, certains discours, comme l’incitation à la haine ou le négationnisme, sont pénalement sanctionnés."),
 
-makeQuestion("v3-049", 3, "Valeurs", "En quoi la conception française des droits fondamentaux se distingue-t-elle de la conception américaine du Premier amendement ?", "La France protège beaucoup plus largement la liberté d'expression que les États-Unis, la DDHC étant une protection absolue sans exception possible pour les discours haineux", "La France et les États-Unis ont des conceptions identiques de la liberté d'expression, les deux systèmes accordant une protection quasi-absolue à tous les discours", "La France limite davantage la liberté d'expression que les États-Unis : elle interdit les discours haineux, le négationnisme et l'incitation à la haine, tandis que le Premier amendement américain protège en principe tous les discours sauf menace directe et imminente, y compris les plus odieux selon la doctrine de la 'marketplace of ideas'", "Les États-Unis protègent mieux la liberté d'expression dans le domaine privé, tandis que la France la protège mieux dans l'espace public, les deux systèmes se compensant dans leur bilan global", "C", "Le Premier amendement américain interdit au Congrès de restreindre la liberté d'expression, et la Cour suprême a développé une protection très large : même les discours racistes, le négationnisme et la propagande d'extrême droite sont en principe protégés (affaire Skokie, 1977). La France, au contraire, pénalise l'incitation à la haine raciale (loi Pleven, 1972), la négation des génocides reconnus (loi Gayssot, 1990). Cette différence reflète des histoires et des philosophies distinctes sur les limites de la liberté d'expression."),
+makeQuestion("v3-050", 3, "Valeurs", "Quel débat la binationalité peut-elle susciter en France ?", "Aucun, car elle est interdite", "Elle soulève parfois la question de la loyauté, même si elle est légalement admise", "Elle n’est autorisée que pour les Européens", "Elle entraîne toujours la perte de la nationalité française", "B", "La France admet la binationalité. Mais le sujet revient régulièrement dans le débat public, notamment lorsqu’il est question de fonctions sensibles ou de sécurité nationale."),
 
-makeQuestion("v3-050", 3, "Valeurs", "Quel enjeu constitutionnel la binationalité soulève-t-elle dans la conception républicaine de la citoyenneté française ?", "La binationalité est inconstitutionnelle en France : toute personne acquérant une nationalité étrangère perd automatiquement la nationalité française selon la Constitution", "La binationalité est entièrement acceptée, aucune disposition législative ou constitutionnelle ne prévoyant de restriction ni de questionnement sur les obligations particulières des binationaux", "La binationalité est uniquement admise pour les ressortissants de l'UE, les binationaux extra-européens devant choisir dans un délai de 5 ans", "La binationalité est légalement admise en France mais suscite un débat politique récurrent sur la loyauté des citoyens disposant de deux nationalités — certains proposant d'en restreindre l'accès aux fonctions régaliennes au nom de l'indivisibilité de la République", "D", "La France admet en principe la binationalité, bien que le droit international permette aux États de la refuser pour certaines fonctions. Elle ne décourage pas la détention de deux nationalités. Mais le débat politique est récurrent : des propositions ont été faites pour interdire aux binationaux l'accès aux fonctions de souveraineté (armée, services de renseignement, diplomatie) ou pour déchoir de la nationalité les personnes condamnées pour terrorisme (débat de 2015-2016 sur la révision constitutionnelle). Ce débat révèle la tension entre le modèle civique de citoyenneté et des conceptions plus exclusives de l'appartenance nationale."),
-makeQuestion("v3-051", 3, "Valeurs", "Comment la théorie de la 'reconnaissance' d'Axel Honneth peut-elle enrichir la conception française des droits fondamentaux ?", "Honneth soutient que les droits formels suffisent à garantir la dignité et que toute demande de reconnaissance culturelle ou sociale est étrangère au cadre juridique des droits", "Honneth est en accord total avec la tradition républicaine française, estimant que la citoyenneté universelle est la seule forme de reconnaissance légitime dans une démocratie libérale", "La théorie de la reconnaissance (amour, droits, estime sociale) enrichit le débat sur les droits fondamentaux en montrant que la reconnaissance sociale — au-delà des droits formels — est une condition de la réalisation de soi, ouvrant sur des droits à ne pas être méprisé et à participer pleinement à la société", "La théorie de la reconnaissance est une doctrine uniquement applicable aux États fédéraux multiculturaux comme le Canada, sans pertinence pour la tradition unitaire républicaine française", "C", "Axel Honneth (La Lutte pour la reconnaissance, 1992) distingue trois sphères de reconnaissance : l'amour (relations intimes), les droits (reconnaissance juridique) et l'estime sociale (valorisation des contributions dans la société). Sa théorie complète les droits formels : même un individu disposant de tous ses droits peut souffrir d'un 'mépris social' (discrimination, invisibilité) qui empêche son épanouissement. Elle ouvre sur la question des droits à la reconnaissance culturelle et à la participation sociale, enrichissant la conception libérale classique des droits purement procéduraux."),
-makeQuestion("v3-052", 3, "Valeurs", "Quelle est la signification philosophique de la notion de droits 'inaliénables' dans la DDHC de 1789 ?", "Que les droits fondamentaux peuvent être librement cédés ou vendus par leur titulaire, mais ne peuvent jamais être confisqués par l'État sans indemnisation préalable", "Que les droits procèdent de la nature humaine et qu'aucun individu ne peut y renoncer volontairement ni être contraint d'y renoncer par l'État — ils sont attachés à la personne de façon permanente et inconditionnelle, quelle que soit sa situation juridique", "Que les droits sont inaliénables uniquement dans la sphère privée, l'État pouvant les suspendre dans l'espace public pour des raisons d'ordre public", "Que les droits ne peuvent pas être modifiés par le Parlement même à la majorité qualifiée, la révision constitutionnelle étant impossible pour les droits fondamentaux", "B", "L'article 2 de la DDHC présente la liberté, la propriété, la sûreté et la résistance à l'oppression comme 'droits naturels et imprescriptibles'. L'inaliénabilité signifie que ces droits ne peuvent pas être cédés, vendus ni aliénés volontairement par leur titulaire (on ne peut pas se vendre en esclavage). Ils ne peuvent pas non plus être supprimés arbitrairement par l'État. Cette tradition jusnaturaliste (Locke, Rousseau) oppose les droits naturels aux droits positifs créés par la loi, qui peuvent être modifiés."),
-makeQuestion("v3-053", 3, "Valeurs", "Pourquoi la notion de 'démocratie militante' (streitbare Demokratie) peut-elle être pertinente pour penser les limites de la liberté d'expression en France ?", "La démocratie militante interdit toute expression politique d'opposition et n'a donc aucune pertinence dans une démocratie libérale comme la France", "La démocratie militante implique que la démocratie peut se défendre contre les acteurs qui cherchent à l'abattre par des voies légales — justifiant des restrictions à la liberté d'expression (incitation à la haine, apologie du terrorisme) qui visent à protéger les fondements démocratiques eux-mêmes", "La France applique intégralement la démocratie militante depuis 1945, tous les partis politiques et mouvements pouvant être interdits à la simple discrétion du gouvernement sans contrôle judiciaire", "Cette notion est incompatible avec la CEDH, qui interdit tout encadrement de la liberté d'expression dans les démocraties", "B", "La démocratie militante (streitbare Demokratie), concept issu de la Loi fondamentale allemande de 1949 (après l'expérience nazie), autorise la démocratie à se défendre contre ses ennemis par des moyens démocratiques : interdiction de partis (article 21 GG), déchéance de droits fondamentaux. La France ne l'applique pas aussi explicitement, mais les lois anti-négationnisme, anti-terrorisme et les interdictions de manifestation s'inscrivent dans une logique proche. Le débat porte sur les limites : une démocratie qui restreint trop la liberté d'expression pour se protéger peut-elle encore se dire libérale ?"),
-makeQuestion("v3-054", 3, "Valeurs", "Quel est le défi que pose le pluralisme moral à l'universalisme des droits de l'homme dans le droit international contemporain ?", "Le pluralisme moral confirme l'universalisme des droits de l'homme, toutes les cultures du monde étant parvenues à un accord fondamental sur leur liste et leur contenu", "Le pluralisme moral est sans pertinence pratique pour le droit international des droits de l'homme, qui s'impose à tous les États par voie de traités indépendamment de leurs valeurs culturelles", "Le pluralisme moral (coexistence de systèmes de valeurs différents légitimes) remet en cause la prétention universelle des droits de l'homme en montrant que leur contenu reflète une tradition historique particulière — défi auquel répond la doctrine de la marge d'appréciation nationale de la Cour EDH et les débats sur l'universalisme vs relativisme", "Le pluralisme moral a été définitivement résolu par la Déclaration universelle de 1948, qui fait l'objet d'un consensus mondial total et met fin à tout relativisme culturel légitime", "C", "Le débat universalisme/relativisme est fondamental en droit international des droits de l'homme. L'Occident défend un système universel de droits fondé sur la dignité individuelle. Des États (Chine, certains pays islamiques) contestent ce caractère universel, arguant que leur conception des droits collectifs, de la famille ou de la religion est également légitime. La Cour EDH répond partiellement par la marge d'appréciation nationale. Ce débat révèle que l'universalité des droits est davantage un projet politique qu'une réalité accomplie."),
-makeQuestion("v3-055", 3, "Valeurs", "En quoi la théorie de la justice de John Rawls constitue-t-elle une remise en cause philosophique du droit de propriété absolu ?", "Rawls défend le droit de propriété absolu, estimant qu'il constitue la condition sine qua non de la liberté individuelle et ne peut faire l'objet d'aucune redistribution légitime", "Le voile d'ignorance de Rawls conduit à privilégier des principes de justice qui favorisent les moins bien lotis (principe de différence), justifiant une redistribution fiscale et sociale qui relativise le droit de propriété au nom de l'équité", "Rawls ne s'est jamais intéressé à la propriété, sa théorie de la justice ne traitant que des libertés politiques et ne disant rien des questions économiques", "Rawls soutient que la propriété privée doit être entièrement supprimée et remplacée par une propriété collective gérée par l'État selon les principes de sa théorie de la justice", "B", "Le voile d'ignorance de Rawls (Théorie de la justice, 1971) consiste à imaginer que les individus choisissent les principes de justice sans savoir quelle position ils occuperont dans la société. Dans cette situation, ils choisiraient le principe de différence : les inégalités ne sont légitimes que si elles bénéficient aux membres les moins favorisés. Ce principe justifie une redistribution significative des revenus et des patrimoines, relativisant le droit de propriété absolu : la propriété est un droit fondamental, mais son exercice est conditionné par l'équité sociale."),
-makeQuestion("v3-056", 3, "Valeurs", "Comment la question des droits des personnes LGBTQ+ révèle-t-elle les tensions entre universalisme républicain et reconnaissance des identités ?", "En France, les droits des personnes LGBTQ+ sont entièrement reconnus depuis 1981, le pays étant pionnier mondial en matière d'égalité des droits quelle que soit l'orientation sexuelle", "La question révèle la tension entre le modèle universaliste — qui protège tous les individus sans reconnaissance d'identités particulières — et les demandes de protection spécifique et de reconnaissance de la pluralité des identités sexuelles et de genre, tensions visibles dans les débats sur l'identité de genre et l'état civil", "Il n'existe aucune tension : le modèle républicain universaliste garantit automatiquement tous les droits aux personnes LGBTQ+ sans qu'aucune législation spécifique ne soit nécessaire", "Les droits des personnes LGBTQ+ sont entièrement contraires à la tradition républicaine française, qui n'a jamais reconnu de droits à ce groupe depuis la Révolution", "B", "La France a dépénalisé l'homosexualité en 1981 (Mitterrand), créé le PACS en 1999, ouvert le mariage en 2013. Ces avancées sont encadrées dans un modèle universaliste : on étend des droits existants à tous les individus, sans créer de catégorie identitaire. Mais des tensions subsistent : les débats sur l'identité de genre et le changement d'état civil, sur la GPA, sur la mention du genre à l'état civil (état civil neutre) révèlent les limites du modèle républicain qui protège les individus mais résiste à la reconnaissance institutionnelle des identités de groupe."),
-makeQuestion("v3-057", 3, "Valeurs", "Quel est l'apport spécifique des droits fondamentaux de troisième génération aux deux premières générations ?", "Les droits de troisième génération (droit à un environnement sain, droit au développement, droit à la paix) introduisent des droits collectifs et solidaires qui transcendent les frontières nationales — leur effectivité dépend de la coopération internationale et non seulement de l'action d'un seul État, posant de nouveaux défis au droit constitutionnel", "La troisième génération de droits remplace entièrement les deux premières : les droits civils et politiques classiques auraient été dépassés par les droits économiques et sociaux, eux-mêmes dépassés par les droits collectifs", "Les droits de troisième génération sont uniquement proclamés dans des textes non contraignants et n'ont aucun effet sur les systèmes juridiques nationaux ni sur la responsabilité des États", "Les droits de troisième génération reprennent exactement le contenu des deux premières générations sans innovation conceptuelle, distinguant seulement les droits civils (1re génération) et sociaux (2e génération)", "A", "La première génération couvre les droits civils et politiques (liberté, vote) ; la deuxième les droits économiques et sociaux (travail, santé, éducation) ; la troisième les droits de solidarité (environnement, développement, paix, patrimoine commun de l'humanité). Ces droits collectifs transcendent les individus et les États : le droit à un environnement sain ne peut être garanti par un seul État (changement climatique). Leur mise en œuvre nécessite une coopération internationale et remet en question les paradigmes du droit constitutionnel classique centré sur la relation individu/État."),
-makeQuestion("v3-058", 3, "Valeurs", "Pourquoi la jurisprudence du Conseil constitutionnel sur l'objectif de valeur constitutionnelle (OVC) est-elle juridiquement originale et contestée ?", "Les OVC sont des objectifs que le Conseil constitutionnel impose au Parlement comme obligations positives absolues — le législateur doit impérativement les atteindre sous peine de censure", "Les OVC sont des normes que le Conseil constitutionnel dégage lui-même de la Constitution pour justifier des restrictions aux droits — original car non écrits dans la Constitution, contesté car cela donne au Conseil un pouvoir créateur susceptible de dériver vers le 'gouvernement des juges'", "Les OVC sont une reprise exacte de principes du droit romain classique, sans innovation propre au Conseil constitutionnel français", "Les OVC ont été supprimés par le Conseil constitutionnel lui-même en 1994, qui les avait jugés incompatibles avec la rigueur de la hiérarchie des normes", "B", "Le Conseil constitutionnel a dégagé plusieurs objectifs de valeur constitutionnelle (OVC) qu'il utilise pour justifier des restrictions à des droits fondamentaux : accessibilité et intelligibilité de la loi, lutte contre la fraude fiscale, sauvegarde de l'ordre public, pluralisme des courants d'expression socioculturels. Ces OVC ne sont pas écrits dans la Constitution mais déduits par le Conseil. Cette méthode est originale et efficace, mais contestée : en créant lui-même les normes qui justifient des restrictions aux droits, le Conseil risque d'élargir son propre pouvoir au-delà du texte constitutionnel."),
-makeQuestion("v3-059", 3, "Valeurs", "Comment la jurisprudence constitutionnelle traite-t-elle la liberté contractuelle ?", "La liberté contractuelle n'a aucun fondement constitutionnel en France, les contrats étant entièrement régis par le Code civil sans rapport avec les droits fondamentaux", "Le Conseil constitutionnel a reconnu la liberté contractuelle comme découlant de l'article 4 de la DDHC, mais a admis que le législateur peut y porter atteinte pour des raisons d'intérêt général, notamment pour protéger la partie faible dans les contrats déséquilibrés", "La liberté contractuelle prime sur toute réglementation législative, le Conseil censurant systématiquement toute loi qui modifie les conditions des contrats en cours", "La liberté contractuelle est un principe absolu que le Conseil constitutionnel refuse de voir restreint même pour protéger les consommateurs ou les salariés contre les clauses abusives", "B", "Le Conseil constitutionnel a consacré en 1994 la liberté contractuelle comme découlant de l'article 4 de la DDHC. Mais il admet largement les restrictions du législateur pour des raisons d'intérêt général : protection du consommateur, du salarié, de l'emprunteur immobilier, de l'environnement. Il n'y a pas d'intangibilité des contrats en cours. Cette jurisprudence équilibrée permet le développement de l'État social régulateur tout en préservant le principe de l'autonomie de la volonté contractuelle."),
-makeQuestion("v3-060", 3, "Valeurs", "Quelles tensions la conception française de l'égalité crée-t-elle avec les demandes de statistiques ethniques ?", "La France collecte systématiquement des statistiques ethniques depuis 1978 dans tous les domaines, sans débat ni restriction constitutionnelle particulière", "La Constitution interdit explicitement toute catégorisation ethnique dans les statistiques publiques, consacrant textuelle ment l'invisibilité des origines dans les données de l'État", "Le refus français des statistiques ethniques — fondé sur l'article premier de la Constitution et la loi de 1978 — empêche de mesurer objectivement les discriminations et inégalités fondées sur l'origine, créant une tension entre le principe d'égalité formelle et la nécessité d'outils pour combattre les inégalités réelles", "Les statistiques ethniques sont autorisées en France pour les seules enquêtes de victimologie criminelle, le Parlement ayant explicitement créé cette exception en 2006", "C", "La Cour de cassation et le Conseil constitutionnel ont posé que les données relatives à l'origine 'raciale ou ethnique' ne peuvent être collectées dans les fichiers publics (décision CC 2007, interprétation de la loi de 1978 sur l'informatique et les libertés). Ce refus, fondé sur le principe républicain d'indivisibilité, empêche de mesurer précisément les discriminations ethniques dans l'emploi ou le logement. Le Comité ONU pour l'élimination de la discrimination raciale a critiqué cette position. La tension persiste entre universalisme républicain et nécessité d'outils statistiques pour identifier et combattre les discriminations réelles."),
-makeQuestion("v3-061", 3, "Valeurs", "Quelle est la portée constitutionnelle du droit de propriété en France et quelles restrictions l'État peut-il lui apporter ?", "Le droit de propriété est absolu en France depuis la Révolution, l'État ne pouvant en aucun cas exproprier un citoyen même pour des raisons d'utilité publique", "L'article 17 de la DDHC garantit le droit de propriété mais admet l'expropriation pour nécessité publique légalement constatée et moyennant une juste indemnité préalable — l'État peut aussi le restreindre par la loi pour des raisons d'intérêt général proportionnées", "Le droit de propriété n'a plus de valeur constitutionnelle depuis que la Charte de l'environnement de 2004 lui a substitué un droit collectif à un environnement sain", "Le droit de propriété est garanti uniquement pour les biens immobiliers, les biens mobiliers et les droits intellectuels relevant de régimes différents sans protection constitutionnelle spécifique", "B", "L'article 17 de la DDHC consacre le droit de propriété comme 'un droit inviolable et sacré' mais admet l'expropriation 'en cas de nécessité publique légalement constatée' et moyennant 'juste et préalable indemnité'. Le Conseil constitutionnel a développé une jurisprudence nuancée : il admet des restrictions à la propriété pour des raisons d'intérêt général (urbanisme, protection de l'environnement, préemption) mais censure les atteintes excessives qui vidaient le droit de sa substance ou n'étaient pas proportionnées au but poursuivi."),
-makeQuestion("v3-062", 3, "Valeurs", "Comment la jurisprudence administrative française concilie-t-elle le principe de laïcité avec les obligations de service public dans les cantines scolaires ?", "La laïcité oblige les cantines scolaires à ne servir qu'un menu unique sans alternative, toute dérogation étant considérée comme une reconnaissance inadmissible des convictions religieuses des élèves", "Le Conseil d'État a jugé que les collectivités ont le pouvoir de proposer des menus alternatifs pour satisfaire les convictions religieuses des élèves, sans y être obligées — créant une liberté d'organiser sans obligation de le faire, ce qui est parfois vécu comme une inégalité entre les communes", "Les cantines scolaires sont constitutionnellement obligées de proposer des menus halal et kasher à la demande des élèves, la neutralité religieuse interdisant toute discrimination alimentaire liée aux convictions", "Le Conseil d'État a interdit toute adaptation des menus aux convictions religieuses dans les cantines, la laïcité imposant un traitement alimentaire identique pour tous", "B", "Le Conseil d'État (arrêt Ville de Lyon, 2011 et circulaire Chatel 2011) a précisé que les collectivités n'ont aucune obligation de proposer des menus alternatifs sans porc, mais en ont la faculté. La neutralité de l'État ne lui impose pas de satisfaire toutes les exigences confessionnelles, mais ne lui interdit pas non plus d'y répondre si elles le jugent opportun. Cette jurisprudence crée des inégalités selon les communes, certaines proposant des alternatives, d'autres non."),
-makeQuestion("v3-063", 3, "Valeurs", "Quelle tension la jurisprudence sur les 'signes ostentatoires' de la loi de 2004 révèle-t-elle dans la définition même du signe religieux ?", "La loi de 2004 définit précisément et exhaustivement tous les signes interdits, ne laissant aucune marge d'interprétation aux chefs d'établissement ni aux tribunaux", "La loi de 2004 ne définit pas précisément ce qu'est un 'signe manifestant ostensiblement une appartenance religieuse', créant une marge d'interprétation mobilisée notamment en 2023 pour l'abaya — révélant que la frontière entre vêtement culturel et signe religieux est évolutive et contestée", "La loi de 2004 a été entièrement remplacée par une circulaire de 2023 définissant exhaustivement tous les signes interdits à l'école, rendant toute jurisprudence d'interprétation obsolète", "La définition du signe religieux est entièrement déléguée à l'Église catholique et au Conseil français du culte musulman, qui décident souverainement de ce qui constitue un signe religieux protégé", "C", "La loi du 15 mars 2004 interdit les signes 'manifestant ostensiblement une appartenance religieuse', sans les définir exhaustivement. Cette imprécision délibérée laisse une marge d'interprétation aux chefs d'établissement. Elle a été appliquée principalement au voile islamique, à la kippa et aux grandes croix chrétiennes. En 2023, la question de l'abaya (robe longue) a relancé le débat : est-ce un signe religieux ou culturel ? La circulaire Attal (2023) l'a interdit, révélant que la frontière est évolutive et politiquement contestée."),
-makeQuestion("v3-064", 3, "Valeurs", "Pourquoi le principe de neutralité des agents publics est-il plus exigeant que celui applicable aux usagers du service public ?", "En raison de leur statut particulier : les agents incarnent l'État et ses valeurs, leur neutralité garantissant l'égalité de traitement de tous les usagers sans discrimination fondée sur les convictions des agents — exigence qui ne s'impose pas aux usagers qui exercent leurs libertés individuelles", "La neutralité des usagers est plus stricte que celle des agents : les usagers, représentant le peuple souverain, doivent s'abstenir de tout signe religieux dans les services publics, contrairement aux agents dont la vie privée est mieux protégée", "Les agents publics et les usagers sont soumis exactement aux mêmes obligations de neutralité, aucune distinction n'existant dans le droit positif entre ces deux catégories", "La neutralité des agents est plus exigeante uniquement dans les établissements scolaires ; dans tous les autres services publics, agents et usagers ont les mêmes obligations de neutralité", "A", "Le Conseil d'État et le Conseil constitutionnel ont établi une distinction nette : les agents publics (fonctionnaires, contractuels) sont soumis à une obligation stricte de neutralité dans l'exercice de leurs fonctions (absence de signes religieux, de manifestation de convictions politiques). Les usagers, en revanche, bénéficient de leurs libertés individuelles dans les services publics (sauf loi contraire, comme la loi de 2010 sur le voile intégral). La neutralité de l'agent est la contrepartie du principe d'égalité de traitement des usagers."),
-makeQuestion("v3-065", 3, "Valeurs", "Quelle est la portée de la jurisprudence constitutionnelle sur la liberté personnelle et l'autonomie individuelle ?", "Le Conseil constitutionnel reconnaît une liberté personnelle impliquant l'autonomie de la personne dans ses choix de vie, mais cette liberté peut être limitée pour des raisons de protection de l'ordre public ou des droits des tiers, le législateur disposant d'une large marge d'appréciation", "La liberté personnelle est un droit absolu en France : le législateur ne peut jamais réglementer les comportements individuels dès lors qu'ils n'affectent que la personne elle-même", "Le Conseil constitutionnel a refusé de reconnaître une liberté personnelle générale, estimant que la Constitution ne garantit que des libertés nommément citées dans les textes constitutionnels", "La liberté personnelle est uniquement garantie par la CEDH, le droit constitutionnel interne ne connaissant pas cette notion dans sa jurisprudence", "A", "Le Conseil constitutionnel a reconnu la liberté personnelle comme découlant du Préambule de 1946 et de l'article 2 de la DDHC. Elle protège les choix de vie, l'autonomie corporelle, les choix thérapeutiques. Mais elle n'est pas absolue : la loi peut restreindre des comportements individuels pour des raisons de santé publique (port de la ceinture, interdiction du tabac dans les lieux publics), de protection de l'ordre public ou des droits des tiers. Le Conseil contrôle que ces restrictions sont proportionnées et ne méconnaissent pas le noyau dur de la liberté."),
-makeQuestion("v3-066", 3, "Valeurs", "Comment le Conseil constitutionnel appréhende-t-il le droit au respect de la vie privée dans le contexte de la surveillance numérique ?", "Il a déclaré que la surveillance numérique ne touche pas à la vie privée dès lors qu'elle est effectuée automatiquement par des algorithmes, sans intervention humaine directe dans le traitement des données", "Le Conseil constitutionnel a développé une jurisprudence rigoureuse : la collecte de données personnelles constitue une atteinte à la vie privée nécessitant une justification, une proportionnalité et des garanties suffisantes contre les abus, notamment un contrôle indépendant", "Il a admis que la vie privée n'a plus de protection constitutionnelle dans le domaine numérique, l'article 2 de la DDHC n'ayant été rédigé qu'en référence à la sphère physique et non aux données", "Il a délégué entièrement le contrôle de la surveillance numérique à la CNIL, se déclarant incompétent pour contrôler la constitutionnalité des lois de renseignement", "B", "Le Conseil constitutionnel a appliqué le droit au respect de la vie privée (article 2 DDHC) aux fichiers informatiques et à la surveillance numérique. Il a censuré des dispositions créant des fichiers sans garanties suffisantes (Décision SAFARI, 1978 contexte), validé le principe de la loi de renseignement de 2015 sous conditions (CNCTR, contrôle indépendant) et censuré des dispositions des lois antiterroristes jugées disproportionnées. La surveillance numérique doit être nécessaire, proportionnée et contrôlée pour être constitutionnellement admissible."),
-makeQuestion("v3-067", 3, "Valeurs", "Quel est l'apport de la doctrine de 'l'effet horizontal' des droits fondamentaux dans les rapports entre particuliers ?", "L'effet horizontal signifie que les droits fondamentaux s'imposent directement entre particuliers comme entre l'État et les individus, sans médiation législative — position radicale rejetée par le droit français qui exige une médiation légale", "L'effet horizontal est expressément consacré par la Constitution française qui impose aux particuliers les mêmes obligations qu'à l'État en matière de droits fondamentaux", "L'effet horizontal des droits fondamentaux dans les rapports privés est admis en France sous une forme 'médiate' : le législateur et le juge mobilisent les droits constitutionnels pour interpréter et éventuellement écarter des règles de droit privé contraires aux libertés fondamentales", "L'effet horizontal est un concept uniquement applicable aux relations commerciales entre entreprises, sans pertinence pour les relations entre personnes physiques", "C", "La question est de savoir si les droits fondamentaux (liberté, égalité) s'imposent directement aux rapports entre particuliers, ou seulement à l'État. La France adopte une position intermédiaire ('effet horizontal médiat') : les droits fondamentaux influencent le droit privé par le biais de la loi (droit du travail, droit à la non-discrimination) et de l'interprétation judiciaire. Par exemple, la liberté d'expression s'applique dans l'entreprise (protection contre le licenciement pour propos syndicaux), mais via le Code du travail, pas directement la Constitution."),
-makeQuestion("v3-068", 3, "Valeurs", "Quelle signification symbolique et normative revêt la formule 'au nom du peuple français' dans les décisions judiciaires ?", "Cette formule est purement protocolaire et ne revêt aucune signification juridique ou politique particulière, pouvant être supprimée sans aucune conséquence sur la validité des jugements", "Elle exprime que la justice est rendue au nom de la souveraineté populaire — le juge n'est pas un souverain mais l'organe d'un peuple souverain qui délègue le pouvoir de juger — fondant la légitimité démocratique de la justice", "Cette formule signifie que les juges français sont élus par le peuple, à la différence des juges américains nommés à vie sans élection populaire", "Elle exprime l'idée que le juge est personnellement responsable devant les citoyens et peut être révoqué par référendum si ses décisions ne correspondent pas à la volonté populaire", "B", "Toutes les décisions de justice françaises sont rendues 'au nom du peuple français'. Cette formule traduit la conception républicaine de la justice : le juge n'est pas souverain, il tire sa légitimité du peuple dont il exprime la volonté à travers la loi. Cette formulation est liée au principe de séparation des pouvoirs : le juge applique la loi votée par les représentants du peuple, sans la créer. Elle fonde aussi l'obligation pour les décisions judiciaires d'être motivées et accessibles au public."),
-makeQuestion("v3-069", 3, "Valeurs", "Pourquoi la protection constitutionnelle des 'droits des générations futures' soulève-t-elle des défis théoriques inédits pour le droit des droits fondamentaux ?", "Ces droits ne présentent aucun défi théorique particulier : la Charte de l'environnement de 2004 les a entièrement résolus en les constitutionnalisant", "Les générations futures ne peuvent pas être titulaires de droits fondamentaux classiques car elles n'existent pas encore — leur protection nécessite une reconception du sujet de droits ou des mécanismes spéciaux de représentation, questionnant les fondements individuels du droit constitutionnel", "La protection des générations futures est garantie par le droit de propriété actuel : protéger le patrimoine transmissible suffit à protéger les droits des générations futures sans innovation conceptuelle", "Il n'existe aucune protection constitutionnelle des générations futures en France, la Constitution ne visant que les personnes actuellement en vie sur le territoire national", "B", "Les droits des générations futures posent un défi conceptuel majeur : le droit classique est bâti sur des sujets actuels, présents. Les générations futures n'existent pas encore. Comment leur accorder des droits ? La Charte de l'environnement (2004) impose de 'préserver et améliorer l'environnement' pour les 'générations futures', mais sans créer de droit subjectif invocable. Des théoriciens (Hans Jonas, Le Principe responsabilité) proposent une 'éthique de la responsabilité' envers le futur. Des États (Irlande, Pays-Bas) ont créé des commissaires aux droits des générations futures."),
-makeQuestion("v3-070", 3, "Valeurs", "Comment l'évolution des droits fondamentaux depuis 1789 illustre-t-elle la tension permanente entre universalisme proclamé et applications concrètes dans l'histoire française ?", "Elle démontre que l'universalisme de 1789 a été parfaitement respecté depuis sa proclamation, la France n'ayant jamais failli à ses principes fondateurs dans aucun domaine", "Elle révèle la nature dialectique des droits fondamentaux : proclamés universels en 1789, ils ont mis deux siècles à couvrir effectivement toutes les personnes — femmes (1944), colonisés (1946-1962), handicapés (2005), personnes LGBTQ+ (1981-2013) — montrant que l'universalisme est un horizon régulateur et non un état accompli", "Elle prouve que l'universalisme de 1789 était purement rhétorique et que les droits fondamentaux n'ont été accordés en France que sous des pressions extérieures, sans conviction intérieure réelle", "Elle démontre que les droits fondamentaux n'évoluent jamais et que le corpus de 1789 représente la liste définitive et complète des droits en France, sans possibilité d'extension", "D", "L'histoire des droits fondamentaux en France depuis 1789 est une longue expansion progressive : les droits proclamés 'universels' en 1789 ne couvraient de facto que les hommes propriétaires, blancs, adultes. Les femmes ont attendu 1944 pour voter, 1965 pour ouvrir un compte bancaire sans autorisation du mari, 2024 pour voir leur droit à l'IVG constitutionnalisé. Les colonisés ont attendu 1946-1962. Les personnes handicapées 2005. Les couples homosexuels 2013. L'universalisme est un projet inachevé et en mouvement perpétuel — ce qui constitue sa force motrice."),
+makeQuestion("v3-051", 3, "Valeurs", "Que met en avant la théorie de la reconnaissance d’Axel Honneth ?", "Que les droits juridiques suffisent toujours à garantir une vie digne", "Que la reconnaissance sociale compte aussi, au-delà des seuls droits formels", "Que l’identité individuelle n’a aucune importance", "Que seule la réussite économique importe", "B", "Honneth insiste sur le fait qu’une personne a besoin non seulement de droits, mais aussi de reconnaissance sociale pour pouvoir réellement se construire et participer à la vie commune."),
+
+makeQuestion("v3-052", 3, "Valeurs", "Que signifie dire que des droits sont 'inaliénables' ?", "Qu’ils peuvent être vendus mais pas donnés", "Qu’ils peuvent être suspendus librement", "Qu’ils sont attachés à la personne et ne peuvent pas être abandonnés comme un simple bien", "Qu’ils dépendent uniquement du Parlement", "C", "L’idée d’inaliénabilité signifie qu’un droit fondamental n’est pas un simple objet dont on pourrait disposer librement. Il est lié à la personne elle-même."),
+
+makeQuestion("v3-053", 3, "Valeurs", "Pourquoi l’idée de 'démocratie militante' peut-elle être invoquée pour limiter certains discours ?", "Parce qu’une démocratie peut chercher à se défendre contre ceux qui veulent la détruire", "Parce qu’elle interdit toute opposition politique", "Parce qu’elle supprime les élections", "Parce qu’elle remplace la séparation des pouvoirs", "A", "Cette idée soutient qu’une démocratie n’est pas obligée de rester passive face à des mouvements ou discours qui cherchent à abolir les libertés démocratiques elles-mêmes."),
+
+makeQuestion("v3-054", 3, "Valeurs", "Quel défi le pluralisme moral pose-t-il à l’universalisme des droits de l’homme ?", "Aucun, car toutes les sociétés pensent les droits de la même manière", "Il rappelle que des cultures différentes peuvent contester la même définition universelle des droits", "Il prouve que les droits de l’homme sont inutiles", "Il interdit tout droit international", "B", "Le pluralisme moral montre que toutes les sociétés ne partagent pas exactement les mêmes valeurs ou priorités. Cela nourrit le débat entre universalisme des droits et relativisme culturel."),
+
+makeQuestion("v3-055", 3, "Valeurs", "Pourquoi la théorie de Rawls remet-elle en cause une vision absolue du droit de propriété ?", "Parce qu’elle estime que toute propriété doit être supprimée", "Parce qu’elle soutient que les inégalités ne sont justes que si elles améliorent aussi la situation des moins favorisés", "Parce qu’elle interdit toute fiscalité", "Parce qu’elle défend la propriété comme droit totalement intouchable", "B", "Chez Rawls, les inégalités ne sont acceptables que si elles bénéficient aussi aux plus défavorisés. Cela justifie l’idée de redistribution et limite une vision purement absolue de la propriété."),
+
+makeQuestion("v3-056", 3, "Valeurs", "Pourquoi les droits des personnes LGBTQ+ posent-ils parfois la question de la reconnaissance des identités dans le cadre républicain ?", "Parce que le modèle universaliste protège d’abord des individus égaux en droit, mais résiste parfois à reconnaître des identités particulières", "Parce que la République interdit ces droits", "Parce qu’il n’existe aucun débat sur ce sujet", "Parce que ces droits ont été pleinement reconnus dès 1789", "A", "Le modèle républicain français préfère raisonner en termes de citoyens égaux. Mais certaines revendications contemporaines portent aussi sur la reconnaissance sociale et juridique d’identités particulières."),
+
+makeQuestion("v3-057", 3, "Valeurs", "Que désigne l’idée de droits fondamentaux de 'troisième génération' ?", "Les anciens droits de 1789", "Des droits collectifs comme l’environnement, la paix ou le développement", "Les seuls droits sociaux du XXe siècle", "Les droits réservés aux États", "B", "On parle de troisième génération pour désigner des droits plus collectifs et solidaires, qui dépassent souvent la seule relation entre un individu et son État."),
+
+makeQuestion("v3-058", 3, "Valeurs", "Pourquoi les objectifs de valeur constitutionnelle sont-ils discutés ?", "Parce qu’ils n’existent plus", "Parce qu’ils permettent au juge constitutionnel de justifier certaines restrictions aux droits à partir de notions qu’il a lui-même dégagées", "Parce qu’ils remplacent la Constitution", "Parce qu’ils n’ont jamais été utilisés", "B", "Les objectifs de valeur constitutionnelle sont des objectifs dégagés par le Conseil constitutionnel, par exemple l’ordre public ou l’accessibilité de la loi. Ils jouent un rôle important mais soulèvent parfois la question du pouvoir créateur du juge."),
+
+makeQuestion("v3-059", 3, "Valeurs", "Comment le droit français traite-t-il la liberté contractuelle ?", "Comme un principe important, mais qui peut être limité pour protéger l’intérêt général ou la partie la plus faible", "Comme un droit absolu sans aucune limite", "Comme une notion étrangère à la Constitution", "Comme un droit réservé au commerce international", "A", "La liberté contractuelle est reconnue, mais elle peut être encadrée par la loi pour protéger le consommateur, le salarié ou l’ordre public économique et social."),
+
+makeQuestion("v3-060", 3, "Valeurs", "Pourquoi la question des statistiques ethniques fait-elle débat en France ?", "Parce qu’elles sont obligatoires", "Parce qu’elles n’ont aucun intérêt", "Parce qu’elles opposent l’universalisme républicain au besoin de mesurer concrètement certaines discriminations", "Parce qu’elles ont été généralisées dans toute l’administration", "C", "Le modèle républicain français hésite à classer les individus selon leurs origines. Mais ce refus peut rendre plus difficile la mesure précise de certaines discriminations réelles."),
+
+makeQuestion("v3-061", 3, "Valeurs", "Comment le droit de propriété est-il protégé en France ?", "Comme un droit important qui peut toutefois être limité ou donner lieu à expropriation pour nécessité publique avec indemnisation", "Comme un droit sans aucune limite", "Comme un droit purement symbolique", "Comme un droit réservé aux biens immobiliers", "A", "Le droit de propriété a une forte valeur en droit français, mais il n’est pas absolu. L’intérêt général peut justifier certaines restrictions, sous contrôle du juge."),
+
+makeQuestion("v3-062", 3, "Valeurs", "Que dit en substance la jurisprudence sur les menus de substitution dans les cantines scolaires ?", "Les communes y sont toujours obligées", "Les communes ne peuvent jamais en proposer", "Les collectivités peuvent en proposer sans y être juridiquement obligées dans tous les cas", "Seule la religion majoritaire peut être prise en compte", "C", "Le droit n’impose pas systématiquement un menu de substitution, mais il n’interdit pas non plus aux collectivités d’en proposer. Cela laisse une marge d’appréciation locale."),
+
+makeQuestion("v3-063", 3, "Valeurs", "Pourquoi la notion de 'signe ostentatoire' reste-t-elle délicate à appliquer ?", "Parce qu’elle n’a jamais été utilisée", "Parce qu’elle dépend parfois d’interprétations concrètes sur ce qui est religieux, culturel ou les deux", "Parce qu’elle est définie de manière totalement exhaustive", "Parce qu’elle ne concerne que les adultes", "B", "La loi de 2004 n’a pas dressé une liste fermée de tous les signes interdits. Cela laisse place à des débats d’interprétation dans certaines situations concrètes."),
+
+makeQuestion("v3-064", 3, "Valeurs", "Pourquoi les agents publics sont-ils soumis à une neutralité plus stricte que les usagers ?", "Parce qu’ils représentent l’État et doivent garantir un traitement égal à tous", "Parce qu’ils ont moins de libertés en tant que citoyens", "Parce qu’ils sont élus", "Parce qu’ils ne bénéficient pas de la liberté de conscience", "A", "Les agents publics incarnent le service public. Leur neutralité vise à garantir que chaque usager soit traité de manière égale, sans pression religieuse ou politique."),
+
+makeQuestion("v3-065", 3, "Valeurs", "Que recouvre l’idée de liberté personnelle en droit constitutionnel français ?", "Une liberté totalement absolue sans aucune limite", "La protection d’une certaine autonomie individuelle, qui peut toutefois être encadrée pour des motifs légitimes", "Un droit uniquement reconnu par la CEDH", "Une notion sans valeur juridique", "B", "La liberté personnelle protège des choix de vie et une forme d’autonomie individuelle. Mais elle peut être limitée, par exemple pour la santé publique, l’ordre public ou la protection d’autrui."),
+
+makeQuestion("v3-066", 3, "Valeurs", "Comment le Conseil constitutionnel protège-t-il la vie privée face à la surveillance numérique ?", "Il considère que les données numériques ne relèvent pas de la vie privée", "Il admet certaines surveillances, mais exige des garanties, un contrôle et une proportionnalité", "Il interdit toute surveillance numérique", "Il laisse la question à la seule CNIL", "B", "Le juge constitutionnel reconnaît que la collecte de données personnelles porte atteinte à la vie privée. Il exige donc un cadre légal, des objectifs précis et des garanties contre les abus."),
+
+makeQuestion("v3-067", 3, "Valeurs", "Que signifie l’effet horizontal des droits fondamentaux ?", "Que les droits fondamentaux peuvent influencer aussi les relations entre particuliers, souvent par l’intermédiaire de la loi et du juge", "Que seuls les États sont concernés", "Que les particuliers peuvent ignorer la Constitution", "Que cela ne concerne que les entreprises", "A", "Même si les droits fondamentaux sont d’abord pensés contre l’État, ils influencent aussi les rapports privés, par exemple en droit du travail, en droit de la consommation ou dans la lutte contre les discriminations."),
+
+makeQuestion("v3-068", 3, "Valeurs", "Pourquoi les décisions judiciaires sont-elles rendues 'au nom du peuple français' ?", "Parce que les juges sont élus au suffrage universel", "Parce que la justice tire sa légitimité de la souveraineté populaire et de la loi commune", "Parce que le peuple peut annuler chaque jugement", "Parce que le juge décide selon l’opinion majoritaire", "B", "Cette formule rappelle que la justice n’est pas rendue au nom d’un individu ou d’un pouvoir personnel. Elle s’inscrit dans le cadre de la souveraineté nationale et de la République."),
+
+makeQuestion("v3-069", 3, "Valeurs", "Pourquoi les droits des générations futures posent-ils une difficulté particulière au droit ?", "Parce que ces générations n’existent pas encore comme sujets juridiques ordinaires", "Parce qu’elles disposent déjà de représentants élus", "Parce qu’elles sont protégées exactement comme les personnes actuelles", "Parce qu’elles ne peuvent jamais être prises en compte par le droit", "A", "Le droit a été pensé d’abord pour des personnes présentes et identifiables. La prise en compte des générations futures oblige donc à adapter la manière de penser la responsabilité, notamment en matière environnementale."),
+
+makeQuestion("v3-070", 3, "Valeurs", "Que montre l’histoire française des droits fondamentaux depuis 1789 ?", "Que les droits ont toujours été appliqués immédiatement à tous", "Que l’universalisme proclamé s’est élargi progressivement à des groupes qui en étaient d’abord exclus", "Que les droits fondamentaux n’ont jamais évolué", "Que l’universalisme était uniquement un mythe sans aucun effet", "B", "Les droits proclamés en 1789 se voulaient universels, mais leur application réelle a longtemps été partielle. Leur histoire est celle d’une extension progressive à davantage de personnes et de situations.")
 ];
