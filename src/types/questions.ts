@@ -4,6 +4,7 @@
 
 export interface MCQVariant {
   title: string;
+  prompt?: string;
   options: string[];
   correct: number;       // index de la bonne réponse (0-3)
   explanation: string;
@@ -14,5 +15,5 @@ export interface Question {
   theme: string;
   question: string;
   best_answer: string;
-  mcq_variants: MCQVariant[];  // toujours 3 variantes
+  mcq_variants: MCQVariant[];
 }
