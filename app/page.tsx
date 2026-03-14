@@ -393,9 +393,15 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setPseudoOpen(false)} />
           <div className="relative w-full max-w-lg rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl p-6">
             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Avant de commencer</h3>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              Entre un pseudo et ton adresse email pour enregistrer tes résultats.
-            </p>
+            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+  
+    <a href={"/register?pseudo=" + encodeURIComponent(pseudoDraft) + "&email=" + encodeURIComponent(emailDraft)}
+    className="text-blue-500 hover:underline font-medium"
+  >
+    Créer un vrai compte
+  </a>
+  {" "}pour sauvegarder ton historique et accéder aux stats complètes.
+</p>
             <input
               value={pseudoDraft}
               onChange={(e) => setPseudoDraft(e.target.value)}

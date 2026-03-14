@@ -317,8 +317,14 @@ export default function ExamPage() {
               </Button>
             </div>
             <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-              Connexion simplifiée (pas encore de compte complet).
-            </p>
+  
+    <a href={"/register?pseudo=" + encodeURIComponent(pseudoDraft) + "&email=" + encodeURIComponent(emailDraft)}
+    className="text-blue-500 hover:underline font-medium"
+  >
+    Créer un vrai compte
+  </a>
+  {" "}pour sauvegarder ton historique et accéder aux stats complètes.
+</p>
           </div>
         </div>
       )}
