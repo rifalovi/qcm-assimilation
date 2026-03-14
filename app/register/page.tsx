@@ -1,19 +1,17 @@
-// app/register/page.tsx
-// Page d'inscription : email + pseudo + mot de passe
-// Après inscription → Supabase envoie un email de confirmation automatiquement
-
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-export default function RegisterPage() {
+// Composant interne qui lit les searchParams
+function RegisterForm() {
   const router = useRouter()
-const searchParams = useSearchParams()
-const [username, setUsername] = useState(searchParams.get('pseudo') ?? '')
-const [email, setEmail] = useState(searchParams.get('email') ?? '')
+  const searchParams = useSearchParams()
+
+  const [email, setEmail]       = useState(searchParams.get('email') ?? '')
+  const [username, setUsername] = useState(searchParams.get('pseudo') ?? '')
   const [password, setPassword] = useState('')
   const [loading, setLoading]   = useState(false)
   const [message, setMessage]   = useState<{ type: 'success' | 'error'; text: string } | null>(null)
@@ -29,7 +27,6 @@ const [email, setEmail] = useState(searchParams.get('email') ?? '')
       email,
       password,
       options: {
-        // Le pseudo est passé ici → le trigger SQL le récupère dans raw_user_meta_data
         data: { username },
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
@@ -128,5 +125,15 @@ const [email, setEmail] = useState(searchParams.get('email') ?? '')
         </p>
       </div>
     </main>
+  )
+}
+
+// Page principale — enveloppe le formulaire dans Suspense
+// Nécessaire car useSearchParams() lit l'URL côté client
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-500">Chargement...</div>}>
+      <RegisterForm />
+    </Suspense>
   )
 }
