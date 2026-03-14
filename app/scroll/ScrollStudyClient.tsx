@@ -77,19 +77,90 @@ function sameTheme(a: string, b: string) {
 // ─── COULEURS PAR THÈME ───────────────────────────────────────────────────────
 // Chaque thème a une couleur distincte pour l'identité visuelle
 const THEME_COLORS: Record<string, { accent: string; bg: string; border: string }> = {
-  "Institutions":  { accent: "#60a5fa", bg: "rgba(96,165,250,0.08)",  border: "rgba(96,165,250,0.2)"  },
-  "Valeurs":       { accent: "#34d399", bg: "rgba(52,211,153,0.08)",  border: "rgba(52,211,153,0.2)"  },
-  "Citoyenneté":   { accent: "#f472b6", bg: "rgba(244,114,182,0.08)", border: "rgba(244,114,182,0.2)" },
-  "Histoire":      { accent: "#fb923c", bg: "rgba(251,146,60,0.08)",  border: "rgba(251,146,60,0.2)"  },
-  "Géographie":    { accent: "#a78bfa", bg: "rgba(167,139,250,0.08)", border: "rgba(167,139,250,0.2)" },
-  "Société":       { accent: "#facc15", bg: "rgba(250,204,21,0.08)",  border: "rgba(250,204,21,0.2)"  },
+  // Institutions
+  "Institutions": {
+    accent: "#60a5fa",
+    bg: "rgba(96,165,250,0.08)",
+    border: "rgba(96,165,250,0.2)",
+  },
+  "Système institutionnel et politique": {
+    accent: "#60a5fa",
+    bg: "rgba(96,165,250,0.08)",
+    border: "rgba(96,165,250,0.2)",
+  },
+
+  // Valeurs
+  "Valeurs": {
+    accent: "#34d399",
+    bg: "rgba(52,211,153,0.08)",
+    border: "rgba(52,211,153,0.2)",
+  },
+  "Principes et valeurs de la République": {
+    accent: "#34d399",
+    bg: "rgba(52,211,153,0.08)",
+    border: "rgba(52,211,153,0.2)",
+  },
+
+  // Histoire
+  "Histoire": {
+    accent: "#fb923c",
+    bg: "rgba(251,146,60,0.08)",
+    border: "rgba(251,146,60,0.2)",
+  },
+  "Histoire, géographie et culture": {
+    accent: "#fb923c",
+    bg: "rgba(251,146,60,0.08)",
+    border: "rgba(251,146,60,0.2)",
+  },
+
+  // Société
+  "Société": {
+    accent: "#facc15",
+    bg: "rgba(250,204,21,0.08)",
+    border: "rgba(250,204,21,0.2)",
+  },
+  "Vivre dans la société française": {
+    accent: "#facc15",
+    bg: "rgba(250,204,21,0.08)",
+    border: "rgba(250,204,21,0.2)",
+  },
+
+  // Optionnel : compatibilité anciens thèmes
+  "Citoyenneté": {
+    accent: "#f472b6",
+    bg: "rgba(244,114,182,0.08)",
+    border: "rgba(244,114,182,0.2)",
+  },
+  "Géographie": {
+    accent: "#a78bfa",
+    bg: "rgba(167,139,250,0.08)",
+    border: "rgba(167,139,250,0.2)",
+  },
 };
-const DEFAULT_COLOR = { accent: "#60a5fa", bg: "rgba(96,165,250,0.08)", border: "rgba(96,165,250,0.2)" };
+
+const DEFAULT_COLOR = {
+  accent: "#60a5fa",
+  bg: "rgba(96,165,250,0.08)",
+  border: "rgba(96,165,250,0.2)",
+};
+
 const themeColor = (theme: string) => THEME_COLORS[theme] ?? DEFAULT_COLOR;
 
 // ─── MCQ VIEW ─────────────────────────────────────────────────────────────────
-function MCQView({ variant, variantIndex, totalVariants, theme, questionText, onBack }: {
-  variant: MCQVariant; variantIndex: number; totalVariants: number; theme: string; questionText: string; onBack: () => void;
+function MCQView({
+  variant,
+  variantIndex,
+  totalVariants,
+  theme,
+  fallbackQuestionText,
+  onBack,
+}: {
+  variant: MCQVariant;
+  variantIndex: number;
+  totalVariants: number;
+  theme: string;
+  fallbackQuestionText: string;
+  onBack: () => void;
 }) {
   const [selected, setSelected] = useState<number | null>(null);
   const revealed = selected !== null;
@@ -115,12 +186,21 @@ function MCQView({ variant, variantIndex, totalVariants, theme, questionText, on
       </div>
 
       {/* ── Question rappelée ── */}
-      <div className="rounded-2xl px-4 py-3"
-        style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
-        <p className="text-sm font-semibold leading-snug" style={{ color: "#f1f5f9" }}>
-          {questionText}
-        </p>
-      </div>
+    {/* ── Question rappelée ── */}
+<div
+  className="rounded-2xl px-4 py-3"
+  style={{
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.08)",
+  }}
+>
+  <p
+    className="text-sm font-semibold leading-snug"
+    style={{ color: "#f1f5f9" }}
+  >
+    {variant.prompt?.trim() || fallbackQuestionText}
+  </p>
+</div>
 
       <div className="flex flex-col gap-3 flex-1 justify-center">
         {variant.options.map((opt, i) => {
@@ -239,9 +319,14 @@ function QuestionCard({ question, qIndex, total, isActive }: {
         </div>
         {variants.map((variant, i) => (
           <div key={i} style={{ width: `${100 / panelCount}%`, flexShrink: 0 }}>
-            <MCQView variant={variant} variantIndex={i} totalVariants={variants.length}
-              theme={question.theme} questionText={question.question}
-              onBack={() => setMcqIndex(i === 0 ? null : i - 1)} />
+            <MCQView
+  variant={variant}
+  variantIndex={i}
+  totalVariants={variants.length}
+  theme={question.theme}
+  fallbackQuestionText={question.question}
+  onBack={() => setMcqIndex(i === 0 ? null : i - 1)}
+/>
           </div>
         ))}
       </div>
@@ -373,7 +458,7 @@ useEffect(() => {
   // Reset scroll au début quand le filtre change
   useEffect(() => {
     setActiveIndex(0);
-    containerRef.current?.scrollTo({ top: 0, behavior: "instant" });
+    containerRef.current?.scrollTo({ top: 0, behavior: "auto" });
   }, [activeTheme]);
 
   // ── IntersectionObserver : détecte la carte visible ──────────────────────────
