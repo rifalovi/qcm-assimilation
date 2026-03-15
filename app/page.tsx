@@ -342,7 +342,7 @@ export default function HomePage() {
                     onClick={openPseudoModal}
                     className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
                   >
-                    Bonjour 👋 Ajouter un pseudo
+                    Bonjour 👋 Connectez-vous
                   </button>
                 )}
               </div>

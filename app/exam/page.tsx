@@ -511,7 +511,7 @@ export default function ExamPage() {
           <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
             <h3 className="text-lg font-bold text-white">Avant de commencer</h3>
             <p className="mt-1 text-sm text-slate-400">
-              Pour lancer l'examen blanc, entrez un pseudo et une adresse email valide.
+              Pour lancer l'examen blanc, inscrivez-vous en entrant un pseudo et une adresse email valide.
             </p>
 
             <input
