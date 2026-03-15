@@ -4,53 +4,42 @@
    THÈME GLOBAL — BLEU NUIT PREMIUM
    ================================================= */
 :root {
-  /* Fond principal */
   --background: #020817;
   --background-soft: #0b1120;
   --background-elevated: #111827;
 
-  /* Surfaces */
   --surface: rgba(15, 23, 42, 0.88);
   --surface-strong: rgba(30, 41, 59, 0.96);
   --surface-muted: rgba(51, 65, 85, 0.72);
 
-  /* Textes */
   --foreground: #f8fafc;
   --foreground-soft: #cbd5e1;
   --foreground-muted: #94a3b8;
 
-  /* Bordures */
   --border: rgba(148, 163, 184, 0.18);
   --border-strong: rgba(148, 163, 184, 0.28);
 
-  /* Accents */
   --accent-primary: #3b82f6;
   --accent-primary-hover: #60a5fa;
   --accent-secondary: #38bdf8;
   --accent-success: #22c55e;
   --accent-error: #f87171;
 
-  /* Boutons */
   --btn-primary-bg: linear-gradient(135deg, #2563eb 0%, #1d4ed8 45%, #0ea5e9 100%);
   --btn-primary-text: #ffffff;
   --btn-secondary-bg: rgba(30, 41, 59, 0.9);
   --btn-secondary-text: #e2e8f0;
   --btn-secondary-border: rgba(148, 163, 184, 0.25);
 
-  /* Ombres */
   --shadow-soft: 0 10px 30px rgba(2, 8, 23, 0.28);
   --shadow-card: 0 18px 45px rgba(2, 8, 23, 0.34);
   --shadow-glow: 0 0 0 1px rgba(96, 165, 250, 0.08), 0 0 30px rgba(59, 130, 246, 0.12);
 
-  /* Rayons */
   --radius-sm: 0.85rem;
   --radius-md: 1.15rem;
   --radius-lg: 1.5rem;
 }
 
-/* =================================================
-   BASE
-   ================================================= */
 html {
   min-height: 100%;
   scroll-behavior: smooth;
@@ -68,13 +57,11 @@ body {
   background-attachment: fixed;
 }
 
-/* Sélection de texte */
 ::selection {
   background: rgba(59, 130, 246, 0.35);
   color: #ffffff;
 }
 
-/* Scrollbar */
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(96, 165, 250, 0.45) rgba(15, 23, 42, 0.7);
@@ -95,9 +82,6 @@ body {
   border: 2px solid rgba(15, 23, 42, 0.8);
 }
 
-/* =================================================
-   LIENS / FOCUS
-   ================================================= */
 a {
   color: inherit;
   text-decoration: none;
@@ -129,9 +113,6 @@ textarea:focus-visible {
   border-color: rgba(96, 165, 250, 0.7);
 }
 
-/* =================================================
-   CLASSES UTILITAIRES — SURFACES
-   ================================================= */
 .card {
   background: linear-gradient(
     180deg,
@@ -176,9 +157,6 @@ textarea:focus-visible {
   box-shadow: var(--shadow-soft);
 }
 
-/* =================================================
-   CLASSES UTILITAIRES — TEXTE
-   ================================================= */
 .text-main {
   color: var(--foreground);
 }
@@ -196,9 +174,6 @@ textarea:focus-visible {
   text-shadow: 0 0 18px rgba(96, 165, 250, 0.18);
 }
 
-/* =================================================
-   BORDURES / BADGES
-   ================================================= */
 .border-theme {
   border-color: var(--border);
 }
@@ -218,9 +193,6 @@ textarea:focus-visible {
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* =================================================
-   BOUTONS
-   ================================================= */
 .btn-primary {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
@@ -283,9 +255,6 @@ textarea:focus-visible {
   border-color: rgba(96, 165, 250, 0.32);
 }
 
-/* =================================================
-   INPUTS / FORMULAIRES
-   ================================================= */
 input,
 select,
 textarea {
@@ -308,9 +277,6 @@ textarea:hover {
   border-color: rgba(96, 165, 250, 0.28);
 }
 
-/* =================================================
-   TITRES / BLOCS
-   ================================================= */
 .section-title {
   color: #ffffff;
   font-weight: 800;
@@ -328,9 +294,6 @@ textarea:hover {
   -webkit-backdrop-filter: blur(18px);
 }
 
-/* =================================================
-   ANIMATIONS
-   ================================================= */
 @keyframes titleReveal {
   0% {
     opacity: 0;
@@ -349,7 +312,8 @@ textarea:hover {
 }
 
 @keyframes softFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {

@@ -15,7 +15,6 @@ export default function Card({ children, className = "" }: CardProps) {
         shadow-[0_18px_45px_rgba(2,8,23,0.34)]
         backdrop-blur-md
         transition-all duration-300 ease-out
-        hover:-translate-y-0.5
         hover:border-blue-400/20
         hover:shadow-[0_24px_55px_rgba(2,8,23,0.42)]
         ${className}
