@@ -5,7 +5,7 @@ import Card from "../components/Card";
 import Button from "../components/Button";
 import { useEffect, useMemo, useState } from "react";
 import { hasAnyResult } from "../src/lib/saveResult";
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from "@/lib/supabase/client";
 
 type Level = 1 | 2 | 3;
 type Theme = "Valeurs" | "Institutions" | "Histoire" | "Société";
@@ -149,20 +149,23 @@ export default function HomePage() {
     check();
   }, [pseudo, email]);
 
-useEffect(() => {
-  const supabase = createClient()
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session?.user) {
-      const username = session.user.user_metadata?.username || session.user.email?.split('@')[0] || ''
-      const email = session.user.email || ''
-      setPseudo(username)
-      setEmail(email)
-      setPseudoDraft(username)
-      setEmailDraft(email)
-      saveUser({ pseudo: username, email })
-    }
-  })
-}, [])
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const username =
+          session.user.user_metadata?.username ||
+          session.user.email?.split("@")[0] ||
+          "";
+        const email = session.user.email || "";
+        setPseudo(username);
+        setEmail(email);
+        setPseudoDraft(username);
+        setEmailDraft(email);
+        saveUser({ pseudo: username, email });
+      }
+    });
+  }, []);
 
   function requireAuthAndRun(action: () => void) {
     if (!pseudo || !email) {
@@ -304,13 +307,14 @@ useEffect(() => {
           <div className="pointer-events-none absolute bottom-0 right-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
 
           <div className="relative px-5 py-6 sm:px-8 sm:py-9 lg:px-10 lg:py-10">
-            <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-              <div className="flex items-center gap-3">
+            <div className="mb-8 flex flex-col gap-4 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left">
+              <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
                   <MarianneMark />
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
+
+                <div className="text-center sm:text-left">
+                  <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
                     <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">
                       République française
                     </span>
@@ -329,13 +333,13 @@ useEffect(() => {
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex justify-center lg:justify-end">
                 {pseudo.trim() ? (
-                  <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 backdrop-blur-md">
+                  <div className="flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-center text-sm text-slate-300 backdrop-blur-md sm:text-left">
                     <span>
                       Bonjour <span className="font-semibold text-white">{pseudo.trim()}</span> 👋
                     </span>
-                    <span className="text-slate-500">•</span>
+                    <span className="hidden sm:inline text-slate-500">•</span>
                     <button
                       type="button"
                       onClick={openPseudoModal}
@@ -343,7 +347,7 @@ useEffect(() => {
                     >
                       Changer
                     </button>
-                    <span className="text-slate-500">•</span>
+                    <span className="hidden sm:inline text-slate-500">•</span>
                     <button
                       type="button"
                       onClick={clearPseudo}
@@ -365,23 +369,23 @@ useEffect(() => {
             </div>
 
             <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-              <div>
+              <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-blue-200">
                   Plus de 400 questions-réponses
                 </div>
 
-                <h1 className="max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+                <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
                   Préparez votre examen civique avec une interface moderne, claire et efficace.
                 </h1>
 
-                <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+                <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base lg:mx-0">
                   Entraînez-vous sur les valeurs de la République, les institutions, l’histoire
                   de France et la vie en société. Choisissez votre niveau, sélectionnez vos thèmes
                   et progressez avec des explications pédagogiques proches des exigences de
                   l’examen civique 2026.
                 </p>
 
-                <div className="mt-7 flex flex-wrap gap-3">
+                <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
                   <Button onClick={start}>🚀 Commencer maintenant</Button>
                   <Button variant="secondary" onClick={() => router.push("/info")}>
                     📖 Comprendre l'examen
@@ -391,7 +395,7 @@ useEffect(() => {
                   </Button>
                 </div>
 
-                <div className="mt-7 flex flex-wrap gap-3 text-xs text-slate-400 sm:text-sm">
+                <div className="mt-7 flex flex-wrap justify-center gap-3 text-xs text-slate-400 sm:text-sm lg:justify-start">
                   <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
                     Entraînement progressif
                   </div>
@@ -404,7 +408,7 @@ useEffect(() => {
                 </div>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-3 lg:grid-cols-1">
                 <StatMiniCard value="40" label="Questions par session" icon="❓" />
                 <StatMiniCard value="20 s" label="Temps par question" icon="⏱️" />
                 <StatMiniCard value="80%" label="Objectif de réussite" icon="🎯" />
@@ -435,7 +439,7 @@ useEffect(() => {
 
         <section className="grid gap-6 lg:grid-cols-3">
           <Card>
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
               <div>
                 <h3 className="text-lg font-bold text-white">Choisissez votre niveau</h3>
                 <p className="mt-1 text-sm text-slate-400">
@@ -467,7 +471,7 @@ useEffect(() => {
               })}
             </div>
 
-            <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4 text-center sm:text-left">
               <div className="mb-2 text-sm font-semibold text-white">Conseil</div>
               <ul className="space-y-2 text-sm text-slate-300">
                 <li>• Niveau 1 : bases et repères essentiels</li>
@@ -478,7 +482,7 @@ useEffect(() => {
           </Card>
 
           <Card>
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
               <div>
                 <h3 className="text-lg font-bold text-white">Sélectionnez vos thèmes</h3>
                 <p className="mt-1 text-sm text-slate-400">
@@ -490,7 +494,7 @@ useEffect(() => {
               </div>
             </div>
 
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
               {THEMES.map((t) => (
                 <Pill key={t} active={themes.includes(t)} onClick={() => toggleTheme(t)}>
                   {t}
@@ -498,7 +502,7 @@ useEffect(() => {
               ))}
             </div>
 
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
               <Button variant="secondary" onClick={() => setThemes([...THEMES])}>
                 Tout sélectionner
               </Button>
@@ -508,14 +512,14 @@ useEffect(() => {
             </div>
 
             {!canStart && (
-              <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-center text-sm text-red-200 sm:text-left">
                 ⚠️ Sélectionnez au moins un thème pour démarrer.
               </div>
             )}
           </Card>
 
           <Card>
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
               <div>
                 <h3 className="text-lg font-bold text-white">Résumé de votre session</h3>
                 <p className="mt-1 text-sm text-slate-400">
@@ -541,16 +545,16 @@ useEffect(() => {
               ))}
             </div>
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Button className="flex-1" onClick={start} disabled={!canStart}>
+            <div className="mt-6 flex flex-col gap-3">
+              <Button className="w-full" onClick={start} disabled={!canStart}>
                 Faire un test
               </Button>
-              <Button variant="danger" className="sm:min-w-[170px]" onClick={startExam}>
+              <Button variant="danger" className="w-full" onClick={startExam}>
                 Examen blanc
               </Button>
             </div>
 
-            <p className="mt-4 text-xs leading-6 text-slate-400">
+            <p className="mt-4 text-center text-xs leading-6 text-slate-400 sm:text-left">
               Votre résultat affichera vos erreurs, vos bonnes réponses et les explications pour
               progresser plus vite.
             </p>
@@ -577,7 +581,7 @@ useEffect(() => {
           ].map((item) => (
             <div
               key={item.title}
-              className="rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20"
+              className="rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 text-center shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20 md:text-left"
             >
               <div className="mb-3 text-2xl">{item.icon}</div>
               <h3 className="text-lg font-bold text-white">{item.title}</h3>
@@ -594,7 +598,7 @@ useEffect(() => {
             onClick={() => setPseudoOpen(false)}
           />
           <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
-            <div className="mb-5">
+            <div className="mb-5 text-center sm:text-left">
               <h3 className="text-xl font-bold text-white">Avant de commencer</h3>
               <p className="mt-2 text-sm leading-6 text-slate-400">
                 Créez un compte pour sauvegarder vos résultats, ou continuez sans compte avec une
@@ -669,7 +673,7 @@ useEffect(() => {
           />
           <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
             <div className="flex items-start justify-between gap-3">
-              <div>
+              <div className="text-center sm:text-left">
                 <h3 className="text-lg font-bold text-white">Donner un avis</h3>
                 <p className="mt-1 text-sm text-slate-400">
                   Votre retour nous aide à améliorer l’expérience.
@@ -699,7 +703,7 @@ useEffect(() => {
 
                 <div>
                   <label className="text-sm font-semibold text-slate-200">Note (1 à 5)</label>
-                  <div className="mt-2 flex gap-2">
+                  <div className="mt-2 flex justify-center gap-2 sm:justify-start">
                     {[1, 2, 3, 4, 5].map((n) => (
                       <button
                         key={n}
