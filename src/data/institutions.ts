@@ -676,6 +676,488 @@ makeQuestion("i3-026", 3, "Institutions", "En droit français, la hiérarchie de
   "En droit interne français, la Constitution est au sommet. Les traités sont supérieurs aux lois, mais restent inférieurs à la Constitution."
 ),
 
+makeQuestion(
+"i3-027",
+3,
+"Institutions",
+"Pour qu'une question prioritaire de constitutionnalité (QPC) soit transmise au Conseil constitutionnel, quelles conditions doivent être réunies ?",
+"La loi doit être postérieure à 1958 et le requérant doit être français",
+"La disposition contestée doit être applicable au litige, ne pas avoir déjà été déclarée conforme sauf changement de circonstances, et la question doit être sérieuse ou nouvelle",
+"La procédure doit concerner uniquement une affaire pénale",
+"La demande doit être signée par au moins dix avocats",
+"B",
+"Une QPC n'est pas transmise automatiquement. La disposition contestée doit être utile pour trancher le litige, ne pas avoir déjà été jugée conforme à la Constitution sauf changement de circonstances, et la question doit présenter un caractère sérieux ou nouveau. Ce filtrage est assuré par le Conseil d'État ou la Cour de cassation."
+),
+
+makeQuestion(
+"i3-028",
+3,
+"Institutions",
+"Quelle différence essentielle existe entre l'article 49 alinéa 1 et l'article 49 alinéa 3 de la Constitution ?",
+"Le 49-1 concerne uniquement le budget, le 49-3 toutes les autres lois",
+"Le 49-1 permet au gouvernement de demander la confiance sur sa politique, alors que le 49-3 permet de faire adopter un texte sans vote sauf motion de censure",
+"Le 49-1 est utilisé par le Président, le 49-3 par le Parlement",
+"Le 49-1 impose une majorité renforcée, le 49-3 une majorité simple",
+"B",
+"L'article 49-1 est un acte de légitimation politique : le gouvernement engage sa responsabilité sur son programme ou une déclaration de politique générale. Le 49-3, lui, est un outil de rationalisation du parlementarisme : sauf motion de censure adoptée, le texte est considéré comme adopté sans vote."
+),
+
+makeQuestion(
+"i3-029",
+3,
+"Institutions",
+"Quelles limites empêchent le Président de dissoudre librement l'Assemblée nationale à tout moment ?",
+"Il ne peut dissoudre que si le Premier ministre est d'accord",
+"La dissolution est impossible si le Sénat s'y oppose",
+"Elle est interdite pendant l'intérim présidentiel, dans l'année suivant une précédente dissolution, et pendant l'application de l'article 16",
+"Elle n'est possible qu'après une motion de censure",
+"C",
+"L'article 12 de la Constitution encadre le pouvoir de dissolution. Le Président ne peut pas dissoudre l'Assemblée pendant l'intérim de la présidence, pendant l'année qui suit une dissolution précédente, ni pendant l'application des pouvoirs exceptionnels de l'article 16."
+),
+
+makeQuestion(
+"i3-030",
+3,
+"Institutions",
+"Pourquoi la destitution du Président de la République par la Haute Cour est-elle très difficile à mettre en œuvre ?",
+"Parce qu'elle n'est possible qu'avec l'accord du Conseil constitutionnel",
+"Parce qu'elle suppose un vote très lourd des deux assemblées et qu'elle ne vise qu'un manquement manifestement incompatible avec l'exercice du mandat",
+"Parce qu'elle n'est possible qu'en cas de crime commis avant l'élection",
+"Parce qu'elle dépend d'un référendum obligatoire",
+"B",
+"La procédure de l'article 68 est exceptionnelle. Elle exige une majorité des deux tiers dans chaque assemblée et ne concerne pas une simple faute politique, mais un manquement manifestement incompatible avec l'exercice du mandat présidentiel. En pratique, cela la rend très difficile à utiliser."
+),
+
+makeQuestion(
+"i3-031",
+3,
+"Institutions",
+"Que permet de protéger la notion d'identité constitutionnelle de la France ?",
+"Les traditions locales face aux lois nationales",
+"La supériorité absolue de toutes les lois françaises sur le droit européen",
+"Le droit exclusif du Parlement de voter toute norme internationale",
+"Certains principes fondamentaux français qui ne peuvent pas être effacés par le droit de l'Union européenne",
+"D",
+"Le Conseil constitutionnel a développé l'idée d'identité constitutionnelle pour protéger certains principes fondamentaux de la République française, comme la laïcité ou l'indivisibilité de la République. Cela signifie que la primauté du droit de l'Union européenne n'efface pas tout le noyau dur constitutionnel français."
+),
+
+makeQuestion(
+"i3-032",
+3,
+"Institutions",
+"Pourquoi dit-on que le Conseil constitutionnel est un 'législateur négatif' ?",
+"Parce qu'il rédige les lois à la place du Parlement",
+"Parce qu'il peut retirer du droit les dispositions contraires à la Constitution sans écrire lui-même la loi",
+"Parce qu'il vote contre les lois du gouvernement",
+"Parce qu'il ne contrôle que les lois défavorables aux citoyens",
+"B",
+"Cette expression, héritée de Kelsen, signifie que le Conseil constitutionnel n'a pas pour rôle principal de fabriquer la loi, mais d'empêcher l'entrée en vigueur ou le maintien de dispositions contraires à la Constitution. Il supprime ou censure, mais ne remplace pas normalement le législateur."
+),
+
+makeQuestion(
+"i3-033",
+3,
+"Institutions",
+"Pourquoi une loi organique a-t-elle une place particulière dans la hiérarchie des normes ?",
+"Parce qu'elle est toujours votée par référendum",
+"Parce qu'elle est signée par le Président et le Premier ministre ensemble",
+"Parce qu'elle précise l'organisation des pouvoirs publics prévue par la Constitution et doit obligatoirement être contrôlée par le Conseil constitutionnel avant promulgation",
+"Parce qu'elle est votée uniquement par le Sénat",
+"C",
+"Les lois organiques complètent la Constitution sur des points essentiels, comme le fonctionnement des institutions. Elles ont un régime d'adoption spécifique et font l'objet d'un contrôle obligatoire du Conseil constitutionnel avant leur promulgation."
+),
+
+makeQuestion(
+"i3-034",
+3,
+"Institutions",
+"Quel reproche démocratique est souvent adressé au Sénat français ?",
+"Il représente davantage les petites communes et les territoires ruraux que le poids réel de la population",
+"Il vote trop lentement les lois de finances",
+"Il n'examine jamais les textes de loi importants",
+"Il est composé uniquement d'anciens ministres",
+"A",
+"Le Sénat est élu au suffrage indirect par un collège d'élus locaux. Ce système donne un poids important aux petites communes et aux territoires ruraux. On lui reproche donc parfois de ne pas refléter fidèlement la démographie réelle du pays."
+),
+
+makeQuestion(
+"i3-035",
+3,
+"Institutions",
+"Qu'a surtout changé la LOLF de 2001 dans la manière de présenter et gérer le budget de l'État ?",
+"Elle a supprimé la Cour des comptes",
+"Elle a rendu le budget automatiquement équilibré",
+"Elle a transféré tout le pouvoir budgétaire au Sénat",
+"Elle a remplacé une logique de moyens par une logique de missions, programmes et résultats",
+"D",
+"La LOLF a profondément modernisé la gestion budgétaire de l'État. Au lieu de présenter uniquement des dépenses par nature, elle organise le budget en missions et programmes avec des objectifs de performance. L'idée est de mieux relier l'argent public aux résultats attendus."
+),
+
+makeQuestion(
+"i3-036",
+3,
+"Institutions",
+"Que limite l'article 40 de la Constitution dans le travail des parlementaires ?",
+"Leur droit de poser des questions au gouvernement",
+"Leur possibilité de proposer des mesures qui aggravent une charge publique ou diminuent les ressources publiques",
+"Leur droit d'amender les projets de loi constitutionnelle",
+"Leur possibilité de créer des commissions d'enquête",
+"B",
+"L'article 40 rend irrecevables les propositions ou amendements parlementaires qui diminueraient les ressources publiques ou augmenteraient les dépenses publiques. C'est un outil classique du parlementarisme rationalisé."
+),
+
+makeQuestion(
+"i3-037",
+3,
+"Institutions",
+"À quoi sert une commission mixte paritaire (CMP) dans la procédure législative ?",
+"À contrôler la constitutionnalité des lois avant leur vote",
+"À préparer tous les projets de loi avant leur dépôt",
+"À réunir députés et sénateurs pour tenter de trouver un texte commun en cas de désaccord entre les deux chambres",
+"À remplacer définitivement l'Assemblée et le Sénat pour les textes urgents",
+"C",
+"La CMP réunit 7 députés et 7 sénateurs. Elle intervient lorsque l'Assemblée nationale et le Sénat ne parviennent pas à s'accorder sur un texte. Son objectif est de rédiger un compromis. Si elle échoue, l'Assemblée nationale peut souvent avoir le dernier mot."
+),
+
+makeQuestion(
+"i3-038",
+3,
+"Institutions",
+"Pourquoi le contreseing est-il important dans la logique de la Ve République ?",
+"Parce qu'il permet au Premier ministre d'assumer politiquement certains actes du Président",
+"Parce qu'il permet au Sénat de contrôler le Président",
+"Parce qu'il oblige le Conseil d'État à approuver tous les actes du gouvernement",
+"Parce qu'il remplace la signature du Président en cas d'absence",
+"A",
+"Le contreseing permet d'articuler l'irresponsabilité politique du Président et la responsabilité du gouvernement devant le Parlement. En pratique, certains actes présidentiels doivent être contresignés par le Premier ministre ou les ministres concernés, qui en assument la responsabilité politique."
+),
+
+makeQuestion(
+"i3-039",
+3,
+"Institutions",
+"Qu'a apporté la réforme constitutionnelle de 2003 sur la décentralisation ?",
+"Elle a supprimé les départements",
+"Elle a inscrit dans la Constitution que l'organisation de la République est décentralisée et a reconnu le droit à l'expérimentation locale",
+"Elle a transformé les régions en États fédérés",
+"Elle a interdit tout contrôle de l'État sur les collectivités",
+"B",
+"La révision constitutionnelle de 2003 a marqué une étape importante de la décentralisation. Elle a inscrit dans l'article 1er que l'organisation de la République est décentralisée et a reconnu davantage de place à l'expérimentation locale."
+),
+
+makeQuestion(
+"i3-040",
+3,
+"Institutions",
+"Que révèle le bicamérisme inégalitaire de la Ve République ?",
+"Le Sénat domine toujours l'Assemblée nationale",
+"Le Parlement est purement consultatif",
+"La suppression du rôle politique du Sénat",
+"Une tension entre la légitimité directe de l'Assemblée nationale et la représentation territoriale du Sénat, l'Assemblée ayant souvent le dernier mot sauf en matière constitutionnelle",
+"D",
+"La France connaît un bicamérisme dit inégalitaire car l'Assemblée nationale, élue au suffrage universel direct, peut souvent l'emporter sur le Sénat en cas de désaccord. Mais le Sénat conserve un rôle essentiel, notamment pour les révisions constitutionnelles, qui exigent l'accord des deux chambres."
+),
+
+makeQuestion(
+  "i3-041",
+  3,
+  "Institutions",
+  "Pourquoi le statut du parquet français fait-il parfois débat au regard de l'indépendance de la justice ?",
+  "Parce que les procureurs sont élus",
+  "Parce que les procureurs appartiennent à l'ordre administratif",
+  "Parce que les magistrats du parquet restent placés dans une logique hiérarchique liée au ministre de la Justice",
+  "Parce qu'ils ne peuvent jamais faire appel",
+  "C",
+  "Les magistrats du parquet font partie de l'autorité judiciaire, mais ils ne disposent pas du même degré d'indépendance que les magistrats du siège. Ils restent dans une organisation hiérarchisée, ce qui alimente le débat sur leur indépendance, notamment dans les affaires sensibles."
+),
+
+
+makeQuestion(
+"i3-042",
+3,
+"Institutions",
+"Quelle différence faut-il bien connaître entre le Conseil de l'Europe et l'Union européenne ?",
+"Le Conseil de l'Europe est une organisation distincte de l'Union européenne, centrée sur les droits humains et la CEDH",
+"Le Conseil de l'Europe est une institution interne de l'Union européenne",
+"Le Conseil de l'Europe vote les lois européennes",
+"Le Conseil de l'Europe ne comprend que les pays de la zone euro",
+"A",
+"Le Conseil de l'Europe est une organisation internationale distincte de l'Union européenne. Il est notamment à l'origine de la Convention européenne des droits de l'homme et de la Cour de Strasbourg. L'Union européenne, elle, est une organisation politique et économique propre."
+),
+
+makeQuestion(
+"i3-043",
+3,
+"Institutions",
+"Pourquoi le contrôle de conventionnalité ne remplace-t-il pas le contrôle de constitutionnalité ?",
+"Parce que seul le Président peut contrôler une loi",
+"Parce qu'ils portent sur des normes différentes : l'un vérifie la conformité aux traités, l'autre à la Constitution",
+"Parce que les traités ont toujours une valeur supérieure à la Constitution",
+"Parce que les juges ordinaires ne peuvent jamais écarter une loi",
+"B",
+"Le contrôle de conventionnalité consiste à vérifier si une loi est conforme à un traité international. Le contrôle de constitutionnalité vérifie sa conformité à la Constitution. Les deux contrôles ont donc des objets différents et produisent des effets juridiques différents."
+),
+
+makeQuestion(
+"i3-044",
+3,
+"Institutions",
+"Depuis la décentralisation, que peut faire le préfet face à un acte local qu'il estime illégal ?",
+"Il peut l'annuler lui-même immédiatement",
+"Il peut le déférer au tribunal administratif mais ne peut plus l'annuler directement lui-même",
+"Il doit saisir automatiquement le Conseil constitutionnel",
+"Il ne peut rien faire contre un acte local",
+"B",
+"Depuis 1982, le préfet n'exerce plus de tutelle administrative directe sur les collectivités territoriales. En revanche, il peut saisir le juge administratif par la voie du déféré préfectoral s'il estime qu'un acte local est illégal."
+),
+
+makeQuestion(
+"i3-045",
+3,
+"Institutions",
+"Que signifie réellement la libre administration des collectivités territoriales ?",
+"Les collectivités peuvent agir sans aucune loi nationale",
+"Elles disposent d'une autonomie absolue comparable à celle d'un État",
+"Elles s'administrent par des conseils élus et exercent leurs compétences dans les conditions fixées par la loi",
+"Le préfet ne peut plus jamais contrôler leurs actes",
+"C",
+"La libre administration signifie que les collectivités territoriales disposent d'organes élus et de compétences propres. Mais cette liberté s'exerce dans le cadre fixé par la loi nationale. Il ne s'agit donc pas d'une souveraineté locale."
+),
+
+makeQuestion(
+"i3-046",
+3,
+"Institutions",
+"Qu'appelle-t-on le 'bloc de constitutionnalité' en droit français ?",
+"L'ensemble des textes et principes ayant valeur constitutionnelle utilisés pour contrôler les lois",
+"Uniquement la Constitution de 1958",
+"La Constitution de 1958 et tous les traités européens",
+"Les lois organiques et les règlements des assemblées",
+"A",
+"Le bloc de constitutionnalité comprend la Constitution de 1958, la Déclaration de 1789, le Préambule de 1946, la Charte de l'environnement de 2004, ainsi que certains principes comme les PFRLR. C'est sur cet ensemble que repose le contrôle de constitutionnalité."
+),
+
+makeQuestion(
+  "i3-047",
+  3,
+  "Institutions",
+  "Pourquoi le scrutin majoritaire à deux tours pour les législatives produit-il souvent un écart entre le nombre de voix et le nombre de sièges ?",
+  "Parce qu'il donne automatiquement la moitié des sièges au Sénat",
+  "Parce qu'il favorise mécaniquement les candidats sans parti",
+  "Parce qu'il amplifie la victoire du camp arrivé en tête et pénalise les partis qui ont peu de réserves de voix ou d'alliances locales",
+  "Parce qu'il est proportionnel seulement au second tour",
+  "C",
+  "Le scrutin majoritaire à deux tours ne transforme pas les voix en sièges de manière proportionnelle. Une coalition qui arrive légèrement en tête peut obtenir beaucoup plus de sièges, tandis qu'un parti isolé peut recueillir beaucoup de voix mais peu d'élus."
+),
+
+makeQuestion(
+  "i3-048",
+  3,
+  "Institutions",
+  "Quelle différence faut-il faire entre irresponsabilité et immunité parlementaire ?",
+  "L'irresponsabilité protège durablement les opinions et votes dans le mandat, tandis que l'inviolabilité protège de manière relative contre certaines poursuites pénales",
+  "L'immunité est absolue, l'irresponsabilité peut être levée",
+  "L'irresponsabilité concerne la vie privée, l'immunité la vie publique",
+  "Ces deux notions désignent exactement la même chose",
+  "A",
+  "L'article 26 distingue deux protections. L'irresponsabilité protège de façon absolue les opinions et votes émis dans l'exercice du mandat. L'inviolabilité, elle, protège seulement de manière relative contre certaines poursuites ou mesures coercitives."
+),
+
+makeQuestion(
+  "i3-049",
+  3,
+  "Institutions",
+  "Quelle différence principale existe entre l'état d'urgence et l'article 16 de la Constitution ?",
+  "Ce sont exactement les mêmes mécanismes",
+  "L'état d'urgence est prévu par une loi ordinaire et renforce les pouvoirs de police, tandis que l'article 16 est un régime constitutionnel exceptionnel concentrant les pouvoirs entre les mains du Président",
+  "L'état d'urgence relève de l'Union européenne et l'article 16 du Parlement",
+  "L'état d'urgence suspend toutes les institutions alors que l'article 16 ne change rien",
+  "B",
+  "L'état d'urgence est organisé par la loi de 1955 et vise surtout à renforcer les pouvoirs de police administrative. L'article 16, lui, est un dispositif constitutionnel exceptionnel beaucoup plus fort, utilisé en cas de crise grave menaçant les institutions de la République."
+),
+
+makeQuestion(
+  "i3-050",
+  3,
+  "Institutions",
+  "Que sont les 'conventions de la Constitution' dans la pratique politique française ?",
+  "Des traités internationaux ayant valeur constitutionnelle",
+  "Des règles non écrites issues de la pratique qui complètent le fonctionnement réel des institutions",
+  "Des circulaires du Premier ministre sur la Constitution",
+  "Des accords entre les juridictions françaises et européennes",
+  "B",
+  "Les conventions de la Constitution sont des usages politiques non écrits mais importants dans la pratique institutionnelle. Par exemple, le fait de nommer un Premier ministre issu de la majorité parlementaire est une pratique essentielle, même si le texte constitutionnel ne le dit pas toujours de manière détaillée."
+),
+
+makeQuestion(
+  "i3-051",
+  3,
+  "Institutions",
+  "Quelle est la portée des avis du Conseil d'État lorsqu'il conseille le gouvernement ?",
+  "Ils s'imposent juridiquement au gouvernement",
+  "Ils sont consultatifs mais leur poids technique et politique est important",
+  "Ils remplacent la décision du Parlement",
+  "Ils ne sont jamais publiés",
+  "B",
+  "Quand le Conseil d'État conseille le gouvernement sur un projet de loi ou un décret, son avis n'est pas juridiquement obligatoire. Mais il a un poids important car il éclaire la solidité juridique du texte et peut éviter des annulations ultérieures."
+),
+
+makeQuestion(
+  "i3-052",
+  3,
+  "Institutions",
+  "Pourquoi la Cour de justice de la République (CJR) est-elle souvent critiquée ?",
+  "Parce qu'elle juge les ministres pour des actes liés à leurs fonctions avec une composition mêlant parlementaires et magistrats, ce qui fait douter de son impartialité",
+  "Parce qu'elle juge les simples citoyens à la place des tribunaux correctionnels",
+  "Parce qu'elle remplace le Conseil constitutionnel",
+  "Parce qu'elle est composée uniquement de préfets",
+  "A",
+  "La CJR juge les ministres pour les crimes et délits commis dans l'exercice de leurs fonctions. Elle est souvent critiquée car sa composition comprend des parlementaires, ce qui peut donner l'impression d'une justice politique ou insuffisamment indépendante."
+),
+
+makeQuestion(
+  "i3-053",
+  3,
+  "Institutions",
+  "Qu'est-ce qu'un recours pour excès de pouvoir en droit administratif ?",
+  "Un recours contre une décision de justice pénale",
+  "Une action permettant d'obtenir l'annulation d'un acte administratif illégal",
+  "Une sanction prise contre un fonctionnaire trop zélé",
+  "Un recours réservé aux ministres",
+  "B",
+  "Le recours pour excès de pouvoir permet au juge administratif d'annuler un acte administratif unilatéral illégal. C'est un outil majeur de l'État de droit, car il permet de contrôler l'administration et de la contraindre à respecter la légalité."
+),
+
+makeQuestion(
+  "i3-054",
+  3,
+  "Institutions",
+  "Que garantit le principe de continuité de l'État ?",
+  "Le fait que les institutions et les services essentiels continuent à fonctionner malgré les crises, les démissions ou les vacances du pouvoir",
+  "Le maintien obligatoire du même gouvernement pendant cinq ans",
+  "L'impossibilité pour le Président de démissionner",
+  "Le droit des fonctionnaires à garder leur poste à vie",
+  "A",
+  "La continuité de l'État signifie que la puissance publique ne s'interrompt pas. Même en cas de crise politique, de vacance présidentielle ou de démission du gouvernement, des mécanismes permettent d'assurer le fonctionnement des institutions et des services essentiels."
+),
+
+makeQuestion(
+  "i3-055",
+  3,
+  "Institutions",
+  "Quel texte empêche aujourd'hui un Président de la République d'exercer plus de deux mandats consécutifs ?",
+  "Une décision du Conseil constitutionnel",
+  "Une loi organique adoptée en 2007",
+  "L'article 6 de la Constitution, modifié par la révision de 2008",
+  "Un usage politique sans valeur juridique",
+  "C",
+  "La révision constitutionnelle du 23 juillet 2008 a modifié l'article 6 de la Constitution. Désormais, nul ne peut exercer plus de deux mandats présidentiels consécutifs."
+),
+
+
+makeQuestion(
+"i3-048",
+3,
+"Institutions",
+"Quelle différence faut-il faire entre irresponsabilité et immunité parlementaire ?",
+"L'irresponsabilité protège durablement les opinions et votes dans le mandat, tandis que l'inviolabilité protège de manière relative contre certaines poursuites pénales",
+"L'immunité est absolue, l'irresponsabilité peut être levée",
+"L'irresponsabilité concerne la vie privée, l'immunité la vie publique",
+"Ces deux notions désignent exactement la même chose",
+"A",
+"L'article 26 distingue deux protections. L'irresponsabilité protège de façon absolue les opinions et votes émis dans l'exercice du mandat. L'inviolabilité, elle, protège seulement de manière relative contre certaines poursuites ou mesures coercitives."
+),
+
+makeQuestion(
+"i3-049",
+3,
+"Institutions",
+"Quelle différence principale existe entre l'état d'urgence et l'article 16 de la Constitution ?",
+"Ce sont exactement les mêmes mécanismes",
+"L'état d'urgence est prévu par une loi ordinaire et renforce les pouvoirs de police, tandis que l'article 16 est un régime constitutionnel exceptionnel concentrant les pouvoirs entre les mains du Président",
+"L'état d'urgence relève de l'Union européenne et l'article 16 du Parlement",
+"L'état d'urgence suspend toutes les institutions alors que l'article 16 ne change rien",
+"B",
+"L'état d'urgence est organisé par la loi de 1955 et vise surtout à renforcer les pouvoirs de police administrative. L'article 16, lui, est un dispositif constitutionnel exceptionnel beaucoup plus fort, utilisé en cas de crise grave menaçant les institutions de la République."
+),
+
+makeQuestion(
+"i3-050",
+3,
+"Institutions",
+"Que sont les 'conventions de la Constitution' dans la pratique politique française ?",
+"Des traités internationaux ayant valeur constitutionnelle",
+"Des règles non écrites issues de la pratique qui complètent le fonctionnement réel des institutions",
+"Des circulaires du Premier ministre sur la Constitution",
+"Des accords entre les juridictions françaises et européennes",
+"B",
+"Les conventions de la Constitution sont des usages politiques non écrits mais importants dans la pratique institutionnelle. Par exemple, le fait de nommer un Premier ministre issu de la majorité parlementaire est une pratique essentielle, même si le texte constitutionnel ne le dit pas toujours de manière détaillée."
+),
+
+makeQuestion(
+"i3-051",
+3,
+"Institutions",
+"Quelle est la portée des avis du Conseil d'État lorsqu'il conseille le gouvernement ?",
+"Ils s'imposent juridiquement au gouvernement",
+"Ils sont consultatifs mais leur poids technique et politique est important",
+"Ils remplacent la décision du Parlement",
+"Ils ne sont jamais publiés",
+"B",
+"Quand le Conseil d'État conseille le gouvernement sur un projet de loi ou un décret, son avis n'est pas juridiquement obligatoire. Mais il a un poids important car il éclaire la solidité juridique du texte et peut éviter des annulations ultérieures."
+),
+
+makeQuestion(
+"i3-052",
+3,
+"Institutions",
+"Pourquoi la Cour de justice de la République (CJR) est-elle souvent critiquée ?",
+"Parce qu'elle juge les ministres pour des actes liés à leurs fonctions avec une composition mêlant parlementaires et magistrats, ce qui fait douter de son impartialité",
+"Parce qu'elle juge les simples citoyens à la place des tribunaux correctionnels",
+"Parce qu'elle remplace le Conseil constitutionnel",
+"Parce qu'elle est composée uniquement de préfets",
+"A",
+"La CJR juge les ministres pour les crimes et délits commis dans l'exercice de leurs fonctions. Elle est souvent critiquée car sa composition comprend des parlementaires, ce qui peut donner l'impression d'une justice politique ou insuffisamment indépendante."
+),
+
+makeQuestion(
+"i3-053",
+3,
+"Institutions",
+"Qu'est-ce qu'un recours pour excès de pouvoir en droit administratif ?",
+"Un recours contre une décision de justice pénale",
+"Une action permettant d'obtenir l'annulation d'un acte administratif illégal",
+"Une sanction prise contre un fonctionnaire trop zélé",
+"Un recours réservé aux ministres",
+"B",
+"Le recours pour excès de pouvoir permet au juge administratif d'annuler un acte administratif unilatéral illégal. C'est un outil majeur de l'État de droit, car il permet de contrôler l'administration et de la contraindre à respecter la légalité."
+),
+
+makeQuestion(
+"i3-054",
+3,
+"Institutions",
+"Que garantit le principe de continuité de l'État ?",
+"Le fait que les institutions et les services essentiels continuent à fonctionner malgré les crises, les démissions ou les vacances du pouvoir",
+"Le maintien obligatoire du même gouvernement pendant cinq ans",
+"L'impossibilité pour le Président de démissionner",
+"Le droit des fonctionnaires à garder leur poste à vie",
+"A",
+"La continuité de l'État signifie que la puissance publique ne s'interrompt pas. Même en cas de crise politique, de vacance présidentielle ou de démission du gouvernement, des mécanismes permettent d'assurer le fonctionnement des institutions et des services essentiels."
+),
+
+makeQuestion(
+"i3-055",
+3,
+"Institutions",
+"Quel texte empêche aujourd'hui un Président de la République d'exercer plus de deux mandats consécutifs ?",
+"Une décision du Conseil constitutionnel",
+"Une loi organique adoptée en 2007",
+"L'article 6 de la Constitution, modifié par la révision de 2008",
+"Un usage politique sans valeur juridique",
+"C",
+"La révision constitutionnelle du 23 juillet 2008 a modifié l'article 6 de la Constitution. Désormais, nul ne peut exercer plus de deux mandats présidentiels consécutifs."
+),
 
 
 makeQuestion(

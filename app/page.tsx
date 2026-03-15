@@ -190,17 +190,12 @@ export default function HomePage() {
 
       {/* ===== HERO ===== */}
       <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm">
-        {/* Bande tricolore */}
         <div className="h-1 w-full bg-gradient-to-r from-blue-600 via-white to-red-600" />
-
-        {/* Halos */}
         <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-red-100/40 dark:bg-red-900/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-blue-100/30 dark:bg-blue-900/20 blur-3xl" />
 
         <div className="p-5 sm:p-6 lg:p-7">
-          {/* TOP BAR */}
           <div className="flex items-start justify-between gap-4 flex-wrap">
-            {/* Bloc République */}
             <div className="flex items-center gap-3">
               <div className="h-11 w-11 rounded-2xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 flex items-center justify-center">
                 <MarianneMark />
@@ -223,7 +218,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Pseudo */}
             <div className="flex items-center gap-2">
               {pseudo.trim() ? (
                 <div className="text-sm text-slate-700 dark:text-slate-300 flex items-center gap-2">
@@ -252,7 +246,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* TITRE */}
           <div className="mt-6 text-center">
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
               Préparez votre parcours en France <span className="text-blue-700 dark:text-blue-400">FR</span>
@@ -265,32 +258,25 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* BOUTONS HERO */}
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-
-  <Button variant="secondary" onClick={() => router.push("/info")}>
-    📖 Comprendre l'examen
-  </Button>
-
-  {hasLastResult && (
-    <Button variant="secondary" onClick={() => router.push("/results")}>
-      {/* ✅ /results — pas /info */}
-      Voir le dernier résultat
-    </Button>
-  )}
-
-  <Button variant="secondary" onClick={smartStart}>
-    Essayer et laisser un avis
-  </Button>
-
-</div>
+            <Button variant="secondary" onClick={() => router.push("/info")}>
+              📖 Comprendre l'examen
+            </Button>
+            {hasLastResult && (
+              <Button variant="secondary" onClick={() => router.push("/results")}>
+                Voir le dernier résultat
+              </Button>
+            )}
+            <Button variant="secondary" onClick={smartStart}>
+              Essayer et laisser un avis
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* ===== GRID ===== */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
-        {/* Niveau */}
         <Card>
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Niveau</h3>
@@ -321,7 +307,6 @@ export default function HomePage() {
           </div>
         </Card>
 
-        {/* Thèmes */}
         <Card>
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Thèmes</h3>
@@ -355,7 +340,6 @@ export default function HomePage() {
           )}
         </Card>
 
-        {/* Résumé */}
         <Card>
           <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Résumé du test</h3>
           <div className="mt-4 space-y-3 text-sm">
@@ -393,40 +377,44 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setPseudoOpen(false)} />
           <div className="relative w-full max-w-lg rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl p-6">
             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Avant de commencer</h3>
-            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-  
-    <a href={"/register?pseudo=" + encodeURIComponent(pseudoDraft) + "&email=" + encodeURIComponent(emailDraft)}
-    className="text-blue-500 hover:underline font-medium"
-  >
-    Créer un vrai compte
-  </a>
-  {" "}pour sauvegarder ton historique et accéder aux stats complètes.
-</p>
-            <input
-              value={pseudoDraft}
-              onChange={(e) => setPseudoDraft(e.target.value)}
-              placeholder="Pseudo (ex : Carlos)"
-              className="mt-4 w-full rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-              maxLength={20}
-              autoFocus
-            />
-            <input
-              type="email"
-              value={emailDraft}
-              onChange={(e) => setEmailDraft(e.target.value)}
-              placeholder="Adresse email"
-              className="mt-3 w-full rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-            />
-            <div className="mt-5 flex gap-2 justify-end">
-              <Button variant="secondary" type="button" onClick={() => setPseudoOpen(false)}>Annuler</Button>
-              <Button type="button" onClick={confirmIdentity}
-                disabled={!pseudoDraft.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailDraft.trim().toLowerCase())}>
-                Continuer
-              </Button>
-            </div>
-            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-              Tes données ne sont pas publiques.
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              Crée un compte pour sauvegarder tes résultats et accéder à toutes les fonctionnalités.
             </p>
+            <div className="mt-5 flex flex-col gap-3">
+              <a href="/register" className="w-full text-center rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-sm transition-colors">
+                Créer un compte gratuit
+              </a>
+              <a href="/login" className="w-full text-center rounded-2xl border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold py-3 text-sm transition-colors">
+                J'ai déjà un compte
+              </a>
+            </div>
+            <div className="mt-5 border-t border-slate-100 dark:border-slate-700 pt-4">
+              <p className="text-xs text-slate-400 dark:text-slate-500 mb-3 text-center">
+                Ou continuer sans compte (résultats non sauvegardés)
+              </p>
+              <input
+                value={pseudoDraft}
+                onChange={(e) => setPseudoDraft(e.target.value)}
+                placeholder="Pseudo (ex : Carlos)"
+                className="w-full rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+                maxLength={20}
+                autoFocus
+              />
+              <input
+                type="email"
+                value={emailDraft}
+                onChange={(e) => setEmailDraft(e.target.value)}
+                placeholder="Adresse email"
+                className="mt-3 w-full rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
+              />
+              <div className="mt-4 flex gap-2 justify-end">
+                <Button variant="secondary" type="button" onClick={() => setPseudoOpen(false)}>Annuler</Button>
+                <Button type="button" onClick={confirmIdentity}
+                  disabled={!pseudoDraft.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailDraft.trim().toLowerCase())}>
+                  Continuer sans compte
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       )}
