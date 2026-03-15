@@ -5,6 +5,7 @@ import Card from "../components/Card";
 import Button from "../components/Button";
 import { useEffect, useMemo, useState } from "react";
 import { hasAnyResult } from "../src/lib/saveResult";
+import { createClient } from '@/lib/supabase/client'
 
 type Level = 1 | 2 | 3;
 type Theme = "Valeurs" | "Institutions" | "Histoire" | "Société";
@@ -147,6 +148,21 @@ export default function HomePage() {
     }
     check();
   }, [pseudo, email]);
+
+useEffect(() => {
+  const supabase = createClient()
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session?.user) {
+      const username = session.user.user_metadata?.username || session.user.email?.split('@')[0] || ''
+      const email = session.user.email || ''
+      setPseudo(username)
+      setEmail(email)
+      setPseudoDraft(username)
+      setEmailDraft(email)
+      saveUser({ pseudo: username, email })
+    }
+  })
+}, [])
 
   function requireAuthAndRun(action: () => void) {
     if (!pseudo || !email) {
