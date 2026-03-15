@@ -69,20 +69,22 @@ export default function LoginPage() {
   }
 
   async function handleNewPassword(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    const supabase = createClient();
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-    if (error) {
-      setError("Erreur : " + error.message);
-      setLoading(false);
-      return;
-    }
-    setSuccess("Mot de passe mis à jour !");
-    setTimeout(() => router.push("/"), 1500);
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
+  const supabase = createClient();
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) {
+    setError("Erreur : " + error.message);
     setLoading(false);
+    return;
   }
+  // Connexion automatique après reset
+  await supabase.auth.signInWithPassword({ email, password: newPassword });
+  setSuccess("Mot de passe mis à jour ! Redirection...");
+  setTimeout(() => { router.push("/"); router.refresh(); }, 1500);
+  setLoading(false);
+}
 
   // ===== MODE FORGOT =====
   if (mode === "forgot") {
