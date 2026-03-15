@@ -35,7 +35,7 @@ export default function LoginPage() {
     setError(null)
     const supabase = createClient()
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${location.origin}/auth/callback?type=recovery`,
+      redirectTo: 'https://qcm-assimilation-fr.netlify.app/auth/callback?type=recovery',
     })
     if (error) {
       setError('Erreur : ' + error.message)
@@ -94,7 +94,7 @@ export default function LoginPage() {
           )}
 
           <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-            <button onClick={() => { setForgotMode(false); setForgotSent(false); }}
+            <button onClick={() => { setForgotMode(false); setForgotSent(false); setError(null); }}
               className="text-blue-600 hover:underline font-medium">
               Retour à la connexion
             </button>
@@ -136,7 +136,7 @@ export default function LoginPage() {
               </label>
               <button
                 type="button"
-                onClick={() => setForgotMode(true)}
+                onClick={() => { setForgotMode(true); setError(null); }}
                 className="text-xs text-blue-600 hover:underline"
               >
                 Mot de passe oublié ?

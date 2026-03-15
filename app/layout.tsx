@@ -7,18 +7,25 @@ export const metadata: Metadata = {
   description: "Plateforme d'entraînement QCM - Assimilation nationalité française",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="fr">
-      <body className="bg-gradient-to-br from-slate-100 via-white to-blue-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 text-slate-900 dark:text-slate-100">
+    <html lang="fr" className="h-full">
+      <body className="min-h-full text-slate-100 antialiased">
         <div className="min-h-screen flex flex-col">
           <AppHeader />
-          <main className="flex-1">{children}</main>
-        </div>
 
-        <footer className="mt-12 text-center text-xs text-slate-500 dark:text-slate-400 py-6">
-          © {new Date().getFullYear()} Par Carlos Hounsinou — QCM Assimilation FR
-        </footer>
+          <main className="flex-1 w-full">
+            {children}
+          </main>
+
+          <footer className="mt-10 border-t border-white/10 bg-slate-950/30 px-4 py-6 text-center text-xs text-slate-400 backdrop-blur-sm sm:px-6">
+            © {new Date().getFullYear()} Par Carlos Hounsinou — QCM Assimilation FR
+          </footer>
+        </div>
       </body>
     </html>
   );
