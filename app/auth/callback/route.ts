@@ -8,6 +8,8 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code')
   const type = searchParams.get('type')
 
+  console.log('CALLBACK received - code:', code?.slice(0,8), 'type:', type)
+
   if (code) {
     const cookieStore = await cookies()
     const supabase = createServerClient(
@@ -26,14 +28,14 @@ export async function GET(request: NextRequest) {
     )
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
+    console.log('exchangeCodeForSession error:', error?.message ?? 'none')
 
     if (!error) {
-      // Reset password → rediriger vers la page de reset
       if (type === 'recovery') {
+        console.log('Redirecting to reset-password')
         return NextResponse.redirect(`${origin}/reset-password`)
       }
 
-      // Confirmation email → passer en freemium
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         await supabase
@@ -43,6 +45,8 @@ export async function GET(request: NextRequest) {
       }
       return NextResponse.redirect(`${origin}/register?confirmed=true`)
     }
+
+    console.log('Error in callback, redirecting to login')
   }
 
   return NextResponse.redirect(`${origin}/login?error=confirmation_failed`)
