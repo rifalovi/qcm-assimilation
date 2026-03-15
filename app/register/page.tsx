@@ -13,6 +13,7 @@ function RegisterForm() {
   const [email, setEmail]       = useState(searchParams.get('email') ?? '')
   const [username, setUsername] = useState(searchParams.get('pseudo') ?? '')
   const [password, setPassword] = useState('')
+  const confirmed = searchParams.get('confirmed')
   const [loading, setLoading]   = useState(false)
   const [message, setMessage]   = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
@@ -47,6 +48,15 @@ function RegisterForm() {
   return (
     <main className="min-h-screen flex items-center justify-center px-4 bg-white dark:bg-slate-900">
       <div className="w-full max-w-sm">
+        {confirmed && (
+  <div className="mb-6 rounded-xl px-4 py-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 text-sm">
+    <p className="font-semibold mb-1">Email confirmé avec succès !</p>
+    <p>Ton compte est actif. Tu peux maintenant te connecter.</p>
+    <a href="/login" className="mt-2 inline-block font-medium underline">
+      Se connecter →
+    </a>
+  </div>
+)}
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
           Créer un compte
         </h1>

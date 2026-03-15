@@ -675,6 +675,9 @@ makeQuestion("i3-026", 3, "Institutions", "En droit français, la hiérarchie de
   "D",
   "En droit interne français, la Constitution est au sommet. Les traités sont supérieurs aux lois, mais restent inférieurs à la Constitution."
 ),
+
+
+
 makeQuestion(
 "i3-056",
 3,

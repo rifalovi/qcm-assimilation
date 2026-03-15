@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
           .eq('id', user.id)
       }
       // Redirige vers la page d'accueil après confirmation
-      return NextResponse.redirect(`${origin}/`)
+      return NextResponse.redirect(`${origin}/register?confirmed=true`)
     }
   }
 
