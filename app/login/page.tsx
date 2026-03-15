@@ -107,7 +107,7 @@ export default function LoginPage() {
                   Retrouvez l'accès à votre compte en quelques instants.
                 </h1>
                 <p className="mt-4 max-w-xl text-base leading-8 text-slate-300">
-                  Entrez votre adresse email pour recevoir un code à 6 chiffres et réinitialiser votre mot de passe sans quitter le site.
+                  Entrez votre adresse email pour recevoir un code à 8 chiffres et réinitialiser votre mot de passe sans quitter le site.
                 </p>
                 <div className="mt-8 space-y-4">
                   {[
@@ -133,7 +133,7 @@ export default function LoginPage() {
                 </div>
                 <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white">Réinitialiser le mot de passe</h1>
                 <p className="mt-2 text-sm leading-7 text-slate-400">
-                  Tu recevras un code à 6 chiffres par email — pas de lien à cliquer.
+                  Tu recevras un code à 8 chiffres par email — pas de lien à cliquer.
                 </p>
               </div>
 
@@ -182,7 +182,7 @@ export default function LoginPage() {
                   Entre le code reçu par email.
                 </h1>
                 <p className="mt-4 max-w-xl text-base leading-8 text-slate-300">
-                  Un code à 6 chiffres a été envoyé à <strong className="text-white">{email}</strong>. Vérifie aussi ton dossier spam.
+                  Un code à 8 chiffres a été envoyé à <strong className="text-white">{email}</strong>. Vérifie aussi ton dossier spam.
                 </p>
               </div>
             </div>
@@ -200,9 +200,9 @@ export default function LoginPage() {
 
               <form onSubmit={handleVerifyOtp} className="space-y-5">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-200">Code à 6 chiffres</label>
+                  <label className="mb-2 block text-sm font-medium text-slate-200">Code à 8 chiffres</label>
                   <input type="text" required value={otp} onChange={(e) => setOtp(e.target.value)}
-                    placeholder="123456" maxLength={6}
+                    placeholder="12345678" maxLength={8}
                     className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-center text-2xl tracking-[0.5em] text-white placeholder:text-slate-600 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"/>
                 </div>
                 {error && <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</div>}
