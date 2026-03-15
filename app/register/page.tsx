@@ -5,25 +5,28 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-// Composant interne qui lit les searchParams
+type Step = 'form' | 'otp' | 'confirmed'
+
 function RegisterForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  const [step, setStep] = useState<Step>(
+    searchParams.get('confirmed') ? 'confirmed' : 'form'
+  )
   const [email, setEmail]       = useState(searchParams.get('email') ?? '')
   const [username, setUsername] = useState(searchParams.get('pseudo') ?? '')
   const [password, setPassword] = useState('')
-  const confirmed = searchParams.get('confirmed')
+  const [otp, setOtp]           = useState('')
   const [loading, setLoading]   = useState(false)
-  const [message, setMessage]   = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [error, setError]       = useState<string | null>(null)
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    setMessage(null)
+    setError(null)
 
     const supabase = createClient()
-
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -34,29 +37,119 @@ function RegisterForm() {
     })
 
     if (error) {
-      setMessage({ type: 'error', text: error.message })
+      setError(error.message)
     } else {
-      setMessage({
-        type: 'success',
-        text: 'Compte créé ! Vérifie ta boîte mail pour confirmer ton adresse.',
-      })
+      setStep('otp')
     }
-
     setLoading(false)
   }
 
+  async function handleVerifyOtp(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    const supabase = createClient()
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token: otp,
+      type: 'signup',
+    })
+
+    if (error) {
+      setError('Code incorrect ou expiré.')
+      setLoading(false)
+      return
+    }
+
+    // Passe le rôle en freemium
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      await supabase.from('profiles').update({ role: 'freemium' }).eq('id', user.id)
+    }
+
+    setStep('confirmed')
+    setLoading(false)
+  }
+
+  // ===== ÉTAPE CONFIRMÉ =====
+  if (step === 'confirmed') {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4 bg-white dark:bg-slate-900">
+        <div className="w-full max-w-sm text-center">
+          <div className="mb-6 rounded-xl px-4 py-6 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300">
+            <p className="text-4xl mb-3">🎉</p>
+            <p className="font-bold text-lg mb-1">Compte confirmé !</p>
+            <p className="text-sm mb-4">Bienvenue {username} — tu as accès à 40 questions.</p>
+            <a href="/login"
+              className="inline-block w-full rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-sm transition-colors">
+              Se connecter maintenant →
+            </a>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  // ===== ÉTAPE OTP =====
+  if (step === 'otp') {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4 bg-white dark:bg-slate-900">
+        <div className="w-full max-w-sm">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+            Confirme ton email
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+            Un code a été envoyé à <strong className="text-slate-700 dark:text-slate-300">{email}</strong>. Entre-le ci-dessous.
+          </p>
+
+          <form onSubmit={handleVerifyOtp} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                Code de confirmation
+              </label>
+              <input
+                type="text"
+                required
+                value={otp}
+                onChange={e => setOtp(e.target.value)}
+                placeholder="12345678"
+                maxLength={8}
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-4 text-center text-2xl tracking-[0.4em] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {error && (
+              <div className="rounded-xl px-4 py-3 text-sm bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-3 text-sm transition-colors"
+            >
+              {loading ? 'Vérification...' : 'Confirmer mon compte'}
+            </button>
+          </form>
+
+          <p className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
+            Code non reçu ?{' '}
+            <button onClick={() => { setStep('form'); setError(null); setOtp(''); }}
+              className="text-blue-600 hover:underline font-medium">
+              Recommencer
+            </button>
+          </p>
+        </div>
+      </main>
+    )
+  }
+
+  // ===== ÉTAPE FORMULAIRE =====
   return (
     <main className="min-h-screen flex items-center justify-center px-4 bg-white dark:bg-slate-900">
       <div className="w-full max-w-sm">
-        {confirmed && (
-  <div className="mb-6 rounded-xl px-4 py-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 text-sm">
-    <p className="font-semibold mb-1">Email confirmé avec succès !</p>
-    <p>Ton compte est actif. Tu peux maintenant te connecter.</p>
-    <a href="/login" className="mt-2 inline-block font-medium underline">
-      Se connecter →
-    </a>
-  </div>
-)}
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
           Créer un compte
         </h1>
@@ -108,13 +201,9 @@ function RegisterForm() {
             />
           </div>
 
-          {message && (
-            <div className={`rounded-xl px-4 py-3 text-sm ${
-              message.type === 'success'
-                ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800'
-                : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800'
-            }`}>
-              {message.text}
+          {error && (
+            <div className="rounded-xl px-4 py-3 text-sm bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
+              {error}
             </div>
           )}
 
@@ -138,8 +227,6 @@ function RegisterForm() {
   )
 }
 
-// Page principale — enveloppe le formulaire dans Suspense
-// Nécessaire car useSearchParams() lit l'URL côté client
 export default function RegisterPage() {
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-500">Chargement...</div>}>
