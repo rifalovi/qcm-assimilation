@@ -6,6 +6,8 @@ import Button from "../components/Button";
 import { useEffect, useMemo, useState } from "react";
 import { hasAnyResult } from "../src/lib/saveResult";
 import { createClient } from "@/lib/supabase/client";
+import { useUser, ROLE_LIMITS } from "./components/UserContext";
+
 
 type Level = 1 | 2 | 3;
 type Theme = "Valeurs" | "Institutions" | "Histoire" | "Société";
@@ -108,6 +110,8 @@ function StatMiniCard({
 
 export default function HomePage() {
   const router = useRouter();
+  const { role } = useUser();
+const limits = ROLE_LIMITS[role];
 
   const [pseudo, setPseudo] = useState("");
   const [email, setEmail] = useState("");
@@ -193,15 +197,15 @@ export default function HomePage() {
     setPseudoOpen(true);
   }
 
-  function clearPseudo() {
+  async function clearPseudo() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
     localStorage.removeItem("qcm_user");
-    setPseudo("");
-    setEmail("");
-    setPseudoDraft("");
-    setEmailDraft("");
-    setHasLastResult(false);
-    setPseudoOpen(false);
+    setPseudo(""); setEmail(""); setPseudoDraft(""); setEmailDraft("");
+    setHasLastResult(false); setPseudoOpen(false);
   }
+  
+  
 
   const [level, setLevel] = useState<Level>(1);
   const [themes, setThemes] = useState<Theme[]>([...THEMES]);
@@ -452,24 +456,32 @@ export default function HomePage() {
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-              {[1, 2, 3].map((n) => {
-                const active = level === n;
-                return (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setLevel(n as Level)}
-                    className={`rounded-2xl border px-4 py-4 text-center transition-all duration-200 ${
-                      active
-                        ? "border-blue-400/30 bg-gradient-to-br from-blue-500/15 to-indigo-500/15 text-blue-200 shadow-[0_10px_30px_rgba(37,99,235,0.18)]"
-                        : "border-white/10 bg-white/5 text-slate-300 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    <div className="text-sm font-semibold">Niveau {n}</div>
-                  </button>
-                );
-              })}
-            </div>
+  {[1, 2, 3].map((n) => {
+    const active = level === n;
+    const locked = !limits.levels.includes(n);
+    return (
+      <button
+        key={n}
+        type="button"
+        onClick={() => !locked && setLevel(n as Level)}
+        className={`relative rounded-2xl border px-4 py-4 text-center transition-all duration-200 ${
+          locked
+            ? "cursor-not-allowed border-white/5 bg-white/[0.02] text-slate-600"
+            : active
+            ? "border-blue-400/30 bg-gradient-to-br from-blue-500/15 to-indigo-500/15 text-blue-200 shadow-[0_10px_30px_rgba(37,99,235,0.18)]"
+            : "border-white/10 bg-white/5 text-slate-300 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
+        }`}
+      >
+        <div className="text-sm font-semibold">Niveau {n}</div>
+        {locked && (
+          <div className="mt-1 text-xs text-amber-400/70">
+            🔒 Premium
+          </div>
+        )}
+      </button>
+    );
+  })}
+</div>
 
             <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4 text-center sm:text-left">
               <div className="mb-2 text-sm font-semibold text-white">Conseil</div>
@@ -546,13 +558,27 @@ export default function HomePage() {
             </div>
 
             <div className="mt-6 flex flex-col gap-3">
-              <Button className="w-full" onClick={start} disabled={!canStart}>
-                Faire un test
-              </Button>
-              <Button variant="danger" className="w-full" onClick={startExam}>
-                Examen blanc
-              </Button>
-            </div>
+  <Button className="w-full" onClick={start} disabled={!canStart}>
+    Faire un test
+  </Button>
+  {limits.canExam ? (
+    <Button variant="danger" className="w-full" onClick={startExam}>
+      Examen blanc
+    </Button>
+  ) : (
+    <div className="relative">
+      <button
+        disabled
+        className="w-full rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-600 cursor-not-allowed"
+      >
+        Examen blanc
+      </button>
+      <div className="mt-1 text-center text-xs text-amber-400/70">
+        🔒 Disponible en Premium — essai gratuit pour Freemium
+      </div>
+    </div>
+  )}
+</div>
 
             <p className="mt-4 text-center text-xs leading-6 text-slate-400 sm:text-left">
               Votre résultat affichera vos erreurs, vos bonnes réponses et les explications pour

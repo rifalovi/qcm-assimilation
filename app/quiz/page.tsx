@@ -101,6 +101,7 @@ export default function QuizPage() {
 
   // Applique la limite de questions
   const allowedCount = Math.min(parsed.count, limits.quizCount);
+  console.log('role:', role, 'limits:', limits.quizCount, 'allowedCount:', allowedCount)
 
   const quiz = generateQuiz({
     level: parsed.level,

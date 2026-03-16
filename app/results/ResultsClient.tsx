@@ -15,6 +15,7 @@ import Button from "../../components/Button";
 import StatsDashboard from "../../components/StatsDashboard";
 import type { ChoiceKey, Question, Theme } from "../../src/data/questions";
 import { loadUser } from "../../src/lib/qcmUser";
+import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
 function computeAdvancedStats(
   questions: Question[],
@@ -184,6 +185,8 @@ export default function ResultsClient() {
   const [sentFeedback, setSentFeedback] = useState(false);
   const [sendingFeedback, setSendingFeedback] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
+  const { role } = useUser();
+const limits = ROLE_LIMITS[role];
 
   const PUBLIC_URL = "https://qcm-assimilation-fr.netlify.app";
 
@@ -752,10 +755,16 @@ ${errorsText}
                   <span className="font-semibold text-white">Bonne réponse :</span>{" "}
                   {d.correct}
                 </div>
-                <div className="mt-3 text-sm text-slate-300">
-                  <span className="font-semibold text-white">Explication :</span>{" "}
-                  {d.explanation}
-                </div>
+                {limits.canSeeExplanations ? (
+  <div className="mt-3 text-sm text-slate-300">
+    <span className="font-semibold text-white">Explication :</span>{" "}
+    {d.explanation}
+  </div>
+) : (
+  <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-300/80">
+    🔒 Explication disponible en Premium
+  </div>
+)}
               </div>
             ))}
           </div>
