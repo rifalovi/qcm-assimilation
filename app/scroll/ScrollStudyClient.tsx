@@ -4,6 +4,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { Question, MCQVariant } from "@/types/questions";
+import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
 interface Props {
   questions: Question[];
@@ -728,6 +729,9 @@ export default function ScrollStudyClient({
   preselectedTheme,
 }: Props) {
   const router = useRouter();
+  const { role } = useUser();
+const limits = ROLE_LIMITS[role];
+const visibleQuestions = questions.slice(0, limits.scrollCount);
 
   const [activeTheme, setActiveTheme] = useState<string | null>(preselectedTheme);
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);
@@ -740,7 +744,7 @@ export default function ScrollStudyClient({
   }, [preselectedTheme]);
 
   const filteredQuestions = activeTheme
-    ? questions.filter((q) => sameTheme(q.theme, activeTheme))
+    ? visibleQuestions.filter((q) => sameTheme(q.theme, activeTheme))
     : questions;
 
   useEffect(() => {
