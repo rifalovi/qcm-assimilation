@@ -374,43 +374,49 @@ const limits = ROLE_LIMITS[role];
 
             <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
               <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-blue-200">
-                  Plus de 400 questions-réponses
-                </div>
+  <div className="mb-4 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-blue-200 sm:text-xs">
+    Plus de 400 questions-réponses
+  </div>
 
-                <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-                  Préparez votre examen civique avec une interface moderne, claire et efficace.
-                </h1>
+  <h1 className="mx-auto max-w-[11ch] text-[1.6rem] font-extrabold leading-[1.08] tracking-tight text-white sm:max-w-[13ch] sm:text-4xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
+    Préparez votre examen civique avec une interface moderne, claire et efficace.
+  </h1>
 
-                <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base lg:mx-0">
-                  Entraînez-vous sur les valeurs de la République, les institutions, l’histoire
-                  de France et la vie en société. Choisissez votre niveau, sélectionnez vos thèmes
-                  et progressez avec des explications pédagogiques proches des exigences de
-                  l’examen civique 2026.
-                </p>
+  <div className="mx-auto mt-5 max-w-2xl rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-4 sm:px-5 sm:py-5 lg:mx-0">
+    <p className="text-[0.98rem] leading-8 text-slate-300 sm:text-base">
+      Entraînez-vous sur les valeurs de la République, les institutions, l’histoire
+      de France et la vie en société.
+    </p>
+    <p className="mt-3 text-[0.98rem] leading-8 text-slate-300 sm:text-base">
+      Choisissez votre niveau, sélectionnez vos thèmes et progressez avec des
+      explications pédagogiques proches des exigences de l’examen civique 2026.
+    </p>
+  </div>
 
-                <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
-                  <Button onClick={start}>🚀 Commencer maintenant</Button>
-                  <Button variant="secondary" onClick={() => router.push("/info")}>
-                    📖 Comprendre l'examen
-                  </Button>
-                  <Button variant="secondary" onClick={startExam}>
-                    🎯 Examen blanc
-                  </Button>
-                </div>
+  <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
+    <Button className="w-full sm:w-auto" onClick={start}>
+      Commencer maintenant
+    </Button>
+    <Button className="w-full sm:w-auto" variant="secondary" onClick={() => router.push("/info")}>
+      Comprendre l'examen
+    </Button>
+    <Button className="w-full sm:w-auto" variant="secondary" onClick={startExam}>
+      Examen blanc
+    </Button>
+  </div>
 
-                <div className="mt-7 flex flex-wrap justify-center gap-3 text-xs text-slate-400 sm:text-sm lg:justify-start">
-                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
-                    Entraînement progressif
-                  </div>
-                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
-                    Corrections détaillées
-                  </div>
-                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
-                    Simulation réaliste
-                  </div>
-                </div>
-              </div>
+  <div className="mt-7 flex flex-wrap justify-center gap-3 text-xs text-slate-400 sm:text-sm lg:justify-start">
+    <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+      Entraînement progressif
+    </div>
+    <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+      Corrections détaillées
+    </div>
+    <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+      Simulation réaliste
+    </div>
+  </div>
+</div>
 
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-3 lg:grid-cols-1">
                 <StatMiniCard value="40" label="Questions par session" icon="❓" />

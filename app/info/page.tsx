@@ -108,7 +108,7 @@ function ActionButton({
   variant?: "primary" | "secondary";
 }) {
   const base =
-    "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400/40";
+    "w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400/40";
   const styles =
     variant === "primary"
       ? "border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 text-white shadow-[0_12px_30px_rgba(37,99,235,0.28)] hover:-translate-y-0.5 hover:brightness-105 hover:shadow-[0_18px_40px_rgba(37,99,235,0.36)]"
@@ -221,30 +221,32 @@ export default function InfoPage() {
             </div>
 
             <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-              <div>
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-blue-200">
-                  Préparez-vous avec méthode
-                </div>
+              <div className="text-center lg:text-left">
+  <div className="mb-4 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-blue-200 sm:text-xs">
+    Préparez-vous avec méthode
+  </div>
 
-                <h1 className="max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-                  Réussir l’examen civique commence par une bonne compréhension des règles du jeu.
-                </h1>
+  <h1 className="mx-auto max-w-[12ch] text-[1.6rem] font-extrabold leading-[1.08] tracking-tight text-white sm:max-w-[14ch] sm:text-4xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
+    Réussir l’examen civique commence par une bonne compréhension des règles du jeu.
+  </h1>
 
-                <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-                  Cette page vous donne une vue claire, rassurante et structurée de l’examen :
-                  format, thèmes, situations concernées, changements introduits en 2026 et points
-                  d’attention à connaître avant de vous lancer.
-                </p>
+  <div className="mx-auto mt-5 max-w-2xl rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-4 sm:px-5 sm:py-5 lg:mx-0">
+    <p className="text-[0.98rem] leading-8 text-slate-300 sm:text-base">
+      Cette page vous donne une vue claire, rassurante et structurée de l’examen :
+      format, thèmes, situations concernées, changements introduits en 2026 et points
+      d’attention à connaître avant de vous lancer.
+    </p>
+  </div>
 
                 <div className="mt-7 flex flex-wrap gap-3">
                   <ActionButton onClick={() => router.push("/")}>
-                    ✏️ S'entraîner maintenant
+                    S'entraîner maintenant
                   </ActionButton>
                   <ActionButton onClick={() => router.push("/exam")} variant="secondary">
-                    🎯 Passer un examen blanc
+                    Passer un examen blanc
                   </ActionButton>
                   <ActionButton onClick={() => router.push("/leaderboard")} variant="secondary">
-                    🏆 Voir le classement
+                    Classement
                   </ActionButton>
                 </div>
 

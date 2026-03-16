@@ -186,7 +186,7 @@ export default function ResultsClient() {
   const [sendingFeedback, setSendingFeedback] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
   const { role } = useUser();
-const limits = ROLE_LIMITS[role];
+  const limits = ROLE_LIMITS[role];
 
   const PUBLIC_URL = "https://qcm-assimilation-fr.netlify.app";
 
@@ -545,15 +545,19 @@ ${errorsText}
               </p>
             </div>
 
-            <span
-              className={`rounded-full border px-3 py-1 text-sm font-semibold ${
+            {limits.canSeeThemeStats ? (
+              <span className={`rounded-full border px-3 py-1 text-sm font-semibold ${
                 score.passed
                   ? "border-emerald-400/20 bg-emerald-500/10 text-emerald-200"
                   : "border-red-400/20 bg-red-500/10 text-red-200"
-              }`}
-            >
-              {score.passed ? "VALIDÉ ✅" : "NON VALIDÉ ❌"}
-            </span>
+              }`}>
+                {score.passed ? "VALIDÉ ✅" : "NON VALIDÉ ❌"}
+              </span>
+            ) : (
+              <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-200">
+                {rank}
+              </span>
+            )}
           </div>
         </div>
       </section>
@@ -573,7 +577,7 @@ ${errorsText}
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-3 justify-center">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
           <Button onClick={replaySame}>Réessayer</Button>
           <Button
             variant="secondary"
@@ -612,49 +616,101 @@ ${errorsText}
         </p>
       </Card>
 
-      <Card>
-        <h2 className="text-lg font-bold text-white">Performance par thème</h2>
-        <p className="mt-1 text-slate-300">
-          Analyse stratégique de tes résultats.
-        </p>
-
-        <div className="mt-6">
-          <StatsDashboard themeStats={stats.themeStats} />
-        </div>
-
-        <div className="mt-6 space-y-3">
-          <p className="text-sm font-semibold text-slate-200">
-            📚 Révise un thème en mode flash-cards
+      
+        {!limits.canSeeThemeStats ? (
+        <div className="rounded-[1.8rem] border border-amber-400/20 bg-gradient-to-br from-amber-500/10 to-orange-500/5 p-8 text-center">
+          <p className="text-3xl mb-3">🔒</p>
+          <h2 className="text-xl font-bold text-white mb-2">
+            Inscris-toi pour voir tes erreurs
+          </h2>
+          <p className="text-slate-300 text-sm mb-6 max-w-md mx-auto">
+            Comprends pourquoi tu te trompes, analyse tes performances par thème et progresse vraiment vers l'examen.
           </p>
-          {Object.entries(stats.themeStats).map(([theme, { correct, total }]) => (
-            <ThemeRevisionCard
-              key={theme}
-              theme={theme}
-              correct={correct}
-              total={total}
-            />
-          ))}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/register"
+              className="rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 text-sm transition">
+              Créer un compte gratuit
+            </a>
+            <a href="/login"
+              className="rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-slate-200 font-semibold px-6 py-3 text-sm transition">
+              J'ai déjà un compte
+            </a>
+          </div>
+          <p className="mt-4 text-xs text-amber-300/70">
+            👑 Détail complet des erreurs + explications avec Premium
+          </p>
         </div>
-      </Card>
+      ) : (
+        <>
+          <Card>
+            <h2 className="text-lg font-bold text-white">Performance par thème</h2>
+            <p className="mt-1 text-slate-300">Analyse stratégique de tes résultats.</p>
+            <div className="mt-6">
+              <StatsDashboard themeStats={stats.themeStats} />
+            </div>
+            <div className="mt-6 space-y-3">
+              <p className="text-sm font-semibold text-slate-200">
+                📚 Révise un thème en mode flash-cards
+              </p>
+              {Object.entries(stats.themeStats).map(([theme, { correct, total }]) => (
+                <ThemeRevisionCard key={theme} theme={theme} correct={correct} total={total} />
+              ))}
+            </div>
+          </Card>
 
-      <Card>
-        <h2 className="text-lg font-bold text-white">Heatmap des réponses</h2>
-        <p className="mt-1 text-slate-300">
-          Vert = bonne réponse • Rouge = erreur
-        </p>
+          <Card>
+            <h2 className="text-lg font-bold text-white">Heatmap des réponses</h2>
+            <p className="mt-1 text-slate-300">Vert = bonne réponse • Rouge = erreur</p>
+            <div className="mt-6 grid grid-cols-10 gap-2">
+              {data.questions.map((q, i) => (
+                <div key={q.id}
+                  className={`h-6 w-6 rounded-md transition ${
+                    data.answers[q.id] !== q.answer ? "bg-red-500" : "bg-emerald-500"
+                  }`}
+                  title={`Question ${i + 1} — ${q.theme}`}
+                />
+              ))}
+            </div>
+          </Card>
 
-        <div className="mt-6 grid grid-cols-10 gap-2">
-          {data.questions.map((q, i) => (
-            <div
-              key={q.id}
-              className={`h-6 w-6 rounded-md transition ${
-                data.answers[q.id] !== q.answer ? "bg-red-500" : "bg-emerald-500"
-              }`}
-              title={`Question ${i + 1} — ${q.theme}`}
-            />
-          ))}
-        </div>
-      </Card>
+          <HistoryCard entries={history} mode={mode} />
+          <ProgressionChart entries={history} />
+
+          <Card>
+            <h2 className="text-lg font-bold text-white">Réviser mes erreurs</h2>
+            <p className="mt-1 text-slate-300">Lis l'explication et refais un test pour consolider.</p>
+            {wrong.length === 0 ? (
+              <div className="mt-4 rounded-2xl border border-green-400/20 bg-green-500/10 p-4 text-green-200">
+                Bravo 🎉 Aucune erreur sur ce test.
+              </div>
+            ) : (
+              <div className="mt-4 space-y-4">
+                {wrong.slice(0, 20).map((d, i) => (
+                  <div key={d.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div className="text-sm text-slate-400">#{i + 1} • {d.theme}</div>
+                      <span className="rounded-full border border-red-400/20 bg-red-500/10 px-2 py-1 text-xs font-semibold text-red-200">Faux</span>
+                    </div>
+                    <div className="mt-2 font-semibold text-white">{d.question}</div>
+                    <div className="mt-3 text-sm text-slate-200">
+                      <span className="font-semibold text-white">Ta réponse :</span>{" "}
+                      {d.user ?? "— (non répondu)"}
+                    </div>
+                    <div className="text-sm text-slate-200">
+                      <span className="font-semibold text-white">Bonne réponse :</span>{" "}
+                      {d.correct}
+                    </div>
+                    <div className="mt-3 text-sm text-slate-300">
+                      <span className="font-semibold text-white">Explication :</span>{" "}
+                      {d.explanation}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+        </>
+      )}
 
       <div id="feedback">
         <Card>
@@ -717,60 +773,7 @@ ${errorsText}
         </Card>
       </div>
 
-      <HistoryCard entries={history} mode={mode} />
-      <ProgressionChart entries={history} />
-
-      <Card>
-        <h2 className="text-lg font-bold text-white">Réviser mes erreurs</h2>
-        <p className="mt-1 text-slate-300">
-          Lis l'explication et refais un test pour consolider.
-        </p>
-
-        {wrong.length === 0 ? (
-          <div className="mt-4 rounded-2xl border border-green-400/20 bg-green-500/10 p-4 text-green-200">
-            Bravo 🎉 Aucune erreur sur ce test.
-          </div>
-        ) : (
-          <div className="mt-4 space-y-4">
-            {wrong.slice(0, 20).map((d, i) => (
-              <div
-                key={d.id}
-                className="rounded-2xl border border-white/10 bg-white/5 p-4"
-              >
-                <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <div className="text-sm text-slate-400">
-                    #{i + 1} • {d.theme}
-                  </div>
-                  <span className="rounded-full border border-red-400/20 bg-red-500/10 px-2 py-1 text-xs font-semibold text-red-200">
-                    Faux
-                  </span>
-                </div>
-
-                <div className="mt-2 font-semibold text-white">{d.question}</div>
-                <div className="mt-3 text-sm text-slate-200">
-                  <span className="font-semibold text-white">Ta réponse :</span>{" "}
-                  {d.user ?? "— (non répondu)"}
-                </div>
-                <div className="text-sm text-slate-200">
-                  <span className="font-semibold text-white">Bonne réponse :</span>{" "}
-                  {d.correct}
-                </div>
-                {limits.canSeeExplanations ? (
-  <div className="mt-3 text-sm text-slate-300">
-    <span className="font-semibold text-white">Explication :</span>{" "}
-    {d.explanation}
-  </div>
-) : (
-  <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-300/80">
-    🔒 Explication disponible en Premium
-  </div>
-)}
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
-
+      
       <form
         name="feedback"
         method="POST"
