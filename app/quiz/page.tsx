@@ -11,7 +11,6 @@ import { generateQuiz, scoreQuiz } from "../../src/lib/quizEngine";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 
-const MIN_ANSWERED_TO_SUBMIT = 32;
 
 export default function QuizPage() {
   const router = useRouter();
@@ -169,7 +168,8 @@ export default function QuizPage() {
     return { correct, total, percent, passed };
   }, [result]);
 
-  const canSubmit = answeredCount >= MIN_ANSWERED_TO_SUBMIT;
+  const minToSubmit = Math.ceil(questions.length * 0.8);
+  const canSubmit = answeredCount >= minToSubmit;
 
   useEffect(() => {
     if (!questions.length) return;
@@ -211,10 +211,9 @@ export default function QuizPage() {
     if (idx < questions.length - 1) setIdx((i) => i + 1);
   }, [remaining, idx, questions.length]);
 
- function selectAnswer(choice: ChoiceKey) {
+function selectAnswer(choice: ChoiceKey) {
   if (!current) return;
   setAnswers((prev) => ({ ...prev, [current.id]: choice }));
-  // Réinitialise le timer et passe à la question suivante
   if (tickRef.current) window.clearInterval(tickRef.current);
   setRemaining(mode === "exam" ? 30 : 20);
   if (idx < questions.length - 1) setIdx(idx + 1);
@@ -395,7 +394,7 @@ export default function QuizPage() {
               Répondu : <span className="font-semibold text-white">{answeredCount}/{questions.length}</span>
             </span>
             <span>
-              Validation : <span className="font-semibold text-white">≥ {MIN_ANSWERED_TO_SUBMIT}</span>
+              Validation : <span className="font-semibold text-white">≥ {minToSubmit}</span>
             </span>
             {mode === "exam" && globalTime !== null && (
               <span>
@@ -485,7 +484,7 @@ export default function QuizPage() {
           {!canSubmit && (
             <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
               ⚠️ Validation possible uniquement si vous avez répondu à au moins{" "}
-              <strong>{MIN_ANSWERED_TO_SUBMIT}</strong> questions.
+              <strong>{minToSubmit}</strong> questions.
             </div>
           )}
 
