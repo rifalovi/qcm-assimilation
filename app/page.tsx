@@ -551,16 +551,23 @@ const limits = ROLE_LIMITS[role];
 
             <div className="mt-5 space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
               {[
-                ["Questions", COUNT],
-                ["Temps / question", `${PER_QUESTION_SECONDS}s`],
-                ["Validation", "≥ 32 bonnes réponses"],
-                ["Niveau", `Niveau ${level}`],
-              ].map(([label, value]) => (
-                <div key={String(label)} className="flex items-center justify-between gap-3">
-                  <span className="text-slate-400">{label}</span>
-                  <span className="font-semibold text-white">{value}</span>
-                </div>
-              ))}
+  ["Questions", `${limits.quizCount} questions`],
+  ["Temps / question", `${PER_QUESTION_SECONDS}s`],
+  ["Niveau", `Niveau ${level}`],
+].map(([label, value]) => (
+  <div key={String(label)} className="flex items-center justify-between gap-3">
+    <span className="text-slate-400">{label}</span>
+    <span className="font-semibold text-white">{value}</span>
+  </div>
+))}
+
+{role !== "premium" && (
+  <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
+    {role === "anonymous"
+      ? "👤 Crée un compte gratuit pour accéder à 20 questions"
+      : "✨ Passe en Premium pour accéder à 40 questions et tous les niveaux"}
+  </div>
+)}
             </div>
 
             <div className="mt-6 flex flex-col gap-3">

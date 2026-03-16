@@ -643,28 +643,57 @@ ${errorsText}
 
       
         {!limits.canSeeThemeStats ? (
-        <div className="rounded-[1.8rem] border border-amber-400/20 bg-gradient-to-br from-amber-500/10 to-orange-500/5 p-8 text-center">
-          <p className="text-3xl mb-3">🔒</p>
-          <h2 className="text-xl font-bold text-white mb-2">
-            Inscris-toi pour voir tes erreurs
-          </h2>
-          <p className="text-slate-300 text-sm mb-6 max-w-md mx-auto">
-            Comprends pourquoi tu te trompes, analyse tes performances par thème et progresse vraiment vers l'examen.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/register"
-              className="rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 text-sm transition">
+  <div className="relative overflow-hidden rounded-[1.8rem]">
+    
+    {/* Aperçu flouté — visible mais illisible */}
+    <div className="pointer-events-none select-none blur-sm opacity-60">
+      <Card>
+        <h2 className="text-lg font-bold text-white">Performance par thème</h2>
+        <div className="mt-4 space-y-3">
+          {["Valeurs", "Institutions", "Histoire", "Société"].map((theme) => (
+            <div key={theme} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-3">
+              <span className="text-sm text-slate-300">{theme}</span>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-24 rounded-full bg-white/10">
+                  <div className="h-2 rounded-full bg-blue-500" style={{ width: "65%" }} />
+                </div>
+                <span className="text-xs text-slate-400">65%</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
+
+    {/* Overlay avec CTA */}
+    <div className="absolute inset-0 flex flex-col items-center justify-center rounded-[1.8rem] bg-slate-900/80 backdrop-blur-[2px] p-6 text-center">
+      <p className="text-3xl mb-3">🔒</p>
+      <h2 className="text-xl font-bold text-white mb-2">
+        {role === "anonymous" ? "Inscris-toi pour voir tes erreurs" : "Passe en Premium pour débloquer"}
+      </h2>
+      <p className="text-slate-300 text-sm mb-6 max-w-md mx-auto">
+        {role === "anonymous"
+          ? "Comprends pourquoi tu as ce résultat, analyse tes performances par thème."
+          : "Accède aux stats détaillées, corrections complètes et tous les niveaux."}
+      </p>
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        {role === "anonymous" ? (
+          <>
+            <a href="/register" className="rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 text-sm transition">
               Créer un compte gratuit
             </a>
-            <a href="/login"
-              className="rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-slate-200 font-semibold px-6 py-3 text-sm transition">
+            <a href="/login" className="rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-slate-200 font-semibold px-6 py-3 text-sm transition">
               J'ai déjà un compte
             </a>
-          </div>
-          <p className="mt-4 text-xs text-amber-300/70">
-            👑 Détail complet des erreurs + explications avec Premium
-          </p>
-        </div>
+          </>
+        ) : (
+          <a href="/account" className="rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-6 py-3 text-sm transition">
+            👑 Passer en Premium
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
       ) : (
         <>
           <Card>
