@@ -404,7 +404,7 @@ function FlashView({
         <p className="mb-3 text-xs font-semibold uppercase tracking-wider" style={{ color: accent }}>
           Question
         </p>
-        <p className="font-semibold leading-snug" style={{ fontSize: "1.08rem", color: "#f8fafc" }}>
+        <p className="font-bold leading-snug" style={{ fontSize: "1.25rem", color: "#f8fafc", textAlign: "justify" }}>
           {question.question}
         </p>
       </div>
@@ -424,7 +424,7 @@ function FlashView({
           border: "1px solid rgba(255,255,255,0.07)",
         }}
       >
-        <p style={{ fontSize: "0.94rem", color: "#dbeafe", lineHeight: "1.8" }}>
+        <p style={{ fontSize: "1.05rem", color: "#dbeafe", lineHeight: "1.9", textAlign: "justify", fontWeight: "500" }}>
           {question.best_answer}
         </p>
       </div>
@@ -808,13 +808,23 @@ const visibleQuestions = questions.slice(0, limits.scrollCount);
           zIndex: 10,
         }}
       >
-        <div className="mb-3 flex items-center justify-between">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "#94a3b8" }}>
-              Révision immersive
-            </p>
-            <p className="mt-1 text-sm font-semibold text-white">Flash-cards thématiques</p>
-          </div>
+<div className="mb-3 flex items-center justify-between">
+  <div className="flex items-center gap-3">
+    <button
+      onClick={() => router.push("/")}
+      className="flex items-center justify-center rounded-xl border border-white/10 bg-white/5 p-2 transition hover:bg-white/10"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-300">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+    </button>
+    <div>
+      <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "#94a3b8" }}>
+        Révision immersive
+      </p>
+      <p className="mt-1 text-sm font-semibold text-white">Flash-cards thématiques</p>
+    </div>
+  </div>
 
           <div
             className="rounded-full px-3 py-1 text-[11px] font-semibold"

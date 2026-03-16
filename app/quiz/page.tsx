@@ -211,11 +211,14 @@ export default function QuizPage() {
     if (idx < questions.length - 1) setIdx((i) => i + 1);
   }, [remaining, idx, questions.length]);
 
-  function selectAnswer(choice: ChoiceKey) {
-    if (!current) return;
-    setAnswers((prev) => ({ ...prev, [current.id]: choice }));
-    if (idx < questions.length - 1) setIdx(idx + 1);
-  }
+ function selectAnswer(choice: ChoiceKey) {
+  if (!current) return;
+  setAnswers((prev) => ({ ...prev, [current.id]: choice }));
+  // Réinitialise le timer et passe à la question suivante
+  if (tickRef.current) window.clearInterval(tickRef.current);
+  setRemaining(mode === "exam" ? 30 : 20);
+  if (idx < questions.length - 1) setIdx(idx + 1);
+}
 
   async function submit() {
     if (submittedRef.current) return;
@@ -268,7 +271,7 @@ export default function QuizPage() {
             Impossible de générer le test
           </h1>
           <p className="mt-2 text-slate-300">{error}</p>
-          <Button className="mt-4" variant="secondary" onClick={() => router.push("/")}>
+          <Button className="mt-4" variant="secondary" onClick={() => router.push(`/results?mode=${mode}`)}>
             Retour
           </Button>
         </Card>
@@ -314,7 +317,7 @@ export default function QuizPage() {
   if (tickRef.current) window.clearInterval(tickRef.current);
   if (globalRef.current) window.clearInterval(globalRef.current);
 
-  router.push(mode === "exam" ? "/exam" : "/");
+  router.push(`/results?mode=${mode}`);
 }
 
   return (
@@ -459,13 +462,16 @@ export default function QuizPage() {
     </button>
 
     {mode !== "exam" && (
-      <button
-        onClick={() => setIdx((i) => Math.max(0, i - 1))}
-        disabled={idx === 0}
-        className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-300 transition hover:bg-white/10 hover:text-white disabled:opacity-50"
-      >
-        Précédent
-      </button>
+      
+        <button
+          onClick={() => setIdx((i) => Math.max(0, i - 1))}
+          disabled={idx === 0}
+          className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-300 transition hover:bg-white/10 hover:text-white disabled:opacity-50"
+        >
+          Précédent
+        </button>
+       
+      
     )}
   </div>
 

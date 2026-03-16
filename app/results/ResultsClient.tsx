@@ -17,6 +17,8 @@ import type { ChoiceKey, Question, Theme } from "../../src/data/questions";
 import { loadUser } from "../../src/lib/qcmUser";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
+// Précharge la page scroll au survol
+
 function computeAdvancedStats(
   questions: Question[],
   answers: Record<string, ChoiceKey | null>
@@ -171,6 +173,9 @@ function StatTile({
 
 export default function ResultsClient() {
   const router = useRouter();
+  const prefetchScroll = () => {
+  router.prefetch('/scroll');
+};
   const searchParams = useSearchParams();
   const mode = (searchParams.get("mode") === "exam" ? "exam" : "train") as
     | "train"
@@ -603,22 +608,27 @@ ${errorsText}
 </div>
 
 {/* ===== BLOC SCROLL — visible pour tous ===== */}
-<div className="mt-6 rounded-[1.5rem] border border-blue-400/20 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 p-5">
+<div className="mt-6 rounded-[1.5rem] border border-blue-400/20 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 p-5" onMouseEnter={prefetchScroll}>
   <div className="flex items-center gap-3 mb-3">
     <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/10 text-lg flex-shrink-0">
       📱
     </div>
     <div>
       <p className="text-sm font-bold text-white">Révise comme sur TikTok</p>
-      <p className="text-xs text-slate-400">Swipe les questions • Mode flash-cards • Unique en France</p>
+      <p className="text-xs text-slate-400">Swipe les questions •scroll vertical • scroll horizontal</p>
     </div>
   </div>
   <button
-    onClick={() => router.push(data.meta?.themes?.[0] ? `/scroll?theme=${encodeURIComponent(data.meta.themes[0])}` : '/scroll')}
-    className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:brightness-105"
-  >
-    Réviser ce thème en mode scroll →
-  </button>
+  onClick={() => {
+    const url = data.meta?.themes?.[0] 
+      ? `/scroll?theme=${encodeURIComponent(data.meta.themes[0])}` 
+      : '/scroll';
+    router.push(url);
+  }}
+  className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:brightness-105 active:scale-95"
+>
+  Réviser ce thème
+</button>
 </div>
 
         {copyMsg && <p className="mt-3 text-sm text-slate-300">{copyMsg}</p>}

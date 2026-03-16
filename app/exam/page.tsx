@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { hasAnyResult } from "../../src/lib/saveResult";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
+import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
 type Level = 1 | 2 | 3;
 type Theme = "Valeurs" | "Institutions" | "Histoire" | "Société";
@@ -103,6 +104,8 @@ function StatMiniCard({
 
 export default function ExamPage() {
   const router = useRouter();
+  const { role } = useUser();
+const limits = ROLE_LIMITS[role];
 
   const [user, setUser] = useState<QcmUser | null>(null);
   const [hasLastResult, setHasLastResult] = useState(false);
@@ -302,7 +305,19 @@ export default function ExamPage() {
                 </p>
 
                 <div className="mt-7 flex flex-wrap gap-3">
-                  <Button onClick={smartStartExam}>🎯 Démarrer l'examen blanc</Button>
+                 {limits.canExam ? (
+  <Button onClick={smartStartExam}>Démarrer l'examen blanc</Button>
+) : (
+  <div className="relative">
+    <button disabled
+      className="rounded-2xl border border-white/5 bg-white/[0.02] px-5 py-3 text-sm font-semibold text-slate-600 cursor-not-allowed">
+      Démarrer l'examen blanc
+    </button>
+    <div className="mt-1 text-xs text-amber-400/70 text-center">
+      🔒 Disponible en Premium
+    </div>
+  </div>
+)}
                   <Button variant="secondary" onClick={() => router.push("/info")}>
                     📖 Comprendre l'examen
                   </Button>
@@ -461,9 +476,19 @@ export default function ExamPage() {
               ))}
             </div>
 
-            <Button className="mt-6 w-full" onClick={smartStartExam} disabled={!canStart}>
-              Démarrer l'examen blanc
-            </Button>
+           {limits.canExam ? (
+  <Button onClick={smartStartExam}>Démarrer l'examen blanc</Button>
+) : (
+  <div className="relative">
+    <button disabled
+      className="rounded-2xl border border-white/5 bg-white/[0.02] px-5 py-3 text-sm font-semibold text-slate-600 cursor-not-allowed">
+      Démarrer l'examen blanc
+    </button>
+    <div className="mt-1 text-xs text-amber-400/70 text-center">
+      🔒 Disponible en Premium
+    </div>
+  </div>
+)}
 
             <p className="mt-4 text-xs leading-6 text-slate-400">
               Vous disposez de 30 secondes par question. Le niveau 3 est sélectionné par défaut
