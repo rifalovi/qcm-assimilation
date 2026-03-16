@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { saveResultToSupabase } from "../../src/lib/saveResult";
+import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
 import type { ChoiceKey, Level, Theme, Question } from "../../src/data/questions";
 import { generateQuiz, scoreQuiz } from "../../src/lib/quizEngine";
@@ -14,6 +15,7 @@ const MIN_ANSWERED_TO_SUBMIT = 32;
 
 export default function QuizPage() {
   const router = useRouter();
+  const { role } = useUser();
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [idx, setIdx] = useState(0);
@@ -83,19 +85,35 @@ export default function QuizPage() {
     });
 
     try {
-      const quiz = generateQuiz({
-        level: parsed.level,
-        themes: parsed.themes,
-        count: parsed.count,
-      });
-      setQuestions(quiz);
+  const limits = ROLE_LIMITS[role];
 
-      const init: Record<string, ChoiceKey | null> = {};
-      for (const q of quiz) init[q.id] = null;
-      setAnswers(init);
-    } catch (e: any) {
-      setError(e?.message ?? "Erreur lors de la génération du test.");
-    }
+  // Bloque le mode examen selon le rôle
+  if (m === "exam" && !limits.canExam) {
+    router.push("/?blocked=exam");
+    return;
+  }
+
+  // Bloque les niveaux non autorisés
+  if (!limits.levels.includes(parsed.level)) {
+    router.push("/?blocked=level");
+    return;
+  }
+
+  // Applique la limite de questions
+  const allowedCount = Math.min(parsed.count, limits.quizCount);
+
+  const quiz = generateQuiz({
+    level: parsed.level,
+    themes: parsed.themes,
+    count: allowedCount,
+  });
+  setQuestions(quiz);
+  const init: Record<string, ChoiceKey | null> = {};
+  for (const q of quiz) init[q.id] = null;
+  setAnswers(init);
+} catch (e: any) {
+  setError(e?.message ?? "Erreur lors de la génération du test.");
+}
   }, [router]);
 
   useEffect(() => {

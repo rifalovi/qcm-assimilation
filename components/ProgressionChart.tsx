@@ -1,8 +1,14 @@
 "use client";
 
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip, ReferenceLine, ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceLine,
+  ResponsiveContainer,
 } from "recharts";
 
 type Entry = {
@@ -15,27 +21,18 @@ type Entry = {
 
 type Props = { entries: Entry[] };
 
-// Détecte le dark mode côté client
-function isDark() {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
-
 export default function ProgressionChart({ entries }: Props) {
-  const dark = isDark();
-
-  // Couleurs adaptées au mode
-  const gridColor   = dark ? "#334155" : "#f1f5f9";
-  const tickColor   = dark ? "#64748b" : "#94a3b8";
-  const tooltipBg   = dark ? "#1e293b" : "#ffffff";
-  const tooltipBorder = dark ? "#334155" : "#e2e8f0";
-  const tooltipText = dark ? "#f1f5f9" : "#0f172a";
+  const gridColor = "rgba(148,163,184,0.14)";
+  const tickColor = "#94a3b8";
+  const tooltipBg = "#0f172a";
+  const tooltipBorder = "rgba(148,163,184,0.18)";
+  const tooltipText = "#f8fafc";
 
   if (entries.length < 2) {
     return (
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Progression</h2>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+      <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] sm:p-6">
+        <h2 className="text-lg font-bold text-white">Progression</h2>
+        <p className="mt-2 text-sm text-slate-400">
           Fais au moins 2 tests pour voir ta progression.
         </p>
       </div>
@@ -46,19 +43,20 @@ export default function ProgressionChart({ entries }: Props) {
     name: `#${i + 1}`,
     score: e.score_percent,
     date: new Date(e.created_at).toLocaleDateString("fr-FR", {
-      day: "numeric", month: "short",
+      day: "numeric",
+      month: "short",
     }),
   }));
 
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm">
-      <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Progression</h2>
-      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+    <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] sm:p-6">
+      <h2 className="text-lg font-bold text-white">Progression</h2>
+      <p className="mt-1 text-sm text-slate-400">
         Évolution de ton score sur tes derniers tests
       </p>
 
-      <div className="mt-6" style={{ width: "100%", height: 200 }}>
-        <ResponsiveContainer width="100%" height={200}>
+      <div className="mt-6" style={{ width: "100%", height: 220 }}>
+        <ResponsiveContainer width="100%" height={220}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
             <XAxis
@@ -80,11 +78,12 @@ export default function ProgressionChart({ entries }: Props) {
                 payload?.[0] ? (payload[0].payload as any).date : _label
               }
               contentStyle={{
-                borderRadius: "12px",
+                borderRadius: "14px",
                 border: `1px solid ${tooltipBorder}`,
                 backgroundColor: tooltipBg,
                 color: tooltipText,
                 fontSize: "12px",
+                boxShadow: "0 18px 45px rgba(2,8,23,0.35)",
               }}
             />
             <ReferenceLine
@@ -101,10 +100,10 @@ export default function ProgressionChart({ entries }: Props) {
             <Line
               type="monotone"
               dataKey="score"
-              stroke="#2563eb"
-              strokeWidth={2.5}
-              dot={{ fill: "#2563eb", r: 4 }}
-              activeDot={{ r: 6 }}
+              stroke="#3b82f6"
+              strokeWidth={3}
+              dot={{ fill: "#3b82f6", r: 4 }}
+              activeDot={{ r: 6, fill: "#60a5fa" }}
             />
           </LineChart>
         </ResponsiveContainer>
