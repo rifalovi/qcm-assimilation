@@ -295,12 +295,12 @@ const limits = ROLE_LIMITS[role];
                 </div>
 
                 <h1 className="max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-                  Testez-vous en conditions d’examen blanc, avec un rythme plus exigeant.
+                  Testez-vous en conditions d’examen blanc.
                 </h1>
 
                 <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
                   Cette simulation reprend les grands thèmes du test civique français avec
-                  40 questions, un temps limité et un niveau de difficulté par défaut plus élevé.
+                  des questions types, un temps limité et un niveau de difficulté par défaut plus élevé.
                   L’objectif est de vous mettre en situation réelle avant le passage officiel.
                 </p>
 

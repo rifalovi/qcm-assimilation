@@ -226,15 +226,15 @@ export default function InfoPage() {
     Préparez-vous avec méthode
   </div>
 
-  <h1 className="mx-auto max-w-[12ch] text-[1.6rem] font-extrabold leading-[1.08] tracking-tight text-white sm:max-w-[14ch] sm:text-4xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
-    Réussir l’examen civique commence par une bonne compréhension des règles du jeu.
+  <h1 className="mx-auto max-w-[18ch] text-2xl font-extrabold leading-tight tracking-tight text-white sm:max-w-xl sm:text-3xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
+    Comprendre les règles du jeu.
   </h1>
 
   <div className="mx-auto mt-5 max-w-2xl rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-4 sm:px-5 sm:py-5 lg:mx-0">
     <p className="text-[0.98rem] leading-8 text-slate-300 sm:text-base">
-      Cette page vous donne une vue claire, rassurante et structurée de l’examen :
+      Avant de vous lancer : prenez le temps de vous familiariser avec les attentes de l’examen civique, son
       format, thèmes, situations concernées, changements introduits en 2026 et points
-      d’attention à connaître avant de vous lancer.
+      d’attention.
     </p>
   </div>
 

@@ -378,8 +378,8 @@ const limits = ROLE_LIMITS[role];
     Plus de 400 questions-réponses
   </div>
 
-  <h1 className="mx-auto max-w-[11ch] text-[1.6rem] font-extrabold leading-[1.08] tracking-tight text-white sm:max-w-[13ch] sm:text-4xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
-    Préparez votre examen civique avec une interface moderne, claire et efficace.
+  <h1 className="mx-auto max-w-[16ch] text-2xl font-extrabold leading-tight tracking-tight text-white sm:max-w-[18ch] sm:text-3xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
+    Préparez votre examen civique.
   </h1>
 
   <div className="mx-auto mt-5 max-w-2xl rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-4 sm:px-5 sm:py-5 lg:mx-0">
