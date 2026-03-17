@@ -10,6 +10,9 @@ interface Props {
   questions: Question[];
   themes: string[];
   preselectedTheme: string | null;
+  role: "anonymous" | "freemium" | "premium";
+  cardsPerTheme: number;
+  totalCards: number;
 }
 
 const IconCheck = () => (
@@ -723,15 +726,11 @@ function ExamModal({
   );
 }
 
-export default function ScrollStudyClient({
-  questions,
-  themes,
-  preselectedTheme,
-}: Props) {
-  const router = useRouter();
-  const { role } = useUser();
+  
+export default function ScrollStudyClient({ questions, themes, preselectedTheme, role, cardsPerTheme, totalCards }: Props) {
+const router = useRouter();
 const limits = ROLE_LIMITS[role];
-const visibleQuestions = questions.slice(0, limits.scrollCount);
+const visibleQuestions = questions;
 
   const [activeTheme, setActiveTheme] = useState<string | null>(preselectedTheme);
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);

@@ -345,21 +345,21 @@ const limits = ROLE_LIMITS[role];
     </div>
 
     {/* Titre */}
-    <div className="mb-3 inline-flex items-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
+    <div className="mb-3 mx-auto block text-center w-fit items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
       Plus de 400 questions-réponses
     </div>
 
-    <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center sm:text-left">
+    <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center">
       Préparez votre <span className="text-blue-400">parcours</span>{" "}
       en <span className="text-blue-300">France</span>.
     </h1>
 
-    <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center sm:text-left max-w-xl">
+    <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center max-w-xl mx-auto">
       Valeurs de la République • Institutions • Histoire • Vie en société — entraînement progressif conforme à l'examen civique 2026.
     </p>
 
     {/* Pills accrocheurs */}
-    <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
+    <div className="mt-4 flex flex-wrap justify-center gap-2">
       <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">
         📝 Entraînement progressif
       </span>
@@ -372,7 +372,7 @@ const limits = ROLE_LIMITS[role];
     </div>
 
     {/* Boutons */}
-    <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-start">
+    <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center">
       <button
         onClick={() => router.push("/scroll")}
         className="w-full sm:w-auto rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition hover:bg-blue-500 hover:shadow-[0_12px_32px_rgba(37,99,235,0.45)] active:scale-95"
