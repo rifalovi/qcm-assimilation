@@ -187,7 +187,7 @@ export default function InfoPage() {
                     République française
                   </div>
                   <div className="mt-1 text-sm font-semibold text-slate-200">
-                    Examen civique 2026
+                    Examen civique FR
                   </div>
                 </div>
               </div>
@@ -227,14 +227,13 @@ export default function InfoPage() {
   </div>
 
   <h1 className="mx-auto max-w-[18ch] text-2xl font-extrabold leading-tight tracking-tight text-white sm:max-w-xl sm:text-3xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
-    Comprendre les règles du jeu.
+    L'examen civique
+Informations essentielles.
   </h1>
 
   <div className="mx-auto mt-5 max-w-2xl rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-4 sm:px-5 sm:py-5 lg:mx-0">
     <p className="text-[0.98rem] leading-8 text-slate-300 sm:text-base">
-      Avant de vous lancer : prenez le temps de vous familiariser avec les attentes de l’examen civique, son
-      format, thèmes, situations concernées, changements introduits en 2026 et points
-      d’attention.
+      Comprendre le format, les thèmes et les conditions de l'examen civique avant de vous entraîner dans les meilleures conditions..
     </p>
   </div>
 

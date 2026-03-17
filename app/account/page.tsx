@@ -116,6 +116,13 @@ export default function AccountPage() {
     router.refresh();
   }
 
+  async function handleUpgrade() {
+  const res = await fetch('/api/create-checkout', { method: 'POST' })
+  const { url, error } = await res.json()
+  if (error) { console.error(error); return }
+  window.location.href = url
+}
+
   const role = profile?.role ?? "anonymous";
   const roleConfig = ROLE_CONFIG[role];
 
@@ -203,11 +210,11 @@ export default function AccountPage() {
                     </p>
                   </div>
                   <button
-                    disabled
-                    className="rounded-xl border border-amber-400/20 bg-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-950 opacity-70"
-                  >
-                    Bientôt disponible
-                  </button>
+  onClick={handleUpgrade}
+  className="rounded-xl border border-amber-400/20 bg-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-amber-400"
+>
+  Passer en Premium →
+</button>
                 </div>
               </div>
             )}

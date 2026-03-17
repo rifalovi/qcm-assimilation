@@ -379,13 +379,12 @@ const limits = ROLE_LIMITS[role];
   </div>
 
   <h1 className="mx-auto max-w-[16ch] text-2xl font-extrabold leading-tight tracking-tight text-white sm:max-w-[18ch] sm:text-3xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
-    Préparez votre examen civique.
+    Préparez votre parcours en France.
   </h1>
 
   <div className="mx-auto mt-5 max-w-2xl rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-4 sm:px-5 sm:py-5 lg:mx-0">
     <p className="text-[0.98rem] leading-8 text-slate-300 sm:text-base">
-      Entraînez-vous sur les valeurs de la République, les institutions, l’histoire
-      de France et la vie en société.
+      Testez vos connaissances sur les valeurs de la République, les institutions françaises et la vie en société • Entraînement progressif • Explications pédagogiques • Une banque de plus de 400 questions-réponses conformes aux exigences de l'examen civique 2026.
     </p>
     <p className="mt-3 text-[0.98rem] leading-8 text-slate-300 sm:text-base">
       Choisissez votre niveau, sélectionnez vos thèmes et progressez avec des
