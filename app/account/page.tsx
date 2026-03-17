@@ -110,11 +110,10 @@ export default function AccountPage() {
   }, [router]);
 
   async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
-  }
+  const supabase = createClient();
+  await supabase.auth.signOut();
+  router.push("/");
+}
 
   async function handleUpgrade() {
   const res = await fetch('/api/create-checkout', { method: 'POST' })
