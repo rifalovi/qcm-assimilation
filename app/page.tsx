@@ -1,4 +1,5 @@
 "use client";
+import ScrollDemo from "@/components/ScrollDemo";
 
 import { useRouter } from "next/navigation";
 import Card from "../components/Card";
@@ -7,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { hasAnyResult } from "../src/lib/saveResult";
 import { createClient } from "@/lib/supabase/client";
 import { useUser, ROLE_LIMITS } from "./components/UserContext";
+
 
 
 type Level = 1 | 2 | 3;
@@ -295,137 +297,99 @@ const limits = ROLE_LIMITS[role];
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <div className="space-y-8 sm:space-y-10">
-        <section
-          className={`relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
-            heroVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          }`}
-        >
-          <div className="flex h-1.5 w-full">
-            <div className="flex-1 bg-blue-600" />
-            <div className="flex-1 bg-white" />
-            <div className="flex-1 bg-red-600" />
+<section
+  className={`relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
+    heroVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+  }`}
+>
+  <div className="flex h-1.5 w-full">
+    <div className="flex-1 bg-blue-600"/>
+    <div className="flex-1 bg-white"/>
+    <div className="flex-1 bg-red-600"/>
+  </div>
+  <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl"/>
+  <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl"/>
+
+  <div className="relative px-5 py-7 sm:px-8 sm:py-9">
+
+    {/* Header */}
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
+        {/* Drapeau FR */}
+        <span className="inline-flex h-10 w-14 overflow-hidden rounded-lg border border-white/10 shadow-md">
+          <span className="flex-1 bg-blue-700"/>
+          <span className="flex-1 bg-white"/>
+          <span className="flex-1 bg-red-600"/>
+        </span>
+        <div>
+          <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">
+            République française
           </div>
+          <div className="text-xs text-slate-400">Plateforme d'entraînement 2026</div>
+        </div>
+      </div>
 
-          <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl" />
-          <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl" />
-          <div className="pointer-events-none absolute bottom-0 right-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
+      {pseudo.trim() ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
+          <span>Bonjour <span className="font-semibold text-white">{pseudo.trim()}</span> 👋</span>
+          <span className="text-slate-500">•</span>
+          <button onClick={openPseudoModal} className="text-slate-400 hover:text-white hover:underline transition">Changer</button>
+          <span className="text-slate-500">•</span>
+          <button onClick={clearPseudo} className="text-slate-400 hover:text-red-400 hover:underline transition">Déconnexion</button>
+        </div>
+      ) : (
+        <button onClick={openPseudoModal} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition">
+          👋 Se connecter
+        </button>
+      )}
+    </div>
 
-          <div className="relative px-5 py-6 sm:px-8 sm:py-9 lg:px-10 lg:py-10">
-            <div className="mb-8 flex flex-col gap-4 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left">
-              <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
-                  <MarianneMark />
-                </div>
+    {/* Titre */}
+    <div className="mb-3 inline-flex items-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
+      Plus de 400 questions-réponses
+    </div>
 
-                <div className="text-center sm:text-left">
-                  <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">
-                      République française
-                    </span>
-                    <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] text-slate-300">
-                      <span className="inline-flex h-2.5 w-4 overflow-hidden rounded-sm border border-white/10">
-                        <span className="w-1/3 bg-blue-600" />
-                        <span className="w-1/3 bg-white" />
-                        <span className="w-1/3 bg-red-600" />
-                      </span>
-                      FR
-                    </span>
-                  </div>
-                  <div className="mt-1 text-sm text-slate-400">
-                    Plateforme d’entraînement 2026
-                  </div>
-                </div>
-              </div>
+    <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center sm:text-left">
+      Préparez votre <span className="text-blue-400">parcours</span>{" "}
+      en <span className="text-blue-300">France</span>.
+    </h1>
 
-              <div className="flex justify-center lg:justify-end">
-                {pseudo.trim() ? (
-                  <div className="flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-center text-sm text-slate-300 backdrop-blur-md sm:text-left">
-                    <span>
-                      Bonjour <span className="font-semibold text-white">{pseudo.trim()}</span> 👋
-                    </span>
-                    <span className="hidden sm:inline text-slate-500">•</span>
-                    <button
-                      type="button"
-                      onClick={openPseudoModal}
-                      className="text-slate-400 transition hover:text-white hover:underline"
-                    >
-                      Changer
-                    </button>
-                    <span className="hidden sm:inline text-slate-500">•</span>
-                    <button
-                      type="button"
-                      onClick={clearPseudo}
-                      className="text-slate-400 transition hover:text-red-400 hover:underline"
-                    >
-                      Déconnexion
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={openPseudoModal}
-                    className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
-                  >
-                    Bonjour 👋 Connectez-vous
-                  </button>
-                )}
-              </div>
-            </div>
-
-            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-              <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
-  <div className="mb-4 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-blue-200 sm:text-xs">
-    Plus de 400 questions-réponses
-  </div>
-
-  <h1 className="mx-auto max-w-[16ch] text-2xl font-extrabold leading-tight tracking-tight text-white sm:max-w-[18ch] sm:text-3xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
-    Préparez votre parcours en France.
-  </h1>
-
-  <div className="mx-auto mt-5 max-w-2xl rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-4 sm:px-5 sm:py-5 lg:mx-0">
-    <p className="text-[0.98rem] leading-8 text-slate-300 sm:text-base">
-      Testez vos connaissances sur les valeurs de la République, les institutions françaises et la vie en société • Entraînement progressif • Explications pédagogiques • Une banque de plus de 400 questions-réponses conformes aux exigences de l'examen civique 2026.
+    <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center sm:text-left max-w-xl">
+      Valeurs de la République • Institutions • Histoire • Vie en société — entraînement progressif conforme à l'examen civique 2026.
     </p>
-    <p className="mt-3 text-[0.98rem] leading-8 text-slate-300 sm:text-base">
-      Choisissez votre niveau, sélectionnez vos thèmes et progressez avec des
-      explications pédagogiques proches des exigences de l’examen civique 2026.
-    </p>
-  </div>
 
-  <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
-    <Button className="w-full sm:w-auto" onClick={start}>
-      Commencer maintenant
-    </Button>
-    <Button className="w-full sm:w-auto" variant="secondary" onClick={() => router.push("/info")}>
-      Comprendre l'examen
-    </Button>
-    <Button className="w-full sm:w-auto" variant="secondary" onClick={startExam}>
-      Examen blanc
-    </Button>
-  </div>
-
-  <div className="mt-7 flex flex-wrap justify-center gap-3 text-xs text-slate-400 sm:text-sm lg:justify-start">
-    <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
-      Entraînement progressif
+    {/* Pills accrocheurs */}
+    <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
+      <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">
+        📝 Entraînement progressif
+      </span>
+      <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
+        ✓ Corrections détaillées
+      </span>
+      <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">
+        🎯 Simulation réaliste
+      </span>
     </div>
-    <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
-      Corrections détaillées
-    </div>
-    <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
-      Simulation réaliste
+
+    {/* Boutons */}
+    <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-start">
+      <button
+        onClick={() => router.push("/scroll")}
+        className="w-full sm:w-auto rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition hover:bg-blue-500 hover:shadow-[0_12px_32px_rgba(37,99,235,0.45)] active:scale-95"
+      >
+        🚀 Réviser maintenant
+      </button>
+      <Button className="w-full sm:w-auto" variant="secondary" onClick={() => router.push("/info")}>
+        📖 Comprendre l'examen
+      </Button>
+      <Button className="w-full sm:w-auto" variant="secondary" onClick={startExam}>
+        🎯 Examen blanc
+      </Button>
     </div>
   </div>
-</div>
+</section>
 
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-3 lg:grid-cols-1">
-                <StatMiniCard value="40" label="Questions par session" icon="❓" />
-                <StatMiniCard value="20 s" label="Temps par question" icon="⏱️" />
-                <StatMiniCard value="80%" label="Objectif de réussite" icon="🎯" />
-              </div>
-            </div>
-          </div>
-        </section>
-
+        <ScrollDemo />
         <section className="flex flex-wrap justify-center gap-3">
           <Button variant="secondary" onClick={() => router.push("/info")}>
             📘 Guide de l'examen
@@ -570,7 +534,7 @@ const limits = ROLE_LIMITS[role];
             </div>
 
             <div className="mt-6 flex flex-col gap-3">
-  <Button className="w-full" onClick={start} disabled={!canStart}>
+  <Button className="w-full" onClick={() => router.push("/scroll")} disabled={!canStart}>
     Faire un test
   </Button>
   {limits.canExam ? (

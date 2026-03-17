@@ -2,10 +2,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import AppHeader from "./components/AppHeader";
 import { UserProvider } from "./components/UserContext";
+import BottomNav from "@/components/BottomNav";
 
 export const metadata: Metadata = {
   title: "QCM Assimilation FR",
-  description: "Plateforme d'entraînement QCM - Assimilation nationalité française",
+  description: "Plateforme d'entraînement QCM - test civique français",
 };
 
 export default function RootLayout({
@@ -15,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" className="h-full">
-      <body className="min-h-full text-slate-100 antialiased">
+      <body className="min-h-full text-slate-100 antialiased pb-16">
         <UserProvider>
           <div className="min-h-screen flex flex-col">
             <AppHeader />
@@ -24,6 +25,7 @@ export default function RootLayout({
               © {new Date().getFullYear()} Par Carlos Hounsinou — QCM Assimilation FR
             </footer>
           </div>
+          <BottomNav />
         </UserProvider>
       </body>
     </html>
