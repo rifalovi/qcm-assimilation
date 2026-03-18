@@ -578,7 +578,7 @@ function ThemeDrawer({
       onClick={onClose}
     >
       <div
-        className="flex max-h-[75vh] w-full flex-col gap-3 overflow-y-auto rounded-t-[2rem] p-5"
+        className="flex max-h-[75vh] w-full flex-col gap-3 overflow-y-auto rounded-t-[2rem] p-5 pb-20"
         style={{
           background:
             "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)",
@@ -783,11 +783,11 @@ const visibleQuestions = questions;
           "radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%), radial-gradient(circle at top right, rgba(14,165,233,0.10), transparent 24%), linear-gradient(180deg, #08101d 0%, #070d18 45%, #050913 100%)",
         color: "#f1f5f9",
         fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
-        height: "100dvh",
+        height: "calc(100dvh - 128px)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        maxWidth: "430px",
+        maxWidth: "390px",
         margin: "0 auto",
         position: "relative",
       }}

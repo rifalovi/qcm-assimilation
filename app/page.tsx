@@ -372,24 +372,35 @@ const limits = ROLE_LIMITS[role];
     </div>
 
     {/* Boutons */}
-    <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center">
-      <button
-        onClick={() => router.push("/scroll")}
-        className="w-full sm:w-auto rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition hover:bg-blue-500 hover:shadow-[0_12px_32px_rgba(37,99,235,0.45)] active:scale-95"
-      >
-        🚀 Réviser maintenant
-      </button>
-      <Button className="w-full sm:w-auto" variant="secondary" onClick={() => router.push("/info")}>
-        📖 Comprendre l'examen
-      </Button>
-      <Button className="w-full sm:w-auto" variant="secondary" onClick={startExam}>
-        🎯 Examen blanc
-      </Button>
-    </div>
+<div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center">
+  <button
+    onClick={start}
+    className="w-full sm:w-auto rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition hover:bg-blue-500 active:scale-95"
+  >
+    🎯 Faire un test
+  </button>
+  <Button className="w-full sm:w-auto" variant="secondary" onClick={() => router.push("/info")}>
+    📖 Comprendre l'examen
+  </Button>
+  <Button className="w-full sm:w-auto" variant="secondary" onClick={startExam}>
+    🎯 Examen blanc
+  </Button>
+</div>
   </div>
 </section>
 
         <ScrollDemo />
+
+{/* CTA Réviser après vidéo */}
+<div className="flex justify-center py-2">
+  <button
+    onClick={() => router.push("/scroll")}
+    className="group relative overflow-hidden rounded-2xl border border-amber-400/30 bg-amber-500/10 px-8 py-4 text-base font-bold text-amber-300 shadow-[0_0_24px_rgba(251,191,36,0.15)] transition hover:bg-amber-500/20 hover:shadow-[0_0_32px_rgba(251,191,36,0.25)] active:scale-95"
+  >
+    <span className="relative z-10">🚀 Réviser maintenant</span>
+    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-amber-400/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+  </button>
+</div>
         <section className="flex flex-wrap justify-center gap-3">
           <Button variant="secondary" onClick={() => router.push("/info")}>
             📘 Guide de l'examen
@@ -534,7 +545,7 @@ const limits = ROLE_LIMITS[role];
             </div>
 
             <div className="mt-6 flex flex-col gap-3">
-  <Button className="w-full" onClick={() => router.push("/scroll")} disabled={!canStart}>
+  <Button className="w-full" onClick={start} disabled={!canStart}>
     Faire un test
   </Button>
   {limits.canExam ? (
