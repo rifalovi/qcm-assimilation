@@ -17,6 +17,7 @@ export default function QuizPage() {
   const { role } = useUser();
 
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [showPremiumCTA, setShowPremiumCTA] = useState(false);
   const [idx, setIdx] = useState(0);
   const [remaining, setRemaining] = useState(20);
   const [meta, setMeta] = useState<{
@@ -143,10 +144,14 @@ export default function QuizPage() {
     submit();
   }, [globalTime]);
 
-  useEffect(() => {
-    if (!goResults) return;
+useEffect(() => {
+  if (!goResults) return;
+  if (role !== "premium") {
+    setShowPremiumCTA(true);
+  } else {
     router.push(`/results?mode=${mode}`);
-  }, [goResults, router, mode]);
+  }
+}, [goResults, router, mode, role]);
 
   const current = questions[idx];
 
@@ -499,6 +504,54 @@ function selectAnswer(choice: ChoiceKey) {
           )}
         </Card>
       </div>
+
+      {showPremiumCTA && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+  style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}>
+  <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
+      
+      <div className="text-center mb-5">
+        <div className="text-4xl mb-3">{role === "anonymous" ? "✨" : "👑"}</div>
+        <h2 className="text-xl font-extrabold text-white">
+          {role === "anonymous" 
+            ? "Crée un compte gratuit !" 
+            : "Passe en Premium !"}
+        </h2>
+        <p className="mt-2 text-sm text-slate-400">
+          {role === "anonymous"
+            ? "Tu viens de faire 10 questions 😉. Avec un compte gratuit, accède à 20 questions et sauvegarde tes résultats."
+            : "Tu viens de terminer tes 20 questions 😉. Passe en Premium pour accéder à 40 questions, tous les niveaux, l'examen blanc et les statistiques détaillées."}
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        {role === "anonymous" ? (
+          <>
+            <a href="/register"
+              className="block w-full rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-bold text-white transition hover:bg-blue-500">
+              🚀 Créer un compte gratuit
+            </a>
+            <a href="/login"
+              className="block w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-medium text-slate-300 transition hover:bg-white/10">
+              J'ai déjà un compte
+            </a>
+          </>
+        ) : (
+          <button
+            onClick={() => router.push("/account")}
+            className="block w-full rounded-2xl bg-amber-500 px-5 py-3 text-center text-sm font-bold text-slate-950 transition hover:bg-amber-400">
+            👑 Passer en Premium — 9,99€/mois
+          </button>
+        )}
+        <button
+          onClick={() => { setShowPremiumCTA(false); router.push(`/results?mode=${mode}`); }}
+          className="block w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-medium text-slate-400 transition hover:text-white">
+          Voir mes résultats →
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </main>
   );
 }

@@ -669,12 +669,22 @@ ${errorsText}
     <div className="absolute inset-0 flex flex-col items-center justify-center rounded-[1.8rem] bg-slate-900/80 backdrop-blur-[2px] p-6 text-center">
       <p className="text-3xl mb-3">🔒</p>
       <h2 className="text-xl font-bold text-white mb-2">
-        {role === "anonymous" ? "Inscris-toi pour voir tes erreurs" : "Passe en Premium pour débloquer"}
+        {role === "anonymous"
+  ? score?.percent === 100
+    ? "🎉 Score parfait — sauvegarde cette performance !"
+    : score?.percent >= 75
+    ? "📈 Inscris-toi pour suivre ta progression"
+    : "💡 Inscris-toi pour comprendre et progresser"
+  : "👑 Passe en Premium pour débloquer tout"}
       </h2>
       <p className="text-slate-300 text-sm mb-6 max-w-md mx-auto">
         {role === "anonymous"
-          ? "Comprends pourquoi tu as ce résultat, analyse tes performances par thème."
-          : "Accède aux stats détaillées, corrections complètes et tous les niveaux."}
+          ? score?.percent === 100
+  ? "Tu viens de faire un sans-faute ! Crée un compte pour sauvegarder ce résultat et suivre ta progression."
+  : score?.percent >= 75
+  ? "Tu progresses bien ! Crée un compte gratuit pour garder un historique de tes résultats."
+  : "Accède aux stats détaillées, corrections complètes et tous les niveaux."
+  : "Analyse tes erreurs par thème et comprends où tu dois progresser."}
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         {role === "anonymous" ? (
