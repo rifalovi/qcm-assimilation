@@ -621,7 +621,7 @@ const limits = ROLE_LIMITS[role];
 
             <div className="flex flex-col gap-3">
               <a
-                href="/register"
+                href={`/register?email=${encodeURIComponent(emailDraft)}&pseudo=${encodeURIComponent(pseudoDraft)}`}
                 className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-center text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.24)] transition hover:brightness-105"
               >
                 Créer un compte gratuit

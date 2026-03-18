@@ -24,11 +24,13 @@ export default function LoginPage() {
     setError(null);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError("Email ou mot de passe incorrect.");
-      setLoading(false);
-      return;
-    }
+   if (error) {
+  setError(
+    error.message.toLowerCase().includes("not found")
+      ? "Aucun compte trouvé avec cet email."
+      : "Email ou mot de passe incorrect."
+  );
+}
     router.push("/");
     router.refresh();
   }
@@ -360,8 +362,21 @@ export default function LoginPage() {
                   className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"/>
               </div>
 
-              {error && <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</div>}
-
+              {error && (
+  <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+    {error}
+    {error.includes("Aucun compte") && (
+      <a href="/register" className="ml-1 font-semibold text-blue-400 underline">
+        Créer un compte
+      </a>
+    )}
+    {error.includes("incorrect") && (
+      <a href="/login?forgot=true" className="ml-1 font-semibold text-blue-400 underline">
+        Mot de passe oublié ?
+      </a>
+    )}
+  </div>
+)}
               <button type="submit" disabled={loading}
                 className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:brightness-105 disabled:opacity-50">
                 {loading ? "Connexion..." : "Se connecter"}
