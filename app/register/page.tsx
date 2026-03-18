@@ -36,11 +36,19 @@ function RegisterForm() {
       },
     });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      setStep("otp");
-    }
+if (error) {
+  if (
+    error.message.toLowerCase().includes("already") ||
+    error.message.toLowerCase().includes("registered") ||
+    error.message.toLowerCase().includes("exists")
+  ) {
+    setError("Un compte existe déjà avec cet email. Connectez-vous plutôt →");
+  } else {
+    setError(error.message);
+  }
+} else {
+  setStep("otp");
+}
     setLoading(false);
   }
 
@@ -252,19 +260,28 @@ function RegisterForm() {
                 </button>
               </form>
 
-              <p className="mt-4 text-center text-sm text-slate-400">
-                Code non reçu ?{" "}
-                <button
-                  onClick={() => {
-                    setStep("form");
-                    setError(null);
-                    setOtp("");
-                  }}
-                  className="font-medium text-blue-400 transition hover:text-blue-300 hover:underline"
-                >
-                  Recommencer
-                </button>
-              </p>
+          <p className="mt-4 text-center text-sm text-slate-400">
+  Code non reçu ?{" "}
+  <button
+    onClick={async () => {
+      setError(null);
+      const supabase = createClient();
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email: email,
+      });
+      if (error) {
+        setError("Erreur lors du renvoi. Réessaie.");
+      } else {
+        setError(null);
+        alert("Code renvoyé ! Vérifie ta boîte mail.");
+      }
+    }}
+    className="font-medium text-blue-400 transition hover:text-blue-300 hover:underline"
+  >
+    Renvoyer le code
+  </button>
+</p>
             </div>
           </section>
         </div>
@@ -393,11 +410,16 @@ function RegisterForm() {
               </div>
 
               {error && (
-                <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-                  {error}
-                </div>
-              )}
-
+  <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+    {error}
+    {error.includes("existe déjà") && (
+      <a href="/login" className="ml-1 font-semibold text-blue-400 underline hover:text-blue-300">
+        Se connecter
+      </a>
+    )}
+  </div>
+)}
+   
               <button
                 type="submit"
                 disabled={loading}

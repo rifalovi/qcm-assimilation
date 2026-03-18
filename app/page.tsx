@@ -351,7 +351,7 @@ const limits = ROLE_LIMITS[role];
 
     <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center">
       Préparez votre <span className="text-blue-400">parcours</span>{" "}
-      en <span className="text-blue-300">France</span>.
+      en <span className="text-blue-400">France</span>.
     </h1>
 
     <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center max-w-xl mx-auto">

@@ -12,6 +12,7 @@ function CallbackHandler() {
 
   useEffect(() => {
     async function handleCallback() {
+      const timeout = setTimeout(() => router.push("/"), 8000)
       const code = searchParams.get('code')
       const type = searchParams.get('type')
 
@@ -60,7 +61,7 @@ function CallbackHandler() {
 
 export default function CallbackPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-500">Chargement...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-500">Connexion en cours...</div>}>
       <CallbackHandler />
     </Suspense>
   )

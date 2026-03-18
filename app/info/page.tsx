@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useUser } from "../components/UserContext";
 import { useEffect, useState } from "react";
+import ScrollDemo from "@/components/ScrollDemo";
 
 type QcmUser = { pseudo: string; email: string };
 
@@ -146,6 +148,7 @@ export default function InfoPage() {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [user, setUser] = useState<QcmUser | null>(null);
+  const { role } = useUser();
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 50);
@@ -307,15 +310,28 @@ Informations essentielles.
           </div>
         </section>
 
-        <section
-          className={`grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5 transition-all duration-700 delay-100 ${
-            visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          }`}
-        >
-          <StatCard value="40" label="Questions" icon="❓" />
-          <StatCard value="80%" label="Score requis" icon="🎯" />
-          <StatCard value="45 min" label="Durée max" icon="⏱️" />
-        </section>
+        <section className={`transition-all duration-700 delay-100 ${
+  visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+}`}>
+  <ScrollDemo />
+  <div className="mt-6 flex flex-col items-center gap-3">
+    <button
+      onClick={() => router.push("/scroll")}
+      className="group relative overflow-hidden rounded-2xl border border-amber-400/30 bg-amber-500/10 px-8 py-4 text-base font-bold text-amber-300 shadow-[0_0_24px_rgba(251,191,36,0.15)] transition hover:bg-amber-500/20 hover:shadow-[0_0_32px_rgba(251,191,36,0.25)] active:scale-95"
+    >
+      <span className="relative z-10">🚀 Réviser maintenant</span>
+      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-amber-400/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+    </button>
+    {role !== "premium" && (
+      <button
+        onClick={() => router.push("/account")}
+        className="rounded-2xl border border-amber-400/20 bg-amber-500/10 px-5 py-2.5 text-sm font-semibold text-amber-200 transition hover:bg-amber-500/20"
+      >
+        👑 Passer en Premium — accès à 280 cartes
+      </button>
+    )}
+  </div>
+</section>
 
         <section
           className={`grid gap-5 lg:grid-cols-3 transition-all duration-700 delay-150 ${

@@ -1,4 +1,6 @@
 "use client";
+import ScrollInteractions from "@/components/ScrollInteractions";
+import { createClient } from "@/lib/supabase/client";
 // app/scroll/ScrollStudyClient.tsx — CLIENT COMPONENT
 
 import { useState, useRef, useCallback, useEffect } from "react";
@@ -281,10 +283,11 @@ function MCQView({
       <div
         className="rounded-[1.4rem] px-4 py-4 transition-all duration-300"
         style={{
-          background: `linear-gradient(135deg, ${gradientA}, ${gradientB})`,
-          border: `1px solid ${border}`,
-          boxShadow: `0 12px 30px ${glow.replace("0.22", "0.10")}`,
-        }}
+  maxWidth: "85%",
+  background: `linear-gradient(135deg, ${gradientA}, ${gradientB})`,
+  border: `1px solid ${border}`,
+  boxShadow: `0 16px 36px ${glow.replace("0.22", "0.12")}`,
+}}
       >
         <p className="text-sm font-semibold leading-relaxed" style={{ color: "#f8fafc" }}>
           {variant.prompt?.trim() || fallbackQuestionText}
@@ -397,7 +400,7 @@ function FlashView({
       </div>
 
       <div
-        className="rounded-[1.8rem] p-5 transition-all duration-300"
+        className="rounded-[1.8rem] p-5 transition-all duration-300 self-start w-full"
         style={{
           background: `linear-gradient(135deg, ${gradientA}, ${gradientB})`,
           border: `1px solid ${border}`,
@@ -407,7 +410,7 @@ function FlashView({
         <p className="mb-3 text-xs font-semibold uppercase tracking-wider" style={{ color: accent }}>
           Question
         </p>
-        <p className="font-bold leading-snug" style={{ fontSize: "1.25rem", color: "#f8fafc", textAlign: "justify" }}>
+        <p className="font-bold leading-snug" style={{ fontSize: "0.92rem", color: "#f8fafc", textAlign: "justify" }}>
           {question.question}
         </p>
       </div>
@@ -427,7 +430,7 @@ function FlashView({
           border: "1px solid rgba(255,255,255,0.07)",
         }}
       >
-        <p style={{ fontSize: "1.05rem", color: "#dbeafe", lineHeight: "1.9", textAlign: "justify", fontWeight: "500" }}>
+        <p style={{ fontSize: "0.92rem", color: "#dbeafe", lineHeight: "1.7", textAlign: "justify", fontWeight: "500" }}>
           {question.best_answer}
         </p>
       </div>
@@ -606,7 +609,7 @@ function ThemeDrawer({
             onSelect(null);
             onClose();
           }}
-          className="flex w-full items-center justify-between rounded-2xl px-4 py-3.5 transition-all duration-200"
+          className="flex w-full items-center justify-between rounded-2xl px-3 py-2.5 transition-all duration-200"
           style={{
             background:
               activeTheme === null ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.04)",
@@ -639,7 +642,7 @@ function ThemeDrawer({
                 onSelect(theme);
                 onClose();
               }}
-              className="flex w-full items-center justify-between rounded-2xl px-4 py-3.5 transition-all duration-200 hover:translate-y-[-1px]"
+              className="flex w-full items-center justify-between rounded-2xl px-3 py-2.5 transition-all duration-200 hover:translate-y-[-1px]"
               style={{
                 background: isActive ? bg : "rgba(255,255,255,0.04)",
                 border: `1.5px solid ${isActive ? accent : "rgba(255,255,255,0.08)"}`,
@@ -732,11 +735,40 @@ const router = useRouter();
 const limits = ROLE_LIMITS[role];
 const visibleQuestions = questions;
 
+const [userId, setUserId] = useState<string | undefined>(undefined);
+const [sessionId] = useState<string>(() => {
+  if (typeof window === "undefined") return "anonymous";
+  const existing = localStorage.getItem("qcm_session_id");
+  if (existing) return existing;
+  const id = crypto.randomUUID();
+  localStorage.setItem("qcm_session_id", id);
+  return id;
+});
+
+useEffect(() => {
+  const supabase = createClient();
+  supabase.auth.getUser().then(({ data: { user } }) => {
+    if (user) setUserId(user.id);
+  });
+}, []);
+
   const [activeTheme, setActiveTheme] = useState<string | null>(preselectedTheme);
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);
   const [showExamModal, setShowExamModal] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Bloquer le scroll natif du navigateur
+useEffect(() => {
+  document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.width = "100%";
+  return () => {
+    document.body.style.overflow = "";
+    document.body.style.position = "";
+    document.body.style.width = "";
+  };
+}, []);
 
   useEffect(() => {
     setActiveTheme(preselectedTheme);
@@ -943,12 +975,19 @@ const visibleQuestions = questions;
                 overflow: "hidden",
               }}
             >
-              <QuestionCard
-                question={q}
-                qIndex={i}
-                total={filteredQuestions.length}
-                isActive={activeIndex === i}
-              />
+              <div className="relative h-full">
+  <QuestionCard
+    question={q}
+    qIndex={i}
+    total={filteredQuestions.length}
+    isActive={activeIndex === i}
+  />
+  <ScrollInteractions
+    questionId={q.id}
+    userId={userId}
+    sessionId={sessionId}
+  />
+</div>
             </div>
           ))
         )}
