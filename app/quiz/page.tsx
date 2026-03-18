@@ -543,11 +543,20 @@ function selectAnswer(choice: ChoiceKey) {
             👑 Passer en Premium — 9,99€/mois
           </button>
         )}
-        <button
-          onClick={() => { setShowPremiumCTA(false); router.push(`/results?mode=${mode}`); }}
-          className="block w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-medium text-slate-400 transition hover:text-white">
-          Voir mes résultats →
-        </button>
+        <div className="flex gap-2">
+  <button
+    onClick={() => router.push("/pricing")}
+    className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center text-xs font-medium text-slate-400 transition hover:text-white"
+  >
+    Voir les tarifs
+  </button>
+  <button
+    onClick={() => { setShowPremiumCTA(false); router.push(`/results?mode=${mode}`); }}
+    className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-medium text-slate-400 transition hover:text-white"
+  >
+    Mes résultats →
+  </button>
+</div>
       </div>
     </div>
   </div>

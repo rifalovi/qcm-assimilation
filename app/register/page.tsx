@@ -23,35 +23,54 @@ function RegisterForm() {
   const [error, setError] = useState<string | null>(null);
 
   async function handleRegister(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
+  const supabase = createClient();
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { username },
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-    });
+ // Vérifie si le compte existe via signInWithPassword avec un faux mdp
+const { error: checkError } = await supabase.auth.signInWithPassword({
+  email,
+  password: "CHECK_ONLY_fake_password_xyz_123",
+});
 
-if (error) {
-  if (
-    error.message.toLowerCase().includes("already") ||
-    error.message.toLowerCase().includes("registered") ||
-    error.message.toLowerCase().includes("exists")
-  ) {
-    setError("Un compte existe déjà avec cet email. Connectez-vous plutôt →");
-  } else {
-    setError(error.message);
-  }
-} else {
-  setStep("otp");
+// Si l'erreur est "Invalid credentials" → compte existe mais mdp incorrect
+// Si l'erreur contient "not found" → compte n'existe pas
+if (checkError && !checkError.message.toLowerCase().includes("invalid") 
+    && !checkError.message.toLowerCase().includes("credentials")) {
+  // Compte n'existe pas → continuer la création
+} else if (!checkError || checkError.message.toLowerCase().includes("invalid") 
+           || checkError.message.toLowerCase().includes("credentials")) {
+  setError("Un compte existe déjà avec cet email.");
+  setLoading(false);
+  return;
 }
-    setLoading(false);
+
+  // Le compte n'existe pas → créer
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { username },
+      emailRedirectTo: `${location.origin}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    if (
+      error.message.toLowerCase().includes("already") ||
+      error.message.toLowerCase().includes("registered") ||
+      error.message.toLowerCase().includes("exists")
+    ) {
+      setError("Un compte existe déjà avec cet email. Connectez-vous plutôt →");
+    } else {
+      setError(error.message);
+    }
+  } else {
+    setStep("otp");
   }
+  setLoading(false);
+}
 
   async function handleVerifyOtp(e: React.FormEvent) {
     e.preventDefault();
@@ -435,7 +454,7 @@ if (error) {
     {error}
     {error.includes("existe déjà") && (
       <a href="/login" className="ml-1 font-semibold text-blue-400 underline hover:text-blue-300">
-        Se connecter
+        Connectez-vous plutôt →
       </a>
     )}
   </div>
