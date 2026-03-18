@@ -191,6 +191,14 @@ export default function AccountPage() {
                 <p className="mt-1 text-xs text-slate-400">{roleConfig.description}</p>
               </div>
 
+<p className="mt-1 text-xs text-slate-400">{roleConfig.description}</p>
+<Link
+  href="/pricing"
+  className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-amber-400 hover:text-amber-300 transition"
+>
+  👑 Voir les tarifs & abonnements →
+</Link>
+
               <button
                 onClick={handleLogout}
                 className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white"

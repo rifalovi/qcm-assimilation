@@ -699,6 +699,9 @@ ${errorsText}
         ) : (
           <a href="/account" className="rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-6 py-3 text-sm transition">
             👑 Passer en Premium
+            <a href="/pricing" className="block text-center text-xs text-amber-400/70 hover:text-amber-300 transition mt-1">
+  Voir les tarifs →
+</a>
           </a>
         )}
       </div>

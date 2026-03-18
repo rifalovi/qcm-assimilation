@@ -20,6 +20,9 @@ export default function AppHeader() {
         </Link>
 
         <div className="flex items-center gap-3 text-xs text-slate-400">
+          <Link href="/pricing" className="rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-1.5 text-amber-300 hover:bg-amber-500/20 transition font-medium">
+            👑 Tarifs
+          </Link>
           {!loading && (
             username ? (
               <Link href="/account"

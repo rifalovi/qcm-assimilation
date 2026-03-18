@@ -541,7 +541,11 @@ function selectAnswer(choice: ChoiceKey) {
             onClick={() => router.push("/account")}
             className="block w-full rounded-2xl bg-amber-500 px-5 py-3 text-center text-sm font-bold text-slate-950 transition hover:bg-amber-400">
             👑 Passer en Premium — 9,99€/mois
+            <a href="/pricing" className="block text-center text-xs text-amber-400/70 hover:text-amber-300 transition mt-1">
+  Voir les tarifs →
+</a>
           </button>
+          
         )}
         <div className="flex gap-2">
   <button

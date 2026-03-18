@@ -161,6 +161,16 @@ export default function BottomNav() {
                   <p className="text-xs text-slate-400">Comparez vos scores</p>
                 </div>
               </button>
+              <button
+  onClick={() => { router.push("/pricing"); setShowStatsMenu(false); }}
+  className="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3.5 text-sm font-semibold text-amber-200 transition hover:bg-amber-500/20"
+>
+  <span className="text-xl">👑</span>
+  <div className="text-left">
+    <p className="font-semibold">Tarifs & Abonnements</p>
+    <p className="text-xs text-slate-400">Voir les plans disponibles</p>
+  </div>
+</button>
             </div>
           </div>
         </div>

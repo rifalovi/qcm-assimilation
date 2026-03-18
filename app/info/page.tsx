@@ -328,6 +328,9 @@ Informations essentielles.
         className="rounded-2xl border border-amber-400/20 bg-amber-500/10 px-5 py-2.5 text-sm font-semibold text-amber-200 transition hover:bg-amber-500/20"
       >
         👑 Passer en Premium — accès à 280 cartes
+        <a href="/pricing" className="text-xs text-amber-400/70 hover:text-amber-300 transition">
+  Voir les tarifs →
+</a>
       </button>
     )}
   </div>
