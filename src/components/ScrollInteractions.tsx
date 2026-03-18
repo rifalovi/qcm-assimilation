@@ -25,6 +25,15 @@ export default function ScrollInteractions({ questionId, userId, sessionId }: Pr
 
   const supabase = createClient();
 
+  const [username, setUsername] = useState("Utilisateur");
+
+useEffect(() => {
+  if (!userId) return;
+  const supabase = createClient();
+  supabase.from("profiles").select("username").eq("id", userId).single()
+    .then(({ data }) => { if (data?.username) setUsername(data.username); });
+}, [userId]);
+
   useEffect(() => {
     loadCounts();
     loadUserActions();
@@ -120,7 +129,7 @@ export default function ScrollInteractions({ questionId, userId, sessionId }: Pr
     await supabase.from("question_comments").insert({
       question_id: questionId,
       user_id: userId,
-      username: "Utilisateur",
+      username: username,
       content: newComment.trim(),
     });
     setNewComment("");
@@ -206,62 +215,67 @@ export default function ScrollInteractions({ questionId, userId, sessionId }: Pr
       </div>
 
       {/* Modal commentaires */}
-      {showComments && (
-        <div
-          className="fixed inset-0 z-50 flex items-end"
-          style={{ background: "rgba(0,0,0,0.62)", backdropFilter: "blur(8px)" }}
-          onClick={() => setShowComments(false)}
-        >
-          <div
-            className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8"
-            style={{ maxHeight: "70vh", overflowY: "auto" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-white">Commentaires ({counts.comments})</p>
-              <button onClick={() => setShowComments(false)} className="text-slate-400 hover:text-white">✕</button>
-            </div>
+ {showComments && (
+  <div
+    className="fixed inset-0 z-50 flex items-end"
+    style={{ background: "rgba(0,0,0,0.62)", backdropFilter: "blur(8px)" }}
+    onClick={() => setShowComments(false)}
+  >
+    <div
+      className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 flex flex-col"
+      style={{ maxHeight: "70vh" }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Header fixe */}
+      <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10">
+        <p className="text-sm font-semibold text-white">Commentaires ({counts.comments})</p>
+        <button onClick={() => setShowComments(false)} className="text-slate-400 hover:text-white">✕</button>
+      </div>
 
-            {userId ? (
-              <div className="mb-4 flex gap-2">
-                <input
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Ajouter un commentaire..."
-                  className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30"
-                />
-                <button
-                  onClick={submitComment}
-                  disabled={sending || !newComment.trim()}
-                  className="rounded-xl border border-blue-400/20 bg-blue-500/15 px-3 py-2 text-sm font-semibold text-blue-300 disabled:opacity-50"
-                >
-                  {sending ? "..." : "Envoyer"}
-                </button>
-              </div>
-            ) : (
-              <div className="mb-4 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
-                Connecte-toi pour commenter
-              </div>
-            )}
-
-            <div className="space-y-3">
-              {comments.length === 0 ? (
-                <p className="text-center text-sm text-slate-500">Aucun commentaire — soyez le premier !</p>
-              ) : (
-                comments.map((c) => (
-                  <div key={c.id} className="rounded-xl border border-white/10 bg-white/5 p-3">
-                    <p className="text-xs font-semibold text-blue-300">{c.username}</p>
-                    <p className="mt-1 text-sm text-slate-300">{c.content}</p>
-                    <p className="mt-1 text-xs text-slate-500">
-                      {new Date(c.created_at).toLocaleDateString("fr-FR")}
-                    </p>
-                  </div>
-                ))
-              )}
-            </div>
+      {/* Zone scrollable */}
+      <div className="flex-1 overflow-y-auto px-4 py-3 pb-20 space-y-2">
+        {userId ? (
+          <div className="flex gap-2 mb-3">
+            <input
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Ajouter un commentaire..."
+              className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30"
+              maxLength={200}
+            />
+            <button
+              onClick={submitComment}
+              disabled={sending || !newComment.trim()}
+              className="rounded-xl border border-blue-400/20 bg-blue-500/15 px-3 py-2 text-sm font-semibold text-blue-300 disabled:opacity-50 shrink-0"
+            >
+              {sending ? "..." : "Envoyer"}
+            </button>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="mb-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
+            Connecte-toi pour commenter
+          </div>
+        )}
+
+        {comments.length === 0 ? (
+          <p className="text-center text-sm text-slate-500">Aucun commentaire — soyez le premier !</p>
+        ) : (
+          comments.map((c) => (
+            <div key={c.id} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-xs font-semibold text-blue-300">{c.username}</p>
+                <p className="text-xs text-slate-500">
+                  {new Date(c.created_at).toLocaleDateString("fr-FR")}
+                </p>
+              </div>
+              <p className="mt-1 text-sm text-slate-300 line-clamp-2">{c.content}</p>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 }
