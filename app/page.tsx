@@ -124,6 +124,8 @@ const limits = ROLE_LIMITS[role];
   const [heroVisible, setHeroVisible] = useState(false);
 
   useEffect(() => {
+    if (authLoading) return;
+    if (supabaseUsername) return;
     const u = loadUserLocal();
     if (u) {
       setPseudo(u.pseudo);
@@ -133,7 +135,7 @@ const limits = ROLE_LIMITS[role];
     }
     const t = setTimeout(() => setHeroVisible(true), 50);
     return () => clearTimeout(t);
-  }, []);
+  }, [authLoading, supabaseUsername]);
 
   useEffect(() => {
     const u = loadUserLocal();
