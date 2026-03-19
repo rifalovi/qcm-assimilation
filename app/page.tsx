@@ -122,6 +122,7 @@ const limits = ROLE_LIMITS[role];
   const [pseudoOpen, setPseudoOpen] = useState(false);
   const [hasLastResult, setHasLastResult] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
+  const [homeMenuOpen, setHomeMenuOpen] = useState(false);
 
   useEffect(() => {
     const u = loadUserLocal();
@@ -330,12 +331,31 @@ const limits = ROLE_LIMITS[role];
       </div>
 
       {pseudo.trim() ? (
-        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
-          <span>Bonjour <span className="font-semibold text-white">{pseudo.trim()}</span> 👋</span>
-          <span className="text-slate-500">•</span>
-          <button onClick={openPseudoModal} className="text-slate-400 hover:text-white hover:underline transition">Changer</button>
-          <span className="text-slate-500">•</span>
-          <button onClick={clearPseudo} className="text-slate-400 hover:text-red-400 hover:underline transition">Déconnexion</button>
+        <div className="relative">
+          <button
+            onClick={() => setHomeMenuOpen(!homeMenuOpen)}
+            className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 transition"
+          >
+            <span>Bonjour <span className="font-semibold text-white">{pseudo.trim()}</span> 👋</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{transform: homeMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s"}}>
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          {homeMenuOpen && (
+            <div className="absolute right-0 top-full mt-2 w-44 overflow-hidden rounded-2xl border border-white/10 z-50"
+              style={{background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)"}}>
+              <div className="py-2">
+                <button onClick={() => { openPseudoModal(); setHomeMenuOpen(false); }}
+                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition">
+                  ✏️ Changer le pseudo
+                </button>
+                <button onClick={() => { clearPseudo(); setHomeMenuOpen(false); }}
+                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition">
+                  🚪 Déconnexion
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <button onClick={openPseudoModal} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition">
