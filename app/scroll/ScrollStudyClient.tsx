@@ -8,6 +8,71 @@ import { useRouter } from "next/navigation";
 import type { Question, MCQVariant } from "@/types/questions";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
+// Type union : question normale OU carte CTA
+type CardItem = Question | { type: "cta"; ctaRole: "anonymous" | "freemium"; hasTheme: boolean };
+function isCTA(card: CardItem): card is { type: "cta"; ctaRole: "anonymous" | "freemium"; hasTheme: boolean } {
+  return (card as any).type === "cta";
+}
+
+// Composant carte CTA
+function CTACard({ ctaRole, hasTheme }: { ctaRole: "anonymous" | "freemium"; hasTheme: boolean }) {
+  const isAnon = ctaRole === "anonymous";
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-6 p-6 text-center">
+      <div
+        className="flex h-16 w-16 items-center justify-center rounded-2xl text-3xl"
+        style={{
+          background: isAnon ? "rgba(96,165,250,0.15)" : "rgba(251,191,36,0.15)",
+          border: isAnon ? "1px solid rgba(96,165,250,0.30)" : "1px solid rgba(251,191,36,0.30)",
+        }}
+      >
+        {isAnon ? "🔓" : "👑"}
+      </div>
+
+      <div>
+        <p
+          className="text-xl font-extrabold leading-tight text-white"
+          style={{ letterSpacing: "-0.01em" }}
+        >
+          {isAnon
+            ? "Tu as vu les 5 premières cartes !"
+            : "Tu as vu les 10 cartes gratuites !"}
+        </p>
+        <p
+          className="mt-2 text-sm leading-relaxed"
+          style={{ color: isAnon ? "#bfdbfe" : "#fde68a" }}
+        >
+          {isAnon
+            ? "Crée un compte gratuit pour accéder à 10 cartes par thème — 280 cartes au total disponibles."
+            : "Passe en Premium pour accéder aux 280 cartes complètes — tous thèmes, tous niveaux."}
+        </p>
+      </div>
+
+      <a
+        href={isAnon ? "/register" : "/pricing"}
+        className="w-full max-w-xs rounded-2xl py-3.5 text-sm font-bold transition hover:brightness-110 active:scale-95"
+        style={{
+          background: isAnon
+            ? "linear-gradient(135deg, #3b82f6, #60a5fa)"
+            : "linear-gradient(135deg, #f59e0b, #fbbf24)",
+          color: isAnon ? "#fff" : "#0b0f1a",
+          boxShadow: isAnon
+            ? "0 12px 28px rgba(59,130,246,0.35)"
+            : "0 12px 28px rgba(251,191,36,0.35)",
+        }}
+      >
+        {isAnon ? "Créer un compte gratuit →" : "Passer en Premium →"}
+      </a>
+
+      {!isAnon && (
+        <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+          9,99€/mois · Résiliation à tout moment
+        </p>
+      )}
+    </div>
+  );
+}
+
 interface Props {
   questions: Question[];
   themes: string[];
@@ -752,6 +817,12 @@ useEffect(() => {
   });
 }, []);
 
+  // Construire le tableau avec CTA injectée à la fin si pas premium
+  const buildCardsWithCta = (questions: Question[], themeActive: boolean): CardItem[] => {
+    if (role === "premium") return questions;
+    return [...questions, { type: "cta", ctaRole: role, hasTheme: themeActive }];
+  };
+
   const [activeTheme, setActiveTheme] = useState<string | null>(preselectedTheme);
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);
   const [showExamModal, setShowExamModal] = useState(false);
@@ -965,9 +1036,9 @@ useEffect(() => {
             </div>
           </div>
         ) : (
-          filteredQuestions.map((q, i) => (
+          buildCardsWithCta(filteredQuestions, !!activeTheme).map((card, i) => (
             <div
-              key={`${activeTheme}-${q.id}`}
+              key={isCTA(card) ? "cta" : `${activeTheme}-${card.id}`}
               data-index={i}
               style={{
                 height: "100%",
@@ -975,19 +1046,23 @@ useEffect(() => {
                 overflow: "hidden",
               }}
             >
-              <div className="relative h-full">
-  <QuestionCard
-    question={q}
-    qIndex={i}
-    total={filteredQuestions.length}
-    isActive={activeIndex === i}
-  />
-  <ScrollInteractions
-    questionId={q.id}
-    userId={userId}
-    sessionId={sessionId}
-  />
-</div>
+              {isCTA(card) ? (
+                <CTACard ctaRole={card.ctaRole} hasTheme={card.hasTheme} />
+              ) : (
+                <div className="relative h-full">
+                  <QuestionCard
+                    question={card}
+                    qIndex={i}
+                    total={filteredQuestions.length}
+                    isActive={activeIndex === i}
+                  />
+                  <ScrollInteractions
+                    questionId={card.id}
+                    userId={userId}
+                    sessionId={sessionId}
+                  />
+                </div>
+              )}
             </div>
           ))
         )}
