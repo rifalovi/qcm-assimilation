@@ -87,14 +87,14 @@ export default function AppHeader() {
                 {/* Dropdown menu */}
                 {open && (
                   <div
-                    className="absolute right-0 top-full mt-2 w-52 overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.50)]"
+                    className="absolute right-0 top-full mt-2 w-48 overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.50)] max-h-[70vh] overflow-y-auto"
                     style={{
                       background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)",
                       backdropFilter: "blur(16px)",
                     }}
                   >
                     {/* En-tête profil */}
-                    <div className="border-b border-white/10 px-4 py-3">
+                    <div className="border-b border-white/10 px-3 py-2">
                       <p className="text-sm font-semibold text-white">{username}</p>
                       {roleLabel && (
                         <p className="mt-0.5 text-xs text-slate-400">{roleLabel}</p>
@@ -113,7 +113,7 @@ export default function AppHeader() {
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 transition hover:bg-white/5 hover:text-white"
+                          className="flex items-center gap-2 px-3 py-2 text-xs text-slate-300 transition hover:bg-white/5 hover:text-white"
                         >
                           <span className="text-base">{item.icon}</span>
                           {item.label}
@@ -125,7 +125,7 @@ export default function AppHeader() {
                     <div className="border-t border-white/10 py-2">
                       <button
                         onClick={handleLogout}
-                        className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-400 transition hover:bg-red-500/10 hover:text-red-300"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/10 hover:text-red-300"
                       >
                         <span className="text-base">🚪</span>
                         Déconnexion
