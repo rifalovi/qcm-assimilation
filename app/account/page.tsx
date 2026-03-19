@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import MFASetup from "@/components/MFASetup";
 
 type Role = "anonymous" | "freemium" | "premium";
 
@@ -28,13 +29,13 @@ const ROLE_CONFIG = {
   anonymous: {
     label: "Anonyme",
     color: "border-slate-400/20 bg-slate-500/10 text-slate-200",
-    description: "20 questions • Pas de sauvegarde",
+    description: "10 questions • Pas de sauvegarde",
     icon: "👤",
   },
   freemium: {
     label: "Freemium",
     color: "border-blue-400/20 bg-blue-500/10 text-blue-200",
-    description: "40 questions • Score sauvegardé • Niveau 1",
+    description: "20 questions • Score sauvegardé • Niveau 1",
     icon: "✨",
   },
   premium: {
@@ -94,6 +95,9 @@ export default function AccountPage() {
         .single();
 
       if (profileData) setProfile(profileData);
+      if (profileData?.role === "anonymous" && user) {
+        setTimeout(() => load(), 2000);
+      }
 
       const { data: resultsData } = await supabase
         .from("results")
@@ -189,9 +193,6 @@ export default function AccountPage() {
                 </div>
                 <p className="mt-2 break-all text-sm text-slate-300">{email}</p>
                 <p className="mt-1 text-xs text-slate-400">{roleConfig.description}</p>
-              </div>
-
-<p className="mt-1 text-xs text-slate-400">{roleConfig.description}</p>
 <Link
   href="/pricing"
   className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-amber-400 hover:text-amber-300 transition"
@@ -222,6 +223,11 @@ export default function AccountPage() {
 >
   Passer en Premium →
 </button>
+       {/* Sécurité */}
+<div className="mt-4">
+  <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Sécurité</p>
+  <MFASetup />
+</div>         
                 </div>
               </div>
             )}
