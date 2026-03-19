@@ -9,13 +9,13 @@ import type { Question, MCQVariant } from "@/types/questions";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
 // Type union : question normale OU carte CTA
-type CardItem = Question | { type: "cta"; ctaRole: "anonymous" | "freemium"; hasTheme: boolean };
-function isCTA(card: CardItem): card is { type: "cta"; ctaRole: "anonymous" | "freemium"; hasTheme: boolean } {
+type CardItem = Question | { type: "cta"; ctaRole: "anonymous" | "freemium"; hasTheme: boolean; cardsCount: number };
+function isCTA(card: CardItem): card is { type: "cta"; ctaRole: "anonymous" | "freemium"; hasTheme: boolean; cardsCount: number } {
   return (card as any).type === "cta";
 }
 
 // Composant carte CTA
-function CTACard({ ctaRole, hasTheme }: { ctaRole: "anonymous" | "freemium"; hasTheme: boolean }) {
+function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "freemium"; hasTheme: boolean; cardsCount: number }) {
   const isAnon = ctaRole === "anonymous";
   return (
     <div className="flex h-full flex-col items-center justify-center gap-6 p-6 text-center">
@@ -820,7 +820,7 @@ useEffect(() => {
   // Construire le tableau avec CTA injectée à la fin si pas premium
   const buildCardsWithCta = (questions: Question[], themeActive: boolean): CardItem[] => {
     if (role === "premium") return questions;
-    return [...questions, { type: "cta", ctaRole: role, hasTheme: themeActive }];
+    return [...questions, { type: "cta", ctaRole: role, hasTheme: themeActive, cardsCount: questions.length }];
   };
 
   const [activeTheme, setActiveTheme] = useState<string | null>(preselectedTheme);
@@ -1047,7 +1047,7 @@ useEffect(() => {
               }}
             >
               {isCTA(card) ? (
-                <CTACard ctaRole={card.ctaRole} hasTheme={card.hasTheme} />
+                <CTACard ctaRole={card.ctaRole} hasTheme={card.hasTheme} cardsCount={card.cardsCount} />
               ) : (
                 <div className="relative h-full">
                   <QuestionCard
@@ -1087,7 +1087,7 @@ useEffect(() => {
             <div
               className="h-full rounded-full transition-all duration-300"
               style={{
-                width: `${((activeIndex + 1) / filteredQuestions.length) * 100}%`,
+                width: `${(Math.min(activeIndex + 1, filteredQuestions.length) / filteredQuestions.length) * 100}%`,
                 background: `linear-gradient(90deg, ${currentThemeAccent}, #818cf8)`,
                 boxShadow: `0 0 20px ${currentThemeAccent}40`,
               }}
@@ -1102,7 +1102,7 @@ useEffect(() => {
               textAlign: "right",
             }}
           >
-            {activeIndex + 1} / {filteredQuestions.length}
+            {Math.min(activeIndex + 1, filteredQuestions.length)} / {filteredQuestions.length}
           </span>
         </div>
       )}
