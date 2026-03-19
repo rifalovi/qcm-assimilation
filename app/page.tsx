@@ -112,7 +112,7 @@ function StatMiniCard({
 
 export default function HomePage() {
   const router = useRouter();
-  const { role, username: supabaseUsername, loading: authLoading } = useUser();
+  const { role } = useUser();
 const limits = ROLE_LIMITS[role];
 
   const [pseudo, setPseudo] = useState("");
@@ -124,8 +124,6 @@ const limits = ROLE_LIMITS[role];
   const [heroVisible, setHeroVisible] = useState(false);
 
   useEffect(() => {
-    if (authLoading) return;
-    if (supabaseUsername) return;
     const u = loadUserLocal();
     if (u) {
       setPseudo(u.pseudo);
@@ -135,7 +133,7 @@ const limits = ROLE_LIMITS[role];
     }
     const t = setTimeout(() => setHeroVisible(true), 50);
     return () => clearTimeout(t);
-  }, [authLoading, supabaseUsername]);
+  }, []);
 
   useEffect(() => {
     const u = loadUserLocal();
@@ -331,7 +329,7 @@ const limits = ROLE_LIMITS[role];
         </div>
       </div>
 
-      {!authLoading && !supabaseUsername && pseudo.trim() ? (
+      {pseudo.trim() ? (
         <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
           <span>Bonjour <span className="font-semibold text-white">{pseudo.trim()}</span> 👋</span>
           <span className="text-slate-500">•</span>
