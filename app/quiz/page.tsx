@@ -14,7 +14,7 @@ import Button from "../../components/Button";
 
 export default function QuizPage() {
   const router = useRouter();
-  const { role } = useUser();
+  const { role, loading: authLoading } = useUser();
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showPremiumCTA, setShowPremiumCTA] = useState(false);
@@ -52,6 +52,7 @@ export default function QuizPage() {
   }, [mode, focusWarn]);
 
   useEffect(() => {
+    if (authLoading) return;
     const raw = localStorage.getItem("quiz_settings");
     if (!raw) {
       router.push("/");
@@ -115,7 +116,7 @@ export default function QuizPage() {
 } catch (e: any) {
   setError(e?.message ?? "Erreur lors de la génération du test.");
 }
-  }, [router]);
+  }, [router, role]);
 
   useEffect(() => {
     if (mode !== "exam") return;

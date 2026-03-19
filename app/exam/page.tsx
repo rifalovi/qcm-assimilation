@@ -131,6 +131,7 @@ export default function ExamPage() {
   }
 
   function smartStartExam() {
+    if (supabaseUsername) { startExam(); return; }
     const u = loadUser();
     if (!u?.pseudo?.trim() || !u?.email?.trim()) { openIdentityModal(); return; }
     startExam();
