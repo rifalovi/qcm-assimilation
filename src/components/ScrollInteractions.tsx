@@ -163,12 +163,12 @@ useEffect(() => {
     <>
       {/* Colonne d'interactions côté droit */}
       <div
-        className="absolute right-2 flex flex-col items-center gap-4"
+        className="absolute right-1 flex flex-col items-center gap-3"
         style={{ top: "50%", transform: "translateY(-50%)" }}
       >
         {/* Like */}
         <button onClick={() => toggleAction("like")} className="flex flex-col items-center gap-1">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-full border transition ${
+          <div className={`flex h-8 w-8 items-center justify-center rounded-full border transition ${
             userActions.like
               ? "border-blue-400/40 bg-blue-500/20 text-blue-300"
               : "border-white/10 bg-white/5 text-slate-400 hover:text-white"
@@ -180,7 +180,7 @@ useEffect(() => {
 
         {/* Dislike */}
         <button onClick={() => toggleAction("dislike")} className="flex flex-col items-center gap-1">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-full border transition ${
+          <div className={`flex h-8 w-8 items-center justify-center rounded-full border transition ${
             userActions.dislike
               ? "border-red-400/40 bg-red-500/20 text-red-300"
               : "border-white/10 bg-white/5 text-slate-400 hover:text-white"

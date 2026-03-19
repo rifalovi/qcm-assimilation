@@ -44,7 +44,7 @@ function CallbackHandler() {
         await supabase.from('profiles').update({ role: 'freemium' }).eq('id', user.id)
       }
       setStatus('Confirmation OK — redirection accueil')
-      setTimeout(() => router.push('/register?confirmed=true'), 500)
+      setTimeout(() => router.push('/account'), 1500)
     }
 
     handleCallback()

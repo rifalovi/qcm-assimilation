@@ -389,7 +389,7 @@ function FlashView({
   const { accent, bg, border, glow, softText, gradientA, gradientB } = themeColor(question.theme);
 
   return (
-    <div className="flex h-full flex-col gap-5 p-5">
+    <div className="flex h-full flex-col gap-2 p-3 pr-12">
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: accent }}>
           {question.theme}
@@ -400,7 +400,7 @@ function FlashView({
       </div>
 
       <div
-        className="rounded-[1.8rem] p-5 transition-all duration-300 self-start w-full"
+        className="rounded-[1.4rem] p-3 transition-all duration-300 self-start w-full"
         style={{
           background: `linear-gradient(135deg, ${gradientA}, ${gradientB})`,
           border: `1px solid ${border}`,
@@ -880,7 +880,7 @@ useEffect(() => {
             }}
           >
             <IconFilter />
-            <span className="text-sm font-semibold" style={{ color: currentThemeAccent }}>
+            <span className="text-sm font-semibold truncate max-w-[140px] block" style={{ color: currentThemeAccent }}>
               {activeTheme ?? "Tous les thèmes"}
             </span>
             <span className="text-xs" style={{ color: "rgba(255,255,255,0.30)" }}>
