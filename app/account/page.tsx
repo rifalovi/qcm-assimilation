@@ -223,14 +223,13 @@ export default function AccountPage() {
 >
   Passer en Premium →
 </button>
-       {/* Sécurité */}
-<div className="mt-4">
-  <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Sécurité</p>
-  <MFASetup />
-</div>         
                 </div>
               </div>
             )}
+            <div className="mt-4">
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Sécurité</p>
+              <MFASetup />
+            </div>
           </div>
         </section>
 
