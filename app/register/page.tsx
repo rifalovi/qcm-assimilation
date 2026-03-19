@@ -232,7 +232,19 @@ if (checkError && !checkError.message.toLowerCase().includes("invalid")
           </section>
 
           <section className="w-full">
+       
             <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.45)] sm:p-8">
+              
+              {/* Bouton retour */}
+    <button
+      onClick={() => { setStep("form"); setError(null); setOtp(""); }}
+      className="mb-4 inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      ← Modifier l'email
+    </button>
               <div className="mb-6 text-center sm:text-left">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
                   📩 Confirmation
@@ -371,6 +383,16 @@ if (checkError && !checkError.message.toLowerCase().includes("invalid")
 
         <section className="w-full">
           <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.45)] sm:p-8">
+           
+             {/* Bouton retour */}
+  <a href="/" className="mb-4 inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Retour à l'accueil
+  </a>
+
+           
             <div className="mb-6 text-center sm:text-left">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
                 ✨ Nouveau compte
