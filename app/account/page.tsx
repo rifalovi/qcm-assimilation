@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import MFASetup from "@/components/MFASetup";
+import MFASetup from "../src/components/MFASetup";
 
 type Role = "anonymous" | "freemium" | "premium";
 
