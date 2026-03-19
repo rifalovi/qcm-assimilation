@@ -148,7 +148,7 @@ export default function InfoPage() {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [user, setUser] = useState<QcmUser | null>(null);
-  const { role } = useUser();
+  const { role, username: supabaseUsername } = useUser();
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 50);
@@ -195,7 +195,7 @@ export default function InfoPage() {
                 </div>
               </div>
 
-              {user?.pseudo?.trim() ? (
+              {!supabaseUsername && user?.pseudo?.trim() ? (
                 <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 backdrop-blur-md">
                   <span>
                     Bonjour <span className="font-semibold text-white">{user.pseudo.trim()}</span> 👋

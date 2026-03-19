@@ -67,7 +67,7 @@ function Pill({ children, active = false, onClick }: {
 
 export default function ExamPage() {
   const router = useRouter();
-  const { role } = useUser();
+  const { role, username: supabaseUsername } = useUser();
   const limits = ROLE_LIMITS[role];
 
   const [user, setUser] = useState<QcmUser | null>(null);
@@ -187,7 +187,7 @@ export default function ExamPage() {
                   <div className="mt-0.5 text-xs text-slate-400">Examen blanc • Simulation 2026</div>
                 </div>
               </div>
-              {user?.pseudo?.trim() ? (
+              {!supabaseUsername && user?.pseudo?.trim() ? (
                 <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
                   <span>Bonjour <span className="font-semibold text-white">{user.pseudo.trim()}</span> 👋</span>
                   <span className="text-slate-500">•</span>
