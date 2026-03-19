@@ -87,7 +87,7 @@ export default function AppHeader() {
                 {/* Dropdown menu */}
                 {open && (
                   <div
-                    className="absolute right-0 top-full mt-2 w-48 overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.50)] max-h-[70vh] overflow-y-auto"
+                    className="absolute right-0 top-full mt-2 w-44 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.50)]"
                     style={{
                       background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)",
                       backdropFilter: "blur(16px)",

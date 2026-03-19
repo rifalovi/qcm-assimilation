@@ -342,7 +342,7 @@ const limits = ROLE_LIMITS[role];
             </svg>
           </button>
           {homeMenuOpen && (
-            <div className="absolute right-0 top-full mt-2 w-44 overflow-hidden rounded-2xl border border-white/10 z-50"
+            <div className="absolute right-0 top-full mt-2 w-44 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-white/10 z-50"
               style={{background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)"}}>
               <div className="py-2">
                 <button onClick={() => { openPseudoModal(); setHomeMenuOpen(false); }}
