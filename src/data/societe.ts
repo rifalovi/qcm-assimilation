@@ -486,10 +486,10 @@ export const SOCIETE_L3: Question[] = [
     "La Charte des droits fondamentaux de l’Union européenne est proclamée en 2000."
   ),
 
-  makeQuestion("s3-006",3,"Société","Depuis le début des années 2000, la France partage comme monnaie commune :",
-    "Le franc","L’euro","La livre","Le dollar","B",
-    "La monnaie commune est l’euro. Il ne faut pas la confondre avec l’ancien franc."
-  ),
+ makeQuestion("s3-006",3,"Société","Depuis le début des années 2000, la France partage comme monnaie commune :",
+  "Le franc","L’euro","La livre","Le dollar","B",
+  "La monnaie commune est l’euro. En 2026, la France la partage avec 20 autres pays de l’Union européenne."
+),
 
   makeQuestion("s3-007",3,"Société","Le drapeau européen avec 12 étoiles symbolise surtout :",
     "Le nombre d’États membres",
@@ -548,10 +548,14 @@ export const SOCIETE_L3: Question[] = [
     "Le Mont-Saint-Michel est situé en Normandie."
   ),
 
-  makeQuestion("s3-016",3,"Société","Selon les données de référence du livret, la France compte environ :",
-    "47 millions d’habitants","57,4 millions d’habitants","67,4 millions d’habitants","77,4 millions d’habitants","C",
-    "Le livret retient environ 67,4 millions d’habitants. Il s’agit d’un grand ordre de grandeur à connaître."
-  ),
+  makeQuestion("s3-016",3,"Société","Aujourd’hui, la France compte environ :",
+  "57 millions d’habitants",
+  "67 millions d’habitants",
+  "69 millions d’habitants",
+  "77 millions d’habitants",
+  "C",
+  "Au 1er janvier 2026, la population de la France est estimée à environ 69,1 millions d’habitants."
+),
 
   makeQuestion("s3-017",3,"Société","Le territoire français, métropole et outre-mer compris, représente environ :",
     "275 000 km²","475 000 km²","675 000 km²","875 000 km²","C",
@@ -577,140 +581,454 @@ export const SOCIETE_L3: Question[] = [
     "L’école publique devient gratuite et laïque dans les années 1880, notamment avec les lois associées à Jules Ferry."
   ),
 
-  makeQuestion("s3-021", 3, "Société", "Le modèle de protection sociale français repose historiquement sur :",
-  "Un système hybride mêlant logique contributive et logique plus universelle",
-  "Un système entièrement universel financé uniquement par l’impôt",
-  "Un système réservé aux seuls actifs cotisants",
-  "Un modèle purement assistanciel depuis 2000",
+  makeQuestion("s3-021",3,"Société","Les citoyens français sont aussi :",
+  "Citoyens européens",
+  "Citoyens de l’OTAN",
+  "Citoyens du Commonwealth",
+  "Citoyens de l’UNESCO",
   "A",
-  "Le modèle social français combine une logique contributive, liée au travail et aux cotisations, et une logique plus universelle financée en partie par l’impôt et la solidarité nationale. Cela explique de nombreux débats sur son financement et ses réformes."
+  "Depuis 1992, les citoyens français sont aussi citoyens européens."
 ),
 
-makeQuestion("s3-022", 3, "Société", "Pourquoi la loi de 2004 sur les signes religieux ostensibles à l’école publique continue-t-elle à susciter des débats ?",
-  "Parce qu’elle a été annulée par le Conseil constitutionnel",
-  "Parce qu’elle met en tension la neutralité de l’école publique et la liberté de conscience des élèves",
-  "Parce qu’elle n’est appliquée que dans certaines académies",
-  "Parce qu’elle interdit toute référence religieuse jusqu’à l’université",
-  "B",
-  "Cette loi est débattue parce qu’elle touche à l’équilibre entre la laïcité scolaire, la neutralité de l’institution publique et la liberté de conscience des élèves."
+makeQuestion("s3-022",3,"Société","Les citoyens européens peuvent notamment :",
+  "Voter aux élections locales du pays de l’UE où ils résident",
+  "Voter à toutes les élections nationales partout en Europe",
+  "Devenir automatiquement députés",
+  "Supprimer leur nationalité d’origine",
+  "A",
+  "Ils peuvent voter aux élections locales du pays de l’Union où ils sont installés."
 ),
 
-makeQuestion("s3-023", 3, "Société", "L’usage de l’article 49-3 pour faire adopter une réforme très contestée révèle surtout :",
-  "Que cette procédure est interdite pour les réformes sociales",
-  "Que le Gouvernement n’avait aucune majorité",
-  "La tension entre l’efficacité institutionnelle et la légitimité démocratique du vote parlementaire",
-  "Que l’Assemblée nationale est automatiquement dissoute",
+makeQuestion("s3-023",3,"Société","La France est membre permanent du Conseil de sécurité de :",
+  "L’OTAN",
+  "L’Union européenne",
+  "L’ONU",
+  "L’UNESCO",
   "C",
-  "L’article 49-3 permet au Gouvernement de faire adopter un texte en engageant sa responsabilité. Son usage souligne souvent la tension entre stabilité gouvernementale et attente d’un vote parlementaire pleinement assumé."
+  "La France est membre permanent du Conseil de sécurité de l’ONU."
 ),
 
-makeQuestion("s3-024", 3, "Société", "Pourquoi la discrimination positive à fondement ethnique est-elle controversée dans la tradition républicaine française ?",
-  "Parce qu’elle est appliquée massivement en France",
-  "Parce qu’elle a totalement remplacé l’égalité devant la loi",
-  "Parce qu’elle n’a jamais suscité de débat en France",
-  "Parce qu’elle suppose de distinguer les citoyens selon leur appartenance d’origine, ce qui entre en tension avec l’universalisme républicain",
-  "D",
-  "La tradition républicaine française repose sur l’idée que la loi s’adresse à des citoyens égaux, et non à des communautés définies par l’origine ou l’ethnie. C’est ce qui rend cette question particulièrement sensible."
+makeQuestion("s3-024",3,"Société","Le français est parlé dans environ :",
+  "20 pays",
+  "40 pays",
+  "70 pays",
+  "120 pays",
+  "C",
+  "Le livret indique que des personnes parlant français sont réparties dans 70 pays."
 ),
 
-makeQuestion("s3-025", 3, "Société", "En quoi le PACS a-t-il préparé le terrain au mariage pour tous ?",
-  "Il accordait déjà exactement les mêmes droits que le mariage",
-  "Il a constitué une première reconnaissance juridique des couples de même sexe, rendant plus acceptable l’évolution vers le mariage pour tous",
-  "Il ne concernait que les couples hétérosexuels",
-  "Il offrait moins de droits que le concubinage",
+makeQuestion("s3-025",3,"Société","Le tourisme en France est :",
+  "Marginal",
+  "Essentiel à l’économie",
+  "Réservé à Paris",
+  "En recul constant",
   "B",
-  "Le PACS a constitué une étape importante dans la reconnaissance juridique des couples de même sexe. Il n’était pas équivalent au mariage, mais il a préparé une évolution du droit et des mentalités."
+  "Le tourisme est un élément essentiel de l’économie française."
 ),
-makeQuestion("s3-026", 3, "Société", "Quelle tension fondamentale le modèle d'intégration républicain révèle-t-il face aux réalités de l'immigration contemporaine en France ?", "Il révèle que la France a renoncé à tout modèle d'intégration depuis 2000, laissant les immigrants s'organiser communautairement sans politique publique structurée", "Il révèle la tension entre un idéal universaliste — l'individu intégré par l'école, la langue et le travail indépendamment de son origine — et des réalités de discrimination, de ségrégation territoriale et d'inégalités structurelles qui empêchent cet idéal d'être pleinement effectif", "Il confirme que le modèle républicain d'intégration fonctionne parfaitement, la France ne connaissant pas de problèmes d'intégration significatifs par rapport à ses voisins européens", "Il révèle uniquement un problème culturel : les immigrants récents refusant l'intégration contrairement aux vagues migratoires précédentes", "B", "Le modèle républicain repose sur l'idée que l'école, la langue et le travail permettent l'intégration de tout individu, quelle que soit son origine. Cependant, de nombreuses études de l'INSEE, de l'INED et du Défenseur des droits montrent la persistance de discriminations à l'embauche, au logement et dans l'accès aux services publics pour certaines populations. La ségrégation résidentielle et scolaire renforce ces inégalités. L'idéal universaliste coexiste donc avec des obstacles structurels qui limitent son application concrète."),
 
-makeQuestion("s3-027", 3, "Société", "Quelles limites la politique d'exception culturelle française révèle-t-elle à l'ère des plateformes numériques mondiales ?", "Elle a totalement disparu depuis 2015 face aux plateformes américaines", "Elle montre uniquement que la France dépense trop pour la culture", "Elle révèle la difficulté de protéger la création nationale face aux plateformes mondiales, obligeant la France à adapter ses outils comme les quotas de production et les contributions financières au CNC", "Elle reste totalement efficace car les plateformes respectent toutes les règles françaises", "C", "L'exception culturelle française vise à protéger la création nationale face à la concurrence internationale. Historiquement appliquée aux chaînes de télévision, elle a dû être adaptée aux plateformes numériques. La directive européenne SMA de 2018 impose désormais aux plateformes comme Netflix ou Disney+ de financer la production européenne et française. Toutefois, ces régulations restent limitées face à des acteurs mondiaux puissants et à l'évolution des habitudes culturelles."),
+makeQuestion("s3-026",3,"Société","La France est aussi présentée comme :",
+  "Une puissance uniquement agricole",
+  "La sixième puissance économique mondiale",
+  "Une économie locale fermée",
+  "Un pays sans grands groupes",
+  "B",
+  "Le livret présente la France comme la sixième puissance économique mondiale."
+),
 
-makeQuestion("s3-028", 3, "Société", "En quoi la constitutionnalisation de la Charte de l'environnement en 2005 a-t-elle enrichi la hiérarchie des droits en France ?", "Elle est purement symbolique et sans effet juridique", "Elle subordonne tous les droits économiques aux droits environnementaux", "Elle n'a rien changé à l'ordre constitutionnel", "Elle introduit de nouveaux droits constitutionnels comme le droit à un environnement sain et le principe de précaution pouvant entrer en tension avec d'autres libertés", "D", "La Charte de l'environnement a été intégrée au bloc de constitutionnalité en 2005. Elle reconnaît notamment le droit de vivre dans un environnement équilibré et le principe de précaution. Le Conseil constitutionnel et le Conseil d'État l'utilisent pour contrôler les lois et décisions administratives. Cela crée parfois des tensions avec d'autres libertés constitutionnelles comme la liberté d'entreprendre ou le droit de propriété."),
+makeQuestion("s3-027",3,"Société","Paris La Défense est présenté comme :",
+  "Le plus grand port français",
+  "Le premier quartier d’affaires d’Europe",
+  "La plus grande université d’Europe",
+  "Le principal site agricole français",
+  "B",
+  "Paris La Défense est présenté comme le premier quartier d’affaires d’Europe."
+),
 
-makeQuestion("s3-029", 3, "Société", "Quelle est la nature structurelle du déficit de la Sécurité sociale française ?", "Il provient principalement de la fraude sociale", "La Sécurité sociale est structurellement excédentaire depuis 2010", "Il résulte du vieillissement démographique et de l'augmentation des dépenses de santé dans un système où les recettes progressent moins vite", "Il est uniquement lié à la crise du Covid-19", "C", "Le déficit de la Sécurité sociale est lié à des évolutions structurelles : vieillissement de la population, augmentation de l'espérance de vie et innovation médicale coûteuse. Les dépenses progressent plus vite que les recettes basées sur la masse salariale. La dette sociale est gérée par la CADES, ce qui pose la question de l'équilibre intergénérationnel du système."),
+makeQuestion("s3-028",3,"Société","Parmi les secteurs d’excellence français, le livret cite notamment :",
+  "L’aéronautique et le luxe",
+  "Le charbon et l’acier",
+  "La pêche et les mines",
+  "Le textile et le bois",
+  "A",
+  "Le livret cite notamment l’aéronautique et le luxe."
+),
 
-makeQuestion("s3-030", 3, "Société", "Quelles limites le droit français impose-t-il au droit de grève dans les services publics ?", "Aucune limite n'est possible", "Des règles comme le préavis obligatoire et le service minimum dans certains secteurs concilient le droit de grève avec la continuité du service public", "Le droit de grève est interdit dans les services publics", "Il dépend uniquement des conventions collectives", "B", "Le droit de grève est reconnu par le préambule de 1946 mais peut être encadré par la loi. Dans certains services publics essentiels, comme les transports ou l'éducation, un préavis de cinq jours et des obligations de service minimum peuvent être imposés. Ces règles cherchent à concilier le droit de grève avec le principe constitutionnel de continuité du service public."),
+makeQuestion("s3-029",3,"Société","Parmi les dix métropoles les plus importantes, on trouve :",
+  "Paris, Lyon, Marseille",
+  "Paris, Rouen, Pau",
+  "Paris, Amiens, Limoges",
+  "Paris, Metz, Brest",
+  "A",
+  "Le livret cite Paris, Lyon et Marseille parmi les plus importantes métropoles."
+),
 
-makeQuestion("s3-031", 3, "Société", "Que révèle la fracture numérique dans la société française ?", "Elle est totalement résolue grâce à la fibre optique", "Elle concerne uniquement les personnes âgées", "Elle montre que l'accès inégal aux outils numériques reproduit et amplifie les inégalités sociales et territoriales", "Elle est uniquement géographique", "C", "La fracture numérique concerne plusieurs dimensions : accès au réseau, accès aux équipements et compétences numériques. Environ 13 millions de Français sont en difficulté avec les outils numériques. La dématérialisation des services publics renforce cette problématique car l'accès aux droits dépend désormais souvent d'une maîtrise minimale d'Internet."),
+makeQuestion("s3-030",3,"Société","Le Mont-Saint-Michel est classé :",
+  "Monument national seulement",
+  "Au patrimoine mondial de l’UNESCO",
+  "Capitale culturelle française",
+  "Parc naturel régional",
+  "B",
+  "Le Mont-Saint-Michel est classé au patrimoine mondial de l’UNESCO."
+),
 
-makeQuestion("s3-032", 3, "Société", "Quelle distinction existe entre égalité formelle et égalité réelle entre les femmes et les hommes ?", "Il n'existe aucune distinction", "L'égalité formelle garantit les droits mais l'égalité réelle suppose que ces droits soient effectivement appliqués dans la société", "Les deux notions sont identiques", "Le féminisme contemporain rejette toute égalité juridique", "B", "L'égalité formelle signifie que la loi reconnaît les mêmes droits aux femmes et aux hommes. Cependant, l'égalité réelle dépend de la manière dont ces droits se traduisent dans la pratique. Les écarts de salaires, les violences conjugales et la sous-représentation dans certains postes de pouvoir montrent que cette égalité reste incomplète malgré les avancées juridiques."),
+makeQuestion("s3-031",3,"Société","Le Mont-Blanc culmine à environ :",
+  "3 810 m",
+  "4 810 m",
+  "5 810 m",
+  "6 810 m",
+  "B",
+  "Le livret indique 4 810 mètres."
+),
 
-makeQuestion("s3-033", 3, "Société", "Quels débats la loi 'mariage pour tous' de 2013 a-t-elle laissés ouverts ?", "La PMA et la GPA", "Aucun débat n'est resté ouvert", "Elle n'a concerné que l'adoption simple", "La GPA a été légalisée", "A", "La loi de 2013 a ouvert le mariage et l'adoption aux couples de même sexe. Elle a également relancé les débats sur la procréation médicalement assistée, finalement ouverte aux couples de femmes en 2021, ainsi que sur la gestation pour autrui qui reste interdite en France mais dont les situations internationales soulèvent des questions juridiques."),
+makeQuestion("s3-032",3,"Société","Le Rhin fait partie :",
+  "Des montagnes françaises",
+  "Des fleuves importants en France",
+  "Des régions françaises",
+  "Des mers françaises",
+  "B",
+  "Le livret cite le Rhin parmi les fleuves importants."
+),
 
-makeQuestion("s3-034", 3, "Société", "Pourquoi la critique de Pierre Bourdieu sur la reproduction sociale à l'école reste-t-elle pertinente ?", "Elle a été totalement invalidée", "Le milieu social reste un facteur majeur de réussite scolaire malgré les politiques d'éducation prioritaire", "Les données PISA contredisent totalement cette thèse", "Les inégalités scolaires sont uniquement géographiques", "B", "Les recherches contemporaines montrent que la réussite scolaire reste fortement corrélée à l'origine sociale. Les enfants issus de milieux favorisés disposent souvent d'un capital culturel et social qui facilite leur réussite. Les politiques d'éducation prioritaire tentent de corriger ces inégalités mais n'ont pas totalement inversé cette tendance."),
+makeQuestion("s3-033",3,"Société","La France est parcourue notamment par :",
+  "La Loire, la Seine, la Garonne, le Rhône et le Rhin",
+  "Le Danube, le Nil, le Tage, le Rhin",
+  "La Loire, le Tage, la Volga, la Seine",
+  "Le Rhône, le Pô, le Nil, la Loire",
+  "A",
+  "Le livret cite ces cinq grands fleuves."
+),
 
-makeQuestion("s3-035", 3, "Société", "Quelles sont les causes structurelles de la désertification médicale en France ?", "Le numerus clausus uniquement", "Le manque d'intérêt des jeunes médecins", "La combinaison de plusieurs facteurs : liberté d'installation, vieillissement des médecins, évolution des modes d'exercice et effets du numerus clausus passé", "Elle ne concerne que les spécialistes", "C", "La désertification médicale résulte de plusieurs facteurs : la liberté d'installation des médecins, la réduction du numerus clausus dans les années 1980-2000, le vieillissement des praticiens et l'évolution des attentes professionnelles des jeunes médecins. Les politiques incitatives n'ont que partiellement corrigé ces déséquilibres territoriaux."),
+makeQuestion("s3-034",3,"Société","Le territoire français comprend :",
+  "Seulement la métropole",
+  "La métropole et l’outre-mer",
+  "Seulement les DROM",
+  "Seulement l’Europe continentale",
+  "B",
+  "Le livret précise que le territoire s’étend sur la métropole et l’outre-mer."
+),
 
-makeQuestion("s3-036", 3, "Société", "Quel débat philosophique soulève la notion de 'communautarisme' en France ?", "La France a officiellement adopté le communautarisme", "Le concept n'existe pas", "Il a disparu avec la loi de 2004", "Il reflète la tension entre libertés individuelles et idéal républicain universaliste", "D", "Le terme 'communautarisme' désigne dans le débat public des pratiques perçues comme un repli identitaire. Il renvoie à la tension entre la liberté d'association et de religion, garanties par la Constitution, et le modèle républicain fondé sur l'universalisme et l'égalité entre citoyens indépendamment de leurs appartenances."),
+makeQuestion("s3-035",3,"Société","La France partage avec d’autres pays européens :",
+  "Une armée unique",
+  "Une langue unique",
+  "Une monnaie unique : l’euro",
+  "Un président unique",
+  "C",
+  "La France partage l’euro avec d’autres pays de l’Union européenne."
+),
 
-makeQuestion("s3-037", 3, "Société", "Pourquoi la crise du logement est-elle un révélateur des tensions entre droits et marché ?", "Elle révèle l'écart entre le droit au logement et un marché immobilier insuffisant pour répondre à la demande", "Elle est totalement résolue", "Elle concerne uniquement Paris", "Le droit au logement n'existe pas", "A", "La France reconnaît un droit au logement opposable depuis 2007. Cependant, dans les zones tendues, l'offre de logements abordables reste insuffisante face à la demande. Cette situation crée une tension entre les droits reconnus par la loi et les réalités économiques du marché immobilier."),
+makeQuestion("s3-036", 3, "Société", "En France, l’égalité signifie que :",
+  "Tous les citoyens sont traités de la même façon par la loi",
+  "Tout le monde a les mêmes revenus",
+  "Les lois changent selon les régions",
+  "Les étrangers votent automatiquement",
+  "A",
+  "La loi est la même pour tous."
+),
 
-makeQuestion("s3-038", 3, "Société", "Pourquoi les syndicats français sont-ils influents malgré un faible taux d'adhésion ?", "Parce que le taux d'adhésion est élevé", "Parce que leur légitimité repose sur la représentativité électorale et leur rôle institutionnel", "Parce qu'ils sont liés aux partis politiques", "Parce qu'ils ne représentent que le secteur public", "B", "Le taux de syndicalisation en France est inférieur à 10%. Toutefois, les syndicats conservent une influence importante grâce à leur rôle dans les négociations collectives, leur participation à la gestion de certains organismes sociaux et leur capacité de mobilisation."),
+makeQuestion("s3-037", 3, "Société", "La liberté d’expression a pour limite :",
+  "Aucune",
+  "La loi",
+  "Le maire",
+  "Les réseaux sociaux",
+  "B",
+  "Elle est encadrée par la loi."
+),
 
-makeQuestion("s3-039", 3, "Société", "Quel débat soulève la condition d'assimilation pour la naturalisation ?", "La naturalisation est automatique", "Les critères sont totalement objectifs", "Elle pose la question de la subjectivité administrative dans l'évaluation de l'intégration", "Elle a été supprimée", "C", "La naturalisation exige une assimilation à la communauté française, incluant la maîtrise de la langue et l'adhésion aux valeurs républicaines. Cependant, l'appréciation de ces critères repose en partie sur le jugement de l'administration, ce qui peut soulever des interrogations sur l'équité des décisions."),
+makeQuestion("s3-038", 3, "Société", "La laïcité signifie surtout :",
+  "L’interdiction de toute religion",
+  "La neutralité de l’État",
+  "L’obligation d’être athée",
+  "La domination d’une religion",
+  "B",
+  "L’État est neutre."
+),
 
-makeQuestion("s3-040", 3, "Société", "Pourquoi le débat sur l'identité nationale est-il sensible en France ?", "Parce qu'il est interdit", "Parce que l'identité nationale est consensuelle", "Parce que la politique n'y joue aucun rôle", "Parce qu'il oppose conception civique et conception culturelle de la nation", "D", "La nation française peut être définie selon deux conceptions : civique, fondée sur l'adhésion aux valeurs républicaines, ou culturelle, liée à l'histoire et aux traditions. Le débat sur l'identité nationale révèle cette tension et soulève la question de l'inclusion et de l'exclusion dans la définition du corps national."),
+makeQuestion("s3-039", 3, "Société", "L’école en France est :",
+  "Privée uniquement",
+  "Obligatoire et laïque",
+  "Réservée aux Français",
+  "Payante pour tous",
+  "B",
+  "Principe fondamental."
+),
 
-makeQuestion("s3-041", 3, "Société", "Quelles critiques sont adressées au RSA ?", "Trappe à inactivité, non-recours élevé et montant insuffisant", "Il est parfaitement efficace", "Il est seulement trop coûteux", "Il a été supprimé", "A", "Le RSA vise à garantir un revenu minimum et à favoriser l'insertion professionnelle. Toutefois, plusieurs critiques existent : certaines personnes renoncent à le demander, son montant reste faible et il peut parfois créer des effets de désincitation à la reprise d'activité lorsque les revenus du travail restent proches des allocations."),
+makeQuestion("s3-040", 3, "Société", "La solidarité nationale permet :",
+  "De financer uniquement l’armée",
+  "D’aider les personnes en difficulté",
+  "De réduire les impôts",
+  "De supprimer les aides sociales",
+  "B",
+  "Base de la protection sociale."
+),
 
-makeQuestion("s3-042", 3, "Société", "Pourquoi la ségrégation scolaire persiste-t-elle en France ?", "Elle a disparu", "Les stratégies d'évitement des familles et la ségrégation résidentielle maintiennent des inégalités entre établissements", "Elle est uniquement géographique", "La carte scolaire l'empêche totalement", "B", "La carte scolaire vise à équilibrer la composition sociale des établissements. Toutefois, certaines familles utilisent des stratégies d'évitement comme l'inscription dans le privé ou des dérogations. La ségrégation résidentielle renforce également ces écarts."),
+makeQuestion("s3-041", 3, "Société", "Le chômage correspond à :",
+  "Ne pas vouloir travailler",
+  "Ne pas avoir d’emploi tout en en cherchant",
+  "Être étudiant",
+  "Être en congé",
+  "B",
+  "Définition simple."
+),
 
-makeQuestion("s3-043", 3, "Société", "Quel conflit le Zéro Artificialisation Nette (ZAN) crée-t-il ?", "Aucun conflit", "Il est symbolique", "Il oppose impératif écologique et développement territorial", "Il a été abandonné", "C", "Le ZAN vise à réduire l'étalement urbain pour préserver les espaces naturels. Cependant, certaines collectivités locales craignent que ces restrictions limitent leur développement économique et la construction de logements."),
+makeQuestion("s3-042", 3, "Société", "Les syndicats servent principalement à :",
+  "Diriger le pays",
+  "Représenter les salariés",
+  "Créer des lois",
+  "Gérer les communes",
+  "B",
+  "Rôle social."
+),
 
-makeQuestion("s3-044", 3, "Société", "Pourquoi parle-t-on d'inégalités territoriales structurelles ?", "Elles ont disparu", "Il n'y en a pas", "Elles sont liées à des dynamiques économiques et démographiques durables", "Elles sont créées uniquement par les régions", "C", "Les inégalités territoriales résultent de tendances profondes comme la métropolisation, la désindustrialisation de certains territoires et le vieillissement démographique dans les zones rurales. Ces phénomènes rendent difficile une correction rapide par les politiques publiques."),
+makeQuestion("s3-043", 3, "Société", "Le racisme est :",
+  "Autorisé",
+  "Toléré",
+  "Interdit par la loi",
+  "Encouragé",
+  "C",
+  "C’est une infraction."
+),
 
-makeQuestion("s3-045", 3, "Société", "Quel bilan peut-on dresser du modèle républicain d'intégration ?", "Il reste une référence mais rencontre des difficultés face aux discriminations et aux inégalités", "Il fonctionne parfaitement", "Il a totalement échoué", "Il a disparu", "A", "Le modèle républicain d'intégration repose sur l'égalité des citoyens et la neutralité de l'État. Toutefois, certaines discriminations persistantes et des inégalités territoriales mettent en évidence un écart entre les principes et leur application concrète."),
+makeQuestion("s3-044", 3, "Société", "L’égalité femmes-hommes signifie :",
+  "Même salaire pour un même travail",
+  "Même métier obligatoire",
+  "Interdiction de travailler",
+  "Priorité aux hommes",
+  "A",
+  "Principe légal."
+),
 
-makeQuestion("s3-046", 3, "Société", "Comment la CADES illustre-t-elle les tensions intergénérationnelles ?", "La dette est remboursée", "Elle transfère les déficits sociaux aux générations futures", "Elle est financée par les entreprises", "Elle est financée par l'UE", "B", "La CADES rembourse la dette sociale accumulée par les déficits de la Sécurité sociale grâce à la CRDS. Ce mécanisme reporte le financement de dépenses passées sur les générations futures, ce qui pose la question de l'équité intergénérationnelle."),
+makeQuestion("s3-045", 3, "Société", "La Sécurité sociale permet :",
+  "De payer les impôts",
+  "De financer la santé",
+  "De voter",
+  "De faire des lois",
+  "B",
+  "Protection sociale."
+),
+makeQuestion("s3-046",3,"Société","Les impôts servent principalement à :",
+  "Financer les services publics",
+  "Enrichir les entreprises",
+  "Payer uniquement les élus",
+  "Remplacer les salaires",
+  "A",
+  "Ils financent les services publics."
+),
 
-makeQuestion("s3-047", 3, "Société", "Quel problème révèle l'école inclusive ?", "Elle fonctionne parfaitement", "Elle a été abandonnée", "Le droit à la scolarisation existe mais les moyens restent parfois insuffisants", "Elle est gérée par le privé", "C", "La loi de 2005 garantit la scolarisation des élèves en situation de handicap en milieu ordinaire. Cependant, le manque d'accompagnants spécialisés et les difficultés d'adaptation des établissements rendent parfois cette inclusion difficile."),
+makeQuestion("s3-047",3,"Société","Les services publics doivent être :",
+  "Réservés aux riches",
+  "Accessibles à tous",
+  "Uniquement privés",
+  "Payants pour tous",
+  "B",
+  "Principe d’égalité d’accès."
+),
 
-makeQuestion("s3-048", 3, "Société", "Quel débat soulève la gestation pour autrui en France ?", "Elle est légale", "Elle est légale pour certains couples", "Elle est pratiquée en France", "Elle est interdite mais reconnue indirectement pour les enfants nés à l'étranger", "D", "La GPA est interdite en France au nom du principe de non-patrimonialité du corps humain. Cependant, les juridictions reconnaissent la filiation d'enfants nés par GPA à l'étranger afin de protéger les droits de l'enfant."),
+makeQuestion("s3-048",3,"Société","En France, la discrimination est :",
+  "Autorisée",
+  "Encouragée",
+  "Punissable par la loi",
+  "Tolérée",
+  "C",
+  "Elle est interdite."
+),
 
-makeQuestion("s3-049", 3, "Société", "Que remet en cause l'ubérisation du travail ?", "Elle crée une zone intermédiaire entre salariat et indépendance", "Elle renforce le salariat", "Elle est marginale", "Elle est déjà résolue", "A", "Les plateformes numériques ont développé un modèle où les travailleurs sont juridiquement indépendants mais dépendants économiquement. Cette situation remet en cause la distinction classique entre salarié et indépendant et pousse à repenser certaines protections sociales."),
+makeQuestion("s3-049",3,"Société","La liberté de religion signifie :",
+  "Obligation de croire",
+  "Interdiction de croire",
+  "Religion imposée par l’État",
+  "Choisir ou ne pas croire",
+  "D",
+  "Liberté de conscience."
+),
 
-makeQuestion("s3-050", 3, "Société", "Quelle lacune juridique concerne les familles recomposées ?", "Le beau-parent a les mêmes droits que le parent", "Le beau-parent n'a pas de statut juridique automatique", "Les familles recomposées n'existent pas", "Le beau-parent a une obligation alimentaire", "B", "Le droit français ne prévoit pas de statut spécifique pour le beau-parent. En cas de séparation ou de décès du parent biologique, les liens juridiques avec l'enfant peuvent être fragiles malgré la réalité affective et éducative de ces relations."),
+makeQuestion("s3-050",3,"Société","Le respect des autres implique :",
+  "Imposer ses idées",
+  "Tolérer les différences",
+  "Ignorer les lois",
+  "Refuser le dialogue",
+  "B",
+  "Valeur essentielle."
+),
 
-makeQuestion("s3-051", 3, "Société", "Quelle tension révèle le droit d'asile en France ?", "Il fonctionne parfaitement", "Il est entièrement géré par l'UE", "Il oppose obligations internationales et capacités d'accueil limitées", "Il concerne peu de personnes", "C", "La France doit respecter la Convention de Genève sur les réfugiés et examiner les demandes d'asile. Cependant, les capacités d'accueil, les délais d'instruction et les tensions politiques sur la question migratoire rendent ce système complexe et souvent critiqué."),
+makeQuestion("s3-051",3,"Société","Le racisme et l’antisémitisme sont :",
+  "Des opinions libres",
+  "Des délits",
+  "Des traditions",
+  "Des droits",
+  "B",
+  "Ils sont sanctionnés."
+),
 
-makeQuestion("s3-052", 3, "Société", "Quel débat soulève la restitution des œuvres coloniales ?", "Toutes les œuvres ont été restituées", "C'est juridiquement impossible", "Elles sont toutes légitimes", "Elle oppose patrimoine universel et restitution aux pays d'origine", "D", "La restitution d'œuvres acquises pendant la période coloniale soulève un débat entre la préservation des collections universelles dans les grands musées et le droit des peuples à récupérer leur patrimoine culturel. La France a commencé certaines restitutions ponctuelles."),
+makeQuestion("s3-052",3,"Société","L’école permet notamment :",
+  "De trier les élèves",
+  "De transmettre des savoirs et des valeurs",
+  "De sanctionner uniquement",
+  "De remplacer la famille",
+  "B",
+  "Rôle éducatif."
+),
 
-makeQuestion("s3-053", 3, "Société", "Pourquoi la relance du nucléaire fait-elle débat ?", "Elle oppose visions différentes de la transition énergétique", "Elle est consensuelle", "La France abandonne le nucléaire", "Elle est uniquement économique", "A", "Le nucléaire produit une électricité très faiblement carbonée mais soulève des questions sur les déchets, les coûts des nouvelles centrales et les risques d'accident. Le débat oppose partisans du nucléaire et défenseurs d'un système fondé principalement sur les énergies renouvelables."),
+makeQuestion("s3-053",3,"Société","Le droit de vote est :",
+  "Un devoir uniquement",
+  "Une obligation légale",
+  "Un droit",
+  "Réservé aux élus",
+  "C",
+  "C’est un droit."
+),
 
-makeQuestion("s3-054", 3, "Société", "Pourquoi le financement des retraites est-il d'abord un problème démographique ?", "Il suffit d'augmenter les cotisations", "Le ratio actifs/retraités diminue avec le vieillissement", "La capitalisation domine", "Les retraites sont financées par l'impôt", "B", "Le système par répartition dépend du nombre d'actifs qui financent les pensions. Le vieillissement de la population réduit ce ratio, ce qui impose des ajustements comme l'augmentation de l'âge de départ ou des cotisations."),
+makeQuestion("s3-054",3,"Société","Ne pas voter est :",
+  "Interdit",
+  "Punissable",
+  "Obligatoire",
+  "Autorisé",
+  "D",
+  "Le vote n’est pas obligatoire."
+),
 
-makeQuestion("s3-055", 3, "Société", "Quel défi les réseaux sociaux posent-ils à la démocratie ?", "Ils ont supprimé la désinformation", "La loi de 2018 a tout résolu", "Ils facilitent la diffusion rapide de fausses informations", "Ils n'ont aucun impact", "C", "Les réseaux sociaux permettent une diffusion très rapide d'informations, vraies ou fausses. Cela peut fragiliser la confiance dans les institutions et influencer le débat public. Les régulations et l'éducation aux médias sont des réponses envisagées."),
+makeQuestion("s3-055",3,"Société","La solidarité nationale repose sur :",
+  "Les impôts et cotisations",
+  "Les dons privés uniquement",
+  "Les entreprises étrangères",
+  "Les communes seules",
+  "A",
+  "Financement collectif."
+),
 
-makeQuestion("s3-056", 3, "Société", "Pourquoi distingue-t-on chômage frictionnel et chômage structurel ?", "Parce qu'ils désignent deux causes différentes du chômage et appellent des réponses différentes", "Parce qu'ils ont exactement les mêmes causes", "Parce que le chômage en France est uniquement volontaire", "Parce que cette distinction n'a aucun intérêt pour les politiques publiques", "A", "Le chômage frictionnel correspond au temps de transition entre deux emplois. Le chômage structurel est plus profond : il vient d'un décalage durable entre les compétences disponibles et les emplois offerts. Cette distinction est utile car elle oriente les politiques publiques : accompagnement rapide pour l'un, réformes de long terme pour l'autre."),
+makeQuestion("s3-056",3,"Société","Le travail permet notamment :",
+  "D’être citoyen uniquement",
+  "De gagner un revenu",
+  "De voter",
+  "D’être élu",
+  "B",
+  "Fonction économique."
+),
 
-makeQuestion("s3-057", 3, "Société", "Pourquoi le reste à charge peut-il créer des inégalités d'accès aux soins en France ?", "Parce que tous les soins sont remboursés à 100 %", "Parce que certaines personnes renoncent à des soins faute de complémentaire suffisante ou à cause du coût restant", "Parce que seules les zones rurales sont concernées", "Parce que la réforme du 100 % santé a supprimé tout problème", "B", "L'Assurance maladie ne rembourse pas toujours l'intégralité des dépenses. Sans mutuelle adaptée, certains patients renoncent à des soins, surtout en dentaire, optique ou pour certains dépassements d'honoraires. Cela montre qu'une couverture universelle de principe ne garantit pas toujours un accès réel et égal aux soins."),
+makeQuestion("s3-057",3,"Société","Le SMIC correspond :",
+  "Au salaire maximum",
+  "Au salaire minimum légal",
+  "Au salaire moyen",
+  "Au salaire des fonctionnaires",
+  "B",
+  "Salaire minimum."
+),
 
-makeQuestion("s3-058", 3, "Société", "Comment la laïcité a-t-elle évolué dans les débats récents sur l'espace public ?", "Elle est restée strictement limitée à la neutralité de l'État sans aucun débat nouveau", "Elle a parfois été interprétée au-delà de la seule neutralité de l'État, en soulevant des débats sur les comportements et tenues dans certains espaces", "Elle a été supprimée par le Conseil constitutionnel", "Elle interdit désormais toute expression religieuse dans toute la société", "B", "À l'origine, la laïcité signifie surtout neutralité de l'État et liberté de conscience. Mais, dans les débats récents, certains défendent une lecture plus large, appliquée à davantage de situations dans l'espace public ou scolaire. Cela crée des tensions entre liberté individuelle, neutralité des institutions et interprétation du principe républicain."),
+makeQuestion("s3-058",3,"Société","Les allocations familiales servent à :",
+  "Financer les entreprises",
+  "Aider les familles",
+  "Payer les impôts",
+  "Soutenir les maires",
+  "B",
+  "Aide sociale."
+),
 
-makeQuestion("s3-059", 3, "Société", "Quelle tension Parcoursup révèle-t-il dans l'enseignement supérieur français ?", "Aucune, car chaque étudiant obtient toujours la filière de son choix", "Il montre la tension entre accès de tous à l'enseignement supérieur et sélection dans les filières les plus demandées", "Il a supprimé toute sélection", "Il repose uniquement sur les notes du baccalauréat", "B", "Parcoursup cherche à mieux répartir les étudiants dans l'enseignement supérieur, surtout dans les filières très demandées. Mais il révèle une tension entre l'idéal d'accès ouvert grâce au baccalauréat et la nécessité de classer les candidatures quand les places sont limitées. Cela alimente des débats sur l'égalité des chances et la transparence des critères."),
+makeQuestion("s3-059",3,"Société","L’égalité des chances signifie :",
+  "Même résultat pour tous",
+  "Même départ pour tous",
+  "Même salaire pour tous",
+  "Même métier",
+  "B",
+  "Même possibilité de réussir."
+),
 
-makeQuestion("s3-060", 3, "Société", "Comment la France cherche-t-elle à concilier sécurité et libertés numériques ?", "Elle laisse les services de renseignement agir sans aucun cadre", "Elle interdit toute surveillance numérique", "Elle a adopté un cadre légal de surveillance encadré, mais les débats restent vifs sur la protection de la vie privée", "Elle applique exactement le modèle américain sans adaptation", "C", "La France a encadré certaines techniques de renseignement par la loi, notamment depuis 2015. Ces outils sont justifiés par la lutte contre le terrorisme et les menaces graves. Mais ils soulèvent des inquiétudes sur la vie privée et les libertés individuelles. Le débat porte donc sur le bon équilibre entre sécurité nationale et État de droit."),
+makeQuestion("s3-060",3,"Société","L’accès aux soins en France est :",
+  "Réservé aux riches",
+  "Réservé aux travailleurs",
+  "Ouvert à tous",
+  "Interdit aux étrangers",
+  "C",
+  "Principe universel."
+),
 
-makeQuestion("s3-061", 3, "Société", "Quelle limite majeure le DALO révèle-t-il dans la politique du logement ?", "Le droit au logement opposable existe, mais il reste difficile à rendre effectif faute de logements disponibles", "Le DALO garantit toujours un logement immédiat", "Le DALO a été supprimé", "Le DALO ne concerne que Paris", "A", "Le DALO reconnaît juridiquement un droit au logement pour certaines personnes prioritaires. Mais un droit reconnu par la loi ne suffit pas si l'offre de logements sociaux reste insuffisante, surtout dans les zones tendues. Cela montre l'écart possible entre un droit proclamé et son application réelle."),
+makeQuestion("s3-061",3,"Société","La carte Vitale sert à :",
+  "Voter",
+  "Payer les impôts",
+  "Accéder aux soins",
+  "S’inscrire à l’école",
+  "C",
+  "Accès santé."
+),
 
-makeQuestion("s3-062", 3, "Société", "Quel enjeu révèle la défense de la langue française dans la mondialisation ?", "La France a renoncé à défendre sa langue", "Elle montre la tension entre la protection du français comme langue commune et la domination croissante de l'anglais dans certains domaines", "Le français n'a plus aucun statut juridique", "La loi Toubon a été annulée", "B", "La France protège le français comme langue de la République et de la vie publique. Mais, dans la recherche, l'économie ou le numérique, l'anglais occupe une place croissante. Cela crée une tension entre identité linguistique, souveraineté culturelle et adaptation à la mondialisation."),
+makeQuestion("s3-062",3,"Société","Le logement est :",
+  "Un luxe uniquement",
+  "Un droit reconnu",
+  "Réservé aux propriétaires",
+  "Interdit sans travail",
+  "B",
+  "Droit au logement."
+),
 
-makeQuestion("s3-063", 3, "Société", "Pourquoi le testing est-il un outil important contre les discriminations ?", "Parce qu'il permet d'objectiver des différences de traitement difficiles à prouver autrement", "Parce qu'il est interdit par la loi", "Parce qu'il remplace tous les procès", "Parce qu'il est obligatoire dans toutes les entreprises", "A", "Le testing consiste à comparer des candidatures très proches, ne différant que par un critère comme le nom ou l'adresse. Il permet de mettre en évidence des discriminations qui restent souvent invisibles. C'est donc un outil utile pour révéler des pratiques inégalitaires, même s'il ne suffit pas à lui seul à prouver toute l'intention discriminatoire."),
+makeQuestion("s3-063",3,"Société","Respecter la loi est :",
+  "Optionnel",
+  "Conseillé",
+  "Obligatoire",
+  "Réservé aux élus",
+  "C",
+  "Obligation."
+),
 
-makeQuestion("s3-064", 3, "Société", "Quelle contradiction la France rencontre-t-elle sur l'immigration ?", "Elle n'a aucun besoin d'immigration", "Elle accueille uniquement une immigration économique massive", "Elle combine des besoins économiques réels avec une forte pression politique pour limiter les flux", "Elle a supprimé toute politique migratoire", "C", "La France a besoin de main-d'œuvre dans plusieurs secteurs comme la santé, le bâtiment ou l'agriculture. Dans le même temps, l'immigration est un sujet très sensible dans le débat public. Cette situation crée une contradiction entre besoins économiques, exigences administratives et pressions politiques pour réduire les arrivées."),
+makeQuestion("s3-064",3,"Société","Les médias permettent :",
+  "De remplacer la justice",
+  "D’informer les citoyens",
+  "De voter",
+  "De faire des lois",
+  "B",
+  "Rôle d’information."
+),
 
-makeQuestion("s3-065", 3, "Société", "Qu'ont changé les réformes du droit du travail de 2016 et 2017 ?", "Elles ont renforcé la place de l'accord d'entreprise dans plusieurs domaines", "Elles ont supprimé tout le Code du travail", "Elles n'ont changé que le licenciement économique", "Elles ont supprimé toute négociation collective", "A", "Les réformes du droit du travail de 2016 et 2017 ont donné plus de place à la négociation au niveau de l'entreprise. L'idée était d'adapter davantage les règles à la réalité locale. Mais cela a aussi suscité des critiques, certains estimant que cela pouvait fragiliser les garanties collectives des salariés."),
+makeQuestion("s3-065",3,"Société","La liberté de la presse signifie :",
+  "Publier sans aucune règle",
+  "Informer librement dans le cadre de la loi",
+  "Écrire uniquement pour l’État",
+  "Supprimer les opinions",
+  "B",
+  "Liberté encadrée."
+),
 
-makeQuestion("s3-066", 3, "Société", "Que révèle l'augmentation du nombre de sans-abri en France ?", "Que les politiques publiques ont entièrement résolu la question", "Qu'il existe des limites fortes dans les politiques de lutte contre l'exclusion et dans l'accès au logement", "Que toutes les personnes à la rue refusent l'aide proposée", "Que le 115 permet toujours une solution immédiate", "B", "L'augmentation du nombre de personnes sans logement montre les limites des dispositifs existants. La pénurie de logements très sociaux, la saturation de l'hébergement d'urgence, certaines situations de grande précarité ou de troubles psychiques rendent la sortie de rue difficile. Cela révèle l'écart entre les objectifs affichés et les moyens réellement disponibles."),
+makeQuestion("s3-066",3,"Société","Les associations permettent :",
+  "De faire des lois",
+  "De s’engager librement",
+  "De remplacer l’État",
+  "D’imposer des règles",
+  "B",
+  "Liberté d’association."
+),
 
-makeQuestion("s3-067", 3, "Société", "Pourquoi la loi de 2018 contre les fausses nouvelles suscite-t-elle un débat ?", "Parce qu'elle a supprimé toute désinformation", "Parce qu'elle permet une censure sans juge", "Parce qu'elle cherche à lutter contre la manipulation de l'information sans porter atteinte de manière excessive à la liberté d'expression", "Parce qu'elle a été annulée avant d'entrer en vigueur", "C", "La loi de 2018 vise surtout les périodes électorales et permet au juge d'intervenir en urgence contre certaines manipulations manifestes. Mais cette logique soulève une question délicate : comment lutter contre la désinformation sans risquer de restreindre abusivement la liberté d'expression et le débat démocratique ?" ),
+makeQuestion("s3-067",3,"Société","La citoyenneté implique :",
+  "Uniquement des droits",
+  "Uniquement des devoirs",
+  "Des droits et des devoirs",
+  "Aucune responsabilité",
+  "C",
+  "Équilibre."
+),
 
-makeQuestion("s3-068", 3, "Société", "Quel effet ambivalent la désinstitutionnalisation psychiatrique a-t-elle eu en France ?", "Elle a tout résolu pour les personnes souffrant de troubles sévères", "Elle a réduit l'hospitalisation sans toujours développer assez les alternatives de suivi, ce qui a laissé certaines personnes en grande vulnérabilité", "Elle n'a jamais eu lieu en France", "Elle n'a concerné que les troubles légers", "B", "La réduction du nombre de lits psychiatriques s'inscrivait dans l'idée de mieux soigner dans la communauté plutôt qu'en institution. Mais, dans la pratique, les structures de suivi, les équipes mobiles et l'accompagnement n'ont pas toujours été suffisants. Cela a pu laisser certaines personnes très fragiles sans prise en charge adaptée, notamment parmi les publics précaires."),
+makeQuestion("s3-068",3,"Société","Payer ses impôts est :",
+  "Facultatif",
+  "Interdit",
+  "Réservé aux riches",
+  "Obligatoire",
+  "D",
+  "Devoir légal."
+),
 
-makeQuestion("s3-069", 3, "Société", "Que révèle le statut de fonctionnaire dans le débat public français ?", "Qu'il ne sert plus à rien", "Qu'il cherche à concilier indépendance des agents publics et adaptation de l'administration", "Qu'il a été supprimé", "Qu'il est identique dans toute l'Europe", "B", "Le statut de fonctionnaire protège les agents publics afin de garantir leur neutralité, leur indépendance et la continuité du service public. Mais il est aussi critiqué pour sa rigidité dans un contexte où les missions de l'administration évoluent rapidement. Le débat porte donc sur l'équilibre entre protection légitime et besoin de modernisation."),
+makeQuestion("s3-069",3,"Société","L’école est obligatoire jusqu’à :",
+  "14 ans",
+  "16 ans",
+  "18 ans",
+  "12 ans",
+  "B",
+  "Jusqu’à 16 ans."
+),
 
-makeQuestion("s3-070", 3, "Société", "Que révèle la persistance des inégalités sociales en France malgré un État-providence développé ?", "Que les politiques sociales sont inutiles", "Qu'il n'existe pas d'inégalités sociales significatives", "Que les dépenses sociales suffisent à tout corriger", "Que les politiques sociales réduisent certaines inégalités de revenus mais agissent moins sur les inégalités de patrimoine, de réussite scolaire et de transmission sociale", "D", "La France consacre une part élevée de sa richesse nationale à la protection sociale, ce qui réduit effectivement la pauvreté monétaire et certaines inégalités. Mais cela ne suffit pas à corriger entièrement les écarts de patrimoine, les différences de capital culturel ou les inégalités de parcours scolaire et professionnel. Cela montre les limites d'une redistribution surtout monétaire face à des inégalités plus profondes et durables.")
-
+makeQuestion("s3-070",3,"Société","Vivre en société suppose :",
+  "Faire ce que l’on veut",
+  "Respecter les règles communes",
+  "Refuser toute autorité",
+  "Ignorer les autres",
+  "B",
+  "Vie collective."
+),
 
 
 ];

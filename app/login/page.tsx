@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
-type Mode = "login" | "forgot" | "otp" | "newpassword";
+// On ajoute "totp" aux modes existants
+type Mode = "login" | "forgot" | "otp" | "newpassword" | "totp";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,19 +20,84 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  // Nouveaux états pour le flux 2FA
+  const [totpCode, setTotpCode] = useState("");
+  const [totpFactorId, setTotpFactorId] = useState<string | null>(null);
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-   if (error) {
-  setError(
-    error.message.toLowerCase().includes("not found")
-      ? "Aucun compte trouvé avec cet email."
-      : "Email ou mot de passe incorrect."
-  );
-}
+
+    // Étape 1 : connexion avec email + mot de passe
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (signInError) {
+      // BUG CORRIGÉ : on fait un return pour ne pas continuer
+      setError(
+        signInError.message.toLowerCase().includes("not found")
+          ? "Aucun compte trouvé avec cet email."
+          : "Email ou mot de passe incorrect."
+      );
+      setLoading(false);
+      return;
+    }
+
+    // Étape 2 : vérifier si l'utilisateur a activé la 2FA
+    const { data: factorsData } = await supabase.auth.mfa.listFactors();
+
+    // On cherche un facteur TOTP qui est bien vérifié (pas juste enregistré)
+    const totpFactor = factorsData?.totp?.find(
+      (factor) => factor.factor_type === "totp" && factor.status === "verified"
+    );
+
+    if (totpFactor) {
+      // L'utilisateur a la 2FA activée → on lui demande son code
+      setTotpFactorId(totpFactor.id);
+      setMode("totp");
+      setLoading(false);
+      return;
+    }
+
+    // Pas de 2FA → connexion directe
+    router.push("/");
+    router.refresh();
+  }
+
+  // Nouvelle fonction : valider le code TOTP 6 chiffres
+  async function handleVerifyTotp(e: React.FormEvent) {
+    e.preventDefault();
+    if (!totpFactorId) return;
+    setLoading(true);
+    setError(null);
+    const supabase = createClient();
+
+    // Étape 3 : créer un "challenge" (défi temporaire)
+    const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
+      factorId: totpFactorId,
+    });
+
+    if (challengeError || !challengeData) {
+      setError("Erreur lors de la vérification 2FA. Réessaie.");
+      setLoading(false);
+      return;
+    }
+
+    // Étape 4 : valider le code avec le challenge
+    const { error: verifyError } = await supabase.auth.mfa.verify({
+      factorId: totpFactorId,
+      challengeId: challengeData.id,
+      code: totpCode,
+    });
+
+    if (verifyError) {
+      setError("Code incorrect ou expiré. Vérifie ton application d'authentification.");
+      setLoading(false);
+      return;
+    }
+
+    // 2FA validée → connexion complète (AAL2)
     router.push("/");
     router.refresh();
   }
@@ -72,22 +138,115 @@ export default function LoginPage() {
   }
 
   async function handleNewPassword(e: React.FormEvent) {
-  e.preventDefault();
-  setLoading(true);
-  setError(null);
-  const supabase = createClient();
-  const { error } = await supabase.auth.updateUser({ password: newPassword });
-  if (error) {
-    setError("Erreur : " + error.message);
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+      setError("Erreur : " + error.message);
+      setLoading(false);
+      return;
+    }
+    await supabase.auth.signInWithPassword({ email, password: newPassword });
+    setSuccess("Mot de passe mis à jour ! Redirection...");
+    setTimeout(() => { router.push("/"); router.refresh(); }, 1500);
     setLoading(false);
-    return;
   }
-  // Connexion automatique après reset
-  await supabase.auth.signInWithPassword({ email, password: newPassword });
-  setSuccess("Mot de passe mis à jour ! Redirection...");
-  setTimeout(() => { router.push("/"); router.refresh(); }, 1500);
-  setLoading(false);
-}
+
+  // ===== MODE TOTP (nouveau) =====
+  if (mode === "totp") {
+    return (
+      <main className="mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-7xl items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+        <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <section className="hidden lg:block">
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 p-8 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
+              <div className="flex h-1.5 w-full">
+                <div className="flex-1 bg-blue-600" />
+                <div className="flex-1 bg-white" />
+                <div className="flex-1 bg-red-600" />
+              </div>
+              <div className="relative pt-8">
+                <div className="inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-violet-200">
+                  Double authentification
+                </div>
+                <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight text-white">
+                  Une étape de plus pour sécuriser votre compte.
+                </h1>
+                <p className="mt-4 max-w-xl text-base leading-8 text-slate-300">
+                  Votre compte est protégé par la double authentification. Ouvrez votre application d'authentification (Google Authenticator, Authy…) et entrez le code à 6 chiffres.
+                </p>
+                <div className="mt-8 space-y-4">
+                  {[
+                    "Code valable 30 secondes seulement",
+                    "Ne jamais partager ce code",
+                    "Utilisez Google Authenticator ou Authy",
+                  ].map((item) => (
+                    <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-slate-200">
+                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-violet-500/15 text-sm">🔐</span>
+                      <span className="text-sm">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="w-full">
+            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.45)] sm:p-8">
+              <div className="mb-6">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
+                  🔐 Vérification 2FA
+                </div>
+                <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white">Double authentification</h1>
+                <p className="mt-2 text-sm leading-7 text-slate-400">
+                  Entre le code à 6 chiffres de ton application d'authentification.
+                </p>
+              </div>
+
+              <form onSubmit={handleVerifyTotp} className="space-y-5">
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-200">Code à 6 chiffres</label>
+                  <input
+                    type="text"
+                    required
+                    value={totpCode}
+                    onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    placeholder="000000"
+                    maxLength={6}
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-center text-2xl tracking-[0.5em] text-white placeholder:text-slate-600 outline-none focus:border-violet-400/30 focus:ring-2 focus:ring-violet-400/20"
+                  />
+                </div>
+                {error && (
+                  <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                    {error}
+                  </div>
+                )}
+                <button
+                  type="submit"
+                  disabled={loading || totpCode.length !== 6}
+                  className="w-full rounded-2xl border border-violet-400/20 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(124,58,237,0.28)] transition hover:-translate-y-0.5 hover:brightness-105 disabled:opacity-50"
+                >
+                  {loading ? "Vérification..." : "Valider le code"}
+                </button>
+              </form>
+
+              <p className="mt-6 text-center text-sm text-slate-400">
+                <button
+                  onClick={() => { setMode("login"); setError(null); setTotpCode(""); }}
+                  className="font-medium text-blue-400 transition hover:text-blue-300 hover:underline"
+                >
+                  ← Retour à la connexion
+                </button>
+              </p>
+            </div>
+          </section>
+        </div>
+      </main>
+    );
+  }
 
   // ===== MODE FORGOT =====
   if (mode === "forgot") {
@@ -141,13 +300,12 @@ export default function LoginPage() {
                   Tu recevras un code à 8 chiffres par email — pas de lien à cliquer.
                 </p>
               </div>
-
               <form onSubmit={handleSendOtp} className="space-y-5">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-200">Email</label>
                   <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                     placeholder="ton@email.com"
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"/>
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20" />
                 </div>
                 {error && <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</div>}
                 <button type="submit" disabled={loading}
@@ -155,7 +313,6 @@ export default function LoginPage() {
                   {loading ? "Envoi..." : "Envoyer le code"}
                 </button>
               </form>
-
               <p className="mt-6 text-center text-sm text-slate-400">
                 <button onClick={() => { setMode("login"); setError(null); setSuccess(null); }}
                   className="font-medium text-blue-400 transition hover:text-blue-300 hover:underline">
@@ -202,13 +359,12 @@ export default function LoginPage() {
                 <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white">Entre ton code</h1>
                 {success && <div className="mt-3 rounded-2xl border border-green-400/20 bg-green-500/10 px-4 py-3 text-sm text-green-200">{success}</div>}
               </div>
-
               <form onSubmit={handleVerifyOtp} className="space-y-5">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-200">Code à 8 chiffres</label>
                   <input type="text" required value={otp} onChange={(e) => setOtp(e.target.value)}
                     placeholder="12345678" maxLength={8}
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-center text-2xl tracking-[0.5em] text-white placeholder:text-slate-600 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"/>
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-center text-2xl tracking-[0.5em] text-white placeholder:text-slate-600 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20" />
                 </div>
                 {error && <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</div>}
                 <button type="submit" disabled={loading}
@@ -216,7 +372,6 @@ export default function LoginPage() {
                   {loading ? "Vérification..." : "Valider le code"}
                 </button>
               </form>
-
               <p className="mt-6 text-center text-sm text-slate-400">
                 Code non reçu ?{" "}
                 <button onClick={() => { setMode("forgot"); setError(null); setSuccess(null); }}
@@ -263,13 +418,12 @@ export default function LoginPage() {
                 </div>
                 <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white">Choisir un mot de passe</h1>
               </div>
-
               <form onSubmit={handleNewPassword} className="space-y-5">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-200">Nouveau mot de passe</label>
                   <input type="password" required minLength={8} value={newPassword} onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="8 caractères minimum"
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"/>
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20" />
                 </div>
                 {error && <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</div>}
                 {success && <div className="rounded-2xl border border-green-400/20 bg-green-500/10 px-4 py-3 text-sm text-green-200">{success}</div>}
@@ -329,7 +483,7 @@ export default function LoginPage() {
         <section className="w-full">
           <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.45)] sm:p-8">
             <a href="/" className="mb-4 inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 5l-7 7 7 7" /></svg>
               Retour à l'accueil
             </a>
             <div className="mb-6">
@@ -347,7 +501,7 @@ export default function LoginPage() {
                 <label className="mb-2 block text-sm font-medium text-slate-200">Email</label>
                 <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                   placeholder="ton@email.com"
-                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"/>
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20" />
               </div>
 
               <div>
@@ -358,44 +512,39 @@ export default function LoginPage() {
                     Mot de passe oublié ?
                   </button>
                 </div>
-<div className="relative">
-  <input type={showPassword ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)}
-    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
-    placeholder="••••••••"
-  />
-  <button type="button" onClick={() => setShowPassword(!showPassword)}
-    className="absolute right-3 top-1/2 -translate-y-1/2 text-white opacity-70 hover:opacity-100 transition">
-    {showPassword ? (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-        <line x1="1" y1="1" x2="23" y2="23"/>
-      </svg>
-    ) : (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-        <circle cx="12" cy="12" r="3"/>
-      </svg>
-    )}
-  </button>
-</div>
-</div>
+                <div className="relative">
+                  <input type={showPassword ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)}
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
+                    placeholder="••••••••" />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white opacity-70 hover:opacity-100 transition">
+                    {showPassword ? (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                      </svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              </div>
 
               {error && (
-  <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-    {error}
-    {error.includes("Aucun compte") && (
-      <a href="/register" className="ml-1 font-semibold text-blue-400 underline">
-        Créer un compte
-      </a>
-    )}
-    {error.includes("incorrect") && (
-      <a href="/login?forgot=true" className="ml-1 font-semibold text-blue-400 underline">
-        Mot de passe oublié ?
-      </a>
-    )}
-  </div>
-)}
+                <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                  {error}
+                  {error.includes("Aucun compte") && (
+                    <a href="/register" className="ml-1 font-semibold text-blue-400 underline">Créer un compte</a>
+                  )}
+                  {error.includes("incorrect") && (
+                    <a href="/login?forgot=true" className="ml-1 font-semibold text-blue-400 underline">Mot de passe oublié ?</a>
+                  )}
+                </div>
+              )}
               <button type="submit" disabled={loading}
                 className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:brightness-105 disabled:opacity-50">
                 {loading ? "Connexion..." : "Se connecter"}

@@ -622,175 +622,139 @@ export const INSTITUTIONS_L3: Question[] = [
     "Le suffrage universel signifie que les citoyens majeurs disposant de leurs droits civils et politiques peuvent voter."
   ),
 
-makeQuestion("i3-021", 3, "Institutions", "Le parlementarisme rationalisé de la Constitution de 1958 désigne :",
-  "Un système où le Parlement vote toutes les lois sans limite",
-  "Un encadrement des partis politiques",
-  "Un ensemble de mécanismes destinés à renforcer la stabilité du Gouvernement face au Parlement",
-  "Un mode d’organisation purement interne des débats parlementaires",
+makeQuestion("i3-021",3,"Institutions","Qui peut dissoudre l’Assemblée nationale ?",
+  "Le Président de la République",
+  "Le Premier ministre",
+  "Le Sénat",
+  "Le Conseil constitutionnel",
+  "A",
+  "Le Président peut dissoudre l’Assemblée nationale."
+),
+
+makeQuestion("i3-022",3,"Institutions","Le Président de la République est élu :",
+  "Par le Parlement",
+  "Par les citoyens au suffrage universel direct",
+  "Par les maires",
+  "Par le Gouvernement",
+  "B",
+  "Le Président est élu directement par les citoyens."
+),
+
+makeQuestion("i3-023",3,"Institutions","Le Gouvernement est responsable devant :",
+  "Le Sénat uniquement",
+  "Le Président uniquement",
+  "L’Assemblée nationale",
+  "Le Conseil d’État",
   "C",
-  "Le parlementarisme rationalisé de 1958 regroupe plusieurs mécanismes conçus pour éviter l’instabilité gouvernementale connue sous la IVe République."
+  "Le Gouvernement est responsable devant l’Assemblée nationale."
 ),
 
-makeQuestion("i3-022", 3, "Institutions", "La grande avancée de la révision constitutionnelle de 2008 en matière de droits des citoyens est :",
-  "La suppression du 49-3",
-  "Le référendum obligatoire pour toute révision",
-  "Le transfert complet des nominations au Parlement",
-  "La création de la QPC permettant à un justiciable de contester une loi déjà en vigueur",
+makeQuestion("i3-024",3,"Institutions","Le Sénat représente principalement :",
+  "Le Président",
+  "Les juges",
+  "Les citoyens directement",
+  "Les collectivités territoriales",
   "D",
-  "La révision de 2008 a introduit la question prioritaire de constitutionnalité, qui permet à un justiciable de contester la constitutionnalité d’une loi applicable à son affaire."
+  "Le Sénat représente les collectivités territoriales."
 ),
 
-makeQuestion("i3-023", 3, "Institutions", "La distinction entre domaine de la loi et domaine du règlement signifie surtout que :",
-  "Le Parlement peut légiférer sur tout",
-  "Le Gouvernement doit faire voter tous ses décrets",
-  "Le Parlement ne contrôle plus rien",
-  "La Constitution répartit certaines compétences normatives entre Parlement et pouvoir exécutif",
-  "D",
-  "La Constitution de 1958 limite le domaine de la loi et laisse le reste au pouvoir réglementaire, ce qui renforce la capacité d’action du Gouvernement."
+makeQuestion("i3-025",3,"Institutions","Le Président de la République est élu pour :",
+  "5 ans",
+  "6 ans",
+  "7 ans",
+  "4 ans",
+  "A",
+  "Mandat de 5 ans."
 ),
 
-makeQuestion("i3-024", 3, "Institutions", "Sous la Ve République, l’irresponsabilité politique du Président s’explique en grande partie par :",
-  "Le fait qu’il ne rende compte qu’au peuple par référendum",
-  "Le contreseing du Premier ministre sur la plupart de ses actes",
-  "Une immunité absolue après son mandat",
-  "Le contrôle préalable du Conseil constitutionnel sur toutes ses décisions",
+makeQuestion("i3-026",3,"Institutions","Les élections législatives permettent d’élire :",
+  "Les sénateurs",
+  "Les députés",
+  "Le Président",
+  "Les maires",
   "B",
-  "Le contreseing du Premier ministre permet de faire porter la responsabilité politique de nombreux actes présidentiels sur le Gouvernement."
+  "Elles permettent d’élire les députés."
 ),
 
-makeQuestion("i3-025", 3, "Institutions", "La dualité fonctionnelle du Conseil d’État soulève un débat parce qu’il :",
-  "Cumule fonctions législative et exécutive",
-  "Conseille le Gouvernement sur des textes qu’il peut ensuite être amené à juger",
-  "Dispose d’un droit de veto sur les décrets",
-  "Annule les lois comme le Conseil constitutionnel",
-  "B",
-  "Le Conseil d’État exerce à la fois une fonction consultative auprès du Gouvernement et une fonction juridictionnelle dans l’ordre administratif, ce qui alimente parfois un débat sur son impartialité."
+makeQuestion("i3-027",3,"Institutions","Le Parlement comprend deux chambres appelées :",
+  "Ministères",
+  "Jurisdictions",
+  "Assemblées",
+  "Commissions",
+  "C",
+  "Assemblée nationale et Sénat."
 ),
 
-makeQuestion("i3-026", 3, "Institutions", "En droit français, la hiérarchie des normes s’organise principalement comme suit :",
-  "Constitution > lois ordinaires > traités > règlements",
-  "Traités européens > Constitution > lois organiques > lois ordinaires",
-  "Droit de l’Union européenne > Constitution en toute hypothèse",
-  "Constitution > traités internationaux > lois organiques > lois ordinaires > règlements",
+makeQuestion("i3-028",3,"Institutions","Qui vote les lois en France ?",
+  "Le Président",
+  "Le Gouvernement",
+  "Les préfets",
+  "Le Parlement",
   "D",
-  "En droit interne français, la Constitution est au sommet. Les traités sont supérieurs aux lois, mais restent inférieurs à la Constitution."
+  "Le Parlement vote les lois."
 ),
 
-makeQuestion(
-"i3-027",
-3,
-"Institutions",
-"Pour qu'une question prioritaire de constitutionnalité (QPC) soit transmise au Conseil constitutionnel, quelles conditions doivent être réunies ?",
-"La loi doit être postérieure à 1958 et le requérant doit être français",
-"La disposition contestée doit être applicable au litige, ne pas avoir déjà été déclarée conforme sauf changement de circonstances, et la question doit être sérieuse ou nouvelle",
-"La procédure doit concerner uniquement une affaire pénale",
-"La demande doit être signée par au moins dix avocats",
-"B",
-"Une QPC n'est pas transmise automatiquement. La disposition contestée doit être utile pour trancher le litige, ne pas avoir déjà été jugée conforme à la Constitution sauf changement de circonstances, et la question doit présenter un caractère sérieux ou nouveau. Ce filtrage est assuré par le Conseil d'État ou la Cour de cassation."
+makeQuestion("i3-029",3,"Institutions","Le pouvoir exécutif est exercé par :",
+  "Le Président et le Gouvernement",
+  "Le Parlement",
+  "Les juges",
+  "Les maires",
+  "A",
+  "Exécutif = Président + Gouvernement."
 ),
 
-makeQuestion(
-"i3-028",
-3,
-"Institutions",
-"Quelle différence essentielle existe entre l'article 49 alinéa 1 et l'article 49 alinéa 3 de la Constitution ?",
-"Le 49-1 concerne uniquement le budget, le 49-3 toutes les autres lois",
-"Le 49-1 permet au gouvernement de demander la confiance sur sa politique, alors que le 49-3 permet de faire adopter un texte sans vote sauf motion de censure",
-"Le 49-1 est utilisé par le Président, le 49-3 par le Parlement",
-"Le 49-1 impose une majorité renforcée, le 49-3 une majorité simple",
-"B",
-"L'article 49-1 est un acte de légitimation politique : le gouvernement engage sa responsabilité sur son programme ou une déclaration de politique générale. Le 49-3, lui, est un outil de rationalisation du parlementarisme : sauf motion de censure adoptée, le texte est considéré comme adopté sans vote."
+makeQuestion("i3-030",3,"Institutions","Le pouvoir législatif appartient :",
+  "Au Président",
+  "Au Parlement",
+  "Aux préfets",
+  "Aux régions",
+  "B",
+  "Le Parlement fait la loi."
 ),
 
-makeQuestion(
-"i3-029",
-3,
-"Institutions",
-"Quelles limites empêchent le Président de dissoudre librement l'Assemblée nationale à tout moment ?",
-"Il ne peut dissoudre que si le Premier ministre est d'accord",
-"La dissolution est impossible si le Sénat s'y oppose",
-"Elle est interdite pendant l'intérim présidentiel, dans l'année suivant une précédente dissolution, et pendant l'application de l'article 16",
-"Elle n'est possible qu'après une motion de censure",
-"C",
-"L'article 12 de la Constitution encadre le pouvoir de dissolution. Le Président ne peut pas dissoudre l'Assemblée pendant l'intérim de la présidence, pendant l'année qui suit une dissolution précédente, ni pendant l'application des pouvoirs exceptionnels de l'article 16."
+makeQuestion("i3-031",3,"Institutions","L’autorité judiciaire est exercée par :",
+  "Le Gouvernement",
+  "Le Parlement",
+  "Les juges",
+  "Les élus locaux",
+  "C",
+  "Les juges rendent la justice."
 ),
 
-makeQuestion(
-"i3-030",
-3,
-"Institutions",
-"Pourquoi la destitution du Président de la République par la Haute Cour est-elle très difficile à mettre en œuvre ?",
-"Parce qu'elle n'est possible qu'avec l'accord du Conseil constitutionnel",
-"Parce qu'elle suppose un vote très lourd des deux assemblées et qu'elle ne vise qu'un manquement manifestement incompatible avec l'exercice du mandat",
-"Parce qu'elle n'est possible qu'en cas de crime commis avant l'élection",
-"Parce qu'elle dépend d'un référendum obligatoire",
-"B",
-"La procédure de l'article 68 est exceptionnelle. Elle exige une majorité des deux tiers dans chaque assemblée et ne concerne pas une simple faute politique, mais un manquement manifestement incompatible avec l'exercice du mandat présidentiel. En pratique, cela la rend très difficile à utiliser."
+makeQuestion("i3-032",3,"Institutions","Le maire est élu :",
+  "Par les citoyens directement",
+  "Par le Président",
+  "Par le préfet",
+  "Par le conseil municipal",
+  "D",
+  "Le maire est élu par le conseil municipal."
 ),
 
-makeQuestion(
-"i3-031",
-3,
-"Institutions",
-"Que permet de protéger la notion d'identité constitutionnelle de la France ?",
-"Les traditions locales face aux lois nationales",
-"La supériorité absolue de toutes les lois françaises sur le droit européen",
-"Le droit exclusif du Parlement de voter toute norme internationale",
-"Certains principes fondamentaux français qui ne peuvent pas être effacés par le droit de l'Union européenne",
-"D",
-"Le Conseil constitutionnel a développé l'idée d'identité constitutionnelle pour protéger certains principes fondamentaux de la République française, comme la laïcité ou l'indivisibilité de la République. Cela signifie que la primauté du droit de l'Union européenne n'efface pas tout le noyau dur constitutionnel français."
+makeQuestion("i3-033",3,"Institutions","Le Conseil constitutionnel vérifie :",
+  "La conformité des lois à la Constitution",
+  "Les élections municipales",
+  "Les décisions des maires",
+  "Les budgets des communes",
+  "A",
+  "Il contrôle les lois."
 ),
 
-makeQuestion(
-"i3-032",
-3,
-"Institutions",
-"Pourquoi dit-on que le Conseil constitutionnel est un 'législateur négatif' ?",
-"Parce qu'il rédige les lois à la place du Parlement",
-"Parce qu'il peut retirer du droit les dispositions contraires à la Constitution sans écrire lui-même la loi",
-"Parce qu'il vote contre les lois du gouvernement",
-"Parce qu'il ne contrôle que les lois défavorables aux citoyens",
-"B",
-"Cette expression, héritée de Kelsen, signifie que le Conseil constitutionnel n'a pas pour rôle principal de fabriquer la loi, mais d'empêcher l'entrée en vigueur ou le maintien de dispositions contraires à la Constitution. Il supprime ou censure, mais ne remplace pas normalement le législateur."
+makeQuestion("i3-034",3,"Institutions","Une loi doit respecter :",
+  "Les décisions du maire",
+  "La Constitution",
+  "Les règles locales",
+  "Les partis politiques",
+  "B",
+  "La Constitution est la norme suprême."
 ),
 
-makeQuestion(
-"i3-033",
-3,
-"Institutions",
-"Pourquoi une loi organique a-t-elle une place particulière dans la hiérarchie des normes ?",
-"Parce qu'elle est toujours votée par référendum",
-"Parce qu'elle est signée par le Président et le Premier ministre ensemble",
-"Parce qu'elle précise l'organisation des pouvoirs publics prévue par la Constitution et doit obligatoirement être contrôlée par le Conseil constitutionnel avant promulgation",
-"Parce qu'elle est votée uniquement par le Sénat",
-"C",
-"Les lois organiques complètent la Constitution sur des points essentiels, comme le fonctionnement des institutions. Elles ont un régime d'adoption spécifique et font l'objet d'un contrôle obligatoire du Conseil constitutionnel avant leur promulgation."
-),
-
-makeQuestion(
-"i3-034",
-3,
-"Institutions",
-"Quel reproche démocratique est souvent adressé au Sénat français ?",
-"Il représente davantage les petites communes et les territoires ruraux que le poids réel de la population",
-"Il vote trop lentement les lois de finances",
-"Il n'examine jamais les textes de loi importants",
-"Il est composé uniquement d'anciens ministres",
-"A",
-"Le Sénat est élu au suffrage indirect par un collège d'élus locaux. Ce système donne un poids important aux petites communes et aux territoires ruraux. On lui reproche donc parfois de ne pas refléter fidèlement la démographie réelle du pays."
-),
-
-makeQuestion(
-"i3-035",
-3,
-"Institutions",
-"Qu'a surtout changé la LOLF de 2001 dans la manière de présenter et gérer le budget de l'État ?",
-"Elle a supprimé la Cour des comptes",
-"Elle a rendu le budget automatiquement équilibré",
-"Elle a transféré tout le pouvoir budgétaire au Sénat",
-"Elle a remplacé une logique de moyens par une logique de missions, programmes et résultats",
-"D",
-"La LOLF a profondément modernisé la gestion budgétaire de l'État. Au lieu de présenter uniquement des dépenses par nature, elle organise le budget en missions et programmes avec des objectifs de performance. L'idée est de mieux relier l'argent public aux résultats attendus."
+makeQuestion("i3-035",3,"Institutions","La France est organisée comme :",
+  "Une monarchie",
+  "Une dictature",
+  "Une démocratie",
+  "Un empire",
+  "C",
+  "La France est une démocratie."
 ),
 
 makeQuestion(
