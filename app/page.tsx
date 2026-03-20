@@ -405,6 +405,18 @@ const limits = ROLE_LIMITS[role];
   <Button className="w-full sm:w-auto" variant="secondary" onClick={startExam}>
     🎯 Examen blanc
   </Button>
+<Button
+  className="w-full sm:w-auto"
+  variant="secondary"
+  onClick={() => router.push("/resources")}
+>
+  🏛️ Ressources officielles
+</Button>
+
+<p className="text-xs text-slate-500 text-center max-w-md mx-auto">
+  Centres agréés, informations officielles et ressources utiles pour préparer l’examen.
+</p>
+
 </div>
   </div>
 </section>

@@ -568,78 +568,122 @@ ${errorsText}
       </section>
 
       <Card>
-        <div className="grid gap-4 sm:grid-cols-3">
-          <StatTile label="Score" value={`${score.correct}/${score.total}`} accent="blue" />
-          <StatTile label="Pourcentage" value={`${score.percent}%`} accent="emerald" />
-          <StatTile label="Erreurs" value={String(wrong.length)} accent="red" />
-        </div>
+  <div className="grid gap-4 sm:grid-cols-3">
+    <StatTile label="Score" value={`${score.correct}/${score.total}`} accent="blue" />
+    <StatTile label="Pourcentage" value={`${score.percent}%`} accent="emerald" />
+    <StatTile label="Erreurs" value={String(wrong.length)} accent="red" />
+  </div>
 
-        <div className="mt-6 rounded-[1.6rem] border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.03] p-6">
-          <div className="text-sm text-slate-400">Classement</div>
-          <div className="mt-1 text-2xl font-extrabold text-white">{rank}</div>
-          <div className="mt-2 text-sm text-slate-300">
-            Score expert : <span className="font-bold text-white">{expertScore}</span>
-          </div>
-        </div>
-
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
-  <Button onClick={replaySame}>Réessayer</Button>
-  <Button variant="secondary" onClick={() => router.push(mode === "exam" ? "/exam" : "/")}>
-    Nouveau test
-  </Button>
-  <Button variant="secondary" onClick={copyDetailedResult}>
-    Copier
-  </Button>
-  <Button variant="secondary" onClick={mailResult}>
-    Email
-  </Button>
-  <Button variant="secondary" onClick={() => {
-    const el = document.getElementById("feedback");
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }}>
-    Avis
-  </Button>
-  <Button variant="secondary" onClick={() => router.push("/leaderboard")}>
-    Classement
-  </Button>
-  <Button variant="secondary" onClick={share}>
-    Partager
-  </Button>
-</div>
-
-{/* ===== BLOC SCROLL — visible pour tous ===== */}
-<div className="mt-6 rounded-[1.5rem] border border-blue-400/20 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 p-5" onMouseEnter={prefetchScroll}>
-  <div className="flex items-center gap-3 mb-3">
-    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/10 text-lg flex-shrink-0">
-      📱
-    </div>
-    <div>
-      <p className="text-sm font-bold text-white">Révise comme sur TikTok</p>
-      <p className="text-xs text-slate-400">Swipe les questions •scroll vertical • scroll horizontal</p>
+  <div className="mt-6 rounded-[1.6rem] border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.03] p-6">
+    <div className="text-sm text-slate-400">Classement</div>
+    <div className="mt-1 text-2xl font-extrabold text-white">{rank}</div>
+    <div className="mt-2 text-sm text-slate-300">
+      Score expert : <span className="font-bold text-white">{expertScore}</span>
     </div>
   </div>
-  <button
-  onClick={() => {
-    const url = data.meta?.themes?.[0] 
-      ? `/scroll?theme=${encodeURIComponent(data.meta.themes[0])}` 
-      : '/scroll';
-    router.push(url);
-  }}
-  className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:brightness-105 active:scale-95"
->
-  Réviser ce thème
-</button>
-</div>
 
-        {copyMsg && <p className="mt-3 text-sm text-slate-300">{copyMsg}</p>}
+  {/* ===== ACTIONS ===== */}
+  <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
+    <Button onClick={replaySame}>Réessayer</Button>
+    <Button variant="secondary" onClick={() => router.push(mode === "exam" ? "/exam" : "/")}>
+      Nouveau test
+    </Button>
+    <Button variant="secondary" onClick={copyDetailedResult}>
+      Copier
+    </Button>
+    <Button variant="secondary" onClick={mailResult}>
+      Email
+    </Button>
+    <Button
+      variant="secondary"
+      onClick={() => {
+        const el = document.getElementById("feedback");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }}
+    >
+      Avis
+    </Button>
+    <Button variant="secondary" onClick={() => router.push("/leaderboard")}>
+      Classement
+    </Button>
+    <Button variant="secondary" onClick={share}>
+      Partager
+    </Button>
 
-      {limits.canSeeThemeStats && (
-  <p className="mt-4 text-sm text-slate-400">
-    Règle : validation si <strong className="text-white">≥ 32</strong> réponses
-    correctes sur 40.
-  </p>
-)}
-      </Card>
+    {/* 🔥 NOUVEAU */}
+    <Button variant="secondary" onClick={() => router.push("/resources")}>
+      🏛️ Liens officiels
+    </Button>
+  </div>
+
+  {/* ===== BLOC SCROLL ===== */}
+  <div
+    className="mt-6 rounded-[1.5rem] border border-blue-400/20 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 p-5"
+    onMouseEnter={prefetchScroll}
+  >
+    <div className="flex items-center gap-3 mb-3">
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/10 text-lg flex-shrink-0">
+        📱
+      </div>
+      <div>
+        <p className="text-sm font-bold text-white">Révise comme sur TikTok</p>
+        <p className="text-xs text-slate-400">
+          Swipe les questions •scroll vertical • scroll horizontal
+        </p>
+      </div>
+    </div>
+
+    <button
+      onClick={() => {
+        const url = data.meta?.themes?.[0]
+          ? `/scroll?theme=${encodeURIComponent(data.meta.themes[0])}`
+          : "/scroll";
+        router.push(url);
+      }}
+      className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:brightness-105 active:scale-95"
+    >
+      Réviser ce thème
+    </button>
+  </div>
+
+  {/* ===== 🔥 NOUVEAU BLOC CENTRE AGRÉÉ ===== */}
+  <div className="mt-6 rounded-[1.5rem] border border-amber-400/20 bg-gradient-to-br from-amber-500/10 to-orange-500/5 p-5">
+    <div className="flex items-center gap-3 mb-3">
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-500/10 text-lg flex-shrink-0">
+        📍
+      </div>
+      <div>
+        <p className="text-sm font-bold text-white">
+          Passer l’examen dans un centre
+        </p>
+        <p className="text-xs text-slate-400">
+          Consulte la carte officielle pour trouver un centre agréé proche de chez toi.
+        </p>
+      </div>
+    </div>
+
+    <a
+      href="https://www.service-public.gouv.fr/particuliers/vosdroits/R74875"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full rounded-2xl border border-amber-400/20 bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 px-4 py-3 text-center text-sm font-semibold text-slate-950 shadow-[0_10px_30px_rgba(251,191,36,0.22)] transition hover:-translate-y-0.5 hover:brightness-105 active:scale-95"
+    >
+      Passer l’examen dans un centre ↗
+    </a>
+
+    <p className="mt-3 text-xs text-slate-500 text-center">
+      Lien officiel Service-Public • Tarifs et disponibilités variables selon le centre
+    </p>
+  </div>
+
+  {copyMsg && <p className="mt-3 text-sm text-slate-300">{copyMsg}</p>}
+
+  {limits.canSeeThemeStats && (
+    <p className="mt-4 text-sm text-slate-400">
+      Règle : validation si <strong className="text-white">≥ 32</strong> réponses correctes sur 40.
+    </p>
+  )}
+</Card>
 
       
         {!limits.canSeeThemeStats ? (

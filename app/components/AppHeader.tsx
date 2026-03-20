@@ -108,6 +108,7 @@ export default function AppHeader() {
                         { href: "/quiz", label: "S'entraîner", icon: "🎯" },
                         { href: "/results", label: "Résultats", icon: "📊" },
                         { href: "/account", label: "Mon compte", icon: "👤" },
+                        { href: "/resources", label: "Ressources", icon: "🏛️" },
                         { href: "/pricing", label: "Tarifs", icon: "👑" },
                       ].map((item) => (
                         <Link

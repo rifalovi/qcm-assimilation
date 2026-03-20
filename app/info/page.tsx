@@ -252,6 +252,42 @@ Informations essentielles.
                   </ActionButton>
                 </div>
 
+<div className="mt-6 rounded-[1.5rem] border border-blue-400/20 bg-white/[0.04] p-4 shadow-[0_18px_40px_rgba(2,8,23,0.22)] backdrop-blur-md sm:p-5">
+  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="min-w-0">
+      <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-200">
+        🏛️ Ressources officielles
+      </div>
+
+      <p className="mt-3 text-sm font-semibold text-white">
+        Centres agréés, informations générales et ressources utiles pour préparer l’examen.
+      </p>
+
+      <p className="mt-1 text-xs leading-6 text-slate-400 sm:text-sm">
+        Retrouvez les liens officiels pour mieux comprendre l’examen et passer à l’étape suivante au bon moment.
+      </p>
+    </div>
+
+    <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[230px]">
+      <button
+        onClick={() => router.push("/resources")}
+        className="inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-bold text-white shadow-[0_10px_30px_rgba(37,99,235,0.24)] transition hover:-translate-y-0.5 hover:brightness-105"
+      >
+        Voir les ressources
+      </button>
+
+      <a
+        href="https://www.service-public.gouv.fr/particuliers/vosdroits/R74875"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+      >
+        Centres agréés ↗
+      </a>
+    </div>
+  </div>
+</div>
+
                 <div className="mt-7 flex flex-wrap gap-3 text-xs text-slate-400 sm:text-sm">
                   <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
                     Format QCM
