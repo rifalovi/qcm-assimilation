@@ -116,7 +116,7 @@ export default function QuizPage() {
 } catch (e: any) {
   setError(e?.message ?? "Erreur lors de la génération du test.");
 }
-  }, [router, role]);
+  }, [router, role, authLoading]);
 
   useEffect(() => {
     if (mode !== "exam") return;

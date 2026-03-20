@@ -29,16 +29,13 @@ export function generateQuiz(params: {
     (q) => q.level === level && themes.includes(q.theme)
   );
 
-  if (allPool.length < count) {
-    throw new Error(
-      `Banque insuffisante : ${allPool.length} disponible(s), ${count} demandé(s).`
-    );
-  }
+  if (allPool.length === 0) throw new Error("Aucune question disponible pour ces critères.");
 
   const seen = getSeenIds();
+  const effectiveCount = Math.min(count, allPool.length);
   let pool = allPool.filter(q => !seen.has(q.id));
   if (pool.length < count) { resetSeenIds(); pool = [...allPool]; }
-  return shuffleArray(pool).slice(0, count);
+  return shuffleArray(pool).slice(0, effectiveCount);
 }
 
 const SEEN_KEY = 'qcm_seen_ids';
