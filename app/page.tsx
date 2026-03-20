@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { hasAnyResult } from "../src/lib/saveResult";
 import { createClient } from "@/lib/supabase/client";
 import { useUser, ROLE_LIMITS } from "./components/UserContext";
+import EligibilityModalLauncher from "./components/EligibilityModalLauncher";
 
 
 
@@ -297,6 +298,7 @@ const limits = ROLE_LIMITS[role];
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <EligibilityModalLauncher isAuthenticated={!!pseudo.trim() && !!email.trim()} />
       <div className="space-y-8 sm:space-y-10">
 <section
   className={`relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
@@ -399,24 +401,41 @@ const limits = ROLE_LIMITS[role];
   >
     🎯 Faire un test
   </button>
-  <Button className="w-full sm:w-auto" variant="secondary" onClick={() => router.push("/info")}>
+
+  <Button
+    className="w-full sm:w-auto"
+    variant="secondary"
+    onClick={() => {
+      const event = new CustomEvent("open-eligibility-modal");
+      window.dispatchEvent(event);
+    }}
+  >
+    🧭 Trouver mon parcours
+  </Button>
+
+  <Button
+    className="w-full sm:w-auto"
+    variant="secondary"
+    onClick={() => router.push("/info")}
+  >
     📖 Comprendre l'examen
   </Button>
+
   <Button className="w-full sm:w-auto" variant="secondary" onClick={startExam}>
     🎯 Examen blanc
   </Button>
-<Button
-  className="w-full sm:w-auto"
-  variant="secondary"
-  onClick={() => router.push("/resources")}
->
-  🏛️ Ressources officielles
-</Button>
 
-<p className="text-xs text-slate-500 text-center max-w-md mx-auto">
-  Centres agréés, informations officielles et ressources utiles pour préparer l’examen.
-</p>
+  <Button
+    className="w-full sm:w-auto"
+    variant="secondary"
+    onClick={() => router.push("/resources")}
+  >
+    🏛️ Ressources officielles
+  </Button>
 
+  <p className="text-xs text-slate-500 text-center max-w-md mx-auto">
+    Centres agréés, informations officielles et ressources utiles pour préparer l’examen.
+  </p>
 </div>
   </div>
 </section>

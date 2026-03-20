@@ -41,8 +41,8 @@ function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "fr
           style={{ color: isAnon ? "#bfdbfe" : "#fde68a" }}
         >
           {isAnon
-            ? "Crée un compte gratuit pour accéder à 10 cartes par thème — 280 cartes au total disponibles."
-            : "Passe en Premium pour accéder aux 280 cartes complètes — tous thèmes, tous niveaux."}
+            ? "Crée un compte gratuit pour accéder à 10 cartes par thème — 400 cartes au total disponibles."
+            : "Passe en Premium pour accéder aux 400 cartes complètes — tous thèmes, tous niveaux."}
         </p>
       </div>
 

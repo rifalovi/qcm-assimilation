@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "../components/UserContext";
 import { useEffect, useState } from "react";
 import ScrollDemo from "@/components/ScrollDemo";
+import EligibilityModalLauncher from "../components/EligibilityModalLauncher";
 
 type QcmUser = { pseudo: string; email: string };
 
@@ -150,6 +151,8 @@ export default function InfoPage() {
   const [user, setUser] = useState<QcmUser | null>(null);
   const { role, username: supabaseUsername, loading: authLoading } = useUser();
 
+  const isAuthenticated = !!supabaseUsername || !!user?.email?.trim();
+
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 50);
     setUser(loadUser());
@@ -163,6 +166,7 @@ export default function InfoPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <EligibilityModalLauncher isAuthenticated={isAuthenticated} />
       <div className="space-y-8 sm:space-y-10">
         <section
           className={`relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
