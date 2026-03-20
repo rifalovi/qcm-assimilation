@@ -2,223 +2,523 @@ import { makeQuestion, Question } from "./types";
 
 export const HISTOIRE_L1: Question[] = [
 
-makeQuestion("h1-001",1,"Histoire","En quelle année commence la Révolution française ?",
+makeQuestion("h1-001",1,"Histoire","En quelle année a débuté la Révolution française ?",
 "1776","1789","1815","1905","B",
-"La Révolution française commence en 1789. Elle met fin à l’Ancien Régime et marque le début d’une transformation politique majeure."
+"La Révolution française débute en 1789."
 ),
 
-makeQuestion("h1-002",1,"Histoire","Que célèbre-t-on le 14 juillet en France ?",
-"La victoire de 1918",
-"La prise de la Bastille et la fête nationale",
-"La fin de la monarchie en 1958",
-"La création de l’euro",
-"B",
-"Le 14 juillet est la fête nationale française. Elle rappelle la prise de la Bastille en 1789."
-),
-
-makeQuestion("h1-003",1,"Histoire","La Déclaration des droits de l’homme et du citoyen est adoptée en :",
-"1789","1815","1914","1945","A",
-"La Déclaration des droits de l’homme et du citoyen est adoptée en août 1789 pendant la Révolution française."
-),
-
-makeQuestion("h1-004",1,"Histoire","La loi de 1905 concerne :",
-"La liberté de vote",
-"La séparation des Églises et de l’État",
-"La création de l’ONU",
-"La fondation de la Vᵉ République",
-"B",
-"La loi de 1905 établit la séparation des Églises et de l’État et fonde la laïcité."
-),
-
-makeQuestion("h1-005",1,"Histoire","La Vᵉ République est fondée en :",
-"1946",
-"1958",
-"1968",
-"1981",
-"B",
-"La Constitution de 1958 fonde la Vᵉ République."
-),
-
-makeQuestion("h1-006",1,"Histoire","Quelle date marque la fin de la Seconde Guerre mondiale en Europe ?",
-"8 mai 1945",
-"11 novembre 1918",
-"14 juillet 1789",
-"1 janvier 2002",
+makeQuestion("h1-002",1,"Histoire","Qui était Napoléon Ier ?",
+"Un empereur des Français",
+"Un roi de France",
+"Un président",
+"Un écrivain",
 "A",
-"Le 8 mai 1945 marque la capitulation de l’Allemagne nazie."
+"Napoléon Ier est devenu empereur des Français."
 ),
 
-makeQuestion("h1-007",1,"Histoire","Napoléon Bonaparte devient empereur en :",
-"1804",
-"1789",
-"1870",
-"1914",
+makeQuestion("h1-003",1,"Histoire","Dans quelle République est-on aujourd’hui en France ?",
+"IIIe République","IVe République","Ve République","VIe République","C",
+"La France est aujourd’hui sous la Ve République."
+),
+
+makeQuestion("h1-004",1,"Histoire","Qu’est-ce que la Shoah ?",
+"Une révolution française",
+"Une guerre coloniale",
+"Une œuvre littéraire",
+"L’extermination des Juifs d’Europe par les nazis",
+"D",
+"La Shoah désigne l’extermination des Juifs d’Europe pendant la Seconde Guerre mondiale."
+),
+
+makeQuestion("h1-005",1,"Histoire","Quel pays ou région du monde a été colonisé par la France ?",
+"L’Algérie",
+"La Suède",
+"Le Japon",
+"Le Portugal",
 "A",
-"Napoléon Bonaparte devient empereur des Français en 1804."
+"L’Algérie a été colonisée par la France."
 ),
 
-makeQuestion("h1-008",1,"Histoire","La Première Guerre mondiale a eu lieu :",
-"1914-1918",
-"1939-1945",
-"1789-1799",
-"1962-1968",
-"A",
-"La Première Guerre mondiale se déroule de 1914 à 1918."
-),
-
-makeQuestion("h1-009",1,"Histoire","La Seconde Guerre mondiale a eu lieu :",
-"1914-1918",
-"1939-1945",
-"1958-1962",
-"2001-2005",
-"B",
-"La Seconde Guerre mondiale s’est déroulée de 1939 à 1945."
-),
-
-makeQuestion("h1-010",1,"Histoire","L’abolition définitive de l’esclavage en France en 1848 est associée à :",
+makeQuestion("h1-006",1,"Histoire","Qui a rendu l’école gratuite, laïque et obligatoire ?",
 "Victor Hugo",
-"Victor Schœlcher",
-"Charles de Gaulle",
 "Jules Ferry",
+"Charles de Gaulle",
+"Napoléon Ier",
 "B",
-"Victor Schœlcher joue un rôle central dans l’abolition de l’esclavage en 1848."
+"Jules Ferry est associé aux grandes lois scolaires de la République."
 ),
 
-makeQuestion("h1-011",1,"Histoire","La France est un pays fondateur de :",
-"L’Union africaine",
-"La construction européenne",
-"L’ASEAN",
-"Le Mercosur",
+makeQuestion("h1-007",1,"Histoire","Quand a eu lieu la Seconde Guerre mondiale ?",
+"1914-1918",
+"1939-1945",
+"1945-1958",
+"1958-1962",
 "B",
-"La France est un des pays fondateurs de la construction européenne."
+"La Seconde Guerre mondiale a eu lieu de 1939 à 1945."
 ),
 
-makeQuestion("h1-012",1,"Histoire","La Commune de Paris date de :",
-"1871",
-"1789",
-"1917",
-"1992",
-"A",
-"La Commune de Paris est un épisode politique important survenu en 1871."
+makeQuestion("h1-008",1,"Histoire","Quand a eu lieu la Première Guerre mondiale ?",
+"1870-1871",
+"1939-1945",
+"1914-1918",
+"1954-1962",
+"C",
+"La Première Guerre mondiale s’est déroulée de 1914 à 1918."
 ),
 
-makeQuestion("h1-013",1,"Histoire","Le 11 novembre commémore :",
+makeQuestion("h1-009",1,"Histoire","En quelle année a été créée la Communauté économique européenne (CEE) ?",
+"1957","1945","1992","2002","A",
+"La CEE est créée par le traité de Rome en 1957."
+),
+
+makeQuestion("h1-010",1,"Histoire","Le 11 novembre correspond à :",
 "La fin de la Seconde Guerre mondiale",
 "L’armistice de 1918",
 "La prise de la Bastille",
-"La loi de 1905",
+"La création de la Ve République",
 "B",
-"Le 11 novembre 1918 marque la fin des combats de la Première Guerre mondiale."
+"Le 11 novembre commémore l’armistice de 1918."
 ),
 
-makeQuestion("h1-014",1,"Histoire","Pendant la Seconde Guerre mondiale, la Résistance :",
-"S’oppose à l’occupation nazie",
-"Soutient l’occupation",
-"Interdit les libertés",
-"N’existe pas en France",
-"A",
-"La Résistance regroupe les mouvements qui luttent contre l’occupation allemande."
-),
-
-makeQuestion("h1-015",1,"Histoire","Charles de Gaulle est :",
-"Un empereur",
-"Un chef de la France libre",
-"Un roi de France",
-"Un sénateur du XIXe siècle",
-"B",
-"De Gaulle dirige la France libre pendant la Seconde Guerre mondiale."
-),
-
-makeQuestion("h1-016",1,"Histoire","La Révolution française met fin :",
-"À la République",
-"À l’Ancien Régime",
-"À l’Union européenne",
-"À la laïcité",
-"B",
-"La Révolution met fin à la monarchie absolue."
-),
-
-makeQuestion("h1-017",1,"Histoire","La Marseillaise est composée en :",
-"1792",
-"1871",
-"1914",
-"1945",
-"A",
-"La Marseillaise est composée pendant la Révolution française."
-),
-
-makeQuestion("h1-018",1,"Histoire","La construction européenne s’accélère après :",
-"1789",
-"1945",
-"1905",
-"2000",
-"B",
-"Après la guerre, les pays européens cherchent à construire la paix."
-),
-
-makeQuestion("h1-019",1,"Histoire","L’appel du 18 juin est lancé par :",
-"Napoléon",
+makeQuestion("h1-011",1,"Histoire","Qui a été le premier Président de la Ve République ?",
+"François Mitterrand",
+"Georges Pompidou",
 "Charles de Gaulle",
-"Victor Hugo",
+"Jacques Chirac",
+"C",
+"Charles de Gaulle est le premier président de la Ve République."
+),
+
+makeQuestion("h1-012",1,"Histoire","En quelle année l’esclavage a-t-il été aboli définitivement en France ?",
+"1789","1815","1905","1848","D",
+"L’esclavage est définitivement aboli en 1848."
+),
+
+makeQuestion("h1-013",1,"Histoire","Depuis quelle année l’école publique est-elle gratuite ?",
+"1881","1789","1905","1958","A",
+"L’école publique devient gratuite en 1881."
+),
+
+makeQuestion("h1-014",1,"Histoire","Combien y a-t-il eu de Républiques en France ?",
+"Trois","Quatre","Cinq","Six","C",
+"La France a connu cinq Républiques."
+),
+
+makeQuestion("h1-015",1,"Histoire","Qui était le roi de France au moment de la Révolution française ?",
+"Louis XIV",
+"Louis XV",
+"Louis XVI",
+"Napoléon",
+"C",
+"Louis XVI est le roi au moment de la Révolution de 1789."
+),
+
+makeQuestion("h1-016",1,"Histoire","Qui a fondé la Ve République ?",
+"Jules Ferry",
+"Charles de Gaulle",
+"Napoléon Ier",
 "Jean Moulin",
 "B",
-"L’appel du 18 juin 1940 encourage les Français à continuer la résistance."
+"Charles de Gaulle est le fondateur de la Ve République."
 ),
 
-makeQuestion("h1-020",1,"Histoire","La Révolution de 1848 conduit à :",
-"La IIᵉ République",
-"La monarchie absolue",
-"La Vᵉ République",
+makeQuestion("h1-017",1,"Histoire","Que célèbre-t-on le 14 juillet ?",
+"La fin de la guerre d’Algérie",
+"La prise de la Bastille et la fête nationale",
+"L’abolition de l’esclavage",
+"La création de l’euro",
+"B",
+"Le 14 juillet est la fête nationale française."
+),
+
+makeQuestion("h1-018",1,"Histoire","Quelle guerre a eu lieu entre 1914 et 1918 ?",
+"La guerre d’Algérie",
+"La Seconde Guerre mondiale",
+"La Première Guerre mondiale",
+"La guerre froide",
+"C",
+"La guerre de 1914 à 1918 est la Première Guerre mondiale."
+),
+
+makeQuestion("h1-019",1,"Histoire","Pourquoi l’année 1958 est-elle importante pour la France ?",
+"Création de la Ve République",
+"Fin de la Première Guerre mondiale",
+"Abolition de l’esclavage",
+"Création de la CEE",
+"A",
+"L’année 1958 marque la naissance de la Ve République."
+),
+
+makeQuestion("h1-020",1,"Histoire","Quel fleuve coule en France ?",
+"Le Nil","L’Amazone","Le Danube","La Loire","D",
+"La Loire est un grand fleuve français."
+),
+
+makeQuestion("h1-021",1,"Histoire","Quelle ville est française ?",
+"Lyon","Madrid","Rome","Bruxelles","A",
+"Lyon est une grande ville française."
+),
+
+makeQuestion("h1-022",1,"Histoire","Quel océan borde la côte ouest française ?",
+"L’océan Atlantique",
+"L’océan Indien",
+"L’océan Pacifique",
+"L’océan Arctique",
+"A",
+"La côte ouest de la France est bordée par l’océan Atlantique."
+),
+
+makeQuestion("h1-023",1,"Histoire","Qu’est-ce que Paris ?",
+"Un département d’outre-mer",
+"Une région étrangère",
+"La capitale de la France",
+"Une île",
+"C",
+"Paris est la capitale de la France."
+),
+
+makeQuestion("h1-024",1,"Histoire","Sur quel continent se situe la France métropolitaine ?",
+"Afrique","Europe","Asie","Amérique","B",
+"La France métropolitaine se situe en Europe."
+),
+
+makeQuestion("h1-025",1,"Histoire","Quelle île est un département d’outre-mer français ?",
+"La Corse","La Sicile","La Réunion","La Sardaigne","C",
+"La Réunion est un département et une région d’outre-mer."
+),
+
+makeQuestion("h1-026",1,"Histoire","Combien y a-t-il de régions en France métropolitaine ?",
+"13","18","22","27","A",
+"La France métropolitaine compte 13 régions."
+),
+
+makeQuestion("h1-027",1,"Histoire","Quelle ville est un grand port maritime ?",
+"Marseille","Dijon","Limoges","Clermont-Ferrand","A",
+"Marseille est un grand port maritime français."
+),
+
+makeQuestion("h1-028",1,"Histoire","Quelle est la mer au sud de la France métropolitaine ?",
+"La mer Noire","La mer Baltique","La mer Méditerranée","La mer du Nord","C",
+"Le sud de la France métropolitaine est bordé par la Méditerranée."
+),
+
+makeQuestion("h1-029",1,"Histoire","Quelle ville est située au bord de la mer Méditerranée ?",
+"Nantes","Marseille","Lille","Reims","B",
+"Marseille se trouve au bord de la Méditerranée."
+),
+
+makeQuestion("h1-030",1,"Histoire","Où se situe la Corse ?",
+"Dans l’océan Atlantique",
+"Dans la Manche",
+"Dans la mer Méditerranée",
+"Dans la mer du Nord",
+"C",
+"La Corse est une île française située en Méditerranée."
+),
+
+makeQuestion("h1-031",1,"Histoire","Quelle chaîne de montagnes est située entre la France et l’Italie ?",
+"Les Vosges",
+"Les Alpes",
+"Le Jura",
+"Le Massif central",
+"B",
+"Les Alpes séparent en partie la France et l’Italie."
+),
+
+makeQuestion("h1-032",1,"Histoire","Qui était Molière ?",
+"Un peintre","Un homme politique","Un écrivain et dramaturge","Un scientifique","C",
+"Molière est un grand auteur du théâtre français."
+),
+
+makeQuestion("h1-033",1,"Histoire","Qui était Charles Baudelaire ?",
+"Un poète français",
+"Un général",
+"Un roi",
+"Un musicien",
+"A",
+"Charles Baudelaire est un grand poète français."
+),
+
+makeQuestion("h1-034",1,"Histoire","Qui était George Sand ?",
+"Une chanteuse",
+"Une écrivaine française",
+"Une reine",
+"Une peintre",
+"B",
+"George Sand est une écrivaine française célèbre."
+),
+
+makeQuestion("h1-035",1,"Histoire","Qui était Simone de Beauvoir ?",
+"Une philosophe et écrivaine française",
+"Une actrice",
+"Une reine",
+"Une compositrice",
+"A",
+"Simone de Beauvoir est une grande figure intellectuelle française."
+),
+
+makeQuestion("h1-036",1,"Histoire","Qui était Albert Camus ?",
+"Un peintre",
+"Un écrivain français",
+"Un empereur",
+"Un ministre",
+"B",
+"Albert Camus est un écrivain français célèbre."
+),
+
+makeQuestion("h1-037",1,"Histoire","Qui était Paul Cézanne ?",
+"Un peintre français",
+"Un poète",
+"Un président",
+"Un musicien",
+"A",
+"Paul Cézanne est un peintre français."
+),
+
+makeQuestion("h1-038",1,"Histoire","Qui était Marc Chagall ?",
+"Un général","Un peintre","Un roi","Un scientifique","B",
+"Marc Chagall est un peintre célèbre ayant vécu en France."
+),
+
+makeQuestion("h1-039",1,"Histoire","Qui était Joséphine Baker ?",
+"Une chanteuse et artiste",
+"Une reine",
+"Une ministre",
+"Une scientifique",
+"A",
+"Joséphine Baker est une artiste célèbre, entrée au Panthéon."
+),
+
+makeQuestion("h1-040",1,"Histoire","Qui était une chanteuse française célèbre ?",
+"Édith Piaf",
+"Marie Curie",
+"George Sand",
+"Simone Veil",
+"A",
+"Édith Piaf est une grande chanteuse française."
+),
+
+makeQuestion("h1-041",1,"Histoire","Qu’est-ce que le Louvre ?",
+"Un hôpital","Un musée","Un port","Un théâtre","B",
+"Le Louvre est un grand musée situé à Paris."
+),
+
+makeQuestion("h1-042",1,"Histoire","Qui était Jean de La Fontaine ?",
+"Un écrivain français",
+"Un navigateur",
+"Un roi",
+"Un ministre",
+"A",
+"Jean de La Fontaine est célèbre pour ses fables."
+),
+
+makeQuestion("h1-043",1,"Histoire","Quel écrivain est français ?",
+"Dostoïevski","Shakespeare","Victor Hugo","Cervantès","C",
+"Victor Hugo est un grand écrivain français."
+),
+
+makeQuestion("h1-044",1,"Histoire","Dans quelle ville se trouve la tour Eiffel ?",
+"Lyon","Marseille","Bordeaux","Paris","D",
+"La tour Eiffel se trouve à Paris."
+),
+
+makeQuestion("h1-045",1,"Histoire","Quand célèbre-t-on Noël ?",
+"1er janvier","14 juillet","25 décembre","11 novembre","C",
+"Noël est célébré le 25 décembre."
+),
+
+makeQuestion("h1-046",1,"Histoire","Que signifie la Shoah dans l’histoire européenne ?",
+"Une fête religieuse",
+"Le génocide des Juifs",
+"Une révolution politique",
+"Une guerre coloniale",
+"B",
+"La Shoah désigne l’extermination des Juifs d’Europe."
+),
+
+makeQuestion("h1-047",1,"Histoire","Quel événement historique a lieu en 1848 en France ?",
+"L’abolition définitive de l’esclavage",
+"La création de la Ve République",
+"La fin de la Première Guerre mondiale",
 "La création de l’euro",
 "A",
-"La révolution de 1848 conduit à la proclamation de la Deuxième République."
+"L’année 1848 marque notamment l’abolition définitive de l’esclavage."
 ),
 
-makeQuestion("h1-021",1,"Histoire","Jean Moulin est connu pour :",
-"Unifier la Résistance",
-"Être un empereur",
-"Écrire la Constitution",
-"Diriger l’ONU",
-"A",
-"Jean Moulin joue un rôle majeur dans l’organisation de la Résistance."
+makeQuestion("h1-048",1,"Histoire","Quel personnage est lié à l’appel du 18 juin 1940 ?",
+"Jules Ferry","Jean Moulin","Charles de Gaulle","Napoléon","C",
+"L’appel du 18 juin 1940 est lancé par Charles de Gaulle."
 ),
 
-makeQuestion("h1-022",1,"Histoire","La France devient une République pour la première fois en :",
-"1792",
-"1789",
-"1871",
-"1905",
-"A",
+makeQuestion("h1-049",1,"Histoire","Quel événement marque la fin de la Seconde Guerre mondiale en Europe ?",
+"L’armistice de 1918",
+"La capitulation de l’Allemagne nazie",
+"La chute de la Bastille",
+"Le traité de Rome",
+"B",
+"La capitulation allemande marque la fin de la guerre en Europe."
+),
+
+makeQuestion("h1-050",1,"Histoire","Que devient la France en 1792 ?",
+"Une monarchie constitutionnelle",
+"Un empire",
+"Une République",
+"Une colonie",
+"C",
 "La Première République est proclamée en 1792."
 ),
 
-makeQuestion("h1-023",1,"Histoire","Qui est le premier président de la Vᵉ République ?",
-"Charles de Gaulle",
-"François Mitterrand",
-"Jacques Chirac",
-"Georges Pompidou",
+makeQuestion("h1-051",1,"Histoire","Quel personnage historique français est associé à la Résistance ?",
+"Jean Moulin",
+"Louis XVI",
+"Molière",
+"Paul Cézanne",
 "A",
-"Charles de Gaulle devient le premier président de la Vᵉ République."
+"Jean Moulin est une figure majeure de la Résistance."
 ),
 
-makeQuestion("h1-024",1,"Histoire","La Déclaration des droits de l’homme affirme notamment :",
-"La liberté et l’égalité",
-"La monarchie absolue",
-"La fin du Parlement",
-"La suppression du vote",
-"A",
-"Elle affirme les droits fondamentaux comme la liberté et l’égalité."
+makeQuestion("h1-052",1,"Histoire","Quel texte européen fonde la CEE en 1957 ?",
+"Le traité de Maastricht",
+"Le traité de Rome",
+"Le traité de Versailles",
+"Le traité de Lisbonne",
+"B",
+"La CEE est créée par le traité de Rome."
 ),
 
-makeQuestion("h1-025",1,"Histoire","La devise Liberté, Égalité, Fraternité apparaît pendant :",
-"La Révolution française",
+makeQuestion("h1-053",1,"Histoire","Quelle guerre a lieu entre 1939 et 1945 ?",
+"La guerre froide",
+"La guerre d’Algérie",
+"La Seconde Guerre mondiale",
 "La Première Guerre mondiale",
-"La IIIᵉ République",
-"La Vᵉ République",
-"A",
-"La devise apparaît pendant la Révolution et devient symbole républicain."
-)
+"C",
+"La guerre de 1939 à 1945 est la Seconde Guerre mondiale."
+),
 
+makeQuestion("h1-054",1,"Histoire","Quel jour férié correspond à l’armistice de 1918 ?",
+"8 mai","14 juillet","25 décembre","11 novembre","D",
+"Le 11 novembre commémore l’armistice de 1918."
+),
+
+makeQuestion("h1-055",1,"Histoire","Quel roi est renversé pendant la Révolution française ?",
+"Louis XVI",
+"Louis XIV",
+"Napoléon",
+"Charles de Gaulle",
+"A",
+"Louis XVI est le roi de France pendant la Révolution."
+),
+
+makeQuestion("h1-056",1,"Histoire","Qui a rendu l’école obligatoire ?",
+"Napoléon",
+"Jules Ferry",
+"Victor Hugo",
+"Jean Moulin",
+"B",
+"Jules Ferry est associé à l’école gratuite, laïque et obligatoire."
+),
+
+makeQuestion("h1-057",1,"Histoire","La France a connu combien de Républiques ?",
+"Trois","Quatre","Cinq","Six","C",
+"La France a connu cinq Républiques."
+),
+
+makeQuestion("h1-058",1,"Histoire","Quel grand principe est affirmé pendant la Révolution française ?",
+"La monarchie absolue",
+"L’empire",
+"Le droit divin",
+"Les droits de l’homme",
+"D",
+"La Révolution française affirme les droits de l’homme."
+),
+
+makeQuestion("h1-059",1,"Histoire","Quelle ville est la capitale de la France ?",
+"Paris","Lyon","Marseille","Toulouse","A",
+"Paris est la capitale de la France."
+),
+
+makeQuestion("h1-060",1,"Histoire","Quel continent abrite la France métropolitaine ?",
+"L’Europe","L’Afrique","L’Asie","L’Amérique","A",
+"La France métropolitaine se trouve en Europe."
+),
+
+makeQuestion("h1-061",1,"Histoire","Quelle ville française se trouve sur la Méditerranée ?",
+"Lille","Nice","Rouen","Reims","B",
+"Nice est une ville française située sur la Méditerranée."
+),
+
+makeQuestion("h1-062",1,"Histoire","Quel département d’outre-mer est une île ?",
+"Le Cantal","La Réunion","L’Yonne","L’Indre","B",
+"La Réunion est une île et un département d’outre-mer."
+),
+
+makeQuestion("h1-063",1,"Histoire","Quel grand musée français se trouve à Paris ?",
+"Le Louvre","Le Prado","Le Colisée","Le British Museum","A",
+"Le Louvre est un grand musée parisien."
+),
+
+makeQuestion("h1-064",1,"Histoire","Quel écrivain français a écrit des fables ?",
+"Jean de La Fontaine",
+"Albert Camus",
+"Molière",
+"Charles Baudelaire",
+"A",
+"Jean de La Fontaine est célèbre pour ses fables."
+),
+
+makeQuestion("h1-065",1,"Histoire","Quelle grande guerre se termine en 1918 ?",
+"La guerre d’Algérie",
+"La Première Guerre mondiale",
+"La Seconde Guerre mondiale",
+"La guerre froide",
+"B",
+"La Première Guerre mondiale se termine en 1918."
+),
+
+makeQuestion("h1-066",1,"Histoire","Quelle guerre se termine en 1945 ?",
+"La Première Guerre mondiale",
+"La guerre d’Algérie",
+"La Seconde Guerre mondiale",
+"La guerre froide",
+"C",
+"La Seconde Guerre mondiale se termine en 1945."
+),
+
+makeQuestion("h1-067",1,"Histoire","Quel monument parisien est célèbre dans le monde entier ?",
+"La tour Eiffel",
+"Le pont du Gard",
+"La basilique de Fourvière",
+"Le viaduc de Millau",
+"A",
+"La tour Eiffel est l’un des monuments les plus connus au monde."
+),
+
+makeQuestion("h1-068",1,"Histoire","Quel personnage français est aussi une grande figure du théâtre ?",
+"Molière",
+"Napoléon",
+"De Gaulle",
+"Jules Ferry",
+"A",
+"Molière est une grande figure du théâtre français."
+),
+
+makeQuestion("h1-069",1,"Histoire","Que commémore le 8 mai ?",
+"La fin de la Première Guerre mondiale",
+"La fin de la Seconde Guerre mondiale en Europe",
+"La Révolution française",
+"La création de la CEE",
+"B",
+"Le 8 mai commémore la victoire de 1945 en Europe."
+),
+
+makeQuestion("h1-070",1,"Histoire","Quel texte est adopté en 1789 pendant la Révolution française ?",
+"Le traité de Rome",
+"La Déclaration des droits de l’homme et du citoyen",
+"La Constitution de 1958",
+"La loi de 1905",
+"B",
+"La Déclaration des droits de l’homme et du citoyen est adoptée en 1789."
+),
 ];
 
 

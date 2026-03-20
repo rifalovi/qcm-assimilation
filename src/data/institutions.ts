@@ -2,230 +2,635 @@ import { makeQuestion, Question } from "./types";
 
 export const INSTITUTIONS_L1: Question[] = [
 
-makeQuestion("i1-001",1,"Institutions","Qui vote les lois en France ?",
+makeQuestion("i1-001",1,"Institutions","Qui nomme le Premier ministre ?",
 "Le Président de la République",
-"Le Gouvernement",
 "Le Parlement",
+"Le Sénat",
 "Le Conseil constitutionnel",
-"C",
-"Les lois sont votées par le Parlement, composé de l’Assemblée nationale et du Sénat."
+"A",
+"Le Premier ministre est nommé par le Président de la République."
 ),
 
-makeQuestion("i1-002",1,"Institutions","Le Parlement français est composé de :",
+makeQuestion("i1-002",1,"Institutions","Le Parlement est composé de :",
+"Le Président et le Gouvernement",
 "L’Assemblée nationale et le Sénat",
-"Le Gouvernement et le Sénat",
-"Le Président et le Premier ministre",
 "Le Conseil d’État et la Cour de cassation",
-"A",
-"Le Parlement comprend deux chambres : l’Assemblée nationale et le Sénat."
-),
-
-makeQuestion("i1-003",1,"Institutions","Le Président de la République est élu pour :",
-"3 ans",
-"5 ans",
-"7 ans",
-"10 ans",
+"Les régions et les départements",
 "B",
-"Depuis 2000, le mandat présidentiel est de 5 ans. On parle de quinquennat."
+"Le Parlement français comprend deux chambres : l’Assemblée nationale et le Sénat."
 ),
 
-makeQuestion("i1-004",1,"Institutions","Qui dirige l’action du Gouvernement ?",
-"Le Président",
-"Le Premier ministre",
-"Le Sénat",
-"Le préfet",
+makeQuestion("i1-003",1,"Institutions","Qu’est-ce que le pouvoir exécutif ?",
+"Le pouvoir de juger",
+"Le pouvoir de voter les lois",
+"Le pouvoir de mettre en œuvre les lois et de diriger l’action du Gouvernement",
+"Le pouvoir de modifier la Constitution seul",
+"C",
+"Le pouvoir exécutif applique les lois et dirige l’action politique du pays."
+),
+
+makeQuestion("i1-004",1,"Institutions","Les dirigeants sont élus par les citoyens dans :",
+"Une monarchie",
+"Une dictature",
+"Un empire",
+"Une démocratie",
+"D",
+"Dans une démocratie, les citoyens élisent leurs représentants."
+),
+
+makeQuestion("i1-005",1,"Institutions","A-t-on le droit de ne pas respecter une loi ?",
+"Non",
+"Oui, si on n’est pas d’accord",
+"Oui, si on vote",
+"Oui, dans sa commune",
+"A",
+"Les lois s’imposent à tous tant qu’elles sont en vigueur."
+),
+
+makeQuestion("i1-006",1,"Institutions","Qui doit respecter la loi ?",
+"Les élus seulement",
+"Tout le monde",
+"Les juges seulement",
+"Les étrangers seulement",
 "B",
-"Le Premier ministre dirige l’action du Gouvernement et coordonne les ministres."
+"La loi s’applique à toutes les personnes présentes sur le territoire."
 ),
 
-makeQuestion("i1-005",1,"Institutions","Qui élit le maire dans une commune ?",
-"Les citoyens directement",
-"Les conseillers municipaux",
-"Le préfet",
-"Le Président",
-"B",
-"Après les élections municipales, les conseillers municipaux élisent le maire."
+makeQuestion("i1-007",1,"Institutions","Quel est le rôle de l’autorité judiciaire ?",
+"Voter les lois",
+"Diriger le Gouvernement",
+"Trancher les litiges et sanctionner les infractions",
+"Nommer les ministres",
+"C",
+"L’autorité judiciaire rend la justice."
 ),
 
-makeQuestion("i1-006",1,"Institutions","Le préfet représente :",
-"Le Gouvernement et l’État dans le territoire",
-"Le Parlement",
-"La commune",
-"Un parti politique",
-"A",
-"Le préfet est le représentant de l’État dans les départements et les régions."
+makeQuestion("i1-008",1,"Institutions","Quel pouvoir détient un juge ?",
+"Le pouvoir exécutif",
+"Le pouvoir législatif",
+"Le pouvoir municipal",
+"Le pouvoir judiciaire",
+"D",
+"Le juge exerce l’autorité judiciaire."
 ),
 
-makeQuestion("i1-007",1,"Institutions","Qui dirige une commune ?",
-"Le député",
-"Le maire",
-"Le préfet",
-"Le sénateur",
-"B",
-"La commune est dirigée par le maire et le conseil municipal."
-),
-
-makeQuestion("i1-008",1,"Institutions","Quel organisme vérifie que les lois respectent la Constitution ?",
-"Le Sénat",
-"Le Conseil constitutionnel",
-"La Cour de cassation",
-"Le Conseil d’État",
-"B",
-"Le Conseil constitutionnel contrôle la conformité des lois à la Constitution."
-),
-
-makeQuestion("i1-009",1,"Institutions","Les élections municipales servent à élire :",
-"Le Président",
-"Les conseillers municipaux",
-"Les préfets",
-"Les juges",
-"B",
-"Les citoyens élisent les conseillers municipaux qui éliront ensuite le maire."
-),
-
-makeQuestion("i1-010",1,"Institutions","Le Sénat représente principalement :",
-"Les entreprises",
-"Les collectivités territoriales",
-"Les syndicats",
-"Les ministères",
-"B",
-"Le Sénat représente les collectivités territoriales comme les communes et les régions."
-),
-
-makeQuestion("i1-011",1,"Institutions","Le siège du Gouvernement français est situé à :",
-"Paris",
-"Lyon",
-"Strasbourg",
-"Bordeaux",
-"A",
-"Le Gouvernement exerce ses fonctions depuis Paris."
-),
-
-makeQuestion("i1-012",1,"Institutions","Le Parlement européen siège notamment à :",
-"Strasbourg",
-"Nice",
-"Marseille",
-"Toulouse",
-"A",
-"Les sessions plénières du Parlement européen se tiennent à Strasbourg."
-),
-
-makeQuestion("i1-013",1,"Institutions","La justice en France est rendue au nom :",
-"Du Président",
-"Du peuple français",
-"Du Parlement",
-"Du Gouvernement",
-"B",
-"La justice est rendue au nom du peuple français."
-),
-
-makeQuestion("i1-014",1,"Institutions","Quel texte fixe les règles fondamentales de la République ?",
-"La Constitution",
-"Le code de la route",
-"Le règlement municipal",
-"Une ordonnance",
-"A",
-"La Constitution est la norme juridique la plus importante."
-),
-
-makeQuestion("i1-015",1,"Institutions","Où siègent les députés ?",
-"À l’Assemblée nationale",
-"Au Sénat",
-"Au Conseil constitutionnel",
-"À la mairie",
-"A",
-"Les députés siègent à l’Assemblée nationale."
-),
-
-makeQuestion("i1-016",1,"Institutions","Où siègent les sénateurs ?",
-"Au Sénat",
-"À l’Assemblée nationale",
-"Au Conseil d’État",
-"À la Cour de cassation",
-"A",
-"Les sénateurs siègent au Sénat."
-),
-
-makeQuestion("i1-017",1,"Institutions","Qui nomme le Premier ministre ?",
-"Le Président de la République",
-"Le Parlement",
-"Le Sénat",
-"Le préfet",
-"A",
-"Le Président nomme le Premier ministre."
-),
-
-makeQuestion("i1-018",1,"Institutions","Qui peut proposer une loi en France ?",
-"Le Gouvernement ou les parlementaires",
-"Uniquement le Président",
-"Les préfets",
-"Les maires",
-"A",
-"L’initiative des lois appartient au Gouvernement et aux parlementaires."
-),
-
-makeQuestion("i1-019",1,"Institutions","Une région est :",
-"Une collectivité territoriale",
-"Une entreprise publique",
-"Un ministère",
-"Un tribunal",
-"A",
-"La région est une collectivité territoriale dirigée par un conseil régional."
-),
-
-makeQuestion("i1-020",1,"Institutions","Le Conseil d’État est principalement :",
-"Une juridiction administrative",
-"Une chambre du Parlement",
-"Un tribunal pénal",
-"Une mairie",
-"A",
-"Le Conseil d’État est la plus haute juridiction administrative."
-),
-
-makeQuestion("i1-021",1,"Institutions","Qui applique les lois votées par le Parlement ?",
+makeQuestion("i1-009",1,"Institutions","L’autorité judiciaire est exercée par :",
+"Les magistrats et les juges",
 "Le Gouvernement",
-"Le Sénat",
-"Les maires uniquement",
-"Les citoyens",
+"Les préfets",
+"Les députés",
 "A",
-"Le Gouvernement applique les lois et dirige l’administration."
+"L’autorité judiciaire est exercée par les magistrats."
 ),
 
-makeQuestion("i1-022",1,"Institutions","Les citoyens participent à la vie démocratique notamment par :",
-"Le vote",
-"La nomination directe des juges",
-"Le tirage au sort obligatoire",
-"Les décisions de l’armée",
+makeQuestion("i1-010",1,"Institutions","Que se passe-t-il si un ministre ne respecte pas la loi ?",
+"Il peut être jugé et sanctionné",
+"Il ne risque rien",
+"Il est automatiquement réélu",
+"Il devient sénateur",
 "A",
-"Le vote permet aux citoyens de choisir leurs représentants."
+"Un ministre doit respecter la loi comme tout le monde."
 ),
 
-makeQuestion("i1-023",1,"Institutions","Qui représente l’État dans un département ?",
-"Le préfet",
+makeQuestion("i1-011",1,"Institutions","Qui est élu lors des élections législatives ?",
+"Les sénateurs",
+"Les députés",
+"Les maires",
+"Les préfets",
+"B",
+"Les élections législatives servent à élire les députés."
+),
+
+makeQuestion("i1-012",1,"Institutions","Combien de députés composent l’Assemblée nationale ?",
+"348",
+"500",
+"577",
+"650",
+"C",
+"L’Assemblée nationale compte 577 députés."
+),
+
+makeQuestion("i1-013",1,"Institutions","Quand sont élus les sénateurs ?",
+"Au suffrage universel direct",
+"Par le Président",
+"Par tirage au sort",
+"Au suffrage universel indirect",
+"D",
+"Les sénateurs sont élus au suffrage universel indirect par un collège d’élus."
+),
+
+makeQuestion("i1-014",1,"Institutions","Qui est élu lors des élections municipales ?",
+"Les conseillers municipaux",
+"Les préfets",
+"Les ministres",
+"Les sénateurs",
+"A",
+"Les citoyens élisent les conseillers municipaux."
+),
+
+makeQuestion("i1-015",1,"Institutions","Qui est élu lors des élections présidentielles ?",
+"Le Premier ministre",
+"Le Président de la République",
+"Le maire de Paris",
+"Le président du Sénat",
+"B",
+"L’élection présidentielle sert à élire le Président de la République."
+),
+
+makeQuestion("i1-016",1,"Institutions","À partir de quel âge a-t-on le droit de voter ?",
+"16 ans",
+"17 ans",
+"18 ans",
+"21 ans",
+"C",
+"En France, on vote à partir de 18 ans."
+),
+
+makeQuestion("i1-017",1,"Institutions","Pour combien de temps est élu le président de la République ?",
+"3 ans",
+"4 ans",
+"6 ans",
+"5 ans",
+"D",
+"Le mandat du Président de la République dure 5 ans."
+),
+
+makeQuestion("i1-018",1,"Institutions","Pour combien de temps sont élus les députés ?",
+"5 ans",
+"4 ans",
+"6 ans",
+"7 ans",
+"A",
+"Les députés sont élus pour 5 ans, sauf dissolution."
+),
+
+makeQuestion("i1-019",1,"Institutions","Pour combien de temps sont élus les sénateurs ?",
+"5 ans",
+"6 ans",
+"7 ans",
+"9 ans",
+"B",
+"Les sénateurs sont élus pour 6 ans."
+),
+
+makeQuestion("i1-020",1,"Institutions","Qui possède le pouvoir exécutif ?",
+"Le Parlement",
+"Les juges",
+"Le Président de la République et le Gouvernement",
+"Le Sénat seulement",
+"C",
+"Le pouvoir exécutif est exercé par le Président et le Gouvernement."
+),
+
+makeQuestion("i1-021",1,"Institutions","Quelle condition est nécessaire pour voter aux élections ?",
+"Être marié",
+"Être propriétaire",
+"Avoir 18 ans et ses droits civiques",
+"Être salarié",
+"C",
+"Il faut notamment être majeur et disposer de ses droits civiques."
+),
+
+makeQuestion("i1-022",1,"Institutions","Qui peut voter aux élections en France ?",
+"Tous les habitants",
+"Les citoyens français majeurs",
+"Les mineurs",
+"Les touristes",
+"B",
+"Les citoyens français majeurs peuvent voter, sous conditions d’inscription."
+),
+
+makeQuestion("i1-023",1,"Institutions","Que signifie « suffrage universel » ?",
+"Tous les citoyens majeurs peuvent voter",
+"Seuls les élus votent",
+"Seuls les hommes votent",
+"Le vote est obligatoire",
+"A",
+"Le suffrage universel signifie que tous les citoyens majeurs peuvent participer au vote."
+),
+
+makeQuestion("i1-024",1,"Institutions","Concernant les partis politiques, quelle proposition est correcte ?",
+"Ils sont interdits",
+"Ils concourent à l’expression du suffrage",
+"Ils rendent la justice",
+"Ils remplacent le Parlement",
+"B",
+"Les partis politiques participent à la vie démocratique."
+),
+
+makeQuestion("i1-025",1,"Institutions","Quel est le rôle des députés ?",
+"Rendre la justice",
+"Diriger les communes",
+"Voter les lois et contrôler le Gouvernement",
+"Nommer les préfets",
+"C",
+"Les députés participent au vote des lois et au contrôle du Gouvernement."
+),
+
+makeQuestion("i1-026",1,"Institutions","La séparation des pouvoirs concerne :",
+"Le pouvoir exécutif, législatif et judiciaire",
+"Le maire, le préfet et le député",
+"Le Président, le Sénat et l’armée",
+"Le Gouvernement, les communes et les régions",
+"A",
+"La séparation des pouvoirs est un principe fondamental de la démocratie."
+),
+
+makeQuestion("i1-027",1,"Institutions","Qui possède le pouvoir législatif ?",
+"Le Parlement",
+"Le Président seul",
+"Les juges",
+"Les préfets",
+"A",
+"Le pouvoir législatif appartient au Parlement."
+),
+
+makeQuestion("i1-028",1,"Institutions","Qui sanctionne l’auteur d’un vol ?",
+"Le Gouvernement",
+"Le juge",
 "Le maire",
-"Le sénateur",
-"Le député",
+"Le préfet",
+"B",
+"Les infractions pénales sont sanctionnées par la justice."
+),
+
+makeQuestion("i1-029",1,"Institutions","Qui élit les députés ?",
+"Le Président",
+"Les sénateurs",
+"Les citoyens",
+"Les maires",
+"C",
+"Les députés sont élus par les citoyens."
+),
+
+makeQuestion("i1-030",1,"Institutions","Qui vote les lois ?",
+"Le Gouvernement",
+"Le Président",
+"Le Conseil d’État",
+"Le Parlement",
+"D",
+"Le Parlement vote les lois."
+),
+
+makeQuestion("i1-031",1,"Institutions","Qui réside au palais de l’Élysée ?",
+"Le Président de la République",
+"Le Premier ministre",
+"Le président du Sénat",
+"Le ministre de la Justice",
 "A",
+"Le palais de l’Élysée est la résidence officielle du Président."
+),
+
+makeQuestion("i1-032",1,"Institutions","Combien y a-t-il de départements en France ?",
+"96",
+"101",
+"13",
+"577",
+"B",
+"La France compte 101 départements en métropole et outre-mer."
+),
+
+makeQuestion("i1-033",1,"Institutions","Qui représente l’État dans un département ?",
+"Le maire",
+"Le député",
+"Le préfet",
+"Le sénateur",
+"C",
 "Le préfet représente l’État dans le département."
 ),
 
-makeQuestion("i1-024",1,"Institutions","Une commune est :",
-"Une collectivité territoriale de base",
-"Un tribunal",
-"Un ministère",
-"Une région",
-"A",
-"La commune est la plus petite collectivité territoriale."
+makeQuestion("i1-034",1,"Institutions","Qui dirige la commune ?",
+"Le président de région",
+"Le préfet",
+"Le député",
+"Le maire",
+"D",
+"Le maire dirige la commune avec le conseil municipal."
 ),
 
-makeQuestion("i1-025",1,"Institutions","Quel est le rôle principal du Parlement ?",
+makeQuestion("i1-035",1,"Institutions","Est-ce que le président de la République a tous les pouvoirs ?",
+"Non",
+"Oui",
+"Oui, sauf en justice",
+"Oui, avec le Sénat",
+"A",
+"En France, les pouvoirs sont séparés et encadrés par la Constitution."
+),
+
+makeQuestion("i1-036",1,"Institutions","Qui est le préfet ?",
+"Le représentant de l’État",
+"Le chef du Parlement",
+"Le chef des juges",
+"Le chef des communes",
+"A",
+"Le préfet représente l’État dans les territoires."
+),
+
+makeQuestion("i1-037",1,"Institutions","Quel est le rôle du Parlement ?",
 "Voter les lois et contrôler le Gouvernement",
-"Diriger la police",
-"Nommer les maires",
-"Appliquer les décisions de justice",
+"Rendre la justice",
+"Commander l’armée",
+"Diriger les communes",
 "A",
 "Le Parlement vote les lois et contrôle l’action du Gouvernement."
-)
+),
+
+makeQuestion("i1-038",1,"Institutions","Quel est le régime politique de la France aujourd’hui ?",
+"Une monarchie",
+"Une République démocratique",
+"Un empire",
+"Une dictature",
+"B",
+"La France est une République démocratique."
+),
+
+makeQuestion("i1-039",1,"Institutions","Combien d’États font partie de l’Union européenne au 1er janvier 2025 ?",
+"26",
+"27",
+"28",
+"30",
+"B",
+"L’Union européenne compte 27 États membres au 1er janvier 2025."
+),
+
+makeQuestion("i1-040",1,"Institutions","Quel État n’est pas membre de l’Union européenne ?",
+"L’Espagne",
+"La Belgique",
+"La Suisse",
+"L’Italie",
+"C",
+"La Suisse n’est pas membre de l’Union européenne."
+),
+
+makeQuestion("i1-041",1,"Institutions","Quelle condition est nécessaire pour voter aux élections européennes en France ?",
+"Être citoyen français ou européen et avoir l’âge requis",
+"Être fonctionnaire",
+"Être propriétaire",
+"Être sénateur",
+"A",
+"Les citoyens français et certains citoyens européens peuvent voter aux élections européennes."
+),
+
+makeQuestion("i1-042",1,"Institutions","À quelle fréquence les élections européennes sont-elles organisées ?",
+"Tous les 3 ans",
+"Tous les 5 ans",
+"Tous les 6 ans",
+"Tous les 7 ans",
+"B",
+"Les élections européennes ont lieu tous les 5 ans."
+),
+
+makeQuestion("i1-043",1,"Institutions","Quel pays est un pays fondateur de l’Union européenne ?",
+"Le Portugal",
+"La Pologne",
+"La France",
+"La Croatie",
+"C",
+"La France est un pays fondateur de la construction européenne."
+),
+
+makeQuestion("i1-044",1,"Institutions","Quelle est la monnaie utilisée en France ?",
+"Le franc",
+"La livre",
+"Le dollar",
+"L’euro",
+"D",
+"La monnaie utilisée en France est l’euro."
+),
+
+makeQuestion("i1-045",1,"Institutions","Qui élit les députés européens ?",
+"Les citoyens",
+"Le Sénat",
+"Le Gouvernement",
+"Le Conseil européen",
+"A",
+"Les députés européens sont élus par les citoyens."
+),
+
+makeQuestion("i1-046",1,"Institutions","Quand célèbre-t-on la journée de l’Europe ?",
+"Le 9 mai",
+"Le 14 juillet",
+"Le 8 mai",
+"Le 1er janvier",
+"A",
+"La journée de l’Europe est célébrée le 9 mai."
+),
+
+makeQuestion("i1-047",1,"Institutions","Quel texte fixe les règles fondamentales de la République ?",
+"La Constitution",
+"Le règlement intérieur du Sénat",
+"Le code de la route",
+"Le budget de l’État",
+"A",
+"La Constitution est le texte fondamental de la République."
+),
+
+makeQuestion("i1-048",1,"Institutions","Qui dirige l’action du Gouvernement ?",
+"Le Président du Sénat",
+"Le Premier ministre",
+"Le Conseil constitutionnel",
+"Le président de région",
+"B",
+"Le Premier ministre dirige l’action du Gouvernement."
+),
+
+makeQuestion("i1-049",1,"Institutions","Où siègent les députés ?",
+"Au Sénat",
+"À la Cour de cassation",
+"À l’Assemblée nationale",
+"À l’Élysée",
+"C",
+"Les députés siègent à l’Assemblée nationale."
+),
+
+makeQuestion("i1-050",1,"Institutions","Où siègent les sénateurs ?",
+"À l’Assemblée nationale",
+"À l’Élysée",
+"Au Conseil d’État",
+"Au Sénat",
+"D",
+"Les sénateurs siègent au Sénat."
+),
+
+makeQuestion("i1-051",1,"Institutions","Les élections municipales servent à élire :",
+"Les conseillers municipaux",
+"Les préfets",
+"Les juges",
+"Les sénateurs",
+"A",
+"Les élections municipales servent à élire les conseillers municipaux."
+),
+
+makeQuestion("i1-052",1,"Institutions","Qui élit le maire ?",
+"Le préfet",
+"Les conseillers municipaux",
+"Le Président",
+"Les députés",
+"B",
+"Le maire est élu par les conseillers municipaux."
+),
+
+makeQuestion("i1-053",1,"Institutions","Le Sénat représente principalement :",
+"Les entreprises",
+"Les tribunaux",
+"Les collectivités territoriales",
+"Les syndicats",
+"C",
+"Le Sénat représente les collectivités territoriales."
+),
+
+makeQuestion("i1-054",1,"Institutions","Qui peut proposer une loi en France ?",
+"Le maire",
+"Le préfet",
+"Le juge",
+"Le Gouvernement ou les parlementaires",
+"D",
+"L’initiative des lois appartient au Gouvernement et aux parlementaires."
+),
+
+makeQuestion("i1-055",1,"Institutions","La justice en France est rendue au nom :",
+"Du peuple français",
+"Du Président",
+"Du Gouvernement",
+"Du Parlement",
+"A",
+"La justice est rendue au nom du peuple français."
+),
+
+makeQuestion("i1-056",1,"Institutions","Quel organisme vérifie qu’une loi respecte la Constitution ?",
+"La Cour de cassation",
+"Le Conseil constitutionnel",
+"Le préfet",
+"Le Sénat",
+"B",
+"Le Conseil constitutionnel vérifie la conformité des lois à la Constitution."
+),
+
+makeQuestion("i1-057",1,"Institutions","Qui applique les lois votées par le Parlement ?",
+"Le Sénat",
+"Les régions",
+"Le Gouvernement",
+"Les députés",
+"C",
+"Le Gouvernement applique les lois."
+),
+
+makeQuestion("i1-058",1,"Institutions","Qui peut être candidat à une élection ?",
+"Seulement les fonctionnaires",
+"Les mineurs",
+"Les étrangers de passage",
+"Tout citoyen remplissant les conditions légales",
+"D",
+"Un citoyen majeur remplissant les conditions prévues peut être candidat."
+),
+
+makeQuestion("i1-059",1,"Institutions","Qui possède le pouvoir judiciaire ?",
+"Les juges",
+"Le Parlement",
+"Le Gouvernement",
+"Le Président",
+"A",
+"Le pouvoir judiciaire est exercé par les juges."
+),
+
+makeQuestion("i1-060",1,"Institutions","Qui sanctionne une infraction pénale ?",
+"Le Sénat",
+"La justice",
+"Le préfet",
+"Le maire",
+"B",
+"Les infractions pénales sont sanctionnées par la justice."
+),
+
+makeQuestion("i1-061",1,"Institutions","Le vote des citoyens permet surtout de :",
+"Rendre la justice",
+"Nommer les préfets",
+"Choisir des représentants",
+"Modifier directement la Constitution à chaque élection",
+"C",
+"Le vote permet de choisir ses représentants."
+),
+
+makeQuestion("i1-062",1,"Institutions","Une commune est :",
+"Un tribunal",
+"Une région",
+"Un ministère",
+"Une collectivité territoriale de base",
+"D",
+"La commune est la collectivité territoriale de proximité."
+),
+
+makeQuestion("i1-063",1,"Institutions","Une région est :",
+"Une collectivité territoriale",
+"Une juridiction",
+"Un ministère",
+"Une chambre du Parlement",
+"A",
+"La région est une collectivité territoriale."
+),
+
+makeQuestion("i1-064",1,"Institutions","Le maire dirige :",
+"Le département",
+"La commune",
+"La région",
+"L’État",
+"B",
+"Le maire dirige la commune."
+),
+
+makeQuestion("i1-065",1,"Institutions","Le président de la République est élu :",
+"Pour 5 ans",
+"Pour 6 ans",
+"Pour 7 ans",
+"Pour 9 ans",
+"A",
+"Le mandat présidentiel dure 5 ans."
+),
+
+makeQuestion("i1-066",1,"Institutions","Les députés sont élus :",
+"Pour 4 ans",
+"Pour 5 ans",
+"Pour 6 ans",
+"Pour 7 ans",
+"B",
+"Les députés sont élus pour 5 ans."
+),
+
+makeQuestion("i1-067",1,"Institutions","Les sénateurs sont élus :",
+"Pour 5 ans",
+"Pour 7 ans",
+"Pour 6 ans",
+"Pour 9 ans",
+"C",
+"Les sénateurs sont élus pour 6 ans."
+),
+
+makeQuestion("i1-068",1,"Institutions","Quel est l’âge minimum pour voter ?",
+"16 ans",
+"17 ans",
+"21 ans",
+"18 ans",
+"D",
+"On peut voter à partir de 18 ans."
+),
+
+makeQuestion("i1-069",1,"Institutions","Les citoyens choisissent leurs représentants par :",
+"Le vote",
+"La nomination",
+"L’hérédité",
+"Le tirage au sort",
+"A",
+"Le vote permet de choisir les représentants."
+),
+
+makeQuestion("i1-070",1,"Institutions","Le Parlement européen siège notamment à :",
+"Bruxelles uniquement",
+"Strasbourg",
+"Berlin",
+"Rome",
+"B",
+"Le Parlement européen siège notamment à Strasbourg."
+),
 
 ];
 export const INSTITUTIONS_L2: Question[] = [

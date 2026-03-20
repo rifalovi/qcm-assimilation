@@ -34,9 +34,7 @@ function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "fr
           className="text-xl font-extrabold leading-tight text-white"
           style={{ letterSpacing: "-0.01em" }}
         >
-          {isAnon
-            ? "Tu as vu les 5 premières cartes !"
-            : "Tu as vu les 10 cartes gratuites !"}
+          {`Tu as vu les ${cardsCount} cartes ${hasTheme ? "de ce thème" : "gratuites"} !`}
         </p>
         <p
           className="mt-2 text-sm leading-relaxed"

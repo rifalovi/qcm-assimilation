@@ -25,18 +25,47 @@ export function generateQuiz(params: {
 }): Question[] {
   const { level, themes, count } = params;
 
-  const pool = QUESTIONS.filter(
+  const allPool = QUESTIONS.filter(
     (q) => q.level === level && themes.includes(q.theme)
   );
 
-  if (pool.length < count) {
+  if (allPool.length < count) {
     throw new Error(
-      `Banque insuffisante : ${pool.length} disponible(s), ${count} demandé(s).`
+      `Banque insuffisante : ${allPool.length} disponible(s), ${count} demandé(s).`
     );
   }
 
+  const seen = getSeenIds();
+  let pool = allPool.filter(q => !seen.has(q.id));
+  if (pool.length < count) { resetSeenIds(); pool = [...allPool]; }
   return shuffleArray(pool).slice(0, count);
 }
+
+const SEEN_KEY = 'qcm_seen_ids';
+
+function getSeenIds(): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+  try {
+    const raw = localStorage.getItem(SEEN_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch { return new Set(); }
+}
+
+function saveSeenIds(ids: Set<string>) {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(SEEN_KEY, JSON.stringify([...ids]));
+}
+
+export function resetSeenIds() {
+  if (typeof window !== 'undefined') localStorage.removeItem(SEEN_KEY);
+}
+
+export function markQuestionsAsSeen(ids: string[]) {
+  const seen = getSeenIds();
+  ids.forEach(id => seen.add(id));
+  saveSeenIds(seen);
+}
+
 
 /**
  * Corrige le quiz et retourne le score détaillé.

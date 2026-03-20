@@ -6,7 +6,7 @@ import { saveResultToSupabase } from "../../src/lib/saveResult";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
 import type { ChoiceKey, Level, Theme, Question } from "../../src/data/questions";
-import { generateQuiz, scoreQuiz } from "../../src/lib/quizEngine";
+import { generateQuiz, scoreQuiz, markQuestionsAsSeen } from "../../src/lib/quizEngine";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -89,7 +89,7 @@ export default function QuizPage() {
   const limits = ROLE_LIMITS[role];
 
   // Bloque le mode examen selon le rôle
-  if (m === "exam" && !limits.canExam) {
+  if (m === "exam" && !limits.canExam && role !== "anonymous") {
     router.push("/?blocked=exam");
     return;
   }
@@ -233,6 +233,7 @@ function selectAnswer(choice: ChoiceKey) {
     if (globalRef.current) window.clearInterval(globalRef.current);
 
     const result = scoreQuiz({ questions, answers });
+    markQuestionsAsSeen(questions.map(q => q.id));
     const payload = { meta, questions, answers, result };
 
     const rawUser = localStorage.getItem("qcm_user");

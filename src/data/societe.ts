@@ -8,11 +8,11 @@ makeQuestion("s1-001",1,"Société","Quel est l’âge minimum pour voter en Fra
 ),
 
 makeQuestion("s1-002",1,"Société","L’école est obligatoire en France :",
-"De 3 à 16 ans",
 "De 6 à 18 ans",
 "De 0 à 12 ans",
+"De 3 à 16 ans",
 "Uniquement au collège",
-"A",
+"C",
 "L’instruction est obligatoire de 3 à 16 ans."
 ),
 
@@ -27,28 +27,28 @@ makeQuestion("s1-003",1,"Société","Un service public est par exemple :",
 
 makeQuestion("s1-004",1,"Société","L’Assurance maladie sert à :",
 "Payer les impôts",
-"Rembourser une partie des soins",
 "Financer les élections",
+"Rembourser une partie des soins",
 "Payer les loyers",
-"B",
+"C",
 "L’Assurance maladie rembourse une partie des dépenses de santé."
 ),
 
 makeQuestion("s1-005",1,"Société","Le SMIC est :",
-"Un impôt",
 "Le salaire minimum légal",
+"Un impôt",
 "Une aide au logement",
 "Un contrat de travail",
-"B",
+"A",
 "Le SMIC est le salaire minimum interprofessionnel de croissance."
 ),
 
 makeQuestion("s1-006",1,"Société","La carte Vitale sert à :",
 "Payer les transports",
-"Faciliter le remboursement des soins",
-"Voter",
 "Payer les impôts",
-"B",
+"Voter",
+"Faciliter le remboursement des soins",
+"D",
 "La carte Vitale facilite les démarches avec l’Assurance maladie."
 ),
 
@@ -62,29 +62,29 @@ makeQuestion("s1-007",1,"Société","La CAF est un organisme qui :",
 ),
 
 makeQuestion("s1-008",1,"Société","Le permis de conduire est nécessaire pour :",
-"Conduire un véhicule",
 "Travailler dans une école",
+"Conduire un véhicule",
 "Voter aux élections",
 "Payer ses impôts",
-"A",
+"B",
 "Le permis de conduire autorise à conduire certains véhicules."
 ),
 
 makeQuestion("s1-009",1,"Société","La protection sociale française comprend notamment :",
-"La santé et la retraite",
 "Uniquement les impôts",
+"La santé et la retraite",
 "Uniquement la police",
 "Uniquement l’école",
-"A",
+"B",
 "La protection sociale couvre la santé, la famille, la retraite et parfois le chômage."
 ),
 
 makeQuestion("s1-010",1,"Société","Le mariage civil en France se célèbre :",
 "À la préfecture",
-"À la mairie",
 "Au tribunal",
+"À la mairie",
 "À l’église uniquement",
-"B",
+"C",
 "Le mariage civil est célébré à la mairie par l’officier d’état civil."
 ),
 
@@ -108,19 +108,19 @@ makeQuestion("s1-012",1,"Société","Un contrat de travail définit :",
 
 makeQuestion("s1-013",1,"Société","Le droit de grève est :",
 "Interdit",
-"Reconnu par la Constitution",
 "Réservé aux patrons",
+"Reconnu par la Constitution",
 "Obligatoire",
-"B",
+"C",
 "Le droit de grève est un droit reconnu dans la Constitution."
 ),
 
 makeQuestion("s1-014",1,"Société","Le RSA est :",
 "Une taxe",
-"Un revenu minimum sous conditions",
 "Une assurance voiture",
 "Un diplôme",
-"B",
+"Un revenu minimum sous conditions",
+"D",
 "Le RSA garantit un revenu minimum aux personnes ayant peu ou pas de ressources."
 ),
 
@@ -133,95 +133,501 @@ makeQuestion("s1-015",1,"Société","La retraite correspond :",
 "La retraite est la période après la vie professionnelle avec une pension."
 ),
 
-makeQuestion("s1-016",1,"Société","Quel numéro peut-on appeler en cas d’urgence en Europe ?",
+makeQuestion("s1-016",1,"Société","Quel numéro permet d’appeler le SAMU ?",
+"15",
+"18",
 "112",
-"200",
-"999",
-"300",
+"17",
 "A",
-"Le 112 est le numéro d’urgence européen."
+"Le 15 permet de contacter le SAMU pour les urgences médicales."
 ),
 
-makeQuestion("s1-017",1,"Société","L’école publique en France est :",
-"Payante",
-"Gratuite",
-"Réservée aux Français",
-"Interdite aux filles",
+makeQuestion("s1-017",1,"Société","Quel numéro permet d’appeler les pompiers ?",
+"15",
+"18",
+"112",
+"114",
 "B",
-"L’école publique est gratuite, même si certains frais peuvent exister."
+"Le 18 permet de joindre les pompiers."
 ),
 
-makeQuestion("s1-018",1,"Société","La Sécurité sociale sert à :",
-"Protéger contre certains risques comme la maladie",
-"Remplacer la justice",
-"Faire les lois",
-"Diriger les écoles",
-"A",
-"La Sécurité sociale protège contre certains risques comme la maladie ou la vieillesse."
+makeQuestion("s1-018",1,"Société","Que faire après avoir obtenu le permis pour conduire ?",
+"Rien",
+"S’inscrire à la mairie",
+"Assurer le véhicule",
+"Passer un examen",
+"C",
+"Il faut assurer son véhicule pour pouvoir conduire."
 ),
 
-makeQuestion("s1-019",1,"Société","L’égalité femmes-hommes signifie :",
-"Les mêmes droits devant la loi",
-"Des salaires différents",
-"Des droits réservés aux hommes",
-"Une règle facultative",
-"A",
-"L’égalité femmes-hommes est un principe fondamental."
-),
-
-makeQuestion("s1-020",1,"Société","La police et la gendarmerie ont pour mission :",
-"Rendre la justice",
-"Assurer la sécurité et l’ordre public",
-"Voter les lois",
-"Diriger les mairies",
+makeQuestion("s1-019",1,"Société","À quelles conditions un mariage est-il reconnu ?",
+"Religieux uniquement",
+"Civil uniquement",
+"Traditionnel",
+"Familial",
 "B",
-"Elles assurent la sécurité et la protection des personnes."
+"Seul le mariage civil célébré en mairie est reconnu."
+),
+
+makeQuestion("s1-020",1,"Société","Quand déclarer la naissance d’un enfant ?",
+"Dans les 30 jours",
+"Dans les 3 jours",
+"Dans l’année",
+"Jamais",
+"B",
+"La déclaration doit être faite dans les 3 jours."
 ),
 
 makeQuestion("s1-021",1,"Société","Les impôts servent notamment à :",
-"Financer les services publics",
 "Financer les entreprises privées",
+"Financer les services publics",
 "Payer uniquement les députés",
 "Supprimer les écoles",
-"A",
+"B",
 "Les impôts financent l’école, les hôpitaux, la sécurité ou les infrastructures."
 ),
 
 makeQuestion("s1-022",1,"Société","La liberté de religion signifie :",
-"Pouvoir pratiquer ou ne pas pratiquer une religion",
 "Imposer une religion",
 "Interdire toutes les religions",
+"Pouvoir pratiquer ou ne pas pratiquer une religion",
 "Obliger les citoyens à croire",
-"A",
+"C",
 "La liberté de religion fait partie des libertés fondamentales."
 ),
 
 makeQuestion("s1-023",1,"Société","Respecter la loi signifie :",
-"Respecter les règles communes",
 "Choisir les lois que l’on veut",
 "Refuser les institutions",
 "Suivre uniquement ses opinions",
-"A",
+"Respecter les règles communes",
+"D",
 "Le respect des lois permet le fonctionnement de la société."
 ),
 
 makeQuestion("s1-024",1,"Société","L’école permet notamment :",
-"D’apprendre et se former",
 "Uniquement jouer",
+"D’apprendre et se former",
 "Uniquement travailler",
 "Uniquement voter",
-"A",
+"B",
 "L’école transmet des connaissances et prépare à la vie citoyenne."
 ),
 
 makeQuestion("s1-025",1,"Société","Être citoyen en France signifie notamment :",
-"Participer à la vie démocratique",
 "Ne jamais voter",
 "Être au-dessus des lois",
+"Participer à la vie démocratique",
 "Refuser les institutions",
-"A",
+"C",
 "Un citoyen a des droits mais aussi des devoirs dans la société."
-)
+),
+
+makeQuestion("s1-026",1,"Société","Quel document prouve l’identité en France ?",
+"Le permis de conduire",
+"La carte d’identité",
+"Le livret scolaire",
+"La carte Vitale",
+"B",
+"La carte nationale d’identité est un document officiel."
+),
+
+makeQuestion("s1-027",1,"Société","L’école en France est aussi :",
+"Obligatoire et laïque",
+"Payante et privée",
+"Réservée aux adultes",
+"Optionnelle",
+"A",
+"L’école est obligatoire, gratuite et laïque."
+),
+
+makeQuestion("s1-028",1,"Société","Quel organisme s’occupe des allocations familiales ?",
+"La police",
+"Le Sénat",
+"La CAF",
+"Le Conseil d’État",
+"C",
+"La CAF verse des aides sociales."
+),
+
+makeQuestion("s1-029",1,"Société","Le chômage correspond :",
+"À une retraite",
+"À un congé",
+"À une formation",
+"À une période sans emploi",
+"D",
+"Le chômage concerne les personnes sans emploi."
+),
+
+makeQuestion("s1-030",1,"Société","Une mutuelle sert à :",
+"Compléter les remboursements de santé",
+"Payer les impôts",
+"Voter",
+"Travailler",
+"A",
+"La mutuelle complète l’Assurance maladie."
+),
+
+
+makeQuestion("s1-031",1,"Société","Le travail non déclaré est :",
+"Autorisé",
+"Encouragé",
+"Interdit",
+"Obligatoire",
+"C",
+"Le travail non déclaré est illégal."
+),
+
+makeQuestion("s1-032",1,"Société","Quelle est la durée légale du travail hebdomadaire ?",
+"30h",
+"32h",
+"35h",
+"40h",
+"C",
+"La durée légale du travail est de 35 heures."
+),
+
+makeQuestion("s1-033",1,"Société","En cas de problème de santé non urgent, qui consulter ?",
+"Les urgences",
+"Le médecin traitant",
+"La police",
+"La mairie",
+"B",
+"Le médecin traitant est le premier interlocuteur."
+),
+
+makeQuestion("s1-034",1,"Société","Quand aller aux urgences ?",
+"Pour un rhume",
+"Pour un rendez-vous",
+"En cas de situation grave",
+"Pour une ordonnance",
+"C",
+"Les urgences sont réservées aux situations graves."
+),
+
+makeQuestion("s1-035",1,"Société","La vaccination sert à :",
+"Guérir",
+"Tester",
+"Prévenir des maladies",
+"Soigner uniquement",
+"C",
+"La vaccination protège contre certaines maladies."
+),
+
+makeQuestion("s1-036",1,"Société","Jusqu’à quel âge l’école est-elle obligatoire ?",
+"14 ans",
+"16 ans",
+"18 ans",
+"20 ans",
+"B",
+"L’instruction est obligatoire jusqu’à 16 ans."
+),
+
+makeQuestion("s1-037",1,"Société","Pour qui l’école est-elle obligatoire ?",
+"Seulement les Français",
+"Tous les enfants",
+"Seulement les garçons",
+"Seulement les riches",
+"B",
+"L’école est obligatoire pour tous les enfants."
+),
+
+makeQuestion("s1-038",1,"Société","Que font les enfants ne parlant pas français ?",
+"Ils ne vont pas à l’école",
+"Ils sont exclus",
+"Ils bénéficient d’un accompagnement",
+"Ils restent chez eux",
+"C",
+"Des dispositifs existent pour les aider."
+),
+
+makeQuestion("s1-039",1,"Société","Quel diplôme obtient-on au lycée ?",
+"Brevet",
+"BTS",
+"Baccalauréat",
+"Licence",
+"C",
+"Le baccalauréat est obtenu à la fin du lycée."
+),
+
+makeQuestion("s1-040",1,"Société","Que doit faire une personne en cas d’accident ?",
+"Partir",
+"Attendre",
+"Aider et prévenir les secours",
+"Filmer",
+"C",
+"Il faut porter assistance et prévenir les secours."
+),
+
+makeQuestion("s1-041",1,"Société","Jeter une bouteille dans la rue est :",
+"Autorisé",
+"Conseillé",
+"Obligatoire",
+"Interdit",
+"D",
+"Il est interdit de jeter des déchets sur la voie publique."
+),
+
+makeQuestion("s1-042",1,"Société","Pourquoi limiter certaines libertés ?",
+"Sans raison",
+"Pour contrôler",
+"Pour protéger les autres",
+"Pour punir",
+"C",
+"Les libertés peuvent être limitées pour protéger les autres."
+),
+
+makeQuestion("s1-043",1,"Société","Le harcèlement est :",
+"Autorisé",
+"Interdit",
+"Encouragé",
+"Obligatoire",
+"B",
+"Le harcèlement est puni par la loi."
+),
+
+makeQuestion("s1-044",1,"Société","Le salaire est :",
+"Un impôt",
+"Une aide sociale",
+"La rémunération du travail",
+"Une sanction",
+"C",
+"Le salaire rémunère le travail."
+),
+
+makeQuestion("s1-045",1,"Société","Le temps de travail est :",
+"Libre sans règle",
+"Fixé par les juges",
+"Choisi par l’État seul",
+"Encadré par la loi",
+"D",
+"La loi encadre le temps de travail."
+),
+
+makeQuestion("s1-046",1,"Société","La carte bancaire sert à :",
+"Payer",
+"Voter",
+"Travailler",
+"Soigner",
+"A",
+"Elle permet de payer des achats."
+),
+
+makeQuestion("s1-047",1,"Société","Un étudiant peut :",
+"Diriger l’État",
+"Étudier",
+"Rendre la justice",
+"Voter à 10 ans",
+"B",
+"Un étudiant suit des études."
+),
+
+makeQuestion("s1-048",1,"Société","La vaccination permet :",
+"Faire les lois",
+"Payer les impôts",
+"Prévenir des maladies",
+"Voter",
+"C",
+"Elle protège contre certaines maladies."
+),
+
+makeQuestion("s1-049",1,"Société","Le respect des autres signifie :",
+"Imposer ses idées",
+"Refuser les lois",
+"Exclure les autres",
+"Accepter les différences",
+"D",
+"Le respect est une valeur fondamentale."
+),
+
+makeQuestion("s1-050",1,"Société","Un employeur est :",
+"Celui qui embauche",
+"Un juge",
+"Un élu",
+"Un policier",
+"A",
+"L’employeur propose un travail."
+),
+
+makeQuestion("s1-051",1,"Société","Une entreprise produit :",
+"Des lois",
+"Des biens ou services",
+"Des jugements",
+"Des élections",
+"B",
+"Une entreprise produit des biens ou des services."
+),
+
+makeQuestion("s1-052",1,"Société","Le recyclage sert à :",
+"Faire les lois",
+"Payer les impôts",
+"Protéger l’environnement",
+"Organiser les élections",
+"C",
+"Le recyclage limite les déchets."
+),
+
+makeQuestion("s1-053",1,"Société","Un logement est :",
+"Un tribunal",
+"Une école",
+"Un ministère",
+"Un lieu pour habiter",
+"D",
+"Le logement est un lieu de vie."
+),
+
+makeQuestion("s1-054",1,"Société","Le respect de la loi est :",
+"Obligatoire",
+"Optionnel",
+"Interdit",
+"Rare",
+"A",
+"La loi s’impose à tous."
+),
+
+makeQuestion("s1-055",1,"Société","Une carte de séjour permet :",
+"De voter automatiquement",
+"De résider en France",
+"De juger",
+"De gouverner",
+"B",
+"Elle autorise le séjour en France."
+),
+
+makeQuestion("s1-056",1,"Société","Le travail est :",
+"Une sanction",
+"Un impôt",
+"Un droit et un devoir",
+"Un privilège rare",
+"C",
+"Le travail participe à la vie sociale."
+),
+
+makeQuestion("s1-057",1,"Société","Un syndicat défend :",
+"Les juges",
+"Les maires",
+"Les préfets",
+"Les travailleurs",
+"D",
+"Les syndicats défendent les salariés."
+),
+
+makeQuestion("s1-058",1,"Société","La solidarité signifie :",
+"S’entraider",
+"Refuser les autres",
+"Être seul",
+"Imposer ses idées",
+"A",
+"La solidarité est une valeur importante."
+),
+
+makeQuestion("s1-059",1,"Société","Un citoyen doit :",
+"Choisir les lois",
+"Respecter les lois",
+"Refuser l’État",
+"Diriger le pays",
+"B",
+"Le respect des lois est obligatoire."
+),
+
+makeQuestion("s1-060",1,"Société","Une école privée est :",
+"Interdite",
+"Obligatoire",
+"Autorisée",
+"Gratuite pour tous",
+"C",
+"Les écoles privées existent en France."
+),
+
+makeQuestion("s1-061",1,"Société","Un diplôme atteste :",
+"Un emploi",
+"Un vote",
+"Un logement",
+"Un niveau d’études",
+"D",
+"Le diplôme valide un niveau d’études."
+),
+
+makeQuestion("s1-062",1,"Société","Une formation sert à :",
+"Apprendre un métier",
+"Voter",
+"Diriger",
+"Juger",
+"A",
+"La formation permet d’acquérir des compétences."
+),
+
+makeQuestion("s1-063",1,"Société","Un stage permet :",
+"Faire les lois",
+"Découvrir un métier",
+"Diriger une commune",
+"Rendre la justice",
+"B",
+"Le stage permet de découvrir le monde professionnel."
+),
+
+makeQuestion("s1-064",1,"Société","Un hôpital privé est :",
+"Interdit",
+"Obligatoire",
+"Autorisé",
+"Unique",
+"C",
+"Les hôpitaux privés existent aussi."
+),
+
+makeQuestion("s1-065",1,"Société","Le respect de l’environnement est :",
+"Inutile",
+"Interdit",
+"Rare",
+"Important",
+"D",
+"Le respect de l’environnement est essentiel pour la société."
+),
+
+makeQuestion("s1-066",1,"Société","Un locataire est :",
+"Une personne qui loue un logement",
+"Un propriétaire",
+"Un juge",
+"Un élu",
+"A",
+"Le locataire paie un loyer."
+),
+
+makeQuestion("s1-067",1,"Société","Un propriétaire est :",
+"Un locataire",
+"Une personne qui possède un logement",
+"Un juge",
+"Un élu",
+"B",
+"Le propriétaire possède le logement."
+),
+
+makeQuestion("s1-068",1,"Société","La liberté signifie :",
+"Faire tout ce qu’on veut",
+"Refuser les règles",
+"Pouvoir agir dans le respect des lois",
+"Imposer ses idées",
+"C",
+"La liberté s’exerce dans le cadre de la loi."
+),
+
+makeQuestion("s1-069",1,"Société","Une règle est :",
+"Une opinion",
+"Un choix personnel",
+"Un conseil",
+"Une norme à respecter",
+"D",
+"Les règles organisent la vie en société."
+),
+
+makeQuestion("s1-070",1,"Société","La vie en société repose sur :",
+"Le respect des autres",
+"La violence",
+"L’individualisme total",
+"Le refus des lois",
+"A",
+"La société repose sur le respect mutuel."
+),
 
 ];
 export const SOCIETE_L2: Question[] = [
@@ -368,96 +774,409 @@ makeQuestion("s2-025", 2, "Société", "Qu’est-ce que le PACS ?",
   "A",
   "Le PACS est un pacte civil de solidarité conclu entre deux personnes majeures. Il organise leur vie commune et ouvre certains droits, mais il reste distinct du mariage."
 ),
-makeQuestion("s2-026", 2, "Société", "Qu'est-ce que le 'droit du sol' en matière de nationalité française ?", "Le principe selon lequel tout enfant né sur le territoire français acquiert automatiquement la nationalité française dès sa naissance, sans condition", "Le principe permettant à un enfant né en France de parents étrangers d'acquérir la nationalité française à sa majorité ou avant sous certaines conditions, notamment de résidence", "Un droit qui s'applique uniquement aux enfants nés dans les DOM-TOM et non en métropole", "Un droit historiquement français mais abandonné en 1993, remplacé entièrement par le droit du sang", "B", "En France, le droit du sol n'est pas pur : un enfant né en France de parents étrangers n'est pas automatiquement français à la naissance. Il peut acquérir la nationalité française à sa majorité s'il réside en France depuis au moins 5 ans depuis ses 11 ans (acquisition automatique) ou avant la majorité sur demande des parents. Ce droit du sol 'différé' est distinct du droit du sang (nationalité transmise par un parent français), et la France pratique en réalité une combinaison des deux."),
+makeQuestion("s2-026", 2, "Société", "Être citoyen européen signifie notamment pouvoir :",
+  "voter aux élections locales dans un autre pays de l’UE",
+  "voter aux élections présidentielles de tous les pays de l’UE",
+  "avoir automatiquement la nationalité du pays d’accueil",
+  "travailler uniquement dans son pays d’origine",
+  "A",
+  "Un citoyen européen peut voter aux élections locales dans le pays où il réside."
+),
 
-makeQuestion("s2-027", 2, "Société", "Quelle est la langue officielle de la République française selon la Constitution ?", "Le français et les langues régionales reconnues (breton, alsacien, occitan), toutes ayant le statut de co-officielles", "Le français uniquement, selon l'article 2 de la Constitution de 1958, modifié par la révision de 1992", "La France n'a pas de langue officielle constitutionnelle, le français s'imposant par l'usage sans texte normatif", "Le français et l'anglais, depuis l'adhésion à la Communauté européenne", "C", "L'article 2 de la Constitution dispose : 'La langue de la République est le français.' Cette disposition a été introduite par la révision constitutionnelle de 1992 (avant la ratification du traité de Maastricht). Elle fonde la loi Toubon de 1994 qui impose l'usage du français dans les actes officiels, la publicité et l'enseignement. Le Conseil constitutionnel a interprété cet article comme s'imposant aussi aux personnes de droit privé dans leur usage public."),
+makeQuestion("s2-027", 2, "Société", "Dire que la langue de la République est le français signifie que :",
+  "toutes les langues régionales sont interdites",
+  "le français est la langue officielle de l’État",
+  "seul le français peut être parlé en France",
+  "les étrangers doivent abandonner leur langue",
+  "B",
+  "Le français est la langue officielle de la République, sans interdire les autres langues."
+),
 
-makeQuestion("s2-028", 2, "Société", "Que prévoit la Charte de l'environnement adossée à la Constitution en 2005 ?", "Elle crée un ministère constitutionnel de l'Environnement obligatoire dans tout gouvernement français", "Elle supprime le droit de propriété sur les terrains naturels classés, qui deviennent propriété de l'État", "Elle affirme uniquement que la France s'engage à réduire ses émissions de CO2, sans créer de droits individuels opposables", "Elle affirme le droit de chacun à vivre dans un environnement sain, consacre le principe de précaution et intègre la protection de l'environnement dans le bloc de constitutionnalité", "D", "La Charte de l'environnement de 2004, adossée à la Constitution en 2005, crée de nouveaux droits : le droit à un environnement équilibré et respectueux de la santé, le devoir de prendre part à la préservation de l'environnement, et le principe de précaution (art. 5). En l'intégrant au bloc de constitutionnalité, elle permet au Conseil constitutionnel de contrôler les lois à l'aune de ces principes. Le Conseil d'État l'utilise également pour contrôler les actes administratifs."),
+makeQuestion("s2-028", 2, "Société", "Pourquoi 1992 est une date importante pour les citoyens français ?",
+  "Création de l’euro",
+  "Création de la Sécurité sociale",
+  "Naissance de la citoyenneté européenne",
+  "Fin de la Ve République",
+  "C",
+  "1992 marque la citoyenneté européenne avec le traité de Maastricht."
+),
 
-makeQuestion("s2-029", 2, "Société", "Quel est l'âge légal de départ à la retraite en France depuis la réforme de 2023 ?", "64 ans, après le recul de 62 ans imposé par la loi du 14 avril 2023 malgré une forte contestation sociale", "62 ans, aucune réforme n'ayant modifié l'âge légal fixé en 2010", "67 ans, âge à partir duquel la retraite à taux plein est garantie sans condition de durée de cotisation", "60 ans, rétabli par décret après le mouvement social de 2023", "A", "La réforme des retraites d'avril 2023 a reculé l'âge légal de départ de 62 à 64 ans. Elle a également allongé la durée de cotisation requise pour une retraite à taux plein (jusqu'à 43 annuités pour la génération 1965). Cette réforme, adoptée via l'article 49-3 sans vote final de l'Assemblée, a suscité une mobilisation sociale historique (plus de 1,2 million de manifestants lors des principales journées de grève)."),
+makeQuestion("s2-029", 2, "Société", "Le drapeau européen avec 12 étoiles représente :",
+  "le nombre d’États membres",
+  "les 12 premiers pays fondateurs",
+  "un symbole d’unité et d’harmonie",
+  "les 12 régions françaises",
+  "C",
+  "Les étoiles symbolisent l’unité, pas le nombre d’États."
+),
 
-makeQuestion("s2-030", 2, "Société", "Le droit de grève est-il constitutionnellement garanti en France ?", "Non, le droit de grève n'a qu'une valeur légale ordinaire et peut être entièrement supprimé par une loi ordinaire du Parlement", "Oui, il est reconnu par le Préambule de la Constitution de 1946, qui fait partie du bloc de constitutionnalité, 'dans le cadre des lois qui le réglementent'", "Oui, il est inscrit directement dans le corps de la Constitution de 1958, sans possibilité de restriction par le législateur", "Non, seule la liberté syndicale est constitutionnelle, le droit de grève n'en étant qu'une conséquence pratique sans valeur constitutionnelle propre", "B", "Le Préambule de la Constitution de 1946, qui a valeur constitutionnelle selon la décision du Conseil constitutionnel de 1971, dispose que 'le droit de grève s'exerce dans le cadre des lois qui le réglementent.' Le droit de grève est donc constitutionnel mais peut être encadré par le législateur. Ce cadre inclut des restrictions dans les services publics (préavis, service minimum) sans pouvoir supprimer le droit lui-même."),
+makeQuestion("s2-030", 2, "Société", "Dire que l’école publique est laïque signifie qu’elle doit être :",
+  "religieuse",
+  "neutre",
+  "privée",
+  "politique",
+  "B",
+  "L’école publique est neutre vis-à-vis des religions."
+),
 
-makeQuestion("s2-031", 2, "Société", "À quoi sert le RSA (Revenu de solidarité active) ?", "Il finance la formation professionnelle des demandeurs d'emploi inscrits à Pôle emploi depuis plus de 6 mois", "Il est réservé aux personnes âgées de plus de 60 ans sans retraite suffisante, assurant un minimum vieillesse", "Il garantit un revenu minimum aux personnes sans ressources ou à faibles revenus, et vise à favoriser le retour à l'emploi en complétant les revenus d'activité", "Il finance les allocations logement des ménages en situation de précarité, en complément des APL", "C", "Le RSA, créé en 2009 en remplacement du RMI et de l'API, assure un revenu minimum aux personnes sans ressources ou aux faibles revenus. Son montant dépend de la composition du foyer et des revenus : il diminue progressivement à mesure que les revenus d'activité augmentent, pour éviter que la reprise d'un emploi ne soit financièrement désavantageuse. Les bénéficiaires ont des droits et devoirs en matière de recherche d'emploi. Il est géré par les départements."),
+makeQuestion("s2-031", 2, "Société", "Pourquoi les signes religieux ostensibles sont interdits à l’école publique ?",
+  "pour interdire toute religion",
+  "pour garantir la neutralité de l’école",
+  "pour limiter les libertés",
+  "pour uniformiser les élèves",
+  "B",
+  "La loi vise à garantir la neutralité de l’école."
+),
 
-makeQuestion("s2-032", 2, "Société", "Qui a droit à l'allocation chômage (ARE - Allocation de retour à l'emploi) en France ?", "Tous les demandeurs d'emploi inscrits à France Travail, qu'ils aient travaillé ou non auparavant, pendant une durée maximale de 2 ans", "Les travailleurs indépendants uniquement, les salariés du secteur privé bénéficiant d'un régime distinct géré par l'État", "Tout demandeur d'emploi ayant au moins 30 ans, sans condition de durée de travail antérieure", "Les salariés involontairement privés d'emploi (licenciement, fin de CDD, rupture conventionnelle), ayant travaillé au moins 6 mois sur les 24 derniers mois et étant aptes à travailler", "D", "L'ARE est versée par l'Unédic (régime d'assurance chômage géré paritairement par syndicats et patronat) aux salariés involontairement privés d'emploi. Les conditions sont : avoir travaillé au moins 6 mois sur les 24 derniers mois (ou 36 mois pour les 53 ans et plus), être inscrit à France Travail, être en recherche active d'emploi et résider en France. La durée d'indemnisation dépend de la durée d'affiliation, dans la limite de 24 mois (36 mois pour les seniors)."),
+makeQuestion("s2-032", 2, "Société", "La liberté d’expression signifie que :",
+  "on peut tout dire sans limite",
+  "on peut s’exprimer dans le respect de la loi",
+  "elle est réservée aux journalistes",
+  "elle n’existe pas sur internet",
+  "B",
+  "Elle est un droit fondamental, encadré par la loi."
+),
 
-makeQuestion("s2-033", 2, "Société", "En quelle année la loi ouvrant le mariage aux couples de même sexe a-t-elle été adoptée en France ?", "2013, sous la présidence de François Hollande, portée par la garde des Sceaux Christiane Taubira", "2009, en même temps que le débat sur l'identité nationale, par une majorité parlementaire de droite", "2007, dans le cadre de la loi de modernisation sociale du gouvernement Fillon", "2017, à l'initiative d'Emmanuel Macron lors de son premier quinquennat", "A", "La loi du 17 mai 2013 ouvrant le mariage aux personnes de même sexe, portée par Christiane Taubira, a été adoptée par l'Assemblée nationale avec 331 voix pour et 225 contre. Elle a été précédée d'un vif débat public (manifestations pour et contre). Elle ouvre le mariage et l'adoption aux couples de même sexe. La France est le 14e pays au monde à légaliser le mariage homosexuel."),
+makeQuestion("s2-033", 2, "Société", "Quelle situation relève d’une limite à la liberté d’expression ?",
+  "critiquer une loi",
+  "exprimer une opinion politique",
+  "diffuser des propos racistes",
+  "publier un livre",
+  "C",
+  "Les propos racistes sont interdits."
+),
 
-makeQuestion("s2-034", 2, "Société", "Que prévoit la loi de mars 2004 sur les signes religieux dans les établissements scolaires publics ?", "Elle interdit uniquement le port du voile islamique intégral (niqab) dans les lycées publics, les autres signes religieux discrets étant autorisés", "Elle interdit le port de signes ou tenues manifestant ostensiblement une appartenance religieuse pour les élèves des écoles, collèges et lycées publics", "Elle s'applique à tous les espaces publics français, y compris les rues, marchés et transports en commun", "Elle interdit uniquement aux enseignants d'afficher leurs convictions religieuses, les élèves restant libres de porter les signes de leur choix", "B", "La loi du 15 mars 2004 interdit le port de signes ou tenues 'manifestant ostensiblement une appartenance religieuse' dans les écoles, collèges et lycées publics. Elle vise les signes 'ostensibles' (voile islamique, grande croix, kippah visible) mais pas les signes discrets. Elle ne s'applique pas à l'enseignement supérieur ni aux espaces publics. Les élèves contrevenants font l'objet d'un dialogue puis, en cas de refus persistant, d'une exclusion."),
+makeQuestion("s2-034", 2, "Société", "Dire que tous les citoyens sont égaux signifie que :",
+  "tout le monde gagne le même salaire",
+  "tout le monde vit de la même manière",
+  "la loi est la même pour tous",
+  "tout le monde a les mêmes opinions",
+  "C",
+  "L’égalité concerne les droits et les devoirs devant la loi."
+),
 
-makeQuestion("s2-035", 2, "Société", "Qu'est-ce que la Complémentaire santé solidaire (CSS) ?", "Une mutuelle privée obligatoire financée intégralement par les entreprises pour leurs salariés, quel que soit le niveau de revenus", "Une aide de l'État permettant aux personnes à faibles revenus d'avoir une couverture complémentaire santé gratuite ou à faible participation", "Un dispositif uniquement disponible pour les bénéficiaires du RSA, excluant les travailleurs à faibles revenus", "Un système d'avances de frais médicaux remboursées en fin d'année par la Sécurité sociale pour les ménages modestes", "C", "La CSS, qui a remplacé la CMU-C et l'ACS en 2019, est une complémentaire santé financée par l'État pour les personnes à faibles revenus. Elle est gratuite sous un certain seuil de revenus et coûte moins d'1€ par jour légèrement au-dessus. Elle prend en charge le ticket modérateur et certains dépassements d'honoraires. Elle est attribuée automatiquement à certains bénéficiaires d'aides sociales. Environ 9 millions de personnes en bénéficient en France."),
+makeQuestion("s2-035", 2, "Société", "Une discrimination est :",
+  "une opinion personnelle",
+  "un traitement défavorable fondé sur un critère interdit",
+  "une critique politique",
+  "une différence culturelle",
+  "B",
+  "Une discrimination repose sur un critère interdit (origine, sexe, etc.)."
+),
 
-makeQuestion("s2-036", 2, "Société", "Que garantit le RGPD (Règlement général sur la protection des données) aux citoyens européens ?", "Il garantit que toutes les données personnelles collectées par les entreprises sont automatiquement détruites après 30 jours, sans possibilité de conservation plus longue", "Il interdit entièrement aux entreprises privées de collecter des données personnelles sans saisine préalable d'un juge", "Il s'applique uniquement aux données médicales et bancaires, les autres types de données personnelles étant hors de son champ d'application", "Il garantit le droit d'accès, de rectification, d'effacement ('droit à l'oubli'), de portabilité et d'opposition au traitement de leurs données personnelles", "D", "Le RGPD (Règlement européen 2016/679, applicable depuis 2018) révolutionne la protection des données : il crée des droits individuels forts (accès, rectification, effacement, portabilité, opposition), impose aux entreprises des obligations de transparence et de sécurité, exige un consentement explicite pour certains traitements, et prévoit des sanctions pouvant atteindre 4% du chiffre d'affaires mondial. En France, la CNIL est l'autorité chargée de le faire respecter."),
+makeQuestion("s2-036", 2, "Société", "La Sécurité sociale illustre surtout :",
+  "la liberté",
+  "l’égalité",
+  "la fraternité",
+  "la neutralité",
+  "C",
+  "Elle repose sur la solidarité entre les citoyens."
+),
 
-makeQuestion("s2-037", 2, "Société", "À quoi servent les APL (Aides personnalisées au logement) ?", "Elles aident les ménages à revenus modestes à financer leur loyer (locataires) ou leurs remboursements d'emprunt immobilier (propriétaires accédants), versées directement au bailleur ou à l'emprunteur", "Elles financent l'achat d'équipements d'isolation thermique pour les logements énergivores des ménages à revenus modestes", "Elles couvrent entièrement le loyer de tout locataire de logement social, quelle que soit sa situation financière", "Elles permettent aux sans-abri d'accéder à un hébergement d'urgence financé entièrement par l'État sans participation personnelle", "A", "Les APL, créées en 1977, sont des aides au logement versées par la CAF (Caisse d'allocations familiales) aux ménages à revenus modestes. Elles réduisent le montant effectif du loyer ou des remboursements de prêt immobilier. Leur montant dépend des revenus, de la taille du foyer, du montant du loyer et de la zone géographique. Elles sont versées directement au bailleur dans la plupart des cas. La réforme de 2021 les a basées sur les revenus des 12 derniers mois (calcul 'en temps réel')."),
+makeQuestion("s2-037", 2, "Société", "Pourquoi doit-on payer des impôts ?",
+  "pour financer les services publics",
+  "pour enrichir l’État",
+  "pour éviter de voter",
+  "pour remplacer le travail",
+  "A",
+  "Les impôts financent les services publics."
+),
 
-makeQuestion("s2-038", 2, "Société", "Combien de personnes dans le monde parlent le français, et combien d'États font partie de l'Organisation internationale de la Francophonie (OIF) ?", "Environ 100 millions de locuteurs dans 50 États membres de l'OIF", "Environ 300 millions de locuteurs dans 88 États et gouvernements membres de l'OIF, faisant du français la 5e langue la plus parlée au monde", "Environ 500 millions de locuteurs dans 120 États, le français étant la 2e langue la plus parlée au monde après le mandarin", "Environ 150 millions de locuteurs exclusivement en Europe et en Afrique du Nord, les autres continents étant peu représentés", "B", "La Francophonie compte environ 300 millions de locuteurs selon l'OIF (rapport 2022), répartis dans 88 États et gouvernements membres. Le français est particulièrement dynamique en Afrique subsaharienne, qui représentera la majorité des francophones en 2050 du fait de la démographie. L'OIF, dont le siège est à Paris, œuvre pour la solidarité, la coopération et la promotion de la langue française. Le français est langue officielle dans 29 pays."),
+makeQuestion("s2-038", 2, "Société", "Se faire recenser à 16 ans permet notamment :",
+  "de voter",
+  "de payer des impôts",
+  "de participer à la Journée défense et citoyenneté",
+  "d’obtenir un emploi",
+  "C",
+  "Le recensement permet la JDC."
+),
 
-makeQuestion("s2-039", 2, "Société", "Que défend la notion d'« exception culturelle » dans les négociations commerciales internationales ?", "L'idée que la France doit exempter ses produits culturels de toute taxe à l'importation pour développer un marché culturel mondial ouvert", "Le refus de la France de participer à toute organisation internationale de commerce, au nom de la protection de son industrie culturelle", "L'idée que les biens culturels (films, musique, livres) ne sont pas des marchandises ordinaires soumises aux règles du libre-échange et doivent bénéficier de protections spécifiques pour préserver la diversité culturelle mondiale", "Le droit exclusif de la France à exporter ses produits culturels sans droits de douane dans tous les pays membres de l'OMC", "C", "L'exception culturelle est un concept défendu par la France depuis les négociations du GATT en 1993. Elle repose sur l'idée que les œuvres culturelles (films, séries, musique, livres) portent des identités et des valeurs qui ne peuvent pas être traitées comme de simples marchandises. La France a ainsi obtenu l'exclusion de l'audiovisuel des accords de libre-échange. Ce principe a été élargi en 2005 via la Convention UNESCO sur la diversité culturelle."),
+makeQuestion("s2-039", 2, "Société", "Dire que la France est une grande destination touristique signifie que :",
+  "le tourisme est interdit ailleurs",
+  "le tourisme est important pour l’économie",
+  "seuls les étrangers voyagent",
+  "les Français ne voyagent pas",
+  "B",
+  "Le tourisme est un secteur majeur de l’économie."
+),
 
-makeQuestion("s2-040", 2, "Société", "Depuis la loi sur l'immigration de janvier 2024, quel niveau de français est requis pour la naturalisation française ?", "Le niveau A1 (notions de base) est suffisant, la priorité étant donnée à la durée de résidence plutôt qu'à la maîtrise linguistique", "Le niveau A2 (utilisateur élémentaire) est requis pour la naturalisation, comme pour le renouvellement des titres de séjour", "Le niveau C1 (maîtrise avancée) est désormais exigé, plaçant la barre au niveau d'un locuteur quasi natif", "Le niveau B2 (utilisateur indépendant avancé) est désormais requis pour la naturalisation, exigence renforcée par rapport au niveau B1 précédemment requis", "D", "La loi du 26 janvier 2024 sur l'immigration a durci les exigences linguistiques pour la naturalisation : le niveau B2 du CECRL est désormais requis (contre B1 auparavant). B2 correspond à un utilisateur capable de comprendre le contenu principal de sujets concrets et abstraits, et de s'exprimer avec un degré de spontanéité rendant la communication possible sans effort. La circulaire de mai 2025 a encore renforcé les exigences d'intégration générale."),
+makeQuestion("s2-040", 2, "Société", "Le fait que le français soit parlé dans de nombreux pays montre :",
+  "qu’il remplace toutes les langues",
+  "son rayonnement international",
+  "qu’il est obligatoire partout",
+  "qu’il est la seule langue mondiale",
+  "B",
+  "Le français est une langue internationale."
+),
+makeQuestion("s2-041", 2, "Société", "Dire que la France est une grande puissance économique signifie que :",
+  "elle est la plus riche du monde",
+  "elle a une économie importante à l’échelle mondiale",
+  "elle n’importe rien",
+  "elle vit uniquement du tourisme",
+  "B",
+  "La France est une grande puissance économique, sans être la première."
+),
 
-makeQuestion("s2-041", 2, "Société", "Combien de jours de congés payés un salarié français à temps plein acquiert-il par an ?", "25 jours ouvrés (5 semaines), acquis à raison de 2,5 jours par mois de travail effectif", "30 jours calendaires (6 semaines), acquis uniformément sans distinction entre jours ouvrés et jours calendaires", "20 jours ouvrés (4 semaines), dont 10 doivent obligatoirement être pris en été", "15 jours ouvrés (3 semaines), avec des jours de RTT venant compléter jusqu'à 5 semaines effectives", "A", "Tout salarié acquiert 2,5 jours ouvrables (ou 2,08 jours ouvrés) de congés payés par mois de travail, soit 30 jours ouvrables (25 jours ouvrés) par an, correspondant à 5 semaines. Ce droit, issu du Front populaire (2 semaines en 1936), a été progressivement étendu. La période de référence d'acquisition est du 1er juin au 31 mai. L'employeur fixe les dates de congés en respectant le droit du salarié à 2 semaines consécutives entre mai et octobre."),
+makeQuestion("s2-042", 2, "Société", "Le secteur du luxe en France illustre :",
+  "une activité artisanale uniquement",
+  "un secteur économique stratégique",
+  "une activité marginale",
+  "un secteur public",
+  "B",
+  "Le luxe est un secteur économique important."
+),
 
-makeQuestion("s2-042", 2, "Société", "Qu'appelle-t-on 'déserts médicaux' en France ?", "Les zones touristiques côtières et de montagne où les médecins refusent d'exercer pendant les périodes de vacances, créant des ruptures de soins saisonnières", "Les zones géographiques où l'offre médicale est insuffisante par rapport aux besoins de la population résidente, en particulier en médecine générale", "Les quartiers urbains défavorisés où les médecins refusent d'exercer par peur des incivilités, le phénomène étant exclusivement urbain", "Les établissements hospitaliers manquant de lits en soins intensifs, sans rapport avec la répartition géographique des médecins libéraux", "B", "Les déserts médicaux sont des zones où la densité de professionnels de santé (médecins généralistes, spécialistes, infirmiers) est insuffisante pour couvrir les besoins. Ils touchent de nombreuses zones rurales, périurbaines et certains quartiers urbains défavorisés. Environ 6 millions de Français vivent dans une zone sous-dotée. Les causes sont multiples : vieillissement des médecins en exercice, liberté d'installation, attractivité variable des territoires. Des mesures incitatives (aides à l'installation, maisons de santé pluridisciplinaires) tentent d'y remédier."),
+makeQuestion("s2-043", 2, "Société", "Dire que Paris La Défense est un quartier d’affaires signifie que :",
+  "c’est une zone résidentielle",
+  "c’est un centre économique avec des entreprises",
+  "c’est un quartier touristique uniquement",
+  "c’est un quartier historique",
+  "B",
+  "C’est un centre économique majeur."
+),
 
-makeQuestion("s2-043", 2, "Société", "Que signifie l'objectif 'ZAN' (Zéro artificialisation nette) inscrit dans la loi Climat et Résilience de 2021 ?", "L'interdiction totale de toute nouvelle construction sur des terres agricoles ou naturelles, avec effet immédiat dès 2021", "L'objectif de réduire de 50% l'artificialisation des sols entre 2021 et 2031, puis d'atteindre zéro artificialisation nette en 2050", "L'obligation pour chaque commune de planter autant d'arbres que de mètres carrés construits chaque année pour compenser l'imperméabilisation", "L'interdiction d'utiliser des pesticides dans les zones naturelles à moins de 200 mètres des habitations", "B", "Le ZAN, inscrit dans la loi Climat et Résilience (2021), vise à stopper l'étalement urbain qui consomme environ 20 000 à 30 000 hectares d'espaces naturels par an en France. L'objectif est de diviser par deux la consommation d'espaces naturels entre 2021 et 2031, puis d'atteindre la neutralité (zéro hectare consommé net) en 2050. Pour chaque espace artificalisé, il faudra en renaturer un équivalent. Cela impose aux collectivités de densifier les espaces déjà urbanisés plutôt que de s'étendre."),
+makeQuestion("s2-044", 2, "Société", "Pourquoi la tour Eiffel est-elle un symbole ?",
+  "parce qu’elle est la plus ancienne tour",
+  "parce qu’elle représente un événement historique et le savoir-faire français",
+  "parce qu’elle est la plus haute du monde",
+  "parce qu’elle est la seule tour en Europe",
+  "B",
+  "Elle symbolise l’Exposition universelle et l’innovation."
+),
 
-makeQuestion("s2-044", 2, "Société", "Qu'appelle-t-on les 'fractures territoriales' en France ?", "Les dommages causés aux routes et infrastructures par les mouvements géologiques dans les zones sismiques françaises", "Les conflits politiques entre communes et intercommunalités sur le partage des compétences après les réformes de décentralisation", "Les inégalités entre régions dans la représentation parlementaire, certains territoires étant sous-représentés à l'Assemblée nationale", "Les inégalités d'accès aux services publics, à l'emploi et aux équipements entre les métropoles, les zones rurales et les banlieues défavorisées, créant un sentiment d'abandon chez certaines populations", "D", "Les fractures territoriales désignent des inégalités géographiques profondes : entre les grandes métropoles (emplois qualifiés, services, culture) et les zones rurales ou périurbaines (fermetures de services publics, déserts médicaux, transports insuffisants). Ce sentiment d''abandon' a été au cœur du mouvement des Gilets jaunes de 2018. Le rapport Borloo (2018) et les 'Contrats de redynamisation des sites de défense' tentent d'y répondre, sans avoir encore comblé ces écarts structurels."),
+makeQuestion("s2-045", 2, "Société", "Le Mont-Saint-Michel attire des visiteurs car :",
+  "c’est une zone industrielle",
+  "c’est un site historique et culturel",
+  "c’est une capitale régionale",
+  "c’est une université",
+  "B",
+  "C’est un site patrimonial majeur."
+),
 
-makeQuestion("s2-045", 2, "Société", "Quelle est la population de la France en 2025 ?", "Environ 68 millions d'habitants, dont 2,3 millions dans les départements d'outre-mer", "Environ 80 millions d'habitants, la France étant le pays le plus peuplé de l'Union européenne", "Environ 55 millions d'habitants, la France ayant connu un fort déclin démographique depuis les années 2000", "Environ 75 millions d'habitants, avec un taux de fécondité de 2,1 enfants par femme assurant le renouvellement des générations", "A", "La France compte environ 68 millions d'habitants au 1er janvier 2025 selon l'INSEE, dont 2,3 millions dans les cinq départements d'outre-mer. La croissance démographique ralentit : l'indice de fécondité est tombé à 1,62 enfant par femme en 2024 (sous le seuil de renouvellement de 2,1), le solde naturel est légèrement négatif, et c'est le solde migratoire positif qui maintient la croissance. L'espérance de vie atteint 85,1 ans pour les femmes et 78,9 ans pour les hommes."),
+makeQuestion("s2-046", 2, "Société", "Être classé à l’UNESCO signifie :",
+  "être un site privé",
+  "être reconnu pour sa valeur universelle",
+  "être interdit au public",
+  "être réservé aux Français",
+  "B",
+  "L’UNESCO reconnaît une valeur universelle."
+),
 
-makeQuestion("s2-046", 2, "Société", "La Sécurité sociale française est organisée en plusieurs branches. Quelle branche couvre spécifiquement le risque 'vieillesse' ?", "La branche famille (CNAF), qui verse les allocations retraite aux anciens allocataires", "La branche vieillesse (CNAV), qui verse les pensions de retraite du régime général et gère la solidarité entre générations actives et retraitées", "La branche accidents du travail, qui prend en charge les retraites anticipées pour inaptitude professionnelle", "La branche maladie, qui couvre aussi bien les soins courants que les pensions de vieillesse des assurés", "B", "La Sécurité sociale comprend quatre branches principales : maladie (CNAM), vieillesse (CNAV), famille (CNAF) et accidents du travail/maladies professionnelles (AT-MP). La branche vieillesse gère les retraites du régime général des salariés du privé. Il existe aussi des régimes complémentaires obligatoires (ARRCO, AGIRC) et des régimes spéciaux pour certaines professions (fonctionnaires, SNCF, EDF…). Depuis 2021, une 5e branche 'autonomie' (dépendance) a été créée."),
+makeQuestion("s2-047", 2, "Société", "Dire que la Loire est le plus long fleuve signifie :",
+  "qu’elle est la plus large",
+  "qu’elle traverse le plus de pays",
+  "qu’elle est la plus longue en France",
+  "qu’elle est la plus profonde",
+  "C",
+  "Elle est la plus longue en France."
+),
 
-makeQuestion("s2-047", 2, "Société", "Qu'est-ce que le baccalauréat français ?", "Un diplôme universitaire de premier cycle (équivalent licence) sanctionnant trois années d'études supérieures", "Un certificat de fin d'études primaires attestant la maîtrise des fondamentaux scolaires", "Un diplôme national qui sanctionne la fin des études secondaires (classe de terminale) et ouvre l'accès à l'enseignement supérieur", "Un concours d'entrée dans les grandes écoles, réservé aux meilleurs élèves de terminale sélectionnés par les lycées", "C", "Le baccalauréat, créé par Napoléon en 1808, est le premier grade de l'enseignement supérieur français et sanctionne la fin du lycée. Il existe plusieurs voies : générale (avec spécialités), technologique (8 séries) et professionnelle. Depuis la réforme de 2019 (bac Blanquer), il intègre un contrôle continu et des épreuves finales. Il donne accès à l'enseignement supérieur via Parcoursup. En 2024, le taux de réussite au bac général est d'environ 91%."),
+makeQuestion("s2-048", 2, "Société", "Les grands fleuves structurent le territoire car :",
+  "ils servent uniquement au tourisme",
+  "ils organisent les échanges et les villes",
+  "ils empêchent les déplacements",
+  "ils sont décoratifs",
+  "B",
+  "Les fleuves jouent un rôle économique et territorial."
+),
 
-makeQuestion("s2-048", 2, "Société", "Quel principe garantit que l'hôpital public en France ne peut pas refuser un patient en urgence ?", "La loi Kouchner de 2002, qui interdit le refus de soins uniquement pour des raisons financières mais autorise le refus pour saturation des services", "La convention européenne de biomédecine qui s'impose au droit français et interdit tout refus de traitement médical urgent", "Le principe de libre choix du patient, qui garantit à chacun d'être soigné dans l'établissement de son choix sans possibilité de refus", "Le principe de continuité et d'égalité du service public hospitalier : tout établissement public doit assurer la prise en charge des urgences vitales, quelle que soit la situation administrative ou financière du patient", "D", "Le service public hospitalier est soumis aux principes fondamentaux de continuité (pas d'interruption), d'égalité (mêmes soins pour tous) et de mutabilité (adaptation aux besoins). Ces principes, combinés à l'obligation légale d'accueil aux urgences, interdisent tout refus de soins urgents. En pratique, un patient non couvert par l'Assurance maladie sera soigné et les frais récupérés ultérieurement. La loi réprime le refus de soins discriminatoire (art. L1110-3 du Code de la santé publique)."),
+makeQuestion("s2-049", 2, "Société", "Le Mont-Blanc est un repère car :",
+  "c’est un volcan actif",
+  "c’est le point le plus élevé d’Europe occidentale",
+  "c’est une capitale",
+  "c’est une île",
+  "B",
+  "Il représente un repère géographique majeur."
+),
 
-makeQuestion("s2-049", 2, "Société", "Qu'est-ce que le SMIC (Salaire minimum interprofessionnel de croissance) ?", "Le plancher légal de rémunération en dessous duquel aucun employeur ne peut rémunérer un salarié, quelle que soit sa branche d'activité", "Le salaire moyen constaté dans l'ensemble des branches professionnelles françaises, servant de référence pour les négociations salariales annuelles", "Un salaire maximum au-delà duquel les entreprises publiques ne peuvent pas rémunérer leurs employés non-cadres", "Le salaire minimum négocié par les partenaires sociaux, qui peut être inférieur au SMIC dans certaines branches en difficulté économique", "A", "Le SMIC, instauré en 1970 (remplaçant le SMIG), est le salaire horaire minimum légal en France, applicable à tous les salariés dès 18 ans. Il est revalorisé au 1er janvier de chaque année (indexé sur l'inflation et un partage des gains de pouvoir d'achat), et peut être relevé par 'coup de pouce' gouvernemental. En 2025, le SMIC horaire est d'environ 11,88€ brut. Aucun accord de branche ne peut fixer des minima inférieurs au SMIC."),
+makeQuestion("s2-050", 2, "Société", "Dire que la population française est d’environ 69 millions signifie :",
+  "un chiffre exact et fixe",
+  "un ordre de grandeur",
+  "une estimation ancienne",
+  "un chiffre symbolique",
+  "B",
+  "Il s’agit d’un ordre de grandeur."
+),
 
-makeQuestion("s2-050", 2, "Société", "À qui appartient l'autorité parentale sur un enfant mineur en France, en cas de séparation des parents ?", "À la mère uniquement, la séparation entraînant automatiquement la déchéance de l'autorité parentale pour le père", "Aux deux parents conjointement, quel que soit leur statut civil (mariés, pacsés ou non), sauf décision contraire d'un juge aux affaires familiales", "Au parent chez qui la résidence principale est fixée, l'autre parent perdant ses droits sauf lors des droits de visite accordés", "Uniquement au parent qui a la garde principale, l'autre n'ayant qu'un droit de visite et d'hébergement sans autorité juridique", "B", "L'autorité parentale conjointe est le principe en droit français, que les parents soient mariés, pacsés, en concubinage ou séparés. La séparation ne modifie pas ce principe : les deux parents continuent d'exercer ensemble l'autorité parentale pour les décisions importantes (santé, éducation, déménagement à l'étranger). Le juge aux affaires familiales ne peut confier l'autorité parentale à un seul parent que dans des cas exceptionnels (danger pour l'enfant). La résidence peut être fixée chez l'un des parents ou en alternance."),
+makeQuestion("s2-051", 2, "Société", "Pourquoi parle-t-on d’agglomérations ?",
+  "pour désigner les campagnes",
+  "pour regrouper une ville et sa périphérie",
+  "pour parler des régions",
+  "pour désigner les fleuves",
+  "B",
+  "Une agglomération inclut la ville et sa périphérie."
+),
 
-makeQuestion("s2-051", 2, "Société", "Qu'est-ce qu'un titre de séjour en France ?", "Un document réservé aux ressortissants des pays hors Union européenne, autorisant leur résidence légale en France pour une durée déterminée", "Un passeport spécial délivré aux étrangers naturalisés français, attestant leur nouvelle nationalité avant réception d'un passeport ordinaire", "Un visa de long séjour accordé uniquement aux conjoints de ressortissants français, sans possibilité d'exercer une activité professionnelle", "Un document uniquement requis pour les personnes sans emploi ; les étrangers travaillant légalement en France en étant automatiquement exemptés", "A", "Les ressortissants de pays hors Union européenne séjournant en France plus de 3 mois doivent détenir un titre de séjour (carte de séjour). Il en existe plusieurs types selon la situation : étudiant, salarié, famille, réfugié, etc. Les ressortissants de l'UE, de l'EEE et de la Suisse bénéficient de la libre circulation et n'ont pas besoin de titre de séjour. La loi de 2024 a créé un nouveau titre de 4 ans pour les professionnels de santé et médical."),
+makeQuestion("s2-052", 2, "Société", "Les grandes métropoles concentrent :",
+  "uniquement des habitants",
+  "des activités économiques et des services",
+  "seulement des touristes",
+  "uniquement des administrations",
+  "B",
+  "Elles concentrent population et activités."
+),
 
-makeQuestion("s2-052", 2, "Société", "En matière de patrimoine culturel, combien de sites français sont inscrits au patrimoine mondial de l'UNESCO ?", "3 sites, la France étant peu représentée par rapport à l'Italie ou à l'Espagne au classement mondial", "52 sites classés, faisant de la France l'un des pays les mieux représentés au patrimoine mondial de l'UNESCO en Europe", "15 sites uniquement situés à Paris, les autres régions françaises n'ayant pas de site classé", "120 sites classés, la France étant le premier pays mondial pour le nombre de biens inscrits au patrimoine de l'UNESCO", "B", "La France possède 52 biens inscrits au patrimoine mondial de l'UNESCO (données 2024), parmi les plus importants en Europe. Ces sites incluent le Mont-Saint-Michel, les châteaux de la Loire, le centre historique d'Avignon, la cathédrale de Chartres, Versailles, les Causses et Cévennes, la baie de la Somme, ou encore les lagons de Nouvelle-Calédonie. La France est également fortement représentée au patrimoine immatériel (repas gastronomique, tapisserie de la Savonnerie, etc.)."),
+makeQuestion("s2-053", 2, "Société", "Dire que l’école est obligatoire signifie que :",
+  "on doit aller à l’université",
+  "l’instruction est obligatoire",
+  "on doit rester à l’école toute sa vie",
+  "l’école est payante",
+  "B",
+  "C’est l’instruction qui est obligatoire."
+),
 
-makeQuestion("s2-053", 2, "Société", "Quelle est la part approximative du nucléaire dans la production d'électricité française ?", "Environ 70%, faisant de la France l'un des pays les plus nucléarisés du monde et lui permettant d'avoir un électricité parmi les moins carbonées d'Europe", "Environ 20%, le reste de la production étant assuré par les énergies renouvelables (éolien, solaire, hydraulique)", "Environ 40%, le nucléaire et le gaz naturel se partageant chacun environ 40% de la production", "Environ 90%, la quasi-totalité des besoins électriques français étant couverts par les 56 réacteurs nucléaires en service", "A", "La France tire environ 65-70% de son électricité du nucléaire (56 réacteurs répartis sur 18 centrales), ce qui lui confère l'une des électricités les moins carbonées d'Europe. Ce parc, construit principalement dans les années 1970-1990, est en cours de vieillissement : plusieurs réacteurs sont à l'arrêt pour maintenance ou corrosion. Le président Macron a annoncé en 2022 la construction de 6 nouveaux EPR2 et l'étude de 8 autres, relançant la filière nucléaire française."),
+makeQuestion("s2-054", 2, "Société", "La gratuité de l’école publique signifie que :",
+  "tout est totalement gratuit",
+  "l’accès à l’enseignement est sans frais",
+  "les livres sont toujours gratuits",
+  "les activités sont payantes uniquement",
+  "B",
+  "L’enseignement est gratuit dans le public."
+),
 
-makeQuestion("s2-054", 2, "Société", "Quelle a été la principale mesure de la réforme des retraites adoptée en avril 2023 en France ?", "La création d'un système universel de retraites par points remplaçant tous les régimes spéciaux existants", "Le recul de l'âge légal de départ à la retraite de 62 à 64 ans, et l'accélération du calendrier d'allongement de la durée de cotisation requise", "La suppression des régimes spéciaux (SNCF, RATP, EDF) et leur alignement immédiat sur le régime général", "L'instauration d'une retraite minimale de 1 200€ nets par mois pour tous les retraités, sans condition de durée de cotisation", "B", "La réforme des retraites de 2023, adoptée par le gouvernement Borne via l'article 49-3, reporte l'âge légal de 62 à 64 ans et accélère la montée en charge de la durée de cotisation requise (43 ans dès 2027 pour la génération 1965, contre 2035 prévu). Elle préserve les dispositifs de départ anticipé (carrières longues, pénibilité, handicap) et revalorise la retraite minimale à 1 200€ pour les carrières complètes au SMIC."),
+makeQuestion("s2-055", 2, "Société", "La laïcité protège :",
+  "une religion",
+  "toutes les religions",
+  "la liberté de croire ou non",
+  "les institutions religieuses",
+  "C",
+  "Elle garantit la liberté de conscience."
+),
 
-makeQuestion("s2-055", 2, "Société", "Comment se détermine la représentativité d'un syndicat en France au niveau national interprofessionnel ?", "Par le nombre d'adhérents cotisants : un syndicat doit compter au moins 500 000 membres pour être représentatif au niveau national", "Par la reconnaissance de l'État via un arrêté ministériel renouvelé tous les 5 ans, sans lien avec les résultats électoraux", "Par l'audience aux élections professionnelles dans les entreprises et administrations, avec un seuil d'au moins 8% des suffrages exprimés au niveau national interprofessionnel", "Par un vote au Conseil économique, social et environnemental (CESE) réunissant les organisations professionnelles et syndicales", "C", "La loi du 20 août 2008 a refondé la représentativité syndicale sur l'audience électorale. Pour être représentatif au niveau national interprofessionnel, un syndicat doit obtenir au moins 8% des suffrages exprimés lors des élections professionnelles (TPE, CSE), respecter les valeurs républicaines et avoir une activité et une expérience significatives. Cinq confédérations sont ainsi représentatives : CGT, CFDT, FO, CFE-CGC et CFTC."),
+makeQuestion("s2-056", 2, "Société", "Dire que l’État est neutre signifie qu’il :",
+  "interdit les religions",
+  "ne favorise aucune religion",
+  "impose une religion",
+  "finance une religion",
+  "B",
+  "L’État ne privilégie aucune religion."
+),
 
-makeQuestion("s2-056", 2, "Société", "Qu'est-ce que le contrat d'apprentissage ?", "Un contrat de travail à durée déterminée exclusivement réservé aux personnes de plus de 30 ans en reconversion professionnelle", "Un stage non rémunéré permettant à un jeune d'observer le fonctionnement d'une entreprise sans exercer de responsabilités réelles", "Un dispositif uniquement accessible dans l'enseignement supérieur public, excluant les lycées professionnels et les CFA privés", "Un contrat de travail permettant à un jeune (16-29 ans, ou plus dans certains cas) de se former en alternance entre une entreprise et un CFA, en préparant un diplôme ou un titre professionnel", "D", "Le contrat d'apprentissage est un contrat de travail (CDD ou CDI) qui permet une formation en alternance : le jeune partage son temps entre l'entreprise (où il exerce un métier sous la responsabilité d'un maître d'apprentissage) et le CFA (Centre de formation des apprentis, où il suit les cours théoriques). Il prépare à des diplômes du CAP au master. La réforme de 2018 a largement développé l'apprentissage : plus de 1 million d'apprentis en France en 2024."),
+makeQuestion("s2-057", 2, "Société", "Pourquoi la liberté d’expression a-t-elle des limites ?",
+  "pour protéger les institutions seulement",
+  "pour éviter les abus et protéger autrui",
+  "pour limiter les débats",
+  "pour empêcher la critique",
+  "B",
+  "Elle est encadrée pour protéger les autres."
+),
 
-makeQuestion("s2-057", 2, "Société", "Comment fonctionne le remboursement des soins par l'Assurance maladie en France ?", "L'Assurance maladie rembourse une partie des soins (taux variable selon l'acte), le reste à charge étant généralement pris en charge par une complémentaire santé (mutuelle) ou laissé à la charge du patient", "L'Assurance maladie rembourse 100% de tous les soins, la médecine française étant entièrement gratuite pour tous les résidents", "L'Assurance maladie ne rembourse que les soins réalisés dans les hôpitaux publics, les soins libéraux n'étant remboursés qu'à 50%", "Le remboursement n'intervient qu'au-delà d'un ticket modérateur annuel de 1 000€ ; les petites dépenses de santé restent entièrement à la charge du patient", "A", "L'Assurance maladie rembourse selon des taux variables : 70% du tarif conventionné pour les consultations de médecins de secteur 1, 100% en cas d'ALD (affection longue durée) ou d'hospitalisation, moins pour certains médicaments ou actes. La partie non remboursée ('ticket modérateur') est prise en charge par la mutuelle complémentaire. La réforme '100% santé' (2019) garantit un remboursement intégral pour certains soins dentaires, optiques et auditifs."),
+makeQuestion("s2-058", 2, "Société", "La diffamation consiste à :",
+  "exprimer une opinion",
+  "donner une information fausse portant atteinte à quelqu’un",
+  "critiquer une loi",
+  "publier un livre",
+  "B",
+  "La diffamation porte atteinte à la réputation."
+),
 
-makeQuestion("s2-058", 2, "Société", "Depuis quelle loi l'adoption est-elle ouverte aux couples de même sexe en France ?", "Depuis la loi du 17 mai 2013 ouvrant le mariage aux personnes de même sexe, qui a automatiquement étendu le droit à l'adoption", "Depuis la loi de bioéthique de 2021, qui a élargi la PMA aux femmes seules et ouvert l'adoption aux couples de même sexe", "Depuis la loi Taubira de 2007, première loi française reconnaissant les droits des couples homosexuels en matière d'adoption", "Depuis la loi de 1999 créant le PACS, qui incluait déjà le droit à l'adoption conjointe pour les partenaires pacsés", "A", "La loi du 17 mai 2013 ouvrant le mariage aux couples de même sexe leur a également ouvert le droit à l'adoption (plénière et simple), individuelle et conjointe. Cette extension a été l'une des parties les plus débattues de la loi : les opposants craignaient les effets sur les enfants, tandis que les partisans rappelaient que les couples non mariés pouvaient déjà adopter individuellement. La loi de 2022 a encore élargi les conditions de l'adoption et modernisé le droit de la filiation."),
+makeQuestion("s2-059", 2, "Société", "Le racisme est interdit car :",
+  "il est impoli",
+  "il va contre les valeurs d’égalité",
+  "il est rare",
+  "il est toléré",
+  "B",
+  "Il viole le principe d’égalité."
+),
 
-makeQuestion("s2-059", 2, "Société", "Comment est structuré le système scolaire français ?", "En deux degrés : le primaire (de la maternelle à la 3e) et le secondaire supérieur (lycée et BTS)", "En un système unique de 12 ans sans distinction de cycles, tous les élèves suivant le même cursus jusqu'au baccalauréat", "En trois degrés : l'école primaire (maternelle + élémentaire), le collège (6e à 3e), puis le lycée (2de à terminale), avant l'enseignement supérieur", "En quatre degrés : crèche, école primaire, collège puis lycée, chacun relevant d'un ministère différent", "C", "L'Éducation nationale organise la scolarité en trois degrés. Le premier degré comprend l'école maternelle (3-6 ans, non obligatoire jusqu'en 2019) et l'école élémentaire (6-11 ans). Le second degré comprend le collège (11-15 ans, classes de 6e à 3e) et le lycée (15-18 ans, classes de 2nde à terminale). L'enseignement supérieur (universités, grandes écoles, BTS, IUT) est organisé selon le schéma européen LMD (Licence-Master-Doctorat)."),
+makeQuestion("s2-060", 2, "Société", "Dire que la France est un État social signifie que :",
+  "elle ne protège pas ses citoyens",
+  "elle organise la solidarité",
+  "elle dépend des entreprises",
+  "elle supprime les impôts",
+  "B",
+  "L’État organise la solidarité."
+),
 
-makeQuestion("s2-060", 2, "Société", "Quel est le rôle de la CNIL (Commission nationale de l'informatique et des libertés) ?", "La CNIL est un tribunal spécialisé qui juge les crimes informatiques et condamne les hackers ayant volé des données personnelles", "La CNIL est un organe du gouvernement chargé d'administrer les bases de données de l'État et de centraliser les informations des citoyens", "La CNIL est un syndicat de professionnels de l'informatique chargé de négocier les conditions d'emploi dans le secteur numérique", "La CNIL est l'autorité administrative indépendante chargée de veiller à la protection des données personnelles, d'informer les citoyens de leurs droits et de sanctionner les manquements au RGPD", "D", "La CNIL, créée par la loi informatique et libertés de 1978, est une autorité administrative indépendante. Ses missions : informer et conseiller (particuliers, entreprises, administrations), contrôler le respect de la loi (inspections), sanctionner les violations (amendes pouvant atteindre 20M€ ou 4% du CA mondial), et instruire les plaintes des particuliers. Elle est l'autorité de contrôle du RGPD en France et peut coordonner son action avec ses homologues européens via l'EDPB."),
+makeQuestion("s2-061", 2, "Société", "La solidarité nationale repose sur :",
+  "les dons uniquement",
+  "les impôts et cotisations",
+  "les entreprises seules",
+  "les associations uniquement",
+  "B",
+  "Elle est financée collectivement."
+),
 
-makeQuestion("s2-061", 2, "Société", "Que garantit la loi DALO (Droit au logement opposable) adoptée en 2007 ?", "Le droit pour toute personne sans logement ou mal logée de saisir une commission de médiation, qui peut reconnaître la priorité du demandeur et obliger l'État à lui proposer un logement social adapté", "Le droit à un logement gratuit pour toute personne sans ressources, l'État prenant en charge l'intégralité du loyer sans conditions", "La garantie que tout demandeur de logement social recevra une réponse et un logement dans les 3 mois suivant son inscription, sans possibilité de refus", "La priorité absolue dans l'attribution de logements sociaux pour les familles de plus de trois enfants, au détriment des célibataires et couples sans enfant", "A", "La loi DALO (5 mars 2007) crée un droit subjectif au logement : les personnes sans logement, menacées d'expulsion ou hébergées dans des conditions indignes peuvent saisir une commission de médiation dans leur département. Si elles sont reconnues prioritaires, l'État doit leur proposer un logement social dans un délai légal. En cas de manquement, elles peuvent saisir le tribunal administratif et obtenir une astreinte financière contre l'État."),
+makeQuestion("s2-062", 2, "Société", "Payer ses impôts est :",
+  "optionnel",
+  "une obligation",
+  "réservé aux riches",
+  "inutile",
+  "B",
+  "C’est une obligation légale."
+),
 
-makeQuestion("s2-062", 2, "Société", "Qu'est-ce que l'OIF (Organisation internationale de la Francophonie) ?", "Une organisation internationale commerciale promouvant les produits culturels français à l'étranger, financée exclusivement par des entreprises françaises", "L'organisation internationale regroupant 88 États et gouvernements partageant l'usage du français, visant la solidarité, la coopération et la promotion de la diversité culturelle", "Un réseau d'universités francophones coordonné par l'UNESCO, proposant des formations en français pour les étudiants du monde entier", "Une institution de l'Union européenne promouvant le français comme seule langue de travail dans les institutions européennes", "B", "L'OIF, dont le secrétaire général est actuellement Louise Mushikiwabo (Rwanda), regroupe 88 États et gouvernements membres ou observateurs. Elle œuvre pour la solidarité politique et économique entre pays francophones, la promotion de la langue française et de la diversité culturelle et linguistique, et le renforcement de la démocratie et des droits de l'homme. Le Sommet de la Francophonie se tient tous les deux ans. La Journée internationale de la Francophonie est célébrée le 20 mars."),
+makeQuestion("s2-063", 2, "Société", "Ne pas déclarer ses revenus est :",
+  "autorisé",
+  "toléré",
+  "illégal",
+  "recommandé",
+  "C",
+  "C’est une fraude."
+),
 
-makeQuestion("s2-063", 2, "Société", "Quel organisme en France est principalement chargé de défendre les personnes victimes de discrimination ?", "Le Conseil supérieur de l'égalité professionnelle, qui traite uniquement les discriminations au travail entre hommes et femmes", "Le ministère de la Justice, qui instruit directement toutes les plaintes pour discrimination sans passer par une autorité intermédiaire", "Le Défenseur des droits, autorité constitutionnelle indépendante créée en 2011 pour défendre les droits des citoyens face aux administrations et aux discriminations", "La Halde (Haute autorité de lutte contre les discriminations et pour l'égalité), créée en 2004 et toujours en activité", "C", "Le Défenseur des droits, institué par la révision constitutionnelle de 2008 et créé par la loi organique de 2011, a absorbé plusieurs autorités indépendantes dont la Halde. Il peut être saisi gratuitement par toute personne s'estimant victime de discrimination (en raison du sexe, de l'origine, du handicap, de l'orientation sexuelle…), de violations des droits de l'enfant, de manquements de services publics ou de signalements d'alerte. Il dispose de pouvoirs d'investigation et de médiation."),
+makeQuestion("s2-064", 2, "Société", "Le recensement à 16 ans permet aussi :",
+  "d’être inscrit automatiquement pour voter",
+  "d’accéder à certains examens",
+  "d’obtenir un emploi",
+  "de voyager librement",
+  "B",
+  "Il est nécessaire pour certaines démarches."
+),
 
-makeQuestion("s2-064", 2, "Société", "Quelle nouveauté importante la loi sur l'immigration de janvier 2024 a-t-elle introduite pour les travailleurs sans-papiers ?", "Elle a généralisé la régularisation automatique de tous les travailleurs étrangers en situation irrégulière présents depuis plus de 2 ans", "Elle a supprimé le droit d'asile pour les ressortissants des pays considérés comme 'sûrs' par le gouvernement", "Elle a créé une carte de séjour 'travailleur saisonnier' permettant aux personnes sans papiers d'exercer légalement dans l'agriculture", "Elle permet aux travailleurs en situation irrégulière dans un métier en tension de déposer eux-mêmes une demande de régularisation, sans avoir besoin que leur employeur le fasse à leur place", "D", "La loi du 26 janvier 2024 introduit un article permettant la régularisation des travailleurs sans-papiers dans des métiers en tension (liste fixée par arrêté), s'ils justifient d'au moins 12 mois de travail dans un de ces métiers au cours des 24 derniers mois et d'au moins 3 ans de résidence en France. Cette disposition, dite 'article 4', permet une demande autonome sans dépendance vis-à-vis de l'employeur, qui reste soumis à des sanctions renforcées s'il emploie des personnes en situation irrégulière."),
+makeQuestion("s2-065", 2, "Société", "La Journée défense et citoyenneté sert à :",
+  "former des militaires",
+  "informer sur les droits et devoirs",
+  "recruter pour l’armée",
+  "faire passer un examen",
+  "B",
+  "Elle informe sur la citoyenneté."
+),
 
-makeQuestion("s2-065", 2, "Société", "Dans quel cas un licenciement est-il qualifié de 'motif économique' en droit français ?", "Lorsqu'il est lié à des difficultés économiques, à des mutations technologiques, à la réorganisation nécessaire pour sauvegarder la compétitivité ou à la cessation d'activité de l'entreprise", "Lorsque l'employeur décide de réduire sa masse salariale pour augmenter ses bénéfices et distribuer des dividendes plus élevés à ses actionnaires", "Lorsque le salarié refuse une modification de son contrat de travail proposée par l'employeur, l'employeur pouvant alors le licencier sans cause réelle et sérieuse", "Dès lors que l'entreprise réalise des pertes sur deux exercices consécutifs, le licenciement économique étant alors automatiquement justifié sans analyse supplémentaire", "A", "Le licenciement pour motif économique (article L1233-3 du Code du travail) est défini limitativement : difficultés économiques (baisse de commandes ou de chiffre d'affaires sur plusieurs trimestres), mutations technologiques, réorganisation nécessaire à la sauvegarde de la compétitivité, ou cessation d'activité. La jurisprudence encadre strictement ces motifs : l'employeur doit prouver la réalité du motif et ne peut pas invoquer une simple baisse de rentabilité. Des obligations de reclassement et un plan de sauvegarde de l'emploi (PSE) s'imposent dans les grandes entreprises."),
+makeQuestion("s2-066", 2, "Société", "Circuler librement dans l’UE signifie :",
+  "aucune règle",
+  "liberté avec certaines conditions",
+  "interdiction de travailler",
+  "obligation de rester",
+  "B",
+  "La liberté existe mais est encadrée."
+),
 
-makeQuestion("s2-066", 2, "Société", "Quelle est l'ampleur des troubles psychiques en France ?", "Moins de 2% de la population est concernée par des troubles mentaux en France, le pays ayant l'un des systèmes de santé mentale les plus efficaces du monde", "Environ 1 Français sur 5 est concerné par des troubles psychiques chaque année, faisant de la santé mentale la première cause de handicap en France", "Les troubles mentaux concernent exclusivement les personnes de plus de 65 ans, les jeunes générations étant protégées par leur résilience psychologique naturelle", "Environ 50% des Français souffriront d'un trouble mental grave au cours de leur vie, nécessitant une hospitalisation psychiatrique", "B", "Selon Santé publique France, environ 1 Français sur 5 est touché par des troubles psychiques chaque année (dépression, anxiété, addictions, troubles bipolaires…). La santé mentale est la première cause de handicap et représente 14% du budget de l'Assurance maladie. La pandémie de Covid-19 a aggravé la situation, particulièrement chez les jeunes. La France manque de psychiatres et de psychologues remboursés : depuis 2022, les consultations chez un psychologue de ville sont remboursées sur prescription médicale."),
+makeQuestion("s2-067", 2, "Société", "Travailler dans un autre pays de l’UE signifie :",
+  "changer automatiquement de nationalité",
+  "avoir le droit de travailler sous conditions",
+  "ne payer aucun impôt",
+  "ne plus dépendre des lois",
+  "B",
+  "Le droit existe avec des règles."
+),
 
-makeQuestion("s2-067", 2, "Société", "Quel est l'objectif de la France en matière climatique à l'horizon 2050 ?", "Réduire de 50% ses émissions de CO2 par rapport au niveau de 1990, tout en maintenant le nucléaire comme source principale d'énergie", "Atteindre la neutralité carbone : les émissions résiduelles de gaz à effet de serre seront entièrement compensées par les puits de carbone (forêts, sols, captage)", "Devenir exportateur net d'énergie renouvelable en supprimant totalement le nucléaire d'ici 2050", "Atteindre 100% d'énergies renouvelables dans la production d'électricité d'ici 2035, puis la neutralité carbone d'ici 2060", "C", "La loi Énergie-Climat de 2019 inscrit dans le droit français l'objectif de neutralité carbone (net zéro) en 2050. Cela signifie que les émissions résiduelles incompressibles seront compensées par des puits de carbone naturels (forêts) ou technologiques (captage et stockage de CO2). La Stratégie nationale bas-carbone (SNBC) fixe des objectifs intermédiaires par secteur (transport, bâtiment, industrie, agriculture). La France a également l'objectif européen de moins 55% d'émissions en 2030 par rapport à 1990."),
+makeQuestion("s2-068", 2, "Société", "S’installer dans un autre pays de l’UE signifie :",
+  "aucune formalité",
+  "respecter certaines règles administratives",
+  "devenir automatiquement citoyen",
+  "perdre ses droits",
+  "B",
+  "L’installation est libre mais encadrée."
+),
 
-makeQuestion("s2-068", 2, "Société", "Qu'appelle-t-on la 'politique de la ville' en France ?", "La politique d'aménagement des grandes métropoles visant à attirer des entreprises étrangères pour dynamiser l'économie nationale", "La politique de rénovation des monuments historiques dans les centres-villes classés, financée par l'État et les collectivités locales", "La politique de transport en commun dans les grandes agglomérations, coordonnée entre l'État et les autorités organisatrices locales", "Un ensemble de mesures ciblées sur les 'quartiers prioritaires de la politique de la ville' (QPV) pour réduire les écarts de développement avec le reste du territoire", "D", "La politique de la ville concentre des moyens supplémentaires (éducation, emploi, sécurité, rénovation urbaine) dans les 1 514 Quartiers prioritaires de la politique de la ville (QPV), définis par un critère de revenu médian inférieur à 60% du revenu national médian. Elle mobilise l'ANRU (Agence nationale de rénovation urbaine) pour la réhabilitation du bâti et les contrats de ville pour les actions sociales et économiques. Elle concerne environ 5,5 millions d'habitants."),
+makeQuestion("s2-069", 2, "Société", "La citoyenneté européenne complète la citoyenneté française car :",
+  "elle la remplace",
+  "elle ajoute des droits",
+  "elle la supprime",
+  "elle est temporaire",
+  "B",
+  "Elle s’ajoute à la citoyenneté nationale."
+),
 
-makeQuestion("s2-069", 2, "Société", "Quel est approximativement le taux de pauvreté en France ?", "Environ 14-15% de la population vit sous le seuil de pauvreté (60% du revenu médian), soit environ 9 millions de personnes", "Environ 5% de la population, la France ayant l'un des taux de pauvreté les plus bas de l'Union européenne grâce à son système de redistribution", "Environ 30% de la population, plaçant la France parmi les pays les plus inégaux de l'Union européenne", "Environ 2% de la population, le système de protection sociale français ayant quasiment éradiqué la pauvreté monétaire", "A", "Selon l'INSEE, le taux de pauvreté en France (personnes vivant avec moins de 60% du revenu médian, soit environ 1 216€/mois pour une personne seule en 2022) est d'environ 14-15%, représentant environ 9 millions de personnes. Ce chiffre reste stable depuis plusieurs années malgré les politiques sociales. La pauvreté touche davantage les familles monoparentales, les jeunes, les résidents des DOM, et les personnes sans emploi. Le taux de pauvreté serait nettement plus élevé sans les transferts sociaux (retraites, allocations, RSA)."),
-
-makeQuestion("s2-070", 2, "Société", "Qu'est-ce qu'un 'désert de services' dans les zones rurales françaises ?", "Une zone avec une faible population et peu de commerces, mais disposant de bons accès aux services publics essentiels grâce au numérique", "Une zone où l'accès aux services essentiels (santé, éducation, administration, commerces de proximité) est difficile en raison de l'éloignement géographique, de la raréfaction des services publics et de la mobilité insuffisante", "Un quartier urbain défavorisé où les administrations refusent d'ouvrir des bureaux par manque de rentabilité et de sécurité", "Un territoire d'outre-mer non desservi par les réseaux mobiles et internet, isolé du reste du territoire national", "B", "Le terme 'désert de services' désigne des territoires, souvent ruraux ou périurbains, où les habitants doivent parcourir de longues distances pour accéder à un médecin, une école, une gare, une préfecture ou un commerce alimentaire. Les fermetures successives de services publics (bureaux de poste, tribunaux, maternités, gares) depuis les années 1990 ont aggravé ces déserts. Les 'maisons France Services' (anciennement maisons de services au public), créées depuis 2019 et présentes dans chaque canton, visent à y remédier."),
-
+makeQuestion("s2-070", 2, "Société", "L’Union européenne repose sur :",
+  "une seule culture",
+  "la diversité et la coopération",
+  "une seule langue",
+  "un seul gouvernement central",
+  "B",
+  "Elle repose sur la coopération entre États."
+),
 ];
 export const SOCIETE_L3: Question[] = [
 
