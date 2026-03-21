@@ -375,6 +375,7 @@ const limits = ROLE_LIMITS[role];
                       {[
                         { label: "Réviser", icon: "📚", onClick: () => router.push("/scroll") },
                         { label: "S'entraîner", icon: "🎯", onClick: () => router.push("/quiz") },
+                        { label: "Audio", icon: "🎧", onClick: () => router.push("/audio") },
                         { label: "Résultats", icon: "📊", onClick: () => router.push("/results") },
                         { label: "Mon compte", icon: "👤", onClick: () => router.push("/account") },
                         { label: "Ressources", icon: "🏛️", onClick: () => router.push("/resources") },
