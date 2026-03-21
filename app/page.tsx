@@ -433,7 +433,7 @@ const limits = ROLE_LIMITS[role];
 
     {/* Titre */}
     <div className="mb-3 mx-auto block text-center w-fit items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
-      Plus de 400 questions-réponses
+      Plus de 800 questions-réponses
     </div>
 
     <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center">

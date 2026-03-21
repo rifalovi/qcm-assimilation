@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import MFASetup from "../../src/components/MFASetup";
+import { VoiceSelector } from "@/components/VoiceSelector";
 
 type Role = "anonymous" | "freemium" | "premium";
 
@@ -114,17 +115,17 @@ export default function AccountPage() {
   }, [router]);
 
   async function handleLogout() {
-  const supabase = createClient();
-  await supabase.auth.signOut();
-  router.push("/");
-}
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
+  }
 
   async function handleUpgrade() {
-  const res = await fetch('/api/create-checkout', { method: 'POST' })
-  const { url, error } = await res.json()
-  if (error) { console.error(error); return }
-  window.location.href = url
-}
+    const res = await fetch('/api/create-checkout', { method: 'POST' })
+    const { url, error } = await res.json()
+    if (error) { console.error(error); return }
+    window.location.href = url
+  }
 
   const role = profile?.role ?? "anonymous";
   const roleConfig = ROLE_CONFIG[role];
@@ -200,7 +201,7 @@ export default function AccountPage() {
                   👑 Voir les tarifs & abonnements →
                 </Link>
               </div>
-</div>
+            </div>
 
             {role !== "premium" && (
               <div className="mt-6 rounded-[1.5rem] border border-amber-400/20 bg-amber-500/10 p-4">
@@ -212,18 +213,29 @@ export default function AccountPage() {
                     </p>
                   </div>
                   <button
-  onClick={handleUpgrade}
-  className="rounded-xl border border-amber-400/20 bg-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-amber-400"
->
-  Passer en Premium →
-</button>
+                    onClick={handleUpgrade}
+                    className="rounded-xl border border-amber-400/20 bg-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-amber-400"
+                  >
+                    Passer en Premium →
+                  </button>
                 </div>
               </div>
             )}
+
             <div className="mt-4">
               <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Sécurité</p>
               <MFASetup />
             </div>
+
+            {/* ── Préférence de voix (Premium uniquement) ── */}
+            {role === "premium" && (
+              <div className="mt-6">
+                <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
+                  Voix audio
+                </p>
+                <VoiceSelector />
+              </div>
+            )}
           </div>
         </section>
 
@@ -242,7 +254,7 @@ export default function AccountPage() {
 
           {results.length === 0 ? (
             <div className="py-10 text-center">
-              <p className="text-sm text-slate-400">Aucun résultat pour l'instant.</p>
+              <p className="text-sm text-slate-400">Aucun résultat pour l&apos;instant.</p>
               <Link href="/" className="mt-3 inline-block text-sm font-medium text-blue-400 transition hover:text-blue-300 hover:underline">
                 Faire un test →
               </Link>
@@ -294,7 +306,7 @@ export default function AccountPage() {
         <section className="flex flex-wrap gap-3">
           <Link href="/"
             className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
-            ← Retour à l'accueil
+            ← Retour à l&apos;accueil
           </Link>
           <Link href="/results"
             className="rounded-xl border border-blue-400/20 bg-blue-500/10 px-5 py-2.5 text-sm font-medium text-blue-200 transition hover:bg-blue-500/15">

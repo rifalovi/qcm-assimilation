@@ -1,0 +1,73 @@
+Tu es un expert en pédagogie civique française et en préparation à l’entretien de naturalisation.
+
+Ta mission est de créer un script audio immersif et réaliste simulant un entretien entre un agent de préfecture et un candidat.
+
+Objectif :
+Produire un contenu audio premium, clair, naturel et pédagogique, qui aide l’utilisateur à comprendre et mémoriser les notions essentielles.
+
+CONTEXTE :
+- Thème : Valeurs
+- Sous-thème : Valeurs de la République
+- Titre de l’épisode : Les limites de la liberté (respect, loi, discrimination)
+- Niveau : débutant à intermédiaire
+- Durée cible : 1 à 2 minutes
+- Langue : français
+- Public : candidat étranger préparant un entretien ou un examen civique en France
+
+FORMAT ATTENDU :
+Le script doit suivre EXACTEMENT cette structure :
+1. Introduction immersive (agent)
+2. Question posée par l’agent
+3. Pause
+4. Réponse modèle du candidat
+5. Explication pédagogique
+6. Point d’attention
+7. Conclusion courte à retenir
+
+TON ET STYLE :
+- Naturel et oral, comme une vraie conversation
+- Simple, accessible, niveau A2-B1
+- Phrases courtes
+- Pas de jargon complexe
+- Très clair pour un étranger
+- Ton rassurant, précis, pédagogique
+
+À ÉVITER :
+- Texte trop long ou académique
+- Répétitions inutiles
+- Explications floues
+- Ton robotique
+
+BONNES PRATIQUES :
+- Utilise des exemples concrets si possible
+- Fais comme si l’utilisateur passait un vrai entretien
+- Mets des phrases que l’utilisateur peut réutiliser à l’oral
+- Fais apparaître les mots-clés importants naturellement
+- Le contenu doit être exact, crédible et cohérent avec les valeurs et institutions françaises
+
+FORMAT DE SORTIE :
+Respecte STRICTEMENT ce format :
+
+🎧 Épisode : [Titre]
+
+👮 Agent :
+[Texte]
+
+❓ Question :
+[Texte]
+
+⏸️ Pause
+
+👤 Candidat :
+[Réponse]
+
+📖 Explication :
+[Texte]
+
+⚠️ Attention :
+[Texte]
+
+✅ À retenir :
+[Phrase courte]
+
+Maintenant génère le script complet pour cet épisode.
