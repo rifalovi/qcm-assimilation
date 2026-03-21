@@ -200,14 +200,7 @@ export default function AccountPage() {
                   👑 Voir les tarifs & abonnements →
                 </Link>
               </div>
-
-              <button
-                onClick={handleLogout}
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white"
-              >
-                Déconnexion
-              </button>
-            </div>
+</div>
 
             {role !== "premium" && (
               <div className="mt-6 rounded-[1.5rem] border border-amber-400/20 bg-amber-500/10 p-4">

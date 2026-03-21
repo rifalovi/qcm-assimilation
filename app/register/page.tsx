@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { mergeLocalAccountToAuthenticatedUser } from "@/lib/mergeLocalAccount";
 
 type Step = "form" | "otp" | "confirmed";
 
@@ -23,54 +24,45 @@ function RegisterForm() {
   const [error, setError] = useState<string | null>(null);
 
   async function handleRegister(e: React.FormEvent) {
-  e.preventDefault();
-  setLoading(true);
-  setError(null);
-  const supabase = createClient();
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
- // Vérifie si le compte existe via signInWithPassword avec un faux mdp
-const { error: checkError } = await supabase.auth.signInWithPassword({
-  email,
-  password: "CHECK_ONLY_fake_password_xyz_123",
-});
+    const supabase = createClient();
+    const normalizedEmail = email.trim().toLowerCase();
+    const trimmedUsername = username.trim();
 
-// Si l'erreur est "Invalid credentials" → compte existe mais mdp incorrect
-// Si l'erreur contient "not found" → compte n'existe pas
-if (checkError && !checkError.message.toLowerCase().includes("invalid") 
-    && !checkError.message.toLowerCase().includes("credentials")) {
-  // Compte n'existe pas → continuer la création
-} else if (!checkError || checkError.message.toLowerCase().includes("invalid") 
-           || checkError.message.toLowerCase().includes("credentials")) {
-  setError("Un compte existe déjà avec cet email.");
-  setLoading(false);
-  return;
-}
+    const { error } = await supabase.auth.signUp({
+      email: normalizedEmail,
+      password,
+      options: {
+        data: { username: trimmedUsername },
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    });
 
-  // Le compte n'existe pas → créer
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { username },
-      emailRedirectTo: `${location.origin}/auth/callback`,
-    },
-  });
+    if (error) {
+      const msg = error.message.toLowerCase();
 
-  if (error) {
-    if (
-      error.message.toLowerCase().includes("already") ||
-      error.message.toLowerCase().includes("registered") ||
-      error.message.toLowerCase().includes("exists")
-    ) {
-      setError("Un compte existe déjà avec cet email. Connectez-vous plutôt →");
-    } else {
-      setError(error.message);
+      if (
+        msg.includes("already registered") ||
+        msg.includes("already exists") ||
+        msg.includes("user already registered")
+      ) {
+        setError("Un compte existe déjà avec cet email.");
+      } else {
+        setError(error.message);
+      }
+
+      setLoading(false);
+      return;
     }
-  } else {
+
+    setEmail(normalizedEmail);
+    setUsername(trimmedUsername);
     setStep("otp");
+    setLoading(false);
   }
-  setLoading(false);
-}
 
   async function handleVerifyOtp(e: React.FormEvent) {
     e.preventDefault();
@@ -95,10 +87,12 @@ if (checkError && !checkError.message.toLowerCase().includes("invalid")
     } = await supabase.auth.getUser();
 
     if (user) {
-      await supabase
-        .from("profiles")
-        .update({ role: "freemium" })
-        .eq("id", user.id);
+      await supabase.from("profiles").upsert({
+        id: user.id,
+        role: "freemium",
+      });
+
+      await mergeLocalAccountToAuthenticatedUser();
     }
 
     setStep("confirmed");
@@ -168,10 +162,10 @@ if (checkError && !checkError.message.toLowerCase().includes("invalid")
               </div>
 
               <a
-                href="/login"
+                href="/"
                 className="inline-block w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-center text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:brightness-105"
               >
-                Se connecter maintenant →
+                Accéder à mon espace →
               </a>
             </div>
           </section>

@@ -138,7 +138,7 @@ function StatCard({
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.14),transparent_42%)] opacity-80" />
       <div className="relative">
         <div className="mb-1 text-xl sm:text-2xl">{icon}</div>
-        <div className="text-2xl font-extrabold text-white sm:text-3xl">{value}</div>
+        <div className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-5xl">{value}</div>
         <div className="mt-1 text-xs font-medium text-slate-400 sm:text-sm">{label}</div>
       </div>
     </div>
@@ -149,9 +149,8 @@ export default function InfoPage() {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [user, setUser] = useState<QcmUser | null>(null);
-  const { role, username: supabaseUsername, loading: authLoading } = useUser();
+  const { role, username: authUsername, loading: authLoading, isAuthenticated, logout } = useUser();
 
-  const isAuthenticated = !!supabaseUsername || !!user?.email?.trim();
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 50);
@@ -159,8 +158,8 @@ export default function InfoPage() {
     return () => clearTimeout(t);
   }, []);
 
-  function clearIdentity() {
-    localStorage.removeItem("qcm_user");
+  async function clearIdentity() {
+    await logout();
     setUser(null);
   }
 
@@ -169,7 +168,7 @@ export default function InfoPage() {
       <EligibilityModalLauncher isAuthenticated={isAuthenticated} />
       <div className="space-y-8 sm:space-y-10">
         <section
-          className={`relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
+          className={`relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
             visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
         >
@@ -183,26 +182,26 @@ export default function InfoPage() {
           <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl" />
           <div className="pointer-events-none absolute bottom-0 right-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
 
-          <div className="relative px-5 py-7 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
-            <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="relative px-5 py-7 sm:px-8 sm:py-9">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
-                  <span className="text-xl">🇫🇷</span>
+                <div className="inline-flex h-10 w-14 overflow-hidden rounded-lg border border-white/10 shadow-md">
+                  <span className="flex-1 bg-blue-700"/><span className="flex-1 bg-white"/><span className="flex-1 bg-red-600"/>
                 </div>
                 <div>
                   <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">
                     République française
                   </div>
-                  <div className="mt-1 text-sm font-semibold text-slate-200">
-                    Examen civique FR
+                  <div className="text-xs text-slate-400">
+                    Plateforme d'entraînement 2026
                   </div>
                 </div>
               </div>
 
-              {!authLoading && !supabaseUsername && user?.pseudo?.trim() ? (
+              {!authLoading && !isAuthenticated && user?.pseudo?.trim() ? (
                 <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 backdrop-blur-md">
                   <span>
-                    Bonjour <span className="font-semibold text-white">{user.pseudo.trim()}</span> 👋
+                    Bonjour <span className="font-semibold text-white">{authUsername?.trim() || user?.pseudo?.trim() || "Utilisateur"}</span> 👋
                   </span>
                   <span className="text-slate-500">•</span>
                   <button
@@ -229,22 +228,19 @@ export default function InfoPage() {
 
             <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
               <div className="text-center lg:text-left">
-  <div className="mb-4 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-blue-200 sm:text-xs">
+  <div className="mb-3 mx-auto block text-center w-fit items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300 lg:mx-0">
     Préparez-vous avec méthode
   </div>
 
-  <h1 className="mx-auto max-w-[18ch] text-2xl font-extrabold leading-tight tracking-tight text-white sm:max-w-xl sm:text-3xl lg:mx-0 lg:max-w-3xl lg:text-5xl">
-    L'examen civique
-Informations essentielles.
+  <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
+    L'examen civique <span className="text-blue-400">informations</span> essentielles.
   </h1>
 
-  <div className="mx-auto mt-5 max-w-2xl rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-4 sm:px-5 sm:py-5 lg:mx-0">
-    <p className="text-[0.98rem] leading-8 text-slate-300 sm:text-base">
-      Comprendre le format, les thèmes et les conditions de l'examen civique avant de vous entraîner dans les meilleures conditions..
-    </p>
-  </div>
+  <p className="mt-3 text-sm leading-relaxed text-slate-400 max-w-xl mx-auto lg:mx-0">
+    Comprendre le format, les thèmes et les conditions de l'examen civique avant de vous entraîner dans les meilleures conditions.
+  </p>
 
-                <div className="mt-7 flex flex-wrap gap-3">
+                <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center lg:justify-start">
                   <ActionButton onClick={() => router.push("/")}>
                     S'entraîner maintenant
                   </ActionButton>
@@ -534,16 +530,16 @@ Informations essentielles.
             visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
         >
-          <div className="relative overflow-hidden rounded-[2rem] border border-blue-400/20 bg-gradient-to-br from-blue-600/15 via-indigo-500/10 to-sky-500/15 px-5 py-8 text-center shadow-[0_22px_60px_rgba(2,8,23,0.32)] sm:px-8 sm:py-10">
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 px-5 py-8 text-center shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl sm:px-8 sm:py-10">
             <div className="pointer-events-none absolute -left-20 top-0 h-56 w-56 rounded-full bg-blue-500/15 blur-3xl" />
             <div className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-indigo-500/15 blur-3xl" />
 
             <div className="relative">
               <div className="mb-3 text-4xl">🎯</div>
-              <h2 className="text-2xl font-extrabold text-white sm:text-3xl">
+              <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-5xl">
                 Prêt à passer à l’action ?
               </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+              <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
                 Commencez par vous entraîner à votre rythme, puis testez-vous dans des conditions
                 proches de l’épreuve réelle pour renforcer vos réflexes et votre confiance.
               </p>

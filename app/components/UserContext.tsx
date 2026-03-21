@@ -9,17 +9,61 @@ type UserContextType = {
   role: Role;
   username: string | null;
   email: string | null;
+  isAuthenticated: boolean;
   loading: boolean;
   refresh: () => void;
+  logout: () => Promise<void>;
 };
 
 const UserContext = createContext<UserContextType>({
   role: "anonymous",
   username: null,
   email: null,
+  isAuthenticated: false,
   loading: true,
   refresh: () => {},
+  logout: async () => {},
 });
+
+function clearQcmLocalState() {
+  if (typeof window === "undefined") return;
+
+  const keysToRemove: string[] = [];
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key) continue;
+
+    if (
+      key === "qcm_user" ||
+      key === "quiz_settings" ||
+      key === "last_result" ||
+      key.startsWith("last_result:train:") ||
+      key.startsWith("last_result:exam:") ||
+      key.startsWith("account_merged:")
+    ) {
+      keysToRemove.push(key);
+    }
+  }
+
+  for (const key of keysToRemove) {
+    localStorage.removeItem(key);
+  }
+
+  if (typeof sessionStorage !== "undefined") {
+    const sessionKeysToRemove: string[] = [];
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const key = sessionStorage.key(i);
+      if (!key) continue;
+      if (key.startsWith("eligibility_modal_seen:")) {
+        sessionKeysToRemove.push(key);
+      }
+    }
+    for (const key of sessionKeysToRemove) {
+      sessionStorage.removeItem(key);
+    }
+  }
+}
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [role, setRole] = useState<Role>("anonymous");
@@ -32,11 +76,25 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     setTick((t) => t + 1);
   }
 
+  async function logout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    clearQcmLocalState();
+    setRole("anonymous");
+    setUsername(null);
+    setEmail(null);
+    setLoading(false);
+    refresh();
+  }
+
   useEffect(() => {
     async function load() {
       setLoading(true);
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       if (!user) {
         setRole("anonymous");
@@ -48,30 +106,39 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
       setEmail(user.email ?? null);
 
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("profiles")
         .select("username, role")
         .eq("id", user.id)
         .single();
 
+      if (error) {
+        console.error("UserContext profiles load error:", error);
+      }
+
       setRole((data?.role as Role) ?? "anonymous");
-      setUsername(data?.username ?? user.email?.split("@")[0] ?? null);
+      setUsername(data?.username ?? user.user_metadata?.username ?? user.email?.split("@")[0] ?? null);
       setLoading(false);
     }
 
     load();
 
-    // Écoute les changements de session (connexion/déconnexion)
     const supabase = createClient();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
       load();
     });
 
     return () => subscription.unsubscribe();
   }, [tick]);
 
+  const isAuthenticated = !!email;
+
   return (
-    <UserContext.Provider value={{ role, username, email, loading, refresh }}>
+    <UserContext.Provider
+      value={{ role, username, email, isAuthenticated, loading, refresh, logout }}
+    >
       {children}
     </UserContext.Provider>
   );
@@ -81,7 +148,6 @@ export function useUser() {
   return useContext(UserContext);
 }
 
-// Limites par rôle
 export const ROLE_LIMITS = {
   anonymous: {
     quizCount: 10,
@@ -96,7 +162,7 @@ export const ROLE_LIMITS = {
     quizCount: 20,
     scrollCount: 999,
     levels: [1] as number[],
-    canExam: true, // une seule fois
+    canExam: true,
     canSeeExplanations: false,
     canSeeThemeStats: false,
     examTrials: 1,

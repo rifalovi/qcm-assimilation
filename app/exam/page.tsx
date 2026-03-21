@@ -67,7 +67,7 @@ function Pill({ children, active = false, onClick }: {
 
 export default function ExamPage() {
   const router = useRouter();
-  const { role, username: supabaseUsername, loading: authLoading } = useUser();
+  const { role, username: authUsername, loading: authLoading, isAuthenticated, logout } = useUser();
   const limits = ROLE_LIMITS[role];
 
   const [user, setUser] = useState<QcmUser | null>(null);
@@ -76,6 +76,7 @@ export default function ExamPage() {
   const [pseudoDraft, setPseudoDraft] = useState("");
   const [emailDraft, setEmailDraft] = useState("");
   const [heroVisible, setHeroVisible] = useState(false);
+  const [openExamUpgrade, setOpenExamUpgrade] = useState(false);
   const [level, setLevel] = useState<Level>(3);
   const [themes, setThemes] = useState<Theme[]>([...THEMES]);
   const canStart = themes.length > 0;
@@ -110,8 +111,8 @@ export default function ExamPage() {
     setPseudoOpen(true);
   }
 
-  function clearIdentity() {
-    localStorage.removeItem("qcm_user");
+  async function clearIdentity() {
+    await logout();
     setUser(null);
     setPseudoDraft("");
     setEmailDraft("");
@@ -131,7 +132,12 @@ export default function ExamPage() {
   }
 
   function smartStartExam() {
-    if (supabaseUsername) { startExam(); return; }
+    if (role === "anonymous") {
+      setOpenExamUpgrade(true);
+      return;
+    }
+
+    if (authUsername) { startExam(); return; }
     const u = loadUser();
     if (!u?.pseudo?.trim() || !u?.email?.trim()) { openIdentityModal(); return; }
     startExam();
@@ -154,7 +160,7 @@ export default function ExamPage() {
       <div className="space-y-6">
 
         {/* ===== HERO ===== */}
-        <section className={`relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
+        <section className={`relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
           heroVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
         }`}>
           <div className="flex h-1.5 w-full">
@@ -173,7 +179,7 @@ export default function ExamPage() {
                 <MarianneMark />
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] sm:tracking-[0.22em] text-slate-400">
                       République française
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] text-slate-300">
@@ -188,38 +194,32 @@ export default function ExamPage() {
                   <div className="mt-0.5 text-xs text-slate-400">Examen blanc • Simulation 2026</div>
                 </div>
               </div>
-              {!authLoading && !supabaseUsername && user?.pseudo?.trim() ? (
+              {!authLoading && !isAuthenticated && user?.pseudo?.trim() && (
                 <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
-                  <span>Bonjour <span className="font-semibold text-white">{user.pseudo.trim()}</span> 👋</span>
-                  <span className="text-slate-500">•</span>
-                  <button onClick={openIdentityModal} className="text-slate-400 hover:text-white hover:underline">Changer</button>
+                  <span>Bonjour <span className="font-semibold text-white">{authUsername?.trim() || user?.pseudo?.trim() || "Utilisateur"}</span> 👋</span>
                   <span className="text-slate-500">•</span>
                   <button onClick={clearIdentity} className="text-slate-400 hover:text-red-400 hover:underline">Déconnexion</button>
                 </div>
-              ) : (
-                <button onClick={openIdentityModal} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition">
-                  👋 S'identifier
-                </button>
               )}
             </div>
 
             {/* Titre + CTA */}
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-blue-300">
+            <div className="mb-3 mx-auto block text-center w-fit items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300 lg:mx-0">
               Conditions proches de l'épreuve
             </div>
 
-            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center">
+            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center lg:text-left">
               Testez-vous en{" "}
               <span className="text-blue-400">conditions</span>{" "}
               d'<span className="text-blue-400">examen blanc</span>.
             </h1>
 
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">
+            <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center max-w-xl mx-auto lg:mx-0 lg:text-left">
               Simulation complète du test civique français — questions chronométrées, niveau exigeant, score requis 32/40.
             </p>
 
             {/* Pills info */}
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
               <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">
                 40 questions
               </span>
@@ -232,7 +232,7 @@ export default function ExamPage() {
             </div>
 
             {/* Boutons */}
-            <div className="mt-6 flex flex-wrap justify-center gap-3 sm:justify-start">
+            <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center lg:justify-start">
               <PremiumButton onClick={smartStartExam} label="Démarrer l'examen blanc" />
               <Button variant="secondary" onClick={() => router.push("/info")}>
                 📖 Comprendre l'examen
@@ -295,7 +295,7 @@ export default function ExamPage() {
                 {themes.length}/{THEMES.length}
               </span>
             </div>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
               {THEMES.map((t) => (
                 <Pill key={t} active={themes.includes(t)} onClick={() => toggleTheme(t)}>{t}</Pill>
               ))}
@@ -355,6 +355,45 @@ export default function ExamPage() {
       </div>
 
       {/* ===== MODAL IDENTITÉ ===== */}
+      {openExamUpgrade && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setOpenExamUpgrade(false)}
+          />
+          <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
+            <div className="text-center">
+              <div className="text-4xl mb-3">👑</div>
+              <h3 className="text-xl font-extrabold text-white">
+                Créez un compte pour commencer l'examen blanc
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-slate-400">
+                Les comptes Freemium bénéficient d’un essai gratuit limité de l’examen blanc. Les comptes Premium débloquent l’accès complet ainsi que les résultats détaillés et les corrections.
+              </p>
+            </div>
+
+            <div className="mt-6 space-y-3">
+              <button
+                onClick={() => {
+                  setOpenExamUpgrade(false);
+                  router.push("/pricing");
+                }}
+                className="w-full rounded-2xl bg-amber-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-400"
+              >
+                ✨ Créer un compte / Voir les offres
+              </button>
+
+              <button
+                onClick={() => setOpenExamUpgrade(false)}
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {pseudoOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setPseudoOpen(false)}/>

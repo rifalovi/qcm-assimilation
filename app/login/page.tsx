@@ -1,15 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { mergeLocalAccountToAuthenticatedUser } from "@/lib/mergeLocalAccount";
 
 // On ajoute "totp" aux modes existants
 type Mode = "login" | "forgot" | "otp" | "newpassword" | "totp";
 
 export default function LoginPage() {
   const router = useRouter();
+
+  useEffect(() => {
+    async function redirectIfAuthenticated() {
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session?.user) {
+        router.push("/");
+        router.refresh();
+      }
+    }
+
+    redirectIfAuthenticated();
+  }, [router]);
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -61,6 +78,7 @@ export default function LoginPage() {
     }
 
     // Pas de 2FA → connexion directe
+    await mergeLocalAccountToAuthenticatedUser();
     router.push("/");
     router.refresh();
   }
@@ -149,6 +167,7 @@ export default function LoginPage() {
       return;
     }
     await supabase.auth.signInWithPassword({ email, password: newPassword });
+    await mergeLocalAccountToAuthenticatedUser();
     setSuccess("Mot de passe mis à jour ! Redirection...");
     setTimeout(() => { router.push("/"); router.refresh(); }, 1500);
     setLoading(false);

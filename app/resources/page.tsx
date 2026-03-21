@@ -446,8 +446,8 @@ export default function ResourcesPage() {
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="space-y-8 sm:space-y-10">
           {/* HERO */}
-          <section className="hero-panel relative overflow-hidden px-5 py-7 sm:px-8 sm:py-10">
-            <div className="flex h-1.5 w-full overflow-hidden rounded-full">
+          <section className="relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
+            <div className="flex h-1.5 w-full">
               <div className="flex-1 bg-blue-600" />
               <div className="flex-1 bg-white" />
               <div className="flex-1 bg-red-600" />
@@ -457,17 +457,36 @@ export default function ResourcesPage() {
             <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl" />
             <div className="pointer-events-none absolute bottom-0 right-24 h-56 w-56 rounded-full bg-indigo-500/10 blur-3xl animate-soft-float" />
 
-            <div className="relative mt-6 text-center">
-              <div className="mb-3 inline-flex w-fit items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
+            <div className="relative px-5 py-7 sm:px-8 sm:py-9">
+              <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex h-10 w-14 overflow-hidden rounded-lg border border-white/10 shadow-md">
+                    <span className="flex-1 bg-blue-700" />
+                    <span className="flex-1 bg-white" />
+                    <span className="flex-1 bg-red-600" />
+                  </span>
+                  <div>
+                    <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">
+                      République française
+                    </div>
+                    <div className="text-xs text-slate-400">Plateforme d'entraînement 2026</div>
+                  </div>
+                </div>
+
+
+              </div>
+
+              <div className="text-center">
+              <div className="mb-3 inline-flex w-fit items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300 mx-auto">
                 Ressources utiles
               </div>
 
-              <h1 className="animate-title-reveal mx-auto max-w-4xl text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+              <h1 className="animate-title-reveal mx-auto max-w-5xl text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
                 Organisez votre <span className="text-blue-400">révision</span>, structurez votre{" "}
                 <span className="text-blue-400">parcours</span> et avancez avec méthode.
               </h1>
 
-              <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+              <p className="mx-auto mt-4 max-w-4xl text-sm leading-8 text-slate-300 sm:text-base">
                 Cette page vous aide à mieux utiliser la plateforme, à prioriser vos efforts et à
                 construire un parcours de préparation plus efficace, avant d’aller consulter les
                 ressources externes.
@@ -486,6 +505,7 @@ export default function ResourcesPage() {
                   📊 Voir mes résultats
                 </HeroButton>
               </div>
+            </div>
             </div>
           </section>
 

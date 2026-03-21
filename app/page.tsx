@@ -103,7 +103,7 @@ function StatMiniCard({
   icon: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-4 text-center shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20 hover:shadow-[0_24px_55px_rgba(2,8,23,0.36)]">
+    <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-4 text-center shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20 hover:shadow-[0_24px_55px_rgba(2,8,23,0.36)]">
       <div className="mb-1 text-xl">{icon}</div>
       <div className="text-2xl font-extrabold text-white sm:text-3xl">{value}</div>
       <div className="mt-1 text-xs font-medium text-slate-400 sm:text-sm">{label}</div>
@@ -113,7 +113,7 @@ function StatMiniCard({
 
 export default function HomePage() {
   const router = useRouter();
-  const { role } = useUser();
+ const { role, username: authUsername, email: authEmail, loading: authLoading, isAuthenticated, logout } = useUser();
 const limits = ROLE_LIMITS[role];
 
   const [pseudo, setPseudo] = useState("");
@@ -201,13 +201,16 @@ const limits = ROLE_LIMITS[role];
     setPseudoOpen(true);
   }
 
-  async function clearPseudo() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    localStorage.removeItem("qcm_user");
-    setPseudo(""); setEmail(""); setPseudoDraft(""); setEmailDraft("");
-    setHasLastResult(false); setPseudoOpen(false);
-  }
+ async function clearPseudo() {
+  await logout();
+  setPseudo("");
+  setEmail("");
+  setPseudoDraft("");
+  setEmailDraft("");
+  setHasLastResult(false);
+  setPseudoOpen(false);
+  setHomeMenuOpen(false);
+}
   
   
 
@@ -248,6 +251,11 @@ const limits = ROLE_LIMITS[role];
   }
 
   function startExam() {
+    if (role === "anonymous") {
+      setOpenExamUpgrade(true);
+      return;
+    }
+
     requireAuthAndRun(() => {
       router.push("/exam");
     });
@@ -264,6 +272,7 @@ const limits = ROLE_LIMITS[role];
   const [comment, setComment] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [openExamUpgrade, setOpenExamUpgrade] = useState(false);
 
   async function submitFeedback(e: React.FormEvent) {
     e.preventDefault();
@@ -301,7 +310,7 @@ const limits = ROLE_LIMITS[role];
       <EligibilityModalLauncher isAuthenticated={!!pseudo.trim() && !!email.trim()} />
       <div className="space-y-8 sm:space-y-10">
 <section
-  className={`relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
+  className={`relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
     heroVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
   }`}
 >
@@ -332,35 +341,91 @@ const limits = ROLE_LIMITS[role];
         </div>
       </div>
 
-      {pseudo.trim() ? (
+      {!authLoading && isAuthenticated ? (
         <div className="relative">
           <button
             onClick={() => setHomeMenuOpen(!homeMenuOpen)}
-            className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 transition"
+            className="flex items-center gap-2 rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 transition"
           >
-            <span>Bonjour <span className="font-semibold text-white">{pseudo.trim()}</span> 👋</span>
+            <span>Bonjour <span className="font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</span> 👋</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{transform: homeMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s"}}>
               <polyline points="6 9 12 15 18 9"/>
             </svg>
           </button>
-          {homeMenuOpen && (
-            <div className="absolute right-0 top-full mt-2 w-44 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-white/10 z-50"
-              style={{background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)"}}>
-              <div className="py-2">
-                <button onClick={() => { openPseudoModal(); setHomeMenuOpen(false); }}
-                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition">
-                  ✏️ Changer le pseudo
-                </button>
-                <button onClick={() => { clearPseudo(); setHomeMenuOpen(false); }}
-                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition">
-                  🚪 Déconnexion
-                </button>
+                    {homeMenuOpen && (
+            <>
+              <div
+                className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm sm:bg-transparent sm:backdrop-blur-0"
+                onClick={() => setHomeMenuOpen(false)}
+              />
+              <div
+                className="fixed left-1/2 top-24 z-50 w-[90vw] max-w-sm -translate-x-1/2 max-h-[70vh] overflow-y-auto rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 shadow-[0_30px_80px_rgba(0,0,0,0.65)] backdrop-blur-xl sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-72 sm:max-w-none sm:translate-x-0 sm:max-h-none sm:overflow-visible"
+                style={{ background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)" }}
+              >
+                {isAuthenticated ? (
+                  <>
+                    <div className="border-b border-white/10 px-3 py-2">
+                      <p className="text-sm font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</p>
+                      <p className="mt-0.5 text-xs text-slate-400">
+                        {role === "premium" ? "👑 Premium" : "✨ Freemium"}
+                      </p>
+                    </div>
+
+                    <div className="py-2">
+                      {[
+                        { label: "Réviser", icon: "📚", onClick: () => router.push("/scroll") },
+                        { label: "S'entraîner", icon: "🎯", onClick: () => router.push("/quiz") },
+                        { label: "Résultats", icon: "📊", onClick: () => router.push("/results") },
+                        { label: "Mon compte", icon: "👤", onClick: () => router.push("/account") },
+                        { label: "Ressources", icon: "🏛️", onClick: () => router.push("/resources") },
+                        { label: "Tarifs", icon: "👑", onClick: () => router.push("/pricing") },
+                      ].map((item) => (
+                        <button
+                          key={item.label}
+                          onClick={() => {
+                            setHomeMenuOpen(false);
+                            item.onClick();
+                          }}
+                          className="flex w-full items-center gap-3 px-4 py-3.5 text-sm text-slate-300 transition hover:bg-white/5 hover:text-white"
+                        >
+                          <span className="text-base">{item.icon}</span>
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="border-t border-white/10 py-2">
+                      <button
+                        onClick={() => { clearPseudo(); }}
+                        className="flex w-full items-center gap-3 px-4 py-3.5 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition"
+                      >
+                        <span className="text-base">🚪</span>
+                        Déconnexion
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="py-2">
+                    <button
+                      onClick={() => { openPseudoModal(); setHomeMenuOpen(false); }}
+                      className="flex w-full items-center gap-3 px-4 py-3.5 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition"
+                    >
+                      ✏️ Changer le pseudo
+                    </button>
+                    <button
+                      onClick={() => { clearPseudo(); }}
+                      className="flex w-full items-center gap-3 px-4 py-3.5 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition"
+                    >
+                      🚪 Déconnexion
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
+            </>
           )}
         </div>
       ) : (
-        <button onClick={openPseudoModal} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition">
+        <button onClick={openPseudoModal} className="rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition">
           👋 Se connecter
         </button>
       )}
@@ -514,7 +579,7 @@ const limits = ROLE_LIMITS[role];
   })}
 </div>
 
-            <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4 text-center sm:text-left">
+            <div className="mt-5 rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 p-4 text-center sm:text-left">
               <div className="mb-2 text-sm font-semibold text-white">Conseil</div>
               <ul className="space-y-2 text-sm text-slate-300">
                 <li>• Niveau 1 : bases et repères essentiels</li>
@@ -574,7 +639,7 @@ const limits = ROLE_LIMITS[role];
               </div>
             </div>
 
-            <div className="mt-5 space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
+            <div className="mt-5 space-y-3 rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 p-4 text-sm">
               {[
   ["Questions", `${limits.quizCount} questions`],
   ["Temps / question", `${PER_QUESTION_SECONDS}s`],
@@ -656,15 +721,15 @@ const limits = ROLE_LIMITS[role];
       </div>
 
       {pseudoOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setPseudoOpen(false)}
           />
-          <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
-            <div className="mb-5 text-center sm:text-left">
-              <h3 className="text-xl font-bold text-white">Avant de commencer</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-400">
+          <div className="relative z-[101] w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_25px_70px_rgba(2,8,23,0.55)] sm:p-6">
+            <div className="mb-4 text-center sm:text-left">
+              <h3 className="text-lg sm:text-xl font-semibold text-white">Avant de commencer</h3>
+              <p className="mt-1.5 text-xs sm:text-sm leading-5 text-slate-400">
                 Créez un compte pour sauvegarder vos résultats, ou continuez sans compte avec une
                 identité locale.
               </p>
@@ -673,20 +738,20 @@ const limits = ROLE_LIMITS[role];
             <div className="flex flex-col gap-3">
               <a
                 href={`/register?email=${encodeURIComponent(emailDraft)}&pseudo=${encodeURIComponent(pseudoDraft)}`}
-                className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-center text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.24)] transition hover:brightness-105"
+                className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.24)] transition hover:brightness-105"
               >
                 Créer un compte gratuit
               </a>
               <a
                 href="/login"
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                className="w-full rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-4 py-3 text-center text-sm font-semibold text-slate-200 transition hover:bg-white/10"
               >
                 J'ai déjà un compte
               </a>
             </div>
 
-            <div className="mt-6 border-t border-white/10 pt-5">
-              <p className="mb-3 text-center text-xs text-slate-500">
+            <div className="mt-4 border-t border-white/10 pt-4">
+              <p className="mb-2.5 text-center text-xs text-slate-500">
                 Ou continuer sans compte
               </p>
 
@@ -694,7 +759,7 @@ const limits = ROLE_LIMITS[role];
                 value={pseudoDraft}
                 onChange={(e) => setPseudoDraft(e.target.value)}
                 placeholder="Pseudo (ex : Carlos)"
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
+                className="w-full rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
                 maxLength={20}
                 autoFocus
               />
@@ -704,10 +769,10 @@ const limits = ROLE_LIMITS[role];
                 value={emailDraft}
                 onChange={(e) => setEmailDraft(e.target.value)}
                 placeholder="Adresse email"
-                className="mt-3 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
+                className="mt-3 w-full rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
               />
 
-              <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:justify-end">
                 <Button variant="secondary" type="button" onClick={() => setPseudoOpen(false)}>
                   Annuler
                 </Button>
@@ -729,13 +794,52 @@ const limits = ROLE_LIMITS[role];
         </div>
       )}
 
+      {openExamUpgrade && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setOpenExamUpgrade(false)}
+          />
+          <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
+            <div className="text-center">
+              <div className="text-4xl mb-3">👑</div>
+              <h3 className="text-xl font-extrabold text-white">
+                Créez un compte pour accéder à l'examen blanc
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-slate-400">
+                L’examen blanc est accessible aux comptes Freemium avec un essai gratuit limité, puis en illimité avec Premium. Créez d’abord un compte pour commencer.
+              </p>
+            </div>
+
+            <div className="mt-6 space-y-3">
+              <button
+                onClick={() => {
+                  setOpenExamUpgrade(false);
+                  router.push("/pricing");
+                }}
+                className="w-full rounded-2xl bg-amber-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-400"
+              >
+                ✨ Créer un compte / Voir les offres
+              </button>
+
+              <button
+                onClick={() => setOpenExamUpgrade(false)}
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {openFeedback && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 sm:absolute sm:left-auto sm:translate-x-0 sm:right-0 sm:top-full sm:mt-2 sm:w-56 flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setOpenFeedback(false)}
           />
-          <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
+          <div className="relative z-[101] w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_25px_70px_rgba(2,8,23,0.55)] sm:p-6">
             <div className="flex items-start justify-between gap-3">
               <div className="text-center sm:text-left">
                 <h3 className="text-lg font-bold text-white">Donner un avis</h3>
@@ -793,7 +897,7 @@ const limits = ROLE_LIMITS[role];
                     name="comment"
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
-                    className="mt-2 min-h-[120px] w-full rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
+                    className="mt-2 min-h-[120px] w-full rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 p-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
                     placeholder="Qu'est-ce qui vous a plu ? Qu'est-ce qu'on doit améliorer ?"
                   />
                 </div>

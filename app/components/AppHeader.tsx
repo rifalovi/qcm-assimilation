@@ -2,13 +2,12 @@
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { useUser } from "./UserContext";
 
 export default function AppHeader() {
   const pathname = usePathname();
   const router = useRouter();
-  const { username, role, loading } = useUser();
+  const { username, role, loading, isAuthenticated, logout } = useUser();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -30,8 +29,7 @@ export default function AppHeader() {
   }, [pathname]);
 
   async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    await logout();
     router.push("/");
     router.refresh();
   }
@@ -65,7 +63,7 @@ export default function AppHeader() {
 
           {/* Bouton compte avec dropdown */}
           {!loading && (
-            username ? (
+            isAuthenticated ? (
               <div className="relative" ref={dropdownRef}>
                 {/* Bouton trigger */}
                 <button
