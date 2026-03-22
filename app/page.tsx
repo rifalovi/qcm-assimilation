@@ -9,6 +9,7 @@ import { hasAnyResult } from "../src/lib/saveResult";
 import { createClient } from "@/lib/supabase/client";
 import { useUser, ROLE_LIMITS } from "./components/UserContext";
 import EligibilityModalLauncher from "./components/EligibilityModalLauncher";
+import AvisSection from "./components/AvisSection";
 
 
 
@@ -459,84 +460,82 @@ const limits = ROLE_LIMITS[role];
       </span>
     </div>
 
-    {/* Boutons */}
-<div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center">
-  <button
-    onClick={start}
-    className="w-full sm:w-auto rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-[0_8px_24px_rgba(37,99,235,0.35)] transition hover:bg-blue-500 active:scale-95"
-  >
-    🎯 Faire un test
-  </button>
+       {/* 4 boutons phares */}
+    <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
 
-  <Button
-    className="w-full sm:w-auto"
-    variant="secondary"
-    onClick={() => {
-      const event = new CustomEvent("open-eligibility-modal");
-      window.dispatchEvent(event);
-    }}
-  >
-    🧭 Trouver mon parcours
-  </Button>
+      {/* Faire un test */}
+      <button
+        onClick={start}
+        className="group flex flex-col items-center gap-2 rounded-2xl border border-blue-400/25 bg-gradient-to-br from-blue-600/20 to-indigo-600/10 px-3 py-4 text-center transition hover:border-blue-400/40 active:scale-95"
+      >
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/20 shadow-[0_6px_16px_rgba(37,99,235,0.25)]">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+          </svg>
+        </div>
+        <div>
+          <p className="text-sm font-bold text-white">Faire un test</p>
+          <p className="mt-0.5 text-[10px] text-blue-300/70">40 questions</p>
+        </div>
+      </button>
 
-  <Button
-    className="w-full sm:w-auto"
-    variant="secondary"
-    onClick={() => router.push("/info")}
-  >
-    📖 Comprendre l'examen
-  </Button>
+      {/* Réviser */}
+      <button
+        onClick={() => router.push("/scroll")}
+        className="group flex flex-col items-center gap-2 rounded-2xl border border-amber-400/25 bg-gradient-to-br from-amber-500/20 to-orange-500/10 px-3 py-4 text-center transition hover:border-amber-400/40 active:scale-95"
+      >
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-500/20 shadow-[0_6px_16px_rgba(251,191,36,0.2)]">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>
+          </svg>
+        </div>
+        <div>
+          <p className="text-sm font-bold text-white">Réviser</p>
+          <p className="mt-0.5 text-[10px] text-amber-300/70">Par thématique</p>
+        </div>
+      </button>
 
-  <Button className="w-full sm:w-auto" variant="secondary" onClick={startExam}>
-    🎯 Examen blanc
-  </Button>
+      {/* Bibliothèque audio */}
+      <button
+        onClick={() => router.push("/audio")}
+        className="group flex flex-col items-center gap-2 rounded-2xl border border-emerald-400/25 bg-gradient-to-br from-emerald-500/20 to-teal-500/10 px-3 py-4 text-center transition hover:border-emerald-400/40 active:scale-95"
+      >
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(52,211,153,0.2)]">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+          </svg>
+        </div>
+        <div>
+          <p className="text-sm font-bold text-white">Bibliothèque</p>
+          <p className="mt-0.5 text-[10px] text-emerald-300/70">+100 pistes audio</p>
+        </div>
+      </button>
 
-  <Button
-    className="w-full sm:w-auto"
-    variant="secondary"
-    onClick={() => router.push("/resources")}
-  >
-    🏛️ Ressources officielles
-  </Button>
+      {/* Avis */}
+      <button
+        onClick={() => { const el = document.getElementById("avis-section"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
+        className="group flex flex-col items-center gap-2 rounded-2xl border border-violet-400/25 bg-gradient-to-br from-violet-500/20 to-purple-500/10 px-3 py-4 text-center transition hover:border-violet-400/40 active:scale-95"
+      >
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/20 shadow-[0_6px_16px_rgba(167,139,250,0.2)]">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div>
+          <p className="text-sm font-bold text-white">Avis</p>
+          <p className="mt-0.5 text-[10px] text-violet-300/70">Voir les retours</p>
+        </div>
+      </button>
 
-  <p className="text-xs text-slate-500 text-center max-w-md mx-auto">
-    Centres agréés, informations officielles et ressources utiles pour préparer l’examen.
-  </p>
-</div>
+    </div>
+
   </div>
 </section>
 
         <ScrollDemo />
 
-{/* CTA Réviser après vidéo */}
-<div className="flex justify-center py-2">
-  <button
-    onClick={() => router.push("/scroll")}
-    className="group relative overflow-hidden rounded-2xl border border-amber-400/30 bg-amber-500/10 px-8 py-4 text-base font-bold text-amber-300 shadow-[0_0_24px_rgba(251,191,36,0.15)] transition hover:bg-amber-500/20 hover:shadow-[0_0_32px_rgba(251,191,36,0.25)] active:scale-95"
-  >
-    <span className="relative z-10">🚀 Réviser maintenant</span>
-    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-amber-400/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-  </button>
-</div>
-        <section className="flex flex-wrap justify-center gap-3">
-          <Button variant="secondary" onClick={() => router.push("/info")}>
-            📘 Guide de l'examen
-          </Button>
 
-          {hasLastResult && (
-            <Button variant="secondary" onClick={() => router.push("/results")}>
-              📊 Voir le dernier résultat
-            </Button>
-          )}
-
-          <Button variant="secondary" onClick={() => setOpenFeedback(true)}>
-            💬 Laisser un avis
-          </Button>
-
-          <Button variant="secondary" onClick={() => router.push("/leaderboard")}>
-            🏆 Classement
-          </Button>
-        </section>
 
         <section className="grid gap-6 lg:grid-cols-3">
           <Card>
@@ -928,6 +927,7 @@ const limits = ROLE_LIMITS[role];
         <input type="text" name="count" />
         <input type="text" name="mode" />
       </form>
+      <AvisSection />
     </main>
   );
 }
