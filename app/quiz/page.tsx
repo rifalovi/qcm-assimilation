@@ -327,7 +327,7 @@ function selectAnswer(choice: ChoiceKey) {
 }
 
   return (
-    <main className="mx-auto max-w-4xl px-3 py-3 sm:px-6 sm:py-6">
+    <main className="mx-auto max-w-4xl px-3 py-2 sm:px-6 sm:py-4">
       <div className="space-y-4">
         {/* Bandeau compact */}
         <div className="rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 p-3 shadow-[0_20px_50px_rgba(2,8,23,0.40)]">
@@ -424,19 +424,19 @@ function selectAnswer(choice: ChoiceKey) {
               {current.theme} • Niveau {current.level}
             </div>
 
-            <h2 className="text-xl font-semibold leading-relaxed text-white sm:text-2xl">
+            <h2 className="text-lg font-semibold leading-snug text-white sm:text-xl">
               {current.question}
             </h2>
           </div>
 
-          <div className="mt-5 space-y-3">
+          <div className="mt-2 space-y-1.5">
             {current.choices.map((c) => {
               const selected = answers[current.id] === c.key;
               return (
                 <button
                   key={c.key}
                   onClick={() => selectAnswer(c.key)}
-                  className={`w-full rounded-2xl border p-4 text-left transition-all duration-200 ${
+                  className={`w-full rounded-xl border px-3 py-2 text-left transition-all duration-200 ${
                     selected
                       ? "border-blue-400/30 bg-blue-500/15 text-white shadow-[0_10px_30px_rgba(37,99,235,0.14)]"
                       : "border-white/10 bg-white/5 text-slate-200 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
