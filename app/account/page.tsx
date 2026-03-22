@@ -150,24 +150,10 @@ export default function AccountPage() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+    <main className="mx-auto max-w-5xl px-4 pt-3 pb-6 sm:px-6 sm:pt-4 sm:pb-8">
       <div className="space-y-6">
 
-        {/* ===== BARRE NAVIGATION STICKY ===== */}
-        <div className="sticky top-16 z-40 flex justify-end gap-3 pb-2">
-          <Link
-            href="/"
-            className="rounded-xl border border-white/10 bg-slate-900/80 px-4 py-2 text-xs font-medium text-slate-300 backdrop-blur-sm transition hover:bg-white/10 hover:text-white"
-          >
-            ← Accueil
-          </Link>
-          <Link
-            href="/results"
-            className="rounded-xl border border-blue-400/20 bg-slate-900/80 px-4 py-2 text-xs font-medium text-blue-300 backdrop-blur-sm transition hover:bg-blue-500/10"
-          >
-            Dernier résultat
-          </Link>
-        </div>
+
 
         {/* ===== PROFIL ===== */}
         <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
@@ -230,9 +216,23 @@ export default function AccountPage() {
             {/* ── Préférence de voix (Premium uniquement) ── */}
             {role === "premium" && (
               <div className="mt-6">
-                <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
-                  Voix audio
-                </p>
+<div className="flex items-center justify-between mb-3">
+  <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+    Voix audio
+  </p>
+  <button
+    onClick={() => {
+      const last = localStorage.getItem("last_audio_page");
+      router.push(last ?? "/audio");
+    }}
+    className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-400 transition hover:text-blue-300"
+  >
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+      <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+    Retour à la lecture
+  </button>
+</div>
                 <VoiceSelector />
               </div>
             )}
