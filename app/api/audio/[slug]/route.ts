@@ -105,5 +105,8 @@ export async function GET(
     );
   }
 
-  return NextResponse.redirect(signedData.signedUrl, 302);
+  return NextResponse.json(
+    { url: signedData.signedUrl, gender, expiresIn: SIGNED_URL_EXPIRY },
+    { status: 200, headers: { "Cache-Control": "no-store" } }
+  );
 }
