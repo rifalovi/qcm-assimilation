@@ -102,12 +102,14 @@ export default function AppHeader() {
                     {/* Navigation */}
                     <div className="py-2">
                       {[
+                        { href: "/", label: "Accueil", icon: "🏠" },
                         { href: "/scroll", label: "Réviser", icon: "📚" },
                         { href: "/quiz", label: "S'entraîner", icon: "🎯" },
+                        { href: "/audio", label: "Audio", icon: "🎧" },
                         { href: "/results", label: "Résultats", icon: "📊" },
                         { href: "/account", label: "Mon compte", icon: "👤" },
-                        { href: "/audio", label: "Audio", icon: "🎧" },
                         { href: "/resources", label: "Ressources", icon: "🏛️" },
+                        { href: "/info", label: "Infos", icon: "ℹ️" },
                         { href: "/pricing", label: "Tarifs", icon: "👑" },
                       ].map((item) => (
                         <Link
