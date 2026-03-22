@@ -582,38 +582,48 @@ ${errorsText}
     </div>
   </div>
 
-  {/* ===== ACTIONS ===== */}
-  <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
-    <Button onClick={replaySame}>Réessayer</Button>
-    <Button variant="secondary" onClick={() => router.push(mode === "exam" ? "/exam" : "/")}>
-      Nouveau test
-    </Button>
-    <Button variant="secondary" onClick={copyDetailedResult}>
-      Copier
-    </Button>
-    <Button variant="secondary" onClick={mailResult}>
-      Email
-    </Button>
-    <Button
-      variant="secondary"
-      onClick={() => {
-        const el = document.getElementById("feedback");
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }}
-    >
-      Avis
-    </Button>
-    <Button variant="secondary" onClick={() => router.push("/leaderboard")}>
-      Classement
-    </Button>
-    <Button variant="secondary" onClick={share}>
-      Partager
-    </Button>
-
-    {/* 🔥 NOUVEAU */}
-    <Button variant="secondary" onClick={() => router.push("/resources")}>
-      🏛️ Liens officiels
-    </Button>
+  {/* ===== ACTIONS — icônes illustratives ===== */}
+  <div className="mt-6 grid grid-cols-4 gap-3 sm:grid-cols-8">
+    <button onClick={replaySame}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      <span className="text-[10px] font-medium leading-tight text-center">Réessayer</span>
+    </button>
+    <button onClick={() => router.push(mode === "exam" ? "/exam" : "/")}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <span className="text-[10px] font-medium leading-tight text-center">Nouveau test</span>
+    </button>
+    <button onClick={copyDetailedResult}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+      <span className="text-[10px] font-medium leading-tight text-center">Copier</span>
+    </button>
+    <button onClick={mailResult}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      <span className="text-[10px] font-medium leading-tight text-center">Email</span>
+    </button>
+    <button onClick={() => { const el = document.getElementById("feedback"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+      <span className="text-[10px] font-medium leading-tight text-center">Avis</span>
+    </button>
+    <button onClick={() => router.push("/leaderboard")}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+      <span className="text-[10px] font-medium leading-tight text-center">Classement</span>
+    </button>
+    <button onClick={share}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
+      <span className="text-[10px] font-medium leading-tight text-center">Partager</span>
+    </button>
+    <button onClick={() => router.push("/resources")}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span className="text-[10px] font-medium leading-tight text-center">Liens officiels</span>
+    </button>
   </div>
 
   {/* ===== BLOC SCROLL ===== */}
