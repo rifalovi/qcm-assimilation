@@ -343,10 +343,10 @@ const limits = ROLE_LIMITS[role];
       </div>
 
       {!authLoading && isAuthenticated ? (
-        <div className="relative">
+        <div className="relative flex justify-end sm:justify-start">
           <button
             onClick={() => setHomeMenuOpen(!homeMenuOpen)}
-            className="flex items-center gap-2 rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 transition"
+            className="flex items-center gap-2 rounded-3xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 transition"
           >
             <span>Bonjour <span className="font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</span> 👋</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{transform: homeMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s"}}>
@@ -360,7 +360,7 @@ const limits = ROLE_LIMITS[role];
                 onClick={() => setHomeMenuOpen(false)}
               />
               <div
-                className="fixed left-1/2 top-24 z-50 w-[90vw] max-w-[320px] -translate-x-1/2 max-h-[70vh] overflow-y-auto rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 shadow-[0_24px_70px_rgba(0,0,0,0.62)] backdrop-blur-xl sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-56 sm:max-w-none sm:translate-x-0 sm:max-h-none sm:overflow-visible"
+                className="fixed right-4 top-20 z-50 w-52 max-h-[70vh] overflow-y-auto rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 shadow-[0_24px_70px_rgba(0,0,0,0.62)] backdrop-blur-xl sm:absolute sm:right-0 sm:top-full sm:mt-2 sm:w-52 sm:max-h-none sm:overflow-visible"
                 style={{ background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)" }}
               >
                 {isAuthenticated ? (

@@ -61,7 +61,7 @@ export default function AvisSection() {
   if (avis.length === 0) return null;
 
   return (
-    <section id="avis-section" className="space-y-5">
+    <section id="avis-section" className="space-y-5 pt-8 mt-4 border-t border-white/10">
       {/* Header */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>

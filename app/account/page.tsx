@@ -260,39 +260,36 @@ export default function AccountPage() {
               </Link>
             </div>
           ) : (
-            <div className="mt-5 space-y-3">
+            <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {results.map((r) => (
                 <div key={r.id}
-                  className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/[0.07]">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <span className={`shrink-0 rounded-full px-2 py-1 text-xs font-semibold ${
-                      r.mode === "exam"
-                        ? "border border-red-400/20 bg-red-500/10 text-red-200"
-                        : "border border-blue-400/20 bg-blue-500/10 text-blue-200"
-                    }`}>
-                      {r.mode === "exam" ? "Examen" : "Entraînement"}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-white">
-                        {r.score_correct}/{r.score_total} — {(r.score_percent ?? 0).toFixed(0)}%
-                      </p>
-                      <p className="truncate text-xs text-slate-400">
-                        Niveau {r.level} • {Array.isArray(r.themes) ? r.themes.join(", ") : r.themes}
-                      </p>
-                    </div>
+                  className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition hover:bg-white/[0.07]">
+                  <span className={`shrink-0 rounded-lg px-1.5 py-0.5 text-[10px] font-semibold ${
+                    r.mode === "exam"
+                      ? "border border-red-400/20 bg-red-500/10 text-red-200"
+                      : "border border-blue-400/20 bg-blue-500/10 text-blue-200"
+                  }`}>
+                    {r.mode === "exam" ? "Exam" : "Train"}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold text-white">
+                      {r.score_correct}/{r.score_total} — {(r.score_percent ?? 0).toFixed(0)}%
+                    </p>
+                    <p className="truncate text-[10px] text-slate-500">
+                      Niv.{r.level} • {Array.isArray(r.themes) ? r.themes.join(", ") : r.themes}
+                    </p>
                   </div>
-
                   <div className="shrink-0 text-right">
-                    <span className={`rounded-full px-2 py-1 text-xs font-semibold ${
+                    <span className={`rounded-lg px-1.5 py-0.5 text-[10px] font-semibold ${
                       r.passed
                         ? "border border-emerald-400/20 bg-emerald-500/10 text-emerald-200"
                         : "border border-red-400/20 bg-red-500/10 text-red-200"
                     }`}>
-                      {r.passed ? "Réussi" : "Échoué"}
+                      {r.passed ? "✓ OK" : "✗"}
                     </span>
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-0.5 text-[10px] text-slate-500">
                       {new Date(r.created_at).toLocaleDateString("fr-FR", {
-                        day: "2-digit", month: "short", year: "numeric",
+                        day: "2-digit", month: "short",
                       })}
                     </p>
                   </div>
@@ -304,12 +301,8 @@ export default function AccountPage() {
 
         {/* ===== ACTIONS BAS ===== */}
         <section className="flex flex-wrap gap-3">
-          <Link href="/"
-            className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
-            ← Retour à l&apos;accueil
-          </Link>
           <Link href="/results"
-            className="rounded-xl border border-blue-400/20 bg-blue-500/10 px-5 py-2.5 text-sm font-medium text-blue-200 transition hover:bg-blue-500/15">
+            className="rounded-xl border border-blue-400/20 bg-blue-500/10 px-5 py-2.5 text-sm font-medium text-blue-200 transition hover:bg-blue-500/15 mx-auto block text-center">
             Voir le dernier résultat
           </Link>
         </section>
