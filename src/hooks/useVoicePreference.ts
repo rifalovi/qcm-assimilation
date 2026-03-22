@@ -14,18 +14,15 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { createClient } from "@supabase/supabase-js";
 
+import { createClient } from "@/lib/supabase/client";
 export type VoiceGender = "male" | "female";
 
 const STORAGE_KEY = "qcm_voice_preference";
 const DEFAULT_VOICE: VoiceGender = "female";
 
-// ─── Client Supabase léger (côté client) ──────────────────────────────────
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// ─── Client Supabase centralisé ───────────────────────────────────────────
+const supabase = createClient();
 
 // ─── Hook ─────────────────────────────────────────────────────────────────
 export function useVoicePreference() {
@@ -94,8 +91,8 @@ export function useVoicePreference() {
         .from("profiles")
         .update({ voice_preference: newVoice })
         .eq("id", user.id);
-    } catch {
-      // Silencieux — localStorage reste cohérent même si la sync échoue
+    } catch (err) {
+      console.error("[VoicePreference] Erreur sync Supabase:", err);
     }
   }, []);
 

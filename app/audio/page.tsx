@@ -391,11 +391,16 @@ export default function AudioPage() {
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 pb-24 sm:px-6 sm:py-8 sm:pb-8 lg:px-8">
       <div className="space-y-8 sm:space-y-10">
-
         {/* ── HERO ────────────────────────────────────────────────────── */}
         <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
           <div className="flex h-1.5 w-full overflow-hidden rounded-full">
             <div className="flex-1 bg-blue-600" /><div className="flex-1 bg-white" /><div className="flex-1 bg-red-600" />
+          </div>
+          <div className="px-5 pt-4 sm:px-8">
+            <button onClick={() => router.back()} className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 transition hover:text-white">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Retour
+            </button>
           </div>
           <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl" />
           <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl" />

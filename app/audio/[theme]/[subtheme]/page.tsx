@@ -320,6 +320,13 @@ export default function AudioSeriesPage() {
   }, [themeKey, subthemeKey]);
 
   // Ouvrir l'épisode demandé via ?episode= ou le premier par défaut
+  // Sauvegarder cette page comme dernière page audio visitée
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("last_audio_page", window.location.pathname);
+    }
+  }, []);
+
   const [openId, setOpenId] = useState<string | null>(null);
   useEffect(() => {
     if (!episodes.length) return;
