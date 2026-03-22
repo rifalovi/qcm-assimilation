@@ -359,12 +359,12 @@ const limits = ROLE_LIMITS[role];
                 onClick={() => setHomeMenuOpen(false)}
               />
               <div
-                className="fixed left-1/2 top-24 z-50 w-[90vw] max-w-sm -translate-x-1/2 max-h-[70vh] overflow-y-auto rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 shadow-[0_30px_80px_rgba(0,0,0,0.65)] backdrop-blur-xl sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-72 sm:max-w-none sm:translate-x-0 sm:max-h-none sm:overflow-visible"
+                className="fixed left-1/2 top-24 z-50 w-[90vw] max-w-[320px] -translate-x-1/2 max-h-[70vh] overflow-y-auto rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 shadow-[0_24px_70px_rgba(0,0,0,0.62)] backdrop-blur-xl sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-56 sm:max-w-none sm:translate-x-0 sm:max-h-none sm:overflow-visible"
                 style={{ background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)" }}
               >
                 {isAuthenticated ? (
                   <>
-                    <div className="border-b border-white/10 px-3 py-2">
+                    <div className="border-b border-white/10 px-3 py-1.5">
                       <p className="text-sm font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</p>
                       <p className="mt-0.5 text-xs text-slate-400">
                         {role === "premium" ? "👑 Premium" : "✨ Freemium"}
@@ -387,20 +387,20 @@ const limits = ROLE_LIMITS[role];
                             setHomeMenuOpen(false);
                             item.onClick();
                           }}
-                          className="flex w-full items-center gap-3 px-4 py-3.5 text-sm text-slate-300 transition hover:bg-white/5 hover:text-white"
+                          className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white active:scale-[0.99]"
                         >
-                          <span className="text-base">{item.icon}</span>
-                          {item.label}
+                          <span className="text-[15px]">{item.icon}</span>
+                          <span className="truncate">{item.label}</span>
                         </button>
                       ))}
                     </div>
 
-                    <div className="border-t border-white/10 py-2">
+                    <div className="border-t border-white/10 py-1">
                       <button
                         onClick={() => { clearPseudo(); }}
-                        className="flex w-full items-center gap-3 px-4 py-3.5 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition"
+                        className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/10 hover:text-red-300 active:scale-[0.99]"
                       >
-                        <span className="text-base">🚪</span>
+                        <span className="text-[15px]">🚪</span>
                         Déconnexion
                       </button>
                     </div>
@@ -415,7 +415,7 @@ const limits = ROLE_LIMITS[role];
                     </button>
                     <button
                       onClick={() => { clearPseudo(); }}
-                      className="flex w-full items-center gap-3 px-4 py-3.5 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition"
+                      className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/10 hover:text-red-300 active:scale-[0.99]"
                     >
                       🚪 Déconnexion
                     </button>

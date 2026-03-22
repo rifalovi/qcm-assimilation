@@ -5,10 +5,7 @@
  * - Vérifie que l'utilisateur est authentifié et premium
  * - Lit sa préférence de voix (male/female) depuis profiles
  * - Génère une URL Supabase Storage signée valable 60 secondes
- *
- * Appelée par le composant AudioPlayer :
- *   GET /api/audio/la-devise-liberte-egalite-fraternite
- *   → { url: "https://supabase.co/...?token=...&expires=..." }
+ * - Redirige directement vers le MP3 signé pour compatibilité <audio>
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -16,14 +13,10 @@ import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
 
-// Durée de validité de l'URL signée en secondes
-// 60s suffit pour démarrer la lecture — le fichier audio reste accessible
-// en streaming une fois lancé même si l'URL expire
 const SIGNED_URL_EXPIRY = 60;
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
-/** Client Supabase côté serveur avec cookies de session */
 async function createServerSupabase() {
   const cookieStore = await cookies();
   return createServerClient(
@@ -37,7 +30,6 @@ async function createServerSupabase() {
   );
 }
 
-/** Client Supabase admin avec service role (pour Storage) */
 function createAdminSupabase() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -47,7 +39,7 @@ function createAdminSupabase() {
 
 // ─── GET /api/audio/[slug] ────────────────────────────────────────────────
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
@@ -56,7 +48,6 @@ export async function GET(
     return NextResponse.json({ error: "Slug manquant" }, { status: 400 });
   }
 
-  // ── 1. Vérifier la session ──────────────────────────────────────────────
   const supabase = await createServerSupabase();
   const {
     data: { user },
@@ -64,13 +55,9 @@ export async function GET(
   } = await supabase.auth.getUser();
 
   if (sessionError || !user) {
-    return NextResponse.json(
-      { error: "Non authentifié" },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
   }
 
-  // ── 2. Vérifier le rôle premium + lire voice_preference ────────────────
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role, voice_preference")
@@ -78,10 +65,7 @@ export async function GET(
     .single();
 
   if (profileError || !profile) {
-    return NextResponse.json(
-      { error: "Profil introuvable" },
-      { status: 403 }
-    );
+    return NextResponse.json({ error: "Profil introuvable" }, { status: 403 });
   }
 
   if (profile.role !== "premium") {
@@ -91,18 +75,18 @@ export async function GET(
     );
   }
 
-  // ── 3. Déterminer le fichier à servir ───────────────────────────────────
-  // ?voice= en query param permet à VoiceSelector de prévisualiser
-  // une voix spécifique indépendamment de la préférence sauvegardée
-  const voiceQuery = new URL(_req.url).searchParams.get("voice");
+  const voiceQuery = new URL(req.url).searchParams.get("voice");
   const gender: "male" | "female" =
-    voiceQuery === "female" ? "female" :
-    voiceQuery === "male" ? "male" :
-    profile.voice_preference === "female" ? "female" : "male";
+    voiceQuery === "female"
+      ? "female"
+      : voiceQuery === "male"
+      ? "male"
+      : profile.voice_preference === "female"
+      ? "female"
+      : "male";
 
   const storagePath = `episodes/${slug}-${gender}.mp3`;
 
-  // ── 4. Générer l'URL signée (60s) ───────────────────────────────────────
   const adminSupabase = createAdminSupabase();
   const { data: signedData, error: signedError } = await adminSupabase.storage
     .from("audio")
@@ -111,24 +95,15 @@ export async function GET(
   if (signedError || !signedData?.signedUrl) {
     console.error("[api/audio] Erreur URL signée :", signedError?.message);
     return NextResponse.json(
-      { error: "Fichier audio introuvable ou non encore généré" },
+      {
+        error: "Fichier audio introuvable ou non encore généré",
+        slug,
+        gender,
+        storagePath,
+      },
       { status: 404 }
     );
   }
 
-  // ── 5. Retourner l'URL ──────────────────────────────────────────────────
-  return NextResponse.json(
-    {
-      url: signedData.signedUrl,
-      gender,
-      expiresIn: SIGNED_URL_EXPIRY,
-    },
-    {
-      status: 200,
-      headers: {
-        // Pas de cache — chaque URL est unique et à usage unique
-        "Cache-Control": "no-store",
-      },
-    }
-  );
+  return NextResponse.redirect(signedData.signedUrl, 302);
 }
