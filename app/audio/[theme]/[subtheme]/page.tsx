@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useUser } from "../../../components/UserContext";
 import { audioEpisodes, type AudioEpisode, type AudioThemeKey } from "@/data/audioEpisodes";
 
-// ─── Config images par sous-thème ─────────────────────────────────────────
 const SUBTHEME_IMAGES: Record<string, string> = {
   valeurs_republique: "/themes/valeurs_republique.jpg",
   droits_devoirs_citoyen: "/themes/droits_devoirs_citoyen.jpg",
@@ -16,11 +15,8 @@ const SUBTHEME_IMAGES: Record<string, string> = {
   societe: "/themes/societe.jpg",
 };
 
-// Épisodes gratuits pour freemium
-// Freemium : les 2 premiers épisodes de chaque thème (numéros 1 et 2)
 const FREE_EPISODE_NUMBERS = new Set([1, 2]);
 
-// ─── Méta visuelle par thème ───────────────────────────────────────────────
 const THEME_META: Record<AudioThemeKey, { icon: string; accent: string; accentText: string; border: string; glow: string }> = {
   Valeurs: { icon: "🇫🇷", accent: "from-blue-500/20 via-indigo-500/10 to-sky-500/20", accentText: "text-blue-300", border: "border-blue-400/30", glow: "rgba(37,99,235,0.3)" },
   Institutions: { icon: "🏛️", accent: "from-violet-500/20 via-purple-500/10 to-fuchsia-500/20", accentText: "text-violet-300", border: "border-violet-400/30", glow: "rgba(139,92,246,0.3)" },
@@ -28,23 +24,23 @@ const THEME_META: Record<AudioThemeKey, { icon: string; accent: string; accentTe
   Société: { icon: "👥", accent: "from-emerald-500/20 via-green-500/10 to-teal-500/20", accentText: "text-emerald-300", border: "border-emerald-400/30", glow: "rgba(16,185,129,0.3)" },
 };
 
-// ─── Utilitaire mm:ss ──────────────────────────────────────────────────────
 function fmt(s: number) {
   const m = Math.floor(s / 60);
   const sec = Math.floor(s % 60);
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-// ─── Hook audio avec autoplay suivant ─────────────────────────────────────
 function useAudioPlayer(
   episodes: AudioEpisode[],
   currentIdx: number,
   onNext: () => void,
   isPremium: boolean,
-  externalAutoPlay: boolean,
-  setExternalAutoPlay: (v: boolean) => void
+  autoPlay: boolean,
+  setAutoPlay: (v: boolean) => void,
+  playTrigger: number = 0
 ) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const autoPlayRef = useRef(autoPlay);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -53,8 +49,7 @@ function useAudioPlayer(
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState(false);
 
-  const autoPlay = externalAutoPlay;
-  const setAutoPlay = setExternalAutoPlay;
+  useEffect(() => { autoPlayRef.current = autoPlay; }, [autoPlay]);
 
   const episode = episodes[currentIdx];
 
@@ -68,16 +63,18 @@ function useAudioPlayer(
       .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
       .then((d) => {
         setAudioUrl(d.url);
-        if (autoPlay) setTimeout(() => audioRef.current?.play().then(() => setPlaying(true)).catch(() => {}), 100);
+        if (autoPlayRef.current) {
+          setTimeout(() => audioRef.current?.play().then(() => setPlaying(true)).catch(() => {}), 100);
+        }
       })
       .catch(() => setFetchError(true));
-  }, [episode?.episodeSlug, isPremium]);
+  }, [episode?.episodeSlug, isPremium, playTrigger]);
 
   const togglePlay = useCallback(() => {
     if (!audioRef.current) return;
     if (playing) { audioRef.current.pause(); setPlaying(false); }
     else { audioRef.current.play(); setPlaying(true); setAutoPlay(true); }
-  }, [playing]);
+  }, [playing, setAutoPlay]);
 
   const skip = useCallback((s: number) => {
     if (!audioRef.current) return;
@@ -86,46 +83,33 @@ function useAudioPlayer(
 
   const handleEnded = useCallback(() => {
     setPlaying(false);
-    if (autoPlay && currentIdx < episodes.length - 1) {
+    if (autoPlayRef.current && currentIdx < episodes.length - 1) {
       setTimeout(() => onNext(), 500);
     }
-  }, [autoPlay, currentIdx, episodes.length, onNext]);
+  }, [currentIdx, episodes.length, onNext]);
 
   return { audioRef, playing, progress, setProgress, currentTime, setCurrentTime, duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded };
 }
 
-// ─── Player sticky ─────────────────────────────────────────────────────────
 function StickyPlayer({
-  episode,
-  episodes,
-  currentIdx,
-  onPrev,
-  onNext,
-  isPremium,
-  subthemeImage,
-  meta,
-  autoPlay,
-  setAutoPlay,
-  selectedEpisodes,
-  repeatMode,
-  setRepeatMode,
+  episode, episodes, currentIdx, onPrev, onNext, isPremium,
+  subthemeImage, meta, autoPlay, setAutoPlay, selectedEpisodes, repeatMode, setRepeatMode,
+  playTrigger, onReady,
 }: {
-  episode: AudioEpisode;
-  episodes: AudioEpisode[];
-  currentIdx: number;
-  onPrev: () => void;
-  onNext: () => void;
-  isPremium: boolean;
-  subthemeImage: string | null;
-  meta: typeof THEME_META[AudioThemeKey];
-  autoPlay: boolean;
-  setAutoPlay: (v: boolean) => void;
-  selectedEpisodes: Set<number>;
-  repeatMode: "none" | "one" | "queue";
+  episode: AudioEpisode; episodes: AudioEpisode[]; currentIdx: number;
+  onPrev: () => void; onNext: () => void; isPremium: boolean;
+  subthemeImage: string | null; meta: typeof THEME_META[AudioThemeKey];
+  autoPlay: boolean; setAutoPlay: (v: boolean) => void;
+  selectedEpisodes: Set<number>; repeatMode: "none" | "one" | "queue";
   setRepeatMode: (v: "none" | "one" | "queue") => void;
+  playTrigger: number;
+  onReady: (play: () => void) => void;
 }) {
-  const { audioRef, playing, progress, setProgress, currentTime, setCurrentTime, duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded } =
-    useAudioPlayer(episodes, currentIdx, onNext, isPremium, autoPlay, setAutoPlay);
+  const { audioRef, playing, progress, setProgress, currentTime, setCurrentTime,
+    duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded } =
+    useAudioPlayer(episodes, currentIdx, onNext, isPremium, autoPlay, setAutoPlay, playTrigger);
+
+  useEffect(() => { onReady(togglePlay); }, [togglePlay, onReady]);
 
   const cycleRepeat = useCallback(() => {
     setRepeatMode(repeatMode === "none" ? "one" : repeatMode === "one" ? "queue" : "none");
@@ -142,8 +126,8 @@ function StickyPlayer({
         />
       )}
 
-      <div className="flex items-center gap-3 px-4 py-3">
-        {/* Pochette */}
+      {/* Ligne 1 : pochette + info + play */}
+      <div className="flex items-center gap-3 px-4 pt-3">
         {subthemeImage ? (
           <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-white/10">
             <Image src={subthemeImage} alt={episode.subthemeLabel} fill className="object-cover" />
@@ -151,8 +135,6 @@ function StickyPlayer({
         ) : (
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-2xl">{meta.icon}</div>
         )}
-
-        {/* Info épisode */}
         <div className="min-w-0 flex-1">
           <p className={`text-[10px] font-bold uppercase tracking-widest ${meta.accentText}`}>
             Épisode {episode.episodeNumber}/{episodes.length}
@@ -161,96 +143,58 @@ function StickyPlayer({
           </p>
           <p className="truncate text-sm font-semibold text-white">{episode.episodeTitle}</p>
         </div>
+        <button onClick={togglePlay} disabled={!audioUrl && !fetchError}
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border text-white shadow-lg transition active:scale-95 disabled:opacity-40 ${meta.border} bg-gradient-to-br from-white/20 to-white/5`}>
+          {fetchError ? <span className="text-xs">⚠️</span>
+            : !audioUrl ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+            : playing ? <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
+            : <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>}
+        </button>
+      </div>
 
-        {/* Contrôles */}
-        <div className="flex shrink-0 items-center gap-1.5">
-          {/* Précédent */}
-          <button onClick={onPrev} disabled={currentIdx === 0}
-            className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-          </button>
-
-          {/* −10s */}
-          <button onClick={() => skip(-10)} disabled={!loaded}
-            className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[10px] font-bold text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
-            −10
-          </button>
-
-          {/* Play/Pause */}
-          <button onClick={togglePlay} disabled={!audioUrl && !fetchError}
-            className={`flex h-11 w-11 items-center justify-center rounded-2xl border text-white shadow-lg transition active:scale-95 disabled:opacity-40 ${meta.border} bg-gradient-to-br from-white/20 to-white/5`}>
-            {fetchError ? (
-              <span className="text-xs">⚠️</span>
-            ) : !audioUrl ? (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-            ) : playing ? (
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
-            ) : (
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
-            )}
-          </button>
-
-          {/* +10s */}
-          <button onClick={() => skip(10)} disabled={!loaded}
-            className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[10px] font-bold text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
-            +10
-          </button>
-
-          {/* Suivant */}
-          <button onClick={() => { setAutoPlay(true); onNext(); }} disabled={currentIdx === episodes.length - 1}
-            className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 4V8l-5.5 4zM16 6h2v12h-2z"/></svg>
-          </button>
-
-          {/* Auto-play toggle */}
-          <button onClick={() => setAutoPlay(!autoPlay)}
-            className={`flex h-8 items-center gap-1 rounded-xl border px-2 text-[10px] font-bold transition ${autoPlay ? `${meta.border} ${meta.accentText} bg-white/10` : "border-white/10 bg-white/5 text-slate-500"}`}
-            title="Lecture automatique">
-            AUTO
-          </button>
-
-          {/* Repeat mode — cycle: none → one → queue → none */}
-          <button
-            onClick={cycleRepeat}
-            className={`flex h-8 w-8 items-center justify-center rounded-xl border transition ${
-              repeatMode !== "none"
-                ? `${meta.border} ${meta.accentText} bg-white/10`
-                : "border-white/10 bg-white/5 text-slate-500"
-            }`}
-            title={
-              repeatMode === "none" ? "Pas de répétition" :
-              repeatMode === "one"  ? "Répéter cet épisode" :
-                                      "Boucler la sélection"
-            }
-          >
-            {repeatMode === "one" ? (
-              /* 🔂 répète 1 seul épisode */
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 2l4 4-4 4"/>
-                <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-                <path d="M7 22l-4-4 4-4"/>
-                <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-                <text x="9.5" y="15.5" fontSize="5.5" fill="currentColor" stroke="none" fontWeight="bold">1</text>
-              </svg>
-            ) : repeatMode === "queue" ? (
-              /* 🔁 boucle sur la sélection */
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 2l4 4-4 4"/>
-                <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-                <path d="M7 22l-4-4 4-4"/>
-                <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-              </svg>
-            ) : (
-              /* pas de répétition — icône grisée */
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.35">
-                <path d="M17 2l4 4-4 4"/>
-                <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-                <path d="M7 22l-4-4 4-4"/>
-                <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-              </svg>
-            )}
-          </button>
-        </div>
+      {/* Ligne 2 : contrôles secondaires */}
+      <div className="flex items-center justify-between gap-1 px-4 py-2">
+        <button onClick={onPrev} disabled={currentIdx === 0}
+          className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+        <button onClick={() => skip(-10)} disabled={!loaded}
+          className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[10px] font-bold text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
+          −10
+        </button>
+        <button onClick={() => skip(10)} disabled={!loaded}
+          className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[10px] font-bold text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
+          +10
+        </button>
+        <button onClick={() => { setAutoPlay(true); onNext(); }} disabled={currentIdx === episodes.length - 1}
+          className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 4V8l-5.5 4zM16 6h2v12h-2z"/></svg>
+        </button>
+        <button onClick={() => setAutoPlay(!autoPlay)}
+          className={`flex h-8 items-center gap-1 rounded-xl border px-2 text-[10px] font-bold transition ${autoPlay ? `${meta.border} ${meta.accentText} bg-white/10` : "border-white/10 bg-white/5 text-slate-500"}`}>
+          AUTO
+        </button>
+        <button onClick={cycleRepeat}
+          className={`flex h-8 w-8 items-center justify-center rounded-xl border transition ${repeatMode !== "none" ? `${meta.border} ${meta.accentText} bg-white/10` : "border-white/10 bg-white/5 text-slate-500"}`}
+          title={repeatMode === "none" ? "Pas de répétition" : repeatMode === "one" ? "Répéter cet épisode" : "Boucler la sélection"}>
+          {repeatMode === "one" ? (
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+              <text x="9.5" y="15.5" fontSize="5.5" fill="currentColor" stroke="none" fontWeight="bold">1</text>
+            </svg>
+          ) : repeatMode === "queue" ? (
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+            </svg>
+          ) : (
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.35">
+              <path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+            </svg>
+          )}
+        </button>
       </div>
 
       {/* Barre de progression */}
@@ -273,7 +217,6 @@ function StickyPlayer({
   );
 }
 
-// ─── Page principale ───────────────────────────────────────────────────────
 export default function AudioSeriesPage() {
   const { theme, subtheme } = useParams();
   const router = useRouter();
@@ -293,16 +236,11 @@ export default function AudioSeriesPage() {
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [autoPlay, setAutoPlay] = useState(false);
-
-  // Pour freemium : forcer le 1er épisode gratuit au chargement
-  useEffect(() => {
-    if (!isFreemium || !episodes.length) return;
-    const firstFreeIdx = episodes.findIndex(ep => FREE_EPISODE_NUMBERS.has(ep.episodeNumber));
-    if (firstFreeIdx >= 0) setCurrentIdx(firstFreeIdx);
-  }, [isFreemium, episodes]);
   const [selectedEpisodes, setSelectedEpisodes] = useState<Set<number>>(new Set());
   const [repeatMode, setRepeatMode] = useState<"none" | "one" | "queue">("none");
   const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [playTrigger, setPlayTrigger] = useState(0);
+  const playerPlayRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("last_audio_page", window.location.pathname);
@@ -312,37 +250,42 @@ export default function AudioSeriesPage() {
     if (!episodes.length) return;
     const requested = Number(searchParams.get("episode"));
     const idx = Number.isFinite(requested) && requested > 0
-      ? episodes.findIndex((ep) => ep.episodeNumber === requested)
-      : -1;
+      ? episodes.findIndex((ep) => ep.episodeNumber === requested) : -1;
     setCurrentIdx(idx >= 0 ? idx : 0);
   }, [episodes, searchParams]);
 
+  useEffect(() => {
+    if (!isFreemium || !episodes.length) return;
+    const firstFreeIdx = episodes.findIndex(ep => FREE_EPISODE_NUMBERS.has(ep.episodeNumber));
+    if (firstFreeIdx >= 0) setCurrentIdx(firstFreeIdx);
+  }, [isFreemium, episodes]);
+
   const goNext = useCallback(() => {
-    if (repeatMode === "one") {
-      // Force re-trigger du useEffect audio en changeant temporairement l'idx
-      setCurrentIdx((i) => i);
-      return;
-    }
+    if (repeatMode === "one") { setCurrentIdx(i => i); return; }
     if (repeatMode === "queue" && selectedEpisodes.size > 0) {
       const sorted = Array.from(selectedEpisodes).sort((a, b) => a - b);
       const pos = sorted.indexOf(currentIdx);
       setCurrentIdx(pos >= 0 ? sorted[(pos + 1) % sorted.length] : sorted[0]);
       return;
     }
-    setCurrentIdx((i) => Math.min(i + 1, episodes.length - 1));
+    setCurrentIdx(i => Math.min(i + 1, episodes.length - 1));
   }, [repeatMode, selectedEpisodes, currentIdx, episodes.length]);
 
-  const goPrev = useCallback(() => setCurrentIdx((i) => Math.max(i - 1, 0)), []);
+  const goPrev = useCallback(() => setCurrentIdx(i => Math.max(i - 1, 0)), []);
 
   const playAll = useCallback(() => {
     setSelectedEpisodes(new Set());
     setRepeatMode("none");
-    setCurrentIdx(0);
     setAutoPlay(true);
-  }, []);
+    if (currentIdx === 0) {
+      setTimeout(() => playerPlayRef.current?.(), 50);
+    } else {
+      setCurrentIdx(0);
+    }
+  }, [currentIdx]);
 
   const toggleEpisodeSelection = useCallback((idx: number) => {
-    setSelectedEpisodes((prev) => {
+    setSelectedEpisodes(prev => {
       const next = new Set(prev);
       if (next.has(idx)) next.delete(idx); else next.add(idx);
       return next;
@@ -370,6 +313,7 @@ export default function AudioSeriesPage() {
   const meta = THEME_META[themeKey] ?? THEME_META.Valeurs;
   const subthemeImage = SUBTHEME_IMAGES[subthemeKey] ?? null;
   const currentEpisode = episodes[currentIdx];
+  const isPlayerVisible = isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0));
 
   if (!episodes.length) {
     return (
@@ -388,7 +332,6 @@ export default function AudioSeriesPage() {
     <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6 sm:py-6">
       <div className="space-y-4">
 
-        {/* ── HEADER ──────────────────────────────────────────────────── */}
         <div className={`relative overflow-hidden rounded-[1.8rem] border ${meta.border} shadow-[0_20px_50px_rgba(2,8,23,0.4)]`}>
           {subthemeImage && (
             <div className="absolute inset-0">
@@ -397,7 +340,6 @@ export default function AudioSeriesPage() {
             </div>
           )}
           {!subthemeImage && <div className={`absolute inset-0 bg-gradient-to-br ${meta.accent}`} />}
-
           <div className="relative px-5 py-5 sm:px-6">
             <div className="mb-4 flex items-center gap-2 text-xs text-slate-400">
               <button onClick={() => router.back()} className="inline-flex items-center gap-1 transition hover:text-white">
@@ -409,7 +351,6 @@ export default function AudioSeriesPage() {
               <span>/</span>
               <span className={meta.accentText}>{themeLabel}</span>
             </div>
-
             <div className="flex items-center gap-4">
               {subthemeImage ? (
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
@@ -427,7 +368,6 @@ export default function AudioSeriesPage() {
                 </div>
               </div>
             </div>
-
             {isPremium && (
               <div className="mt-4 flex gap-2">
                 <button onClick={playAll}
@@ -436,10 +376,8 @@ export default function AudioSeriesPage() {
                   Tout écouter
                 </button>
                 <button
-                  onClick={() => { setIsSelectionMode((v) => !v); if (isSelectionMode) setSelectedEpisodes(new Set()); }}
-                  className={`inline-flex items-center justify-center gap-1.5 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition ${
-                    isSelectionMode ? `${meta.border} ${meta.accentText} bg-white/10` : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
-                  }`}>
+                  onClick={() => { setIsSelectionMode(v => !v); if (isSelectionMode) setSelectedEpisodes(new Set()); }}
+                  className={`inline-flex items-center justify-center gap-1.5 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition ${isSelectionMode ? `${meta.border} ${meta.accentText} bg-white/10` : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"}`}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="18" height="18" rx="3"/><path d="m9 12 2 2 4-4"/>
                   </svg>
@@ -447,7 +385,6 @@ export default function AudioSeriesPage() {
                 </button>
               </div>
             )}
-
             {isSelectionMode && selectedEpisodes.size > 0 && (
               <div className={`mt-3 flex items-center justify-between rounded-2xl border ${meta.border} bg-white/5 px-4 py-2.5`}>
                 <span className={`text-sm font-semibold ${meta.accentText}`}>
@@ -463,26 +400,20 @@ export default function AudioSeriesPage() {
           </div>
         </div>
 
-        {/* ── PLAYER STICKY ───────────────────────────────────────────── */}
-        {(isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0))) && currentEpisode && (
+        {isPlayerVisible && currentEpisode && (
           <StickyPlayer
-            episode={currentEpisode}
-            episodes={episodes}
-            currentIdx={currentIdx}
-            onPrev={goPrev}
-            onNext={goNext}
+            episode={currentEpisode} episodes={episodes} currentIdx={currentIdx}
+            onPrev={goPrev} onNext={goNext}
             isPremium={isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0))}
-            subthemeImage={subthemeImage}
-            meta={meta}
-            autoPlay={autoPlay}
-            setAutoPlay={setAutoPlay}
+            subthemeImage={subthemeImage} meta={meta}
+            autoPlay={autoPlay} setAutoPlay={setAutoPlay}
             selectedEpisodes={selectedEpisodes}
-            repeatMode={repeatMode}
-            setRepeatMode={setRepeatMode}
+            repeatMode={repeatMode} setRepeatMode={setRepeatMode}
+            playTrigger={playTrigger}
+            onReady={(play) => { playerPlayRef.current = play; }}
           />
         )}
 
-        {/* ── LOCK PREMIUM ────────────────────────────────────────────── */}
         {!isPremium && !isFreemium && (
           <div className="rounded-[1.5rem] border border-amber-400/20 bg-gradient-to-br from-amber-500/10 to-orange-500/10 p-5 text-center">
             <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-2xl">👑</div>
@@ -494,7 +425,6 @@ export default function AudioSeriesPage() {
           </div>
         )}
 
-        {/* ── BANNIÈRE FREEMIUM ────────────────────────────────────────── */}
         {isFreemium && (
           <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-3">
             <div className="flex items-center justify-between gap-3">
@@ -504,34 +434,28 @@ export default function AudioSeriesPage() {
           </div>
         )}
 
-        {/* ── LISTE DES ÉPISODES ───────────────────────────────────────── */}
         <section>
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-base font-bold text-white">Épisodes</h2>
             <span className="text-xs text-slate-400">
-              {isPremium
-                ? isSelectionMode ? "Coche les épisodes à écouter" : "Cliquez pour écouter"
+              {isPremium ? (isSelectionMode ? "Coche les épisodes à écouter" : "Cliquez pour écouter")
                 : isFreemium ? "2 gratuits" : "Premium requis"}
             </span>
           </div>
-
           <div className="space-y-2">
             {episodes.map((ep, idx) => {
               const isFree = isFreemium && FREE_EPISODE_NUMBERS.has(ep.episodeNumber);
               const locked = !isPremium && !isFree;
               const isActive = currentIdx === idx && (isPremium || isFree);
               const isSelected = selectedEpisodes.has(idx);
-
               return (
-                <div key={ep.id}
-                  className={`rounded-xl border transition-all duration-200 ${
-                    isActive ? `${meta.border} bg-white/10 shadow-[0_4px_16px_rgba(0,0,0,0.3)]`
-                    : isSelected ? `${meta.border} bg-white/8`
-                    : isFree ? "border-emerald-400/20 bg-emerald-500/5 hover:bg-emerald-500/8"
-                    : locked ? "border-white/5 bg-white/[0.02] opacity-60"
-                    : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
-                  }`}
-                >
+                <div key={ep.id} className={`rounded-xl border transition-all duration-200 ${
+                  isActive ? `${meta.border} bg-white/10 shadow-[0_4px_16px_rgba(0,0,0,0.3)]`
+                  : isSelected ? `${meta.border} bg-white/8`
+                  : isFree ? "border-emerald-400/20 bg-emerald-500/5 hover:bg-emerald-500/8"
+                  : locked ? "border-white/5 bg-white/[0.02] opacity-60"
+                  : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
+                }`}>
                   <div role="button" tabIndex={0}
                     onClick={() => {
                       if (locked) { handleUpgrade(); return; }
@@ -546,35 +470,21 @@ export default function AudioSeriesPage() {
                         else { setCurrentIdx(idx); setAutoPlay(true); }
                       }
                     }}
-                    className="flex cursor-pointer items-center gap-3 px-4 py-3"
-                  >
+                    className="flex cursor-pointer items-center gap-3 px-4 py-3">
                     {isSelectionMode && isPremium && (
                       <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition ${isSelected ? `${meta.border} bg-white/20` : "border-white/20 bg-transparent"}`}>
-                        {isSelected && (
-                          <svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                            <polyline points="2 7 6 11 12 3"/>
-                          </svg>
-                        )}
+                        {isSelected && <svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white"><polyline points="2 7 6 11 12 3"/></svg>}
                       </div>
                     )}
-
                     {!isSelectionMode && (
-                      subthemeImage ? (
-                        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-white/10">
-                          <Image src={subthemeImage} alt="" fill className="object-cover" />
-                        </div>
-                      ) : (
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-lg">{meta.icon}</div>
-                      )
+                      subthemeImage
+                        ? <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-white/10"><Image src={subthemeImage} alt="" fill className="object-cover" /></div>
+                        : <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-lg">{meta.icon}</div>
                     )}
-
                     <div className="min-w-0 flex-1">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                        {String(ep.episodeNumber).padStart(2, "0")}
-                      </p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{String(ep.episodeNumber).padStart(2, "0")}</p>
                       <p className="mt-0.5 text-sm font-semibold leading-5 text-white">{ep.episodeTitle}</p>
                     </div>
-
                     <div className="flex shrink-0 items-center gap-2">
                       <span className="text-xs text-slate-500">{Math.round(ep.durationTargetSeconds / 60)}m</span>
                       {isActive ? (
@@ -584,9 +494,7 @@ export default function AudioSeriesPage() {
                       ) : locked ? (
                         <span className="text-xs text-amber-400">🔒</span>
                       ) : (
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="text-slate-500">
-                          <path d="M5 4l6 4-6 4V4z" fill="currentColor"/>
-                        </svg>
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="text-slate-500"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
                       )}
                     </div>
                   </div>
@@ -596,10 +504,8 @@ export default function AudioSeriesPage() {
           </div>
         </section>
 
-        {/* ── NAVIGATION ──────────────────────────────────────────────── */}
         <div className="flex gap-3 pt-2">
-          <Link href="/audio"
-            className="flex-1 inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/10">
+          <Link href="/audio" className="flex-1 inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/10">
             ← Retour aux séries
           </Link>
           <button onClick={() => router.push(scrollReviseUrl)}
