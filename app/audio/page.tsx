@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUser } from "../components/UserContext";
 import { audioEpisodes, type AudioThemeKey } from "@/data/audioEpisodes";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 // ─── Config albums ─────────────────────────────────────────────────────────
 const SUBTHEME_CONFIG: Record<string, {
@@ -222,6 +222,8 @@ export default function AudioLibraryPage() {
   const isFreemium = role === "freemium";
   const isAnonymous = role === "anonymous" || !role;
 
+  const [showInfo, setShowInfo] = useState(false);
+
   const handleUpgrade = async () => {
     try {
       const res = await fetch("/api/create-checkout", { method: "POST" });
@@ -320,6 +322,60 @@ export default function AudioLibraryPage() {
           </div>
         </section>
 
+        {/* ── HERO BANNER NETFLIX ────────────────────────────────────── */}
+        {!isAnonymous && (
+          <section
+            className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_25px_70px_rgba(2,8,23,0.6)]"
+            style={{ minHeight: 320 }}
+          >
+            {/* Image de fond */}
+            <div className="absolute inset-0">
+              <Image src="/themes/valeurs_republique.jpg" alt="Valeurs de la République" fill className="object-cover" priority />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+            </div>
+
+            {/* Contenu */}
+            <div className="relative flex h-full min-h-[320px] flex-col justify-end px-6 py-8 sm:px-10 sm:py-10 lg:justify-center">
+              <div className="max-w-lg">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-blue-300 backdrop-blur-sm">
+                  ⭐ En vedette
+                </span>
+                <h2 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+                  Valeurs de la République
+                </h2>
+                <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-300">
+                  Les valeurs fondamentales — Liberté, Égalité, Fraternité — au cœur de l'entretien civique. 10 épisodes pour maîtriser ce thème essentiel.
+                </p>
+                <div className="mt-2 flex gap-3 text-xs text-slate-400">
+                  <span>10 épisodes</span>
+                  <span>•</span>
+                  <span>~15 min</span>
+                  <span>•</span>
+                  <span className="text-emerald-400">Disponible</span>
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button
+                    onClick={() => router.push("/audio/Valeurs/valeurs_republique")}
+                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-bold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.2)] transition hover:bg-slate-100 active:scale-95"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
+                    Écouter maintenant
+                  </button>
+                  <button
+                    onClick={() => setShowInfo(true)}
+                    className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20 active:scale-95"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    + Infos
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ── THÉMATIQUES ─────────────────────────────────────────────── */}
         {!isAnonymous && (
           <section>
@@ -404,6 +460,37 @@ export default function AudioLibraryPage() {
         </section>
 
       </div>
+      {/* ── MODAL INFOS ─────────────────────────────────────────────── */}
+      {showInfo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowInfo(false)} />
+          <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 shadow-[0_25px_70px_rgba(0,0,0,0.6)]">
+            <div className="relative h-48 overflow-hidden">
+              <Image src="/themes/valeurs_republique.jpg" alt="" fill className="object-cover opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
+              <button onClick={() => setShowInfo(false)} className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white transition hover:bg-black/70">✕</button>
+            </div>
+            <div className="px-6 pb-6">
+              <span className="inline-flex items-center rounded-full border border-blue-400/30 bg-blue-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-blue-300">Valeurs</span>
+              <h3 className="mt-2 text-xl font-extrabold text-white">Valeurs de la République</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-300">
+                Les valeurs fondamentales de la République française — Liberté, Égalité, Fraternité — sont au cœur de l&apos;entretien civique. Cette série de 10 épisodes couvre la devise nationale, les libertés fondamentales, la laïcité, les symboles républicains et bien plus. Format entretien réel, voix naturelle.
+              </p>
+              <div className="mt-3 flex gap-4 text-xs text-slate-400">
+                <span>🎙️ 10 épisodes</span>
+                <span>⏱️ ~15 min</span>
+                <span>🎧 Voix naturelle</span>
+              </div>
+              <button
+                onClick={() => { setShowInfo(false); router.push("/audio/Valeurs/valeurs_republique"); }}
+                className="mt-5 w-full rounded-2xl bg-white py-3 text-sm font-bold text-slate-950 transition hover:bg-slate-100"
+              >
+                ▶ Écouter maintenant
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
