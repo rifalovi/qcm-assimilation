@@ -4,13 +4,12 @@ import ScrollDemo from "./components/ScrollDemo";
 import { useRouter } from "next/navigation";
 import Card from "../components/Card";
 import Button from "../components/Button";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { hasAnyResult } from "../src/lib/saveResult";
 import { createClient } from "@/lib/supabase/client";
 import { useUser, ROLE_LIMITS } from "./components/UserContext";
 import EligibilityModalLauncher from "./components/EligibilityModalLauncher";
 import AvisSection from "./components/AvisSection";
-
 
 type Level = 1 | 2 | 3;
 type Theme = "Valeurs" | "Institutions" | "Histoire" | "Société";
@@ -29,39 +28,160 @@ function loadUserLocal(): QcmUser | null {
   try {
     const raw = localStorage.getItem("qcm_user");
     return raw ? (JSON.parse(raw) as QcmUser) : null;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
 function saveUser(u: QcmUser) {
   localStorage.setItem("qcm_user", JSON.stringify(u));
 }
 
-function Pill({
-  children,
-  active = false,
-  onClick,
-}: {
-  children: React.ReactNode;
-  active?: boolean;
-  onClick?: () => void;
+// ─── Calcul du streak ──────────────────────────────────────────────────────
+function getStreak(): number {
+  try {
+    const raw = localStorage.getItem("qcm_streak");
+    if (!raw) return 0;
+    const { count, lastDate } = JSON.parse(raw) as { count: number; lastDate: string };
+    const today = new Date().toDateString();
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (lastDate === today || lastDate === yesterday) return count;
+    return 0;
+  } catch { return 0; }
+}
+
+function updateStreak() {
+  try {
+    const today = new Date().toDateString();
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    const raw = localStorage.getItem("qcm_streak");
+    if (!raw) {
+      localStorage.setItem("qcm_streak", JSON.stringify({ count: 1, lastDate: today }));
+      return;
+    }
+    const { count, lastDate } = JSON.parse(raw) as { count: number; lastDate: string };
+    if (lastDate === today) return;
+    if (lastDate === yesterday) {
+      localStorage.setItem("qcm_streak", JSON.stringify({ count: count + 1, lastDate: today }));
+    } else {
+      localStorage.setItem("qcm_streak", JSON.stringify({ count: 1, lastDate: today }));
+    }
+  } catch {}
+}
+
+// ─── Pill ──────────────────────────────────────────────────────────────────
+function Pill({ children, active = false, onClick }: {
+  children: React.ReactNode; active?: boolean; onClick?: () => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
+    <button type="button" onClick={onClick}
       className={`rounded-full border px-3 py-2 text-sm font-semibold transition-all duration-200 ${
         active
-          ? "border-blue-400/30 bg-blue-500/15 text-blue-200 shadow-[0_0_0_1px_rgba(96,165,250,0.06)]"
+          ? "border-blue-400/30 bg-blue-500/15 text-blue-200"
           : "border-white/10 bg-white/5 text-slate-300 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
-      }`}
-    >
+      }`}>
       {children}
     </button>
   );
 }
 
+// ─── Modal Onboarding ──────────────────────────────────────────────────────
+function OnboardingModal({ onClose, onAction }: {
+  onClose: () => void;
+  onAction: (action: "scroll" | "quiz" | "audio") => void;
+}) {
+  const [step, setStep] = useState(0);
+
+  const steps = [
+    {
+      icon: "📱",
+      title: "Révisez en scrollant",
+      desc: "Swipez verticalement pour changer de question, horizontalement pour voir les QCM associés. Aussi rapide qu'un fil d'actu.",
+      action: "scroll" as const,
+      cta: "Essayer le Scroll",
+      color: "border-amber-400/20 bg-amber-500/10 text-amber-200",
+      btnColor: "bg-amber-500 text-slate-950 hover:bg-amber-400",
+    },
+    {
+      icon: "🎯",
+      title: "Testez votre niveau",
+      desc: "Faites un premier test de 10 questions pour savoir où vous en êtes. Vos erreurs seront expliquées en détail.",
+      action: "quiz" as const,
+      cta: "Faire un test",
+      color: "border-blue-400/20 bg-blue-500/10 text-blue-200",
+      btnColor: "bg-blue-600 text-white hover:bg-blue-500",
+    },
+    {
+      icon: "🎧",
+      title: "Écoutez en déplacement",
+      desc: "100 épisodes audio guidés au format entretien réel. Révisez dans le métro, en cuisine, partout.",
+      action: "audio" as const,
+      cta: "Découvrir l'audio",
+      color: "border-emerald-400/20 bg-emerald-500/10 text-emerald-200",
+      btnColor: "bg-emerald-600 text-white hover:bg-emerald-500",
+    },
+  ];
+
+  const current = steps[step];
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative z-[101] w-full max-w-sm overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/98 to-slate-900/98 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]">
+
+        {/* Header */}
+        <div className="mb-5 flex items-center justify-between">
+          <div className="flex gap-1.5">
+            {steps.map((_, i) => (
+              <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === step ? "w-6 bg-blue-400" : i < step ? "w-3 bg-blue-400/50" : "w-3 bg-white/15"
+              }`} />
+            ))}
+          </div>
+          <button onClick={onClose} className="text-slate-500 hover:text-white transition text-lg">✕</button>
+        </div>
+
+        {/* Bienvenue */}
+        {step === 0 && (
+          <div className="mb-5 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+            <p className="text-xs text-slate-400">
+              🇫🇷 Bienvenue sur <span className="font-semibold text-white">QCM Assimilation</span> — la meilleure façon de préparer votre entretien civique.
+            </p>
+          </div>
+        )}
+
+        {/* Contenu étape */}
+        <div className={`mb-5 rounded-2xl border p-4 ${current.color}`}>
+          <div className="mb-2 text-3xl">{current.icon}</div>
+          <h3 className="mb-1 text-base font-extrabold text-white">{current.title}</h3>
+          <p className="text-xs leading-5 opacity-80">{current.desc}</p>
+        </div>
+
+        {/* Actions */}
+        <div className="flex flex-col gap-2">
+          <button
+            onClick={() => { onAction(current.action); onClose(); }}
+            className={`w-full rounded-2xl py-3 text-sm font-bold transition active:scale-[0.98] ${current.btnColor}`}
+          >
+            {current.cta} →
+          </button>
+          {step < steps.length - 1 ? (
+            <button onClick={() => setStep(s => s + 1)}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 py-2.5 text-sm font-medium text-slate-400 transition hover:bg-white/10">
+              Étape suivante
+            </button>
+          ) : (
+            <button onClick={onClose}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 py-2.5 text-sm font-medium text-slate-400 transition hover:bg-white/10">
+              Commencer librement
+            </button>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+// ─── Page principale ───────────────────────────────────────────────────────
 export default function HomePage() {
   const router = useRouter();
   const { role, username: authUsername, loading: authLoading, isAuthenticated, logout } = useUser();
@@ -76,11 +196,24 @@ export default function HomePage() {
   const [heroVisible, setHeroVisible] = useState(false);
   const [homeMenuOpen, setHomeMenuOpen] = useState(false);
   const [showReviseModal, setShowReviseModal] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [streak, setStreak] = useState(0);
+  const [openExamUpgrade, setOpenExamUpgrade] = useState(false);
 
   useEffect(() => {
     const u = loadUserLocal();
     if (u) { setPseudo(u.pseudo); setEmail(u.email); setPseudoDraft(u.pseudo); setEmailDraft(u.email); }
     const t = setTimeout(() => setHeroVisible(true), 50);
+
+    // Streak
+    setStreak(getStreak());
+
+    // Onboarding — afficher seulement à la 1ère visite
+    const onboarded = localStorage.getItem("qcm_onboarded");
+    if (!onboarded) {
+      setTimeout(() => setShowOnboarding(true), 800);
+    }
+
     return () => clearTimeout(t);
   }, []);
 
@@ -91,9 +224,10 @@ export default function HomePage() {
     async function check() {
       const remote = await hasAnyResult(e);
       if (remote) { setHasLastResult(true); return; }
-      const hasTrain = !!localStorage.getItem(`last_result:train:${e}`);
-      const hasExam = !!localStorage.getItem(`last_result:exam:${e}`);
-      setHasLastResult(hasTrain || hasExam);
+      setHasLastResult(
+        !!localStorage.getItem(`last_result:train:${e}`) ||
+        !!localStorage.getItem(`last_result:exam:${e}`)
+      );
     }
     check();
   }, [pseudo, email]);
@@ -152,6 +286,8 @@ export default function HomePage() {
 
   function start() {
     if (!canStart) return;
+    updateStreak();
+    setStreak(getStreak());
     requireAuthAndRun(() => { localStorage.setItem("quiz_settings", JSON.stringify(meta)); router.push("/quiz"); });
   }
 
@@ -164,11 +300,24 @@ export default function HomePage() {
     setThemes((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]);
   }
 
+  const handleOnboardingAction = useCallback((action: "scroll" | "quiz" | "audio") => {
+    localStorage.setItem("qcm_onboarded", "1");
+    if (action === "scroll") router.push("/scroll");
+    else if (action === "quiz") start();
+    else router.push("/audio");
+  }, [router]);
+
+  const closeOnboarding = useCallback(() => {
+    localStorage.setItem("qcm_onboarded", "1");
+    setShowOnboarding(false);
+  }, []);
+
+  const streakMessage = streak >= 7 ? "🔥 Incroyable !" : streak >= 3 ? "💪 Continue !" : streak >= 1 ? "✨ Bonne habitude !" : "";
+
   const [rating, setRating] = useState<number>(5);
   const [comment, setComment] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-  const [openExamUpgrade, setOpenExamUpgrade] = useState(false);
 
   async function submitFeedback(e: React.FormEvent) {
     e.preventDefault();
@@ -221,6 +370,11 @@ export default function HomePage() {
                   <button onClick={() => setHomeMenuOpen(!homeMenuOpen)}
                     className="flex items-center gap-2 rounded-3xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 transition">
                     <span>Bonjour <span className="font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</span> 👋</span>
+                    {streak > 0 && (
+                      <span className="rounded-full border border-orange-400/30 bg-orange-500/10 px-2 py-0.5 text-[10px] font-bold text-orange-300">
+                        🔥 {streak}j
+                      </span>
+                    )}
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{transform: homeMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s"}}><polyline points="6 9 12 15 18 9"/></svg>
                   </button>
                   {homeMenuOpen && (
@@ -231,6 +385,9 @@ export default function HomePage() {
                         <div className="border-b border-white/10 px-3 py-2">
                           <p className="text-sm font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</p>
                           <p className="mt-0.5 text-xs text-slate-400">{role === "premium" ? "👑 Premium" : "✨ Freemium"}</p>
+                          {streak > 0 && (
+                            <p className="mt-1 text-xs text-orange-300">🔥 {streak} jour{streak > 1 ? "s" : ""} de suite {streakMessage}</p>
+                          )}
                         </div>
                         <div className="py-2">
                           {[
@@ -259,7 +416,6 @@ export default function HomePage() {
                   )}
                 </div>
               ) : (
-                /* Boutons auth — plus visibles */
                 <div className="flex items-center gap-2">
                   <button onClick={() => router.push("/login")}
                     className="rounded-2xl border border-white/15 bg-white/8 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/15 hover:text-white">
@@ -273,6 +429,35 @@ export default function HomePage() {
               )}
             </div>
 
+            {/* ── ANGLE ÉMOTIONNEL ── */}
+            {!isAuthenticated && (
+              <div className="mb-5 rounded-2xl border border-red-400/15 bg-red-500/8 px-4 py-3 text-center">
+                <p className="text-sm font-semibold leading-6 text-slate-200">
+                  <span className="text-red-300">Des milliers de candidats échouent faute de préparation.</span>
+                  <span className="ml-1 text-white">Vous, vous serez prêt.</span>
+                </p>
+              </div>
+            )}
+
+            {/* ── STREAK pour utilisateurs connectés ── */}
+            {isAuthenticated && streak > 0 && (
+              <div className="mb-5 rounded-2xl border border-orange-400/20 bg-orange-500/8 px-4 py-3 text-center">
+                <p className="text-sm font-semibold text-orange-200">
+                  🔥 {streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""} — {streakMessage}
+                </p>
+                <p className="mt-0.5 text-xs text-orange-300/70">Continuez aujourd'hui pour maintenir votre série !</p>
+              </div>
+            )}
+
+            {/* ── STREAK vide pour utilisateurs connectés ── */}
+            {isAuthenticated && streak === 0 && (
+              <div className="mb-5 rounded-2xl border border-slate-400/10 bg-white/3 px-4 py-3 text-center">
+                <p className="text-xs text-slate-400">
+                  🎯 Faites un exercice aujourd'hui pour démarrer votre série de révisions
+                </p>
+              </div>
+            )}
+
             {/* Badge + Titre */}
             <div className="mb-3 mx-auto block text-center w-fit rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
               Plus de 800 questions-réponses
@@ -283,6 +468,21 @@ export default function HomePage() {
             <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center max-w-xl mx-auto">
               Valeurs de la République • Institutions • Histoire • Vie en société — entraînement progressif conforme à l'examen civique 2026.
             </p>
+
+            {/* ── STATS de réassurance ── */}
+            <div className="mt-4 flex flex-wrap justify-center gap-3">
+              {[
+                { val: "93%", label: "taux de réussite", color: "text-emerald-300", bg: "border-emerald-400/20 bg-emerald-500/8" },
+                { val: "800+", label: "questions", color: "text-blue-300", bg: "border-blue-400/20 bg-blue-500/8" },
+                { val: "2 sem.", label: "pour être prêt", color: "text-amber-300", bg: "border-amber-400/20 bg-amber-500/8" },
+              ].map((s) => (
+                <div key={s.label} className={`rounded-2xl border px-4 py-2 text-center ${s.bg}`}>
+                  <div className={`text-base font-extrabold ${s.color}`}>{s.val}</div>
+                  <div className="text-[10px] text-slate-400">{s.label}</div>
+                </div>
+              ))}
+            </div>
+
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">📝 Entraînement progressif</span>
               <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">✓ Corrections détaillées</span>
@@ -297,7 +497,7 @@ export default function HomePage() {
                 Commencer un test
               </button>
               <button onClick={() => setShowReviseModal(true)}
-                className="inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-2xl border border-amber-400/30 bg-amber-500/10 px-6 py-4 text-base font-bold text-amber-200 shadow-[0_12px_32px_rgba(251,191,36,0.12)] transition hover:border-amber-400/50 hover:bg-amber-500/15 active:scale-[0.98] sm:w-auto">
+                className="inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-2xl border border-amber-400/30 bg-amber-500/10 px-6 py-4 text-base font-bold text-amber-200 transition hover:border-amber-400/50 hover:bg-amber-500/15 active:scale-[0.98] sm:w-auto">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>
                 Réviser
               </button>
@@ -321,6 +521,13 @@ export default function HomePage() {
                 className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
                 🏛️ Ressources
               </button>
+              {/* Bouton guide onboarding */}
+              {!isAuthenticated && (
+                <button onClick={() => setShowOnboarding(true)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-xs font-semibold text-violet-300 transition hover:bg-violet-500/15">
+                  🗺️ Guide de démarrage
+                </button>
+              )}
             </div>
 
           </div>
@@ -330,8 +537,6 @@ export default function HomePage() {
             SECTION 2 — DÉMO SCROLL
         ══════════════════════════════════════════ */}
         <ScrollDemo />
-
-
 
         {/* ══════════════════════════════════════════
             SECTION 3 — PARAMÉTRAGE
@@ -472,7 +677,17 @@ export default function HomePage() {
       </div>
 
       {/* ══════════════════════════════════════════
-          MODAL — Réviser (choix Audio / Scroll)
+          MODAL — Onboarding
+      ══════════════════════════════════════════ */}
+      {showOnboarding && (
+        <OnboardingModal
+          onClose={closeOnboarding}
+          onAction={handleOnboardingAction}
+        />
+      )}
+
+      {/* ══════════════════════════════════════════
+          MODAL — Réviser
       ══════════════════════════════════════════ */}
       {showReviseModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -517,7 +732,7 @@ export default function HomePage() {
             </div>
             <div className="flex flex-col gap-3">
               <a href={`/register?email=${encodeURIComponent(emailDraft)}&pseudo=${encodeURIComponent(pseudoDraft)}`}
-                className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.24)] transition hover:brightness-105">
+                className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:brightness-105">
                 Créer un compte gratuit
               </a>
               <a href="/login" className="w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-slate-200 transition hover:bg-white/10">

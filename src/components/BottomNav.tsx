@@ -6,10 +6,10 @@ import { useState } from "react";
 
 const tabs = [
   { href: "/", label: "Accueil", icon: "🏠" },
-  { href: null, label: "Entraîner", icon: "📝" },
+  { href: null, label: "Préparation", icon: "📚" },
   { href: "/exam", label: "Examen", icon: "🎯" },
   { href: null, label: "Stats", icon: "📊" },
-  { href: "/account", label: "Compte", icon: "👤" },
+  { href: null, label: "Info", icon: "ℹ️" },
 ];
 
 export default function BottomNav() {
@@ -17,6 +17,7 @@ export default function BottomNav() {
   const router = useRouter();
   const [showStatsMenu, setShowStatsMenu] = useState(false);
   const [showTrainMenu, setShowTrainMenu] = useState(false);
+  const [showInfoMenu, setShowInfoMenu] = useState(false);
 
   return (
     <>
@@ -27,11 +28,13 @@ export default function BottomNav() {
               ? pathname === tab.href
               : tab.label === "Stats"
               ? pathname === "/results" || pathname === "/leaderboard"
-              : tab.label === "Entraîner"
-              ? pathname === "/quiz" || pathname === "/scroll"
+              : tab.label === "Préparation"
+              ? pathname === "/quiz" || pathname === "/scroll" || pathname === "/audio"
+              : tab.label === "Info"
+              ? pathname === "/resources" || pathname === "/info"
               : false;
 
-            if (tab.label === "Entraîner") {
+            if (tab.label === "Préparation") {
               return (
                 <button
                   key="train"
@@ -67,6 +70,17 @@ export default function BottomNav() {
               );
             }
 
+            if (tab.label === "Info") {
+              return (
+                <button key="info" onClick={() => setShowInfoMenu(true)}
+                  className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
+                  <span className="text-xl">{tab.icon}</span>
+                  <span className={active ? "font-semibold" : ""}>{tab.label}</span>
+                  {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
+                </button>
+              );
+            }
+
             return (
               <Link
                 key={tab.href}
@@ -97,27 +111,31 @@ export default function BottomNav() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-white">Mode d'apprentissage</p>
+              <p className="text-sm font-semibold text-white">Préparation</p>
               <button onClick={() => setShowTrainMenu(false)} className="text-slate-400 hover:text-white">✕</button>
             </div>
             <div className="flex flex-col gap-3">
-              <button
-                onClick={() => { router.push("/scroll"); setShowTrainMenu(false); }}
-                className="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3.5 text-sm font-semibold text-amber-200 transition hover:bg-amber-500/20"
-              >
-                <span className="text-xl">🚀</span>
+              <button onClick={() => { router.push("/scroll"); setShowTrainMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3.5 text-sm font-semibold text-amber-200 transition hover:bg-amber-500/20">
+                <span className="text-xl">📱</span>
                 <div className="text-left">
-                  <p className="font-semibold">Réviser</p>
+                  <p className="font-semibold">Réviser les cartes</p>
                   <p className="text-xs text-slate-400">Flash-cards thématiques</p>
                 </div>
               </button>
-              <button
-                onClick={() => { router.push("/quiz"); setShowTrainMenu(false); }}
-                className="flex items-center gap-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-4 py-3.5 text-sm font-semibold text-blue-200 transition hover:bg-blue-500/20"
-              >
-                <span className="text-xl">✏️</span>
+              <button onClick={() => { router.push("/audio"); setShowTrainMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3.5 text-sm font-semibold text-emerald-200 transition hover:bg-emerald-500/20">
+                <span className="text-xl">🎧</span>
                 <div className="text-left">
-                  <p className="font-semibold">S'entraîner</p>
+                  <p className="font-semibold">Bibliothèque Audio</p>
+                  <p className="text-xs text-slate-400">100 épisodes guidés</p>
+                </div>
+              </button>
+              <button onClick={() => { router.push("/quiz"); setShowTrainMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-4 py-3.5 text-sm font-semibold text-blue-200 transition hover:bg-blue-500/20">
+                <span className="text-xl">🎯</span>
+                <div className="text-left">
+                  <p className="font-semibold">Passer un test</p>
                   <p className="text-xs text-slate-400">QCM chronométré</p>
                 </div>
               </button>
@@ -171,6 +189,34 @@ export default function BottomNav() {
     <p className="text-xs text-slate-400">Voir les plans disponibles</p>
   </div>
 </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showInfoMenu && (
+        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowInfoMenu(false)}>
+          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-sm font-semibold text-white">Point info</p>
+              <button onClick={() => setShowInfoMenu(false)} className="text-slate-400 hover:text-white">✕</button>
+            </div>
+            <div className="flex flex-col gap-3">
+              <button onClick={() => { router.push("/resources"); setShowInfoMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-4 py-3.5 text-sm font-semibold text-blue-200 transition hover:bg-blue-500/20">
+                <span className="text-xl">🏛️</span>
+                <div className="text-left">
+                  <p className="font-semibold">Ressources</p>
+                  <p className="text-xs text-slate-400">Documents et liens officiels</p>
+                </div>
+              </button>
+              <button onClick={() => { router.push("/info"); setShowInfoMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-violet-400/20 bg-violet-500/10 px-4 py-3.5 text-sm font-semibold text-violet-200 transition hover:bg-violet-500/20">
+                <span className="text-xl">📖</span>
+                <div className="text-left">
+                  <p className="font-semibold">À propos du QCM</p>
+                  <p className="text-xs text-slate-400">Comprendre l'examen civique</p>
+                </div>
+              </button>
             </div>
           </div>
         </div>
