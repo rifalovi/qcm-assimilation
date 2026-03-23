@@ -17,7 +17,8 @@ const SUBTHEME_IMAGES: Record<string, string> = {
 };
 
 // Épisodes gratuits pour freemium
-const FREE_EPISODE_IDS = new Set(["audio-001", "audio-021", "audio-031", "audio-041"]);
+// Freemium : les 2 premiers épisodes de chaque thème (numéros 1 et 2)
+const FREE_EPISODE_NUMBERS = new Set([1, 2]);
 
 // ─── Méta visuelle par thème ───────────────────────────────────────────────
 const THEME_META: Record<AudioThemeKey, { icon: string; accent: string; accentText: string; border: string; glow: string }> = {
@@ -58,7 +59,8 @@ function useAudioPlayer(
   const episode = episodes[currentIdx];
 
   useEffect(() => {
-    if (!episode || !isPremium) return;
+    const isFreeEpisode = FREE_EPISODE_NUMBERS.has(episode?.episodeNumber ?? 0);
+    if (!episode || (!isPremium && !isFreeEpisode)) return;
     setPlaying(false); setProgress(0); setCurrentTime(0);
     setDuration(0); setLoaded(false); setAudioUrl(null); setFetchError(false);
 
@@ -291,6 +293,13 @@ export default function AudioSeriesPage() {
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [autoPlay, setAutoPlay] = useState(false);
+
+  // Pour freemium : forcer le 1er épisode gratuit au chargement
+  useEffect(() => {
+    if (!isFreemium || !episodes.length) return;
+    const firstFreeIdx = episodes.findIndex(ep => FREE_EPISODE_NUMBERS.has(ep.episodeNumber));
+    if (firstFreeIdx >= 0) setCurrentIdx(firstFreeIdx);
+  }, [isFreemium, episodes]);
   const [selectedEpisodes, setSelectedEpisodes] = useState<Set<number>>(new Set());
   const [repeatMode, setRepeatMode] = useState<"none" | "one" | "queue">("none");
   const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -455,14 +464,14 @@ export default function AudioSeriesPage() {
         </div>
 
         {/* ── PLAYER STICKY ───────────────────────────────────────────── */}
-        {isPremium && currentEpisode && (
+        {(isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0))) && currentEpisode && (
           <StickyPlayer
             episode={currentEpisode}
             episodes={episodes}
             currentIdx={currentIdx}
             onPrev={goPrev}
             onNext={goNext}
-            isPremium={isPremium}
+            isPremium={isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0))}
             subthemeImage={subthemeImage}
             meta={meta}
             autoPlay={autoPlay}
@@ -489,7 +498,7 @@ export default function AudioSeriesPage() {
         {isFreemium && (
           <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-3">
             <div className="flex items-center justify-between gap-3">
-              <p className="text-xs text-slate-300">✨ <span className="font-semibold text-white">Freemium</span> — 1 épisode gratuit. Débloquez tout.</p>
+              <p className="text-xs text-slate-300">✨ <span className="font-semibold text-white">Freemium</span> — 2 épisodes gratuits par thème. Débloquez tout.</p>
               <button onClick={handleUpgrade} className="shrink-0 rounded-xl border border-amber-400/20 bg-amber-500 px-3 py-1.5 text-xs font-bold text-slate-900 transition hover:bg-amber-400">Premium</button>
             </div>
           </div>
@@ -502,15 +511,15 @@ export default function AudioSeriesPage() {
             <span className="text-xs text-slate-400">
               {isPremium
                 ? isSelectionMode ? "Coche les épisodes à écouter" : "Cliquez pour écouter"
-                : isFreemium ? "1 gratuit" : "Premium requis"}
+                : isFreemium ? "2 gratuits" : "Premium requis"}
             </span>
           </div>
 
           <div className="space-y-2">
             {episodes.map((ep, idx) => {
-              const isFree = isFreemium && FREE_EPISODE_IDS.has(ep.id);
+              const isFree = isFreemium && FREE_EPISODE_NUMBERS.has(ep.episodeNumber);
               const locked = !isPremium && !isFree;
-              const isActive = currentIdx === idx && isPremium;
+              const isActive = currentIdx === idx && (isPremium || isFree);
               const isSelected = selectedEpisodes.has(idx);
 
               return (

@@ -77,7 +77,7 @@ export default function ExamPage() {
   const [emailDraft, setEmailDraft] = useState("");
   const [heroVisible, setHeroVisible] = useState(false);
   const [openExamUpgrade, setOpenExamUpgrade] = useState(false);
-  const [level, setLevel] = useState<Level>(3);
+  const [level, setLevel] = useState<Level>(1);
   const [themes, setThemes] = useState<Theme[]>([...THEMES]);
   const canStart = themes.length > 0;
   const meta = useMemo(() => ({ level, themes, count: COUNT }), [level, themes]);
@@ -150,7 +150,13 @@ export default function ExamPage() {
   function startExam() {
     if (!canStart) return;
     localStorage.setItem("quiz_settings", JSON.stringify({
-      ...meta, mode: "exam", perQuestion: 30, maxDuration: 900,
+      level,
+      themes,
+      count: limits.quizCount,
+      mode: "exam",
+      perQuestion: 30,
+      maxDuration: 900,
+      perQuestionSeconds: 30,
     }));
     router.push("/quiz");
   }

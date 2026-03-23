@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useUser } from "../components/UserContext";
 import { createClient } from "@/lib/supabase/client";
 
@@ -19,10 +19,11 @@ const PLANS = [
       { label: "10 questions par session", ok: true },
       { label: "Niveau 1 uniquement", ok: true },
       { label: "5 cartes Scroll par thème", ok: true },
+      { label: "Accès bibliothèque audio", ok: false },
       { label: "Examen blanc", ok: false },
       { label: "Historique des résultats", ok: false },
       { label: "Statistiques détaillées", ok: false },
-      { label: "Tous les niveaux", ok: false },
+      { label: "Tous les niveaux (1, 2, 3)", ok: false },
     ],
     cta: "Continuer sans compte",
     ctaAction: "anonymous",
@@ -40,10 +41,11 @@ const PLANS = [
       { label: "20 questions par session", ok: true },
       { label: "Niveau 1 uniquement", ok: true },
       { label: "10 cartes Scroll par thème", ok: true },
+      { label: "2 épisodes audio gratuits par thème", ok: true },
       { label: "Historique des résultats", ok: true },
-      { label: "Examen blanc", ok: false },
+      { label: "Examen blanc (1 essai gratuit)", ok: true },
       { label: "Statistiques détaillées", ok: false },
-      { label: "Tous les niveaux", ok: false },
+      { label: "Tous les niveaux (1, 2, 3)", ok: false },
     ],
     cta: "Créer un compte gratuit",
     ctaAction: "register",
@@ -60,7 +62,8 @@ const PLANS = [
     features: [
       { label: "40 questions par session", ok: true },
       { label: "Tous les niveaux (1, 2, 3)", ok: true },
-      { label: "280 cartes Scroll complètes", ok: true },
+      { label: "400 cartes Scroll complètes", ok: true },
+      { label: "100 épisodes audio complets", ok: true },
       { label: "Examen blanc illimité", ok: true },
       { label: "Historique complet", ok: true },
       { label: "Statistiques détaillées", ok: true },
@@ -86,10 +89,8 @@ export default function PricingPage() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        // Pas de compte → créer un compte puis payer
         router.push("/register?redirect=premium");
       } else {
-        // A un compte → aller directement au checkout Stripe
         const res = await fetch("/api/create-checkout", { method: "POST" });
         const { url, error } = await res.json();
         if (error) { setLoading(false); return; }
@@ -132,12 +133,9 @@ export default function PricingPage() {
                 isRecommended ? "ring-2 ring-amber-400/30 shadow-[0_0_40px_rgba(251,191,36,0.1)]" : ""
               } ${isCurrent ? "ring-2 ring-blue-400/30" : ""}`}
             >
-              {/* Badge */}
               {plan.badge && (
                 <div className={`absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-bold ${
-                  isRecommended
-                    ? "bg-amber-500 text-slate-950"
-                    : "bg-blue-500 text-white"
+                  isRecommended ? "bg-amber-500 text-slate-950" : "bg-blue-500 text-white"
                 }`}>
                   {plan.badge}
                 </div>
@@ -148,7 +146,6 @@ export default function PricingPage() {
                 </div>
               )}
 
-              {/* Header plan */}
               <div className="mb-5">
                 <div className="text-3xl mb-2">{plan.icon}</div>
                 <h2 className="text-lg font-extrabold text-white">{plan.name}</h2>
@@ -159,7 +156,6 @@ export default function PricingPage() {
                 </div>
               </div>
 
-              {/* Features */}
               <ul className="space-y-2.5 mb-6">
                 {plan.features.map((f) => (
                   <li key={f.label} className="flex items-center gap-2.5 text-sm">
@@ -173,7 +169,6 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              {/* CTA */}
               <button
                 onClick={() => handleCTA(plan.ctaAction)}
                 disabled={isCurrent || loading}
@@ -192,8 +187,44 @@ export default function PricingPage() {
         })}
       </div>
 
-      {/* FAQ rapide */}
+      {/* Comparatif détaillé */}
       <div className="mt-10 rounded-2xl border border-white/10 bg-slate-800/60 p-6">
+        <h2 className="text-base font-bold text-white mb-5">Comparatif détaillé</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/10">
+                <th className="text-left py-2 pr-4 text-slate-400 font-medium">Fonctionnalité</th>
+                <th className="text-center py-2 px-3 text-slate-400 font-medium">Sans compte</th>
+                <th className="text-center py-2 px-3 text-blue-300 font-medium">Freemium</th>
+                <th className="text-center py-2 px-3 text-amber-300 font-medium">Premium</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {[
+                ["Questions / session", "10", "20", "40"],
+                ["Niveaux", "1", "1", "1, 2, 3"],
+                ["Cartes Scroll", "5 / thème", "10 / thème", "400 complètes"],
+                ["Épisodes audio", "—", "2 / thème", "100 complets"],
+                ["Examen blanc", "—", "1 essai", "Illimité"],
+                ["Historique", "—", "✓", "✓"],
+                ["Statistiques", "—", "—", "✓"],
+                ["Support", "—", "Standard", "Prioritaire"],
+              ].map(([feature, anon, free, prem]) => (
+                <tr key={feature}>
+                  <td className="py-2.5 pr-4 text-slate-300">{feature}</td>
+                  <td className="py-2.5 px-3 text-center text-slate-500">{anon}</td>
+                  <td className="py-2.5 px-3 text-center text-blue-300">{free}</td>
+                  <td className="py-2.5 px-3 text-center text-amber-300">{prem}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* FAQ */}
+      <div className="mt-6 rounded-2xl border border-white/10 bg-slate-800/60 p-6">
         <h2 className="text-base font-bold text-white mb-4">Questions fréquentes</h2>
         <div className="space-y-4 text-sm">
           {[
@@ -209,6 +240,10 @@ export default function PricingPage() {
               q: "Mes données sont-elles sauvegardées si je passe de gratuit à Premium ?",
               a: "Oui, tout votre historique et vos résultats sont conservés lors du passage en Premium."
             },
+            {
+              q: "L'examen blanc freemium est-il limité ?",
+              a: "Oui, les comptes Freemium bénéficient d'un essai gratuit de l'examen blanc. Le Premium donne un accès illimité avec résultats détaillés et corrections."
+            },
           ].map((item) => (
             <div key={item.q} className="border-b border-white/10 pb-4 last:border-0 last:pb-0">
               <p className="font-semibold text-white">{item.q}</p>
@@ -218,12 +253,8 @@ export default function PricingPage() {
         </div>
       </div>
 
-      {/* Retour */}
       <div className="mt-6 text-center">
-        <button
-          onClick={() => router.back()}
-          className="text-sm text-slate-400 hover:text-white transition"
-        >
+        <button onClick={() => router.back()} className="text-sm text-slate-400 hover:text-white transition">
           ← Retour
         </button>
       </div>

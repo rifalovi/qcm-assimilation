@@ -297,7 +297,7 @@ export default function AudioLibraryPage() {
             {/* Badge rôle */}
             <div className="mt-3 flex justify-center">
               {isAnonymous && <span className="rounded-full border border-slate-400/20 bg-slate-500/10 px-3 py-1 text-xs font-medium text-slate-300">👤 Sans compte — créez un compte gratuit</span>}
-              {isFreemium && <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">✨ Freemium — 1 épisode gratuit par thème</span>}
+              {isFreemium && <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">✨ Freemium — 2 épisodes gratuits par thème</span>}
               {isPremium && <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">👑 Premium — accès complet</span>}
             </div>
 
