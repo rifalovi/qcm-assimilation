@@ -1,5 +1,5 @@
 "use client";
-import ScrollDemo from "@/components/ScrollDemo";
+import ScrollDemo from "./components/ScrollDemo";
 
 import { useRouter } from "next/navigation";
 import Card from "../components/Card";
@@ -12,44 +12,12 @@ import EligibilityModalLauncher from "./components/EligibilityModalLauncher";
 import AvisSection from "./components/AvisSection";
 
 
-
 type Level = 1 | 2 | 3;
 type Theme = "Valeurs" | "Institutions" | "Histoire" | "Société";
 
 const COUNT = 40;
 const PER_QUESTION_SECONDS = 20;
 const THEMES: Theme[] = ["Valeurs", "Institutions", "Histoire", "Société"];
-
-function MarianneMark() {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      className="h-7 w-7 text-slate-200"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        d="M32 8c8.5 0 15.5 7 15.5 15.5S40.5 39 32 39 16.5 32 16.5 23.5 23.5 8 32 8Z"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M18 53c3.8-7.6 10.1-12 14-12s10.2 4.4 14 12"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M22 22c4-6 9-9 16-9 1.5 0 3 .2 4.3.5"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
 
 function encode(data: Record<string, string>) {
   return new URLSearchParams(data).toString();
@@ -94,28 +62,10 @@ function Pill({
   );
 }
 
-function StatMiniCard({
-  value,
-  label,
-  icon,
-}: {
-  value: string;
-  label: string;
-  icon: string;
-}) {
-  return (
-    <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-4 text-center shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20 hover:shadow-[0_24px_55px_rgba(2,8,23,0.36)]">
-      <div className="mb-1 text-xl">{icon}</div>
-      <div className="text-2xl font-extrabold text-white sm:text-3xl">{value}</div>
-      <div className="mt-1 text-xs font-medium text-slate-400 sm:text-sm">{label}</div>
-    </div>
-  );
-}
-
 export default function HomePage() {
   const router = useRouter();
- const { role, username: authUsername, email: authEmail, loading: authLoading, isAuthenticated, logout } = useUser();
-const limits = ROLE_LIMITS[role];
+  const { role, username: authUsername, loading: authLoading, isAuthenticated, logout } = useUser();
+  const limits = ROLE_LIMITS[role];
 
   const [pseudo, setPseudo] = useState("");
   const [email, setEmail] = useState("");
@@ -125,32 +75,22 @@ const limits = ROLE_LIMITS[role];
   const [hasLastResult, setHasLastResult] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
   const [homeMenuOpen, setHomeMenuOpen] = useState(false);
+  const [showReviseModal, setShowReviseModal] = useState(false);
 
   useEffect(() => {
     const u = loadUserLocal();
-    if (u) {
-      setPseudo(u.pseudo);
-      setEmail(u.email);
-      setPseudoDraft(u.pseudo);
-      setEmailDraft(u.email);
-    }
+    if (u) { setPseudo(u.pseudo); setEmail(u.email); setPseudoDraft(u.pseudo); setEmailDraft(u.email); }
     const t = setTimeout(() => setHeroVisible(true), 50);
     return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
     const u = loadUserLocal();
-    if (!u?.email) {
-      setHasLastResult(false);
-      return;
-    }
+    if (!u?.email) { setHasLastResult(false); return; }
     const e = u.email.trim().toLowerCase();
     async function check() {
       const remote = await hasAnyResult(e);
-      if (remote) {
-        setHasLastResult(true);
-        return;
-      }
+      if (remote) { setHasLastResult(true); return; }
       const hasTrain = !!localStorage.getItem(`last_result:train:${e}`);
       const hasExam = !!localStorage.getItem(`last_result:exam:${e}`);
       setHasLastResult(hasTrain || hasExam);
@@ -162,25 +102,16 @@ const limits = ROLE_LIMITS[role];
     const supabase = createClient();
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        const username =
-          session.user.user_metadata?.username ||
-          session.user.email?.split("@")[0] ||
-          "";
+        const username = session.user.user_metadata?.username || session.user.email?.split("@")[0] || "";
         const email = session.user.email || "";
-        setPseudo(username);
-        setEmail(email);
-        setPseudoDraft(username);
-        setEmailDraft(email);
+        setPseudo(username); setEmail(email); setPseudoDraft(username); setEmailDraft(email);
         saveUser({ pseudo: username, email });
       }
     });
   }, []);
 
   function requireAuthAndRun(action: () => void) {
-    if (!pseudo || !email) {
-      setPseudoOpen(true);
-      return;
-    }
+    if (!pseudo || !email) { setPseudoOpen(true); return; }
     action();
   }
 
@@ -191,84 +122,48 @@ const limits = ROLE_LIMITS[role];
         const u = JSON.parse(raw) as { pseudo?: string; email?: string };
         setPseudoDraft(u.pseudo ?? pseudo ?? "");
         setEmailDraft(u.email ?? email ?? "");
-      } else {
-        setPseudoDraft(pseudo ?? "");
-        setEmailDraft(email ?? "");
-      }
-    } catch {
-      setPseudoDraft(pseudo ?? "");
-      setEmailDraft(email ?? "");
-    }
+      } else { setPseudoDraft(pseudo ?? ""); setEmailDraft(email ?? ""); }
+    } catch { setPseudoDraft(pseudo ?? ""); setEmailDraft(email ?? ""); }
     setPseudoOpen(true);
   }
 
- async function clearPseudo() {
-  await logout();
-  setPseudo("");
-  setEmail("");
-  setPseudoDraft("");
-  setEmailDraft("");
-  setHasLastResult(false);
-  setPseudoOpen(false);
-  setHomeMenuOpen(false);
-}
-  
-  
+  async function clearPseudo() {
+    await logout();
+    setPseudo(""); setEmail(""); setPseudoDraft(""); setEmailDraft("");
+    setHasLastResult(false); setPseudoOpen(false); setHomeMenuOpen(false);
+  }
 
   const [level, setLevel] = useState<Level>(1);
   const [themes, setThemes] = useState<Theme[]>([...THEMES]);
   const canStart = themes.length > 0;
 
-  const meta = useMemo(
-    () => ({
-      level,
-      themes,
-      count: COUNT,
-      perQuestionSeconds: PER_QUESTION_SECONDS,
-      mode: "train" as const,
-    }),
-    [level, themes]
-  );
+  const meta = useMemo(() => ({
+    level, themes, count: COUNT, perQuestionSeconds: PER_QUESTION_SECONDS, mode: "train" as const,
+  }), [level, themes]);
 
   function confirmIdentity() {
     const p = pseudoDraft.trim();
     const e = emailDraft.trim().toLowerCase();
     if (!p || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return;
-    const u = { pseudo: p, email: e };
-    saveUser(u);
-    setPseudo(p);
-    setEmail(e);
-    setPseudoOpen(false);
+    saveUser({ pseudo: p, email: e }); setPseudo(p); setEmail(e); setPseudoOpen(false);
     localStorage.setItem("quiz_settings", JSON.stringify(meta));
     router.push("/quiz");
   }
 
   function start() {
     if (!canStart) return;
-    requireAuthAndRun(() => {
-      localStorage.setItem("quiz_settings", JSON.stringify(meta));
-      router.push("/quiz");
-    });
+    requireAuthAndRun(() => { localStorage.setItem("quiz_settings", JSON.stringify(meta)); router.push("/quiz"); });
   }
 
   function startExam() {
-    if (role === "anonymous") {
-      setOpenExamUpgrade(true);
-      return;
-    }
-
-    requireAuthAndRun(() => {
-      router.push("/exam");
-    });
+    if (role === "anonymous") { setOpenExamUpgrade(true); return; }
+    requireAuthAndRun(() => { router.push("/exam"); });
   }
 
   function toggleTheme(t: Theme) {
-    setThemes((prev) =>
-      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
-    );
+    setThemes((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]);
   }
 
-  const [openFeedback, setOpenFeedback] = useState(false);
   const [rating, setRating] = useState<number>(5);
   const [comment, setComment] = useState("");
   const [sending, setSending] = useState(false);
@@ -280,306 +175,194 @@ const limits = ROLE_LIMITS[role];
     if (sending) return;
     setSending(true);
     const payload: Record<string, string> = {
-      "form-name": "feedback-qcm",
-      rating: String(rating),
-      comment: comment.trim(),
-      pseudo: pseudo.trim() || "",
-      page: "home",
-      level: String(level),
-      themes: themes.join(", "),
-      count: String(COUNT),
-      mode: "train",
+      "form-name": "feedback-qcm", rating: String(rating), comment: comment.trim(),
+      pseudo: pseudo.trim() || "", page: "home", level: String(level),
+      themes: themes.join(", "), count: String(COUNT), mode: "train",
     };
     try {
-      const res = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encode(payload),
-      });
+      const res = await fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: encode(payload) });
       if (!res.ok) throw new Error("failed");
-      setSent(true);
-      setComment("");
-    } catch {
-      alert("Erreur d'envoi. Réessaie.");
-    } finally {
-      setSending(false);
-    }
+      setSent(true); setComment("");
+    } catch { alert("Erreur d'envoi. Réessaie."); }
+    finally { setSending(false); }
   }
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <EligibilityModalLauncher isAuthenticated={!!pseudo.trim() && !!email.trim()} />
       <div className="space-y-8 sm:space-y-10">
-<section
-  className={`relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
-    heroVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-  }`}
->
-  <div className="flex h-1.5 w-full">
-    <div className="flex-1 bg-blue-600"/>
-    <div className="flex-1 bg-white"/>
-    <div className="flex-1 bg-red-600"/>
-  </div>
-  <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl"/>
-  <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl"/>
 
-  <div className="relative px-5 py-7 sm:px-8 sm:py-9">
-
-    {/* Header */}
-    <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-      <div className="flex items-center gap-3">
-        {/* Drapeau FR */}
-        <span className="inline-flex h-10 w-14 overflow-hidden rounded-lg border border-white/10 shadow-md">
-          <span className="flex-1 bg-blue-700"/>
-          <span className="flex-1 bg-white"/>
-          <span className="flex-1 bg-red-600"/>
-        </span>
-        <div>
-          <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">
-            République française
+        {/* ══════════════════════════════════════════
+            SECTION 1 — HERO
+        ══════════════════════════════════════════ */}
+        <section className={`relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${heroVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
+          <div className="flex h-1.5 w-full">
+            <div className="flex-1 bg-blue-600"/><div className="flex-1 bg-white"/><div className="flex-1 bg-red-600"/>
           </div>
-          <div className="text-xs text-slate-400">Plateforme d'entraînement 2026</div>
-        </div>
-      </div>
+          <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl"/>
+          <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl"/>
 
-      {!authLoading && isAuthenticated ? (
-        <div className="relative flex justify-end sm:justify-start">
-          <button
-            onClick={() => setHomeMenuOpen(!homeMenuOpen)}
-            className="flex items-center gap-2 rounded-3xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 transition"
-          >
-            <span>Bonjour <span className="font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</span> 👋</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{transform: homeMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s"}}>
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
-                    {homeMenuOpen && (
-            <>
-              <div
-                className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm sm:bg-transparent sm:backdrop-blur-0"
-                onClick={() => setHomeMenuOpen(false)}
-              />
-              <div
-                className="fixed right-4 top-20 z-50 w-52 max-h-[70vh] overflow-y-auto rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 shadow-[0_24px_70px_rgba(0,0,0,0.62)] backdrop-blur-xl sm:absolute sm:right-0 sm:top-full sm:mt-2 sm:w-52 sm:max-h-none sm:overflow-visible"
-                style={{ background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)" }}
-              >
-                {isAuthenticated ? (
-                  <>
-                    <div className="border-b border-white/10 px-3 py-1.5">
-                      <p className="text-sm font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</p>
-                      <p className="mt-0.5 text-xs text-slate-400">
-                        {role === "premium" ? "👑 Premium" : "✨ Freemium"}
-                      </p>
-                    </div>
+          <div className="relative px-5 py-7 sm:px-8 sm:py-9">
 
-                    <div className="py-2">
-                      {[
-                        { label: "Réviser", icon: "📚", onClick: () => router.push("/scroll") },
-                        { label: "S'entraîner", icon: "🎯", onClick: () => router.push("/quiz") },
-                        { label: "Audio", icon: "🎧", onClick: () => router.push("/audio") },
-                        { label: "Résultats", icon: "📊", onClick: () => router.push("/results") },
-                        { label: "Mon compte", icon: "👤", onClick: () => router.push("/account") },
-                        { label: "Ressources", icon: "🏛️", onClick: () => router.push("/resources") },
-                        { label: "Tarifs", icon: "👑", onClick: () => router.push("/pricing") },
-                      ].map((item) => (
-                        <button
-                          key={item.label}
-                          onClick={() => {
-                            setHomeMenuOpen(false);
-                            item.onClick();
-                          }}
-                          className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white active:scale-[0.99]"
-                        >
-                          <span className="text-[15px]">{item.icon}</span>
-                          <span className="truncate">{item.label}</span>
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="border-t border-white/10 py-1">
-                      <button
-                        onClick={() => { clearPseudo(); }}
-                        className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/10 hover:text-red-300 active:scale-[0.99]"
-                      >
-                        <span className="text-[15px]">🚪</span>
-                        Déconnexion
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <div className="py-2">
-                    <button
-                      onClick={() => { openPseudoModal(); setHomeMenuOpen(false); }}
-                      className="flex w-full items-center gap-3 px-4 py-3.5 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition"
-                    >
-                      ✏️ Changer le pseudo
-                    </button>
-                    <button
-                      onClick={() => { clearPseudo(); }}
-                      className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/10 hover:text-red-300 active:scale-[0.99]"
-                    >
-                      🚪 Déconnexion
-                    </button>
-                  </div>
-                )}
+            {/* Nav */}
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-10 w-14 overflow-hidden rounded-lg border border-white/10 shadow-md">
+                  <span className="flex-1 bg-blue-700"/><span className="flex-1 bg-white"/><span className="flex-1 bg-red-600"/>
+                </span>
+                <div>
+                  <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">République française</div>
+                  <div className="text-xs text-slate-400">Plateforme d'entraînement 2026</div>
+                </div>
               </div>
-            </>
-          )}
-        </div>
-      ) : (
-        <button onClick={openPseudoModal} className="rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition">
-          👋 Se connecter
-        </button>
-      )}
-    </div>
 
-    {/* Titre */}
-    <div className="mb-3 mx-auto block text-center w-fit items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
-      Plus de 800 questions-réponses
-    </div>
+              {!authLoading && isAuthenticated ? (
+                <div className="relative flex justify-end">
+                  <button onClick={() => setHomeMenuOpen(!homeMenuOpen)}
+                    className="flex items-center gap-2 rounded-3xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 transition">
+                    <span>Bonjour <span className="font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</span> 👋</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{transform: homeMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s"}}><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  {homeMenuOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm sm:bg-transparent sm:backdrop-blur-0" onClick={() => setHomeMenuOpen(false)} />
+                      <div className="fixed right-4 top-20 z-50 w-52 rounded-[1.6rem] border border-white/10 shadow-[0_24px_70px_rgba(0,0,0,0.62)] backdrop-blur-xl sm:absolute sm:right-0 sm:top-full sm:mt-2"
+                        style={{ background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)" }}>
+                        <div className="border-b border-white/10 px-3 py-2">
+                          <p className="text-sm font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</p>
+                          <p className="mt-0.5 text-xs text-slate-400">{role === "premium" ? "👑 Premium" : "✨ Freemium"}</p>
+                        </div>
+                        <div className="py-2">
+                          {[
+                            { label: "Réviser", icon: "📚", onClick: () => router.push("/scroll") },
+                            { label: "S'entraîner", icon: "🎯", onClick: () => router.push("/quiz") },
+                            { label: "Audio", icon: "🎧", onClick: () => router.push("/audio") },
+                            { label: "Résultats", icon: "📊", onClick: () => router.push("/results") },
+                            { label: "Mon compte", icon: "👤", onClick: () => router.push("/account") },
+                            { label: "Ressources", icon: "🏛️", onClick: () => router.push("/resources") },
+                            { label: "Tarifs", icon: "👑", onClick: () => router.push("/pricing") },
+                          ].map((item) => (
+                            <button key={item.label} onClick={() => { setHomeMenuOpen(false); item.onClick(); }}
+                              className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white">
+                              <span>{item.icon}</span><span>{item.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                        <div className="border-t border-white/10 py-1">
+                          <button onClick={clearPseudo}
+                            className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/10">
+                            <span>🚪</span>Déconnexion
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                /* Boutons auth — plus visibles */
+                <div className="flex items-center gap-2">
+                  <button onClick={() => router.push("/login")}
+                    className="rounded-2xl border border-white/15 bg-white/8 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/15 hover:text-white">
+                    Se connecter
+                  </button>
+                  <button onClick={() => router.push("/register")}
+                    className="rounded-2xl border border-blue-400/30 bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-[0_4px_14px_rgba(37,99,235,0.3)] transition hover:brightness-110">
+                    Créer un compte
+                  </button>
+                </div>
+              )}
+            </div>
 
-    <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center">
-      Préparez votre <span className="text-blue-400">parcours</span>{" "}
-      en <span className="text-blue-400">France</span>.
-    </h1>
+            {/* Badge + Titre */}
+            <div className="mb-3 mx-auto block text-center w-fit rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
+              Plus de 800 questions-réponses
+            </div>
+            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center">
+              Préparez votre <span className="text-blue-400">parcours</span> en <span className="text-blue-400">France</span>.
+            </h1>
+            <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center max-w-xl mx-auto">
+              Valeurs de la République • Institutions • Histoire • Vie en société — entraînement progressif conforme à l'examen civique 2026.
+            </p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">📝 Entraînement progressif</span>
+              <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">✓ Corrections détaillées</span>
+              <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">🎯 Simulation réaliste</span>
+            </div>
 
-    <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center max-w-xl mx-auto">
-      Valeurs de la République • Institutions • Histoire • Vie en société — entraînement progressif conforme à l'examen civique 2026.
-    </p>
+            {/* CTA principaux */}
+            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <button onClick={start}
+                className="inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-2xl border border-blue-400/30 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-6 py-4 text-base font-bold text-white shadow-[0_12px_32px_rgba(37,99,235,0.35)] transition hover:brightness-110 active:scale-[0.98] sm:w-auto">
+                <svg width="18" height="18" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
+                Commencer un test
+              </button>
+              <button onClick={() => setShowReviseModal(true)}
+                className="inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-2xl border border-amber-400/30 bg-amber-500/10 px-6 py-4 text-base font-bold text-amber-200 shadow-[0_12px_32px_rgba(251,191,36,0.12)] transition hover:border-amber-400/50 hover:bg-amber-500/15 active:scale-[0.98] sm:w-auto">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>
+                Réviser
+              </button>
+            </div>
 
-    {/* Pills accrocheurs */}
-    <div className="mt-4 flex flex-wrap justify-center gap-2">
-      <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">
-        📝 Entraînement progressif
-      </span>
-      <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
-        ✓ Corrections détaillées
-      </span>
-      <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">
-        🎯 Simulation réaliste
-      </span>
-    </div>
+            {/* Actions secondaires */}
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
+              <button onClick={() => router.push("/audio")}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
+                🎧 Bibliothèque audio
+              </button>
+              <button onClick={() => { const el = document.getElementById("avis-section"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
+                ⭐ Voir les avis
+              </button>
+              <button onClick={() => router.push("/leaderboard")}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
+                🏆 Classement
+              </button>
+              <button onClick={() => router.push("/resources")}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
+                🏛️ Ressources
+              </button>
+            </div>
 
-       {/* 4 boutons phares */}
-    <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          </div>
+        </section>
 
-      {/* Faire un test */}
-      <button
-        onClick={start}
-        className="group flex flex-col items-center gap-2 rounded-2xl border border-blue-400/25 bg-gradient-to-br from-blue-600/20 to-indigo-600/10 px-3 py-4 text-center transition hover:border-blue-400/40 active:scale-95"
-      >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/20 shadow-[0_6px_16px_rgba(37,99,235,0.25)]">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-          </svg>
-        </div>
-        <div>
-          <p className="text-sm font-bold text-white">Faire un test</p>
-          <p className="mt-0.5 text-[10px] text-blue-300/70">40 questions</p>
-        </div>
-      </button>
-
-      {/* Réviser */}
-      <button
-        onClick={() => router.push("/scroll")}
-        className="group flex flex-col items-center gap-2 rounded-2xl border border-amber-400/25 bg-gradient-to-br from-amber-500/20 to-orange-500/10 px-3 py-4 text-center transition hover:border-amber-400/40 active:scale-95"
-      >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-500/20 shadow-[0_6px_16px_rgba(251,191,36,0.2)]">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>
-          </svg>
-        </div>
-        <div>
-          <p className="text-sm font-bold text-white">Réviser</p>
-          <p className="mt-0.5 text-[10px] text-amber-300/70">Par thématique</p>
-        </div>
-      </button>
-
-      {/* Bibliothèque audio */}
-      <button
-        onClick={() => router.push("/audio")}
-        className="group flex flex-col items-center gap-2 rounded-2xl border border-emerald-400/25 bg-gradient-to-br from-emerald-500/20 to-teal-500/10 px-3 py-4 text-center transition hover:border-emerald-400/40 active:scale-95"
-      >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(52,211,153,0.2)]">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
-            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
-          </svg>
-        </div>
-        <div>
-          <p className="text-sm font-bold text-white">Bibliothèque</p>
-          <p className="mt-0.5 text-[10px] text-emerald-300/70">+100 pistes audio</p>
-        </div>
-      </button>
-
-      {/* Avis */}
-      <button
-        onClick={() => { const el = document.getElementById("avis-section"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
-        className="group flex flex-col items-center gap-2 rounded-2xl border border-violet-400/25 bg-gradient-to-br from-violet-500/20 to-purple-500/10 px-3 py-4 text-center transition hover:border-violet-400/40 active:scale-95"
-      >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/20 shadow-[0_6px_16px_rgba(167,139,250,0.2)]">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-        </div>
-        <div>
-          <p className="text-sm font-bold text-white">Avis</p>
-          <p className="mt-0.5 text-[10px] text-violet-300/70">Voir les retours</p>
-        </div>
-      </button>
-
-    </div>
-
-  </div>
-</section>
-
+        {/* ══════════════════════════════════════════
+            SECTION 2 — DÉMO SCROLL
+        ══════════════════════════════════════════ */}
         <ScrollDemo />
 
 
 
+        {/* ══════════════════════════════════════════
+            SECTION 3 — PARAMÉTRAGE
+        ══════════════════════════════════════════ */}
         <section className="grid gap-6 lg:grid-cols-3">
+          {/* Niveau */}
           <Card>
-            <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
-              <div>
-                <h3 className="text-lg font-bold text-white">Choisissez votre niveau</h3>
-                <p className="mt-1 text-sm text-slate-400">
-                  Ajustez la difficulté selon votre progression.
-                </p>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/10 text-xl">🎯</div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Choisissez votre niveau</h3>
+                  <p className="mt-0.5 text-xs text-slate-400">Ajustez la difficulté selon votre progression.</p>
+                </div>
               </div>
-              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
-                3 niveaux
-              </div>
+              <div className="shrink-0 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-slate-300">3 niveaux</div>
             </div>
-
             <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-  {[1, 2, 3].map((n) => {
-    const active = level === n;
-    const locked = !limits.levels.includes(n);
-    return (
-      <button
-        key={n}
-        type="button"
-        onClick={() => !locked && setLevel(n as Level)}
-        className={`relative rounded-2xl border px-4 py-4 text-center transition-all duration-200 ${
-          locked
-            ? "cursor-not-allowed border-white/5 bg-white/[0.02] text-slate-600"
-            : active
-            ? "border-blue-400/30 bg-gradient-to-br from-blue-500/15 to-indigo-500/15 text-blue-200 shadow-[0_10px_30px_rgba(37,99,235,0.18)]"
-            : "border-white/10 bg-white/5 text-slate-300 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
-        }`}
-      >
-        <div className="text-sm font-semibold">Niveau {n}</div>
-        {locked && (
-          <div className="mt-1 text-xs text-amber-400/70">
-            🔒 Premium
-          </div>
-        )}
-      </button>
-    );
-  })}
-</div>
-
-            <div className="mt-5 rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 p-4 text-center sm:text-left">
+              {[1, 2, 3].map((n) => {
+                const active = level === n;
+                const locked = !limits.levels.includes(n);
+                return (
+                  <button key={n} type="button" onClick={() => !locked && setLevel(n as Level)}
+                    className={`relative rounded-2xl border px-4 py-4 text-center transition-all duration-200 ${locked ? "cursor-not-allowed border-white/5 bg-white/[0.02] text-slate-600" : active ? "border-blue-400/30 bg-gradient-to-br from-blue-500/15 to-indigo-500/15 text-blue-200 shadow-[0_10px_30px_rgba(37,99,235,0.18)]" : "border-white/10 bg-white/5 text-slate-300 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"}`}>
+                    <div className="text-sm font-semibold">Niveau {n}</div>
+                    {locked && <div className="mt-1 text-xs text-amber-400/70">🔒 Premium</div>}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-5 rounded-3xl border border-white/10 bg-white/5 p-4">
               <div className="mb-2 text-sm font-semibold text-white">Conseil</div>
               <ul className="space-y-2 text-sm text-slate-300">
                 <li>• Niveau 1 : bases et repères essentiels</li>
@@ -587,38 +370,39 @@ const limits = ROLE_LIMITS[role];
                 <li>• Niveau 3 : approfondissement et maîtrise</li>
               </ul>
             </div>
+            {role !== "premium" && (
+              <button onClick={() => router.push("/pricing")}
+                className="mt-4 w-full rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-left transition hover:bg-amber-500/15">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <p className="text-xs font-bold text-amber-300">👑 Passer en Premium</p>
+                    <p className="mt-0.5 text-[11px] text-amber-200/60">Débloquez niveaux 2 & 3 + 40 questions + examen blanc</p>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 text-amber-400"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
+                </div>
+              </button>
+            )}
           </Card>
 
+          {/* Thèmes */}
           <Card>
-            <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
-              <div>
-                <h3 className="text-lg font-bold text-white">Sélectionnez vos thèmes</h3>
-                <p className="mt-1 text-sm text-slate-400">
-                  Ciblez vos révisions selon vos besoins.
-                </p>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-xl">📚</div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Sélectionnez vos thèmes</h3>
+                  <p className="mt-0.5 text-xs text-slate-400">Ciblez vos révisions selon vos besoins.</p>
+                </div>
               </div>
-              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
-                {themes.length}/{THEMES.length}
-              </div>
+              <div className="shrink-0 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-slate-300">{themes.length}/{THEMES.length}</div>
             </div>
-
             <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
-              {THEMES.map((t) => (
-                <Pill key={t} active={themes.includes(t)} onClick={() => toggleTheme(t)}>
-                  {t}
-                </Pill>
-              ))}
+              {THEMES.map((t) => <Pill key={t} active={themes.includes(t)} onClick={() => toggleTheme(t)}>{t}</Pill>)}
             </div>
-
             <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
-              <Button variant="secondary" onClick={() => setThemes([...THEMES])}>
-                Tout sélectionner
-              </Button>
-              <Button variant="secondary" onClick={() => setThemes([])}>
-                Tout retirer
-              </Button>
+              <Button variant="secondary" onClick={() => setThemes([...THEMES])}>Tout sélectionner</Button>
+              <Button variant="secondary" onClick={() => setThemes([])}>Tout retirer</Button>
             </div>
-
             {!canStart && (
               <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-center text-sm text-red-200 sm:text-left">
                 ⚠️ Sélectionnez au moins un thème pour démarrer.
@@ -626,166 +410,130 @@ const limits = ROLE_LIMITS[role];
             )}
           </Card>
 
+          {/* Résumé */}
           <Card>
-            <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
-              <div>
-                <h3 className="text-lg font-bold text-white">Résumé de votre session</h3>
-                <p className="mt-1 text-sm text-slate-400">
-                  Vérifiez les paramètres avant de lancer le test.
-                </p>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/10 text-xl">📋</div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Résumé de votre session</h3>
+                  <p className="mt-0.5 text-xs text-slate-400">Vérifiez les paramètres avant de lancer le test.</p>
+                </div>
               </div>
-              <div className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
-                Prêt
-              </div>
+              <div className="shrink-0 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-300">Prêt</div>
             </div>
-
-            <div className="mt-5 space-y-3 rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 p-4 text-sm">
-              {[
-  ["Questions", `${limits.quizCount} questions`],
-  ["Temps / question", `${PER_QUESTION_SECONDS}s`],
-  ["Niveau", `Niveau ${level}`],
-].map(([label, value]) => (
-  <div key={String(label)} className="flex items-center justify-between gap-3">
-    <span className="text-slate-400">{label}</span>
-    <span className="font-semibold text-white">{value}</span>
-  </div>
-))}
-
-{role !== "premium" && (
-  <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
-    {role === "anonymous"
-      ? "👤 Crée un compte gratuit pour accéder à 20 questions"
-      : "✨ Passe en Premium pour accéder à 40 questions et tous les niveaux"}
-  </div>
-)}
+            <div className="mt-5 space-y-3 rounded-3xl border border-white/10 bg-white/5 p-4 text-sm">
+              {[["Questions", `${limits.quizCount} questions`], ["Temps / question", `${PER_QUESTION_SECONDS}s`], ["Niveau", `Niveau ${level}`]].map(([label, value]) => (
+                <div key={String(label)} className="flex items-center justify-between gap-3">
+                  <span className="text-slate-400">{label}</span>
+                  <span className="font-semibold text-white">{value}</span>
+                </div>
+              ))}
+              {role !== "premium" && (
+                <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
+                  {role === "anonymous" ? "👤 Crée un compte gratuit pour accéder à 20 questions" : "✨ Passe en Premium pour accéder à 40 questions et tous les niveaux"}
+                </div>
+              )}
             </div>
-
             <div className="mt-6 flex flex-col gap-3">
-  <Button className="w-full" onClick={start} disabled={!canStart}>
-    Faire un test
-  </Button>
-  {limits.canExam ? (
-    <Button variant="danger" className="w-full" onClick={startExam}>
-      Examen blanc
-    </Button>
-  ) : (
-    <div className="relative">
-      <button
-        disabled
-        className="w-full rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-600 cursor-not-allowed"
-      >
-        Examen blanc
-      </button>
-      <div className="mt-1 text-center text-xs text-amber-400/70">
-        🔒 Disponible en Premium — essai gratuit pour Freemium
-      </div>
-    </div>
-  )}
-</div>
-
+              <Button className="w-full" onClick={start} disabled={!canStart}>Faire un test</Button>
+              {limits.canExam ? (
+                <Button variant="danger" className="w-full" onClick={startExam}>Examen blanc</Button>
+              ) : (
+                <div className="relative">
+                  <button disabled className="w-full rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-600 cursor-not-allowed">Examen blanc</button>
+                  <div className="mt-1 text-center text-xs text-amber-400/70">🔒 Disponible en Premium — essai gratuit pour Freemium</div>
+                </div>
+              )}
+            </div>
             <p className="mt-4 text-center text-xs leading-6 text-slate-400 sm:text-left">
-              Votre résultat affichera vos erreurs, vos bonnes réponses et les explications pour
-              progresser plus vite.
+              Votre résultat affichera vos erreurs, vos bonnes réponses et les explications pour progresser plus vite.
             </p>
           </Card>
         </section>
 
+        {/* ══════════════════════════════════════════
+            SECTION 4 — BÉNÉFICES
+        ══════════════════════════════════════════ */}
         <section className="grid gap-4 md:grid-cols-3">
           {[
-            {
-              icon: "🧠",
-              title: "Apprendre intelligemment",
-              text: "Chaque question peut être accompagnée d’une explication pour transformer l’erreur en progression réelle.",
-            },
-            {
-              icon: "📚",
-              title: "Réviser par thème",
-              text: "Concentrez-vous sur les sujets qui vous manquent le plus et adaptez votre entraînement à vos objectifs.",
-            },
-            {
-              icon: "🏁",
-              title: "Se mettre en condition",
-              text: "Passez d’un mode entraînement libre à une simulation plus exigeante avec l’examen blanc.",
-            },
+            { icon: "🧠", title: "Comprenez vos erreurs et progressez rapidement", text: "Chaque question est accompagnée d'une explication détaillée pour transformer chaque erreur en véritable leçon." },
+            { icon: "📌", title: "Travaillez uniquement vos points faibles", text: "Ciblez les thèmes qui vous manquent, ajustez le niveau de difficulté et concentrez-vous sur ce qui compte vraiment." },
+            { icon: "🏁", title: "Simulez l'examen réel et gagnez en confiance", text: "Le mode examen blanc reproduit les conditions réelles de l'entretien civique — pour arriver préparé le jour J." },
           ].map((item) => (
-            <div
-              key={item.title}
-              className="rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 text-center shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20 md:text-left"
-            >
+            <div key={item.title} className="rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 text-center shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20 md:text-left">
               <div className="mb-3 text-2xl">{item.icon}</div>
-              <h3 className="text-lg font-bold text-white">{item.title}</h3>
+              <h3 className="text-base font-bold text-white">{item.title}</h3>
               <p className="mt-2 text-sm leading-7 text-slate-300">{item.text}</p>
             </div>
           ))}
         </section>
+
       </div>
 
+      {/* ══════════════════════════════════════════
+          MODAL — Réviser (choix Audio / Scroll)
+      ══════════════════════════════════════════ */}
+      {showReviseModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowReviseModal(false)} />
+          <div className="relative z-[101] w-full max-w-sm overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/98 to-slate-900/98 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]">
+            <button onClick={() => setShowReviseModal(false)}
+              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-slate-400 transition hover:text-white">✕</button>
+            <h3 className="text-lg font-extrabold text-white">Comment voulez-vous réviser ?</h3>
+            <p className="mt-1 text-sm text-slate-400">Choisissez votre mode de révision préféré.</p>
+            <div className="mt-5 flex flex-col gap-3">
+              <button onClick={() => { setShowReviseModal(false); router.push("/scroll"); }}
+                className="flex items-center gap-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4 text-left transition hover:border-amber-400/40 hover:bg-amber-500/15 active:scale-[0.98]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-500/20 text-2xl">📱</div>
+                <div className="flex-1">
+                  <p className="font-bold text-white">Flash-cards Scroll</p>
+                  <p className="mt-0.5 text-xs text-slate-400">Swipez verticalement pour réviser — rapide et immersif.</p>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 text-amber-400"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
+              </button>
+              <button onClick={() => { setShowReviseModal(false); router.push("/audio"); }}
+                className="flex items-center gap-4 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-left transition hover:border-emerald-400/40 hover:bg-emerald-500/15 active:scale-[0.98]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/20 text-2xl">🎧</div>
+                <div className="flex-1">
+                  <p className="font-bold text-white">Bibliothèque Audio</p>
+                  <p className="mt-0.5 text-xs text-slate-400">Écoutez les épisodes guidés — format entretien réel, voix naturelle.</p>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 text-emerald-400"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal identité */}
       {pseudoOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setPseudoOpen(false)}
-          />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setPseudoOpen(false)} />
           <div className="relative z-[101] w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_25px_70px_rgba(2,8,23,0.55)] sm:p-6">
             <div className="mb-4 text-center sm:text-left">
               <h3 className="text-lg sm:text-xl font-semibold text-white">Avant de commencer</h3>
-              <p className="mt-1.5 text-xs sm:text-sm leading-5 text-slate-400">
-                Créez un compte pour sauvegarder vos résultats, ou continuez sans compte avec une
-                identité locale.
-              </p>
+              <p className="mt-1.5 text-xs sm:text-sm leading-5 text-slate-400">Créez un compte pour sauvegarder vos résultats, ou continuez sans compte.</p>
             </div>
-
             <div className="flex flex-col gap-3">
-              <a
-                href={`/register?email=${encodeURIComponent(emailDraft)}&pseudo=${encodeURIComponent(pseudoDraft)}`}
-                className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.24)] transition hover:brightness-105"
-              >
+              <a href={`/register?email=${encodeURIComponent(emailDraft)}&pseudo=${encodeURIComponent(pseudoDraft)}`}
+                className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.24)] transition hover:brightness-105">
                 Créer un compte gratuit
               </a>
-              <a
-                href="/login"
-                className="w-full rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-4 py-3 text-center text-sm font-semibold text-slate-200 transition hover:bg-white/10"
-              >
+              <a href="/login" className="w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-slate-200 transition hover:bg-white/10">
                 J'ai déjà un compte
               </a>
             </div>
-
             <div className="mt-4 border-t border-white/10 pt-4">
-              <p className="mb-2.5 text-center text-xs text-slate-500">
-                Ou continuer sans compte
-              </p>
-
-              <input
-                value={pseudoDraft}
-                onChange={(e) => setPseudoDraft(e.target.value)}
-                placeholder="Pseudo (ex : Carlos)"
-                className="w-full rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
-                maxLength={20}
-                autoFocus
-              />
-
-              <input
-                type="email"
-                value={emailDraft}
-                onChange={(e) => setEmailDraft(e.target.value)}
-                placeholder="Adresse email"
-                className="mt-3 w-full rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
-              />
-
+              <p className="mb-2.5 text-center text-xs text-slate-500">Ou continuer sans compte</p>
+              <input value={pseudoDraft} onChange={(e) => setPseudoDraft(e.target.value)} placeholder="Pseudo (ex : Carlos)"
+                className="w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
+                maxLength={20} autoFocus />
+              <input type="email" value={emailDraft} onChange={(e) => setEmailDraft(e.target.value)} placeholder="Adresse email"
+                className="mt-3 w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20" />
               <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:justify-end">
-                <Button variant="secondary" type="button" onClick={() => setPseudoOpen(false)}>
-                  Annuler
-                </Button>
-                <Button
-                  type="button"
-                  onClick={confirmIdentity}
-                  disabled={
-                    !pseudoDraft.trim() ||
-                    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                      emailDraft.trim().toLowerCase()
-                    )
-                  }
-                >
+                <Button variant="secondary" type="button" onClick={() => setPseudoOpen(false)}>Annuler</Button>
+                <Button type="button" onClick={confirmIdentity} disabled={!pseudoDraft.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailDraft.trim().toLowerCase())}>
                   Continuer sans compte
                 </Button>
               </div>
@@ -794,38 +542,23 @@ const limits = ROLE_LIMITS[role];
         </div>
       )}
 
+      {/* Modal upgrade examen */}
       {openExamUpgrade && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setOpenExamUpgrade(false)}
-          />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpenExamUpgrade(false)} />
           <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
             <div className="text-center">
               <div className="text-4xl mb-3">👑</div>
-              <h3 className="text-xl font-extrabold text-white">
-                Créez un compte pour accéder à l'examen blanc
-              </h3>
-              <p className="mt-2 text-sm leading-7 text-slate-400">
-                L’examen blanc est accessible aux comptes Freemium avec un essai gratuit limité, puis en illimité avec Premium. Créez d’abord un compte pour commencer.
-              </p>
+              <h3 className="text-xl font-extrabold text-white">Créez un compte pour accéder à l'examen blanc</h3>
+              <p className="mt-2 text-sm leading-7 text-slate-400">L'examen blanc est accessible aux comptes Freemium avec un essai gratuit limité, puis en illimité avec Premium.</p>
             </div>
-
             <div className="mt-6 space-y-3">
-              <button
-                onClick={() => {
-                  setOpenExamUpgrade(false);
-                  router.push("/pricing");
-                }}
-                className="w-full rounded-2xl bg-amber-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-400"
-              >
+              <button onClick={() => { setOpenExamUpgrade(false); router.push("/pricing"); }}
+                className="w-full rounded-2xl bg-amber-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-400">
                 ✨ Créer un compte / Voir les offres
               </button>
-
-              <button
-                onClick={() => setOpenExamUpgrade(false)}
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10"
-              >
+              <button onClick={() => setOpenExamUpgrade(false)}
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10">
                 Fermer
               </button>
             </div>
@@ -833,100 +566,14 @@ const limits = ROLE_LIMITS[role];
         </div>
       )}
 
-      {openFeedback && (
-        <div className="fixed inset-0 z-50 sm:absolute sm:left-auto sm:translate-x-0 sm:right-0 sm:top-full sm:mt-2 sm:w-56 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setOpenFeedback(false)}
-          />
-          <div className="relative z-[101] w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_25px_70px_rgba(2,8,23,0.55)] sm:p-6">
-            <div className="flex items-start justify-between gap-3">
-              <div className="text-center sm:text-left">
-                <h3 className="text-lg font-bold text-white">Donner un avis</h3>
-                <p className="mt-1 text-sm text-slate-400">
-                  Votre retour nous aide à améliorer l’expérience.
-                </p>
-              </div>
-              <button
-                onClick={() => setOpenFeedback(false)}
-                className="text-slate-500 transition hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
-
-            {sent ? (
-              <div className="mt-5 rounded-2xl border border-green-400/20 bg-green-500/10 p-4 text-green-200">
-                Merci ✅ Votre retour a bien été envoyé.
-              </div>
-            ) : (
-              <form
-                name="feedback-qcm"
-                method="POST"
-                data-netlify="true"
-                onSubmit={submitFeedback}
-                className="mt-5 space-y-4"
-              >
-                <input type="hidden" name="form-name" value="feedback-qcm" />
-
-                <div>
-                  <label className="text-sm font-semibold text-slate-200">Note (1 à 5)</label>
-                  <div className="mt-2 flex justify-center gap-2 sm:justify-start">
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <button
-                        key={n}
-                        type="button"
-                        onClick={() => setRating(n)}
-                        className={`h-10 w-10 rounded-xl border text-sm font-bold transition ${
-                          rating === n
-                            ? "border-blue-400/30 bg-blue-500/15 text-blue-200"
-                            : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white"
-                        }`}
-                      >
-                        {n}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-sm font-semibold text-slate-200">
-                    Commentaire (optionnel)
-                  </label>
-                  <textarea
-                    name="comment"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    className="mt-2 min-h-[120px] w-full rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/98 to-slate-800/98 backdrop-blur-xl bg-white/5 p-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
-                    placeholder="Qu'est-ce qui vous a plu ? Qu'est-ce qu'on doit améliorer ?"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
-                  <Button variant="secondary" type="button" onClick={() => setOpenFeedback(false)}>
-                    Fermer
-                  </Button>
-                  <Button type="submit" disabled={sending}>
-                    {sending ? "Envoi…" : "Envoyer"}
-                  </Button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
-
       <form name="feedback-qcm" method="POST" data-netlify="true" hidden>
         <input type="hidden" name="form-name" value="feedback-qcm" />
-        <input type="text" name="pseudo" />
-        <input type="text" name="rating" />
-        <input type="text" name="comment" />
-        <input type="text" name="page" />
-        <input type="text" name="level" />
-        <input type="text" name="themes" />
-        <input type="text" name="count" />
-        <input type="text" name="mode" />
+        <input type="text" name="pseudo" /><input type="text" name="rating" />
+        <input type="text" name="comment" /><input type="text" name="page" />
+        <input type="text" name="level" /><input type="text" name="themes" />
+        <input type="text" name="count" /><input type="text" name="mode" />
       </form>
+
       <AvisSection />
     </main>
   );
