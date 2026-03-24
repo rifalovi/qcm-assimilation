@@ -176,4 +176,13 @@ export const ROLE_LIMITS = {
     canSeeThemeStats: true,
     examTrials: 999,
   },
+  elite: {
+    quizCount: 40,
+    scrollCount: 999,
+    levels: [1, 2, 3] as number[],
+    canExam: true,
+    canSeeExplanations: true,
+    canSeeThemeStats: true,
+    examTrials: 999,
+  },
 };
