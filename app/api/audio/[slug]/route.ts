@@ -90,7 +90,7 @@ export async function GET(
   const isFreemium = profile.role === "freemium";
   const isFreeSlug = FREE_SLUGS.has(slug);
 
-  if (profile.role !== "premium" && !(isFreemium && isFreeSlug)) {
+  if (profile.role !== "premium" && profile.role !== "elite" && !(isFreemium && isFreeSlug)) {
     return NextResponse.json(
       { error: "Accès réservé aux membres Premium" },
       { status: 403 }

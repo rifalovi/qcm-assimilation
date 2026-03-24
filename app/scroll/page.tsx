@@ -40,7 +40,7 @@ export default async function ScrollPage({ searchParams }: PageProps) {
   const { data: { user } } = await supabase.auth.getUser();
 
   // Récupérer le rôle depuis profiles
-  let role: "anonymous" | "freemium" | "premium" = "anonymous";
+  let role: "anonymous" | "freemium" | "premium" | "elite" = "anonymous";
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")

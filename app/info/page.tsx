@@ -358,7 +358,7 @@ export default function InfoPage() {
       <span className="relative z-10">🚀 Réviser maintenant</span>
       <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-amber-400/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
     </button>
-    {role !== "premium" && (
+    {(role !== "premium" && role !== "elite") && (
       <button
         onClick={() => router.push("/account")}
         className="rounded-2xl border border-amber-400/20 bg-amber-500/10 px-5 py-2.5 text-sm font-semibold text-amber-200 transition hover:bg-amber-500/20"

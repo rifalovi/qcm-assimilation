@@ -428,7 +428,7 @@ export default function ResourcesPage() {
     }
 
     // Modal 2 : compte existant mais non premium
-    if (hasRealAccount && role !== "premium") {
+    if (hasRealAccount && role !== "premium" && role !== "elite") {
       const alreadySeen = sessionStorage.getItem("resources_premium_modal_seen") === "1";
       if (alreadySeen) return;
 

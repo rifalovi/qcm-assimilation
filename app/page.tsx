@@ -575,7 +575,7 @@ export default function HomePage() {
                 <li>• Niveau 3 : approfondissement et maîtrise</li>
               </ul>
             </div>
-            {role !== "premium" && (
+            {(role !== "premium" && role !== "elite") && (
               <button onClick={() => router.push("/pricing")}
                 className="mt-4 w-full rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-left transition hover:bg-amber-500/15">
                 <div className="flex items-center justify-between gap-2">
@@ -634,9 +634,9 @@ export default function HomePage() {
                   <span className="font-semibold text-white">{value}</span>
                 </div>
               ))}
-              {role !== "premium" && (
+              {(role !== "premium" && role !== "elite") && (
                 <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
-                  {role === "anonymous" ? "👤 Crée un compte gratuit pour accéder à 20 questions" : "✨ Passe en Premium pour accéder à 40 questions et tous les niveaux"}
+                  {role === "anonymous" ? "👤 Crée un compte gratuit pour accéder à 20 questions" : role === "elite" ? "" : "✨ Passe en Premium pour accéder à 40 questions et tous les niveaux"}
                 </div>
               )}
             </div>

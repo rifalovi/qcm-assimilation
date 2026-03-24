@@ -147,7 +147,7 @@ export default function QuizPage() {
 
 useEffect(() => {
   if (!goResults) return;
-  if (role !== "premium") {
+  if (role !== "premium" && role !== "elite") {
     setShowPremiumCTA(true);
   } else {
     router.push(`/results?mode=${mode}`);
