@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import MFASetup from "../../src/components/MFASetup";
 import { VoiceSelector } from "@/components/VoiceSelector";
 
-type Role = "anonymous" | "freemium" | "premium";
+type Role = "anonymous" | "freemium" | "premium" | "elite";
 
 type Profile = {
   username: string;
@@ -43,6 +43,12 @@ const ROLE_CONFIG = {
     label: "Premium",
     color: "border-amber-400/20 bg-amber-500/10 text-amber-200",
     description: "Accès complet • Tous niveaux • Stats détaillées",
+    icon: "👑",
+  },
+  elite: {
+    label: "Élite",
+    color: "border-yellow-400/20 bg-yellow-500/10 text-yellow-200",
+    description: "Accès à vie • Contenu exclusif expert • Support prioritaire",
     icon: "👑",
   },
 };
@@ -189,7 +195,7 @@ export default function AccountPage() {
               </div>
             </div>
 
-            {role !== "premium" && (
+            {(role !== "premium" && role !== "elite") && (
               <div className="mt-6 rounded-[1.5rem] border border-amber-400/20 bg-amber-500/10 p-4">
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                   <div>
