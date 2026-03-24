@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-type Role = "anonymous" | "freemium" | "premium";
+type Role = "anonymous" | "freemium" | "premium" | "elite";
 
 type UserContextType = {
   role: Role;
