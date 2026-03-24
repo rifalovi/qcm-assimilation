@@ -109,7 +109,7 @@ function StickyPlayer({
     duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded } =
     useAudioPlayer(episodes, currentIdx, onNext, isPremium, autoPlay, setAutoPlay, playTrigger);
 
-  useEffect(() => { onReady(togglePlay); }, [togglePlay, onReady]);
+
 
   const cycleRepeat = useCallback(() => {
     setRepeatMode(repeatMode === "none" ? "one" : repeatMode === "one" ? "queue" : "none");
@@ -143,7 +143,7 @@ function StickyPlayer({
           </p>
           <p className="truncate text-sm font-semibold text-white">{episode.episodeTitle}</p>
         </div>
-        <button onClick={togglePlay} disabled={!audioUrl && !fetchError}
+        <button ref={(el) => { if (el) onReady(() => el.click()); }} onClick={togglePlay} disabled={!audioUrl && !fetchError}
           className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border text-white shadow-lg transition active:scale-95 disabled:opacity-40 ${meta.border} bg-gradient-to-br from-white/20 to-white/5`}>
           {fetchError ? <span className="text-xs">⚠️</span>
             : !audioUrl ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
