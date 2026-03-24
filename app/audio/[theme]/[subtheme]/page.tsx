@@ -88,6 +88,13 @@ function useAudioPlayer(
     }
   }, [currentIdx, episodes.length, onNext]);
 
+  // Quand l'URL audio est prête et autoPlay actif → déclencher le play
+  useEffect(() => {
+    if (audioUrl && autoPlayRef.current) {
+      setTimeout(() => audioRef.current?.play().then(() => setPlaying(true)).catch(() => {}), 150);
+    }
+  }, [audioUrl]);
+
   return { audioRef, playing, progress, setProgress, currentTime, setCurrentTime, duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded };
 }
 
