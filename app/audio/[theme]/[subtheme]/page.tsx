@@ -106,16 +106,26 @@ function useAudioPlayer(
     const nextIdx = currentIdxRef.current + 1;
     if (nextIdx >= episodesLenRef.current) return;
 
-    // Charger directement l'URL suivante si on l'a en cache
     if (nextUrlRef.current && audioRef.current) {
-      audioRef.current.src = nextUrlRef.current;
-      audioRef.current.load();
-      audioRef.current.play().catch(() => {});
+      // Charger et jouer directement — fonctionne en arrière-plan
+      // car on est dans la continuité d'une session audio déjà autorisée
+      const url = nextUrlRef.current;
       nextUrlRef.current = null;
+      audioRef.current.src = url;
+      audioRef.current.load();
+      // onended est perdu après src change — on le réattache
+      audioRef.current.onended = handleEndedRef.current;
+      audioRef.current.play().catch(() => {});
     }
-    // Mettre à jour React en parallèle (pour l'UI)
+    // Mettre à jour React pour l'UI
     setTimeout(() => onNextRef.current(), 100);
   }, []);
+
+  // Ref vers handleEnded pour le réattacher après changement de src
+  const handleEndedRef = useRef<EventListener | null>(null);
+  useEffect(() => {
+    handleEndedRef.current = handleEnded as EventListener;
+  }, [handleEnded]);
 
   // Pré-fetcher l'URL du prochain épisode en avance
   useEffect(() => {
@@ -172,7 +182,16 @@ function useAudioPlayer(
       if (currentIdxRef.current > 0) onPrevRef.current();
     });
     navigator.mediaSession.setActionHandler("nexttrack", () => {
-      if (currentIdxRef.current < episodesLenRef.current - 1) onNextRef.current();
+      if (currentIdxRef.current >= episodesLenRef.current - 1) return;
+      if (nextUrlRef.current && audioRef.current) {
+        const url = nextUrlRef.current;
+        nextUrlRef.current = null;
+        audioRef.current.src = url;
+        audioRef.current.load();
+        audioRef.current.onended = handleEndedRef.current;
+        audioRef.current.play().catch(() => {});
+      }
+      onNextRef.current();
     });
     navigator.mediaSession.setActionHandler("seekbackward", () => {
       if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
@@ -590,6 +609,14 @@ export default function AudioSeriesPage() {
               <p className="text-xs text-slate-300">✨ <span className="font-semibold text-white">Freemium</span> — 2 épisodes gratuits par thème. Débloquez tout.</p>
               <button onClick={handleUpgrade} className="shrink-0 rounded-xl border border-amber-400/20 bg-amber-500 px-3 py-1.5 text-xs font-bold text-slate-900 transition hover:bg-amber-400">Premium</button>
             </div>
+          </div>
+        )}
+
+        {isPremium && (
+          <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+            <p className="text-xs text-slate-400">
+              📱 <span className="font-semibold text-slate-300">Lecture en arrière-plan</span> — Sur iOS, utilisez les contrôles de l'écran de verrouillage pour passer à la piste suivante. L'enchaînement automatique est disponible sur Android et sur notre app mobile à venir.
+            </p>
           </div>
         )}
 
