@@ -636,7 +636,7 @@ export default function HomePage() {
               ))}
               {(role !== "premium" && role !== "elite") && (
                 <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
-                  {role === "anonymous" ? "👤 Crée un compte gratuit pour accéder à 20 questions" : role === "elite" ? "" : "✨ Passe en Premium pour accéder à 40 questions et tous les niveaux"}
+                  {role === "anonymous" ? "👤 Crée un compte gratuit pour accéder à 20 questions" : "✨ Passe en Premium pour accéder à 40 questions et tous les niveaux"}
                 </div>
               )}
             </div>
