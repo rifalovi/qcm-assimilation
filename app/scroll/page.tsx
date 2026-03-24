@@ -70,7 +70,7 @@ export default async function ScrollPage({ searchParams }: PageProps) {
   const allQuestions = data as Question[];
   const themes = Array.from(new Set(allQuestions.map((q) => q.theme))).sort();
 
-  const questions = role === "premium"
+  const questions = (role === "premium" || role === "elite")
     ? allQuestions
     : themes.flatMap((theme) =>
         allQuestions

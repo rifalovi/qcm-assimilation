@@ -214,7 +214,7 @@ export default function AccountPage() {
             </div>
 
             {/* ── Préférence de voix (Premium uniquement) ── */}
-            {role === "premium" && (
+            {(role === "premium" || role === "elite") && (
               <div className="mt-6">
 <div className="flex items-center justify-between mb-3">
   <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">

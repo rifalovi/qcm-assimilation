@@ -36,7 +36,7 @@ export default function AppHeader() {
 
   if (pathname === "/") return null;
 
-  const roleLabel = role === "premium" ? "👑 Premium" : role === "freemium" ? "✨ Freemium" : null;
+  const roleLabel = role === "elite" ? "👑 Élite" : role === "premium" ? "🎯 Premium" : role === "freemium" ? "✨ Freemium" : null;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/40 backdrop-blur-xl">

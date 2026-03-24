@@ -384,7 +384,7 @@ export default function HomePage() {
                         style={{ background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)" }}>
                         <div className="border-b border-white/10 px-3 py-2">
                           <p className="text-sm font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</p>
-                          <p className="mt-0.5 text-xs text-slate-400">{role === "premium" ? "👑 Premium" : "✨ Freemium"}</p>
+                          <p className="mt-0.5 text-xs text-slate-400">{role === "elite" ? "👑 Élite" : role === "premium" ? "🎯 Premium" : "✨ Freemium"}</p>
                           {streak > 0 && (
                             <p className="mt-1 text-xs text-orange-300">🔥 {streak} jour{streak > 1 ? "s" : ""} de suite {streakMessage}</p>
                           )}

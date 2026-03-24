@@ -817,7 +817,7 @@ useEffect(() => {
 
   // Construire le tableau avec CTA injectée à la fin si pas premium
   const buildCardsWithCta = (questions: Question[], themeActive: boolean): CardItem[] => {
-    if (role === "premium") return questions;
+    if ((role === "premium" || role === "elite")) return questions;
     return [...questions, { type: "cta", ctaRole: role, hasTheme: themeActive, cardsCount: questions.length }];
   };
 

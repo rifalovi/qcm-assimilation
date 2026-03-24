@@ -218,7 +218,7 @@ function ComingSoonCard({ item }: { item: typeof COMING_SOON[0] }) {
 export default function AudioLibraryPage() {
   const router = useRouter();
   const { role } = useUser();
-  const isPremium = role === "premium";
+  const isPremium = (role === "premium" || role === "elite");
   const isFreemium = role === "freemium";
   const isAnonymous = role === "anonymous" || !role;
 
