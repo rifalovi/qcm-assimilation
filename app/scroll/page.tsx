@@ -7,9 +7,10 @@ import type { Question } from "../../src/types/questions";
 export const dynamic = "force-dynamic";
 
 const LIMITS = {
-  anonymous: 5,  // 5 cartes par thème
-  freemium: 10,  // 10 cartes par thème
-  premium: 999,  // tout
+  anonymous: 5,   // 5 cartes par thème
+  freemium: 10,   // 10 cartes par thème
+  premium: 999,   // tout
+  elite: 999,     // tout
 };
 
 interface PageProps {
