@@ -9,13 +9,13 @@ import type { Question, MCQVariant } from "@/types/questions";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
 // Type union : question normale OU carte CTA
-type CardItem = Question | { type: "cta"; ctaRole: "anonymous" | "freemium"; hasTheme: boolean; cardsCount: number };
-function isCTA(card: CardItem): card is { type: "cta"; ctaRole: "anonymous" | "freemium"; hasTheme: boolean; cardsCount: number } {
+type CardItem = Question | { type: "cta"; ctaRole: "anonymous" | "freemium" | "premium" | "elite"; hasTheme: boolean; cardsCount: number };
+function isCTA(card: CardItem): card is { type: "cta"; ctaRole: "anonymous" | "freemium" | "premium" | "elite"; hasTheme: boolean; cardsCount: number } {
   return (card as any).type === "cta";
 }
 
 // Composant carte CTA
-function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "freemium"; hasTheme: boolean; cardsCount: number }) {
+function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "freemium" | "premium" | "elite"; hasTheme: boolean; cardsCount: number }) {
   const isAnon = ctaRole === "anonymous";
   return (
     <div className="flex h-full flex-col items-center justify-center gap-6 p-6 text-center">
@@ -75,7 +75,7 @@ interface Props {
   questions: Question[];
   themes: string[];
   preselectedTheme: string | null;
-  role: "anonymous" | "freemium" | "premium";
+  role: "anonymous" | "freemium" | "premium" | "elite";
   cardsPerTheme: number;
   totalCards: number;
 }
