@@ -136,6 +136,17 @@ export default function AccountPage() {
     window.location.href = url;
   }
 
+  async function handleUpgradeElite() {
+    const res = await fetch("/api/create-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plan: "elite" }),
+    });
+    const { url, error } = await res.json();
+    if (error) return;
+    window.location.href = url;
+  }
+
   async function handlePortal() {
     setPortalLoading(true);
     try {
@@ -269,10 +280,16 @@ export default function AccountPage() {
                       )}
                     </div>
                   </div>
-                  <button onClick={handlePortal} disabled={portalLoading}
-                    className="rounded-xl border border-blue-400/20 bg-blue-500/15 px-4 py-2 text-xs font-semibold text-blue-200 transition hover:bg-blue-500/25 disabled:opacity-50">
-                    {portalLoading ? "Redirection..." : "⚙️ Gérer mon abonnement"}
-                  </button>
+                  <div className="flex flex-wrap gap-2">
+                    <button onClick={handlePortal} disabled={portalLoading}
+                      className="rounded-xl border border-blue-400/20 bg-blue-500/15 px-4 py-2 text-xs font-semibold text-blue-200 transition hover:bg-blue-500/25 disabled:opacity-50">
+                      {portalLoading ? "Redirection..." : "⚙️ Gérer mon abonnement"}
+                    </button>
+                    <button onClick={handleUpgradeElite}
+                      className="rounded-xl border border-yellow-400/20 bg-yellow-500/10 px-4 py-2 text-xs font-semibold text-yellow-200 transition hover:bg-yellow-500/20">
+                      👑 Passer en Élite
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
