@@ -50,6 +50,7 @@ function useAudioPlayer(
   const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => { autoPlayRef.current = autoPlay; }, [autoPlay]);
+  const shouldPlayOnLoad = useRef(false);
 
   const episode = episodes[currentIdx];
 
@@ -59,14 +60,10 @@ function useAudioPlayer(
     setPlaying(false); setProgress(0); setCurrentTime(0);
     setDuration(0); setLoaded(false); setAudioUrl(null); setFetchError(false);
 
+    shouldPlayOnLoad.current = autoPlayRef.current;
     fetch(`/api/audio/${episode.episodeSlug}`)
       .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
-      .then((d) => {
-        setAudioUrl(d.url);
-        if (autoPlayRef.current) {
-          setTimeout(() => audioRef.current?.play().then(() => setPlaying(true)).catch(() => {}), 100);
-        }
-      })
+      .then((d) => { setAudioUrl(d.url); })
       .catch(() => setFetchError(true));
   }, [episode?.episodeSlug, isPremium, playTrigger]);
 
@@ -95,7 +92,7 @@ function useAudioPlayer(
     }
   }, [audioUrl]);
 
-  return { audioRef, playing, progress, setProgress, currentTime, setCurrentTime, duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded };
+  return { audioRef, playing, setPlaying, shouldPlayOnLoad, progress, setProgress, currentTime, setCurrentTime, duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded };
 }
 
 function StickyPlayer({
@@ -112,7 +109,7 @@ function StickyPlayer({
   playTrigger: number;
   onReady: (play: () => void) => void;
 }) {
-  const { audioRef, playing, progress, setProgress, currentTime, setCurrentTime,
+  const { audioRef, playing, setPlaying, shouldPlayOnLoad, progress, setProgress, currentTime, setCurrentTime,
     duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded } =
     useAudioPlayer(episodes, currentIdx, onNext, isPremium, autoPlay, setAutoPlay, playTrigger);
 
@@ -126,10 +123,13 @@ function StickyPlayer({
     <div className={`sticky top-14 z-40 rounded-[1.5rem] border ${meta.border} bg-gradient-to-r ${meta.accent} backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]`}>
       {audioUrl && (
         <audio ref={audioRef} src={audioUrl}
+          autoPlay={shouldPlayOnLoad.current}
           onTimeUpdate={() => { if (!audioRef.current) return; setCurrentTime(audioRef.current.currentTime); setProgress((audioRef.current.currentTime / (audioRef.current.duration || 1)) * 100); }}
           onLoadedMetadata={() => { setDuration(audioRef.current?.duration ?? 0); setLoaded(true); }}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
           onEnded={handleEnded}
-          preload="metadata"
+          preload="auto"
         />
       )}
 
@@ -378,9 +378,9 @@ export default function AudioSeriesPage() {
             {isPremium && (
               <div className="mt-4 flex gap-2">
                 <button onClick={playAll}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border py-2.5 text-sm font-bold text-white transition hover:brightness-110 active:scale-95 ${meta.border} bg-white/10`}>
+                  className={`flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border py-2.5 text-sm font-bold transition hover:brightness-110 active:scale-95 ${autoPlay ? `border-blue-400/50 bg-blue-500/20 text-blue-200 shadow-[0_0_16px_rgba(37,99,235,0.3)]` : `${meta.border} bg-white/10 text-white`}`}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
-                  Tout écouter
+                  {autoPlay ? "▶ En lecture..." : "Tout écouter"}
                 </button>
                 <button
                   onClick={() => { setIsSelectionMode(v => !v); if (isSelectionMode) setSelectedEpisodes(new Set()); }}
@@ -457,7 +457,7 @@ export default function AudioSeriesPage() {
               const isSelected = selectedEpisodes.has(idx);
               return (
                 <div key={ep.id} className={`rounded-xl border transition-all duration-200 ${
-                  isActive ? `${meta.border} bg-white/10 shadow-[0_4px_16px_rgba(0,0,0,0.3)]`
+                  isActive ? `${meta.border} bg-white/15 shadow-[0_4px_20px_rgba(0,0,0,0.5)] ring-1 ring-white/20`
                   : isSelected ? `${meta.border} bg-white/8`
                   : isFree ? "border-emerald-400/20 bg-emerald-500/5 hover:bg-emerald-500/8"
                   : locked ? "border-white/5 bg-white/[0.02] opacity-60"
