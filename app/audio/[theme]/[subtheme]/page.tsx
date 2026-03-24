@@ -18,10 +18,10 @@ const SUBTHEME_IMAGES: Record<string, string> = {
 const FREE_EPISODE_NUMBERS = new Set([1, 2]);
 
 const THEME_META: Record<AudioThemeKey, { icon: string; accent: string; accentText: string; border: string; glow: string }> = {
-  Valeurs: { icon: "🇫🇷", accent: "from-blue-500/20 via-indigo-500/10 to-sky-500/20", accentText: "text-blue-300", border: "border-blue-400/30", glow: "rgba(37,99,235,0.3)" },
-  Institutions: { icon: "🏛️", accent: "from-violet-500/20 via-purple-500/10 to-fuchsia-500/20", accentText: "text-violet-300", border: "border-violet-400/30", glow: "rgba(139,92,246,0.3)" },
-  Histoire: { icon: "📜", accent: "from-amber-500/20 via-orange-500/10 to-yellow-500/20", accentText: "text-amber-300", border: "border-amber-400/30", glow: "rgba(245,158,11,0.3)" },
-  Société: { icon: "👥", accent: "from-emerald-500/20 via-green-500/10 to-teal-500/20", accentText: "text-emerald-300", border: "border-emerald-400/30", glow: "rgba(16,185,129,0.3)" },
+  Valeurs:      { icon: "🇫🇷", accent: "from-blue-500/20 via-indigo-500/10 to-sky-500/20",       accentText: "text-blue-300",    border: "border-blue-400/30",    glow: "rgba(37,99,235,0.3)"   },
+  Institutions: { icon: "🏛️", accent: "from-violet-500/20 via-purple-500/10 to-fuchsia-500/20", accentText: "text-violet-300",  border: "border-violet-400/30",  glow: "rgba(139,92,246,0.3)"  },
+  Histoire:     { icon: "📜", accent: "from-amber-500/20 via-orange-500/10 to-yellow-500/20",    accentText: "text-amber-300",   border: "border-amber-400/30",   glow: "rgba(245,158,11,0.3)"  },
+  Société:      { icon: "👥", accent: "from-emerald-500/20 via-green-500/10 to-teal-500/20",     accentText: "text-emerald-300", border: "border-emerald-400/30", glow: "rgba(16,185,129,0.3)"  },
 };
 
 function fmt(s: number) {
@@ -30,47 +30,114 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
+// ─── Hook audio ─────────────────────────────────────────────────────────────
+// Toutes les refs servent à éviter les stale closures en arrière-plan iOS.
+// autoPlayRef  : valeur courante de autoPlay sans dépendre de la closure
+// onNextRef    : fonction onNext toujours à jour
+// onPrevRef    : fonction onPrev toujours à jour
+// currentIdxRef: index courant toujours à jour pour handleEnded et Media Session
+// shouldPlayOnLoad : indique si on doit lancer le play quand l'audio est prêt
 function useAudioPlayer(
   episodes: AudioEpisode[],
   currentIdx: number,
   onNext: () => void,
+  onPrev: () => void,
   isPremium: boolean,
   autoPlay: boolean,
   setAutoPlay: (v: boolean) => void,
   playTrigger: number = 0
 ) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const autoPlayRef = useRef(autoPlay);
-  const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [loaded, setLoaded] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [fetchError, setFetchError] = useState(false);
 
-  useEffect(() => { autoPlayRef.current = autoPlay; }, [autoPlay]);
+  // Refs toujours à jour — évitent les stale closures en arrière-plan
+  const autoPlayRef      = useRef(autoPlay);
+  const onNextRef        = useRef(onNext);
+  const onPrevRef        = useRef(onPrev);
+  const currentIdxRef    = useRef(currentIdx);
+  const episodesLenRef   = useRef(episodes.length);
   const shouldPlayOnLoad = useRef(false);
+
+  useEffect(() => { autoPlayRef.current    = autoPlay;        }, [autoPlay]);
+  useEffect(() => { onNextRef.current      = onNext;          }, [onNext]);
+  useEffect(() => { onPrevRef.current      = onPrev;          }, [onPrev]);
+  useEffect(() => { currentIdxRef.current  = currentIdx;      }, [currentIdx]);
+  useEffect(() => { episodesLenRef.current = episodes.length; }, [episodes.length]);
+
+  const [playing,    setPlaying]    = useState(false);
+  const [progress,   setProgress]   = useState(0);
+  const [currentTime,setCurrentTime]= useState(0);
+  const [duration,   setDuration]   = useState(0);
+  const [loaded,     setLoaded]     = useState(false);
+  const [audioUrl,   setAudioUrl]   = useState<string | null>(null);
+  const [fetchError, setFetchError] = useState(false);
 
   const episode = episodes[currentIdx];
 
+  // Charger l'URL audio à chaque changement d'épisode ou playTrigger
   useEffect(() => {
     const isFreeEpisode = FREE_EPISODE_NUMBERS.has(episode?.episodeNumber ?? 0);
     if (!episode || (!isPremium && !isFreeEpisode)) return;
+
     setPlaying(false); setProgress(0); setCurrentTime(0);
     setDuration(0); setLoaded(false); setAudioUrl(null); setFetchError(false);
 
+    // Capturer la valeur courante de autoPlay AVANT le fetch async
     shouldPlayOnLoad.current = autoPlayRef.current;
+
     fetch(`/api/audio/${episode.episodeSlug}`)
       .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
       .then((d) => { setAudioUrl(d.url); })
       .catch(() => setFetchError(true));
   }, [episode?.episodeSlug, isPremium, playTrigger]);
 
+  // Quand l'URL arrive : jouer si shouldPlayOnLoad
+  // NOTE: on n'appelle PAS .play() ici car iOS bloque les appels programmatiques
+  // hors événement utilisateur. On utilise autoPlay={shouldPlayOnLoad.current}
+  // sur l'élément <audio> à la place (voir StickyPlayer).
+
+  // handleEnded : en arrière-plan iOS, React est suspendu.
+  // On charge directement l'URL du prochain épisode dans l'élément audio
+  // sans passer par setState/React pour éviter la suspension.
+  const nextUrlRef = useRef<string | null>(null);
+
+  const handleEnded = useCallback(() => {
+    setPlaying(false);
+    if (!autoPlayRef.current) return;
+    const nextIdx = currentIdxRef.current + 1;
+    if (nextIdx >= episodesLenRef.current) return;
+
+    // Charger directement l'URL suivante si on l'a en cache
+    if (nextUrlRef.current && audioRef.current) {
+      audioRef.current.src = nextUrlRef.current;
+      audioRef.current.load();
+      audioRef.current.play().catch(() => {});
+      nextUrlRef.current = null;
+    }
+    // Mettre à jour React en parallèle (pour l'UI)
+    setTimeout(() => onNextRef.current(), 100);
+  }, []);
+
+  // Pré-fetcher l'URL du prochain épisode en avance
+  useEffect(() => {
+    const nextIdx = currentIdx + 1;
+    if (!isPremium || nextIdx >= episodes.length) { nextUrlRef.current = null; return; }
+    const nextEp = episodes[nextIdx];
+    if (!nextEp) return;
+    fetch(`/api/audio/${nextEp.episodeSlug}`)
+      .then(r => r.json())
+      .then(d => { nextUrlRef.current = d.url; })
+      .catch(() => { nextUrlRef.current = null; });
+  }, [currentIdx, isPremium, episodes]);
+
   const togglePlay = useCallback(() => {
     if (!audioRef.current) return;
-    if (playing) { audioRef.current.pause(); setPlaying(false); }
-    else { audioRef.current.play(); setPlaying(true); setAutoPlay(true); }
+    if (playing) {
+      audioRef.current.pause();
+      setPlaying(false);
+    } else {
+      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      setAutoPlay(true);
+    }
   }, [playing, setAutoPlay]);
 
   const skip = useCallback((s: number) => {
@@ -78,26 +145,67 @@ function useAudioPlayer(
     audioRef.current.currentTime = Math.max(0, Math.min(audioRef.current.currentTime + s, audioRef.current.duration || 0));
   }, []);
 
-  const handleEnded = useCallback(() => {
-    setPlaying(false);
-    if (autoPlayRef.current && currentIdx < episodes.length - 1) {
-      setTimeout(() => onNext(), 500);
-    }
-  }, [currentIdx, episodes.length, onNext]);
-
-  // Quand l'URL audio est prête et autoPlay actif → déclencher le play
+  // Media Session API — contrôles écran de verrouillage (premium uniquement)
+  // Utilise des refs pour éviter les stale closures quand la page est suspendue
   useEffect(() => {
-    if (audioUrl && autoPlayRef.current) {
-      setTimeout(() => audioRef.current?.play().then(() => setPlaying(true)).catch(() => {}), 150);
-    }
-  }, [audioUrl]);
+    if (!isPremium || !episode || typeof window === "undefined" || !("mediaSession" in navigator)) return;
 
-  return { audioRef, playing, setPlaying, shouldPlayOnLoad, progress, setProgress, currentTime, setCurrentTime, duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded };
+    const artwork = episode.subthemeKey
+      ? [{ src: `/themes/${episode.subthemeKey}.jpg`, sizes: "512x512", type: "image/jpeg" }]
+      : [];
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title:   episode.episodeTitle,
+      artist:  "QCM Assimilation",
+      album:   episode.subthemeLabel,
+      artwork,
+    });
+
+    navigator.mediaSession.setActionHandler("play", () => {
+      audioRef.current?.play().then(() => setPlaying(true)).catch(() => {});
+    });
+    navigator.mediaSession.setActionHandler("pause", () => {
+      audioRef.current?.pause();
+      setPlaying(false);
+    });
+    navigator.mediaSession.setActionHandler("previoustrack", () => {
+      if (currentIdxRef.current > 0) onPrevRef.current();
+    });
+    navigator.mediaSession.setActionHandler("nexttrack", () => {
+      if (currentIdxRef.current < episodesLenRef.current - 1) onNextRef.current();
+    });
+    navigator.mediaSession.setActionHandler("seekbackward", () => {
+      if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
+    });
+    navigator.mediaSession.setActionHandler("seekforward", () => {
+      if (audioRef.current) audioRef.current.currentTime = Math.min(audioRef.current.duration || 0, audioRef.current.currentTime + 10);
+    });
+
+    return () => {
+      (["play","pause","previoustrack","nexttrack","seekbackward","seekforward"] as MediaSessionAction[])
+        .forEach(a => { try { navigator.mediaSession.setActionHandler(a, null); } catch {} });
+    };
+  }, [episode, isPremium]);
+
+  // Statut playback dans Media Session
+  useEffect(() => {
+    if (!isPremium || !("mediaSession" in navigator)) return;
+    navigator.mediaSession.playbackState = playing ? "playing" : "paused";
+  }, [playing, isPremium]);
+
+  return {
+    audioRef, playing, setPlaying, shouldPlayOnLoad,
+    progress, setProgress, currentTime, setCurrentTime,
+    duration, setDuration, loaded, setLoaded,
+    audioUrl, fetchError, togglePlay, skip, handleEnded,
+  };
 }
 
+// ─── StickyPlayer ────────────────────────────────────────────────────────────
 function StickyPlayer({
   episode, episodes, currentIdx, onPrev, onNext, isPremium,
-  subthemeImage, meta, autoPlay, setAutoPlay, selectedEpisodes, repeatMode, setRepeatMode,
+  subthemeImage, meta, autoPlay, setAutoPlay,
+  selectedEpisodes, repeatMode, setRepeatMode,
   playTrigger, onReady,
 }: {
   episode: AudioEpisode; episodes: AudioEpisode[]; currentIdx: number;
@@ -109,11 +217,12 @@ function StickyPlayer({
   playTrigger: number;
   onReady: (play: () => void) => void;
 }) {
-  const { audioRef, playing, setPlaying, shouldPlayOnLoad, progress, setProgress, currentTime, setCurrentTime,
-    duration, setDuration, loaded, setLoaded, audioUrl, fetchError, togglePlay, skip, handleEnded } =
-    useAudioPlayer(episodes, currentIdx, onNext, isPremium, autoPlay, setAutoPlay, playTrigger);
-
-
+  const {
+    audioRef, playing, setPlaying, shouldPlayOnLoad,
+    progress, setProgress, currentTime, setCurrentTime,
+    duration, setDuration, loaded, setLoaded,
+    audioUrl, fetchError, togglePlay, skip, handleEnded,
+  } = useAudioPlayer(episodes, currentIdx, onNext, onPrev, isPremium, autoPlay, setAutoPlay, playTrigger);
 
   const cycleRepeat = useCallback(() => {
     setRepeatMode(repeatMode === "none" ? "one" : repeatMode === "one" ? "queue" : "none");
@@ -122,10 +231,19 @@ function StickyPlayer({
   return (
     <div className={`sticky top-14 z-40 rounded-[1.5rem] border ${meta.border} bg-gradient-to-r ${meta.accent} backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]`}>
       {audioUrl && (
-        <audio ref={audioRef} src={audioUrl}
+        <audio
+          ref={audioRef}
+          src={audioUrl}
           autoPlay={shouldPlayOnLoad.current}
-          onTimeUpdate={() => { if (!audioRef.current) return; setCurrentTime(audioRef.current.currentTime); setProgress((audioRef.current.currentTime / (audioRef.current.duration || 1)) * 100); }}
-          onLoadedMetadata={() => { setDuration(audioRef.current?.duration ?? 0); setLoaded(true); }}
+          onTimeUpdate={() => {
+            if (!audioRef.current) return;
+            setCurrentTime(audioRef.current.currentTime);
+            setProgress((audioRef.current.currentTime / (audioRef.current.duration || 1)) * 100);
+          }}
+          onLoadedMetadata={() => {
+            setDuration(audioRef.current?.duration ?? 0);
+            setLoaded(true);
+          }}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
           onEnded={handleEnded}
@@ -150,12 +268,21 @@ function StickyPlayer({
           </p>
           <p className="truncate text-sm font-semibold text-white">{episode.episodeTitle}</p>
         </div>
-        <button ref={(el) => { if (el) onReady(() => el.click()); }} onClick={togglePlay} disabled={!audioUrl && !fetchError}
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border text-white shadow-lg transition active:scale-95 disabled:opacity-40 ${meta.border} bg-gradient-to-br from-white/20 to-white/5`}>
-          {fetchError ? <span className="text-xs">⚠️</span>
-            : !audioUrl ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-            : playing ? <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
-            : <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>}
+        {/* Bouton play — ref exposé via onReady pour "Tout écouter" */}
+        <button
+          ref={(el) => { if (el) onReady(() => el.click()); }}
+          onClick={togglePlay}
+          disabled={!audioUrl && !fetchError}
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border text-white shadow-lg transition active:scale-95 disabled:opacity-40 ${meta.border} bg-gradient-to-br from-white/20 to-white/5`}
+        >
+          {fetchError
+            ? <span className="text-xs">⚠️</span>
+            : !audioUrl
+            ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+            : playing
+            ? <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
+            : <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
+          }
         </button>
       </div>
 
@@ -224,29 +351,31 @@ function StickyPlayer({
   );
 }
 
+// ─── Page principale ─────────────────────────────────────────────────────────
 export default function AudioSeriesPage() {
   const { theme, subtheme } = useParams();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { role } = useUser();
-  const isPremium = role === "premium";
-  const isFreemium = role === "freemium";
+  const router        = useRouter();
+  const searchParams  = useSearchParams();
+  const { role }      = useUser();
+  const isPremium     = role === "premium";
+  const isFreemium    = role === "freemium";
 
-  const themeKey = decodeURIComponent(theme as string) as AudioThemeKey;
+  const themeKey    = decodeURIComponent(theme as string) as AudioThemeKey;
   const subthemeKey = decodeURIComponent(subtheme as string);
 
-  const episodes = useMemo(() => {
-    return audioEpisodes
+  const episodes = useMemo(() =>
+    audioEpisodes
       .filter((ep) => ep.themeKey === themeKey && ep.subthemeKey === subthemeKey)
-      .sort((a, b) => a.episodeNumber - b.episodeNumber);
-  }, [themeKey, subthemeKey]);
+      .sort((a, b) => a.episodeNumber - b.episodeNumber),
+    [themeKey, subthemeKey]
+  );
 
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [autoPlay, setAutoPlay] = useState(false);
-  const [selectedEpisodes, setSelectedEpisodes] = useState<Set<number>>(new Set());
-  const [repeatMode, setRepeatMode] = useState<"none" | "one" | "queue">("none");
-  const [isSelectionMode, setIsSelectionMode] = useState(false);
-  const [playTrigger, setPlayTrigger] = useState(0);
+  const [currentIdx,        setCurrentIdx]        = useState(0);
+  const [autoPlay,          setAutoPlay]           = useState(false);
+  const [selectedEpisodes,  setSelectedEpisodes]   = useState<Set<number>>(new Set());
+  const [repeatMode,        setRepeatMode]         = useState<"none" | "one" | "queue">("none");
+  const [isSelectionMode,   setIsSelectionMode]    = useState(false);
+  const [playTrigger,       setPlayTrigger]        = useState(0);
   const playerPlayRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
@@ -261,6 +390,7 @@ export default function AudioSeriesPage() {
     setCurrentIdx(idx >= 0 ? idx : 0);
   }, [episodes, searchParams]);
 
+  // Freemium : forcer le 1er épisode gratuit
   useEffect(() => {
     if (!isFreemium || !episodes.length) return;
     const firstFreeIdx = episodes.findIndex(ep => FREE_EPISODE_NUMBERS.has(ep.episodeNumber));
@@ -268,7 +398,7 @@ export default function AudioSeriesPage() {
   }, [isFreemium, episodes]);
 
   const goNext = useCallback(() => {
-    if (repeatMode === "one") { setCurrentIdx(i => i); return; }
+    if (repeatMode === "one") return;
     if (repeatMode === "queue" && selectedEpisodes.size > 0) {
       const sorted = Array.from(selectedEpisodes).sort((a, b) => a - b);
       const pos = sorted.indexOf(currentIdx);
@@ -280,12 +410,14 @@ export default function AudioSeriesPage() {
 
   const goPrev = useCallback(() => setCurrentIdx(i => Math.max(i - 1, 0)), []);
 
+  // "Tout écouter" : active autoPlay et démarre depuis l'épisode 0
   const playAll = useCallback(() => {
     setSelectedEpisodes(new Set());
     setRepeatMode("none");
     setAutoPlay(true);
     if (currentIdx === 0) {
-      setTimeout(() => playerPlayRef.current?.(), 50);
+      // Déjà sur l'épisode 0 — déclencher le play directement via la ref du bouton
+      setTimeout(() => playerPlayRef.current?.(), 300);
     } else {
       setCurrentIdx(0);
     }
@@ -317,8 +449,8 @@ export default function AudioSeriesPage() {
     } catch { router.push("/pricing"); }
   };
 
-  const meta = THEME_META[themeKey] ?? THEME_META.Valeurs;
-  const subthemeImage = SUBTHEME_IMAGES[subthemeKey] ?? null;
+  const meta           = THEME_META[themeKey] ?? THEME_META.Valeurs;
+  const subthemeImage  = SUBTHEME_IMAGES[subthemeKey] ?? null;
   const currentEpisode = episodes[currentIdx];
   const isPlayerVisible = isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0));
 
@@ -332,13 +464,14 @@ export default function AudioSeriesPage() {
   }
 
   const { themeLabel, subthemeLabel } = episodes[0];
-  const totalMinutes = Math.round(episodes.reduce((acc, ep) => acc + ep.durationTargetSeconds, 0) / 60);
+  const totalMinutes   = Math.round(episodes.reduce((acc, ep) => acc + ep.durationTargetSeconds, 0) / 60);
   const scrollReviseUrl = `/scroll?theme=${encodeURIComponent(themeKey)}`;
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6 sm:py-6">
       <div className="space-y-4">
 
+        {/* ── HEADER ── */}
         <div className={`relative overflow-hidden rounded-[1.8rem] border ${meta.border} shadow-[0_20px_50px_rgba(2,8,23,0.4)]`}>
           {subthemeImage && (
             <div className="absolute inset-0">
@@ -347,6 +480,7 @@ export default function AudioSeriesPage() {
             </div>
           )}
           {!subthemeImage && <div className={`absolute inset-0 bg-gradient-to-br ${meta.accent}`} />}
+
           <div className="relative px-5 py-5 sm:px-6">
             <div className="mb-4 flex items-center gap-2 text-xs text-slate-400">
               <button onClick={() => router.back()} className="inline-flex items-center gap-1 transition hover:text-white">
@@ -358,6 +492,7 @@ export default function AudioSeriesPage() {
               <span>/</span>
               <span className={meta.accentText}>{themeLabel}</span>
             </div>
+
             <div className="flex items-center gap-4">
               {subthemeImage ? (
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
@@ -375,16 +510,23 @@ export default function AudioSeriesPage() {
                 </div>
               </div>
             </div>
+
             {isPremium && (
               <div className="mt-4 flex gap-2">
                 <button onClick={playAll}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border py-2.5 text-sm font-bold transition hover:brightness-110 active:scale-95 ${autoPlay ? `border-blue-400/50 bg-blue-500/20 text-blue-200 shadow-[0_0_16px_rgba(37,99,235,0.3)]` : `${meta.border} bg-white/10 text-white`}`}>
+                  className={`flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border py-2.5 text-sm font-bold transition hover:brightness-110 active:scale-95 ${
+                    autoPlay
+                      ? "border-blue-400/50 bg-blue-500/20 text-blue-200 shadow-[0_0_16px_rgba(37,99,235,0.3)]"
+                      : `${meta.border} bg-white/10 text-white`
+                  }`}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
                   {autoPlay ? "▶ En lecture..." : "Tout écouter"}
                 </button>
                 <button
                   onClick={() => { setIsSelectionMode(v => !v); if (isSelectionMode) setSelectedEpisodes(new Set()); }}
-                  className={`inline-flex items-center justify-center gap-1.5 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition ${isSelectionMode ? `${meta.border} ${meta.accentText} bg-white/10` : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"}`}>
+                  className={`inline-flex items-center justify-center gap-1.5 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition ${
+                    isSelectionMode ? `${meta.border} ${meta.accentText} bg-white/10` : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
+                  }`}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="18" height="18" rx="3"/><path d="m9 12 2 2 4-4"/>
                   </svg>
@@ -392,6 +534,7 @@ export default function AudioSeriesPage() {
                 </button>
               </div>
             )}
+
             {isSelectionMode && selectedEpisodes.size > 0 && (
               <div className={`mt-3 flex items-center justify-between rounded-2xl border ${meta.border} bg-white/5 px-4 py-2.5`}>
                 <span className={`text-sm font-semibold ${meta.accentText}`}>
@@ -407,20 +550,28 @@ export default function AudioSeriesPage() {
           </div>
         </div>
 
+        {/* ── PLAYER ── */}
         {isPlayerVisible && currentEpisode && (
           <StickyPlayer
-            episode={currentEpisode} episodes={episodes} currentIdx={currentIdx}
-            onPrev={goPrev} onNext={goNext}
+            episode={currentEpisode}
+            episodes={episodes}
+            currentIdx={currentIdx}
+            onPrev={goPrev}
+            onNext={goNext}
             isPremium={isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0))}
-            subthemeImage={subthemeImage} meta={meta}
-            autoPlay={autoPlay} setAutoPlay={setAutoPlay}
+            subthemeImage={subthemeImage}
+            meta={meta}
+            autoPlay={autoPlay}
+            setAutoPlay={setAutoPlay}
             selectedEpisodes={selectedEpisodes}
-            repeatMode={repeatMode} setRepeatMode={setRepeatMode}
+            repeatMode={repeatMode}
+            setRepeatMode={setRepeatMode}
             playTrigger={playTrigger}
             onReady={(play) => { playerPlayRef.current = play; }}
           />
         )}
 
+        {/* ── LOCK PREMIUM ── */}
         {!isPremium && !isFreemium && (
           <div className="rounded-[1.5rem] border border-amber-400/20 bg-gradient-to-br from-amber-500/10 to-orange-500/10 p-5 text-center">
             <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-2xl">👑</div>
@@ -432,6 +583,7 @@ export default function AudioSeriesPage() {
           </div>
         )}
 
+        {/* ── BANNIÈRE FREEMIUM ── */}
         {isFreemium && (
           <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-3">
             <div className="flex items-center justify-between gap-3">
@@ -441,27 +593,33 @@ export default function AudioSeriesPage() {
           </div>
         )}
 
+        {/* ── LISTE ÉPISODES ── */}
         <section>
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-base font-bold text-white">Épisodes</h2>
             <span className="text-xs text-slate-400">
-              {isPremium ? (isSelectionMode ? "Coche les épisodes à écouter" : "Cliquez pour écouter")
+              {isPremium
+                ? (isSelectionMode ? "Coche les épisodes à écouter" : "Cliquez pour écouter")
                 : isFreemium ? "2 gratuits" : "Premium requis"}
             </span>
           </div>
           <div className="space-y-2">
             {episodes.map((ep, idx) => {
-              const isFree = isFreemium && FREE_EPISODE_NUMBERS.has(ep.episodeNumber);
-              const locked = !isPremium && !isFree;
+              const isFree  = isFreemium && FREE_EPISODE_NUMBERS.has(ep.episodeNumber);
+              const locked  = !isPremium && !isFree;
               const isActive = currentIdx === idx && (isPremium || isFree);
               const isSelected = selectedEpisodes.has(idx);
               return (
                 <div key={ep.id} className={`rounded-xl border transition-all duration-200 ${
-                  isActive ? `${meta.border} bg-white/15 shadow-[0_4px_20px_rgba(0,0,0,0.5)] ring-1 ring-white/20`
-                  : isSelected ? `${meta.border} bg-white/8`
-                  : isFree ? "border-emerald-400/20 bg-emerald-500/5 hover:bg-emerald-500/8"
-                  : locked ? "border-white/5 bg-white/[0.02] opacity-60"
-                  : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
+                  isActive
+                    ? `${meta.border} bg-white/15 shadow-[0_4px_20px_rgba(0,0,0,0.5)] ring-1 ring-white/20`
+                    : isSelected
+                    ? `${meta.border} bg-white/8`
+                    : isFree
+                    ? "border-emerald-400/20 bg-emerald-500/5 hover:bg-emerald-500/8"
+                    : locked
+                    ? "border-white/5 bg-white/[0.02] opacity-60"
+                    : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
                 }`}>
                   <div role="button" tabIndex={0}
                     onClick={() => {
@@ -471,11 +629,10 @@ export default function AudioSeriesPage() {
                       setAutoPlay(true);
                     }}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        if (locked) handleUpgrade();
-                        else if (isSelectionMode) toggleEpisodeSelection(idx);
-                        else { setCurrentIdx(idx); setAutoPlay(true); }
-                      }
+                      if (e.key !== "Enter") return;
+                      if (locked) handleUpgrade();
+                      else if (isSelectionMode) toggleEpisodeSelection(idx);
+                      else { setCurrentIdx(idx); setAutoPlay(true); }
                     }}
                     className="flex cursor-pointer items-center gap-3 px-4 py-3">
                     {isSelectionMode && isPremium && (
@@ -511,6 +668,7 @@ export default function AudioSeriesPage() {
           </div>
         </section>
 
+        {/* ── NAVIGATION ── */}
         <div className="flex gap-3 pt-2">
           <Link href="/audio" className="flex-1 inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/10">
             ← Retour aux séries
