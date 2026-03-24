@@ -45,14 +45,26 @@ export async function POST(req: NextRequest) {
     const userId = session.client_reference_id
     const plan = session.metadata?.plan ?? "premium"
 
+    console.log(`[webhook] session completed - mode:${session.mode} plan:${plan} userId:${userId}`)
+
     if (userId) {
       if (plan === "elite" || session.mode === "payment") {
-        // Élite — accès à vie, pas d'expiration
-        await setRole(userId, "elite", {
-          customerId: session.customer as string,
-          expiresAt: null,
-        })
-        console.log(`[webhook] Élite activé pour ${userId}`)
+        console.log(`[webhook] tentative setRole elite pour ${userId}`)
+        const { error } = await supabase
+          .from("profiles")
+          .update({ role: "elite" })
+          .eq("id", userId)
+        console.log(`[webhook] profiles update error:`, error)
+        const { error: subError } = await supabase
+          .from("subscriptions")
+          .upsert({
+            user_id: userId,
+            stripe_customer_id: session.customer as string ?? null,
+            status: "active",
+            expires_at: null,
+            updated_at: new Date().toISOString(),
+          }, { onConflict: "user_id" })
+        console.log(`[webhook] subscriptions upsert error:`, subError)
       } else {
         // Premium — expiration dans 3 mois
         const expiresAt = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
