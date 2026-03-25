@@ -1,5 +1,5 @@
 "use client";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useRef } from "react";
 const LocationModal = lazy(() => import("./LocationModal"));
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -72,6 +72,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [username, setUsername] = useState<string | null>(null);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const locationModalShown = useRef(false);
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [tick, setTick] = useState(0);
@@ -123,7 +124,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       setRole((data?.role as Role) ?? "anonymous");
       setUsername(data?.username ?? user.user_metadata?.username ?? user.email?.split("@")[0] ?? null);
       setUserId(user.id);
-      if (!data?.has_seen_location_modal) setShowLocationModal(true);
+      if (!data?.has_seen_location_modal && !locationModalShown.current) {
+        locationModalShown.current = true;
+        setShowLocationModal(true);
+      }
       setLoading(false);
     }
 

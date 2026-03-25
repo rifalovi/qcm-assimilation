@@ -7,7 +7,7 @@ import { useUser } from "./UserContext";
 export default function AppHeader() {
   const pathname = usePathname();
   const router = useRouter();
-  const { username, role, loading, isAuthenticated, logout } = useUser();
+  const { username, role, loading, isAuthenticated, logout, email } = useUser();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -102,6 +102,7 @@ export default function AppHeader() {
                     {/* Navigation */}
                     <div className="py-2">
                       {[
+                        ...(username && ["rifalovi@gmail.com"].includes(email ?? "") ? [{ href: "/dashboard", label: "Dashboard", icon: "📊" }] : []),
                         { href: "/", label: "Accueil", icon: "🏠" },
                         { href: "/scroll", label: "Réviser", icon: "📚" },
                         { href: "/quiz", label: "S'entraîner", icon: "🎯" },
