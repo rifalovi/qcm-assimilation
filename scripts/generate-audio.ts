@@ -83,7 +83,11 @@ function parseVoiceArg(): VoiceGender | "both" {
 }
 
 // ─── ElevenLabs TTS ────────────────────────────────────────────────────────
-async function synthesize(text: string, gender: VoiceGender): Promise<Buffer> {
+async function synthesize(rawText: string, gender: VoiceGender): Promise<Buffer> {
+  const text = rawText
+    .replace(/\[PRÉSENTATION\]|\[QUESTION\]|\[PAUSE\]|\[RÉPONSE\]|\[EXPLICATION\]|\[ATTENTION\]|\[À RETENIR\]/g, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
   const voice = VOICES[gender];
   const response = await fetch(
     `https://api.elevenlabs.io/v1/text-to-speech/${voice.id}`,

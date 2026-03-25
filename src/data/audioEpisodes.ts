@@ -4,7 +4,7 @@
 // Généré depuis audio_content/episodes.json — ne pas éditer manuellement.
 // =============================================================================
 
-export type AudioThemeKey = "Valeurs" | "Institutions" | "Histoire" | "Société";
+export type AudioThemeKey = "Valeurs" | "Institutions" | "Histoire" | "Société" | "Devenir français(e)";
 
 export type AudioEpisode = {
   id: string;
@@ -641,6 +641,20 @@ export const audioEpisodes: AudioEpisode[] = [
     durationTargetSeconds: 90,
     premium: true,
   },
+  // ─────────────────────────────────────────────
+  // THÈME : Devenir français(e) (051–060)
+  // ─────────────────────────────────────────────
+  { id: "audio-051", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 1, episodeTitle: "Comprendre ce que l'agent attend vraiment", episodeSlug: "comprendre-ce-que-lagent-attend-vraiment", durationTargetSeconds: 90, premium: true },
+  { id: "audio-052", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 2, episodeTitle: "Construire votre réponse personnelle en 3 parties", episodeSlug: "construire-votre-reponse-personnelle-en-3-parties", durationTargetSeconds: 90, premium: true },
+  { id: "audio-053", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 3, episodeTitle: "Parler de votre parcours sans trop en dire", episodeSlug: "parler-de-votre-parcours-sans-trop-en-dire", durationTargetSeconds: 90, premium: true },
+  { id: "audio-054", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 4, episodeTitle: "Démontrer votre attachement aux valeurs républicaines", episodeSlug: "demontrer-votre-attachement-aux-valeurs-republicaines", durationTargetSeconds: 90, premium: true },
+  { id: "audio-055", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 5, episodeTitle: "Parler de votre intégration dans la société française", episodeSlug: "parler-de-votre-integration-dans-la-societe-francaise", durationTargetSeconds: 90, premium: true },
+  { id: "audio-056", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 6, episodeTitle: "Les mots qui rassurent vs les mots qui inquiètent", episodeSlug: "les-mots-qui-rassurent-vs-les-mots-qui-inquietent", durationTargetSeconds: 90, premium: true },
+  { id: "audio-057", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 7, episodeTitle: "Que faire si vous bloquez ou ne savez pas quoi dire", episodeSlug: "que-faire-si-vous-bloquez-ou-ne-savez-pas-quoi-dire", durationTargetSeconds: 90, premium: true },
+  { id: "audio-058", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 8, episodeTitle: "Religion, origines, culture : comment en parler sans se piéger", episodeSlug: "religion-origines-culture-comment-en-parler-sans-se-pieger", durationTargetSeconds: 90, premium: true },
+  { id: "audio-059", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 9, episodeTitle: "Répéter et incarner sa réponse à l'oral", episodeSlug: "repeter-et-incarner-sa-reponse-a-loral", durationTargetSeconds: 90, premium: true },
+  { id: "audio-060", themeKey: "Devenir français(e)", themeLabel: "Devenir français(e)", subthemeKey: "pourquoi_francais", subthemeLabel: "Pourquoi voulez-vous devenir français(e) ?", episodeNumber: 10, episodeTitle: "Simulation complète : la question, une réponse modèle commentée", episodeSlug: "simulation-complete-la-question-une-reponse-modele-commentee", durationTargetSeconds: 90, premium: true },
+
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
