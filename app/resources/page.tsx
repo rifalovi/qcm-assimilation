@@ -203,8 +203,8 @@ function PremiumModal({ open, onClose }: { open: boolean; onClose: () => void })
         </div>
         <div className="space-y-3 rounded-[1.4rem] border border-white/10 bg-white/5 p-4">
           {[
-            { icon: "🎯", text: "Premium 14,99€/3 mois — accès complet pour se préparer à son rythme." },
-            { icon: "👑", text: "Élite 24,99€ à vie — tout Premium + contenu exclusif expert + mises à jour futures incluses." },
+            { icon: "🎯", text: "Premium 19,99€/3 mois — accès complet pour se préparer à son rythme." },
+            { icon: "👑", text: "Élite 49,99€ à vie — tout Premium + contenu exclusif expert + mises à jour futures incluses." },
             { icon: "🎧", text: "100 épisodes audio guidés — révisez en déplacement, en voix naturelle." },
           ].map((item) => (
             <div key={item.text} className="flex items-start gap-3">
@@ -352,7 +352,7 @@ export default function ResourcesPage() {
             {(role !== "premium" && role !== "elite") && (
               <div className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-5 text-center">
                 <p className="text-sm font-semibold text-amber-100 mb-1">🔓 Débloquez tout — 800+ questions, 100 épisodes audio, examen blanc illimité</p>
-                <p className="text-xs text-amber-200/70 mb-4">Premium 14,99€/3 mois · Élite 24,99€ accès à vie</p>
+                <p className="text-xs text-amber-200/70 mb-4">Premium 19,99€/3 mois · Élite 49,99€ accès à vie</p>
                 <Link href="/pricing" className="inline-flex items-center gap-2 rounded-2xl bg-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-amber-400">
                   Voir les offres →
                 </Link>
