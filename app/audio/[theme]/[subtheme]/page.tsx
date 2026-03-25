@@ -471,6 +471,21 @@ export default function AudioSeriesPage() {
   };
 
   const meta           = THEME_META[themeKey] ?? THEME_META.Valeurs;
+
+  // Série suivante
+  const allSeries = useMemo(() => {
+    const seen = new Set<string>();
+    return audioEpisodes.filter(ep => {
+      const key = ep.themeKey + '|' + ep.subthemeKey;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, []);
+  const currentSeriesIndex = allSeries.findIndex(ep => ep.themeKey === themeKey && ep.subthemeKey === subthemeKey);
+  const nextSeries = allSeries[(currentSeriesIndex + 1) % allSeries.length];
+  const nextSeriesUrl = nextSeries ? `/audio/${encodeURIComponent(nextSeries.themeKey)}/${encodeURIComponent(nextSeries.subthemeKey)}` : '/audio';
+  const isDevenir = themeKey === "Devenir français(e)";
   const subthemeImage  = SUBTHEME_IMAGES[subthemeKey] ?? null;
   const currentEpisode = episodes[currentIdx];
   const isPlayerVisible = isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0));
@@ -699,12 +714,36 @@ export default function AudioSeriesPage() {
 
         {/* ── NAVIGATION ── */}
         <div className="flex gap-3 pt-2">
-          <Link href="/audio" className="flex-1 inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-white/10">
-            ← Retour aux séries
+          {/* Retour */}
+          <Link href="/audio" className="flex-1 inline-flex flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-semibold text-slate-100 transition hover:bg-white/10 gap-1">
+            <span className="text-lg">←</span>
+            <span>Séries</span>
           </Link>
-          <button onClick={() => router.push(scrollReviseUrl)}
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-500 active:scale-95">
-            📖 Réviser {subthemeLabel}
+          {/* Réviser — désactivé pour Devenir français(e) */}
+          <button
+            onClick={() => !isDevenir && router.push(scrollReviseUrl)}
+            disabled={isDevenir}
+            className={`flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl px-3 py-2.5 text-xs font-bold transition active:scale-95 ${
+              isDevenir
+                ? "bg-white/5 text-slate-500 border border-white/10 cursor-not-allowed opacity-50"
+                : "bg-blue-600 text-white hover:bg-blue-500"
+            }`}>
+            <span className="text-lg">📖</span>
+            <span>Réviser</span>
+          </button>
+          {/* Partager */}
+          <button
+            onClick={() => navigator.share?.({ title: subthemeLabel, url: window.location.href }) ?? navigator.clipboard.writeText(window.location.href)}
+            className="flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-semibold text-slate-100 transition hover:bg-white/10">
+            <span className="text-lg">🔗</span>
+            <span>Partager</span>
+          </button>
+          {/* Série suivante */}
+          <button
+            onClick={() => router.push(nextSeriesUrl)}
+            className="flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-500 active:scale-95">
+            <span className="text-lg">▶▶</span>
+            <span>Suivante</span>
           </button>
         </div>
 
