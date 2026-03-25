@@ -393,6 +393,7 @@ export default function HomePage() {
                           {[
                             { label: "Réviser", icon: "📚", onClick: () => router.push("/scroll") },
                             { label: "S'entraîner", icon: "🎯", onClick: () => router.push("/quiz") },
+                            { label: "Examen blanc", icon: "📝", onClick: () => router.push("/exam") },
                             { label: "Audio", icon: "🎧", onClick: () => router.push("/audio") },
                             { label: "Résultats", icon: "📊", onClick: () => router.push("/results") },
                             { label: "Mon compte", icon: "👤", onClick: () => router.push("/account") },
@@ -400,8 +401,8 @@ export default function HomePage() {
                             { label: "Tarifs", icon: "👑", onClick: () => router.push("/pricing") },
                           ].map((item) => (
                             <button key={item.label} onClick={() => { setHomeMenuOpen(false); item.onClick(); }}
-                              className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white">
-                              <span>{item.icon}</span><span>{item.label}</span>
+                              className="flex w-full items-center gap-2.5 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 hover:text-white">
+                              <span className="text-sm">{item.icon}</span><span>{item.label}</span>
                             </button>
                           ))}
                         </div>

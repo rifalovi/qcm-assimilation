@@ -105,6 +105,7 @@ export default function AppHeader() {
                         { href: "/", label: "Accueil", icon: "🏠" },
                         { href: "/scroll", label: "Réviser", icon: "📚" },
                         { href: "/quiz", label: "S'entraîner", icon: "🎯" },
+                        { href: "/exam", label: "Examen blanc", icon: "📝" },
                         { href: "/audio", label: "Audio", icon: "🎧" },
                         { href: "/results", label: "Résultats", icon: "📊" },
                         { href: "/account", label: "Mon compte", icon: "👤" },
@@ -115,9 +116,9 @@ export default function AppHeader() {
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="flex items-center gap-2 px-3 py-2 text-xs text-slate-300 transition hover:bg-white/5 hover:text-white"
+                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/5 hover:text-white"
                         >
-                          <span className="text-base">{item.icon}</span>
+                          <span className="text-sm">{item.icon}</span>
                           {item.label}
                         </Link>
                       ))}

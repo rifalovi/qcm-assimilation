@@ -1,10 +1,11 @@
 export type EligibilityGoal = "csp" | "cr" | "nat" | "unknown";
-export type EligibilityStay = "lt1" | "1to3" | "gt3";
+export type EligibilityStay = "lt1" | "1to3" | "3to5" | "gt5";
 
 export type Theme = "Valeurs" | "Institutions" | "Histoire" | "Société";
 export type Level = 1 | 2 | 3;
 
 export type EligibilityRecommendation = {
+  natEarlyWarning?: boolean;
   goal: Exclude<EligibilityGoal, "unknown">;
   title: string;
   shortLabel: string;
@@ -44,7 +45,7 @@ export const ELIGIBILITY_OPTIONS = [
 export const STAY_OPTIONS = [
   { value: "lt1" as const, label: "Moins d’1 an" },
   { value: "1to3" as const, label: "Entre 1 et 3 ans" },
-  { value: "gt3" as const, label: "Plus de 3 ans" },
+  
 ];
 
 export const RECOMMENDATIONS: Record<
@@ -122,7 +123,7 @@ export function getRecommendation(
 
   if (!stay) return base;
 
-  if (goal === "csp" && stay === "gt3") {
+  if (goal === "csp" && stay === "gt5") {
     return {
       ...base,
       confidenceText:
@@ -138,12 +139,11 @@ export function getRecommendation(
     };
   }
 
-  if (goal === "nat" && stay === "lt1") {
+  if (goal === "nat" && (stay === "lt1" || stay === "1to3")) {
     return {
       ...base,
-      confidenceText:
-        "La naturalisation demande une assimilation plus complète. Ce parcours est volontairement le plus exigeant.",
-    };
+      natEarlyWarning: true,
+    } as EligibilityRecommendation & { natEarlyWarning: boolean };
   }
 
   return base;

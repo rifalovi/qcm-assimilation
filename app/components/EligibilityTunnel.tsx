@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   ELIGIBILITY_OPTIONS,
   STAY_OPTIONS,
@@ -307,6 +308,50 @@ const settings = buildQuizSettings({
                   Ton offre actuelle ne débloque pas entièrement ce niveau.
                   L’entraînement sera lancé avec le meilleur niveau disponible
                   pour ton compte.
+                </div>
+              )}
+
+              {/* Avertissement naturalisation < 3 ans */}
+              {(recommendation as any).natEarlyWarning && (
+                <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4 text-sm text-amber-100">
+                  <div className="font-bold text-amber-300 mb-2">⚠️ Attention — durée de résidence insuffisante</div>
+                  <p className="text-xs leading-5 text-amber-200 mb-3">
+                    La naturalisation requiert en général <strong>5 ans de résidence</strong> en France. Cependant, des exceptions existent si vous êtes dans l'une de ces situations :
+                  </p>
+                  <ul className="text-xs leading-6 text-amber-100 space-y-1 mb-3">
+                    <li>• Statut de réfugié reconnu</li>
+                    <li>• Langue maternelle française (pays francophone)</li>
+                    <li>• Scolarisé 5 ans+ dans un établissement francophone</li>
+                    <li>• Service militaire dans l'armée française</li>
+                    <li>• Diplôme d'un établissement supérieur français (2 ans+)</li>
+                    <li>• Services exceptionnels rendus à la France</li>
+                    <li>• Parcours exceptionnel d'intégration</li>
+                  </ul>
+                  <Link
+                    href="https://www.service-public.fr/particuliers/vosdroits/F2213"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-300 underline hover:text-blue-200"
+                  >
+                    Voir toutes les conditions sur Service-Public.fr →
+                  </Link>
+                </div>
+              )}
+
+              {/* Recommandation Bibliothèque Audio pour naturalisation */}
+              {goal === "nat" && (
+                <div className="mt-4 rounded-2xl border border-violet-400/20 bg-violet-500/10 p-4">
+                  <div className="text-xs font-bold text-violet-300 mb-1">🎧 Bibliothèque Audio recommandée</div>
+                  <p className="text-xs leading-5 text-slate-300 mb-3">
+                    Préparez l'oral de votre entretien avec nos épisodes audio dédiés à la naturalisation — valeurs, institutions, histoire et la question clé : <em>Pourquoi voulez-vous devenir français(e) ?</em>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => { onClose(); router.push("/audio"); }}
+                    className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-3 py-2 text-xs font-bold text-white transition hover:bg-violet-500"
+                  >
+                    Découvrir la bibliothèque audio →
+                  </button>
                 </div>
               )}
 
