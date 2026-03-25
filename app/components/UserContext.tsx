@@ -124,8 +124,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       setRole((data?.role as Role) ?? "anonymous");
       setUsername(data?.username ?? user.user_metadata?.username ?? user.email?.split("@")[0] ?? null);
       setUserId(user.id);
-      if (!data?.has_seen_location_modal && !locationModalShown.current) {
+      const alreadyShown = sessionStorage.getItem("location_modal_shown");
+      if (!data?.has_seen_location_modal && !alreadyShown && !locationModalShown.current) {
         locationModalShown.current = true;
+        sessionStorage.setItem("location_modal_shown", "1");
         setShowLocationModal(true);
       }
       setLoading(false);
