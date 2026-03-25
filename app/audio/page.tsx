@@ -38,6 +38,12 @@ const SUBTHEME_CONFIG: Record<string, {
     border: "border-amber-400/20",
     accentText: "text-amber-300",
   },
+  pourquoi_francais: {
+    image: "/themes/devenir_francais.jpg",
+    accent: "from-rose-600/30 to-pink-600/20",
+    border: "border-rose-400/20",
+    accentText: "text-rose-300",
+  },
   societe: {
     image: "/themes/societe.jpg",
     accent: "from-emerald-600/30 to-teal-600/20",
