@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import AppHeader from "./components/AppHeader";
+import PostHogProvider from "./components/PostHogProvider";
+import { Suspense } from "react";
 import { UserProvider } from "./components/UserContext";
 import BottomNav from "@/components/BottomNav";
 
@@ -18,6 +20,8 @@ export default function RootLayout({
     <html lang="fr" className="h-full">
       <body className="min-h-full text-slate-100 antialiased pb-16">
         <UserProvider>
+        <Suspense fallback={null}>
+        <PostHogProvider>
           <div className="min-h-screen flex flex-col">
             <AppHeader />
             <main className="flex-1 w-full overflow-x-hidden">{children}</main>
@@ -28,6 +32,8 @@ export default function RootLayout({
             </footer>
           </div>
           <BottomNav />
+        </PostHogProvider>
+        </Suspense>
         </UserProvider>
       </body>
     </html>
