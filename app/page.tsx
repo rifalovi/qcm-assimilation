@@ -391,6 +391,7 @@ export default function HomePage() {
                         </div>
                         <div className="py-2">
                           {[
+                            ...(email === "rifalovi@gmail.com" ? [{ label: "Dashboard", icon: "📊", onClick: () => router.push("/dashboard") }] : []),
                             { label: "Réviser", icon: "📚", onClick: () => router.push("/scroll") },
                             { label: "S'entraîner", icon: "🎯", onClick: () => router.push("/quiz") },
                             { label: "Examen blanc", icon: "📝", onClick: () => router.push("/exam") },
