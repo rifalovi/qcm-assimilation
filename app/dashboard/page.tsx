@@ -61,7 +61,7 @@ export default function DashboardPage() {
       <div className="mb-8">
         <div className="inline-flex rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-violet-300">Admin Dashboard</div>
         <h1 className="mt-3 text-3xl font-extrabold text-white">Tableau de bord</h1>
-        <p className="mt-1 text-sm text-slate-400">Activité et métriques de QCM Assimilation FR</p>
+        <p className="mt-1 text-sm text-slate-400">Activité et métriques de Cap Citoyen</p>
       </div>
       {loadingStats ? (
         <div className="grid gap-4 sm:grid-cols-3">

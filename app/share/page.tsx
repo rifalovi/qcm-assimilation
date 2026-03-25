@@ -39,7 +39,7 @@ export default function SharePage() {
     { name: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}` },
     { name: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}` },
     { name: "X (Twitter)", href: `https://twitter.com/intent/tweet?text=${enc(shareText)}` },
-    { name: "Email", href: `mailto:?subject=${enc("QCM Assimilation FR — Simulation 2026")}&body=${enc(shareText)}` },
+    { name: "Email", href: `mailto:?subject=${enc("Cap Citoyen — Simulation 2026")}&body=${enc(shareText)}` },
   ];
 
   return (

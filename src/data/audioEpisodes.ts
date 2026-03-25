@@ -1,6 +1,6 @@
 // =============================================================================
 // src/data/audioEpisodes.ts
-// Source de vérité pour les 50 épisodes audio de QCM Assimilation FR.
+// Source de vérité pour les 50 épisodes audio de Cap Citoyen.
 // Généré depuis audio_content/episodes.json — ne pas éditer manuellement.
 // =============================================================================
 

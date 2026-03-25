@@ -193,7 +193,7 @@ export default function ResultsClient() {
   const { role } = useUser();
   const limits = ROLE_LIMITS[role];
 
-  const PUBLIC_URL = "https://qcm-assimilation-fr.netlify.app";
+  const PUBLIC_URL = "https://cap-citoyen.fr";
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -314,7 +314,7 @@ Score: ${score.correct}/${score.total} (${score.percent}%) — ${
 Teste-toi ici: ${url}`;
 
     if (navigator.share) {
-      navigator.share({ title: "QCM Assimilation FR", text, url }).catch(() => {});
+      navigator.share({ title: "Cap Citoyen", text, url }).catch(() => {});
       return;
     }
 
@@ -324,7 +324,7 @@ Teste-toi ici: ${url}`;
 
   function buildResultText() {
     const lines = [
-      "QCM Assimilation FR — Résultat détaillé",
+      "Cap Citoyen — Résultat détaillé",
       `Date: ${new Date().toLocaleString("fr-FR")}`,
       `Niveau: ${data?.meta?.level ?? "—"}`,
       `Thèmes: ${data?.meta?.themes?.join(", ") ?? "—"}`,
@@ -435,7 +435,7 @@ QUESTIONS À REVOIR
 =================================
 ${errorsText}
 
-— QCM Assimilation FR`
+— Cap Citoyen`
     )}`;
   }
 
