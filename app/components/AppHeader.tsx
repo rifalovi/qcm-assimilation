@@ -45,7 +45,7 @@ export default function AppHeader() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <span className="text-sm font-semibold tracking-wide text-slate-200">
-            🇫🇷 QCM Assimilation
+            🇫🇷 Cap Citoyen
           </span>
         </Link>
 
