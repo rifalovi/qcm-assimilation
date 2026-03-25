@@ -250,6 +250,14 @@ function StickyPlayer({
   }, [repeatMode, setRepeatMode]);
 
   return (
+    {/* Bouton retour flottant */}
+    <div className="fixed top-16 left-3 z-50">
+      <Link href="/audio" className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-slate-300 shadow-lg backdrop-blur-md transition hover:bg-white/10 hover:text-white">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        Séries
+      </Link>
+    </div>
+
     <div className={`sticky top-14 z-40 rounded-[1.5rem] border ${meta.border} bg-gradient-to-r ${meta.accent} backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]`}>
       {audioUrl && (
         <audio

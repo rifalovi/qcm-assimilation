@@ -166,7 +166,7 @@ function AlbumCard({
         {/* Badge freemium */}
         {isFreemium && !isPremium && (
           <div className="absolute right-2 top-2 rounded-full border border-emerald-400/30 bg-emerald-500/20 px-2 py-0.5 backdrop-blur-sm">
-            <p className="text-[10px] font-bold text-emerald-300">1 gratuit</p>
+            <p className="text-[10px] font-bold text-emerald-300">2 gratuits</p>
           </div>
         )}
 
