@@ -60,7 +60,7 @@ const PLANS = [
   {
     id: "premium",
     name: "Premium",
-    price: "14,99€",
+    price: "19,99€",
     period: "/3 mois",
     badge: "⭐ Recommandé",
     badgeColor: "bg-blue-600 text-white",
@@ -85,7 +85,7 @@ const PLANS = [
   {
     id: "elite",
     name: "Élite",
-    price: "24,99€",
+    price: "49,99€",
     period: "accès à vie",
     badge: "👑 Accès à vie",
     badgeColor: "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950",
@@ -110,7 +110,7 @@ const PLANS = [
 ];
 
 // ─── Effet psychologique ───────────────────────────────────────────────────
-// Principe de l'ancrage : le prix Élite à 24,99€ rend Premium à 14,99€
+// Principe de l'ancrage : le prix Élite à 49,99€ rend Premium à 19,99€
 // très attractif (effet de compromis de Simonson).
 // Le badge "Recommandé" sur Premium renforce ce biais de confirmation.
 
