@@ -1,4 +1,6 @@
 "use client";
+import { lazy, Suspense } from "react";
+const LocationModal = lazy(() => import("./LocationModal"));
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -68,6 +70,8 @@ function clearQcmLocalState() {
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [role, setRole] = useState<Role>("anonymous");
   const [username, setUsername] = useState<string | null>(null);
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [tick, setTick] = useState(0);
@@ -108,7 +112,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("username, role")
+        .select("username, role, has_seen_location_modal")
         .eq("id", user.id)
         .single();
 
@@ -118,6 +122,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
       setRole((data?.role as Role) ?? "anonymous");
       setUsername(data?.username ?? user.user_metadata?.username ?? user.email?.split("@")[0] ?? null);
+      setUserId(user.id);
+      if (!data?.has_seen_location_modal) setShowLocationModal(true);
       setLoading(false);
     }
 
@@ -140,6 +146,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       value={{ role, username, email, isAuthenticated, loading, refresh, logout }}
     >
       {children}
+      {showLocationModal && userId && (
+        <Suspense fallback={null}>
+          <LocationModal userId={userId} onClose={() => setShowLocationModal(false)} />
+        </Suspense>
+      )}
     </UserContext.Provider>
   );
 }
