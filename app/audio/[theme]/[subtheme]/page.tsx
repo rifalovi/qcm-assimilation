@@ -13,7 +13,7 @@ const SUBTHEME_IMAGES: Record<string, string> = {
   institutions: "/themes/institutions.jpg",
   histoire_geographie: "/themes/histoire_geographie.jpg",
   societe: "/themes/societe.jpg",
-  pourquoi_francais: "/themes/devenir_francais(e).jpg",
+  pourquoi_francais: "/themes/devenir_francais.jpg",
 };
 
 const FREE_EPISODE_NUMBERS = new Set([1, 2]);
