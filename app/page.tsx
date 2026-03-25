@@ -397,6 +397,7 @@ export default function HomePage() {
                             { label: "Audio", icon: "🎧", onClick: () => router.push("/audio") },
                             { label: "Résultats", icon: "📊", onClick: () => router.push("/results") },
                             { label: "Mon compte", icon: "👤", onClick: () => router.push("/account") },
+                            { label: "Informations", icon: "ℹ️", onClick: () => router.push("/info") },
                             { label: "Ressources", icon: "🏛️", onClick: () => router.push("/resources") },
                             { label: "Tarifs", icon: "👑", onClick: () => router.push("/pricing") },
                           ].map((item) => (
