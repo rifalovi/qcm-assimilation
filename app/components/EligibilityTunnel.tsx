@@ -174,7 +174,7 @@ const settings = buildQuizSettings({
             Cette réponse nous aide à mieux te guider.
           </p>
 
-          <div className="mt-4 grid gap-2.5 sm:mt-5 sm:grid-cols-3 sm:gap-3">
+          <div className="mt-4 grid grid-cols-2 gap-2.5 sm:mt-5 sm:gap-3">
             {STAY_OPTIONS.map((option) => (
               <button
                 key={option.value}

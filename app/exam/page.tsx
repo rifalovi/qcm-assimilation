@@ -225,7 +225,7 @@ export default function ExamPage() {
             </p>
 
             {/* Pills info */}
-            <div className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
               <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">
                 40 questions
               </span>
@@ -238,7 +238,7 @@ export default function ExamPage() {
             </div>
 
             {/* Boutons */}
-            <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center lg:justify-start">
+            <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center">
               <PremiumButton onClick={smartStartExam} label="Démarrer l'examen blanc" />
               <Button variant="secondary" onClick={() => router.push("/info")}>
                 📖 Comprendre l'examen
@@ -301,7 +301,7 @@ export default function ExamPage() {
                 {themes.length}/{THEMES.length}
               </span>
             </div>
-            <div className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
               {THEMES.map((t) => (
                 <Pill key={t} active={themes.includes(t)} onClick={() => toggleTheme(t)}>{t}</Pill>
               ))}
