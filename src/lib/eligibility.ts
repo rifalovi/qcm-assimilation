@@ -45,7 +45,8 @@ export const ELIGIBILITY_OPTIONS = [
 export const STAY_OPTIONS = [
   { value: "lt1" as const, label: "Moins d’1 an" },
   { value: "1to3" as const, label: "Entre 1 et 3 ans" },
-  
+  { value: "3to5" as const, label: "Entre 3 et 5 ans" },
+  { value: "gt5" as const, label: "5 ans ou plus" },
 ];
 
 export const RECOMMENDATIONS: Record<
