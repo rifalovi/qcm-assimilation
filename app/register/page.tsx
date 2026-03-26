@@ -1,6 +1,5 @@
 "use client";
 
-import { Turnstile } from "@marsidev/react-turnstile";
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -24,6 +23,25 @@ function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef(false);
+  useEffect(() => {
+    if (turnstileRef.current) return;
+    turnstileRef.current = true;
+    const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!;
+    const interval = setInterval(() => {
+      if (typeof window !== "undefined" && (window as any).turnstile) {
+        clearInterval(interval);
+        (window as any).turnstile.render("#turnstile-register", {
+          sitekey,
+          theme: "dark",
+          language: "fr",
+          callback: (token: string) => setTurnstileToken(token),
+          "expired-callback": () => setTurnstileToken(null),
+        });
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
@@ -478,14 +496,7 @@ function RegisterForm() {
   </div>
 )}
    
-              <Turnstile
-                key="turnstile-register"
-                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-                onSuccess={(token) => setTurnstileToken(token)}
-                onExpire={() => setTurnstileToken(null)}
-                options={{ theme: "dark", language: "fr", execution: "render" }}
-                className="mb-2"
-              />
+              <div id="turnstile-register" className="mb-2" />
               <button
                 type="submit"
                 disabled={loading || !turnstileToken}
