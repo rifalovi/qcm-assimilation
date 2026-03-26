@@ -479,6 +479,7 @@ function RegisterForm() {
 )}
    
               <Turnstile
+                key="turnstile-register"
                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
                 onSuccess={(token) => setTurnstileToken(token)}
                 onExpire={() => setTurnstileToken(null)}
