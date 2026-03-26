@@ -64,7 +64,7 @@ function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "fr
 
       {!isAnon && (
         <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
-          9,99€/mois · Résiliation à tout moment
+          19,99€/3 mois · Résiliation à tout moment
         </p>
       )}
     </div>
