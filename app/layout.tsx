@@ -39,6 +39,12 @@ export default function RootLayout({
               © {new Date().getFullYear()} Cap Citoyen
               <span className="mx-2">·</span>
               <a href="/pricing" className="text-amber-400 hover:text-amber-300 transition">👑 Tarifs</a>
+              <span className="mx-2">·</span>
+              <a href="/contact" className="hover:text-slate-300 transition">Contact</a>
+              <span className="mx-2">·</span>
+              <a href="/mentions-legales" className="hover:text-slate-300 transition">Mentions légales</a>
+              <span className="mx-2">·</span>
+              <a href="/cgv" className="hover:text-slate-300 transition">CGV</a>
             </footer>
           </div>
           <BottomNav />
