@@ -1,0 +1,24 @@
+{
+  "name": "Cap Citoyen",
+  "short_name": "Cap Citoyen",
+  "description": "Préparez votre test civique français — QCM, audio, examen blanc",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0f1a",
+  "theme_color": "#0a0f1a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/cap-citoyen.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/cap-citoyen.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

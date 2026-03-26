@@ -8,7 +8,17 @@ import BottomNav from "@/components/BottomNav";
 
 export const metadata: Metadata = {
   title: "Cap Citoyen",
-  description: "Plateforme d'entraînement QCM - test civique français",
+  description: "Préparez votre test civique français — QCM, audio, examen blanc",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Cap Citoyen",
+  },
+  icons: {
+    icon: "/cap-citoyen.png",
+    apple: "/cap-citoyen.png",
+  },
 };
 
 export default function RootLayout({
