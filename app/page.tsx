@@ -143,7 +143,7 @@ function OnboardingModal({ onClose, onAction }: {
         {step === 0 && (
           <div className="mb-5 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
             <p className="text-xs text-slate-400">
-              🇫🇷 Bienvenue sur <span className="font-semibold text-white">QCM Assimilation</span> — la meilleure façon de préparer votre entretien civique.
+              🇫🇷 Bienvenue sur <span className="font-semibold text-white">Cap Citoyen</span> — la meilleure façon de préparer votre entretien civique.
             </p>
           </div>
         )}

@@ -168,7 +168,7 @@ function useAudioPlayer(
 
     navigator.mediaSession.metadata = new MediaMetadata({
       title:   episode.episodeTitle,
-      artist:  "QCM Assimilation",
+      artist:  "Cap Citoyen",
       album:   episode.subthemeLabel,
       artwork,
     });

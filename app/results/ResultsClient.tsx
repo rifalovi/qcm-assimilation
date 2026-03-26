@@ -307,7 +307,7 @@ export default function ResultsClient() {
   function share() {
     if (!score) return;
     const url = `${PUBLIC_URL}/`;
-    const text = `🇫🇷 Je viens de faire une simulation QCM Assimilation 2026.
+    const text = `🇫🇷 Je viens de faire une simulation Cap Citoyen 2026.
 Score: ${score.correct}/${score.total} (${score.percent}%) — ${
       score.passed ? "VALIDÉ ✅" : "NON VALIDÉ ❌"
     }
@@ -422,7 +422,7 @@ Teste-toi ici: ${url}`;
             .join("\n\n---------------------------------\n\n");
 
     window.location.href = `mailto:${email}?subject=${encodeURIComponent(
-      `Résultat QCM Assimilation — ${pseudoLocal}`
+      `Résultat Cap Citoyen — ${pseudoLocal}`
     )}&body=${encodeURIComponent(
       `Bonjour ${pseudoLocal},
 

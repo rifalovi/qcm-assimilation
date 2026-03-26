@@ -30,7 +30,7 @@ export default function MFASetup() {
     const supabase = createClient();
     const { data, error } = await supabase.auth.mfa.enroll({
       factorType: "totp",
-      friendlyName: "QCM Assimilation",
+      friendlyName: "Cap Citoyen",
     });
     if (error) { setError(error.message); setLoading(false); return; }
     setQrUrl(data.totp.qr_code);

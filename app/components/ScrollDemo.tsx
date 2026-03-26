@@ -12,7 +12,7 @@ const STEPS = [
 function StatusBar() {
   return (
     <div style={{ height: 18, display: "flex", alignItems: "center", justifyContent: "space-between", background: "#0b1626", padding: "0 10px", flexShrink: 0 }}>
-      <span style={{ fontSize: 7.5, color: "#334155", fontWeight: 600 }}>QCM Assimilation</span>
+      <span style={{ fontSize: 7.5, color: "#334155", fontWeight: 600 }}>Cap Citoyen</span>
       <span style={{ fontSize: 7.5, color: "#334155" }}>Carlos</span>
     </div>
   );

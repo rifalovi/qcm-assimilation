@@ -67,7 +67,7 @@ export default function AvisSection() {
         <div>
           <h2 className="text-xl font-extrabold text-white">Ce qu&apos;ils en pensent</h2>
           <p className="mt-1 text-sm text-slate-400">
-            Avis de candidats qui ont préparé leur entretien avec QCM Assimilation
+            Avis de candidats qui ont préparé leur entretien avec Cap Citoyen
           </p>
         </div>
         <div className="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-2.5">
