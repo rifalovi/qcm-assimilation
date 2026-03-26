@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Turnstile } from '@marsidev/react-turnstile'
 import { createClient } from '@/lib/supabase/client'
 
 function ResetForm() {
@@ -9,7 +10,7 @@ function ResetForm() {
   const [password, setPassword] = useState('')
   const [loading, setLoading]   = useState(false)
   const [message, setMessage]   = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   async function handleReset(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
@@ -62,13 +63,20 @@ function ResetForm() {
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-3 text-sm transition-colors"
-          >
-            {loading ? 'Mise à jour...' : 'Mettre à jour le mot de passe'}
-          </button>
+          <Turnstile
+  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+  onSuccess={(token) => setTurnstileToken(token)}
+  onExpire={() => setTurnstileToken(null)}
+  options={{ theme: "dark", language: "fr" }}
+  className="mb-2"
+/>
+<button
+  type="submit"
+  disabled={loading || !turnstileToken}
+  className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-3 text-sm transition-colors"
+>
+  {loading ? 'Mise à jour...' : 'Mettre à jour le mot de passe'}
+</button>
         </form>
       </div>
     </main>
