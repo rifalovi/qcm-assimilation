@@ -209,10 +209,10 @@ export default function PricingPage() {
                   <span className={`text-2xl font-extrabold ${plan.price === "—" ? "text-slate-500" : "text-white"}`}>
                     {plan.price}
                   </span>
-                  {plan.period && <span className="text-xs text-slate-400 mb-0.5">{plan.period}</span>}
+                  {plan.period && <span className="text-sm font-semibold text-slate-300 mb-0.5">{plan.period}</span>}
                 </div>
                 {plan.id === "premium" && (
-                  <p className="mt-1 text-[10px] text-blue-300/70">≈ 5€/mois · annulable à tout moment</p>
+                  <p className="mt-1 text-[10px] text-blue-300/70">≈ 6,66€/mois · annulable à tout moment</p>
                 )}
                 {plan.id === "elite" && (
                   <p className="mt-1 text-[10px] text-amber-300/70">Paiement unique · pas d'abonnement</p>
@@ -254,7 +254,7 @@ export default function PricingPage() {
       <div className="mt-8 rounded-2xl border border-blue-400/20 bg-blue-500/8 px-6 py-4 text-center">
         <p className="text-sm text-slate-300">
           💡 <span className="font-semibold text-white">La majorité de nos candidats réussissent en moins de 8 semaines</span> avec Premium.
-          L'accès 3 mois est largement suffisant — et à 5€/mois c'est moins cher qu'un café.
+          L'accès 3 mois est largement suffisant — et à ~6,66€/mois c'est moins cher qu'un café.
         </p>
       </div>
 
