@@ -28,6 +28,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" className="h-full">
+      <head>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+      </head>
       <body className="min-h-full text-slate-100 antialiased pb-16">
         <UserProvider>
         <Suspense fallback={null}>
