@@ -27,6 +27,7 @@ const PLANS = [
       { label: "Historique & statistiques",    ok: false },
       { label: "Tous les niveaux",             ok: false },
       { label: "Contenu exclusif expert",      ok: false },
+      { label: "Espace communauté",             ok: false },
     ],
     cta: "Continuer sans compte",
     ctaAction: "anonymous",
@@ -52,6 +53,7 @@ const PLANS = [
       { label: "Historique des résultats",          ok: true  },
       { label: "Statistiques détaillées",           ok: false },
       { label: "Contenu exclusif expert",           ok: false },
+      { label: "Espace communauté Premium",         ok: false },
     ],
     cta: "Créer un compte gratuit",
     ctaAction: "register",
@@ -77,6 +79,7 @@ const PLANS = [
       { label: "Historique complet",           ok: true },
       { label: "Statistiques détaillées",      ok: true },
       { label: "Contenu exclusif expert",      ok: false },
+      { label: "Communauté (témoignages, forum, messages)", ok: true },
     ],
     cta: "Commencer ma préparation",
     ctaAction: "premium",
@@ -102,6 +105,7 @@ const PLANS = [
       { label: "Badge profil exclusif Élite",       ok: true },
       { label: "Accès prioritaire nouvelles features", ok: true },
       { label: "Support prioritaire dédié",         ok: true },
+      { label: "Communauté (témoignages, forum, messages)", ok: true, bold: true },
     ],
     cta: "Obtenir l'accès à vie",
     ctaAction: "elite",
@@ -286,6 +290,7 @@ export default function PricingPage() {
                 ["Mises à jour futures",   "—",         "—",          "—",          "✓ incluses"],
                 ["Badge Élite",            "—",         "—",          "—",          "✓"],
                 ["Support",                "—",         "Standard",   "Standard",   "Prioritaire"],
+                ["Communauté",             "—",         "—",          "✓ Complet",  "✓ Complet"],
               ].map(([feature, anon, free, prem, elite]) => (
                 <tr key={String(feature)}>
                   <td className="py-2 pr-4 text-slate-300">{feature}</td>

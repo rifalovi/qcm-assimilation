@@ -138,10 +138,10 @@ export default function NewTestimonyPage() {
     if (!error) setSubmitted(true)
   }
 
-  if (loading) return <main className="max-w-lg mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
+  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
 
   if (submitted) return (
-    <main className="max-w-lg mx-auto px-4 py-16 text-center">
+    <main className="max-w-2xl mx-auto px-4 py-16 text-center">
       <div className="w-16 h-16 bg-teal-900/40 rounded-full flex items-center justify-center mx-auto mb-4"><Check size={28} className="text-teal-600" /></div>
       <h1 className="text-xl font-medium text-white mb-2">Merci pour votre témoignage !</h1>
       <p className="text-sm text-slate-400 mb-6">Votre retour d&apos;expérience aidera d&apos;autres candidats à se préparer.</p>
@@ -153,7 +153,7 @@ export default function NewTestimonyPage() {
   )
 
   return (
-    <main className="max-w-lg mx-auto px-4 py-8 text-white">
+    <main className="max-w-2xl mx-auto px-4 py-8 text-white">
       <button onClick={() => step > 1 ? setStep(step - 1) : router.push('/communaute/temoignages')}
         className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-gray-600 transition-colors mb-6">
         <ArrowLeft size={15} />{step > 1 ? 'Étape précédente' : 'Retour'}

@@ -130,10 +130,10 @@ export default function MessagesPage() {
     return () => clearTimeout(timer)
   }, [searchQuery, currentUserId, supabase])
 
-  if (loading) return <main className="max-w-lg mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
+  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
 
   return (
-    <main className="max-w-lg mx-auto px-4 py-8">
+    <main className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <Link href="/communaute" className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors">
           <ArrowLeft size={15} />Communauté

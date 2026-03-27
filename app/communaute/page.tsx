@@ -151,7 +151,7 @@ export default async function CommunautePage() {
 
   // ── Rendu ────────────────────────────────────────────────────
   return (
-    <main className="max-w-2xl mx-auto px-4 py-8">
+    <main className="max-w-5xl mx-auto px-4 py-8">
 
       {/* En-tête */}
       <div className="mb-8">

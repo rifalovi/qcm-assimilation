@@ -158,11 +158,11 @@ export default function ForumPostPage() {
     setSubmitting(false)
   }
 
-  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
-  if (!post) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Discussion introuvable.</p></main>
+  if (loading) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
+  if (!post) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Discussion introuvable.</p></main>
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-8">
+    <main className="max-w-4xl mx-auto px-4 py-8">
       <button onClick={() => router.push('/communaute/forum')}
         className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors mb-6">
         <ArrowLeft size={15} />Forum

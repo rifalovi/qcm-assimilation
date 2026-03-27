@@ -102,16 +102,21 @@ export default function AppHeader() {
                     {/* Navigation */}
                     <div className="py-2">
                       {[
-                        ...(username && ["rifalovi@gmail.com"].includes(email ?? "") ? [{ href: "/dashboard", label: "Dashboard", icon: "📊" }] : []),
+                        ...(['super_admin','admin','moderator'].includes(role ?? '') ? [{ href: "/admin", label: "Administration", icon: "⚙️" }] : []),
                         { href: "/", label: "Accueil", icon: "🏠" },
                         { href: "/scroll", label: "Réviser", icon: "📚" },
                         { href: "/quiz", label: "S'entraîner", icon: "🎯" },
                         { href: "/exam", label: "Examen blanc", icon: "📝" },
                         { href: "/audio", label: "Audio", icon: "🎧" },
+                        ...(['premium','elite','moderator','admin','super_admin'].includes(role ?? '') ? [
+                          { href: "/communaute", label: "Communauté", icon: "👥" },
+                          { href: "/communaute/temoignages", label: "Témoignages", icon: "💬" },
+                          { href: "/communaute/forum", label: "Forum", icon: "🗣️" },
+                          { href: "/communaute/messages", label: "Messages", icon: "✉️" },
+                        ] : []),
                         { href: "/results", label: "Résultats", icon: "📊" },
                         { href: "/account", label: "Mon compte", icon: "👤" },
                         { href: "/resources", label: "Ressources", icon: "🏛️" },
-                        { href: "/info", label: "Infos", icon: "ℹ️" },
                         { href: "/pricing", label: "Tarifs", icon: "👑" },
                       ].map((item) => (
                         <Link

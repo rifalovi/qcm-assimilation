@@ -37,10 +37,10 @@ export default function NewForumPostPage() {
     if (!error && data) router.push(`/communaute/forum/${data.id}`)
   }
 
-  if (loading) return <main className="max-w-lg mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
+  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
 
   return (
-    <main className="max-w-lg mx-auto px-4 py-8">
+    <main className="max-w-2xl mx-auto px-4 py-8">
       <button onClick={() => router.push('/communaute/forum')}
         className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors mb-6">
         <ArrowLeft size={15} />Retour au forum

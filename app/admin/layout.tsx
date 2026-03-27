@@ -28,8 +28,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { cookies: { getAll() { return cookieStore.getAll() }, setAll(s) { s.forEach(({ name, value, options }) => cookieStore.set(name, value, options)) } } }
   )
 
+  // Exclut la page de login du layout admin
+  const { headers } = await import('next/headers')
+  const headersList = await headers()
+  const pathname = headersList.get('x-invoke-path') ?? ''
+  if (pathname === '/admin/login') return <>{children}</>
+
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login?redirect=/admin')
+  if (!user) redirect('/admin/login')
 
   // Utilise le service role key pour bypasser le RLS
   const adminClient = createAdminClient(
