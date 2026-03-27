@@ -85,7 +85,7 @@ export default function AppHeader() {
                 {/* Dropdown menu */}
                 {open && (
                   <div
-                    className="absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-1rem)] overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.50)]"
+                    className="absolute right-0 top-full mt-2 w-72 max-w-[calc(100vw-1rem)] overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.50)]"
                     style={{
                       background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)",
                       backdropFilter: "blur(16px)",
@@ -104,7 +104,7 @@ export default function AppHeader() {
                       <div className="px-2 pt-2">
                         <Link href="/admin" className="flex items-center gap-2.5 px-2 py-2 rounded-xl bg-red-500/5 hover:bg-red-500/10 transition">
                           <span className="w-7 h-7 rounded-lg bg-red-900/40 flex items-center justify-center text-sm flex-shrink-0">⚙️</span>
-                          <div><p className="text-xs font-medium text-red-300">Administration</p><p className="text-[10px] text-slate-500">Dashboard & modération</p></div>
+                          <div><p className="text-xs font-medium text-red-300">Administration</p><p className="text-xs text-slate-500">Dashboard & modération</p></div>
                         </Link>
                         <div className="my-2 h-px bg-white/6" />
                       </div>
@@ -112,7 +112,7 @@ export default function AppHeader() {
 
                     {/* Apprendre */}
                     <div className="px-2 pt-1">
-                      <p className="text-[10px] text-slate-500 uppercase tracking-wider px-2 mb-1">Apprendre</p>
+                      <p className="text-xs text-slate-500 uppercase tracking-wider px-2 mb-1">Apprendre</p>
                       <div className="grid grid-cols-2 gap-0.5">
                         {[
                           { href: "/scroll", icon: "📱", label: "Réviser", sub: "Flash-cards" },
@@ -120,9 +120,9 @@ export default function AppHeader() {
                           { href: "/exam", icon: "📝", label: "Examen", sub: "Blanc" },
                           { href: "/audio", icon: "🎧", label: "Audio", sub: "100 épisodes" },
                         ].map(({ href, icon, label, sub }) => (
-                          <Link key={href} href={href} className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition">
-                            <span className="w-6 h-6 rounded-lg bg-blue-900/40 flex items-center justify-center text-xs flex-shrink-0">{icon}</span>
-                            <div><p className="text-xs text-slate-300">{label}</p><p className="text-[10px] text-slate-500">{sub}</p></div>
+                          <Link key={href} href={href} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-white/5 transition">
+                            <span className="w-8 h-8 rounded-lg bg-blue-900/40 flex items-center justify-center text-sm flex-shrink-0">{icon}</span>
+                            <div><p className="text-sm text-slate-300">{label}</p><p className="text-xs text-slate-500">{sub}</p></div>
                           </Link>
                         ))}
                       </div>
@@ -132,7 +132,7 @@ export default function AppHeader() {
                     {['premium','elite','moderator','admin','super_admin'].includes(role ?? '') && (
                       <div className="px-2 pt-2">
                         <div className="my-1 h-px bg-white/6" />
-                        <p className="text-[10px] text-slate-500 uppercase tracking-wider px-2 mb-1">Communauté</p>
+                        <p className="text-xs text-slate-500 uppercase tracking-wider px-2 mb-1">Communauté</p>
                         <div className="grid grid-cols-2 gap-0.5">
                           {[
                             { href: "/communaute/temoignages", icon: "💬", label: "Témoignages", sub: "Retours" },
@@ -140,9 +140,9 @@ export default function AppHeader() {
                             { href: "/communaute/messages", icon: "✉️", label: "Messages", sub: "Privés" },
                             { href: "/communaute", icon: "👥", label: "Hub", sub: "Communauté" },
                           ].map(({ href, icon, label, sub }) => (
-                            <Link key={href} href={href} className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition">
-                              <span className="w-6 h-6 rounded-lg bg-teal-900/40 flex items-center justify-center text-xs flex-shrink-0">{icon}</span>
-                              <div><p className="text-xs text-slate-300">{label}</p><p className="text-[10px] text-slate-500">{sub}</p></div>
+                            <Link key={href} href={href} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-white/5 transition">
+                              <span className="w-8 h-8 rounded-lg bg-teal-900/40 flex items-center justify-center text-sm flex-shrink-0">{icon}</span>
+                              <div><p className="text-sm text-slate-300">{label}</p><p className="text-xs text-slate-500">{sub}</p></div>
                             </Link>
                           ))}
                         </div>
@@ -159,9 +159,9 @@ export default function AppHeader() {
                           { href: "/resources", icon: "🏛️", label: "Ressources" },
                           { href: "/pricing", icon: "👑", label: "Tarifs" },
                         ].map(({ href, icon, label }) => (
-                          <Link key={href} href={href} className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition">
-                            <span className="w-6 h-6 rounded-lg bg-slate-700/60 flex items-center justify-center text-xs flex-shrink-0">{icon}</span>
-                            <p className="text-xs text-slate-300">{label}</p>
+                          <Link key={href} href={href} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-white/5 transition">
+                            <span className="w-8 h-8 rounded-lg bg-slate-700/60 flex items-center justify-center text-sm flex-shrink-0">{icon}</span>
+                            <p className="text-sm text-slate-300">{label}</p>
                           </Link>
                         ))}
                       </div>
