@@ -15,6 +15,20 @@ function ResetForm() {
     e.preventDefault()
     setLoading(true)
 
+    // Vérification Turnstile
+    const verif = await fetch('/api/verify-turnstile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: turnstileToken })
+    })
+    const { success } = await verif.json()
+    if (!success) {
+      setMessage({ type: 'error', text: 'Vérification de sécurité échouée. Réessaie.' })
+      setTurnstileToken(null)
+      setLoading(false)
+      return
+    }
+
     const supabase = createClient()
     const { error } = await supabase.auth.updateUser({ password })
 

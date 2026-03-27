@@ -7,6 +7,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: "Token manquant" }, { status: 400 });
   }
 
+  // En développement, bypass Turnstile (les clés de test ne valident pas côté API)
+  if (process.env.NODE_ENV === "development") {
+    return NextResponse.json({ success: true });
+  }
+
   const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

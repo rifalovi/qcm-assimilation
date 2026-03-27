@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Turnstile } from '@marsidev/react-turnstile';
 import { mergeLocalAccountToAuthenticatedUser } from "@/lib/mergeLocalAccount";
 
 type Step = "form" | "otp" | "confirmed";
@@ -21,6 +22,8 @@ function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileKey, setTurnstileKey] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   async function handleRegister(e: React.FormEvent) {
@@ -31,6 +34,21 @@ function RegisterForm() {
     const supabase = createClient();
     const normalizedEmail = email.trim().toLowerCase();
     const trimmedUsername = username.trim();
+
+    // Vérification Turnstile
+    const verif = await fetch('/api/verify-turnstile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: turnstileToken })
+    })
+    const { success } = await verif.json()
+    if (!success) {
+      setError("Vérification de sécurité échouée. Réessaie.")
+      setTurnstileKey(k => k + 1)
+      setTurnstileToken(null)
+      setLoading(false)
+      return
+    }
 
     const { error } = await supabase.auth.signUp({
       email: normalizedEmail,
@@ -476,9 +494,17 @@ function RegisterForm() {
   </div>
 )}
    
+              <Turnstile
+                key={turnstileKey}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                onSuccess={(token) => setTurnstileToken(token)}
+                onExpire={() => setTurnstileToken(null)}
+                options={{ theme: "dark", language: "fr" }}
+                className="mb-2"
+              />
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !turnstileToken}
                 className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:brightness-105 disabled:opacity-50"
               >
                 {loading ? "Création..." : "Créer mon compte"}
