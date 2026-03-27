@@ -26,10 +26,14 @@ export default async function UsersPage() {
     .limit(200)
 
   // Emails via auth admin API
-  const { data: authData } = await adminClient.auth.admin.listUsers({ perPage: 200 })
   const emailMap: Record<string, string> = {}
-  for (const u of authData?.users ?? []) {
-    emailMap[u.id] = u.email ?? ''
+  try {
+    const { data: authData } = await adminClient.auth.admin.listUsers({ perPage: 200 })
+    for (const u of authData?.users ?? []) {
+      emailMap[u.id] = u.email ?? ''
+    }
+  } catch (e) {
+    console.error('listUsers error:', e)
   }
 
   const { data: bans } = await supabase.from('bans').select('user_id')
