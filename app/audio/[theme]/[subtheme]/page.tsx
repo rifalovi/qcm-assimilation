@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "../../../components/UserContext";
 import { audioEpisodes, type AudioEpisode, type AudioThemeKey } from "@/data/audioEpisodes";
+import { trackEvent } from "@/lib/posthog";
 
 const SUBTHEME_IMAGES: Record<string, string> = {
   valeurs_republique: "/themes/valeurs_republique.jpg",
@@ -147,7 +148,15 @@ function useAudioPlayer(
       audioRef.current.pause();
       setPlaying(false);
     } else {
-      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      audioRef.current.play().then(() => {
+        setPlaying(true);
+        trackEvent("audio_played", {
+          episode_slug: episode?.episodeSlug,
+          episode_title: episode?.episodeTitle,
+          subtheme: episode?.subthemeKey,
+          episode_number: episode?.episodeNumber,
+        });
+      }).catch(() => {});
       setAutoPlay(true);
     }
   }, [playing, setAutoPlay]);

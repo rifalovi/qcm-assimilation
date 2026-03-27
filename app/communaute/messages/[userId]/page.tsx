@@ -3,13 +3,16 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, Send } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
+import MediaInput from '@/components/community/MediaInput'
+import MediaDisplay from '@/components/community/MediaDisplay'
 
 type Message = {
   id: string
   sender_id: string
   receiver_id: string
   content: string
+  attachments?: string[]
   is_read: boolean
   created_at: string
 }
@@ -198,6 +201,7 @@ export default function ConversationPage() {
                     : 'bg-slate-700 text-slate-100 rounded-bl-sm'
                 } ${msg.id.startsWith('temp-') ? 'opacity-70' : ''}`}>
                   {msg.content}
+                  {msg.attachments && msg.attachments.length > 0 && <MediaDisplay attachments={msg.attachments} content={msg.content} />}
                 </div>
               </div>
             </div>
@@ -207,27 +211,35 @@ export default function ConversationPage() {
       </div>
 
       {/* Zone de saisie fixe */}
-      <div className="flex items-end gap-2 px-4 py-3 border-t border-slate-700 bg-slate-900 flex-shrink-0">
-        <textarea
-          ref={inputRef}
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
-          placeholder="Message… (Entrée pour envoyer)"
-          rows={1}
-          maxLength={2000}
-          style={{ resize: 'none' }}
-          className="flex-1 border border-slate-600 rounded-2xl px-4 py-2.5 text-sm bg-slate-800 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 overflow-hidden"
-          onInput={(e) => {
-            const t = e.target as HTMLTextAreaElement
-            t.style.height = 'auto'
-            t.style.height = Math.min(t.scrollHeight, 120) + 'px'
+      <div className="px-4 py-3 border-t border-slate-700 bg-slate-900 flex-shrink-0">
+        <MediaInput
+          onSubmit={async (content, attachments) => {
+            if (!content.trim() && attachments.length === 0) return
+            const optimistic: Message = {
+              id: `temp-${Date.now()}`,
+              sender_id: currentUserId,
+              receiver_id: otherUserId,
+              content,
+              attachments,
+              is_read: false,
+              created_at: new Date().toISOString(),
+            }
+            setMessages((m) => [...m, optimistic])
+            const { data, error } = await supabase
+              .from('direct_messages')
+              .insert({ sender_id: currentUserId, receiver_id: otherUserId, content, attachments })
+              .select('id, sender_id, receiver_id, content, attachments, is_read, created_at')
+              .single()
+            if (!error && data) {
+              setMessages((m) => m.map((msg) => msg.id === optimistic.id ? data as Message : msg))
+            } else {
+              setMessages((m) => m.filter((msg) => msg.id !== optimistic.id))
+            }
           }}
+          placeholder="Message…"
+          submitLabel="Envoyer"
+          rows={1}
         />
-        <button onClick={handleSend} disabled={!newMessage.trim() || sending}
-          className="p-2.5 bg-teal-600 text-white rounded-xl hover:bg-teal-700 disabled:opacity-40 transition-colors flex-shrink-0">
-          <Send size={16} />
-        </button>
       </div>
     </main>
   )

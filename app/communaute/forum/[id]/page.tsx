@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, Send, Flag, Pin, Mail } from 'lucide-react'
+import { ArrowLeft, Flag, Pin, Mail } from 'lucide-react'
 import ShareButton from '@/components/ShareButton'
+import MediaInput from '@/components/community/MediaInput'
+import MediaDisplay, { renderTextWithLinks } from '@/components/community/MediaDisplay'
 
 type Post = {
   id: string; user_id: string; title: string; content: string
@@ -73,7 +75,8 @@ function ReplyCard({ reply, currentUserId, supabase }: { reply: Reply; currentUs
           <span className="text-sm font-medium text-white">{formatName(reply.profiles)}</span>
           <span className="text-xs text-slate-500">{timeAgo(reply.created_at)}</span>
         </div>
-        <p className="text-sm text-slate-300 leading-relaxed mb-2">{reply.content}</p>
+        <p className="text-sm text-slate-300 leading-relaxed mb-2">{renderTextWithLinks(reply.content)}</p>
+        <MediaDisplay attachments={(reply as Reply & { attachments?: string[] }).attachments ?? []} content={reply.content} />
         <div className="flex items-center justify-between">
           <div className="flex gap-1">
             {EMOJIS.map((emoji) => {
@@ -214,17 +217,25 @@ export default function ForumPostPage() {
       </div>
 
       {/* Formulaire réponse */}
-      <div className="flex gap-2">
-        <textarea value={newReply} onChange={(e) => setNewReply(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleReply())}
-          placeholder="Votre réponse… (Entrée pour envoyer, Maj+Entrée pour sauter une ligne)"
-          rows={3} maxLength={2000}
-          className="flex-1 border border-slate-600 rounded-2xl px-4 py-3 text-sm bg-slate-800 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 resize-none" />
-        <button onClick={handleReply} disabled={!newReply.trim() || submitting}
-          className="self-end p-3 bg-teal-600 text-white rounded-xl hover:bg-teal-700 disabled:opacity-40 transition-colors">
-          <Send size={16} />
-        </button>
-      </div>
+      <MediaInput
+        onSubmit={async (content, attachments) => {
+          if (!content.trim() && attachments.length === 0) return
+          setSubmitting(true)
+          const { data, error } = await supabase
+            .from('forum_replies')
+            .insert({ post_id: params.id, user_id: currentUserId, content, attachments })
+            .select('id, user_id, content, created_at, profiles ( first_name, last_name )')
+            .single()
+          if (!error && data) {
+            setReplies((r) => [...r, data as unknown as Reply])
+            await supabase.from('forum_posts').update({ reply_count: replies.length + 1 }).eq('id', params.id)
+          }
+          setSubmitting(false)
+        }}
+        placeholder="Votre réponse… (Entrée pour envoyer)"
+        submitLabel="Répondre"
+        rows={2}
+      />
     </main>
   )
 }

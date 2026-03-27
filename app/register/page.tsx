@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { trackEvent } from "@/lib/posthog";
 import { mergeLocalAccountToAuthenticatedUser } from "@/lib/mergeLocalAccount";
 
 type Step = "form" | "otp" | "confirmed";
@@ -95,6 +96,7 @@ function RegisterForm() {
       await mergeLocalAccountToAuthenticatedUser();
     }
 
+    trackEvent("register_completed", { email });
     setStep("confirmed");
     setLoading(false);
   }
