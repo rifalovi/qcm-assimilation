@@ -29,7 +29,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?redirect=/admin')
 
-  const { data: profile } = await supabase
+  // Utilise le service role key pour bypasser le RLS
+  const { createClient } = await import('@supabase/supabase-js')
+  const adminClient = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+
+  const { data: profile } = await adminClient
     .from('profiles')
     .select('role, username')
     .eq('id', user.id)
