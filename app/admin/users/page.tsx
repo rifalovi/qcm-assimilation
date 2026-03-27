@@ -40,6 +40,7 @@ export default async function UsersPage() {
   const bannedIds = new Set((bans ?? []).map((b) => b.user_id))
 
   // Enrichit avec email
+  console.log('rawUsers count:', rawUsers?.length, 'error check')
   const users = (rawUsers ?? []).map((u) => ({
     id: u.id as string,
     username: u.username as string,
@@ -56,7 +57,7 @@ export default async function UsersPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-medium text-white mb-1">Utilisateurs</h1>
-        <p className="text-sm text-slate-400">{users.length} membres enregistrés</p>
+        <p className="text-sm text-slate-400">{users.length} membres enregistrés (raw: {rawUsers?.length ?? 0})</p>
       </div>
       <UserActions users={users} bannedIds={[...bannedIds]} currentRole={currentProfile?.role ?? ''} />
     </div>
