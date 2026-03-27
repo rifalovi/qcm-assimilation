@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { saveResultToSupabase } from "../../src/lib/saveResult";
+import { trackEvent } from "../../src/lib/posthog";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
 import type { ChoiceKey, Level, Theme, Question } from "../../src/data/questions";
@@ -79,6 +80,12 @@ export default function QuizPage() {
     else setGlobalTime(null);
 
     setMeta({
+      level: parsed.level,
+      themes: parsed.themes,
+      count: parsed.count,
+      mode: m,
+    });
+    trackEvent("quiz_started", {
       level: parsed.level,
       themes: parsed.themes,
       count: parsed.count,
@@ -234,6 +241,16 @@ function selectAnswer(choice: ChoiceKey) {
 
     const result = scoreQuiz({ questions, answers });
     markQuestionsAsSeen(questions.map(q => q.id));
+    const _percent = result.total > 0 ? Math.round((result.correct / result.total) * 100) : 0;
+    trackEvent("quiz_completed", {
+      score_correct: result.correct,
+      score_total: result.total,
+      score_percent: _percent,
+      passed: result.correct >= 32,
+      mode: mode,
+      level: meta?.level,
+      themes: meta?.themes,
+    });
     const payload = { meta, questions, answers, result };
 
     const rawUser = localStorage.getItem("qcm_user");

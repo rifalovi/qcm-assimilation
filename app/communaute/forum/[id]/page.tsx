@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { ArrowLeft, Send, Flag, Pin, Mail } from 'lucide-react'
+import ShareButton from '@/components/ShareButton'
 
 type Post = {
   id: string; user_id: string; title: string; content: string
@@ -188,6 +189,12 @@ export default function ForumPostPage() {
             Contacter {formatName(post.profiles)}
           </button>
         )}
+        <ShareButton
+          url={`/communaute/forum/${post.id}`}
+          title={post.title}
+          text={`Discussion sur Cap Citoyen : ${post.title}`}
+          size={14}
+        />
       </div>
 
       {/* Réponses */}

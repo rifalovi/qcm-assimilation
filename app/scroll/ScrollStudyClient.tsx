@@ -7,6 +7,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { Question, MCQVariant } from "@/types/questions";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
+import { trackEvent } from "@/lib/posthog";
 
 // Type union : question normale OU carte CTA
 type CardItem = Question | { type: "cta"; ctaRole: "anonymous" | "freemium" | "premium" | "elite"; hasTheme: boolean; cardsCount: number };
@@ -48,6 +49,7 @@ function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "fr
 
       <a
         href={isAnon ? "/register" : "/pricing"}
+        onClick={() => trackEvent("upgrade_clicked", { source: "scroll_cta", role: ctaRole })}
         className="w-full max-w-xs rounded-2xl py-3.5 text-sm font-bold transition hover:brightness-110 active:scale-95"
         style={{
           background: isAnon
@@ -860,7 +862,16 @@ useEffect(() => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveIndex(parseInt((entry.target as HTMLElement).dataset.index || "0"));
+            const idx = parseInt((entry.target as HTMLElement).dataset.index || "0");
+            setActiveIndex(idx);
+            const card = filteredQuestions[idx];
+            if (card && !(card as any).type) {
+              trackEvent("scroll_card_viewed", {
+                question_id: (card as any).id,
+                theme: (card as any).theme,
+                index: idx,
+              });
+            }
           }
         });
       },

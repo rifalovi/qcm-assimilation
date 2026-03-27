@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Star, MessageCircle, Flag, ChevronDown, ChevronUp, Send, Mail } from 'lucide-react'
+import ShareButton from '@/components/ShareButton'
 export type Testimony = {
   id: string
   user_id: string
@@ -317,6 +318,12 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
               <Mail size={13} />
             </button>
           )}
+          <ShareButton
+            url={`/communaute/temoignages#${testimony.id}`}
+            title="Témoignage — Cap Citoyen"
+            text="Découvre ce retour d'expérience sur la naturalisation 🇫🇷"
+            size={13}
+          />
           {/* Bouton commentaires */}
           <button
             onClick={toggleComments}

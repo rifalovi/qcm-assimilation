@@ -5,6 +5,7 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import ShareButton from '@/components/ShareButton'
 import { MessageSquare, Users, BookOpen, Star, ArrowRight, Plus } from 'lucide-react'
 
 // ── Types ──────────────────────────────────────────────────────
@@ -292,6 +293,17 @@ export default async function CommunautePage() {
         </Link>
       </div>
 
+
+      {/* Bouton partage flottant */}
+      <div className="fixed bottom-24 right-4 z-30">
+        <ShareButton
+          url="/communaute"
+          title="Cap Citoyen — Espace communauté"
+          text="Rejoins la communauté Cap Citoyen pour préparer ta naturalisation 🇫🇷"
+          size={18}
+          className="bg-slate-800 border border-slate-700 rounded-full p-1 shadow-lg"
+        />
+      </div>
     </main>
   )
 }
