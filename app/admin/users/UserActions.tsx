@@ -155,6 +155,7 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
         {filtered.length === 0 && (
           <p className="text-center text-slate-500 text-sm py-8">Aucun utilisateur trouvé</p>
         )}
+        </div>
       </div>
     </div>
   )
