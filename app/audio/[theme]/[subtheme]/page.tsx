@@ -34,12 +34,23 @@ function fmt(s: number) {
 }
 
 // ─── Hook audio ─────────────────────────────────────────────────────────────
-// Toutes les refs servent à éviter les stale closures en arrière-plan iOS.
-// autoPlayRef  : valeur courante de autoPlay sans dépendre de la closure
-// onNextRef    : fonction onNext toujours à jour
-// onPrevRef    : fonction onPrev toujours à jour
-// currentIdxRef: index courant toujours à jour pour handleEnded et Media Session
-// shouldPlayOnLoad : indique si on doit lancer le play quand l'audio est prêt
+//
+// 🎓 PATTERN "Single Audio Element" — pourquoi ?
+//
+// iOS Safari suspend le JS quand l'écran est verrouillé ou que l'app passe
+// en arrière-plan. React ne peut donc plus re-render, setState, ni appeler
+// audio.play() de façon programmatique.
+//
+// La seule séquence qui fonctionne sur iOS en arrière-plan :
+//   audio.src = newUrl  →  audio.load()  →  audio.play()
+// … mais UNIQUEMENT sur le MÊME élément audio qui a déjà eu l'autorisation
+// utilisateur (user gesture). Si React démonte/remonte l'élément <audio>,
+// l'autorisation est perdue et iOS bloque le play().
+//
+// Solution : on crée l'élément Audio() une seule fois via useRef + useEffect,
+// et on ne le détruit jamais. On change audio.src directement sans passer
+// par le JSX.
+//
 function useAudioPlayer(
   episodes: AudioEpisode[],
   currentIdx: number,
@@ -50,9 +61,26 @@ function useAudioPlayer(
   setAutoPlay: (v: boolean) => void,
   playTrigger: number = 0
 ) {
-  const audioRef = useRef<HTMLAudioElement>(null);
+  // ── Élément audio persistant ──────────────────────────────────────────────
+  // Créé une seule fois, jamais démonté. C'est la clé pour iOS.
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Refs toujours à jour — évitent les stale closures en arrière-plan
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+      audioRef.current.preload = "auto";
+    }
+    // Nettoyage quand la page est démontée (navigation)
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = "";
+      }
+    };
+  }, []);
+
+  // ── Refs toujours à jour — évitent les stale closures en arrière-plan ─────
   const autoPlayRef      = useRef(autoPlay);
   const onNextRef        = useRef(onNext);
   const onPrevRef        = useRef(onPrev);
@@ -66,71 +94,20 @@ function useAudioPlayer(
   useEffect(() => { currentIdxRef.current  = currentIdx;      }, [currentIdx]);
   useEffect(() => { episodesLenRef.current = episodes.length; }, [episodes.length]);
 
-  const [playing,    setPlaying]    = useState(false);
-  const [progress,   setProgress]   = useState(0);
-  const [currentTime,setCurrentTime]= useState(0);
-  const [duration,   setDuration]   = useState(0);
-  const [loaded,     setLoaded]     = useState(false);
-  const [audioUrl,   setAudioUrl]   = useState<string | null>(null);
-  const [fetchError, setFetchError] = useState(false);
+  const [playing,     setPlaying]    = useState(false);
+  const [progress,    setProgress]   = useState(0);
+  const [currentTime, setCurrentTime]= useState(0);
+  const [duration,    setDuration]   = useState(0);
+  const [loaded,      setLoaded]     = useState(false);
+  const [fetchError,  setFetchError] = useState(false);
 
   const episode = episodes[currentIdx];
 
-  // Charger l'URL audio à chaque changement d'épisode ou playTrigger
-  useEffect(() => {
-    const isFreeEpisode = FREE_EPISODE_NUMBERS.has(episode?.episodeNumber ?? 0);
-    if (!episode || (!isPremium && !isFreeEpisode)) return;
-
-    setPlaying(false); setProgress(0); setCurrentTime(0);
-    setDuration(0); setLoaded(false); setAudioUrl(null); setFetchError(false);
-
-    // Capturer la valeur courante de autoPlay AVANT le fetch async
-    shouldPlayOnLoad.current = autoPlayRef.current;
-
-    fetch(`/api/audio/${episode.episodeSlug}`)
-      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
-      .then((d) => { setAudioUrl(d.url); })
-      .catch(() => setFetchError(true));
-  }, [episode?.episodeSlug, isPremium, playTrigger]);
-
-  // Quand l'URL arrive : jouer si shouldPlayOnLoad
-  // NOTE: on n'appelle PAS .play() ici car iOS bloque les appels programmatiques
-  // hors événement utilisateur. On utilise autoPlay={shouldPlayOnLoad.current}
-  // sur l'élément <audio> à la place (voir StickyPlayer).
-
-  // handleEnded : en arrière-plan iOS, React est suspendu.
-  // On charge directement l'URL du prochain épisode dans l'élément audio
-  // sans passer par setState/React pour éviter la suspension.
+  // ── Pré-fetch URL prochain épisode ────────────────────────────────────────
+  // On stocke l'URL du prochain épisode en avance dans nextUrlRef pour
+  // pouvoir l'utiliser immédiatement dans handleEnded, sans fetch bloquant.
   const nextUrlRef = useRef<string | null>(null);
 
-  const handleEnded = useCallback(() => {
-    setPlaying(false);
-    if (!autoPlayRef.current) return;
-    const nextIdx = currentIdxRef.current + 1;
-    if (nextIdx >= episodesLenRef.current) return;
-
-    if (nextUrlRef.current && audioRef.current) {
-      // Charger et jouer directement — fonctionne en arrière-plan
-      // car on est dans la continuité d'une session audio déjà autorisée
-      const url = nextUrlRef.current;
-      nextUrlRef.current = null;
-      audioRef.current.src = url;
-      audioRef.current.load();
-      // onended est perdu après src change — on le réattache
-      audioRef.current.onended = handleEndedRef.current;
-      audioRef.current.play().catch(() => {});
-    }
-    // Mettre à jour React pour l'UI
-    setTimeout(() => onNextRef.current(), 100);
-  }, []);
-
-  // Ref vers handleEnded pour le réattacher après changement de src
-  const handleEndedRef = useRef<EventListener | null>(null);
-  useEffect(() => {
-    handleEndedRef.current = handleEnded as EventListener;
-  }, [handleEnded]);
-
-  // Pré-fetcher l'URL du prochain épisode en avance
   useEffect(() => {
     const nextIdx = currentIdx + 1;
     if (!isPremium || nextIdx >= episodes.length) { nextUrlRef.current = null; return; }
@@ -142,13 +119,142 @@ function useAudioPlayer(
       .catch(() => { nextUrlRef.current = null; });
   }, [currentIdx, isPremium, episodes]);
 
+  // ── Chargement URL épisode courant ────────────────────────────────────────
+  // 🎓 On ne remet PAS audioUrl dans le state pour éviter que React
+  // re-monte l'élément <audio>. On change audio.src directement.
+  useEffect(() => {
+    const isFreeEpisode = FREE_EPISODE_NUMBERS.has(episode?.episodeNumber ?? 0);
+    if (!episode || (!isPremium && !isFreeEpisode)) return;
+
+    setPlaying(false);
+    setProgress(0);
+    setCurrentTime(0);
+    setDuration(0);
+    setLoaded(false);
+    setFetchError(false);
+
+    // Capturer autoPlay AVANT le fetch async (évite stale closure)
+    shouldPlayOnLoad.current = autoPlayRef.current;
+
+    fetch(`/api/audio/${episode.episodeSlug}`)
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+      .then(d => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        // ── Reconfigurer les event listeners sur le même élément ──────────
+        // On retire les anciens pour éviter les doublons
+        audio.onended      = null;
+        audio.ontimeupdate = null;
+        audio.onloadedmetadata = null;
+        audio.onplay       = null;
+        audio.onpause      = null;
+
+        audio.src = d.url;
+        audio.load();
+
+        audio.ontimeupdate = () => {
+          setCurrentTime(audio.currentTime);
+          setProgress((audio.currentTime / (audio.duration || 1)) * 100);
+        };
+        audio.onloadedmetadata = () => {
+          setDuration(audio.duration ?? 0);
+          setLoaded(true);
+          // 🎓 Sur iOS, on peut appeler play() ici car on est dans la
+          // continuité de la session audio autorisée par le user gesture initial.
+          if (shouldPlayOnLoad.current) {
+            audio.play().then(() => setPlaying(true)).catch(() => {});
+          }
+        };
+        audio.onplay  = () => setPlaying(true);
+        audio.onpause = () => setPlaying(false);
+        audio.onended = handleEndedRef.current;
+      })
+      .catch(() => setFetchError(true));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [episode?.episodeSlug, isPremium, playTrigger]);
+
+  // ── handleEnded ───────────────────────────────────────────────────────────
+  // 🎓 Cette fonction s'exécute quand un épisode se termine.
+  // Sur iOS en arrière-plan, React est suspendu. On ne peut PAS faire de
+  // setState ici — uniquement manipuler directement audioRef.current.
+  //
+  // Flux :
+  //  1. nextUrlRef.current disponible ?  → src = url, load, play (immédiat)
+  //  2. Sinon → fetch l'URL puis src/load/play
+  //  3. Dans les deux cas → setTimeout pour réveiller React et mettre l'UI à jour
+  //
+  const handleEnded = useCallback(() => {
+    setPlaying(false);
+    if (!autoPlayRef.current) return;
+    const nextIdx = currentIdxRef.current + 1;
+    if (nextIdx >= episodesLenRef.current) return;
+
+    const doPlay = (url: string) => {
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      audio.onended      = null;
+      audio.ontimeupdate = null;
+      audio.onloadedmetadata = null;
+
+      audio.src = url;
+      audio.load();
+
+      audio.onloadedmetadata = () => {
+        setDuration(audio.duration ?? 0);
+        setLoaded(true);
+        audio.play().then(() => setPlaying(true)).catch(() => {});
+      };
+      audio.ontimeupdate = () => {
+        setCurrentTime(audio.currentTime);
+        setProgress((audio.currentTime / (audio.duration || 1)) * 100);
+      };
+      // Réattacher handleEnded pour les épisodes suivants
+      audio.onended = handleEndedRef.current;
+      audio.onplay  = () => setPlaying(true);
+      audio.onpause = () => setPlaying(false);
+
+      // Mettre à jour React pour l'UI (setTimeout pour ne pas bloquer iOS)
+      setTimeout(() => onNextRef.current(), 100);
+    };
+
+    if (nextUrlRef.current) {
+      // Cas idéal : URL déjà pré-fetchée, lecture immédiate
+      const url = nextUrlRef.current;
+      nextUrlRef.current = null;
+      doPlay(url);
+    } else {
+      // Fallback : fetch à la volée (peut être lent sur iOS en arrière-plan)
+      const nextEp = episodes[nextIdx]; // snapshot locale pour éviter stale
+      if (!nextEp) return;
+      fetch(`/api/audio/${nextEp.episodeSlug}`)
+        .then(r => r.json())
+        .then(d => doPlay(d.url))
+        .catch(() => {});
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [episodes]);
+
+  // Ref vers handleEnded pour pouvoir le réattacher sans créer de closure stale
+  const handleEndedRef = useRef<(() => void)>(handleEnded);
+  useEffect(() => { handleEndedRef.current = handleEnded; }, [handleEnded]);
+
+  // Attacher handleEnded à l'élément audio au montage initial
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.onended = handleEndedRef.current;
+    }
+  }, []);
+
   const togglePlay = useCallback(() => {
-    if (!audioRef.current) return;
+    const audio = audioRef.current;
+    if (!audio) return;
     if (playing) {
-      audioRef.current.pause();
+      audio.pause();
       setPlaying(false);
     } else {
-      audioRef.current.play().then(() => {
+      audio.play().then(() => {
         setPlaying(true);
         trackEvent("audio_played", {
           episode_slug: episode?.episodeSlug,
@@ -159,15 +265,19 @@ function useAudioPlayer(
       }).catch(() => {});
       setAutoPlay(true);
     }
-  }, [playing, setAutoPlay]);
+  }, [playing, setAutoPlay, episode]);
 
   const skip = useCallback((s: number) => {
-    if (!audioRef.current) return;
-    audioRef.current.currentTime = Math.max(0, Math.min(audioRef.current.currentTime + s, audioRef.current.duration || 0));
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = Math.max(0, Math.min(audio.currentTime + s, audio.duration || 0));
   }, []);
 
-  // Media Session API — contrôles écran de verrouillage (premium uniquement)
-  // Utilise des refs pour éviter les stale closures quand la page est suspendue
+  // ── Media Session API ─────────────────────────────────────────────────────
+  // 🎓 Les contrôles de l'écran de verrouillage passent par cette API.
+  // Sur iOS, les handlers "nexttrack" et "previoustrack" sont appelés même
+  // quand le JS est suspendu — iOS les exécute dans un contexte prioritaire.
+  // On utilise des refs pour que les handlers aient toujours les valeurs à jour.
   useEffect(() => {
     if (!isPremium || !episode || typeof window === "undefined" || !("mediaSession" in navigator)) return;
 
@@ -176,9 +286,9 @@ function useAudioPlayer(
       : [];
 
     navigator.mediaSession.metadata = new MediaMetadata({
-      title:   episode.episodeTitle,
-      artist:  "Cap Citoyen",
-      album:   episode.subthemeLabel,
+      title:  episode.episodeTitle,
+      artist: "Cap Citoyen",
+      album:  episode.subthemeLabel,
       artwork,
     });
 
@@ -194,13 +304,26 @@ function useAudioPlayer(
     });
     navigator.mediaSession.setActionHandler("nexttrack", () => {
       if (currentIdxRef.current >= episodesLenRef.current - 1) return;
+      // Sur iOS : utiliser nextUrlRef si disponible pour enchaîner sans fetch
       if (nextUrlRef.current && audioRef.current) {
         const url = nextUrlRef.current;
         nextUrlRef.current = null;
-        audioRef.current.src = url;
-        audioRef.current.load();
-        audioRef.current.onended = handleEndedRef.current;
-        audioRef.current.play().catch(() => {});
+        const audio = audioRef.current;
+        audio.onended = null;
+        audio.src = url;
+        audio.load();
+        audio.onloadedmetadata = () => {
+          setDuration(audio.duration ?? 0);
+          setLoaded(true);
+          audio.play().then(() => setPlaying(true)).catch(() => {});
+        };
+        audio.ontimeupdate = () => {
+          setCurrentTime(audio.currentTime);
+          setProgress((audio.currentTime / (audio.duration || 1)) * 100);
+        };
+        audio.onended = handleEndedRef.current;
+        audio.onplay  = () => setPlaying(true);
+        audio.onpause = () => setPlaying(false);
       }
       onNextRef.current();
     });
@@ -217,7 +340,6 @@ function useAudioPlayer(
     };
   }, [episode, isPremium]);
 
-  // Statut playback dans Media Session
   useEffect(() => {
     if (!isPremium || !("mediaSession" in navigator)) return;
     navigator.mediaSession.playbackState = playing ? "playing" : "paused";
@@ -227,7 +349,7 @@ function useAudioPlayer(
     audioRef, playing, setPlaying, shouldPlayOnLoad,
     progress, setProgress, currentTime, setCurrentTime,
     duration, setDuration, loaded, setLoaded,
-    audioUrl, fetchError, togglePlay, skip, handleEnded,
+    fetchError, togglePlay, skip, handleEnded,
   };
 }
 
@@ -251,35 +373,26 @@ function StickyPlayer({
     audioRef, playing, setPlaying, shouldPlayOnLoad,
     progress, setProgress, currentTime, setCurrentTime,
     duration, setDuration, loaded, setLoaded,
-    audioUrl, fetchError, togglePlay, skip, handleEnded,
+    fetchError, togglePlay, skip, handleEnded,
   } = useAudioPlayer(episodes, currentIdx, onNext, onPrev, isPremium, autoPlay, setAutoPlay, playTrigger);
+
+  // Exposer togglePlay via onReady pour le bouton "Tout écouter"
+  useEffect(() => {
+    onReady(togglePlay);
+  }, [togglePlay, onReady]);
 
   const cycleRepeat = useCallback(() => {
     setRepeatMode(repeatMode === "none" ? "one" : repeatMode === "one" ? "queue" : "none");
   }, [repeatMode, setRepeatMode]);
 
+  // Indicateur de chargement : on n'a plus audioUrl en state,
+  // on utilise loaded pour savoir si l'audio est prêt
+  const isLoading = !loaded && !fetchError;
+
   return (
     <div className={`sticky top-14 z-40 rounded-[1.5rem] border ${meta.border} bg-gradient-to-r ${meta.accent} backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]`}>
-      {audioUrl && (
-        <audio
-          ref={audioRef}
-          src={audioUrl}
-          autoPlay={shouldPlayOnLoad.current}
-          onTimeUpdate={() => {
-            if (!audioRef.current) return;
-            setCurrentTime(audioRef.current.currentTime);
-            setProgress((audioRef.current.currentTime / (audioRef.current.duration || 1)) * 100);
-          }}
-          onLoadedMetadata={() => {
-            setDuration(audioRef.current?.duration ?? 0);
-            setLoaded(true);
-          }}
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          onEnded={handleEnded}
-          preload="auto"
-        />
-      )}
+      {/* 🎓 Plus de <audio> dans le JSX — l'élément est géré par le hook
+          via new Audio() pour garantir la persistance sur iOS */}
 
       {/* Ligne 1 : pochette + info + play */}
       <div className="flex items-center gap-3 px-4 pt-3">
@@ -298,16 +411,14 @@ function StickyPlayer({
           </p>
           <p className="truncate text-sm font-semibold text-white">{episode.episodeTitle}</p>
         </div>
-        {/* Bouton play — ref exposé via onReady pour "Tout écouter" */}
         <button
-          ref={(el) => { if (el) onReady(() => el.click()); }}
           onClick={togglePlay}
-          disabled={!audioUrl && !fetchError}
+          disabled={isLoading || fetchError}
           className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border text-white shadow-lg transition active:scale-95 disabled:opacity-40 ${meta.border} bg-gradient-to-br from-white/20 to-white/5`}
         >
           {fetchError
             ? <span className="text-xs">⚠️</span>
-            : !audioUrl
+            : isLoading
             ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
             : playing
             ? <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
@@ -365,8 +476,9 @@ function StickyPlayer({
       <div className="px-4 pb-3">
         <input type="range" min={0} max={100} step={0.1} value={progress}
           onChange={(e) => {
-            if (!audioRef.current) return;
-            audioRef.current.currentTime = (Number(e.target.value) / 100) * (audioRef.current.duration || 0);
+            const audio = audioRef.current;
+            if (!audio) return;
+            audio.currentTime = (Number(e.target.value) / 100) * (audio.duration || 0);
             setProgress(Number(e.target.value));
           }}
           disabled={!loaded}
@@ -440,14 +552,15 @@ export default function AudioSeriesPage() {
 
   const goPrev = useCallback(() => setCurrentIdx(i => Math.max(i - 1, 0)), []);
 
-  // "Tout écouter" : active autoPlay et démarre depuis l'épisode 0
+  // "Tout écouter" — active autoPlay et démarre depuis l'épisode 0
+  // 🎓 Si on est déjà sur l'épisode 0, pas de changement de state → on
+  // déclenche le play directement via la ref exposée par StickyPlayer.
   const playAll = useCallback(() => {
     setSelectedEpisodes(new Set());
     setRepeatMode("none");
     setAutoPlay(true);
     if (currentIdx === 0) {
-      // Déjà sur l'épisode 0 — déclencher le play directement via la ref du bouton
-      setTimeout(() => playerPlayRef.current?.(), 300);
+      setTimeout(() => playerPlayRef.current?.(), 150);
     } else {
       setCurrentIdx(0);
     }
@@ -479,7 +592,7 @@ export default function AudioSeriesPage() {
     } catch { router.push("/pricing"); }
   };
 
-  const meta           = THEME_META[themeKey] ?? THEME_META.Valeurs;
+  const meta = THEME_META[themeKey] ?? THEME_META.Valeurs;
 
   // Série suivante
   const allSeries = useMemo(() => {
@@ -648,7 +761,7 @@ export default function AudioSeriesPage() {
         {isPremium && (
           <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
             <p className="text-xs text-slate-400">
-              📱 <span className="font-semibold text-slate-300">Lecture en arrière-plan</span> — Sur iOS, utilisez les contrôles de l'écran de verrouillage pour passer à la piste suivante. L'enchaînement automatique est disponible sur Android et sur notre app mobile à venir.
+              📱 <span className="font-semibold text-slate-300">Lecture en arrière-plan</span> — Utilisez les contrôles de l'écran de verrouillage pour naviguer entre les épisodes.
             </p>
           </div>
         )}
@@ -730,12 +843,10 @@ export default function AudioSeriesPage() {
 
         {/* ── NAVIGATION ── */}
         <div className="flex gap-3 pt-2">
-          {/* Retour */}
           <Link href="/audio" className="flex-1 inline-flex flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-semibold text-slate-100 transition hover:bg-white/10 gap-1">
             <span className="text-lg">←</span>
             <span>Séries</span>
           </Link>
-          {/* Réviser — désactivé pour Devenir français(e) */}
           <button
             onClick={() => !isDevenir && router.push(scrollReviseUrl)}
             disabled={isDevenir}
@@ -747,14 +858,12 @@ export default function AudioSeriesPage() {
             <span className="text-lg">📖</span>
             <span>Réviser</span>
           </button>
-          {/* Partager */}
           <button
             onClick={() => navigator.share?.({ title: subthemeLabel, url: window.location.href }) ?? navigator.clipboard.writeText(window.location.href)}
             className="flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-semibold text-slate-100 transition hover:bg-white/10">
             <span className="text-lg">🔗</span>
             <span>Partager</span>
           </button>
-          {/* Série suivante */}
           <button
             onClick={() => router.push(nextSeriesUrl)}
             className="flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-500 active:scale-95">
