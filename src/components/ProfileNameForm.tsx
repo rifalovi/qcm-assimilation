@@ -19,6 +19,7 @@ export default function ProfileNameForm({ userId, initialFirstName, initialLastN
 
   const [firstName, setFirstName] = useState(initialFirstName ?? '')
   const [lastName, setLastName]   = useState(initialLastName ?? '')
+  const [preference, setPreference] = useState(initialPreference ?? 'firstname')
   const [status, setStatus]       = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   async function handleSave() {
