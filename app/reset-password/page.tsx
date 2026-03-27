@@ -81,7 +81,7 @@ function ResetForm() {
   siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
   onSuccess={(token) => setTurnstileToken(token)}
   onExpire={() => setTurnstileToken(null)}
-  options={{ theme: "dark", language: "fr" }}
+  options={{ theme: "dark" }}
   className="mb-2"
 />
 <button
