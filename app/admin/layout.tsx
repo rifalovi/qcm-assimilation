@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { 
   LayoutDashboard, Users, Flag, Ban, 
   Shield, BarChart2, FileEdit, LogOut,
-  ChevronRight
+  ChevronRight, TrendingUp
 } from 'lucide-react'
 
 const NAV = [
@@ -16,6 +16,7 @@ const NAV = [
   { href: '/admin/bans',        label: 'Bannis',           icon: Ban },
   { href: '/admin/moderators',  label: 'Modérateurs',      icon: Shield },
   { href: '/admin/stats',       label: 'Statistiques',     icon: BarChart2 },
+  { href: '/admin/analytics',    label: 'Analytics',        icon: TrendingUp },
   { href: '/admin/content',     label: 'Contenu',          icon: FileEdit },
 ]
 
