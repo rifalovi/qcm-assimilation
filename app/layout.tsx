@@ -4,7 +4,8 @@ import AppHeader from "./components/AppHeader";
 import PostHogProvider from "./components/PostHogProvider";
 import { Suspense } from "react";
 import { UserProvider } from "./components/UserContext";
-import BottomNav from "@/components/BottomNav";
+import BottomNav from "@/components/BottomNav"
+import CapacitorProvider from "@/components/CapacitorProvider";
 
 export const metadata: Metadata = {
   title: "Cap Citoyen",
@@ -30,6 +31,7 @@ export default function RootLayout({
     <html lang="fr" className="h-full">
       <body className="min-h-full text-slate-100 antialiased pb-16">
         <UserProvider>
+        <CapacitorProvider>
         <Suspense fallback={null}>
         <PostHogProvider>
           <div className="min-h-screen flex flex-col">
@@ -50,6 +52,7 @@ export default function RootLayout({
           <BottomNav />
         </PostHogProvider>
         </Suspense>
+        </CapacitorProvider>
         </UserProvider>
       </body>
     </html>
