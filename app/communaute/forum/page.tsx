@@ -47,7 +47,7 @@ export default async function ForumPage() {
   if (!session) redirect('/login?redirect=/communaute/forum')
 
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
-  if (profile?.role !== 'premium' && profile?.role !== 'elite') redirect('/account?upgrade=true')
+  if (profile?.role !== 'premium' && profile?.role !== 'elite') redirect('/communaute/upgrade?feature=le forum&back=/communaute/forum')
 
   const { data: posts } = await supabase
     .from('forum_posts')

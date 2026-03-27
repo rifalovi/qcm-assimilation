@@ -52,7 +52,7 @@ export default function MessagesPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
       const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-      if (profile?.role !== 'premium' && profile?.role !== 'elite') { router.push('/account?upgrade=true'); return }
+      if (profile?.role !== 'premium' && profile?.role !== 'elite') { router.push('/communaute/upgrade?feature=la messagerie privée&back=/communaute/messages'); return }
       setCurrentUserId(user.id)
 
       // Charge toutes les conversations via les messages

@@ -41,7 +41,7 @@ export default async function TemoignagesPage({ searchParams }: { searchParams: 
 
   const { data: profile } = await supabase
     .from('profiles').select('role').eq('id', session.user.id).single()
-  if (profile?.role !== 'premium' && profile?.role !== 'elite') redirect('/account?upgrade=true')
+  if (profile?.role !== 'premium' && profile?.role !== 'elite') redirect('/communaute/upgrade?feature=les témoignages&back=/communaute/temoignages')
 
   const typeFilter = searchParams.type as 'test_civique' | 'entretien_naturalisation' | undefined
 

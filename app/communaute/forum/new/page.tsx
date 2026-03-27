@@ -19,7 +19,7 @@ export default function NewForumPostPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
       const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-      if (profile?.role !== 'premium' && profile?.role !== 'elite') { router.push('/account?upgrade=true'); return }
+      if (profile?.role !== 'premium' && profile?.role !== 'elite') { router.push('/communaute/upgrade?feature=la création de discussion&back=/communaute/forum'); return }
       setUserId(user.id)
       setLoading(false)
     }
