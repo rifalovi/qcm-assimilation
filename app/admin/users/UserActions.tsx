@@ -94,6 +94,7 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
 
       {/* Table */}
       <div className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden">
+        <div className="max-h-[70vh] overflow-y-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-slate-700">
