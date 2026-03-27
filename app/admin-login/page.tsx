@@ -40,6 +40,9 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
+          <div className="mb-5 flex justify-center">
+            <img src="/admin-hero.png" alt="Cap Citoyen" className="w-24 h-24 rounded-3xl object-cover shadow-[0_8px_32px_rgba(0,0,0,0.4)]" />
+          </div>
           <div className="inline-flex items-center gap-2 mb-4">
             <span className="text-2xl">🇫🇷</span>
             <span className="text-lg font-semibold text-white">Cap Citoyen</span>
