@@ -84,13 +84,14 @@ function Pill({ children, active = false, onClick }: {
 }
 
 // ─── Modal Onboarding ──────────────────────────────────────────────────────
-function OnboardingModal({ onClose, onAction }: {
+function OnboardingModal({ onClose, onAction, role = "anonymous" }: {
   onClose: () => void;
   onAction: (action: "scroll" | "quiz" | "audio") => void;
+  role?: string;
 }) {
   const [step, setStep] = useState(0);
 
-  const steps = [
+  const basSteps = [
     {
       icon: "📱",
       title: "Révisez en scrollant",
@@ -99,6 +100,7 @@ function OnboardingModal({ onClose, onAction }: {
       cta: "Essayer le Scroll",
       color: "border-amber-400/20 bg-amber-500/10 text-amber-200",
       btnColor: "bg-amber-500 text-slate-950 hover:bg-amber-400",
+      premium: false,
     },
     {
       icon: "🎯",
@@ -108,6 +110,7 @@ function OnboardingModal({ onClose, onAction }: {
       cta: "Faire un test",
       color: "border-blue-400/20 bg-blue-500/10 text-blue-200",
       btnColor: "bg-blue-600 text-white hover:bg-blue-500",
+      premium: false,
     },
     {
       icon: "🎧",
@@ -117,9 +120,46 @@ function OnboardingModal({ onClose, onAction }: {
       cta: "Découvrir l'audio",
       color: "border-emerald-400/20 bg-emerald-500/10 text-emerald-200",
       btnColor: "bg-emerald-600 text-white hover:bg-emerald-500",
+      premium: false,
+    },
+    {
+      icon: "💬",
+      title: "Retours d'expériences",
+      desc: "Lisez les témoignages de candidats ayant passé le test ou l'entretien. Questions posées, notes d'accueil, conseils — tout y est.",
+      action: "scroll" as const,
+      cta: "Voir les témoignages",
+      color: "border-teal-400/20 bg-teal-500/10 text-teal-200",
+      btnColor: "bg-teal-600 text-white hover:bg-teal-500",
+      premium: true,
+      href: "/communaute/temoignages",
+    },
+    {
+      icon: "🗣️",
+      title: "Forum communauté",
+      desc: "Posez vos questions, partagez vos conseils avec d'autres candidats. Une communauté d'entraide pour réussir ensemble.",
+      action: "scroll" as const,
+      cta: "Rejoindre le forum",
+      color: "border-orange-400/20 bg-orange-500/10 text-orange-200",
+      btnColor: "bg-orange-500 text-white hover:bg-orange-400",
+      premium: true,
+      href: "/communaute/forum",
+    },
+    {
+      icon: "✉️",
+      title: "Messagerie instantanée",
+      desc: "Échangez en privé avec d'autres membres. Posez vos questions directement à ceux qui ont déjà réussi leur entretien.",
+      action: "scroll" as const,
+      cta: "Découvrir la messagerie",
+      color: "border-blue-400/20 bg-blue-500/10 text-blue-200",
+      btnColor: "bg-blue-600 text-white hover:bg-blue-500",
+      premium: true,
+      href: "/communaute/messages",
     },
   ];
 
+
+
+  const steps = basSteps.filter(s => !s.premium || role === "premium" || role === "elite" || role === "super_admin" || role === "admin")
   const current = steps[step];
 
   return (
@@ -157,12 +197,22 @@ function OnboardingModal({ onClose, onAction }: {
 
         {/* Actions */}
         <div className="flex flex-col gap-2">
-          <button
-            onClick={() => { onAction(current.action); onClose(); }}
-            className={`w-full rounded-2xl py-3 text-sm font-bold transition active:scale-[0.98] ${current.btnColor}`}
-          >
-            {current.cta} →
-          </button>
+          {(current as { href?: string }).href ? (
+            <a
+              href={(current as { href?: string }).href}
+              onClick={onClose}
+              className={`block w-full rounded-2xl py-3 text-center text-sm font-bold transition active:scale-[0.98] ${current.btnColor}`}
+            >
+              {current.cta} →
+            </a>
+          ) : (
+            <button
+              onClick={() => { onAction(current.action); onClose(); }}
+              className={`w-full rounded-2xl py-3 text-sm font-bold transition active:scale-[0.98] ${current.btnColor}`}
+            >
+              {current.cta} →
+            </button>
+          )}
           {step < steps.length - 1 ? (
             <button onClick={() => setStep(s => s + 1)}
               className="w-full rounded-2xl border border-white/10 bg-white/5 py-2.5 text-sm font-medium text-slate-400 transition hover:bg-white/10">
@@ -684,6 +734,7 @@ export default function HomePage() {
       ══════════════════════════════════════════ */}
       {showOnboarding && (
         <OnboardingModal
+          role={role}
           onClose={closeOnboarding}
           onAction={handleOnboardingAction}
         />
