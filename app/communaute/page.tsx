@@ -116,7 +116,7 @@ export default async function CommunautePage() {
     .eq('id', session.user.id)
     .single()
 
-  if (profile?.role !== 'premium') redirect('/account?upgrade=true')
+  if (!['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(profile?.role ?? '')) redirect('/account?upgrade=true')
 
   // 3. Chargement des stats en parallèle (Promise.all = plus rapide)
   const [
