@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Search, Ban, Shield, ChevronDown } from 'lucide-react'
 
-type User = { id: string; username: string; role: string; city: string | null; created_at: string }
+type User = { id: string; username: string; role: string; city: string | null; postal_code: string | null; first_name: string | null; last_name: string | null; email: string; created_at: string }
 type Props = { users: User[]; bannedIds: string[]; currentRole: string }
 
 const ROLES = ['anonymous', 'freemium', 'premium', 'elite', 'moderator', 'admin', 'super_admin']
@@ -39,7 +39,14 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
   const [loading, setLoading] = useState<string | null>(null)
 
   const filtered = users.filter((u) => {
-    const matchSearch = u.username.toLowerCase().includes(search.toLowerCase())
+    const q = search.toLowerCase()
+    const matchSearch = !q ||
+      u.username?.toLowerCase().includes(q) ||
+      u.first_name?.toLowerCase().includes(q) ||
+      u.last_name?.toLowerCase().includes(q) ||
+      u.email?.toLowerCase().includes(q) ||
+      u.city?.toLowerCase().includes(q) ||
+      u.postal_code?.toLowerCase().includes(q)
     const matchFilter = filter === 'all' || u.role === filter || (filter === 'banned' && banned.has(u.id))
     return matchSearch && matchFilter
   })
@@ -74,7 +81,7 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
         <div className="relative flex-1 min-w-48">
           <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
           <input value={search} onChange={(e) => setSearch(e.target.value)}
-            placeholder="Rechercher un membre…"
+            placeholder="Nom, prénom, email, ville, code postal…"
             className="w-full pl-8 pr-4 py-2 text-sm bg-slate-800 border border-slate-700 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500" />
         </div>
         <select value={filter} onChange={(e) => setFilter(e.target.value)}
@@ -104,7 +111,8 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
                       {u.username?.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <p className="text-sm text-white">{u.username}</p>
+                      <p className="text-sm text-white">{u.first_name ? `${u.first_name} ${u.last_name?.charAt(0) ?? ''}.` : u.username}</p>
+                      <p className="text-[10px] text-slate-500">@{u.username} · {u.email}</p>
                       {banned.has(u.id) && <span className="text-[10px] text-red-400">Banni</span>}
                     </div>
                   </div>
@@ -125,7 +133,7 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
                     <span className={`text-xs px-2 py-1 rounded-lg ${ROLE_COLORS[u.role] ?? 'bg-slate-700 text-slate-400'}`}>{u.role}</span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-xs text-slate-400">{u.city ?? '—'}</td>
+                <td className="px-4 py-3 text-xs text-slate-400">{u.city ?? '—'}{u.postal_code ? ` (${u.postal_code})` : ''}</td>
                 <td className="px-4 py-3 text-xs text-slate-500">{timeAgo(u.created_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
