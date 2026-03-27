@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -24,6 +24,7 @@ function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileKey, setTurnstileKey] = useState(0);
+  const turnstileRef = useRef<any>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function handleRegister(e: React.FormEvent) {
@@ -495,16 +496,16 @@ function RegisterForm() {
 )}
    
               <Turnstile
+                ref={turnstileRef}
                 key={turnstileKey}
                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-                onSuccess={(token) => setTurnstileToken(token)}
-                onExpire={() => setTurnstileToken(null)}
-                options={{ theme: "dark" }}
-                className="mb-2"
+                onSuccess={(token) => { console.log("✅ Turnstile token:", token.substring(0, 20) + "..."); setTurnstileToken(token); }}
+                onExpire={() => { setTurnstileToken(null); setTurnstileKey(k => k + 1); }}
+                options={{ size: "invisible" }}
               />
               <button
                 type="submit"
-                disabled={loading || !turnstileToken}
+                disabled={loading}
                 className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:brightness-105 disabled:opacity-50"
               >
                 {loading ? "Création..." : "Créer mon compte"}
