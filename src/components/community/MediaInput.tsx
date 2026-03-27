@@ -4,6 +4,7 @@
 // Réutilisable dans forum, témoignages, messages privés
 
 import { useState, useRef, useEffect } from 'react'
+import { validateContent } from '@/lib/contentSafety'
 import { createClient } from '@/lib/supabase/client'
 import { Image, Smile, Send, X, Link as LinkIcon, Loader } from 'lucide-react'
 
@@ -138,6 +139,16 @@ export default function MediaInput({
   async function handleSubmit() {
     if (submitting || disabled) return
     if (content.trim().length < minLength && attachments.length === 0) return
+
+    // Validation sécurité
+    if (content.trim()) {
+      const check = validateContent(content)
+      if (!check.valid) {
+        alert(check.error)
+        return
+      }
+    }
+
     setSubmitting(true)
     await onSubmit(content.trim(), attachments)
     setContent('')

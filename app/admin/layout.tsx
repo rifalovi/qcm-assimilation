@@ -3,6 +3,7 @@ import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import LogoutButton from './LogoutButton'
 import { 
   LayoutDashboard, Users, Flag, Ban, 
   Shield, BarChart2, FileEdit, LogOut,
