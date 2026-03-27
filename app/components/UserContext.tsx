@@ -5,7 +5,7 @@ const LocationModal = lazy(() => import("./LocationModal"));
 import { createContext, useContext, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-type Role = "anonymous" | "freemium" | "premium" | "elite";
+type Role = "anonymous" | "freemium" | "premium" | "elite" | "moderator" | "admin" | "super_admin";
 
 type UserContextType = {
   role: Role;
@@ -195,6 +195,33 @@ export const ROLE_LIMITS = {
   },
   elite: {
     quizCount: 40,
+    scrollCount: 999,
+    levels: [1, 2, 3] as number[],
+    canExam: true,
+    canSeeExplanations: true,
+    canSeeThemeStats: true,
+    examTrials: 999,
+  },
+  moderator: {
+    quizCount: 999,
+    scrollCount: 999,
+    levels: [1, 2, 3] as number[],
+    canExam: true,
+    canSeeExplanations: true,
+    canSeeThemeStats: true,
+    examTrials: 999,
+  },
+  admin: {
+    quizCount: 999,
+    scrollCount: 999,
+    levels: [1, 2, 3] as number[],
+    canExam: true,
+    canSeeExplanations: true,
+    canSeeThemeStats: true,
+    examTrials: 999,
+  },
+  super_admin: {
+    quizCount: 999,
     scrollCount: 999,
     levels: [1, 2, 3] as number[],
     canExam: true,
