@@ -34,7 +34,7 @@ export default function AppHeader() {
     router.refresh();
   }
 
-  if (pathname === "/") return null;
+  if (pathname === "/" || pathname.startsWith("/admin")) return null;
 
   const roleLabel = role === "elite" ? "👑 Élite" : role === "premium" ? "🎯 Premium" : role === "freemium" ? "✨ Freemium" : null;
 
@@ -85,7 +85,7 @@ export default function AppHeader() {
                 {/* Dropdown menu */}
                 {open && (
                   <div
-                    className="absolute right-0 top-full mt-2 w-44 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.50)]"
+                    className="absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-1rem)] overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.50)]"
                     style={{
                       background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)",
                       backdropFilter: "blur(16px)",
@@ -99,45 +99,79 @@ export default function AppHeader() {
                       )}
                     </div>
 
-                    {/* Navigation */}
-                    <div className="py-2">
-                      {[
-                        ...(['super_admin','admin','moderator'].includes(role ?? '') ? [{ href: "/admin", label: "Administration", icon: "⚙️" }] : []),
-                        { href: "/", label: "Accueil", icon: "🏠" },
-                        { href: "/scroll", label: "Réviser", icon: "📚" },
-                        { href: "/quiz", label: "S'entraîner", icon: "🎯" },
-                        { href: "/exam", label: "Examen blanc", icon: "📝" },
-                        { href: "/audio", label: "Audio", icon: "🎧" },
-                        ...(['premium','elite','moderator','admin','super_admin'].includes(role ?? '') ? [
-                          { href: "/communaute", label: "Communauté", icon: "👥" },
-                          { href: "/communaute/temoignages", label: "Témoignages", icon: "💬" },
-                          { href: "/communaute/forum", label: "Forum", icon: "🗣️" },
-                          { href: "/communaute/messages", label: "Messages", icon: "✉️" },
-                        ] : []),
-                        { href: "/results", label: "Résultats", icon: "📊" },
-                        { href: "/account", label: "Mon compte", icon: "👤" },
-                        { href: "/resources", label: "Ressources", icon: "🏛️" },
-                        { href: "/pricing", label: "Tarifs", icon: "👑" },
-                      ].map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="flex items-center gap-2 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/5 hover:text-white"
-                        >
-                          <span className="text-sm">{item.icon}</span>
-                          {item.label}
+                    {/* Admin */}
+                    {['super_admin','admin','moderator'].includes(role ?? '') && (
+                      <div className="px-2 pt-2">
+                        <Link href="/admin" className="flex items-center gap-2.5 px-2 py-2 rounded-xl bg-red-500/5 hover:bg-red-500/10 transition">
+                          <span className="w-7 h-7 rounded-lg bg-red-900/40 flex items-center justify-center text-sm flex-shrink-0">⚙️</span>
+                          <div><p className="text-xs font-medium text-red-300">Administration</p><p className="text-[10px] text-slate-500">Dashboard & modération</p></div>
                         </Link>
-                      ))}
+                        <div className="my-2 h-px bg-white/6" />
+                      </div>
+                    )}
+
+                    {/* Apprendre */}
+                    <div className="px-2 pt-1">
+                      <p className="text-[10px] text-slate-500 uppercase tracking-wider px-2 mb-1">Apprendre</p>
+                      <div className="grid grid-cols-2 gap-0.5">
+                        {[
+                          { href: "/scroll", icon: "📱", label: "Réviser", sub: "Flash-cards" },
+                          { href: "/quiz", icon: "🎯", label: "S'entraîner", sub: "QCM" },
+                          { href: "/exam", icon: "📝", label: "Examen", sub: "Blanc" },
+                          { href: "/audio", icon: "🎧", label: "Audio", sub: "100 épisodes" },
+                        ].map(({ href, icon, label, sub }) => (
+                          <Link key={href} href={href} className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition">
+                            <span className="w-6 h-6 rounded-lg bg-blue-900/40 flex items-center justify-center text-xs flex-shrink-0">{icon}</span>
+                            <div><p className="text-xs text-slate-300">{label}</p><p className="text-[10px] text-slate-500">{sub}</p></div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Communauté */}
+                    {['premium','elite','moderator','admin','super_admin'].includes(role ?? '') && (
+                      <div className="px-2 pt-2">
+                        <div className="my-1 h-px bg-white/6" />
+                        <p className="text-[10px] text-slate-500 uppercase tracking-wider px-2 mb-1">Communauté</p>
+                        <div className="grid grid-cols-2 gap-0.5">
+                          {[
+                            { href: "/communaute/temoignages", icon: "💬", label: "Témoignages", sub: "Retours" },
+                            { href: "/communaute/forum", icon: "🗣️", label: "Forum", sub: "Discussions" },
+                            { href: "/communaute/messages", icon: "✉️", label: "Messages", sub: "Privés" },
+                            { href: "/communaute", icon: "👥", label: "Hub", sub: "Communauté" },
+                          ].map(({ href, icon, label, sub }) => (
+                            <Link key={href} href={href} className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition">
+                              <span className="w-6 h-6 rounded-lg bg-teal-900/40 flex items-center justify-center text-xs flex-shrink-0">{icon}</span>
+                              <div><p className="text-xs text-slate-300">{label}</p><p className="text-[10px] text-slate-500">{sub}</p></div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Autres */}
+                    <div className="px-2 pt-2">
+                      <div className="my-1 h-px bg-white/6" />
+                      <div className="grid grid-cols-2 gap-0.5">
+                        {[
+                          { href: "/results", icon: "📊", label: "Résultats" },
+                          { href: "/account", icon: "👤", label: "Mon compte" },
+                          { href: "/resources", icon: "🏛️", label: "Ressources" },
+                          { href: "/pricing", icon: "👑", label: "Tarifs" },
+                        ].map(({ href, icon, label }) => (
+                          <Link key={href} href={href} className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition">
+                            <span className="w-6 h-6 rounded-lg bg-slate-700/60 flex items-center justify-center text-xs flex-shrink-0">{icon}</span>
+                            <p className="text-xs text-slate-300">{label}</p>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Déconnexion */}
-                    <div className="border-t border-white/10 py-2">
-                      <button
-                        onClick={handleLogout}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/10 hover:text-red-300"
-                      >
-                        <span className="text-base">🚪</span>
-                        Déconnexion
+                    <div className="border-t border-white/10 px-2 py-2 mt-1">
+                      <button onClick={handleLogout}
+                        className="flex w-full items-center gap-2 px-2 py-2 rounded-xl text-xs text-red-400 transition hover:bg-red-500/10">
+                        <span>🚪</span>Déconnexion
                       </button>
                     </div>
                   </div>

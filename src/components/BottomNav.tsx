@@ -22,6 +22,7 @@ export default function BottomNav() {
   const [showInfoMenu, setShowInfoMenu] = useState(false);
   const [showCommunityMenu, setShowCommunityMenu] = useState(false);
 
+  if (pathname.startsWith('/admin')) return null
   const isPremium = ['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '')
 
   return (
