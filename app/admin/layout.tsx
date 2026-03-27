@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -30,8 +31,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!user) redirect('/login?redirect=/admin')
 
   // Utilise le service role key pour bypasser le RLS
-  const { createClient } = await import('@supabase/supabase-js')
-  const adminClient = createClient(
+  const adminClient = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
