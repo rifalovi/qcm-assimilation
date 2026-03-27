@@ -14,7 +14,7 @@ interface Props {
   initialPreference?: string | null
 }
 
-export default function ProfileNameForm({ userId, initialFirstName, initialLastName }: Props) {
+export default function ProfileNameForm({ userId, initialFirstName, initialLastName, initialPreference }: Props) {
   const supabase = createClient()
 
   const [firstName, setFirstName] = useState(initialFirstName ?? '')
