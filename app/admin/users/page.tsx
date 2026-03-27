@@ -38,7 +38,7 @@ export default async function UsersPage() {
         <h1 className="text-2xl font-medium text-white mb-1">Utilisateurs</h1>
         <p className="text-sm text-slate-400">{users?.length ?? 0} membres enregistrés</p>
       </div>
-      <UserActions users={(users ?? []).map((u: Record<string, unknown>) => ({ ...u, email: emailMap[u.id as string] ?? '' }))} bannedIds={[...bannedIds]} currentRole={currentProfile?.role ?? ''} />
+      <UserActions users={(users ?? []).map((u) => ({ ...u, email: emailMap[u.id] ?? '' })) as never} bannedIds={[...bannedIds]} currentRole={currentProfile?.role ?? ''} />
     </div>
   )
 }
