@@ -11,6 +11,7 @@ interface Props {
   userId: string
   initialFirstName: string | null
   initialLastName: string | null
+  initialPreference?: string | null
 }
 
 export default function ProfileNameForm({ userId, initialFirstName, initialLastName }: Props) {
@@ -83,6 +84,26 @@ export default function ProfileNameForm({ userId, initialFirstName, initialLastN
           </span>
         </p>
       )}
+
+      {/* Toggle préférence d'affichage */}
+      <div className="mb-4">
+        <p className="text-xs text-slate-400 mb-2">Afficher dans la communauté :</p>
+        <div className="flex gap-2">
+          <button type="button" onClick={() => setPreference('firstname')}
+            className={`flex-1 py-2 rounded-xl text-xs font-medium border transition-colors ${preference === 'firstname' ? 'border-teal-400/40 bg-teal-500/10 text-teal-300' : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10'}`}>
+            Prénom N.
+          </button>
+          <button type="button" onClick={() => setPreference('username')}
+            className={`flex-1 py-2 rounded-xl text-xs font-medium border transition-colors ${preference === 'username' ? 'border-blue-400/40 bg-blue-500/10 text-blue-300' : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10'}`}>
+            Pseudo
+          </button>
+        </div>
+        <p className="text-xs text-slate-500 mt-1.5">
+          Apparaîtra comme : <span className="text-slate-300 font-medium">
+            {preference === 'username' ? '(votre pseudo)' : `${firstName || 'Prénom'} ${lastName ? lastName.charAt(0).toUpperCase() + '.' : ''}`}
+          </span>
+        </p>
+      </div>
 
       <button
         onClick={handleSave}

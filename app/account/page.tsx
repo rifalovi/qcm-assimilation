@@ -15,6 +15,7 @@ type Profile = {
   role: Role;
   first_name: string | null;
   last_name: string | null;
+  display_name_preference: string | null;
 };
 
 type Subscription = {
@@ -108,7 +109,7 @@ export default function AccountPage() {
       setUserId(user.id);
 
       const { data: profileData } = await supabase
-        .from("profiles").select("username, role, first_name, last_name").eq("id", user.id).single();
+        .from("profiles").select("username, role, first_name, last_name, display_name_preference").eq("id", user.id).single();
       if (profileData) setProfile(profileData);
 
       const { data: subData } = await supabase
@@ -318,6 +319,7 @@ export default function AccountPage() {
                 userId={userId}
                 initialFirstName={profile?.first_name ?? null}
                 initialLastName={profile?.last_name ?? null}
+                initialPreference={profile?.display_name_preference ?? 'firstname'}
               />
             </div>
 
