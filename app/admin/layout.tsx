@@ -26,13 +26,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { cookies: { getAll() { return cookieStore.getAll() }, setAll(s) { s.forEach(({ name, value, options }) => cookieStore.set(name, value, options)) } } }
   )
 
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) redirect('/login?redirect=/admin')
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login?redirect=/admin')
 
   const { data: profile } = await supabase
     .from('profiles')
     .select('role, username')
-    .eq('id', session.user.id)
+    .eq('id', user.id)
     .single()
 
   if (!['super_admin', 'admin', 'moderator'].includes(profile?.role ?? '')) {
