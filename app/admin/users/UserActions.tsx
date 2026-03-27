@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Search, Ban, Shield, ChevronDown } from 'lucide-react'
 
@@ -28,6 +29,7 @@ function timeAgo(d: string) {
 
 export default function UserActions({ users, bannedIds, currentRole }: Props) {
   const supabase = createClient()
+  const router = useRouter()
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
   const [banned, setBanned] = useState(new Set(bannedIds))
@@ -95,7 +97,7 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
           </thead>
           <tbody className="divide-y divide-slate-700/50">
             {filtered.map((u) => (
-              <tr key={u.id} className={`hover:bg-slate-700/30 transition-colors ${banned.has(u.id) ? 'opacity-50' : ''}`}>
+              <tr key={u.id} onClick={() => router.push(`/admin/users/${u.id}`)} className={`hover:bg-slate-700/30 transition-colors cursor-pointer ${banned.has(u.id) ? 'opacity-50' : ''}`}>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-xs text-slate-300 flex-shrink-0">
@@ -111,6 +113,7 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
                   {canChangeRole ? (
                     <div className="relative">
                       <select
+                        onClick={(e) => e.stopPropagation()}
                         value={roles[u.id] ?? u.role}
                         onChange={(e) => changeRole(u.id, e.target.value)}
                         disabled={loading === u.id}
@@ -127,7 +130,7 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     {canBan && (
-                      <button onClick={() => toggleBan(u.id, u.username)}
+                      <button onClick={(e) => { e.stopPropagation(); toggleBan(u.id, u.username) }}
                         disabled={loading === u.id}
                         title={banned.has(u.id) ? 'Débannir' : 'Bannir'}
                         className={`p-1.5 rounded-lg transition-colors ${banned.has(u.id) ? 'text-teal-400 hover:bg-teal-900/30' : 'text-slate-500 hover:text-red-400 hover:bg-red-900/20'}`}>
