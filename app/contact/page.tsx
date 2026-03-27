@@ -38,12 +38,14 @@ export default function ContactPage() {
   const [customSubject, setCustomSubject] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
   const isOther = subject === "Autre demande";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (honeypot) { setStatus("success"); return; }
     setLoading(true);
     setStatus("idle");
 
@@ -60,6 +62,8 @@ export default function ContactPage() {
           message,
           _subject: `[Cap Citoyen] ${finalSubject}`,
           _captcha: "false",
+          _honey: "",
+          _template: "box",
         }),
       });
       if (res.ok) {
@@ -172,6 +176,18 @@ export default function ContactPage() {
                 rows={5}
                 placeholder="Décrivez votre demande en détail..."
                 className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-blue-400/40 focus:outline-none resize-none"
+              />
+            </div>
+
+            {/* Honeypot anti-bot — invisible pour les humains */}
+            <div style={{ display: "none" }} aria-hidden="true">
+              <input
+                type="text"
+                name="website"
+                value={honeypot}
+                onChange={e => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
               />
             </div>
 

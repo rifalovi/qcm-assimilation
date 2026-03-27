@@ -2,7 +2,6 @@
 
 import { Suspense, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Turnstile } from '@marsidev/react-turnstile'
 import { createClient } from '@/lib/supabase/client'
 
 function ResetForm() {
@@ -10,24 +9,9 @@ function ResetForm() {
   const [password, setPassword] = useState('')
   const [loading, setLoading]   = useState(false)
   const [message, setMessage]   = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   async function handleReset(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-
-    // Vérification Turnstile
-    const verif = await fetch('/api/verify-turnstile', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: turnstileToken })
-    })
-    const { success } = await verif.json()
-    if (!success) {
-      setMessage({ type: 'error', text: 'Vérification de sécurité échouée. Réessaie.' })
-      setTurnstileToken(null)
-      setLoading(false)
-      return
-    }
 
     const supabase = createClient()
     const { error } = await supabase.auth.updateUser({ password })
@@ -77,16 +61,9 @@ function ResetForm() {
             </div>
           )}
 
-          <Turnstile
-  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-  onSuccess={(token) => setTurnstileToken(token)}
-  onExpire={() => setTurnstileToken(null)}
-  options={{ theme: "dark" }}
-  className="mb-2"
-/>
-<button
+          <button
   type="submit"
-  disabled={loading || !turnstileToken}
+  disabled={loading}
   className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-3 text-sm transition-colors"
 >
   {loading ? 'Mise à jour...' : 'Mettre à jour le mot de passe'}

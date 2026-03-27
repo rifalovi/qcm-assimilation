@@ -6,12 +6,15 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import MFASetup from "../../src/components/MFASetup";
 import { VoiceSelector } from "@/components/VoiceSelector";
+import ProfileNameForm from "@/components/ProfileNameForm";
 
 type Role = "anonymous" | "freemium" | "premium" | "elite";
 
 type Profile = {
   username: string;
   role: Role;
+  first_name: string | null;
+  last_name: string | null;
 };
 
 type Subscription = {
@@ -79,6 +82,7 @@ function StatCard({ label, value, accent = "blue" }: {
 export default function AccountPage() {
   const router = useRouter();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [userId, setUserId] = useState<string>("");
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [email, setEmail] = useState("");
   const [results, setResults] = useState<Result[]>([]);
@@ -101,9 +105,10 @@ export default function AccountPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/login"); return; }
       setEmail(user.email ?? "");
+      setUserId(user.id);
 
       const { data: profileData } = await supabase
-        .from("profiles").select("username, role").eq("id", user.id).single();
+        .from("profiles").select("username, role, first_name, last_name").eq("id", user.id).single();
       if (profileData) setProfile(profileData);
 
       const { data: subData } = await supabase
@@ -181,12 +186,10 @@ export default function AccountPage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Supprimer les données utilisateur
     await supabase.from("results").delete().eq("email", user.email ?? "");
     await supabase.from("subscriptions").delete().eq("user_id", user.id);
     await supabase.from("profiles").delete().eq("id", user.id);
 
-    // Déconnexion
     await supabase.auth.signOut();
     router.push("/");
   }
@@ -203,7 +206,6 @@ export default function AccountPage() {
     };
   }, [results]);
 
-  // Calcul jours restants Premium
   const daysLeft = useMemo(() => {
     if (!subscription?.expires_at) return null;
     const diff = new Date(subscription.expires_at).getTime() - Date.now();
@@ -308,6 +310,16 @@ export default function AccountPage() {
                 </div>
               </div>
             )}
+
+            {/* ── Informations personnelles (communauté) ── */}
+            <div className="mt-6">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-500">Informations personnelles</p>
+              <ProfileNameForm
+                userId={userId}
+                initialFirstName={profile?.first_name ?? null}
+                initialLastName={profile?.last_name ?? null}
+              />
+            </div>
 
             {/* ── Voix audio ── */}
             {(role === "premium" || role === "elite") && (
