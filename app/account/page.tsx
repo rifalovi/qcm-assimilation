@@ -195,7 +195,7 @@ export default function AccountPage() {
   }
 
   const role = profile?.role ?? "anonymous";
-  const roleConfig = ROLE_CONFIG[role];
+  const roleConfig = ROLE_CONFIG[role as keyof typeof ROLE_CONFIG] ?? ROLE_CONFIG['freemium'];
 
   const quickStats = useMemo(() => {
     if (!results.length) return null;
