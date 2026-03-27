@@ -12,7 +12,7 @@ export default function MentionsLegalesPage() {
             <p><span className="text-slate-400">SIREN :</span> 918 107 848</p>
             <p><span className="text-slate-400">SIRET :</span> 918 107 848 00015</p>
             <p><span className="text-slate-400">Numéro de TVA :</span> FR20918107848</p>
-            <p><span className="text-slate-400">Adresse :</span> 7 allée de la Caravelle, 94430 Chennevières-sur-Marne, France</p>
+            <p><span className="text-slate-400">Adresse :</span> Chennevières-sur-Marne, 94430, France</p>
             <p><span className="text-slate-400">Email :</span> contact@cap-citoyen.fr</p>
           </div>
         </section>
