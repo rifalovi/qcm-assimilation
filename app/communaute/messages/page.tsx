@@ -25,7 +25,7 @@ type Member = {
 const AVATAR_COLORS = ['bg-teal-900/60 text-teal-300','bg-orange-900/60 text-orange-300','bg-blue-900/60 text-blue-300','bg-pink-900/60 text-pink-300','bg-purple-900/60 text-purple-300']
 function avatarColor(id: string) { const s = id.charCodeAt(0)+id.charCodeAt(id.length-1); return AVATAR_COLORS[s%AVATAR_COLORS.length] }
 function getInitials(fn: string|null, ln: string|null) { return ((fn?.charAt(0)??'')+(ln?.charAt(0)??'')).toUpperCase()||'M' }
-function formatName(fn: string|null, ln: string|null) { if(!fn&&!ln) return 'Membre'; return `${fn??''} ${ln?ln.charAt(0).toUpperCase()+'.':''}`.trim() }
+function formatName(fn: string|null, ln: string|null, username?: string) { if(!fn&&!ln) return username ?? 'Membre'; return `${fn??''} ${ln?ln.charAt(0).toUpperCase()+'.':''}`.trim() }
 function timeAgo(dateStr: string) {
   const diff = Date.now()-new Date(dateStr).getTime()
   const mins = Math.floor(diff/60000)

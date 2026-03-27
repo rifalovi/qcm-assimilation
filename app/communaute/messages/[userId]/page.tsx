@@ -154,7 +154,7 @@ export default function ConversationPage() {
   if (loading) return <main className="flex flex-col h-screen max-w-lg mx-auto px-4 py-16 items-center justify-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
 
   return (
-    <main className="flex flex-col h-[100dvh] max-w-lg mx-auto">
+    <main className="flex flex-col max-w-lg mx-auto" style={{ height: "100dvh" }}>
 
       {/* Header fixe */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-700 bg-slate-900 flex-shrink-0">
@@ -168,7 +168,7 @@ export default function ConversationPage() {
               {getInitials(otherUser.first_name, otherUser.last_name)}
             </div>
             <div>
-              <p className="text-sm font-medium text-white">{formatName(otherUser.first_name, otherUser.last_name)}</p>
+              <p className="text-sm font-medium text-white">{formatName(otherUser.first_name, otherUser.last_name, otherUser.username)}</p>
               <p className="text-xs text-slate-500">@{otherUser.username}</p>
             </div>
           </>
@@ -176,7 +176,7 @@ export default function ConversationPage() {
       </div>
 
       {/* Zone messages scrollable */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0">
         {messages.length === 0 && (
           <div className="text-center py-12">
             <p className="text-slate-500 text-sm">Début de la conversation</p>
