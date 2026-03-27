@@ -6,7 +6,7 @@ import UserActions from './UserActions'
 type User = {
   id: string; username: string; role: string; city: string | null
   postal_code: string | null; first_name: string | null; last_name: string | null
-  email: string; created_at: string
+  email: string; updated_at: string
 }
 
 export default function UserActionsWrapper({ bannedIds, currentRole }: { bannedIds: string[]; currentRole: string }) {

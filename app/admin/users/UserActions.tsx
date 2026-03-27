@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Search, Ban, Shield, ChevronDown } from 'lucide-react'
 
-type User = { id: string; username: string; role: string; city: string | null; postal_code: string | null; first_name: string | null; last_name: string | null; email: string; created_at: string }
+type User = { id: string; username: string; role: string; city: string | null; postal_code: string | null; first_name: string | null; last_name: string | null; email: string; updated_at: string }
 type Props = { users: User[]; bannedIds: string[]; currentRole: string }
 
 const ROLES = ['anonymous', 'freemium', 'premium', 'elite', 'moderator', 'admin', 'super_admin']
@@ -134,7 +134,7 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
                   )}
                 </td>
                 <td className="px-4 py-3 text-xs text-slate-400">{u.city ?? '—'}{u.postal_code ? ` (${u.postal_code})` : ''}</td>
-                <td className="px-4 py-3 text-xs text-slate-500">{timeAgo(u.created_at)}</td>
+                <td className="px-4 py-3 text-xs text-slate-500">{timeAgo(u.updated_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     {canBan && (

@@ -10,8 +10,8 @@ export async function GET() {
     )
     const { data, error } = await adminClient
       .from('profiles')
-      .select('id, username, role, city, postal_code, first_name, last_name, created_at')
-      .order('created_at', { ascending: false })
+      .select('id, username, role, city, postal_code, first_name, last_name, updated_at')
+      .order('updated_at', { ascending: false })
       .limit(200)
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
     return NextResponse.json({ users: data, count: data?.length })
