@@ -19,26 +19,42 @@ export default async function UsersPage() {
   const { data: currentProfile } = await supabase
     .from('profiles').select('role').eq('id', (await supabase.auth.getSession()).data.session?.user.id ?? '').single()
 
-  const { data: users } = await adminClient
+  const { data: rawUsers } = await adminClient
     .from('profiles')
     .select('id, username, role, city, postal_code, first_name, last_name, created_at, updated_at')
     .order('created_at', { ascending: false })
     .limit(200)
 
-  // Récupère les emails via auth admin
-  const { data: authUsers } = await adminClient.auth.admin.listUsers({ perPage: 200 })
-  const emailMap = Object.fromEntries((authUsers?.users ?? []).map((u: { id: string; email?: string }) => [u.id, u.email ?? '']))
+  // Emails via auth admin API
+  const { data: authData } = await adminClient.auth.admin.listUsers({ perPage: 200 })
+  const emailMap: Record<string, string> = {}
+  for (const u of authData?.users ?? []) {
+    emailMap[u.id] = u.email ?? ''
+  }
 
   const { data: bans } = await supabase.from('bans').select('user_id')
   const bannedIds = new Set((bans ?? []).map((b) => b.user_id))
+
+  // Enrichit avec email
+  const users = (rawUsers ?? []).map((u) => ({
+    id: u.id as string,
+    username: u.username as string,
+    role: u.role as string,
+    city: u.city as string | null,
+    postal_code: u.postal_code as string | null,
+    first_name: u.first_name as string | null,
+    last_name: u.last_name as string | null,
+    email: emailMap[u.id as string] ?? '',
+    created_at: u.created_at as string,
+  }))
 
   return (
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-medium text-white mb-1">Utilisateurs</h1>
-        <p className="text-sm text-slate-400">{users?.length ?? 0} membres enregistrés</p>
+        <p className="text-sm text-slate-400">{users.length} membres enregistrés</p>
       </div>
-      <UserActions users={(users ?? []).map((u) => ({ ...u, email: emailMap[u.id] ?? '' })) as never} bannedIds={[...bannedIds]} currentRole={currentProfile?.role ?? ''} />
+      <UserActions users={users} bannedIds={[...bannedIds]} currentRole={currentProfile?.role ?? ''} />
     </div>
   )
 }
