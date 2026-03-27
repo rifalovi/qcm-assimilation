@@ -430,7 +430,7 @@ export default function HomePage() {
                   {homeMenuOpen && (
                     <>
                       <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm sm:bg-transparent sm:backdrop-blur-0" onClick={() => setHomeMenuOpen(false)} />
-                      <div className="fixed right-4 top-20 z-50 w-52 rounded-[1.6rem] border border-white/10 shadow-[0_24px_70px_rgba(0,0,0,0.62)] backdrop-blur-xl sm:absolute sm:right-0 sm:top-full sm:mt-2"
+                      <div className="fixed right-4 top-20 z-50 w-64 rounded-[1.6rem] border border-white/10 shadow-[0_24px_70px_rgba(0,0,0,0.62)] backdrop-blur-xl sm:absolute sm:right-0 sm:top-full sm:mt-2"
                         style={{ background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)" }}>
                         <div className="border-b border-white/10 px-3 py-2">
                           <p className="text-sm font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</p>
@@ -439,24 +439,73 @@ export default function HomePage() {
                             <p className="mt-1 text-xs text-orange-300">🔥 {streak} jour{streak > 1 ? "s" : ""} de suite {streakMessage}</p>
                           )}
                         </div>
-                        <div className="py-2">
-                          {[
-                            ...(email === "rifalovi@gmail.com" ? [{ label: "Dashboard", icon: "📊", onClick: () => router.push("/dashboard") }] : []),
-                            { label: "Réviser", icon: "📚", onClick: () => router.push("/scroll") },
-                            { label: "S'entraîner", icon: "🎯", onClick: () => router.push("/quiz") },
-                            { label: "Examen blanc", icon: "📝", onClick: () => router.push("/exam") },
-                            { label: "Audio", icon: "🎧", onClick: () => router.push("/audio") },
-                            { label: "Résultats", icon: "📊", onClick: () => router.push("/results") },
-                            { label: "Mon compte", icon: "👤", onClick: () => router.push("/account") },
-                            { label: "Informations", icon: "ℹ️", onClick: () => router.push("/info") },
-                            { label: "Ressources", icon: "🏛️", onClick: () => router.push("/resources") },
-                            { label: "Tarifs", icon: "👑", onClick: () => router.push("/pricing") },
-                          ].map((item) => (
-                            <button key={item.label} onClick={() => { setHomeMenuOpen(false); item.onClick(); }}
-                              className="flex w-full items-center gap-2.5 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 hover:text-white">
-                              <span className="text-sm">{item.icon}</span><span>{item.label}</span>
+                        {/* Admin */}
+                        {['super_admin','admin','moderator'].includes(role ?? '') && (
+                          <div className="px-2 pt-2">
+                            <button onClick={() => { setHomeMenuOpen(false); router.push("/admin"); }}
+                              className="flex w-full items-center gap-2.5 px-2 py-2 rounded-xl bg-red-500/5 hover:bg-red-500/10 transition">
+                              <span className="w-7 h-7 rounded-lg bg-red-900/40 flex items-center justify-center text-sm flex-shrink-0">⚙️</span>
+                              <div className="text-left"><p className="text-xs font-medium text-red-300">Administration</p><p className="text-[10px] text-slate-500">Dashboard & modération</p></div>
                             </button>
-                          ))}
+                            <div className="my-2 h-px bg-white/6" />
+                          </div>
+                        )}
+                        {/* Apprendre */}
+                        <div className="px-2 pt-1">
+                          <p className="text-[10px] text-slate-500 uppercase tracking-wider px-2 mb-1">Apprendre</p>
+                          <div className="grid grid-cols-2 gap-0.5">
+                            {[
+                              { href: "/scroll", icon: "📱", label: "Réviser", sub: "Flash-cards" },
+                              { href: "/quiz", icon: "🎯", label: "S'entraîner", sub: "QCM" },
+                              { href: "/exam", icon: "📝", label: "Examen", sub: "Blanc" },
+                              { href: "/audio", icon: "🎧", label: "Audio", sub: "100 épisodes" },
+                            ].map(({ href, icon, label, sub }) => (
+                              <button key={href} onClick={() => { setHomeMenuOpen(false); router.push(href); }}
+                                className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition text-left w-full">
+                                <span className="w-6 h-6 rounded-lg bg-blue-900/40 flex items-center justify-center text-xs flex-shrink-0">{icon}</span>
+                                <div><p className="text-xs text-slate-300">{label}</p><p className="text-[10px] text-slate-500">{sub}</p></div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        {/* Communauté */}
+                        {['premium','elite','moderator','admin','super_admin'].includes(role ?? '') && (
+                          <div className="px-2 pt-2">
+                            <div className="my-1 h-px bg-white/6" />
+                            <p className="text-[10px] text-slate-500 uppercase tracking-wider px-2 mb-1">Communauté</p>
+                            <div className="grid grid-cols-2 gap-0.5">
+                              {[
+                                { href: "/communaute/temoignages", icon: "💬", label: "Témoignages", sub: "Retours" },
+                                { href: "/communaute/forum", icon: "🗣️", label: "Forum", sub: "Discussions" },
+                                { href: "/communaute/messages", icon: "✉️", label: "Messages", sub: "Privés" },
+                                { href: "/communaute", icon: "👥", label: "Hub", sub: "Communauté" },
+                              ].map(({ href, icon, label, sub }) => (
+                                <button key={href} onClick={() => { setHomeMenuOpen(false); router.push(href); }}
+                                  className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition text-left w-full">
+                                  <span className="w-6 h-6 rounded-lg bg-teal-900/40 flex items-center justify-center text-xs flex-shrink-0">{icon}</span>
+                                  <div><p className="text-xs text-slate-300">{label}</p><p className="text-[10px] text-slate-500">{sub}</p></div>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {/* Autres */}
+                        <div className="px-2 pt-2">
+                          <div className="my-1 h-px bg-white/6" />
+                          <div className="grid grid-cols-2 gap-0.5">
+                            {[
+                              { href: "/results", icon: "📊", label: "Résultats" },
+                              { href: "/account", icon: "👤", label: "Mon compte" },
+                              { href: "/resources", icon: "🏛️", label: "Ressources" },
+                              { href: "/pricing", icon: "👑", label: "Tarifs" },
+                            ].map(({ href, icon, label }) => (
+                              <button key={href} onClick={() => { setHomeMenuOpen(false); router.push(href); }}
+                                className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition text-left w-full">
+                                <span className="w-6 h-6 rounded-lg bg-slate-700/60 flex items-center justify-center text-xs flex-shrink-0">{icon}</span>
+                                <p className="text-xs text-slate-300">{label}</p>
+                              </button>
+                            ))}
+                          </div>
                         </div>
                         <div className="border-t border-white/10 py-1">
                           <button onClick={clearPseudo}
