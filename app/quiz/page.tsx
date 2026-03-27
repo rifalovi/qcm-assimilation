@@ -538,7 +538,7 @@ function selectAnswer(choice: ChoiceKey) {
         </h2>
         <p className="mt-2 text-sm text-slate-400">
           {role === "anonymous"
-            ? "Tu viens de faire 10 questions 😉. Avec un compte gratuit, accède à 20 questions et sauvegarde tes résultats."
+            ? "Tu viens de faire 10 questions 🎉. Crée un compte gratuit pour sauvegarder tes résultats et accéder à 20 questions."
             : "Tu viens de terminer tes 20 questions 😉. Passe en Premium pour accéder à 40 questions, tous les niveaux, l'examen blanc et les statistiques détaillées."}
         </p>
       </div>
@@ -546,14 +546,19 @@ function selectAnswer(choice: ChoiceKey) {
       <div className="space-y-3">
         {role === "anonymous" ? (
           <>
-            <a href="/register"
+            <a href={`/register?redirect=/results?mode=${mode}`}
               className="block w-full rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-bold text-white transition hover:bg-blue-500">
-              🚀 Créer un compte gratuit
+              🚀 Créer un compte pour sauvegarder
             </a>
-            <a href="/login"
+            <a href={`/login?redirect=/results?mode=${mode}`}
               className="block w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-medium text-slate-300 transition hover:bg-white/10">
               J'ai déjà un compte
             </a>
+            <button
+              onClick={() => { setShowPremiumCTA(false); router.push(`/results?mode=${mode}`); }}
+              className="block w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-center text-xs font-medium text-slate-500 transition hover:text-slate-300">
+              Voir mes résultats sans compte →
+            </button>
           </>
         ) : (
           <button
@@ -575,7 +580,7 @@ function selectAnswer(choice: ChoiceKey) {
   </button>
   <button
     onClick={() => { setShowPremiumCTA(false); router.push(`/results?mode=${mode}`); }}
-    className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-medium text-slate-400 transition hover:text-white"
+    className={`flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-medium text-slate-400 transition hover:text-white ${role === "anonymous" ? "hidden" : ""}`}
   >
     Mes résultats →
   </button>
