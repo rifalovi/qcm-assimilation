@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
+export const dynamic = 'force-dynamic'
 
-
-
-async function setRole(supabase: ReturnType<typeof createClient>, userId: string, role: "premium" | "elite", stripeData: {
+async function setRole(supabase: SupabaseClient, userId: string, role: "premium" | "elite", stripeData: {
   customerId?: string;
   subscriptionId?: string;
   expiresAt?: string | null;
@@ -21,16 +20,15 @@ async function setRole(supabase: ReturnType<typeof createClient>, userId: string
   }, { onConflict: "user_id" });
 }
 
-export const dynamic = 'force-dynamic'
-
 export async function POST(req: NextRequest) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2026-02-25.clover',
+    apiVersion: "2026-02-25.clover",
   })
+
   const body = await req.text()
   const signature = req.headers.get("stripe-signature")!
 
@@ -41,8 +39,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Signature invalide" }, { status: 400 })
   }
 
-  // ── checkout.session.completed ────────────────────────────────────────
-  // Déclenché pour Premium (subscription) ET Élite (payment)
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session
     const userId = session.client_reference_id
@@ -53,45 +49,34 @@ export async function POST(req: NextRequest) {
     if (userId) {
       if (plan === "elite" || session.mode === "payment") {
         console.log(`[webhook] tentative setRole elite pour ${userId}`)
-        const { error } = await supabase
-          .from("profiles")
-          .update({ role: "elite" })
-          .eq("id", userId)
+        const { error } = await supabase.from("profiles").update({ role: "elite" }).eq("id", userId)
         console.log(`[webhook] profiles update error:`, error)
-        const { error: subError } = await supabase
-          .from("subscriptions")
-          .upsert({
-            user_id: userId,
-            stripe_customer_id: session.customer as string ?? null,
-            status: "active",
-            expires_at: null,
-            updated_at: new Date().toISOString(),
-          }, { onConflict: "user_id" })
+        const { error: subError } = await supabase.from("subscriptions").upsert({
+          user_id: userId,
+          stripe_customer_id: session.customer as string ?? null,
+          status: "active",
+          expires_at: null,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: "user_id" })
         console.log(`[webhook] subscriptions upsert error:`, subError)
       } else {
-        // Premium — expiration dans 3 mois
         const expiresAt = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
         await setRole(supabase, userId, "premium", {
           customerId: session.customer as string,
           subscriptionId: session.subscription as string,
           expiresAt,
         })
-        console.log(`[webhook] Premium activé pour ${userId} jusqu'au ${expiresAt}`)
+        console.log(`[webhook] Premium active pour ${userId} jusqu au ${expiresAt}`)
       }
     }
   }
 
-  // ── invoice.payment_succeeded — renouvellement Premium ────────────────
   if (event.type === "invoice.payment_succeeded") {
     const invoice = event.data.object as Stripe.Invoice
     const subId = (invoice as any).subscription as string
     if (subId) {
       const subscription = await stripe.subscriptions.retrieve(subId)
-      const { data } = await supabase
-        .from("subscriptions")
-        .select("user_id")
-        .eq("stripe_subscription_id", subId)
-        .single()
+      const { data } = await supabase.from("subscriptions").select("user_id").eq("stripe_subscription_id", subId).single()
       if (data?.user_id) {
         const expiresAt = new Date((subscription as any).current_period_end * 1000).toISOString()
         await setRole(supabase, data.user_id, "premium", {
@@ -99,26 +84,21 @@ export async function POST(req: NextRequest) {
           subscriptionId: subId,
           expiresAt,
         })
-        console.log(`[webhook] Premium renouvelé pour ${data.user_id} jusqu'au ${expiresAt}`)
+        console.log(`[webhook] Premium renouvelé pour ${data.user_id} jusqu au ${expiresAt}`)
       }
     }
   }
 
-  // ── customer.subscription.deleted — annulation Premium ───────────────
   if (event.type === "customer.subscription.deleted") {
     const subscription = event.data.object as Stripe.Subscription
-    const { data } = await supabase
-      .from("subscriptions")
-      .select("user_id")
-      .eq("stripe_subscription_id", subscription.id)
-      .single()
+    const { data } = await supabase.from("subscriptions").select("user_id").eq("stripe_subscription_id", subscription.id).single()
     if (data?.user_id) {
       await supabase.from("profiles").update({ role: "freemium" }).eq("id", data.user_id)
       await supabase.from("subscriptions").update({
         status: "canceled",
         updated_at: new Date().toISOString(),
       }).eq("stripe_subscription_id", subscription.id)
-      console.log(`[webhook] Premium révoqué pour ${data.user_id}`)
+      console.log(`[webhook] Premium revoque pour ${data.user_id}`)
     }
   }
 
