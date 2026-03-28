@@ -24,7 +24,7 @@ const THEME_META: Record<AudioThemeKey, { icon: string; accent: string; accentTe
   Institutions: { icon: "🏛️", accent: "from-violet-500/20 via-purple-500/10 to-fuchsia-500/20", accentText: "text-violet-300",  border: "border-violet-400/30",  glow: "rgba(139,92,246,0.3)"  },
   Histoire:     { icon: "📜", accent: "from-amber-500/20 via-orange-500/10 to-yellow-500/20",    accentText: "text-amber-300",   border: "border-amber-400/30",   glow: "rgba(245,158,11,0.3)"  },
   Société:      { icon: "👥", accent: "from-emerald-500/20 via-green-500/10 to-teal-500/20",     accentText: "text-emerald-300", border: "border-emerald-400/30", glow: "rgba(16,185,129,0.3)"  },
-  "Devenir français(e)": { icon: "🎖️", accent: "from-rose-500/20 via-red-500/10 to-pink-500/20",      accentText: "text-rose-300",    border: "border-rose-400/30",    glow: "rgba(244,63,94,0.3)"   },
+  "Devenir français(e)": { icon: "🎖️", accent: "from-rose-500/20 via-red-500/10 to-pink-500/20", accentText: "text-rose-300",    border: "border-rose-400/30",    glow: "rgba(244,63,94,0.3)"   },
 };
 
 function fmt(s: number) {
@@ -33,7 +33,7 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-// ─── Hook audio ─────────────────────────────────────────────────────────────
+// ─── Hook audio ──────────────────────────────────────────────────────────────
 //
 // 🎓 PATTERN "Single Audio Element" — pourquoi ?
 //
@@ -50,6 +50,14 @@ function fmt(s: number) {
 // Solution : on crée l'élément Audio() une seule fois via useRef + useEffect,
 // et on ne le détruit jamais. On change audio.src directement sans passer
 // par le JSX.
+//
+// Corrections v2 :
+// 1. episodesRef suit tout le tableau episodes (pas juste sa longueur)
+//    → handleEnded lit episodesRef.current, jamais une closure capturée
+// 2. doPlay() extrait au niveau du hook (stable, réutilisé par handleEnded
+//    ET Media Session nexttrack)
+// 3. handleEndedRef réattaché à audio.onended après chaque mise à jour
+// 4. setAutoPlayImmediate : met à jour ref + state synchroniquement
 //
 function useAudioPlayer(
   episodes: AudioEpisode[],
@@ -71,7 +79,6 @@ function useAudioPlayer(
       audioRef.current = new Audio();
       audioRef.current.preload = "auto";
     }
-    // Nettoyage quand la page est démontée (navigation)
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
@@ -80,38 +87,43 @@ function useAudioPlayer(
     };
   }, []);
 
-  // ── Refs toujours à jour — évitent les stale closures en arrière-plan ─────
-  const autoPlayRef      = useRef(autoPlay);
+  // ── Refs toujours à jour — TOUTES les valeurs dynamiques ─────────────────
+  // 🎓 Règle fondamentale : toute valeur lue dans handleEnded ou dans un
+  // callback natif (onended, Media Session) DOIT passer par une ref.
+  // Une closure capturée dans useCallback devient "stale" dès que React
+  // re-rend le composant — la ref, elle, est toujours fraîche.
+  const autoPlayRef    = useRef(autoPlay);
+  const onNextRef      = useRef(onNext);
+  const onPrevRef      = useRef(onPrev);
+  const currentIdxRef  = useRef(currentIdx);
+  const episodesRef    = useRef(episodes);        // ← ref sur TOUT le tableau
+  const shouldPlayOnLoad = useRef(false);
+
   // setAutoPlayImmediate — met à jour ref ET state synchroniquement
   // pour garantir que handleEnded voit toujours la bonne valeur
   const setAutoPlayImmediate = useCallback((v: boolean) => {
     autoPlayRef.current = v;
     setAutoPlay(v);
   }, [setAutoPlay]);
-  const onNextRef        = useRef(onNext);
-  const onPrevRef        = useRef(onPrev);
-  const currentIdxRef    = useRef(currentIdx);
-  const episodesLenRef   = useRef(episodes.length);
-  const shouldPlayOnLoad = useRef(false);
 
-  useEffect(() => { autoPlayRef.current    = autoPlay;        }, [autoPlay]);
-  useEffect(() => { onNextRef.current      = onNext;          }, [onNext]);
-  useEffect(() => { onPrevRef.current      = onPrev;          }, [onPrev]);
-  useEffect(() => { currentIdxRef.current  = currentIdx;      }, [currentIdx]);
-  useEffect(() => { episodesLenRef.current = episodes.length; }, [episodes.length]);
+  useEffect(() => { autoPlayRef.current   = autoPlay;   }, [autoPlay]);
+  useEffect(() => { onNextRef.current     = onNext;     }, [onNext]);
+  useEffect(() => { onPrevRef.current     = onPrev;     }, [onPrev]);
+  useEffect(() => { currentIdxRef.current = currentIdx; }, [currentIdx]);
+  useEffect(() => { episodesRef.current   = episodes;   }, [episodes]);
 
-  const [playing,     setPlaying]    = useState(false);
-  const [progress,    setProgress]   = useState(0);
-  const [currentTime, setCurrentTime]= useState(0);
-  const [duration,    setDuration]   = useState(0);
-  const [loaded,      setLoaded]     = useState(false);
-  const [fetchError,  setFetchError] = useState(false);
+  const [playing,      setPlaying]     = useState(false);
+  const [progress,     setProgress]    = useState(0);
+  const [currentTime,  setCurrentTime] = useState(0);
+  const [duration,     setDuration]    = useState(0);
+  const [loaded,       setLoaded]      = useState(false);
+  const [fetchError,   setFetchError]  = useState(false);
 
   const episode = episodes[currentIdx];
 
   // ── Pré-fetch URL prochain épisode ────────────────────────────────────────
-  // On stocke l'URL du prochain épisode en avance dans nextUrlRef pour
-  // pouvoir l'utiliser immédiatement dans handleEnded, sans fetch bloquant.
+  // Stocké dans nextUrlRef pour une lecture immédiate dans handleEnded,
+  // sans fetch bloquant — crucial sur iOS en arrière-plan.
   const nextUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -125,9 +137,82 @@ function useAudioPlayer(
       .catch(() => { nextUrlRef.current = null; });
   }, [currentIdx, isPremium, episodes]);
 
+  // ── doPlay : joue une URL sur l'élément audio persistant ─────────────────
+  // 🎓 Extrait au niveau du hook (pas dans handleEnded) pour être stable
+  // et réutilisable depuis handleEnded ET Media Session nexttrack.
+  // Ne capture aucune valeur de rendu React — tout passe par les refs.
+  const doPlay = useCallback((url: string) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Nettoyer les anciens listeners pour éviter les doublons
+    audio.onended          = null;
+    audio.ontimeupdate     = null;
+    audio.onloadedmetadata = null;
+    audio.onplay           = null;
+    audio.onpause          = null;
+
+    audio.src = url;
+    audio.load();
+
+    audio.ontimeupdate = () => {
+      setCurrentTime(audio.currentTime);
+      setProgress((audio.currentTime / (audio.duration || 1)) * 100);
+    };
+    audio.onloadedmetadata = () => {
+      setDuration(audio.duration ?? 0);
+      setLoaded(true);
+      audio.play().then(() => setPlaying(true)).catch(() => {});
+    };
+    audio.onplay  = () => setPlaying(true);
+    audio.onpause = () => setPlaying(false);
+    // Réattacher handleEnded pour que la chaîne continue
+    audio.onended = handleEndedRef.current;
+
+    // Mettre à jour l'UI React (setTimeout pour ne pas bloquer iOS)
+    setTimeout(() => onNextRef.current(), 100);
+  }, []); // Pas de dépendances : tout passe par les refs
+
+  // ── handleEnded ───────────────────────────────────────────────────────────
+  // 🎓 Ne capture AUCUNE variable de rendu React.
+  //    Lit tout depuis les refs (episodesRef, currentIdxRef, autoPlayRef).
+  //    C'est la clé pour iOS/Android en arrière-plan où React est suspendu.
+  const handleEnded = useCallback(() => {
+    setPlaying(false);
+    if (!autoPlayRef.current) return;
+
+    const eps     = episodesRef.current;       // tableau toujours à jour
+    const nextIdx = currentIdxRef.current + 1;
+    if (nextIdx >= eps.length) return;
+
+    if (nextUrlRef.current) {
+      // Cas idéal : URL pré-fetchée disponible → lecture immédiate
+      const url = nextUrlRef.current;
+      nextUrlRef.current = null;
+      doPlay(url);
+    } else {
+      // Fallback : fetch à la volée
+      const nextEp = eps[nextIdx];
+      if (!nextEp) return;
+      fetch(`/api/audio/${nextEp.episodeSlug}`)
+        .then(r => r.json())
+        .then(d => doPlay(d.url))
+        .catch(() => {});
+    }
+  }, [doPlay]); // Dépend uniquement de doPlay (stable)
+
+  // Ref vers handleEnded — toujours à jour
+  const handleEndedRef = useRef<(() => void)>(handleEnded);
+  useEffect(() => {
+    handleEndedRef.current = handleEnded;
+    // 🎓 IMPORTANT : réattacher onended après chaque mise à jour de handleEnded
+    // pour que l'élément audio utilise toujours la version la plus récente.
+    if (audioRef.current) {
+      audioRef.current.onended = handleEnded;
+    }
+  }, [handleEnded]);
+
   // ── Chargement URL épisode courant ────────────────────────────────────────
-  // 🎓 On ne remet PAS audioUrl dans le state pour éviter que React
-  // re-monte l'élément <audio>. On change audio.src directement.
   useEffect(() => {
     const isFreeEpisode = FREE_EPISODE_NUMBERS.has(episode?.episodeNumber ?? 0);
     if (!episode || (!isPremium && !isFreeEpisode)) return;
@@ -148,13 +233,11 @@ function useAudioPlayer(
         const audio = audioRef.current;
         if (!audio) return;
 
-        // ── Reconfigurer les event listeners sur le même élément ──────────
-        // On retire les anciens pour éviter les doublons
-        audio.onended      = null;
-        audio.ontimeupdate = null;
+        audio.onended          = null;
+        audio.ontimeupdate     = null;
         audio.onloadedmetadata = null;
-        audio.onplay       = null;
-        audio.onpause      = null;
+        audio.onplay           = null;
+        audio.onpause          = null;
 
         audio.src = d.url;
         audio.load();
@@ -174,84 +257,12 @@ function useAudioPlayer(
         };
         audio.onplay  = () => setPlaying(true);
         audio.onpause = () => setPlaying(false);
+        // Toujours utiliser handleEndedRef.current pour avoir la version à jour
         audio.onended = handleEndedRef.current;
       })
       .catch(() => setFetchError(true));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episode?.episodeSlug, isPremium, playTrigger]);
-
-  // ── handleEnded ───────────────────────────────────────────────────────────
-  // 🎓 Cette fonction s'exécute quand un épisode se termine.
-  // Sur iOS en arrière-plan, React est suspendu. On ne peut PAS faire de
-  // setState ici — uniquement manipuler directement audioRef.current.
-  //
-  // Flux :
-  //  1. nextUrlRef.current disponible ?  → src = url, load, play (immédiat)
-  //  2. Sinon → fetch l'URL puis src/load/play
-  //  3. Dans les deux cas → setTimeout pour réveiller React et mettre l'UI à jour
-  //
-  const handleEnded = useCallback(() => {
-    setPlaying(false);
-    if (!autoPlayRef.current) return;
-    const nextIdx = currentIdxRef.current + 1;
-    if (nextIdx >= episodesLenRef.current) return;
-
-    const doPlay = (url: string) => {
-      const audio = audioRef.current;
-      if (!audio) return;
-
-      audio.onended      = null;
-      audio.ontimeupdate = null;
-      audio.onloadedmetadata = null;
-
-      audio.src = url;
-      audio.load();
-
-      audio.onloadedmetadata = () => {
-        setDuration(audio.duration ?? 0);
-        setLoaded(true);
-        audio.play().then(() => setPlaying(true)).catch(() => {});
-      };
-      audio.ontimeupdate = () => {
-        setCurrentTime(audio.currentTime);
-        setProgress((audio.currentTime / (audio.duration || 1)) * 100);
-      };
-      // Réattacher handleEnded pour les épisodes suivants
-      audio.onended = handleEndedRef.current;
-      audio.onplay  = () => setPlaying(true);
-      audio.onpause = () => setPlaying(false);
-
-      // Mettre à jour React pour l'UI (setTimeout pour ne pas bloquer iOS)
-      setTimeout(() => onNextRef.current(), 100);
-    };
-
-    if (nextUrlRef.current) {
-      // Cas idéal : URL déjà pré-fetchée, lecture immédiate
-      const url = nextUrlRef.current;
-      nextUrlRef.current = null;
-      doPlay(url);
-    } else {
-      // Fallback : fetch à la volée (peut être lent sur iOS en arrière-plan)
-      const nextEp = episodes[nextIdx]; // snapshot locale pour éviter stale
-      if (!nextEp) return;
-      fetch(`/api/audio/${nextEp.episodeSlug}`)
-        .then(r => r.json())
-        .then(d => doPlay(d.url))
-        .catch(() => {});
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [episodes]);
-
-  // Ref vers handleEnded pour pouvoir le réattacher sans créer de closure stale
-  const handleEndedRef = useRef<(() => void)>(handleEnded);
-  useEffect(() => { handleEndedRef.current = handleEnded; }, [handleEnded]);
-
-  // Attacher handleEnded à l'élément audio au montage initial
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.onended = handleEndedRef.current;
-    }
-  }, []);
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
@@ -263,15 +274,15 @@ function useAudioPlayer(
       audio.play().then(() => {
         setPlaying(true);
         trackEvent("audio_played", {
-          episode_slug: episode?.episodeSlug,
-          episode_title: episode?.episodeTitle,
-          subtheme: episode?.subthemeKey,
+          episode_slug:   episode?.episodeSlug,
+          episode_title:  episode?.episodeTitle,
+          subtheme:       episode?.subthemeKey,
           episode_number: episode?.episodeNumber,
         });
       }).catch(() => {});
       setAutoPlayImmediate(true);
     }
-  }, [playing, setAutoPlay, setAutoPlayImmediate, episode]);
+  }, [playing, setAutoPlayImmediate, episode]);
 
   const skip = useCallback((s: number) => {
     const audio = audioRef.current;
@@ -281,9 +292,8 @@ function useAudioPlayer(
 
   // ── Media Session API ─────────────────────────────────────────────────────
   // 🎓 Les contrôles de l'écran de verrouillage passent par cette API.
-  // Sur iOS, les handlers "nexttrack" et "previoustrack" sont appelés même
-  // quand le JS est suspendu — iOS les exécute dans un contexte prioritaire.
-  // On utilise des refs pour que les handlers aient toujours les valeurs à jour.
+  // nexttrack utilise doPlay() directement — robuste sur écran verrouillé
+  // iOS/Android car ne dépend d'aucune closure React.
   useEffect(() => {
     if (!isPremium || !episode || typeof window === "undefined" || !("mediaSession" in navigator)) return;
 
@@ -309,29 +319,22 @@ function useAudioPlayer(
       if (currentIdxRef.current > 0) onPrevRef.current();
     });
     navigator.mediaSession.setActionHandler("nexttrack", () => {
-      if (currentIdxRef.current >= episodesLenRef.current - 1) return;
-      // Sur iOS : utiliser nextUrlRef si disponible pour enchaîner sans fetch
-      if (nextUrlRef.current && audioRef.current) {
+      const eps     = episodesRef.current;
+      const nextIdx = currentIdxRef.current + 1;
+      if (nextIdx >= eps.length) return;
+
+      if (nextUrlRef.current) {
         const url = nextUrlRef.current;
         nextUrlRef.current = null;
-        const audio = audioRef.current;
-        audio.onended = null;
-        audio.src = url;
-        audio.load();
-        audio.onloadedmetadata = () => {
-          setDuration(audio.duration ?? 0);
-          setLoaded(true);
-          audio.play().then(() => setPlaying(true)).catch(() => {});
-        };
-        audio.ontimeupdate = () => {
-          setCurrentTime(audio.currentTime);
-          setProgress((audio.currentTime / (audio.duration || 1)) * 100);
-        };
-        audio.onended = handleEndedRef.current;
-        audio.onplay  = () => setPlaying(true);
-        audio.onpause = () => setPlaying(false);
+        doPlay(url);
+      } else {
+        const nextEp = eps[nextIdx];
+        if (!nextEp) return;
+        fetch(`/api/audio/${nextEp.episodeSlug}`)
+          .then(r => r.json())
+          .then(d => doPlay(d.url))
+          .catch(() => {});
       }
-      onNextRef.current();
     });
     navigator.mediaSession.setActionHandler("seekbackward", () => {
       if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
@@ -344,7 +347,7 @@ function useAudioPlayer(
       (["play","pause","previoustrack","nexttrack","seekbackward","seekforward"] as MediaSessionAction[])
         .forEach(a => { try { navigator.mediaSession.setActionHandler(a, null); } catch {} });
     };
-  }, [episode, isPremium]);
+  }, [episode, isPremium, doPlay]);
 
   useEffect(() => {
     if (!isPremium || !("mediaSession" in navigator)) return;
@@ -382,7 +385,6 @@ function StickyPlayer({
     fetchError, togglePlay, skip, handleEnded, setAutoPlayImmediate,
   } = useAudioPlayer(episodes, currentIdx, onNext, onPrev, isPremium, autoPlay, setAutoPlay, playTrigger);
 
-  // Exposer togglePlay via onReady pour le bouton "Tout écouter"
   useEffect(() => {
     onReady(togglePlay, setAutoPlayImmediate);
   }, [togglePlay, onReady, setAutoPlayImmediate]);
@@ -391,15 +393,10 @@ function StickyPlayer({
     setRepeatMode(repeatMode === "none" ? "one" : repeatMode === "one" ? "queue" : "none");
   }, [repeatMode, setRepeatMode]);
 
-  // Indicateur de chargement : on n'a plus audioUrl en state,
-  // on utilise loaded pour savoir si l'audio est prêt
   const isLoading = !loaded && !fetchError;
 
   return (
     <div className={`sticky top-14 z-40 rounded-[1.5rem] border ${meta.border} bg-gradient-to-r ${meta.accent} backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]`}>
-      {/* 🎓 Plus de <audio> dans le JSX — l'élément est géré par le hook
-          via new Audio() pour garantir la persistance sur iOS */}
-
       {/* Ligne 1 : pochette + info + play */}
       <div className="flex items-center gap-3 px-4 pt-3">
         {subthemeImage ? (
@@ -447,11 +444,11 @@ function StickyPlayer({
           className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[10px] font-bold text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
           +10
         </button>
-        <button onClick={() => { setAutoPlay(true); onNext(); }} disabled={currentIdx === episodes.length - 1}
+        <button onClick={() => { setAutoPlayImmediate(true); onNext(); }} disabled={currentIdx === episodes.length - 1}
           className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 disabled:opacity-30">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 4V8l-5.5 4zM16 6h2v12h-2z"/></svg>
         </button>
-        <button onClick={() => setAutoPlay(!autoPlay)}
+        <button onClick={() => setAutoPlayImmediate(!autoPlay)}
           className={`flex h-8 items-center gap-1 rounded-xl border px-2 text-[10px] font-bold transition ${autoPlay ? `${meta.border} ${meta.accentText} bg-white/10` : "border-white/10 bg-white/5 text-slate-500"}`}>
           AUTO
         </button>
@@ -502,11 +499,11 @@ function StickyPlayer({
 // ─── Page principale ─────────────────────────────────────────────────────────
 export default function AudioSeriesPage() {
   const { theme, subtheme } = useParams();
-  const router        = useRouter();
-  const searchParams  = useSearchParams();
-  const { role }      = useUser();
-  const isPremium     = (role === "premium" || role === "elite");
-  const isFreemium    = role === "freemium";
+  const router       = useRouter();
+  const searchParams = useSearchParams();
+  const { role }     = useUser();
+  const isPremium    = (role === "premium" || role === "elite");
+  const isFreemium   = role === "freemium";
 
   const themeKey    = decodeURIComponent(theme as string) as AudioThemeKey;
   const subthemeKey = decodeURIComponent(subtheme as string);
@@ -518,14 +515,14 @@ export default function AudioSeriesPage() {
     [themeKey, subthemeKey]
   );
 
-  const [currentIdx,        setCurrentIdx]        = useState(0);
-  const [autoPlay,          setAutoPlay]           = useState(false);
-  const [selectedEpisodes,  setSelectedEpisodes]   = useState<Set<number>>(new Set());
-  const [repeatMode,        setRepeatMode]         = useState<"none" | "one" | "queue">("none");
-  const [isSelectionMode,   setIsSelectionMode]    = useState(false);
-  const [playTrigger,       setPlayTrigger]        = useState(0);
-  const playerPlayRef = useRef<(() => void) | null>(null);
-  const playerSetAutoPlayRef = useRef<((v: boolean) => void) | null>(null);
+  const [currentIdx,       setCurrentIdx]       = useState(0);
+  const [autoPlay,         setAutoPlay]          = useState(false);
+  const [selectedEpisodes, setSelectedEpisodes]  = useState<Set<number>>(new Set());
+  const [repeatMode,       setRepeatMode]        = useState<"none" | "one" | "queue">("none");
+  const [isSelectionMode,  setIsSelectionMode]   = useState(false);
+  const [playTrigger,      setPlayTrigger]       = useState(0);
+  const playerPlayRef         = useRef<(() => void) | null>(null);
+  const playerSetAutoPlayRef  = useRef<((v: boolean) => void) | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("last_audio_page", window.location.pathname);
@@ -539,7 +536,6 @@ export default function AudioSeriesPage() {
     setCurrentIdx(idx >= 0 ? idx : 0);
   }, [episodes, searchParams]);
 
-  // Freemium : forcer le 1er épisode gratuit
   useEffect(() => {
     if (!isFreemium || !episodes.length) return;
     const firstFreeIdx = episodes.findIndex(ep => FREE_EPISODE_NUMBERS.has(ep.episodeNumber));
@@ -560,13 +556,11 @@ export default function AudioSeriesPage() {
   const goPrev = useCallback(() => setCurrentIdx(i => Math.max(i - 1, 0)), []);
 
   // "Tout écouter" — active autoPlay et démarre depuis l'épisode 0
-  // 🎓 Si on est déjà sur l'épisode 0, pas de changement de state → on
-  // déclenche le play directement via la ref exposée par StickyPlayer.
+  // 🎓 playerSetAutoPlayRef met à jour ref + state synchroniquement pour
+  // éviter la race condition où handleEnded lirait autoPlayRef.current = false.
   const playAll = useCallback(() => {
     setSelectedEpisodes(new Set());
     setRepeatMode("none");
-    // ⚡ setAutoPlayImmediate met à jour ref + state synchroniquement
-    // évite la race condition : handleEnded voit autoPlayRef.current = true immédiatement
     playerSetAutoPlayRef.current?.(true);
     setAutoPlay(true);
     if (currentIdx === 0) {
@@ -574,7 +568,7 @@ export default function AudioSeriesPage() {
     } else {
       setCurrentIdx(0);
     }
-  }, [currentIdx, setAutoPlay]);
+  }, [currentIdx]);
 
   const toggleEpisodeSelection = useCallback((idx: number) => {
     setSelectedEpisodes(prev => {
@@ -605,7 +599,6 @@ export default function AudioSeriesPage() {
 
   const meta = THEME_META[themeKey] ?? THEME_META.Valeurs;
 
-  // Série suivante
   const allSeries = useMemo(() => {
     const seen = new Set<string>();
     return audioEpisodes.filter(ep => {
@@ -615,10 +608,11 @@ export default function AudioSeriesPage() {
       return true;
     });
   }, []);
+
   const currentSeriesIndex = allSeries.findIndex(ep => ep.themeKey === themeKey && ep.subthemeKey === subthemeKey);
-  const nextSeries = allSeries[(currentSeriesIndex + 1) % allSeries.length];
+  const nextSeries    = allSeries[(currentSeriesIndex + 1) % allSeries.length];
   const nextSeriesUrl = nextSeries ? `/audio/${encodeURIComponent(nextSeries.themeKey)}/${encodeURIComponent(nextSeries.subthemeKey)}` : '/audio';
-  const isDevenir = themeKey === "Devenir français(e)";
+  const isDevenir      = themeKey === "Devenir français(e)";
   const subthemeImage  = SUBTHEME_IMAGES[subthemeKey] ?? null;
   const currentEpisode = episodes[currentIdx];
   const isPlayerVisible = isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0));
@@ -633,7 +627,7 @@ export default function AudioSeriesPage() {
   }
 
   const { themeLabel, subthemeLabel } = episodes[0];
-  const totalMinutes   = Math.round(episodes.reduce((acc, ep) => acc + ep.durationTargetSeconds, 0) / 60);
+  const totalMinutes    = Math.round(episodes.reduce((acc, ep) => acc + ep.durationTargetSeconds, 0) / 60);
   const scrollReviseUrl = `/scroll?theme=${encodeURIComponent(themeKey)}`;
 
   return (
@@ -789,9 +783,9 @@ export default function AudioSeriesPage() {
           </div>
           <div className="space-y-2">
             {episodes.map((ep, idx) => {
-              const isFree  = isFreemium && FREE_EPISODE_NUMBERS.has(ep.episodeNumber);
-              const locked  = !isPremium && !isFree;
-              const isActive = currentIdx === idx && (isPremium || isFree);
+              const isFree    = isFreemium && FREE_EPISODE_NUMBERS.has(ep.episodeNumber);
+              const locked    = !isPremium && !isFree;
+              const isActive  = currentIdx === idx && (isPremium || isFree);
               const isSelected = selectedEpisodes.has(idx);
               return (
                 <div key={ep.id} className={`rounded-xl border transition-all duration-200 ${
