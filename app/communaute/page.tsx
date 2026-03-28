@@ -106,14 +106,14 @@ export default async function CommunautePage() {
   )
 
   // 1. Vérification de l'authentification
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user: session } } = await supabase.auth.getUser()
   if (!session) redirect('/login?redirect=/communaute')
 
   // 2. Vérification du rôle Premium
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
-    .eq('id', session.user.id)
+    .eq('id', session.id)
     .single()
 
   if (!['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(profile?.role ?? '')) redirect('/communaute/upgrade?feature=la communauté Premium&back=/communaute')
@@ -139,7 +139,7 @@ export default async function CommunautePage() {
     supabase
       .from('direct_messages')
       .select('*', { count: 'exact', head: true })
-      .eq('receiver_id', session.user.id)
+      .eq('receiver_id', session.id)
       .eq('is_read', false),
   ])
 
