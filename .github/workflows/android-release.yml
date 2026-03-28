@@ -41,10 +41,10 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/cap-citoyen-release.keystore
 
-      - name: Build Release APK
+      - name: Build Release AAB
         run: |
           cd android
-          ./gradlew assembleRelease
+          ./gradlew bundleRelease
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -53,4 +53,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cap-citoyen-release
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: android/app/build/outputs/bundle/release/app-release.aab
