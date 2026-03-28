@@ -82,6 +82,12 @@ function useAudioPlayer(
 
   // ── Refs toujours à jour — évitent les stale closures en arrière-plan ─────
   const autoPlayRef      = useRef(autoPlay);
+  // setAutoPlayImmediate — met à jour ref ET state synchroniquement
+  // pour garantir que handleEnded voit toujours la bonne valeur
+  const setAutoPlayImmediate = useCallback((v: boolean) => {
+    autoPlayRef.current = v;
+    setAutoPlay(v);
+  }, [setAutoPlay]);
   const onNextRef        = useRef(onNext);
   const onPrevRef        = useRef(onPrev);
   const currentIdxRef    = useRef(currentIdx);
@@ -263,9 +269,9 @@ function useAudioPlayer(
           episode_number: episode?.episodeNumber,
         });
       }).catch(() => {});
-      setAutoPlay(true);
+      setAutoPlayImmediate(true);
     }
-  }, [playing, setAutoPlay, episode]);
+  }, [playing, setAutoPlay, setAutoPlayImmediate, episode]);
 
   const skip = useCallback((s: number) => {
     const audio = audioRef.current;
@@ -349,7 +355,7 @@ function useAudioPlayer(
     audioRef, playing, setPlaying, shouldPlayOnLoad,
     progress, setProgress, currentTime, setCurrentTime,
     duration, setDuration, loaded, setLoaded,
-    fetchError, togglePlay, skip, handleEnded,
+    fetchError, togglePlay, skip, handleEnded, setAutoPlayImmediate,
   };
 }
 
@@ -367,19 +373,19 @@ function StickyPlayer({
   selectedEpisodes: Set<number>; repeatMode: "none" | "one" | "queue";
   setRepeatMode: (v: "none" | "one" | "queue") => void;
   playTrigger: number;
-  onReady: (play: () => void) => void;
+  onReady: (play: () => void, setAutoPlayImmediate: (v: boolean) => void) => void;
 }) {
   const {
     audioRef, playing, setPlaying, shouldPlayOnLoad,
     progress, setProgress, currentTime, setCurrentTime,
     duration, setDuration, loaded, setLoaded,
-    fetchError, togglePlay, skip, handleEnded,
+    fetchError, togglePlay, skip, handleEnded, setAutoPlayImmediate,
   } = useAudioPlayer(episodes, currentIdx, onNext, onPrev, isPremium, autoPlay, setAutoPlay, playTrigger);
 
   // Exposer togglePlay via onReady pour le bouton "Tout écouter"
   useEffect(() => {
-    onReady(togglePlay);
-  }, [togglePlay, onReady]);
+    onReady(togglePlay, setAutoPlayImmediate);
+  }, [togglePlay, onReady, setAutoPlayImmediate]);
 
   const cycleRepeat = useCallback(() => {
     setRepeatMode(repeatMode === "none" ? "one" : repeatMode === "one" ? "queue" : "none");
@@ -519,6 +525,7 @@ export default function AudioSeriesPage() {
   const [isSelectionMode,   setIsSelectionMode]    = useState(false);
   const [playTrigger,       setPlayTrigger]        = useState(0);
   const playerPlayRef = useRef<(() => void) | null>(null);
+  const playerSetAutoPlayRef = useRef<((v: boolean) => void) | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("last_audio_page", window.location.pathname);
@@ -558,13 +565,16 @@ export default function AudioSeriesPage() {
   const playAll = useCallback(() => {
     setSelectedEpisodes(new Set());
     setRepeatMode("none");
+    // ⚡ setAutoPlayImmediate met à jour ref + state synchroniquement
+    // évite la race condition : handleEnded voit autoPlayRef.current = true immédiatement
+    playerSetAutoPlayRef.current?.(true);
     setAutoPlay(true);
     if (currentIdx === 0) {
       setTimeout(() => playerPlayRef.current?.(), 150);
     } else {
       setCurrentIdx(0);
     }
-  }, [currentIdx]);
+  }, [currentIdx, setAutoPlay]);
 
   const toggleEpisodeSelection = useCallback((idx: number) => {
     setSelectedEpisodes(prev => {
@@ -579,6 +589,7 @@ export default function AudioSeriesPage() {
     const sorted = Array.from(selectedEpisodes).sort((a, b) => a - b);
     setCurrentIdx(sorted[0]);
     setRepeatMode("queue");
+    playerSetAutoPlayRef.current?.(true);
     setAutoPlay(true);
     setIsSelectionMode(false);
   }, [selectedEpisodes]);
@@ -732,7 +743,7 @@ export default function AudioSeriesPage() {
             repeatMode={repeatMode}
             setRepeatMode={setRepeatMode}
             playTrigger={playTrigger}
-            onReady={(play) => { playerPlayRef.current = play; }}
+            onReady={(play, setAP) => { playerPlayRef.current = play; playerSetAutoPlayRef.current = setAP; }}
           />
         )}
 
@@ -799,13 +810,14 @@ export default function AudioSeriesPage() {
                       if (locked) { handleUpgrade(); return; }
                       if (isSelectionMode) { toggleEpisodeSelection(idx); return; }
                       setCurrentIdx(idx);
+                      playerSetAutoPlayRef.current?.(true);
                       setAutoPlay(true);
                     }}
                     onKeyDown={(e) => {
                       if (e.key !== "Enter") return;
                       if (locked) handleUpgrade();
                       else if (isSelectionMode) toggleEpisodeSelection(idx);
-                      else { setCurrentIdx(idx); setAutoPlay(true); }
+                      else { setCurrentIdx(idx); playerSetAutoPlayRef.current?.(true); setAutoPlay(true); }
                     }}
                     className="flex cursor-pointer items-center gap-3 px-4 py-3">
                     {isSelectionMode && isPremium && (
