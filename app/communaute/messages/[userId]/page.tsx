@@ -154,7 +154,7 @@ export default function ConversationPage() {
   if (loading) return <main className="flex flex-col h-screen max-w-lg mx-auto px-4 py-16 items-center justify-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
 
   return (
-    <main className="flex flex-col max-w-lg mx-auto" style={{ height: "100dvh" }}>
+    <main className="flex flex-col max-w-lg mx-auto" style={{ height: "calc(100dvh - 65px)" }}>
 
       {/* Header fixe */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-700 bg-slate-900 flex-shrink-0">
