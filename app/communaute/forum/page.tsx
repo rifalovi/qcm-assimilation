@@ -43,11 +43,11 @@ export default async function ForumPage() {
     { cookies: { getAll() { return cookieStore.getAll() }, setAll(s) { s.forEach(({ name, value, options }) => cookieStore.set(name, value, options)) } } }
   )
 
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user: session } } = await supabase.auth.getUser()
   if (!session) redirect('/login?redirect=/communaute/forum')
 
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
-  if (profile?.role !== 'premium' && profile?.role !== 'elite') redirect('/communaute/upgrade?feature=le forum&back=/communaute/forum')
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.id).single()
+  if (!['premium','elite','moderator','admin','super_admin'].includes(profile?.role ?? '')) redirect('/communaute/upgrade?feature=le forum&back=/communaute/forum')
 
   const { data: posts } = await supabase
     .from('forum_posts')

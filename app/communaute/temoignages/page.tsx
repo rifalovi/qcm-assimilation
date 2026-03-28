@@ -36,12 +36,12 @@ export default async function TemoignagesPage({ searchParams }: { searchParams: 
     }
   )
 
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user: session } } = await supabase.auth.getUser()
   if (!session) redirect('/login?redirect=/communaute/temoignages')
 
   const { data: profile } = await supabase
-    .from('profiles').select('role').eq('id', session.user.id).single()
-  if (profile?.role !== 'premium' && profile?.role !== 'elite') redirect('/communaute/upgrade?feature=les témoignages&back=/communaute/temoignages')
+    .from('profiles').select('role').eq('id', session.id).single()
+  if (!['premium','elite','moderator','admin','super_admin'].includes(profile?.role ?? '')) redirect('/communaute/upgrade?feature=les témoignages&back=/communaute/temoignages')
 
   const typeFilter = searchParams.type as 'test_civique' | 'entretien_naturalisation' | undefined
 
@@ -115,7 +115,7 @@ export default async function TemoignagesPage({ searchParams }: { searchParams: 
       ) : (
         <div className="space-y-4">
           {enriched.map((testimony) => (
-            <TestimonyCard key={testimony.id} testimony={testimony} currentUserId={session.user.id} timeAgo={timeAgo(testimony.created_at)} />
+            <TestimonyCard key={testimony.id} testimony={testimony} currentUserId={session.id} timeAgo={timeAgo(testimony.created_at)} />
           ))}
         </div>
       )}
