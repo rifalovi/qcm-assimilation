@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 
 
 
-async function setRole(userId: string, role: "premium" | "elite", stripeData: {
+async function setRole(supabase: ReturnType<typeof createClient>, userId: string, role: "premium" | "elite", stripeData: {
   customerId?: string;
   subscriptionId?: string;
   expiresAt?: string | null;
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
       } else {
         // Premium — expiration dans 3 mois
         const expiresAt = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
-        await setRole(userId, "premium", {
+        await setRole(supabase, userId, "premium", {
           customerId: session.customer as string,
           subscriptionId: session.subscription as string,
           expiresAt,
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
         .single()
       if (data?.user_id) {
         const expiresAt = new Date((subscription as any).current_period_end * 1000).toISOString()
-        await setRole(data.user_id, "premium", {
+        await setRole(supabase, data.user_id, "premium", {
           customerId: subscription.customer as string,
           subscriptionId: subId,
           expiresAt,
