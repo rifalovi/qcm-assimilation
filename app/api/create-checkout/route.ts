@@ -3,10 +3,6 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-02-25.clover',
-})
-
 const PLANS = {
   premium: {
     priceId: process.env.STRIPE_PRICE_ID_PREMIUM!,
@@ -18,7 +14,13 @@ const PLANS = {
   },
 }
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2026-02-25.clover',
+  })
+
   const cookieStore = await cookies()
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -40,7 +42,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
   }
 
-  // Lire le plan depuis le body (premium ou elite)
   let plan = 'premium'
   try {
     const body = await req.json()
