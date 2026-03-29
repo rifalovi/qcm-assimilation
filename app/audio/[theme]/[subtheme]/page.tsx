@@ -15,6 +15,7 @@ const SUBTHEME_IMAGES: Record<string, string> = {
   histoire_geographie: "/themes/histoire_geographie.jpg",
   societe: "/themes/societe.jpg",
   pourquoi_francais: "/themes/devenir_francais.jpg",
+  quiz_audio: "/themes/quiz_audio.png",
 };
 
 const FREE_EPISODE_NUMBERS = new Set([1, 2]);

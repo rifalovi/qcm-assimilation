@@ -50,6 +50,12 @@ const SUBTHEME_CONFIG: Record<string, {
     border: "border-emerald-400/20",
     accentText: "text-emerald-300",
   },
+  quiz_audio: {
+    image: "/themes/quiz_audio.png",
+    accent: "from-teal-600/30 to-cyan-600/20",
+    border: "border-teal-400/20",
+    accentText: "text-teal-300",
+  },
 };
 
 const THEME_ICONS: Record<string, string> = {
@@ -88,15 +94,7 @@ const COMING_SOON = [
     iconBg: "bg-cyan-500/20 border-cyan-400/20",
     count: "Bientôt",
   },
-  {
-    id: "quiz-audio",
-    title: "Quiz audio",
-    description: "Questions posées à l'oral — entraîne ta réponse",
-    icon: "🎯",
-    color: "from-orange-600/20 to-red-600/10 border-orange-400/20",
-    iconBg: "bg-orange-500/20 border-orange-400/20",
-    count: "Bientôt",
-  },
+
 ];
 
 // ─── Composant Album Card ──────────────────────────────────────────────────
