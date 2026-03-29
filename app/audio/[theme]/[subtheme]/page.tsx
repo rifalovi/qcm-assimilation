@@ -26,7 +26,7 @@ const THEME_META: Record<AudioThemeKey, { icon: string; accent: string; accentTe
   Histoire:     { icon: "📜", accent: "from-amber-500/20 via-orange-500/10 to-yellow-500/20",    accentText: "text-amber-300",   border: "border-amber-400/30",   glow: "rgba(245,158,11,0.3)"  },
   Société:      { icon: "👥", accent: "from-emerald-500/20 via-green-500/10 to-teal-500/20",     accentText: "text-emerald-300", border: "border-emerald-400/30", glow: "rgba(16,185,129,0.3)"  },
   "Devenir français(e)": { icon: "🎖️", accent: "from-rose-500/20 via-red-500/10 to-pink-500/20", accentText: "text-rose-300",    border: "border-rose-400/30",    glow: "rgba(244,63,94,0.3)"   },
-  "Quiz Audio":          { icon: "🎯", accent: "from-teal-500/20 via-cyan-500/10 to-emerald-500/20", accentText: "text-teal-300",    border: "border-teal-400/30",    glow: "rgba(20,184,166,0.3)"  },
+  "Quiz Audio":          { icon: "🎯", accent: "from-teal-500/20 via-cyan-500/10 to-emerald-500/20", accentText: "text-teal-300", border: "border-teal-400/30",    glow: "rgba(20,184,166,0.3)"  },
 };
 
 function fmt(s: number) {
@@ -35,31 +35,30 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-// ─── Hook audio ──────────────────────────────────────────────────────────────
+// ─── Hook audio — Pattern Ping-Pong ──────────────────────────────────────────
 //
-// 🎓 PATTERN "Single Audio Element" — pourquoi ?
+// 🎓 POURQUOI LE PING-PONG ?
 //
-// iOS Safari suspend le JS quand l'écran est verrouillé ou que l'app passe
-// en arrière-plan. React ne peut donc plus re-render, setState, ni appeler
-// audio.play() de façon programmatique.
+// Sur iOS, quand l'écran se verrouille, le JS de la WKWebView est suspendu.
+// Un fetch() réseau ou un re-render React est impossible.
 //
-// La seule séquence qui fonctionne sur iOS en arrière-plan :
-//   audio.src = newUrl  →  audio.load()  →  audio.play()
-// … mais UNIQUEMENT sur le MÊME élément audio qui a déjà eu l'autorisation
-// utilisateur (user gesture). Si React démonte/remonte l'élément <audio>,
-// l'autorisation est perdue et iOS bloque le play().
+// MAIS : audio.play() sur un élément DÉJÀ CHARGÉ fonctionne même écran verrouillé,
+// car le thread audio natif iOS reste actif indépendamment du JS.
 //
-// Solution : on crée l'élément Audio() une seule fois via useRef + useEffect,
-// et on ne le détruit jamais. On change audio.src directement sans passer
-// par le JSX.
+// Solution : 2 éléments audio (A et B) qui alternent.
+//   - A joue l'épisode courant
+//   - B charge silencieusement l'épisode suivant (src + load, pas play)
+//   - Quand A se termine : B.play() immédiat (déjà en mémoire, 0 fetch)
+//   - Pendant que B joue : A charge l'épisode d'après
 //
-// Corrections v2 :
-// 1. episodesRef suit tout le tableau episodes (pas juste sa longueur)
-//    → handleEnded lit episodesRef.current, jamais une closure capturée
-// 2. doPlay() extrait au niveau du hook (stable, réutilisé par handleEnded
-//    ET Media Session nexttrack)
-// 3. handleEndedRef réattaché à audio.onended après chaque mise à jour
-// 4. setAutoPlayImmediate : met à jour ref + state synchroniquement
+// Résultat : onended → play() = instantané, sans réseau, sans React.
+//
+// 🎓 QUEUE DE LECTURE
+//
+// playQueue = tableau ordonné des indices à jouer.
+// null = mode normal (tous les épisodes dans l'ordre).
+// [2, 5, 7] = sélection manuelle dans cet ordre.
+// Permet à "Écouter la sélection" de fonctionner correctement.
 //
 function useAudioPlayer(
   episodes: AudioEpisode[],
@@ -69,40 +68,38 @@ function useAudioPlayer(
   isPremium: boolean,
   autoPlay: boolean,
   setAutoPlay: (v: boolean) => void,
+  playQueue: number[] | null,   // null = tous les épisodes, sinon indices ordonnés
   playTrigger: number = 0
 ) {
-  // ── Élément audio persistant ──────────────────────────────────────────────
-  // Créé une seule fois, jamais démonté. C'est la clé pour iOS.
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // ── Deux éléments audio persistants (ping-pong) ───────────────────────────
+  const audioARef  = useRef<HTMLAudioElement | null>(null);
+  const audioBRef  = useRef<HTMLAudioElement | null>(null);
+  const activeRef  = useRef<"A" | "B">("A"); // lequel est en train de jouer
+
+  const getActive   = () => activeRef.current === "A" ? audioARef.current : audioBRef.current;
+  const getInactive = () => activeRef.current === "A" ? audioBRef.current : audioARef.current;
+  const swapActive  = () => { activeRef.current = activeRef.current === "A" ? "B" : "A"; };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!audioRef.current) {
-      audioRef.current = new Audio();
-      audioRef.current.preload = "auto";
-    }
+    if (!audioARef.current) { audioARef.current = new Audio(); audioARef.current.preload = "auto"; }
+    if (!audioBRef.current) { audioBRef.current = new Audio(); audioBRef.current.preload = "auto"; }
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = "";
-      }
+      [audioARef, audioBRef].forEach(ref => {
+        if (ref.current) { ref.current.pause(); ref.current.src = ""; }
+      });
     };
   }, []);
 
-  // ── Refs toujours à jour — TOUTES les valeurs dynamiques ─────────────────
-  // 🎓 Règle fondamentale : toute valeur lue dans handleEnded ou dans un
-  // callback natif (onended, Media Session) DOIT passer par une ref.
-  // Une closure capturée dans useCallback devient "stale" dès que React
-  // re-rend le composant — la ref, elle, est toujours fraîche.
-  const autoPlayRef    = useRef(autoPlay);
-  const onNextRef      = useRef(onNext);
-  const onPrevRef      = useRef(onPrev);
-  const currentIdxRef  = useRef(currentIdx);
-  const episodesRef    = useRef(episodes);        // ← ref sur TOUT le tableau
+  // ── Refs toujours à jour ──────────────────────────────────────────────────
+  const autoPlayRef   = useRef(autoPlay);
+  const onNextRef     = useRef(onNext);
+  const onPrevRef     = useRef(onPrev);
+  const currentIdxRef = useRef(currentIdx);
+  const episodesRef   = useRef(episodes);
+  const playQueueRef  = useRef(playQueue);
   const shouldPlayOnLoad = useRef(false);
 
-  // setAutoPlayImmediate — met à jour ref ET state synchroniquement
-  // pour garantir que handleEnded voit toujours la bonne valeur
   const setAutoPlayImmediate = useCallback((v: boolean) => {
     autoPlayRef.current = v;
     setAutoPlay(v);
@@ -113,50 +110,70 @@ function useAudioPlayer(
   useEffect(() => { onPrevRef.current     = onPrev;     }, [onPrev]);
   useEffect(() => { currentIdxRef.current = currentIdx; }, [currentIdx]);
   useEffect(() => { episodesRef.current   = episodes;   }, [episodes]);
+  useEffect(() => { playQueueRef.current  = playQueue;  }, [playQueue]);
 
-  const [playing,      setPlaying]     = useState(false);
-  const [progress,     setProgress]    = useState(0);
-  const [currentTime,  setCurrentTime] = useState(0);
-  const [duration,     setDuration]    = useState(0);
-  const [loaded,       setLoaded]      = useState(false);
-  const [fetchError,   setFetchError]  = useState(false);
+  const [playing,     setPlaying]    = useState(false);
+  const [progress,    setProgress]   = useState(0);
+  const [currentTime, setCurrentTime]= useState(0);
+  const [duration,    setDuration]   = useState(0);
+  const [loaded,      setLoaded]     = useState(false);
+  const [fetchError,  setFetchError] = useState(false);
 
   const episode = episodes[currentIdx];
 
-  // ── Pré-fetch URL prochain épisode ────────────────────────────────────────
-  // Stocké dans nextUrlRef pour une lecture immédiate dans handleEnded,
-  // sans fetch bloquant — crucial sur iOS en arrière-plan.
+  // ── Trouver l'index suivant selon la queue ────────────────────────────────
+  // 🎓 Si playQueue est défini, on cherche la position courante dans la queue
+  // et on retourne le suivant. Sinon, simple currentIdx + 1.
+  const getNextIdx = useCallback((fromIdx: number): number | null => {
+    const queue = playQueueRef.current;
+    if (queue && queue.length > 0) {
+      const pos = queue.indexOf(fromIdx);
+      if (pos === -1 || pos >= queue.length - 1) return null;
+      return queue[pos + 1];
+    }
+    const nextIdx = fromIdx + 1;
+    return nextIdx < episodesRef.current.length ? nextIdx : null;
+  }, []);
+
+  // ── Pré-charger silencieusement sur l'élément inactif ────────────────────
+  // 🎓 C'est le cœur du ping-pong. On charge l'URL sans appeler play().
+  // L'élément est prêt en mémoire pour un play() immédiat dans handleEnded.
+  const preloadNext = useCallback((url: string) => {
+    const inactive = getInactive();
+    if (!inactive) return;
+    inactive.onended          = null;
+    inactive.ontimeupdate     = null;
+    inactive.onloadedmetadata = null;
+    inactive.onplay           = null;
+    inactive.onpause          = null;
+    inactive.src = url;
+    inactive.load(); // charge sans jouer
+  }, []);
+
+  // Ref vers preloadNext pour usage dans handleEnded
+  const preloadNextRef = useRef(preloadNext);
+  useEffect(() => { preloadNextRef.current = preloadNext; }, [preloadNext]);
+
+  // ── Pré-fetch + pré-chargement du prochain épisode ───────────────────────
   const nextUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const nextIdx = currentIdx + 1;
-    if (!isPremium || nextIdx >= episodes.length) { nextUrlRef.current = null; return; }
-    const nextEp = episodes[nextIdx];
+    const nextIdx = getNextIdx(currentIdx);
+    if (!isPremium || nextIdx === null) { nextUrlRef.current = null; return; }
+    const nextEp = episodesRef.current[nextIdx];
     if (!nextEp) return;
     fetch(`/api/audio/${nextEp.episodeSlug}`)
       .then(r => r.json())
-      .then(d => { nextUrlRef.current = d.url; })
+      .then(d => {
+        nextUrlRef.current = d.url;
+        // Pré-charger immédiatement sur l'élément inactif
+        preloadNextRef.current(d.url);
+      })
       .catch(() => { nextUrlRef.current = null; });
-  }, [currentIdx, isPremium, episodes]);
+  }, [currentIdx, isPremium, episodes, getNextIdx]);
 
-  // ── doPlay : joue une URL sur l'élément audio persistant ─────────────────
-  // 🎓 Extrait au niveau du hook (pas dans handleEnded) pour être stable
-  // et réutilisable depuis handleEnded ET Media Session nexttrack.
-  // Ne capture aucune valeur de rendu React — tout passe par les refs.
-  const doPlay = useCallback((url: string) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    // Nettoyer les anciens listeners pour éviter les doublons
-    audio.onended          = null;
-    audio.ontimeupdate     = null;
-    audio.onloadedmetadata = null;
-    audio.onplay           = null;
-    audio.onpause          = null;
-
-    audio.src = url;
-    audio.load();
-
+  // ── attachListeners : configure les listeners sur l'élément actif ─────────
+  const attachListeners = useCallback((audio: HTMLAudioElement) => {
     audio.ontimeupdate = () => {
       setCurrentTime(audio.currentTime);
       setProgress((audio.currentTime / (audio.duration || 1)) * 100);
@@ -164,63 +181,99 @@ function useAudioPlayer(
     audio.onloadedmetadata = () => {
       setDuration(audio.duration ?? 0);
       setLoaded(true);
-      audio.play().then(() => setPlaying(true)).catch(() => {});
     };
     audio.onplay  = () => setPlaying(true);
     audio.onpause = () => setPlaying(false);
-    // Réattacher handleEnded pour que la chaîne continue
     audio.onended = handleEndedRef.current;
+  }, []);
 
-    // Mettre à jour l'UI React (setTimeout pour ne pas bloquer iOS)
-    setTimeout(() => onNextRef.current(), 100);
-  }, []); // Pas de dépendances : tout passe par les refs
+  const attachListenersRef = useRef(attachListeners);
+  useEffect(() => { attachListenersRef.current = attachListeners; }, [attachListeners]);
 
-  // ── handleEnded ───────────────────────────────────────────────────────────
-  // 🎓 Ne capture AUCUNE variable de rendu React.
-  //    Lit tout depuis les refs (episodesRef, currentIdxRef, autoPlayRef).
-  //    C'est la clé pour iOS/Android en arrière-plan où React est suspendu.
+  // ── handleEnded : swap ping-pong + play immédiat ──────────────────────────
+  // 🎓 Cette fonction s'exécute quand une piste se termine.
+  // Sur iOS écran verrouillé :
+  //   - Pas de fetch (l'URL est déjà dans l'élément inactif)
+  //   - Pas de setState bloquant
+  //   - Juste : swapActive() + inactive.play() = IMMÉDIAT
   const handleEnded = useCallback(() => {
-    console.log("[handleEnded] triggered, autoPlay=", autoPlayRef.current);
     setPlaying(false);
-    if (!autoPlayRef.current) {
-      console.log("[handleEnded] stopped: autoPlay is false");
-      return;
-    }
-    const eps     = episodesRef.current;
-    const nextIdx = currentIdxRef.current + 1;
-    console.log("[handleEnded] nextIdx=", nextIdx, "eps.length=", eps.length);
-    if (nextIdx >= eps.length) {
-      console.log("[handleEnded] stopped: end of playlist");
-      return;
-    }
-    if (nextUrlRef.current) {
-      console.log("[handleEnded] playing from prefetch");
-      const url = nextUrlRef.current;
-      nextUrlRef.current = null;
-      doPlay(url);
-    } else {
-      console.log("[handleEnded] fetching:", eps[nextIdx]?.episodeSlug);
-      const nextEp = eps[nextIdx];
+    if (!autoPlayRef.current) return;
+
+    const nextIdx = getNextIdx(currentIdxRef.current);
+    if (nextIdx === null) return;
+
+    const inactive = getInactive(); // l'élément qui a déjà l'audio chargé
+    if (!inactive || !inactive.src) {
+      // Fallback : l'élément inactif n'est pas chargé (cas rare)
+      // On fetch à la volée
+      const nextEp = episodesRef.current[nextIdx];
       if (!nextEp) return;
       fetch(`/api/audio/${nextEp.episodeSlug}`)
         .then(r => r.json())
-        .then(d => { console.log("[handleEnded] fetch ok"); doPlay(d.url); })
-        .catch((e) => { console.error("[handleEnded] fetch failed", e); });
+        .then(d => {
+          const inact = getInactive();
+          if (!inact) return;
+          inact.src = d.url;
+          inact.load();
+          inact.onloadedmetadata = () => {
+            setDuration(inact.duration ?? 0);
+            setLoaded(true);
+            swapActive();
+            attachListenersRef.current(inact);
+            inact.play().then(() => setPlaying(true)).catch(() => {});
+            setTimeout(() => onNextRef.current(), 100);
+          };
+        })
+        .catch(() => {});
+      return;
     }
-  }, [doPlay]); // Dépend uniquement de doPlay (stable)
 
-  // Ref vers handleEnded — toujours à jour
-  const handleEndedRef = useRef<(() => void)>(handleEnded);
+    // Cas nominal : l'élément inactif a déjà l'audio — play immédiat
+    swapActive();
+    const nowActive = getActive()!;
+    attachListenersRef.current(nowActive);
+
+    // Reset UI
+    setProgress(0);
+    setCurrentTime(0);
+    setLoaded(false);
+
+    nowActive.play()
+      .then(() => {
+        setPlaying(true);
+        setDuration(nowActive.duration ?? 0);
+        setLoaded(true);
+      })
+      .catch(() => {});
+
+    // Mettre à jour l'UI React (index épisode)
+    setTimeout(() => onNextRef.current(), 100);
+
+    // Pré-charger l'épisode d'après sur l'élément maintenant inactif
+    const nextNextIdx = getNextIdx(nextIdx);
+    if (nextNextIdx !== null) {
+      const nextNextEp = episodesRef.current[nextNextIdx];
+      if (nextNextEp) {
+        fetch(`/api/audio/${nextNextEp.episodeSlug}`)
+          .then(r => r.json())
+          .then(d => {
+            nextUrlRef.current = d.url;
+            preloadNextRef.current(d.url);
+          })
+          .catch(() => {});
+      }
+    }
+  }, [getNextIdx, attachListeners]);
+
+  const handleEndedRef = useRef(handleEnded);
   useEffect(() => {
     handleEndedRef.current = handleEnded;
-    // 🎓 IMPORTANT : réattacher onended après chaque mise à jour de handleEnded
-    // pour que l'élément audio utilise toujours la version la plus récente.
-    if (audioRef.current) {
-      audioRef.current.onended = handleEnded;
-    }
+    const active = getActive();
+    if (active) active.onended = handleEnded;
   }, [handleEnded]);
 
-  // ── Chargement URL épisode courant ────────────────────────────────────────
+  // ── Chargement épisode courant ────────────────────────────────────────────
   useEffect(() => {
     const isFreeEpisode = FREE_EPISODE_NUMBERS.has(episode?.episodeNumber ?? 0);
     if (!episode || (!isPremium && !isFreeEpisode)) return;
@@ -232,13 +285,12 @@ function useAudioPlayer(
     setLoaded(false);
     setFetchError(false);
 
-    // Capturer autoPlay AVANT le fetch async (évite stale closure)
     shouldPlayOnLoad.current = autoPlayRef.current;
 
     fetch(`/api/audio/${episode.episodeSlug}`)
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => {
-        const audio = audioRef.current;
+        const audio = getActive();
         if (!audio) return;
 
         audio.onended          = null;
@@ -257,15 +309,12 @@ function useAudioPlayer(
         audio.onloadedmetadata = () => {
           setDuration(audio.duration ?? 0);
           setLoaded(true);
-          // 🎓 Sur iOS, on peut appeler play() ici car on est dans la
-          // continuité de la session audio autorisée par le user gesture initial.
           if (shouldPlayOnLoad.current) {
             audio.play().then(() => setPlaying(true)).catch(() => {});
           }
         };
         audio.onplay  = () => setPlaying(true);
         audio.onpause = () => setPlaying(false);
-        // Toujours utiliser handleEndedRef.current pour avoir la version à jour
         audio.onended = handleEndedRef.current;
       })
       .catch(() => setFetchError(true));
@@ -273,7 +322,7 @@ function useAudioPlayer(
   }, [episode?.episodeSlug, isPremium, playTrigger]);
 
   const togglePlay = useCallback(() => {
-    const audio = audioRef.current;
+    const audio = getActive();
     if (!audio) return;
     if (playing) {
       audio.pause();
@@ -293,15 +342,12 @@ function useAudioPlayer(
   }, [playing, setAutoPlayImmediate, episode]);
 
   const skip = useCallback((s: number) => {
-    const audio = audioRef.current;
+    const audio = getActive();
     if (!audio) return;
     audio.currentTime = Math.max(0, Math.min(audio.currentTime + s, audio.duration || 0));
   }, []);
 
   // ── Media Session API ─────────────────────────────────────────────────────
-  // 🎓 Les contrôles de l'écran de verrouillage passent par cette API.
-  // nexttrack utilise doPlay() directement — robuste sur écran verrouillé
-  // iOS/Android car ne dépend d'aucune closure React.
   useEffect(() => {
     if (!isPremium || !episode || typeof window === "undefined" || !("mediaSession" in navigator)) return;
 
@@ -317,50 +363,41 @@ function useAudioPlayer(
     });
 
     navigator.mediaSession.setActionHandler("play", () => {
-      audioRef.current?.play().then(() => setPlaying(true)).catch(() => {});
+      getActive()?.play().then(() => setPlaying(true)).catch(() => {});
     });
     navigator.mediaSession.setActionHandler("pause", () => {
-      audioRef.current?.pause();
+      getActive()?.pause();
       setPlaying(false);
     });
     navigator.mediaSession.setActionHandler("previoustrack", () => {
       if (currentIdxRef.current > 0) onPrevRef.current();
     });
     navigator.mediaSession.setActionHandler("nexttrack", () => {
-      const eps     = episodesRef.current;
-      const nextIdx = currentIdxRef.current + 1;
-      if (nextIdx >= eps.length) return;
-
-      if (nextUrlRef.current) {
-        const url = nextUrlRef.current;
-        nextUrlRef.current = null;
-        doPlay(url);
-      } else {
-        const nextEp = eps[nextIdx];
-        if (!nextEp) return;
-        fetch(`/api/audio/${nextEp.episodeSlug}`)
-          .then(r => r.json())
-          .then(d => doPlay(d.url))
-          .catch(() => {});
-      }
+      // Même logique que handleEnded mais déclenchée manuellement
+      handleEndedRef.current();
     });
     navigator.mediaSession.setActionHandler("seekbackward", () => {
-      if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
+      const a = getActive();
+      if (a) a.currentTime = Math.max(0, a.currentTime - 10);
     });
     navigator.mediaSession.setActionHandler("seekforward", () => {
-      if (audioRef.current) audioRef.current.currentTime = Math.min(audioRef.current.duration || 0, audioRef.current.currentTime + 10);
+      const a = getActive();
+      if (a) a.currentTime = Math.min(a.duration || 0, a.currentTime + 10);
     });
 
     return () => {
       (["play","pause","previoustrack","nexttrack","seekbackward","seekforward"] as MediaSessionAction[])
         .forEach(a => { try { navigator.mediaSession.setActionHandler(a, null); } catch {} });
     };
-  }, [episode, isPremium, doPlay]);
+  }, [episode, isPremium]);
 
   useEffect(() => {
     if (!isPremium || !("mediaSession" in navigator)) return;
     navigator.mediaSession.playbackState = playing ? "playing" : "paused";
   }, [playing, isPremium]);
+
+  // Exposer audioRef pour la barre de progression (on expose l'actif)
+  const audioRef = { current: getActive() };
 
   return {
     audioRef, playing, setPlaying, shouldPlayOnLoad,
@@ -375,7 +412,7 @@ function StickyPlayer({
   episode, episodes, currentIdx, onPrev, onNext, isPremium,
   subthemeImage, meta, autoPlay, setAutoPlay,
   selectedEpisodes, repeatMode, setRepeatMode,
-  playTrigger, onReady,
+  playTrigger, playQueue, onReady,
 }: {
   episode: AudioEpisode; episodes: AudioEpisode[]; currentIdx: number;
   onPrev: () => void; onNext: () => void; isPremium: boolean;
@@ -384,6 +421,7 @@ function StickyPlayer({
   selectedEpisodes: Set<number>; repeatMode: "none" | "one" | "queue";
   setRepeatMode: (v: "none" | "one" | "queue") => void;
   playTrigger: number;
+  playQueue: number[] | null;
   onReady: (play: () => void, setAutoPlayImmediate: (v: boolean) => void) => void;
 }) {
   const {
@@ -391,7 +429,7 @@ function StickyPlayer({
     progress, setProgress, currentTime, setCurrentTime,
     duration, setDuration, loaded, setLoaded,
     fetchError, togglePlay, skip, handleEnded, setAutoPlayImmediate,
-  } = useAudioPlayer(episodes, currentIdx, onNext, onPrev, isPremium, autoPlay, setAutoPlay, playTrigger);
+  } = useAudioPlayer(episodes, currentIdx, onNext, onPrev, isPremium, autoPlay, setAutoPlay, playQueue, playTrigger);
 
   useEffect(() => {
     onReady(togglePlay, setAutoPlayImmediate);
@@ -529,8 +567,12 @@ export default function AudioSeriesPage() {
   const [repeatMode,       setRepeatMode]        = useState<"none" | "one" | "queue">("none");
   const [isSelectionMode,  setIsSelectionMode]   = useState(false);
   const [playTrigger,      setPlayTrigger]       = useState(0);
-  const playerPlayRef         = useRef<(() => void) | null>(null);
-  const playerSetAutoPlayRef  = useRef<((v: boolean) => void) | null>(null);
+  // 🎓 playQueue : null = tous les épisodes, sinon tableau d'indices ordonnés
+  // Transmis au hook pour que handleEnded sache quoi jouer ensuite
+  const [playQueue,        setPlayQueue]         = useState<number[] | null>(null);
+
+  const playerPlayRef        = useRef<(() => void) | null>(null);
+  const playerSetAutoPlayRef = useRef<((v: boolean) => void) | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("last_audio_page", window.location.pathname);
@@ -550,25 +592,28 @@ export default function AudioSeriesPage() {
     if (firstFreeIdx >= 0) setCurrentIdx(firstFreeIdx);
   }, [isFreemium, episodes]);
 
+  // goNext tient compte de la playQueue
   const goNext = useCallback(() => {
     if (repeatMode === "one") return;
-    if (repeatMode === "queue" && selectedEpisodes.size > 0) {
-      const sorted = Array.from(selectedEpisodes).sort((a, b) => a - b);
-      const pos = sorted.indexOf(currentIdx);
-      setCurrentIdx(pos >= 0 ? sorted[(pos + 1) % sorted.length] : sorted[0]);
+    if (playQueue && playQueue.length > 0) {
+      const pos = playQueue.indexOf(currentIdx);
+      if (pos >= 0 && pos < playQueue.length - 1) {
+        setCurrentIdx(playQueue[pos + 1]);
+      } else {
+        // Fin de la queue — arrêt
+        setAutoPlay(false);
+      }
       return;
     }
     setCurrentIdx(i => Math.min(i + 1, episodes.length - 1));
-  }, [repeatMode, selectedEpisodes, currentIdx, episodes.length]);
+  }, [repeatMode, playQueue, currentIdx, episodes.length, setAutoPlay]);
 
   const goPrev = useCallback(() => setCurrentIdx(i => Math.max(i - 1, 0)), []);
 
-  // "Tout écouter" — active autoPlay et démarre depuis l'épisode 0
-  // 🎓 playerSetAutoPlayRef met à jour ref + state synchroniquement pour
-  // éviter la race condition où handleEnded lirait autoPlayRef.current = false.
   const playAll = useCallback(() => {
     setSelectedEpisodes(new Set());
     setRepeatMode("none");
+    setPlayQueue(null); // tous les épisodes
     playerSetAutoPlayRef.current?.(true);
     setAutoPlay(true);
     if (currentIdx === 0) {
@@ -589,8 +634,11 @@ export default function AudioSeriesPage() {
   const playSelection = useCallback(() => {
     if (selectedEpisodes.size === 0) return;
     const sorted = Array.from(selectedEpisodes).sort((a, b) => a - b);
+    // 🎓 On passe la queue ordonnée au hook — handleEnded saura exactement
+    // quel épisode jouer après chaque piste, même écran verrouillé
+    setPlayQueue(sorted);
+    setRepeatMode("none");
     setCurrentIdx(sorted[0]);
-    setRepeatMode("queue");
     playerSetAutoPlayRef.current?.(true);
     setAutoPlay(true);
     setIsSelectionMode(false);
@@ -640,7 +688,6 @@ export default function AudioSeriesPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6 sm:py-6">
-      {/* Bouton retour flottant */}
       <div className="fixed top-16 left-3 z-50">
         <Link href="/audio" className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-slate-300 shadow-lg backdrop-blur-md transition hover:bg-white/10 hover:text-white">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -693,12 +740,12 @@ export default function AudioSeriesPage() {
               <div className="mt-4 flex gap-2">
                 <button onClick={playAll}
                   className={`flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border py-2.5 text-sm font-bold transition hover:brightness-110 active:scale-95 ${
-                    autoPlay
+                    autoPlay && !playQueue
                       ? "border-blue-400/50 bg-blue-500/20 text-blue-200 shadow-[0_0_16px_rgba(37,99,235,0.3)]"
                       : `${meta.border} bg-white/10 text-white`
                   }`}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
-                  {autoPlay ? "▶ En lecture..." : "Tout écouter"}
+                  {autoPlay && !playQueue ? "▶ En lecture..." : "Tout écouter"}
                 </button>
                 <button
                   onClick={() => { setIsSelectionMode(v => !v); if (isSelectionMode) setSelectedEpisodes(new Set()); }}
@@ -745,6 +792,7 @@ export default function AudioSeriesPage() {
             repeatMode={repeatMode}
             setRepeatMode={setRepeatMode}
             playTrigger={playTrigger}
+            playQueue={playQueue}
             onReady={(play, setAP) => { playerPlayRef.current = play; playerSetAutoPlayRef.current = setAP; }}
           />
         )}
@@ -811,6 +859,7 @@ export default function AudioSeriesPage() {
                     onClick={() => {
                       if (locked) { handleUpgrade(); return; }
                       if (isSelectionMode) { toggleEpisodeSelection(idx); return; }
+                      setPlayQueue(null);
                       setCurrentIdx(idx);
                       playerSetAutoPlayRef.current?.(true);
                       setAutoPlay(true);
@@ -819,7 +868,7 @@ export default function AudioSeriesPage() {
                       if (e.key !== "Enter") return;
                       if (locked) handleUpgrade();
                       else if (isSelectionMode) toggleEpisodeSelection(idx);
-                      else { setCurrentIdx(idx); playerSetAutoPlayRef.current?.(true); setAutoPlay(true); }
+                      else { setPlayQueue(null); setCurrentIdx(idx); playerSetAutoPlayRef.current?.(true); setAutoPlay(true); }
                     }}
                     className="flex cursor-pointer items-center gap-3 px-4 py-3">
                     {isSelectionMode && isPremium && (
