@@ -219,7 +219,7 @@ export default async function UserProfilePage({ params }: { params: { id: string
               {userEvents?.filter(e => ['audio_played','scroll_card_viewed','quiz_started','quiz_completed'].includes(e.event_type)).map((e, i) => {
                 const icons: Record<string,string> = { audio_played: '🎧', scroll_card_viewed: '🃏', quiz_started: '📝', quiz_completed: '✅' }
                 const labels: Record<string,string> = { audio_played: 'Audio écouté', scroll_card_viewed: 'Flash-card vue', quiz_started: 'Quiz démarré', quiz_completed: 'Quiz terminé' }
-                const detail = e.event_type === 'audio_played' ? (e.properties?.episodeTitle ?? e.properties?.episodeId ?? '') :
+                const detail = e.event_type === 'audio_played' ? (e.properties?.episode_title ?? e.properties?.episodeTitle ?? '') :
                                e.event_type === 'quiz_completed' ? `Score: ${e.properties?.score ?? '—'}` : ''
                 return (
                   <div key={i} className="flex items-center justify-between py-1.5 border-b border-slate-700/50 last:border-0">
