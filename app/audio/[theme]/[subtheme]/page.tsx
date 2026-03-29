@@ -479,11 +479,26 @@ function StickyPlayer({
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-2xl">{meta.icon}</div>
         )}
         <div className="min-w-0 flex-1">
-          <p className={`text-[10px] font-bold uppercase tracking-widest ${meta.accentText}`}>
-            Épisode {episode.episodeNumber}/{episodes.length}
-            {repeatMode === "one" && <span className="ml-1 opacity-70">· 🔂</span>}
-            {repeatMode === "queue" && selectedEpisodes.size > 0 && <span className="ml-1 opacity-70">· {selectedEpisodes.size} sélect.</span>}
-          </p>
+          <div className="flex items-center gap-1.5">
+            <p className={`text-[10px] font-bold uppercase tracking-widest ${meta.accentText}`}>
+              Épisode {episode.episodeNumber}/{episodes.length}
+              {repeatMode === "one" && <span className="ml-1 opacity-70">· 🔂</span>}
+              {repeatMode === "queue" && selectedEpisodes.size > 0 && <span className="ml-1 opacity-70">· {selectedEpisodes.size} sélect.</span>}
+            </p>
+            <button
+              onClick={() => {
+                const url = `${window.location.origin}${window.location.pathname}?episode=${episode.episodeNumber}`;
+                if (navigator.share) navigator.share({ title: episode.episodeTitle, text: `Cap Citoyen — ${episode.episodeTitle}`, url });
+                else navigator.clipboard.writeText(url);
+              }}
+              className="ml-auto shrink-0 flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-white transition"
+              title="Partager cet épisode">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+            </button>
+          </div>
           <p className="truncate text-sm font-semibold text-white">{episode.episodeTitle}</p>
         </div>
         <button
@@ -694,7 +709,7 @@ export default function AudioSeriesPage() {
   const currentSeriesIndex = allSeries.findIndex(ep => ep.themeKey === themeKey && ep.subthemeKey === subthemeKey);
   const nextSeries    = allSeries[(currentSeriesIndex + 1) % allSeries.length];
   const nextSeriesUrl = nextSeries ? `/audio/${encodeURIComponent(nextSeries.themeKey)}/${encodeURIComponent(nextSeries.subthemeKey)}` : '/audio';
-  const isDevenir      = themeKey === "Devenir français(e)";
+  const isDevenir      = themeKey === "Devenir français(e)" || themeKey === "Quiz Audio";
   const subthemeImage  = SUBTHEME_IMAGES[subthemeKey] ?? null;
   const currentEpisode = episodes[currentIdx];
   const isPlayerVisible = isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0));
@@ -922,6 +937,20 @@ export default function AudioSeriesPage() {
                       ) : (
                         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="text-slate-500"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
                       )}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const url = `${window.location.origin}${window.location.pathname}?episode=${ep.episodeNumber}`;
+                          if (navigator.share) navigator.share({ title: ep.episodeTitle, text: `Cap Citoyen — ${ep.episodeTitle}`, url });
+                          else navigator.clipboard.writeText(url);
+                        }}
+                        className="flex h-6 w-6 items-center justify-center rounded-full text-slate-500 hover:text-slate-300 transition"
+                        title="Partager">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>
