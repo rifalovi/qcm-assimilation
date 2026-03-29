@@ -139,7 +139,7 @@ function useAudioPlayer(
   // ── Pré-charger silencieusement sur l'élément inactif ────────────────────
   // 🎓 C'est le cœur du ping-pong. On charge l'URL sans appeler play().
   // L'élément est prêt en mémoire pour un play() immédiat dans handleEnded.
-  const preloadNext = useCallback((url: string) => {
+  const preloadNext = useCallback((url: string, slug?: string) => {
     const inactive = getInactive();
     if (!inactive) return;
     inactive.onended          = null;
@@ -147,6 +147,7 @@ function useAudioPlayer(
     inactive.onloadedmetadata = null;
     inactive.onplay           = null;
     inactive.onpause          = null;
+    if (slug) inactive.dataset.slug = slug;
     inactive.src = url;
     inactive.load(); // charge sans jouer
   }, []);
@@ -231,7 +232,6 @@ function useAudioPlayer(
     }
 
     // Cas nominal : l'élément inactif a déjà l'audio — play immédiat
-    isSwappingRef.current = true; // bloquer le useEffect pendant le swap
     swapActive();
     const nowActive = getActive()!;
     attachListenersRef.current(nowActive);
@@ -241,14 +241,26 @@ function useAudioPlayer(
     setCurrentTime(0);
     setLoaded(false);
 
-    nowActive.play()
-      .then(() => {
-        setPlaying(true);
-        setDuration(nowActive.duration ?? 0);
-        setLoaded(true);
-        isSwappingRef.current = false; // swap terminé
-      })
-      .catch(() => { isSwappingRef.current = false; });
+    // 🎓 readyState >= 3 = HAVE_FUTURE_DATA : assez chargé pour jouer
+    // Sur Android, on attend oncanplay si pas encore prêt
+    const doSwapPlay = () => {
+      nowActive.play()
+        .then(() => {
+          setPlaying(true);
+          setDuration(nowActive.duration ?? 0);
+          setLoaded(true);
+        })
+        .catch(() => {});
+    };
+
+    if (nowActive.readyState >= 3) {
+      doSwapPlay();
+    } else {
+      nowActive.oncanplay = () => {
+        nowActive.oncanplay = null;
+        doSwapPlay();
+      };
+    }
 
     // Mettre à jour l'UI React (index épisode)
     setTimeout(() => onNextRef.current(), 100);
@@ -288,13 +300,22 @@ function useAudioPlayer(
     setLoaded(false);
     setFetchError(false);
 
-    // Si le ping-pong vient de swapper, ne pas recharger l'épisode
-    if (isSwappingRef.current) return;
     shouldPlayOnLoad.current = autoPlayRef.current;
+
+    // Si l'élément actif contient déjà cet épisode (swap ping-pong), ne pas recharger
+    const activeAudio = getActive();
+    if (activeAudio?.dataset.slug === episode.episodeSlug) {
+      setLoaded(true);
+      return;
+    }
 
     fetch(`/api/audio/${episode.episodeSlug}`)
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => {
+        // 🎓 Garantir que l'élément audio est initialisé avant d'agir
+        // (le useEffect de création peut être plus lent que le fetch)
+        if (!audioARef.current) { audioARef.current = new Audio(); audioARef.current.preload = "auto"; }
+        if (!audioBRef.current) { audioBRef.current = new Audio(); audioBRef.current.preload = "auto"; }
         const audio = getActive();
         if (!audio) return;
 
@@ -304,6 +325,7 @@ function useAudioPlayer(
         audio.onplay           = null;
         audio.onpause          = null;
 
+        audio.dataset.slug = episode.episodeSlug; // marquer ce qui est chargé
         audio.src = d.url;
         audio.load();
 
