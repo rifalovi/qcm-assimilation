@@ -3,7 +3,6 @@ import posthog from "posthog-js";
 export function initPostHog() {
   if (typeof window === "undefined") return;
   if (posthog.__loaded) return;
-
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://eu.i.posthog.com",
     capture_pageview: true,
@@ -20,7 +19,14 @@ export function identifyUser(userId: string, props: Record<string, unknown>) {
 
 export function trackEvent(event: string, props?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
+  // PostHog
   posthog.capture(event, props);
+  // Supabase user_events (fire and forget)
+  fetch("/api/track", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event_type: event, properties: props ?? {} }),
+  }).catch(() => {});
 }
 
 export function resetUser() {

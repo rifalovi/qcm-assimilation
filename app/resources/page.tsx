@@ -249,7 +249,7 @@ export default function ResourcesPage() {
       return () => window.clearTimeout(timer);
     }
 
-    if (hasRealAccount && role !== "premium" && role !== "elite") {
+    if (hasRealAccount && !['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role)) {
       const alreadySeen = sessionStorage.getItem("resources_premium_modal_seen") === "1";
       if (alreadySeen) return;
       const timer = window.setTimeout(() => {
@@ -349,7 +349,7 @@ export default function ResourcesPage() {
             </div>
 
             {/* CTA upgrade */}
-            {(role !== "premium" && role !== "elite") && (
+            {(!['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role)) && (
               <div className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-5 text-center">
                 <p className="text-sm font-semibold text-amber-100 mb-1">🔓 Débloquez tout — 800+ questions, 100 épisodes audio, examen blanc illimité</p>
                 <p className="text-xs text-amber-200/70 mb-4">Premium 19,99€/3 mois · Élite 49,99€ accès à vie</p>

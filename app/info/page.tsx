@@ -312,7 +312,7 @@ export default function InfoPage() {
           </div>
 
           {/* CTA upgrade */}
-          {(role !== "premium" && role !== "elite") && (
+          {(!['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '')) && (
             <div className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-5 text-center">
               <p className="text-sm font-semibold text-amber-100 mb-3">
                 🔓 Débloquez tout — 800+ questions, 100 épisodes audio, examen blanc illimité

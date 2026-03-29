@@ -77,7 +77,7 @@ interface Props {
   questions: Question[];
   themes: string[];
   preselectedTheme: string | null;
-  role: "anonymous" | "freemium" | "premium" | "elite";
+  role: "anonymous" | "freemium" | "premium" | "elite" | "moderator" | "admin" | "super_admin";
   cardsPerTheme: number;
   totalCards: number;
 }
@@ -819,8 +819,8 @@ useEffect(() => {
 
   // Construire le tableau avec CTA injectée à la fin si pas premium
   const buildCardsWithCta = (questions: Question[], themeActive: boolean): CardItem[] => {
-    if ((role === "premium" || role === "elite")) return questions;
-    return [...questions, { type: "cta", ctaRole: role, hasTheme: themeActive, cardsCount: questions.length }];
+    if (['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role)) return questions;
+    return [...questions, { type: "cta", ctaRole: role as "anonymous" | "freemium" | "premium" | "elite", hasTheme: themeActive, cardsCount: questions.length }];
   };
 
   const [activeTheme, setActiveTheme] = useState<string | null>(preselectedTheme);

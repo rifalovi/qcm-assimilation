@@ -6,11 +6,14 @@ import type { Question } from "../../src/types/questions";
 
 export const dynamic = "force-dynamic";
 
-const LIMITS = {
-  anonymous: 5,   // 5 cartes par thème
-  freemium: 10,   // 10 cartes par thème
-  premium: 999,   // tout
-  elite: 999,     // tout
+const LIMITS: Record<string, number> = {
+  anonymous: 5,
+  freemium: 10,
+  premium: 999,
+  elite: 999,
+  moderator: 999,
+  admin: 999,
+  super_admin: 999,
 };
 
 interface PageProps {
@@ -41,7 +44,7 @@ export default async function ScrollPage({ searchParams }: PageProps) {
   const { data: { user } } = await supabase.auth.getUser();
 
   // Récupérer le rôle depuis profiles
-  let role: "anonymous" | "freemium" | "premium" | "elite" = "anonymous";
+  let role: "anonymous" | "freemium" | "premium" | "elite" | "moderator" | "admin" | "super_admin" = "anonymous";
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
@@ -71,7 +74,7 @@ export default async function ScrollPage({ searchParams }: PageProps) {
   const allQuestions = data as Question[];
   const themes = Array.from(new Set(allQuestions.map((q) => q.theme))).sort();
 
-  const questions = (role === "premium" || role === "elite")
+  const questions = (['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role))
     ? allQuestions
     : themes.flatMap((theme) =>
         allQuestions

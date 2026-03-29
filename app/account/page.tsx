@@ -297,7 +297,7 @@ export default function AccountPage() {
               </div>
             )}
 
-            {(role !== "premium" && role !== "elite") && (
+            {(!['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role)) && (
               <div className="mt-6 rounded-[1.5rem] border border-amber-400/20 bg-amber-500/10 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
@@ -324,7 +324,7 @@ export default function AccountPage() {
             </div>
 
             {/* ── Voix audio ── */}
-            {(role === "premium" || role === "elite") && (
+            {(['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role)) && (
               <div className="mt-6">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Voix audio</p>

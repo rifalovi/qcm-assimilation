@@ -222,7 +222,7 @@ function ComingSoonCard({ item }: { item: typeof COMING_SOON[0] }) {
 export default function AudioLibraryPage() {
   const router = useRouter();
   const { role } = useUser();
-  const isPremium = (role === "premium" || role === "elite");
+  const isPremium = ['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role);
   const isFreemium = role === "freemium";
   const isAnonymous = role === "anonymous" || !role;
 
@@ -436,13 +436,23 @@ export default function AudioLibraryPage() {
                 <div className="flex items-center gap-2">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-blue-300">🇫🇷 Hymne national</p>
                   <div className="group relative">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer text-slate-500 hover:text-slate-300"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                    <div className="absolute bottom-full left-0 z-10 mb-2 hidden w-52 rounded-xl border border-white/10 bg-slate-800 p-2.5 text-[10px] leading-4 text-slate-300 shadow-xl group-hover:block">
+                    <button
+                      type="button"
+                      className="flex items-center justify-center rounded-full p-0.5 text-slate-500 transition hover:text-slate-300 focus:outline-none"
+                      onClick={(e) => {
+                        const tip = e.currentTarget.nextElementSibling as HTMLElement;
+                        tip.classList.toggle("hidden");
+                      }}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    </button>
+                    <div className="absolute bottom-full left-0 z-10 mb-2 hidden w-52 rounded-xl border border-white/10 bg-slate-800 p-2.5 text-[10px] leading-4 text-slate-300 shadow-xl">
                       Contenu YouTube officiel • 3,9M de vues • Publié il y a 14 ans. La lecture se fait directement dans l&apos;app.
                     </div>
                   </div>
                 </div>
                 <p className="mt-0.5 text-sm font-bold text-white">La Marseillaise</p>
+                <p className="mt-0.5 text-[10px] text-slate-500">Publié par <span className="text-blue-400">@Hitoshi54140</span> sur YouTube</p>
                 <p className="mt-1 text-[11px] text-slate-500">Écrite en 1792 • Symbole de la République française</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <a
@@ -455,7 +465,7 @@ export default function AudioLibraryPage() {
                     Voir sur YouTube
                   </a>
                   <a
-                    href="/La-Marseillaise-lhymne-national.pdf"
+                    href="/La-Marseillaise-lhymne-national.pdf?v=2"
                     download
                     className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-[11px] font-bold text-blue-300 transition hover:bg-blue-500/20"
                   >

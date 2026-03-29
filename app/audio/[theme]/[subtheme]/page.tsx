@@ -574,7 +574,7 @@ export default function AudioSeriesPage() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const { role }     = useUser();
-  const isPremium    = (role === "premium" || role === "elite");
+  const isPremium    = ['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role);
   const isFreemium   = role === "freemium";
 
   const themeKey    = decodeURIComponent(theme as string) as AudioThemeKey;

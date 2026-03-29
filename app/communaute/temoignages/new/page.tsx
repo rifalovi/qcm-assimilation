@@ -104,7 +104,7 @@ export default function NewTestimonyPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login?redirect=/communaute/temoignages/new'); return }
       const { data: profile } = await supabase.from('profiles').select('role, first_name, last_name').eq('id', user.id).single()
-      if (profile?.role !== 'premium' && profile?.role !== 'elite') { router.push('/communaute/upgrade?feature=le formulaire de témoignage&back=/communaute/temoignages'); return }
+      if (!profile || !['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(profile.role ?? '')) { router.push('/communaute/upgrade?feature=le formulaire de témoignage&back=/communaute/temoignages'); return }
       setUserId(user.id)
       setFirstName(profile.first_name ?? null)
       setLastName(profile.last_name ?? null)

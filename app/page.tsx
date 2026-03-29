@@ -677,7 +677,7 @@ export default function HomePage() {
                 <li>• Niveau 3 : approfondissement et maîtrise</li>
               </ul>
             </div>
-            {(role !== "premium" && role !== "elite") && (
+            {(!['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '')) && (
               <button onClick={() => router.push("/pricing")}
                 className="mt-4 w-full rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-left transition hover:bg-amber-500/15">
                 <div className="flex items-center justify-between gap-2">
