@@ -35,12 +35,12 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-// ─── Hook audio — Single Element stable ──────────────────────────────────────
+// ─── Hook audio — Ping-Pong + fix doublon ────────────────────────────────────
 //
-// 🎓 Pattern Single Audio Element — un seul élément Audio() persistant.
-// handleEnded lit tout depuis des refs (jamais de closures stale).
-// doPlay() est stable au niveau du hook, réutilisé par handleEnded et Media Session.
-// onended = () => handleEndedRef.current() pour toujours pointer vers la version fraîche.
+// 2 éléments audio alternent. onended → play() immédiat sur l'élément
+// déjà chargé = fonctionne écran verrouillé iOS/Android.
+// Fix doublon : loadedSlugMap empêche le useEffect de rechargement
+// de recharger un épisode déjà joué par le ping-pong.
 //
 function useAudioPlayer(
   episodes: AudioEpisode[],
@@ -53,23 +53,35 @@ function useAudioPlayer(
   playQueue: number[] | null,
   playTrigger: number = 0
 ) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioARef = useRef<HTMLAudioElement | null>(null);
+  const audioBRef = useRef<HTMLAudioElement | null>(null);
+  const activeRef = useRef<"A" | "B">("A");
+
+  const getActive   = () => activeRef.current === "A" ? audioARef.current : audioBRef.current;
+  const getInactive = () => activeRef.current === "A" ? audioBRef.current : audioARef.current;
+  const swapActive  = () => { activeRef.current = activeRef.current === "A" ? "B" : "A"; };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!audioRef.current) { audioRef.current = new Audio(); audioRef.current.preload = "auto"; }
+    if (!audioARef.current) { audioARef.current = new Audio(); audioARef.current.preload = "auto"; }
+    if (!audioBRef.current) { audioBRef.current = new Audio(); audioBRef.current.preload = "auto"; }
     return () => {
-      if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
+      [audioARef, audioBRef].forEach(ref => {
+        if (ref.current) { ref.current.pause(); ref.current.src = ""; }
+      });
     };
   }, []);
 
-  const autoPlayRef   = useRef(autoPlay);
-  const onNextRef     = useRef(onNext);
-  const onPrevRef     = useRef(onPrev);
-  const currentIdxRef = useRef(currentIdx);
-  const episodesRef   = useRef(episodes);
-  const playQueueRef  = useRef(playQueue);
+  const autoPlayRef      = useRef(autoPlay);
+  const onNextRef        = useRef(onNext);
+  const onPrevRef        = useRef(onPrev);
+  const currentIdxRef    = useRef(currentIdx);
+  const episodesRef      = useRef(episodes);
+  const playQueueRef     = useRef(playQueue);
   const shouldPlayOnLoad = useRef(false);
+  // 🎓 loadedSlugMap : mémorise quel slug est chargé sur chaque élément audio
+  // Empêche le useEffect de rechargement de recharger un épisode déjà joué
+  const loadedSlugMap    = useRef<Map<HTMLAudioElement, string>>(new Map());
 
   const setAutoPlayImmediate = useCallback((v: boolean) => {
     autoPlayRef.current = v;
@@ -103,61 +115,146 @@ function useAudioPlayer(
     return nextIdx < episodesRef.current.length ? nextIdx : null;
   }, []);
 
-  const doPlay = useCallback((url: string) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.onended = null; audio.ontimeupdate = null;
-    audio.onloadedmetadata = null; audio.onplay = null; audio.onpause = null;
-    audio.src = url;
-    audio.load();
-    audio.ontimeupdate = () => {
-      setCurrentTime(audio.currentTime);
-      setProgress((audio.currentTime / (audio.duration || 1)) * 100);
-    };
-    audio.onloadedmetadata = () => {
-      setDuration(audio.duration ?? 0);
-      setLoaded(true);
-      audio.play().then(() => setPlaying(true)).catch(() => {});
-    };
-    audio.onplay  = () => setPlaying(true);
-    audio.onpause = () => setPlaying(false);
-    audio.onended = () => handleEndedRef.current();
-    setTimeout(() => onNextRef.current(), 100);
-  }, []);
+  // Pré-fetch URL prochain épisode + preload sur élément inactif
+  const nextUrlRef = useRef<string | null>(null);
+  useEffect(() => {
+    const nextIdx = getNextIdx(currentIdx);
+    if (!isPremium || nextIdx === null) { nextUrlRef.current = null; return; }
+    const nextEp = episodesRef.current[nextIdx];
+    if (!nextEp) return;
+    fetch(`/api/audio/${nextEp.episodeSlug}`)
+      .then(r => r.json())
+      .then(d => {
+        nextUrlRef.current = d.url;
+        const inactive = getInactive();
+        if (!inactive) return;
+        inactive.onended = null; inactive.ontimeupdate = null;
+        inactive.onloadedmetadata = null; inactive.onplay = null; inactive.onpause = null;
+        loadedSlugMap.current.set(inactive, nextEp.episodeSlug);
+        inactive.src = d.url;
+        inactive.load();
+      })
+      .catch(() => { nextUrlRef.current = null; });
+  }, [currentIdx, isPremium, episodes, getNextIdx]);
 
+  // ── handleEnded ───────────────────────────────────────────────────────────
   const handleEnded = useCallback(() => {
     setPlaying(false);
     if (!autoPlayRef.current) return;
     const nextIdx = getNextIdx(currentIdxRef.current);
     if (nextIdx === null) return;
-    const nextEp = episodesRef.current[nextIdx];
-    if (!nextEp) return;
-    fetch(`/api/audio/${nextEp.episodeSlug}`)
-      .then(r => r.json())
-      .then(d => doPlay(d.url))
-      .catch(() => {});
-  }, [getNextIdx, doPlay]);
+
+    const toPlay    = getInactive();
+    const toPreload = getActive();
+    const nextEp    = episodesRef.current[nextIdx];
+    const nextNextIdx = getNextIdx(nextIdx);
+    const nextNextEp  = nextNextIdx !== null ? episodesRef.current[nextNextIdx] : null;
+
+    const executeSwap = () => {
+      swapActive();
+      // Attacher les listeners sur le nouvel actif
+      const nowActive = getActive()!;
+      nowActive.ontimeupdate = () => {
+        setCurrentTime(nowActive.currentTime);
+        setProgress((nowActive.currentTime / (nowActive.duration || 1)) * 100);
+      };
+      nowActive.onloadedmetadata = () => { setDuration(nowActive.duration ?? 0); setLoaded(true); };
+      nowActive.onplay  = () => setPlaying(true);
+      nowActive.onpause = () => setPlaying(false);
+      nowActive.onended = () => handleEndedRef.current();
+
+      setProgress(0); setCurrentTime(0); setLoaded(false);
+
+      nowActive.play()
+        .then(() => {
+          setPlaying(true);
+          setDuration(nowActive.duration ?? 0);
+          setLoaded(true);
+        })
+        .catch(() => {});
+
+      // 🎓 onNextRef APRÈS play() pour éviter que le useEffect de chargement
+      // ne recharge l'épisode que le ping-pong vient de charger.
+      // Le guard loadedSlugMap dans le useEffect fait le vrai travail.
+      setTimeout(() => onNextRef.current(), 100);
+
+      // Preload N+2 sur l'ancien actif (maintenant inactif) — différé 3s
+      if (nextNextEp && toPreload) {
+        setTimeout(() => {
+          toPreload.onended = null; toPreload.ontimeupdate = null;
+          toPreload.onloadedmetadata = null; toPreload.onplay = null; toPreload.onpause = null;
+          fetch(`/api/audio/${nextNextEp.episodeSlug}`)
+            .then(r => r.json())
+            .then(d => {
+              loadedSlugMap.current.set(toPreload, nextNextEp.episodeSlug);
+              toPreload.src = d.url;
+              toPreload.load();
+            })
+            .catch(() => {});
+        }, 3000);
+      }
+    };
+
+    // Cas nominal : toPlay déjà chargé avec le bon slug
+    const slug = loadedSlugMap.current.get(toPlay!);
+    if (toPlay && toPlay.src && slug === nextEp?.episodeSlug && toPlay.readyState >= 2) {
+      executeSwap();
+    } else {
+      // Fallback fetch
+      if (!nextEp) return;
+      fetch(`/api/audio/${nextEp.episodeSlug}`)
+        .then(r => r.json())
+        .then(d => {
+          if (!toPlay) return;
+          toPlay.onended = null; toPlay.ontimeupdate = null;
+          toPlay.onloadedmetadata = null; toPlay.onplay = null; toPlay.onpause = null;
+          loadedSlugMap.current.set(toPlay, nextEp.episodeSlug);
+          toPlay.src = d.url;
+          toPlay.load();
+          toPlay.oncanplay = () => { toPlay.oncanplay = null; executeSwap(); };
+        })
+        .catch(() => {});
+    }
+  }, [getNextIdx]);
 
   const handleEndedRef = useRef(handleEnded);
   useEffect(() => {
     handleEndedRef.current = handleEnded;
-    if (audioRef.current) audioRef.current.onended = () => handleEndedRef.current();
+    const active = getActive();
+    if (active) active.onended = () => handleEndedRef.current();
   }, [handleEnded]);
 
+  // ── Chargement épisode courant ────────────────────────────────────────────
   useEffect(() => {
     const isFreeEpisode = FREE_EPISODE_NUMBERS.has(episode?.episodeNumber ?? 0);
     if (!episode || (!isPremium && !isFreeEpisode)) return;
+
     setPlaying(false); setProgress(0); setCurrentTime(0);
     setDuration(0); setLoaded(false); setFetchError(false);
     shouldPlayOnLoad.current = autoPlayRef.current;
-    if (!audioRef.current) { audioRef.current = new Audio(); audioRef.current.preload = "auto"; }
+
+    if (!audioARef.current) { audioARef.current = new Audio(); audioARef.current.preload = "auto"; }
+    if (!audioBRef.current) { audioBRef.current = new Audio(); audioBRef.current.preload = "auto"; }
+
+    // 🎓 GUARD anti-doublon : si l'actif contient déjà cet épisode
+    // (le ping-pong vient de le charger), on ne recharge pas.
+    const activeAudio = getActive();
+    if (activeAudio && loadedSlugMap.current.get(activeAudio) === episode.episodeSlug) {
+      setLoaded(true);
+      if (shouldPlayOnLoad.current) {
+        activeAudio.play().then(() => setPlaying(true)).catch(() => {});
+      }
+      return;
+    }
+
     fetch(`/api/audio/${episode.episodeSlug}`)
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => {
-        const audio = audioRef.current;
+        const audio = getActive();
         if (!audio) return;
         audio.onended = null; audio.ontimeupdate = null;
         audio.onloadedmetadata = null; audio.onplay = null; audio.onpause = null;
+        loadedSlugMap.current.set(audio, episode.episodeSlug);
         audio.src = d.url;
         audio.load();
         audio.ontimeupdate = () => {
@@ -178,7 +275,7 @@ function useAudioPlayer(
   }, [episode?.episodeSlug, isPremium, playTrigger]);
 
   const togglePlay = useCallback(() => {
-    const audio = audioRef.current;
+    const audio = getActive();
     if (!audio) return;
     if (playing) { audio.pause(); setPlaying(false); }
     else {
@@ -194,7 +291,7 @@ function useAudioPlayer(
   }, [playing, setAutoPlayImmediate, episode]);
 
   const skip = useCallback((s: number) => {
-    const audio = audioRef.current;
+    const audio = getActive();
     if (!audio) return;
     audio.currentTime = Math.max(0, Math.min(audio.currentTime + s, audio.duration || 0));
   }, []);
@@ -207,16 +304,18 @@ function useAudioPlayer(
       title: episode.episodeTitle, artist: "Cap Citoyen", album: episode.subthemeLabel, artwork,
     });
     navigator.mediaSession.setActionHandler("play", () => {
-      audioRef.current?.play().then(() => setPlaying(true)).catch(() => {});
+      getActive()?.play().then(() => setPlaying(true)).catch(() => {});
     });
-    navigator.mediaSession.setActionHandler("pause", () => { audioRef.current?.pause(); setPlaying(false); });
-    navigator.mediaSession.setActionHandler("previoustrack", () => { if (currentIdxRef.current > 0) onPrevRef.current(); });
+    navigator.mediaSession.setActionHandler("pause", () => { getActive()?.pause(); setPlaying(false); });
+    navigator.mediaSession.setActionHandler("previoustrack", () => {
+      if (currentIdxRef.current > 0) onPrevRef.current();
+    });
     navigator.mediaSession.setActionHandler("nexttrack", () => { handleEndedRef.current(); });
     navigator.mediaSession.setActionHandler("seekbackward", () => {
-      if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
+      const a = getActive(); if (a) a.currentTime = Math.max(0, a.currentTime - 10);
     });
     navigator.mediaSession.setActionHandler("seekforward", () => {
-      if (audioRef.current) audioRef.current.currentTime = Math.min(audioRef.current.duration || 0, audioRef.current.currentTime + 10);
+      const a = getActive(); if (a) a.currentTime = Math.min(a.duration || 0, a.currentTime + 10);
     });
     return () => {
       (["play","pause","previoustrack","nexttrack","seekbackward","seekforward"] as MediaSessionAction[])
@@ -228,6 +327,8 @@ function useAudioPlayer(
     if (!isPremium || !("mediaSession" in navigator)) return;
     navigator.mediaSession.playbackState = playing ? "playing" : "paused";
   }, [playing, isPremium]);
+
+  const audioRef = { current: getActive() };
 
   return {
     audioRef, playing, setPlaying, shouldPlayOnLoad,
