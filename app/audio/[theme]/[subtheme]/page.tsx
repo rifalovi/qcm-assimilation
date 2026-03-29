@@ -242,7 +242,10 @@ function useAudioPlayer(
         fetch(`/api/audio/${nextNextEp.episodeSlug}`)
           .then(r => r.json())
           .then(d => {
+            // 🎓 toPreload est maintenant inactif (swap déjà fait)
+            // On peut charger sans risque d'interrompre la lecture
             loadedSlugMap.current.set(toPreload, nextNextEp.episodeSlug);
+            toPreload.pause();
             toPreload.src = d.url;
             toPreload.load();
           })
@@ -341,7 +344,8 @@ function useAudioPlayer(
         };
         audio.onplay  = () => setPlaying(true);
         audio.onpause = () => setPlaying(false);
-        audio.onended = handleEndedRef.current;
+        // 🎓 iOS : forcer l'attachement de onended via la ref fraîche
+        audio.onended = () => handleEndedRef.current();
       })
       .catch(() => setFetchError(true));
   // eslint-disable-next-line react-hooks/exhaustive-deps
