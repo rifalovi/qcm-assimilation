@@ -175,6 +175,9 @@ function useAudioPlayer(
   }, [currentIdx, isPremium, episodes, getNextIdx]);
 
   // ── attachListeners : configure les listeners sur l'élément actif ─────────
+  // 🎓 onended utilise un wrapper () => handleEndedRef.current() pour toujours
+  // pointer vers la version la plus récente de handleEnded, même si attachListeners
+  // a été créé avant que handleEndedRef soit initialisé.
   const attachListeners = useCallback((audio: HTMLAudioElement) => {
     audio.ontimeupdate = () => {
       setCurrentTime(audio.currentTime);
@@ -186,7 +189,7 @@ function useAudioPlayer(
     };
     audio.onplay  = () => setPlaying(true);
     audio.onpause = () => setPlaying(false);
-    audio.onended = handleEndedRef.current;
+    audio.onended = () => handleEndedRef.current(); // wrapper : lit la ref au moment de l'appel
   }, []);
 
   const attachListenersRef = useRef(attachListeners);
@@ -232,24 +235,27 @@ function useAudioPlayer(
 
       setTimeout(() => onNextRef.current(), 100);
 
-      // Preload épisode N+2 sur l'ancien actif (maintenant inactif)
+      // Preload épisode N+2 — attendre que toPlay soit bien lancé avant de toucher toPreload
+      // 🎓 Sur Android, modifier toPreload trop tôt peut interrompre la lecture de toPlay
+      // car les deux éléments partagent la même session audio WebView.
+      // On attend 2s que toPlay soit stable avant de charger sur toPreload.
       if (nextNextEp && toPreload) {
-        toPreload.onended          = null;
-        toPreload.ontimeupdate     = null;
-        toPreload.onloadedmetadata = null;
-        toPreload.onplay           = null;
-        toPreload.onpause          = null;
-        fetch(`/api/audio/${nextNextEp.episodeSlug}`)
-          .then(r => r.json())
-          .then(d => {
-            // 🎓 toPreload est maintenant inactif (swap déjà fait)
-            // On peut charger sans risque d'interrompre la lecture
-            loadedSlugMap.current.set(toPreload, nextNextEp.episodeSlug);
-            toPreload.pause();
-            toPreload.src = d.url;
-            toPreload.load();
-          })
-          .catch(() => {});
+        setTimeout(() => {
+          toPreload.onended          = null;
+          toPreload.ontimeupdate     = null;
+          toPreload.onloadedmetadata = null;
+          toPreload.onplay           = null;
+          toPreload.onpause          = null;
+          fetch(`/api/audio/${nextNextEp.episodeSlug}`)
+            .then(r => r.json())
+            .then(d => {
+              loadedSlugMap.current.set(toPreload, nextNextEp.episodeSlug);
+              toPreload.pause();
+              toPreload.src = d.url;
+              toPreload.load();
+            })
+            .catch(() => {});
+        }, 2000); // attendre 2s que la nouvelle piste soit stable
       }
     };
 
