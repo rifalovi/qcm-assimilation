@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     siteName: "Cap Citoyen",
     images: [
       {
-        url: "https://cap-citoyen.fr/cap-citoyen.png",
+        url: "https://cap-citoyen.fr/og-image.png",
         width: 512,
         height: 512,
         alt: "Cap Citoyen",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "Cap Citoyen",
     description: "Préparez votre test civique français — QCM, audio, examen blanc",
-    images: ["https://cap-citoyen.fr/cap-citoyen.png"],
+    images: ["https://cap-citoyen.fr/og-image.png"],
   },
 };
 
@@ -54,12 +54,12 @@ export default function RootLayout({
       <head>
         <meta property="og:title" content="Cap Citoyen" />
         <meta property="og:description" content="Préparez votre test civique français — QCM, audio, examen blanc" />
-        <meta property="og:image" content="https://cap-citoyen.fr/cap-citoyen.png" />
+        <meta property="og:image" content="https://cap-citoyen.fr/og-image.png" />
         <meta property="og:url" content="https://cap-citoyen.fr" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Cap Citoyen" />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:image" content="https://cap-citoyen.fr/cap-citoyen.png" />
+        <meta name="twitter:image" content="https://cap-citoyen.fr/og-image.png" />
       </head>
       <body className="min-h-full text-slate-100 antialiased pb-16">
         <UserProvider>
