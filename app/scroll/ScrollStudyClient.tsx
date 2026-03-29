@@ -895,7 +895,7 @@ useEffect(() => {
           "radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%), radial-gradient(circle at top right, rgba(14,165,233,0.10), transparent 24%), linear-gradient(180deg, #08101d 0%, #070d18 45%, #050913 100%)",
         color: "#f1f5f9",
         fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
-        height: "calc(100dvh - 128px)",
+        height: "calc(100svh - 120px)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
