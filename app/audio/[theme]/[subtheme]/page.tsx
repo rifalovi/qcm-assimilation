@@ -205,91 +205,78 @@ function useAudioPlayer(
     const nextIdx = getNextIdx(currentIdxRef.current);
     if (nextIdx === null) return;
 
-    const inactive = getInactive(); // l'élément qui a déjà l'audio chargé
-    if (!inactive || !inactive.src) {
-      // Fallback : l'élément inactif n'est pas chargé (cas rare)
-      // On fetch à la volée
-      const nextEp = episodesRef.current[nextIdx];
+    // 🎓 Capturer les deux refs AVANT tout swap
+    const toPlay    = getInactive(); // contient le prochain épisode préchargé
+    const toPreload = getActive();   // sera libéré après le swap pour preload
+
+    const nextEp     = episodesRef.current[nextIdx];
+    const nextNextIdx = getNextIdx(nextIdx);
+    const nextNextEp  = nextNextIdx !== null ? episodesRef.current[nextNextIdx] : null;
+
+    // ── Fonction commune : joue toPlay, preload sur toPreload ────────────
+    const executeSwap = () => {
+      swapActive();
+      attachListenersRef.current(toPlay!);
+
+      setProgress(0);
+      setCurrentTime(0);
+      setLoaded(false);
+
+      toPlay!.play()
+        .then(() => {
+          setPlaying(true);
+          setDuration(toPlay!.duration ?? 0);
+          setLoaded(true);
+        })
+        .catch(() => {});
+
+      setTimeout(() => onNextRef.current(), 100);
+
+      // Preload épisode N+2 sur l'ancien actif (maintenant inactif)
+      if (nextNextEp && toPreload) {
+        toPreload.onended          = null;
+        toPreload.ontimeupdate     = null;
+        toPreload.onloadedmetadata = null;
+        toPreload.onplay           = null;
+        toPreload.onpause          = null;
+        fetch(`/api/audio/${nextNextEp.episodeSlug}`)
+          .then(r => r.json())
+          .then(d => {
+            loadedSlugMap.current.set(toPreload, nextNextEp.episodeSlug);
+            toPreload.src = d.url;
+            toPreload.load();
+          })
+          .catch(() => {});
+      }
+    };
+
+    // ── Cas nominal : toPlay est déjà chargé ─────────────────────────────
+    const slug = loadedSlugMap.current.get(toPlay!);
+    const isPreloaded = toPlay && toPlay.src && slug === nextEp?.episodeSlug;
+
+    if (isPreloaded && toPlay!.readyState >= 2) {
+      executeSwap();
+    } else {
+      // ── Fallback : fetch à la volée ───────────────────────────────────
       if (!nextEp) return;
       fetch(`/api/audio/${nextEp.episodeSlug}`)
         .then(r => r.json())
         .then(d => {
-          const inact = getInactive();
-          if (!inact) return;
-          inact.src = d.url;
-          inact.load();
-          inact.onloadedmetadata = () => {
-            setDuration(inact.duration ?? 0);
-            setLoaded(true);
-            swapActive();
-            attachListenersRef.current(inact);
-            inact.play().then(() => setPlaying(true)).catch(() => {});
-            setTimeout(() => onNextRef.current(), 100);
+          if (!toPlay) return;
+          toPlay.onended          = null;
+          toPlay.ontimeupdate     = null;
+          toPlay.onloadedmetadata = null;
+          toPlay.onplay           = null;
+          toPlay.onpause          = null;
+          loadedSlugMap.current.set(toPlay, nextEp.episodeSlug);
+          toPlay.src = d.url;
+          toPlay.load();
+          toPlay.oncanplay = () => {
+            toPlay.oncanplay = null;
+            executeSwap();
           };
         })
         .catch(() => {});
-      return;
-    }
-
-    // Cas nominal : l'élément inactif a déjà l'audio — play immédiat
-    swapActive();
-    const nowActive = getActive()!;
-    attachListenersRef.current(nowActive);
-
-    // Reset UI
-    setProgress(0);
-    setCurrentTime(0);
-    setLoaded(false);
-
-    // 🎓 readyState >= 3 = HAVE_FUTURE_DATA : assez chargé pour jouer
-    // Sur Android, on attend oncanplay si pas encore prêt
-    const doSwapPlay = () => {
-      nowActive.play()
-        .then(() => {
-          setPlaying(true);
-          setDuration(nowActive.duration ?? 0);
-          setLoaded(true);
-        })
-        .catch(() => {});
-    };
-
-    if (nowActive.readyState >= 3) {
-      doSwapPlay();
-    } else {
-      nowActive.oncanplay = () => {
-        nowActive.oncanplay = null;
-        doSwapPlay();
-      };
-    }
-
-    // Mettre à jour l'UI React (index épisode)
-    setTimeout(() => onNextRef.current(), 100);
-
-    // Pré-charger l'épisode d'après sur l'élément maintenant inactif
-    // 🎓 getInactive() est correct ICI car swapActive() a déjà été appelé —
-    // l'inactif est bien l'ancien actif, libéré pour le prochain preload
-    const nextNextIdx = getNextIdx(nextIdx);
-    if (nextNextIdx !== null) {
-      const nextNextEp = episodesRef.current[nextNextIdx];
-      if (nextNextEp) {
-        const inactiveEl = getInactive(); // capturer APRÈS le swap
-        fetch(`/api/audio/${nextNextEp.episodeSlug}`)
-          .then(r => r.json())
-          .then(d => {
-            nextUrlRef.current = d.url;
-            if (inactiveEl) {
-              inactiveEl.onended          = null;
-              inactiveEl.ontimeupdate     = null;
-              inactiveEl.onloadedmetadata = null;
-              inactiveEl.onplay           = null;
-              inactiveEl.onpause          = null;
-              loadedSlugMap.current.set(inactiveEl, nextNextEp.episodeSlug);
-              inactiveEl.src = d.url;
-              inactiveEl.load();
-            }
-          })
-          .catch(() => {});
-      }
     }
   }, [getNextIdx, attachListeners]);
 
