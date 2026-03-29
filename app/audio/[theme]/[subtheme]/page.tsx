@@ -99,6 +99,7 @@ function useAudioPlayer(
   const episodesRef   = useRef(episodes);
   const playQueueRef  = useRef(playQueue);
   const shouldPlayOnLoad = useRef(false);
+  const isSwappingRef    = useRef(false); // true pendant un swap ping-pong
 
   const setAutoPlayImmediate = useCallback((v: boolean) => {
     autoPlayRef.current = v;
@@ -230,6 +231,7 @@ function useAudioPlayer(
     }
 
     // Cas nominal : l'élément inactif a déjà l'audio — play immédiat
+    isSwappingRef.current = true; // bloquer le useEffect pendant le swap
     swapActive();
     const nowActive = getActive()!;
     attachListenersRef.current(nowActive);
@@ -244,8 +246,9 @@ function useAudioPlayer(
         setPlaying(true);
         setDuration(nowActive.duration ?? 0);
         setLoaded(true);
+        isSwappingRef.current = false; // swap terminé
       })
-      .catch(() => {});
+      .catch(() => { isSwappingRef.current = false; });
 
     // Mettre à jour l'UI React (index épisode)
     setTimeout(() => onNextRef.current(), 100);
@@ -285,6 +288,8 @@ function useAudioPlayer(
     setLoaded(false);
     setFetchError(false);
 
+    // Si le ping-pong vient de swapper, ne pas recharger l'épisode
+    if (isSwappingRef.current) return;
     shouldPlayOnLoad.current = autoPlayRef.current;
 
     fetch(`/api/audio/${episode.episodeSlug}`)
