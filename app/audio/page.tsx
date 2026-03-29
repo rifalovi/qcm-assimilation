@@ -412,6 +412,59 @@ export default function AudioLibraryPage() {
           </section>
         )}
 
+
+        {/* ── HYMNES & CHANTS ─────────────────────────────────────────── */}
+        {/* ── HYMNES & CHANTS ─────────────────────────────────────────── */}
+        {!isAnonymous && (
+          <section>
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-extrabold text-white">🎵 Hymnes & Chants</h2>
+                <p className="mt-0.5 text-xs text-slate-500">Écouter et mémoriser les symboles sonores de la République</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="overflow-hidden rounded-[1.5rem] border border-blue-400/20 bg-slate-900/95">
+                <a
+                  href="https://www.youtube.com/watch?v=QY8tdnqdPwI"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative block aspect-video w-full overflow-hidden rounded-t-[1.5rem]"
+                >
+                  <Image
+                    src="https://img.youtube.com/vi/QY8tdnqdPwI/maxresdefault.jpg"
+                    alt="La Marseillaise"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/30 transition-opacity duration-200 group-hover:bg-black/50" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-600 shadow-[0_8px_24px_rgba(220,38,38,0.5)] transition-transform duration-200 group-hover:scale-110">
+                      <svg width="20" height="20" viewBox="0 0 14 14" fill="white">
+                        <path d="M3 1.5l10 5.5-10 5.5V1.5z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </a>
+                <div className="px-4 py-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-blue-300">🇫🇷 Hymne national</p>
+                  <p className="mt-0.5 text-sm font-bold text-white">La Marseillaise</p>
+                  <p className="mt-1 text-[11px] text-slate-500">Écrite en 1792 • Symbole de la République française</p>
+                  <a
+                    href="https://www.youtube.com/watch?v=QY8tdnqdPwI"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-500/10 px-3 py-1.5 text-[11px] font-bold text-red-300 transition hover:bg-red-500/20"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
+                    Voir sur YouTube
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ── ANONYMOUS TEASER ────────────────────────────────────────── */}
         {isAnonymous && (
           <section>
