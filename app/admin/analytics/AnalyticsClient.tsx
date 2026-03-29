@@ -11,12 +11,36 @@ type Stats = {
   recentEvents: { event_type: string; properties: Record<string, unknown>; created_at: string }[]
 }
 
+// Labels lisibles pour chaque type d'événement
+const EVENT_LABELS: Record<string, { label: string; icon: string; color: string }> = {
+  '$pageview':        { label: 'Page visitée',         icon: '👁️',  color: 'text-slate-300' },
+  'quiz_started':     { label: 'Quiz démarré',          icon: '📝',  color: 'text-blue-300' },
+  'quiz_completed':   { label: 'Quiz terminé',          icon: '✅',  color: 'text-emerald-300' },
+  'audio_played':     { label: 'Audio écouté',          icon: '🎧',  color: 'text-purple-300' },
+  'scroll_card_viewed': { label: 'Flash-card vue',      icon: '🃏',  color: 'text-cyan-300' },
+  'upgrade_clicked':  { label: 'Upgrade cliqué',        icon: '👑',  color: 'text-amber-300' },
+  'register_completed': { label: 'Inscription',         icon: '🎉',  color: 'text-green-300' },
+  'location_collected': { label: 'Localisation',        icon: '📍',  color: 'text-rose-300' },
+  'location_skipped': { label: 'Localisation ignorée',  icon: '⏭️', color: 'text-slate-400' },
+}
+
+function formatEventProps(type: string, props: Record<string, unknown>): string {
+  if (type === '$pageview') return `→ ${props.path ?? ''}`
+  if (type === 'quiz_started') return `Thème: ${props.theme ?? '—'}`
+  if (type === 'quiz_completed') return `Score: ${props.score ?? '—'} • ${props.theme ?? ''}`
+  if (type === 'audio_played') return `${props.episodeTitle ?? props.episodeId ?? '—'}`
+  if (type === 'scroll_card_viewed') return `Question #${props.questionId ?? '—'}`
+  if (type === 'upgrade_clicked') return `Source: ${props.source ?? '—'}`
+  if (type === 'location_collected') return `${props.city ?? '—'} ${props.postal_code ?? ''}`
+  return Object.entries(props).slice(0, 2).map(([k, v]) => `${k}: ${v}`).join(' • ')
+}
+
 function KPICard({ label, value, icon, color }: { label: string; value: number; icon: string; color: string }) {
   const colors: Record<string, string> = {
-    blue: 'border-blue-400/20 bg-blue-500/10 text-blue-300',
-    amber: 'border-amber-400/20 bg-amber-500/10 text-amber-300',
+    blue:    'border-blue-400/20 bg-blue-500/10 text-blue-300',
+    amber:   'border-amber-400/20 bg-amber-500/10 text-amber-300',
     emerald: 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300',
-    yellow: 'border-yellow-400/20 bg-yellow-500/10 text-yellow-300',
+    yellow:  'border-yellow-400/20 bg-yellow-500/10 text-yellow-300',
   }
   return (
     <div className={`rounded-2xl border p-5 ${colors[color]}`}>
@@ -106,12 +130,20 @@ export default function AnalyticsClient({ stats }: { stats: Stats }) {
               <p className="text-sm text-slate-500">Aucun événement encore enregistré</p>
             ) : (
               <div className="space-y-2">
-                {stats.topEvents.map((e, i) => (
-                  <div key={i} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-3 py-2">
-                    <span className="text-sm text-slate-300">{e.event_type}</span>
-                    <span className="rounded-full bg-blue-500/20 px-2 py-0.5 text-xs font-bold text-blue-300">{e.count}</span>
-                  </div>
-                ))}
+                {stats.topEvents.map((e, i) => {
+                  const meta = EVENT_LABELS[e.event_type]
+                  return (
+                    <div key={i} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-3 py-2">
+                      <div className="flex items-center gap-2">
+                        <span>{meta?.icon ?? '📊'}</span>
+                        <span className={`text-sm ${meta?.color ?? 'text-slate-300'}`}>
+                          {meta?.label ?? e.event_type}
+                        </span>
+                      </div>
+                      <span className="rounded-full bg-blue-500/20 px-2 py-0.5 text-xs font-bold text-blue-300">{e.count}</span>
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>
@@ -123,17 +155,28 @@ export default function AnalyticsClient({ stats }: { stats: Stats }) {
               <p className="text-sm text-slate-500">Aucun événement encore enregistré</p>
             ) : (
               <div className="max-h-80 space-y-2 overflow-y-auto">
-                {stats.recentEvents.map((e, i) => (
-                  <div key={i} className="rounded-xl border border-white/5 bg-white/5 px-3 py-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-white">{e.event_type}</span>
-                      <span className="text-[10px] text-slate-500">{new Date(e.created_at).toLocaleString('fr-FR')}</span>
+                {stats.recentEvents.map((e, i) => {
+                  const meta = EVENT_LABELS[e.event_type]
+                  const detail = formatEventProps(e.event_type, e.properties)
+                  return (
+                    <div key={i} className="rounded-xl border border-white/5 bg-white/5 px-3 py-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span>{meta?.icon ?? '📊'}</span>
+                          <span className={`text-xs font-semibold ${meta?.color ?? 'text-white'}`}>
+                            {meta?.label ?? e.event_type}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-slate-500">
+                          {new Date(e.created_at).toLocaleString('fr-FR')}
+                        </span>
+                      </div>
+                      {detail && (
+                        <p className="mt-1 truncate text-[10px] text-slate-400">{detail}</p>
+                      )}
                     </div>
-                    {Object.keys(e.properties).length > 0 && (
-                      <p className="mt-1 truncate text-[10px] text-slate-400">{JSON.stringify(e.properties)}</p>
-                    )}
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>

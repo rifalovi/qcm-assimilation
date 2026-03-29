@@ -465,7 +465,7 @@ export default function AudioLibraryPage() {
                     Voir sur YouTube
                   </a>
                   <a
-                    href="/La-Marseillaise-lhymne-national.pdf?v=2"
+                    href="/La-Marseillaise-lhymne-national.pdf?v=3"
                     download
                     className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-[11px] font-bold text-blue-300 transition hover:bg-blue-500/20"
                   >
