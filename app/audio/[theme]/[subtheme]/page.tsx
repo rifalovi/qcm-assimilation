@@ -99,7 +99,7 @@ function useAudioPlayer(
   const episodesRef   = useRef(episodes);
   const playQueueRef  = useRef(playQueue);
   const shouldPlayOnLoad = useRef(false);
-  const isSwappingRef    = useRef(false); // true pendant un swap ping-pong
+  const loadedSlugMap    = useRef<Map<HTMLAudioElement, string>>(new Map()); // slug chargé par élément
 
   const setAutoPlayImmediate = useCallback((v: boolean) => {
     autoPlayRef.current = v;
@@ -147,7 +147,7 @@ function useAudioPlayer(
     inactive.onloadedmetadata = null;
     inactive.onplay           = null;
     inactive.onpause          = null;
-    if (slug) inactive.dataset.slug = slug;
+    if (slug) loadedSlugMap.current.set(inactive, slug);
     inactive.src = url;
     inactive.load(); // charge sans jouer
   }, []);
@@ -266,15 +266,27 @@ function useAudioPlayer(
     setTimeout(() => onNextRef.current(), 100);
 
     // Pré-charger l'épisode d'après sur l'élément maintenant inactif
+    // 🎓 getInactive() est correct ICI car swapActive() a déjà été appelé —
+    // l'inactif est bien l'ancien actif, libéré pour le prochain preload
     const nextNextIdx = getNextIdx(nextIdx);
     if (nextNextIdx !== null) {
       const nextNextEp = episodesRef.current[nextNextIdx];
       if (nextNextEp) {
+        const inactiveEl = getInactive(); // capturer APRÈS le swap
         fetch(`/api/audio/${nextNextEp.episodeSlug}`)
           .then(r => r.json())
           .then(d => {
             nextUrlRef.current = d.url;
-            preloadNextRef.current(d.url);
+            if (inactiveEl) {
+              inactiveEl.onended          = null;
+              inactiveEl.ontimeupdate     = null;
+              inactiveEl.onloadedmetadata = null;
+              inactiveEl.onplay           = null;
+              inactiveEl.onpause          = null;
+              loadedSlugMap.current.set(inactiveEl, nextNextEp.episodeSlug);
+              inactiveEl.src = d.url;
+              inactiveEl.load();
+            }
           })
           .catch(() => {});
       }
@@ -304,7 +316,7 @@ function useAudioPlayer(
 
     // Si l'élément actif contient déjà cet épisode (swap ping-pong), ne pas recharger
     const activeAudio = getActive();
-    if (activeAudio?.dataset.slug === episode.episodeSlug) {
+    if (activeAudio && loadedSlugMap.current.get(activeAudio) === episode.episodeSlug) {
       setLoaded(true);
       return;
     }
@@ -325,7 +337,7 @@ function useAudioPlayer(
         audio.onplay           = null;
         audio.onpause          = null;
 
-        audio.dataset.slug = episode.episodeSlug; // marquer ce qui est chargé
+        loadedSlugMap.current.set(audio, episode.episodeSlug);
         audio.src = d.url;
         audio.load();
 
