@@ -46,6 +46,7 @@ export default async function UserProfilePage({ params }: { params: { id: string
     { data: messages },
     { data: ban },
     { data: reports },
+    { data: userEvents },
   ] = await Promise.all([
     adminClient.from('profiles').select('*').eq('id', userId).single(),
     adminClient.from('subscriptions').select('*').eq('user_id', userId).single(),
@@ -55,6 +56,7 @@ export default async function UserProfilePage({ params }: { params: { id: string
     adminClient.from('direct_messages').select('id, created_at').eq('sender_id', userId),
     adminClient.from('bans').select('*').eq('user_id', userId).single(),
     adminClient.from('reports').select('*').eq('reporter_id', userId),
+    adminClient.from('user_events').select('event_type, properties, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(50),
   ])
 
   // Charge les résultats via email
@@ -208,6 +210,33 @@ export default async function UserProfilePage({ params }: { params: { id: string
             </div>
           )}
         </div>
+
+        {/* Activité Audio & Scroll */}
+        {(userEvents?.filter(e => ['audio_played','scroll_card_viewed','quiz_started','quiz_completed'].includes(e.event_type)).length ?? 0) > 0 && (
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5">
+            <h2 className="text-sm font-medium text-white mb-4">🎧 Activité Audio & Scroll</h2>
+            <div className="max-h-60 overflow-y-auto space-y-2">
+              {userEvents?.filter(e => ['audio_played','scroll_card_viewed','quiz_started','quiz_completed'].includes(e.event_type)).map((e, i) => {
+                const icons: Record<string,string> = { audio_played: '🎧', scroll_card_viewed: '🃏', quiz_started: '📝', quiz_completed: '✅' }
+                const labels: Record<string,string> = { audio_played: 'Audio écouté', scroll_card_viewed: 'Flash-card vue', quiz_started: 'Quiz démarré', quiz_completed: 'Quiz terminé' }
+                const detail = e.event_type === 'audio_played' ? (e.properties?.episodeTitle ?? e.properties?.episodeId ?? '') :
+                               e.event_type === 'quiz_completed' ? `Score: ${e.properties?.score ?? '—'}` : ''
+                return (
+                  <div key={i} className="flex items-center justify-between py-1.5 border-b border-slate-700/50 last:border-0">
+                    <div className="flex items-center gap-2">
+                      <span>{icons[e.event_type]}</span>
+                      <div>
+                        <p className="text-xs text-white">{labels[e.event_type]}</p>
+                        {detail && <p className="text-[10px] text-slate-400">{String(detail)}</p>}
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-slate-500">{new Date(e.created_at).toLocaleString('fr-FR')}</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Signalements émis */}
         {(reports?.length ?? 0) > 0 && (
