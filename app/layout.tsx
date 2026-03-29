@@ -20,6 +20,28 @@ export const metadata: Metadata = {
     icon: "/cap-citoyen.png",
     apple: "/cap-citoyen.png",
   },
+  openGraph: {
+    title: "Cap Citoyen",
+    description: "Préparez votre test civique français — QCM, audio, examen blanc",
+    url: "https://cap-citoyen.fr",
+    siteName: "Cap Citoyen",
+    images: [
+      {
+        url: "https://cap-citoyen.fr/cap-citoyen.png",
+        width: 512,
+        height: 512,
+        alt: "Cap Citoyen",
+      },
+    ],
+    locale: "fr_FR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Cap Citoyen",
+    description: "Préparez votre test civique français — QCM, audio, examen blanc",
+    images: ["https://cap-citoyen.fr/cap-citoyen.png"],
+  },
 };
 
 export default function RootLayout({
