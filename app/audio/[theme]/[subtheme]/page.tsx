@@ -139,14 +139,17 @@ function useAudioPlayer(
 
   // ── handleEnded ───────────────────────────────────────────────────────────
   const handleEnded = useCallback(() => {
+    console.log("[handleEnded] triggered, autoPlay=", autoPlayRef.current, "currentIdx=", currentIdxRef.current);
     setPlaying(false);
-    if (!autoPlayRef.current) return;
+    if (!autoPlayRef.current) { console.log("[handleEnded] stopped: autoPlay false"); return; }
     const nextIdx = getNextIdx(currentIdxRef.current);
-    if (nextIdx === null) return;
+    console.log("[handleEnded] nextIdx=", nextIdx);
+    if (nextIdx === null) { console.log("[handleEnded] stopped: end of playlist"); return; }
 
     const toPlay    = getInactive();
     const toPreload = getActive();
     const nextEp    = episodesRef.current[nextIdx];
+    console.log("[handleEnded] nextEp=", nextEp?.episodeSlug, "toPlay.readyState=", toPlay?.readyState, "slug=", toPlay ? loadedSlugMap.current.get(toPlay) : null);
     const nextNextIdx = getNextIdx(nextIdx);
     const nextNextEp  = nextNextIdx !== null ? episodesRef.current[nextNextIdx] : null;
 
@@ -240,9 +243,27 @@ function useAudioPlayer(
     // (le ping-pong vient de le charger), on ne recharge pas.
     const activeAudio = getActive();
     if (activeAudio && loadedSlugMap.current.get(activeAudio) === episode.episodeSlug) {
-      setLoaded(true);
-      if (shouldPlayOnLoad.current) {
-        activeAudio.play().then(() => setPlaying(true)).catch(() => {});
+      // 🎓 L'élément est déjà chargé par le ping-pong — attendre qu'il soit prêt
+      if (activeAudio.readyState >= 2) {
+        setDuration(activeAudio.duration ?? 0);
+        setLoaded(true);
+        if (shouldPlayOnLoad.current) {
+          activeAudio.play().then(() => setPlaying(true)).catch(() => {});
+        }
+      } else {
+        // Pas encore prêt — attacher les listeners et laisser onloadedmetadata déclencher
+        activeAudio.ontimeupdate = () => {
+          setCurrentTime(activeAudio.currentTime);
+          setProgress((activeAudio.currentTime / (activeAudio.duration || 1)) * 100);
+        };
+        activeAudio.onloadedmetadata = () => {
+          setDuration(activeAudio.duration ?? 0);
+          setLoaded(true);
+          if (shouldPlayOnLoad.current) activeAudio.play().then(() => setPlaying(true)).catch(() => {});
+        };
+        activeAudio.onplay  = () => setPlaying(true);
+        activeAudio.onpause = () => setPlaying(false);
+        activeAudio.onended = () => handleEndedRef.current();
       }
       return;
     }
