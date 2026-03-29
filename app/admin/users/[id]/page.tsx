@@ -27,6 +27,10 @@ export default async function UserProfilePage({ params }: { params: { id: string
 
   const userId = params.id
 
+  // Récupérer l'email auth
+  const { data: { user: authUser } } = await adminClient.auth.admin.getUserById(userId)
+  const userEmail = authUser?.email ?? ''
+
   // Charge tout en parallèle
   const [
     { data: profile },
@@ -40,7 +44,7 @@ export default async function UserProfilePage({ params }: { params: { id: string
   ] = await Promise.all([
     adminClient.from('profiles').select('*').eq('id', userId).single(),
     adminClient.from('subscriptions').select('*').eq('user_id', userId).single(),
-    adminClient.from('results').select('id, score_percent, passed, mode, created_at').eq('email', '').limit(20),
+    Promise.resolve({ data: [] }),
     adminClient.from('testimonials').select('id, type, city, passed, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
     adminClient.from('forum_posts').select('id, title, reply_count, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
     adminClient.from('direct_messages').select('id, created_at').eq('sender_id', userId),
@@ -52,7 +56,7 @@ export default async function UserProfilePage({ params }: { params: { id: string
   const { data: resultsData } = await adminClient
     .from('results')
     .select('id, score_percent, passed, mode, created_at, level')
-    .eq('email', profile?.username ?? '')
+    .eq('email', userEmail)
     .order('created_at', { ascending: false })
     .limit(20)
 
@@ -112,9 +116,10 @@ export default async function UserProfilePage({ params }: { params: { id: string
           <h2 className="text-sm font-medium text-white mb-4">Informations</h2>
           <table className="w-full text-sm">
             {[
+              { label: 'Email', value: userEmail || '—' },
+              { label: 'Pseudo', value: profile?.username ?? '—' },
               { label: 'Prénom', value: profile?.first_name ?? '—' },
               { label: 'Nom', value: profile?.last_name ?? '—' },
-              { label: 'Pseudo', value: profile?.username ?? '—' },
               { label: 'Ville', value: profile?.city ?? '—' },
               { label: 'Code postal', value: profile?.postal_code ?? '—' },
               { label: 'Rôle', value: profile?.role ?? '—' },

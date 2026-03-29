@@ -258,7 +258,8 @@ export default function HomePage() {
     // Streak
     setStreak(getStreak());
 
-    // Onboarding — afficher seulement à la 1ère visite
+    // Onboarding — afficher seulement à la 1ère visite pour les anonymes/freemium
+    // Les comptes premium/elite/admin voient un accueil VIP, pas le tutoriel de base
     const onboarded = localStorage.getItem("qcm_onboarded");
     if (!onboarded) {
       setTimeout(() => setShowOnboarding(true), 800);
@@ -781,7 +782,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════
           MODAL — Onboarding
       ══════════════════════════════════════════ */}
-      {showOnboarding && (
+      {showOnboarding && !['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '') && (
         <OnboardingModal
           role={role}
           onClose={closeOnboarding}
