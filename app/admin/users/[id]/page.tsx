@@ -25,7 +25,7 @@ export default async function UserProfilePage({ params }: { params: { id: string
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const userId = params.id
+  const userId = (await params).id.replace(/\/+$/, '')
 
   // Récupérer l'email auth
   let userEmail = ''
