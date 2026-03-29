@@ -28,8 +28,11 @@ export default async function UserProfilePage({ params }: { params: { id: string
   const userId = params.id
 
   // Récupérer l'email auth
-  const { data: { user: authUser } } = await adminClient.auth.admin.getUserById(userId)
-  const userEmail = authUser?.email ?? ''
+  let userEmail = ''
+  try {
+    const { data: { user: authUser } } = await adminClient.auth.admin.getUserById(userId)
+    userEmail = authUser?.email ?? ''
+  } catch { userEmail = '' }
 
   // Charge tout en parallèle
   const [
