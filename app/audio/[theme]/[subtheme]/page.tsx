@@ -25,6 +25,7 @@ const THEME_META: Record<AudioThemeKey, { icon: string; accent: string; accentTe
   Histoire:     { icon: "📜", accent: "from-amber-500/20 via-orange-500/10 to-yellow-500/20",    accentText: "text-amber-300",   border: "border-amber-400/30",   glow: "rgba(245,158,11,0.3)"  },
   Société:      { icon: "👥", accent: "from-emerald-500/20 via-green-500/10 to-teal-500/20",     accentText: "text-emerald-300", border: "border-emerald-400/30", glow: "rgba(16,185,129,0.3)"  },
   "Devenir français(e)": { icon: "🎖️", accent: "from-rose-500/20 via-red-500/10 to-pink-500/20", accentText: "text-rose-300",    border: "border-rose-400/30",    glow: "rgba(244,63,94,0.3)"   },
+  "Quiz Audio":          { icon: "🎯", accent: "from-teal-500/20 via-cyan-500/10 to-emerald-500/20", accentText: "text-teal-300",    border: "border-teal-400/30",    glow: "rgba(20,184,166,0.3)"  },
 };
 
 function fmt(s: number) {
@@ -178,26 +179,32 @@ function useAudioPlayer(
   //    Lit tout depuis les refs (episodesRef, currentIdxRef, autoPlayRef).
   //    C'est la clé pour iOS/Android en arrière-plan où React est suspendu.
   const handleEnded = useCallback(() => {
+    console.log("[handleEnded] triggered, autoPlay=", autoPlayRef.current);
     setPlaying(false);
-    if (!autoPlayRef.current) return;
-
-    const eps     = episodesRef.current;       // tableau toujours à jour
+    if (!autoPlayRef.current) {
+      console.log("[handleEnded] stopped: autoPlay is false");
+      return;
+    }
+    const eps     = episodesRef.current;
     const nextIdx = currentIdxRef.current + 1;
-    if (nextIdx >= eps.length) return;
-
+    console.log("[handleEnded] nextIdx=", nextIdx, "eps.length=", eps.length);
+    if (nextIdx >= eps.length) {
+      console.log("[handleEnded] stopped: end of playlist");
+      return;
+    }
     if (nextUrlRef.current) {
-      // Cas idéal : URL pré-fetchée disponible → lecture immédiate
+      console.log("[handleEnded] playing from prefetch");
       const url = nextUrlRef.current;
       nextUrlRef.current = null;
       doPlay(url);
     } else {
-      // Fallback : fetch à la volée
+      console.log("[handleEnded] fetching:", eps[nextIdx]?.episodeSlug);
       const nextEp = eps[nextIdx];
       if (!nextEp) return;
       fetch(`/api/audio/${nextEp.episodeSlug}`)
         .then(r => r.json())
-        .then(d => doPlay(d.url))
-        .catch(() => {});
+        .then(d => { console.log("[handleEnded] fetch ok"); doPlay(d.url); })
+        .catch((e) => { console.error("[handleEnded] fetch failed", e); });
     }
   }, [doPlay]); // Dépend uniquement de doPlay (stable)
 
