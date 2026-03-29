@@ -35,30 +35,12 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-// ─── Hook audio — Pattern Ping-Pong ──────────────────────────────────────────
+// ─── Hook audio — Single Element stable ──────────────────────────────────────
 //
-// 🎓 POURQUOI LE PING-PONG ?
-//
-// Sur iOS, quand l'écran se verrouille, le JS de la WKWebView est suspendu.
-// Un fetch() réseau ou un re-render React est impossible.
-//
-// MAIS : audio.play() sur un élément DÉJÀ CHARGÉ fonctionne même écran verrouillé,
-// car le thread audio natif iOS reste actif indépendamment du JS.
-//
-// Solution : 2 éléments audio (A et B) qui alternent.
-//   - A joue l'épisode courant
-//   - B charge silencieusement l'épisode suivant (src + load, pas play)
-//   - Quand A se termine : B.play() immédiat (déjà en mémoire, 0 fetch)
-//   - Pendant que B joue : A charge l'épisode d'après
-//
-// Résultat : onended → play() = instantané, sans réseau, sans React.
-//
-// 🎓 QUEUE DE LECTURE
-//
-// playQueue = tableau ordonné des indices à jouer.
-// null = mode normal (tous les épisodes dans l'ordre).
-// [2, 5, 7] = sélection manuelle dans cet ordre.
-// Permet à "Écouter la sélection" de fonctionner correctement.
+// 🎓 Pattern Single Audio Element — un seul élément Audio() persistant.
+// handleEnded lit tout depuis des refs (jamais de closures stale).
+// doPlay() est stable au niveau du hook, réutilisé par handleEnded et Media Session.
+// onended = () => handleEndedRef.current() pour toujours pointer vers la version fraîche.
 //
 function useAudioPlayer(
   episodes: AudioEpisode[],
@@ -68,30 +50,19 @@ function useAudioPlayer(
   isPremium: boolean,
   autoPlay: boolean,
   setAutoPlay: (v: boolean) => void,
-  playQueue: number[] | null,   // null = tous les épisodes, sinon indices ordonnés
+  playQueue: number[] | null,
   playTrigger: number = 0
 ) {
-  // ── Deux éléments audio persistants (ping-pong) ───────────────────────────
-  const audioARef  = useRef<HTMLAudioElement | null>(null);
-  const audioBRef  = useRef<HTMLAudioElement | null>(null);
-  const activeRef  = useRef<"A" | "B">("A"); // lequel est en train de jouer
-
-  const getActive   = () => activeRef.current === "A" ? audioARef.current : audioBRef.current;
-  const getInactive = () => activeRef.current === "A" ? audioBRef.current : audioARef.current;
-  const swapActive  = () => { activeRef.current = activeRef.current === "A" ? "B" : "A"; };
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!audioARef.current) { audioARef.current = new Audio(); audioARef.current.preload = "auto"; }
-    if (!audioBRef.current) { audioBRef.current = new Audio(); audioBRef.current.preload = "auto"; }
+    if (!audioRef.current) { audioRef.current = new Audio(); audioRef.current.preload = "auto"; }
     return () => {
-      [audioARef, audioBRef].forEach(ref => {
-        if (ref.current) { ref.current.pause(); ref.current.src = ""; }
-      });
+      if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
     };
   }, []);
 
-  // ── Refs toujours à jour ──────────────────────────────────────────────────
   const autoPlayRef   = useRef(autoPlay);
   const onNextRef     = useRef(onNext);
   const onPrevRef     = useRef(onPrev);
@@ -99,7 +70,6 @@ function useAudioPlayer(
   const episodesRef   = useRef(episodes);
   const playQueueRef  = useRef(playQueue);
   const shouldPlayOnLoad = useRef(false);
-  const loadedSlugMap    = useRef<Map<HTMLAudioElement, string>>(new Map()); // slug chargé par élément
 
   const setAutoPlayImmediate = useCallback((v: boolean) => {
     autoPlayRef.current = v;
@@ -122,9 +92,6 @@ function useAudioPlayer(
 
   const episode = episodes[currentIdx];
 
-  // ── Trouver l'index suivant selon la queue ────────────────────────────────
-  // 🎓 Si playQueue est défini, on cherche la position courante dans la queue
-  // et on retourne le suivant. Sinon, simple currentIdx + 1.
   const getNextIdx = useCallback((fromIdx: number): number | null => {
     const queue = playQueueRef.current;
     if (queue && queue.length > 0) {
@@ -136,49 +103,13 @@ function useAudioPlayer(
     return nextIdx < episodesRef.current.length ? nextIdx : null;
   }, []);
 
-  // ── Pré-charger silencieusement sur l'élément inactif ────────────────────
-  // 🎓 C'est le cœur du ping-pong. On charge l'URL sans appeler play().
-  // L'élément est prêt en mémoire pour un play() immédiat dans handleEnded.
-  const preloadNext = useCallback((url: string, slug?: string) => {
-    const inactive = getInactive();
-    if (!inactive) return;
-    inactive.onended          = null;
-    inactive.ontimeupdate     = null;
-    inactive.onloadedmetadata = null;
-    inactive.onplay           = null;
-    inactive.onpause          = null;
-    if (slug) loadedSlugMap.current.set(inactive, slug);
-    inactive.src = url;
-    inactive.load(); // charge sans jouer
-  }, []);
-
-  // Ref vers preloadNext pour usage dans handleEnded
-  const preloadNextRef = useRef(preloadNext);
-  useEffect(() => { preloadNextRef.current = preloadNext; }, [preloadNext]);
-
-  // ── Pré-fetch + pré-chargement du prochain épisode ───────────────────────
-  const nextUrlRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    const nextIdx = getNextIdx(currentIdx);
-    if (!isPremium || nextIdx === null) { nextUrlRef.current = null; return; }
-    const nextEp = episodesRef.current[nextIdx];
-    if (!nextEp) return;
-    fetch(`/api/audio/${nextEp.episodeSlug}`)
-      .then(r => r.json())
-      .then(d => {
-        nextUrlRef.current = d.url;
-        // Pré-charger immédiatement sur l'élément inactif
-        preloadNextRef.current(d.url);
-      })
-      .catch(() => { nextUrlRef.current = null; });
-  }, [currentIdx, isPremium, episodes, getNextIdx]);
-
-  // ── attachListeners : configure les listeners sur l'élément actif ─────────
-  // 🎓 onended utilise un wrapper () => handleEndedRef.current() pour toujours
-  // pointer vers la version la plus récente de handleEnded, même si attachListeners
-  // a été créé avant que handleEndedRef soit initialisé.
-  const attachListeners = useCallback((audio: HTMLAudioElement) => {
+  const doPlay = useCallback((url: string) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.onended = null; audio.ontimeupdate = null;
+    audio.onloadedmetadata = null; audio.onplay = null; audio.onpause = null;
+    audio.src = url;
+    audio.load();
     audio.ontimeupdate = () => {
       setCurrentTime(audio.currentTime);
       setProgress((audio.currentTime / (audio.duration || 1)) * 100);
@@ -186,157 +117,49 @@ function useAudioPlayer(
     audio.onloadedmetadata = () => {
       setDuration(audio.duration ?? 0);
       setLoaded(true);
+      audio.play().then(() => setPlaying(true)).catch(() => {});
     };
     audio.onplay  = () => setPlaying(true);
     audio.onpause = () => setPlaying(false);
-    audio.onended = () => handleEndedRef.current(); // wrapper : lit la ref au moment de l'appel
+    audio.onended = () => handleEndedRef.current();
+    setTimeout(() => onNextRef.current(), 100);
   }, []);
 
-  const attachListenersRef = useRef(attachListeners);
-  useEffect(() => { attachListenersRef.current = attachListeners; }, [attachListeners]);
-
-  // ── handleEnded : swap ping-pong + play immédiat ──────────────────────────
-  // 🎓 Cette fonction s'exécute quand une piste se termine.
-  // Sur iOS écran verrouillé :
-  //   - Pas de fetch (l'URL est déjà dans l'élément inactif)
-  //   - Pas de setState bloquant
-  //   - Juste : swapActive() + inactive.play() = IMMÉDIAT
   const handleEnded = useCallback(() => {
     setPlaying(false);
     if (!autoPlayRef.current) return;
-
     const nextIdx = getNextIdx(currentIdxRef.current);
     if (nextIdx === null) return;
-
-    // 🎓 Capturer les deux refs AVANT tout swap
-    const toPlay    = getInactive(); // contient le prochain épisode préchargé
-    const toPreload = getActive();   // sera libéré après le swap pour preload
-
-    const nextEp     = episodesRef.current[nextIdx];
-    const nextNextIdx = getNextIdx(nextIdx);
-    const nextNextEp  = nextNextIdx !== null ? episodesRef.current[nextNextIdx] : null;
-
-    // ── Fonction commune : joue toPlay, preload sur toPreload ────────────
-    const executeSwap = () => {
-      swapActive();
-      attachListenersRef.current(toPlay!);
-
-      setProgress(0);
-      setCurrentTime(0);
-      setLoaded(false);
-
-      toPlay!.play()
-        .then(() => {
-          setPlaying(true);
-          setDuration(toPlay!.duration ?? 0);
-          setLoaded(true);
-        })
-        .catch(() => {});
-
-      setTimeout(() => onNextRef.current(), 100);
-
-      // Preload épisode N+2 — attendre que toPlay soit bien lancé avant de toucher toPreload
-      // 🎓 Sur Android, modifier toPreload trop tôt peut interrompre la lecture de toPlay
-      // car les deux éléments partagent la même session audio WebView.
-      // On attend 2s que toPlay soit stable avant de charger sur toPreload.
-      if (nextNextEp && toPreload) {
-        setTimeout(() => {
-          toPreload.onended          = null;
-          toPreload.ontimeupdate     = null;
-          toPreload.onloadedmetadata = null;
-          toPreload.onplay           = null;
-          toPreload.onpause          = null;
-          fetch(`/api/audio/${nextNextEp.episodeSlug}`)
-            .then(r => r.json())
-            .then(d => {
-              loadedSlugMap.current.set(toPreload, nextNextEp.episodeSlug);
-              toPreload.pause();
-              toPreload.src = d.url;
-              toPreload.load();
-            })
-            .catch(() => {});
-        }, 2000); // attendre 2s que la nouvelle piste soit stable
-      }
-    };
-
-    // ── Cas nominal : toPlay est déjà chargé ─────────────────────────────
-    const slug = loadedSlugMap.current.get(toPlay!);
-    const isPreloaded = toPlay && toPlay.src && slug === nextEp?.episodeSlug;
-
-    if (isPreloaded && toPlay!.readyState >= 2) {
-      executeSwap();
-    } else {
-      // ── Fallback : fetch à la volée ───────────────────────────────────
-      if (!nextEp) return;
-      fetch(`/api/audio/${nextEp.episodeSlug}`)
-        .then(r => r.json())
-        .then(d => {
-          if (!toPlay) return;
-          toPlay.onended          = null;
-          toPlay.ontimeupdate     = null;
-          toPlay.onloadedmetadata = null;
-          toPlay.onplay           = null;
-          toPlay.onpause          = null;
-          loadedSlugMap.current.set(toPlay, nextEp.episodeSlug);
-          toPlay.src = d.url;
-          toPlay.load();
-          toPlay.oncanplay = () => {
-            toPlay.oncanplay = null;
-            executeSwap();
-          };
-        })
-        .catch(() => {});
-    }
-  }, [getNextIdx, attachListeners]);
+    const nextEp = episodesRef.current[nextIdx];
+    if (!nextEp) return;
+    fetch(`/api/audio/${nextEp.episodeSlug}`)
+      .then(r => r.json())
+      .then(d => doPlay(d.url))
+      .catch(() => {});
+  }, [getNextIdx, doPlay]);
 
   const handleEndedRef = useRef(handleEnded);
   useEffect(() => {
     handleEndedRef.current = handleEnded;
-    const active = getActive();
-    if (active) active.onended = handleEnded;
+    if (audioRef.current) audioRef.current.onended = () => handleEndedRef.current();
   }, [handleEnded]);
 
-  // ── Chargement épisode courant ────────────────────────────────────────────
   useEffect(() => {
     const isFreeEpisode = FREE_EPISODE_NUMBERS.has(episode?.episodeNumber ?? 0);
     if (!episode || (!isPremium && !isFreeEpisode)) return;
-
-    setPlaying(false);
-    setProgress(0);
-    setCurrentTime(0);
-    setDuration(0);
-    setLoaded(false);
-    setFetchError(false);
-
+    setPlaying(false); setProgress(0); setCurrentTime(0);
+    setDuration(0); setLoaded(false); setFetchError(false);
     shouldPlayOnLoad.current = autoPlayRef.current;
-
-    // Si l'élément actif contient déjà cet épisode (swap ping-pong), ne pas recharger
-    const activeAudio = getActive();
-    if (activeAudio && loadedSlugMap.current.get(activeAudio) === episode.episodeSlug) {
-      setLoaded(true);
-      return;
-    }
-
+    if (!audioRef.current) { audioRef.current = new Audio(); audioRef.current.preload = "auto"; }
     fetch(`/api/audio/${episode.episodeSlug}`)
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => {
-        // 🎓 Garantir que l'élément audio est initialisé avant d'agir
-        // (le useEffect de création peut être plus lent que le fetch)
-        if (!audioARef.current) { audioARef.current = new Audio(); audioARef.current.preload = "auto"; }
-        if (!audioBRef.current) { audioBRef.current = new Audio(); audioBRef.current.preload = "auto"; }
-        const audio = getActive();
+        const audio = audioRef.current;
         if (!audio) return;
-
-        audio.onended          = null;
-        audio.ontimeupdate     = null;
-        audio.onloadedmetadata = null;
-        audio.onplay           = null;
-        audio.onpause          = null;
-
-        loadedSlugMap.current.set(audio, episode.episodeSlug);
+        audio.onended = null; audio.ontimeupdate = null;
+        audio.onloadedmetadata = null; audio.onplay = null; audio.onpause = null;
         audio.src = d.url;
         audio.load();
-
         audio.ontimeupdate = () => {
           setCurrentTime(audio.currentTime);
           setProgress((audio.currentTime / (audio.duration || 1)) * 100);
@@ -344,13 +167,10 @@ function useAudioPlayer(
         audio.onloadedmetadata = () => {
           setDuration(audio.duration ?? 0);
           setLoaded(true);
-          if (shouldPlayOnLoad.current) {
-            audio.play().then(() => setPlaying(true)).catch(() => {});
-          }
+          if (shouldPlayOnLoad.current) audio.play().then(() => setPlaying(true)).catch(() => {});
         };
         audio.onplay  = () => setPlaying(true);
         audio.onpause = () => setPlaying(false);
-        // 🎓 iOS : forcer l'attachement de onended via la ref fraîche
         audio.onended = () => handleEndedRef.current();
       })
       .catch(() => setFetchError(true));
@@ -358,19 +178,15 @@ function useAudioPlayer(
   }, [episode?.episodeSlug, isPremium, playTrigger]);
 
   const togglePlay = useCallback(() => {
-    const audio = getActive();
+    const audio = audioRef.current;
     if (!audio) return;
-    if (playing) {
-      audio.pause();
-      setPlaying(false);
-    } else {
+    if (playing) { audio.pause(); setPlaying(false); }
+    else {
       audio.play().then(() => {
         setPlaying(true);
         trackEvent("audio_played", {
-          episode_slug:   episode?.episodeSlug,
-          episode_title:  episode?.episodeTitle,
-          subtheme:       episode?.subthemeKey,
-          episode_number: episode?.episodeNumber,
+          episode_slug: episode?.episodeSlug, episode_title: episode?.episodeTitle,
+          subtheme: episode?.subthemeKey, episode_number: episode?.episodeNumber,
         });
       }).catch(() => {});
       setAutoPlayImmediate(true);
@@ -378,49 +194,30 @@ function useAudioPlayer(
   }, [playing, setAutoPlayImmediate, episode]);
 
   const skip = useCallback((s: number) => {
-    const audio = getActive();
+    const audio = audioRef.current;
     if (!audio) return;
     audio.currentTime = Math.max(0, Math.min(audio.currentTime + s, audio.duration || 0));
   }, []);
 
-  // ── Media Session API ─────────────────────────────────────────────────────
   useEffect(() => {
     if (!isPremium || !episode || typeof window === "undefined" || !("mediaSession" in navigator)) return;
-
     const artwork = episode.subthemeKey
-      ? [{ src: `/themes/${episode.subthemeKey}.jpg`, sizes: "512x512", type: "image/jpeg" }]
-      : [];
-
+      ? [{ src: `/themes/${episode.subthemeKey}.jpg`, sizes: "512x512", type: "image/jpeg" }] : [];
     navigator.mediaSession.metadata = new MediaMetadata({
-      title:  episode.episodeTitle,
-      artist: "Cap Citoyen",
-      album:  episode.subthemeLabel,
-      artwork,
+      title: episode.episodeTitle, artist: "Cap Citoyen", album: episode.subthemeLabel, artwork,
     });
-
     navigator.mediaSession.setActionHandler("play", () => {
-      getActive()?.play().then(() => setPlaying(true)).catch(() => {});
+      audioRef.current?.play().then(() => setPlaying(true)).catch(() => {});
     });
-    navigator.mediaSession.setActionHandler("pause", () => {
-      getActive()?.pause();
-      setPlaying(false);
-    });
-    navigator.mediaSession.setActionHandler("previoustrack", () => {
-      if (currentIdxRef.current > 0) onPrevRef.current();
-    });
-    navigator.mediaSession.setActionHandler("nexttrack", () => {
-      // Même logique que handleEnded mais déclenchée manuellement
-      handleEndedRef.current();
-    });
+    navigator.mediaSession.setActionHandler("pause", () => { audioRef.current?.pause(); setPlaying(false); });
+    navigator.mediaSession.setActionHandler("previoustrack", () => { if (currentIdxRef.current > 0) onPrevRef.current(); });
+    navigator.mediaSession.setActionHandler("nexttrack", () => { handleEndedRef.current(); });
     navigator.mediaSession.setActionHandler("seekbackward", () => {
-      const a = getActive();
-      if (a) a.currentTime = Math.max(0, a.currentTime - 10);
+      if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
     });
     navigator.mediaSession.setActionHandler("seekforward", () => {
-      const a = getActive();
-      if (a) a.currentTime = Math.min(a.duration || 0, a.currentTime + 10);
+      if (audioRef.current) audioRef.current.currentTime = Math.min(audioRef.current.duration || 0, audioRef.current.currentTime + 10);
     });
-
     return () => {
       (["play","pause","previoustrack","nexttrack","seekbackward","seekforward"] as MediaSessionAction[])
         .forEach(a => { try { navigator.mediaSession.setActionHandler(a, null); } catch {} });
@@ -431,9 +228,6 @@ function useAudioPlayer(
     if (!isPremium || !("mediaSession" in navigator)) return;
     navigator.mediaSession.playbackState = playing ? "playing" : "paused";
   }, [playing, isPremium]);
-
-  // Exposer audioRef pour la barre de progression (on expose l'actif)
-  const audioRef = { current: getActive() };
 
   return {
     audioRef, playing, setPlaying, shouldPlayOnLoad,
