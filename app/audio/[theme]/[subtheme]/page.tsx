@@ -182,20 +182,25 @@ setPlaying(true);
       // Le guard loadedSlugMap dans le useEffect fait le vrai travail.
       setTimeout(() => onNextRef.current(), 100);
 
-      // Preload N+2 sur l'ancien actif (maintenant inactif) — différé 3s
+      // Preload N+2 sur l'ancien actif (maintenant inactif) — différé 5s
+      // 🎓 On vérifie que toPreload est toujours inactif au moment du fetch
+      // pour ne jamais interrompre l'élément qui joue
       if (nextNextEp && toPreload) {
         setTimeout(() => {
+          // Vérification : toPreload doit être l'inactif au moment d'agir
+          if (getActive() === toPreload) return; // devenu actif entre-temps — abort
           toPreload.onended = null; toPreload.ontimeupdate = null;
           toPreload.onloadedmetadata = null; toPreload.onplay = null; toPreload.onpause = null;
           fetch(`/api/audio/${nextNextEp.episodeSlug}`)
             .then(r => r.json())
             .then(d => {
+              if (getActive() === toPreload) return; // vérification après fetch aussi
               loadedSlugMap.current.set(toPreload, nextNextEp.episodeSlug);
               toPreload.src = d.url;
               toPreload.load();
             })
             .catch(() => {});
-        }, 3000);
+        }, 5000);
       }
     };
 
