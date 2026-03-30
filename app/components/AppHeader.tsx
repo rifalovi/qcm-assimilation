@@ -34,6 +34,21 @@ export default function AppHeader() {
     router.refresh();
   }
 
+  // Scroll conditionnel vers #feedback
+  const handleNoterClick = () => {
+    setOpen(false);
+    if (pathname === "/") {
+      setTimeout(() => {
+        document.getElementById("feedback")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    } else {
+      router.push("/");
+      setTimeout(() => {
+        document.getElementById("feedback")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 600);
+    }
+  };
+
   if (pathname === "/" || pathname.startsWith("/admin")) return null;
 
   const roleLabel = role === "elite" ? "👑 Élite" : role === "premium" ? "🎯 Premium" : role === "freemium" ? "✨ Freemium" : null;
@@ -165,6 +180,21 @@ export default function AppHeader() {
                           </Link>
                         ))}
                       </div>
+                    </div>
+
+                    {/* Noter l'application */}
+                    <div className="px-2 pt-2">
+                      <div className="my-1 h-px bg-white/6" />
+                      <button
+                        onClick={handleNoterClick}
+                        className="flex w-full items-center gap-2.5 px-2 py-2.5 rounded-xl bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-400/20 transition"
+                      >
+                        <span className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-sm flex-shrink-0">⭐</span>
+                        <div className="text-left">
+                          <p className="text-sm font-semibold text-yellow-200">Noter l'application</p>
+                          <p className="text-xs text-slate-500">Votre avis nous aide à progresser</p>
+                        </div>
+                      </button>
                     </div>
 
                     {/* Déconnexion */}
