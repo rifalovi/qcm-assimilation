@@ -161,6 +161,14 @@ function useAudioPlayer(
       nowActive.ontimeupdate = () => {
         setCurrentTime(nowActive.currentTime);
         setProgress((nowActive.currentTime / (nowActive.duration || 1)) * 100);
+        // 🎓 Fallback Android : onended ne se déclenche pas écran verrouillé
+        // ontimeupdate continue → on détecte la fin manuellement
+        // Guard anti-doublon : on vérifie que l'élément joue encore
+        const dur = nowActive.duration;
+        if (dur && dur > 0 && nowActive.currentTime >= dur - 0.3 && !nowActive.paused && nowActive === getActive()) {
+          nowActive.pause(); // stopper avant handleEnded pour éviter le doublon
+          handleEndedRef.current();
+        }
       };
       nowActive.onloadedmetadata = () => { setDuration(nowActive.duration ?? 0); setLoaded(true); };
       nowActive.onplay  = () => setPlaying(true);
