@@ -255,6 +255,7 @@ setPlaying(true);
     setPlaying(false); setProgress(0); setCurrentTime(0);
     setDuration(0); setLoaded(false); setFetchError(false);
     shouldPlayOnLoad.current = autoPlayRef.current;
+    androidEndedFired.current = false; // reset au changement d'épisode
 
     if (!audioARef.current) { audioARef.current = new Audio(); audioARef.current.preload = "auto"; }
     if (!audioBRef.current) { audioBRef.current = new Audio(); audioBRef.current.preload = "auto"; }
