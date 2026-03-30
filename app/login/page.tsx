@@ -41,6 +41,14 @@ export default function LoginPage() {
   const [totpCode, setTotpCode] = useState("");
   const [totpFactorId, setTotpFactorId] = useState<string | null>(null);
 
+  async function handleGoogleLogin() {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback` }
+    })
+  }
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);

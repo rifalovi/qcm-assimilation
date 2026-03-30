@@ -24,6 +24,14 @@ function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  async function handleGoogleLogin() {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback` }
+    })
+  }
+
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
