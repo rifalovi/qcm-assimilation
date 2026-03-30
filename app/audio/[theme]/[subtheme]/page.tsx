@@ -316,8 +316,11 @@ setPlaying(true);
 
   useEffect(() => {
     if (!isPremium || !episode || typeof window === "undefined" || !("mediaSession" in navigator)) return;
+    // 🎓 Certaines images sont en .png, d'autres en .jpg
+    const imgExt = episode.subthemeKey === "quiz_audio" ? "png" : "jpg";
+    const imgKey = episode.subthemeKey === "pourquoi_francais" ? "devenir_francais" : episode.subthemeKey;
     const artwork = episode.subthemeKey
-      ? [{ src: `/themes/${episode.subthemeKey}.jpg`, sizes: "512x512", type: "image/jpeg" }] : [];
+      ? [{ src: `/themes/${imgKey}.${imgExt}`, sizes: "512x512", type: `image/${imgExt === "png" ? "png" : "jpeg"}` }] : [];
     navigator.mediaSession.metadata = new MediaMetadata({
       title: episode.episodeTitle, artist: "Cap Citoyen", album: episode.subthemeLabel, artwork,
     });
