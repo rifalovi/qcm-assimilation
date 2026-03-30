@@ -139,17 +139,14 @@ function useAudioPlayer(
 
   // ── handleEnded ───────────────────────────────────────────────────────────
   const handleEnded = useCallback(() => {
-    console.log("[handleEnded] triggered, autoPlay=", autoPlayRef.current, "currentIdx=", currentIdxRef.current);
     setPlaying(false);
-    if (!autoPlayRef.current) { console.log("[handleEnded] stopped: autoPlay false"); return; }
+    if (!autoPlayRef.current) return;
     const nextIdx = getNextIdx(currentIdxRef.current);
-    console.log("[handleEnded] nextIdx=", nextIdx);
-    if (nextIdx === null) { console.log("[handleEnded] stopped: end of playlist"); return; }
+    if (nextIdx === null) return;
 
     const toPlay    = getInactive();
     const toPreload = getActive();
     const nextEp    = episodesRef.current[nextIdx];
-    console.log("[handleEnded] nextEp=", nextEp?.episodeSlug, "toPlay.readyState=", toPlay?.readyState, "slug=", toPlay ? loadedSlugMap.current.get(toPlay) : null);
     const nextNextIdx = getNextIdx(nextIdx);
     const nextNextEp  = nextNextIdx !== null ? episodesRef.current[nextNextIdx] : null;
 
@@ -170,7 +167,7 @@ function useAudioPlayer(
 
       nowActive.play()
         .then(() => {
-          setPlaying(true);
+setPlaying(true);
           setDuration(nowActive.duration ?? 0);
           setLoaded(true);
         })
