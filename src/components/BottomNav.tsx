@@ -25,6 +25,23 @@ export default function BottomNav() {
   if (pathname.startsWith('/admin')) return null
   const isPremium = ['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '')
 
+  // Scroll vers la section feedback — conditionnel selon la page courante
+  const handleNoterClick = () => {
+    setShowInfoMenu(false);
+    if (pathname === "/") {
+      // Déjà sur l'accueil → scroll direct
+      setTimeout(() => {
+        document.getElementById("feedback")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100); // léger délai pour que la popup se ferme d'abord
+    } else {
+      // Ailleurs → navigation puis scroll
+      router.push("/");
+      setTimeout(() => {
+        document.getElementById("feedback")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 600); // délai pour laisser Next.js charger la page
+    }
+  };
+
   return (
     <>
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-slate-900/95 backdrop-blur-xl md:hidden">
@@ -37,7 +54,7 @@ export default function BottomNav() {
               : tab.label === "Communauté"
               ? pathname.startsWith("/communaute")
               : tab.label === "Info"
-              ? pathname === "/resources" || pathname === "/info"
+              ? pathname === "/results" || pathname === "/leaderboard" || pathname === "/resources" || pathname === "/info"
               : false;
 
             if (tab.label === "Préparation") {
@@ -168,6 +185,19 @@ export default function BottomNav() {
                   </div>
                 </button>
               ))}
+
+              {/* Séparateur visuel */}
+              <div className="my-1 border-t border-white/10" />
+
+              {/* Bouton Noter l'application — scroll conditionnel vers #feedback */}
+              <button onClick={handleNoterClick}
+                className="flex items-center gap-3 rounded-2xl border border-yellow-400/30 bg-gradient-to-r from-yellow-500/15 to-amber-500/10 px-4 py-3.5 text-sm font-semibold transition hover:opacity-90 text-yellow-200">
+                <span className="text-xl">⭐</span>
+                <div className="text-left">
+                  <p className="font-semibold">Noter l'application</p>
+                  <p className="text-xs text-slate-400">Votre avis nous aide à progresser</p>
+                </div>
+              </button>
             </div>
           </div>
         </div>
