@@ -161,15 +161,6 @@ function useAudioPlayer(
       nowActive.ontimeupdate = () => {
         setCurrentTime(nowActive.currentTime);
         setProgress((nowActive.currentTime / (nowActive.duration || 1)) * 100);
-        // 🎓 Fallback Android UNIQUEMENT — sans pause() pour ne pas casser iOS
-        const isAndroid = typeof window !== "undefined" && /Android/i.test(navigator.userAgent);
-        const isIOS = typeof window !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent);
-        if (!isIOS && isAndroid) {
-          const dur = nowActive.duration;
-          if (dur && dur > 0 && nowActive.currentTime >= dur - 0.3 && nowActive === getActive()) {
-            handleEndedRef.current();
-          }
-        }
       };
       nowActive.onloadedmetadata = () => { setDuration(nowActive.duration ?? 0); setLoaded(true); };
       nowActive.onplay  = () => setPlaying(true);
