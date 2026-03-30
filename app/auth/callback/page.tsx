@@ -7,64 +7,71 @@ import { Suspense } from 'react'
 function CallbackHandler() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [status, setStatus] = useState('Connexion en cours...')
+  const [logs, setLogs] = useState<string[]>(['Démarrage...'])
+
+  const addLog = (msg: string) => setLogs(prev => [...prev, msg])
 
   useEffect(() => {
-    const supabase = createClient()
-    const code = searchParams.get('code')
-    const type = searchParams.get('type')
+    async function handleCallback() {
+      const supabase = createClient()
+      const code = searchParams.get('code')
+      const type = searchParams.get('type')
+      const error = searchParams.get('error')
 
-    // Écouter le changement d'état auth (OAuth Google)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
-        subscription.unsubscribe()
-        const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single()
-        if (!profile?.role || profile.role === 'anonymous') {
-          await supabase.from('profiles').update({ role: 'freemium' }).eq('id', session.user.id)
-        }
-        setStatus('Connexion réussie !')
-        router.push('/account')
+      addLog(`code=${code?.slice(0,10) ?? 'null'} type=${type} error=${error}`)
+
+      if (error) {
+        addLog(`Erreur OAuth: ${error}`)
+        setTimeout(() => router.push('/login?error=' + error), 3000)
         return
       }
-    })
 
-    // Cas email confirmation via code
-    if (code) {
-      supabase.auth.exchangeCodeForSession(code).then(async ({ error }) => {
-        if (error) {
-          setStatus(`Erreur: ${error.message}`)
-          setTimeout(() => router.push('/login?error=confirmation_failed'), 2000)
+      if (code) {
+        addLog('Échange du code...')
+        const { data, error: exchError } = await supabase.auth.exchangeCodeForSession(code)
+        if (exchError) {
+          addLog(`Erreur échange: ${exchError.message}`)
+          setTimeout(() => router.push('/login?error=exchange_failed'), 3000)
           return
         }
+        addLog(`Session OK — user: ${data.session?.user?.email}`)
         if (type === 'recovery') {
           router.push('/reset-password')
           return
         }
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) {
-          await supabase.from('profiles').update({ role: 'freemium' }).eq('id', user.id)
+        if (data.session?.user) {
+          await supabase.from('profiles').update({ role: 'freemium' }).eq('id', data.session.user.id)
         }
+        addLog('Redirection vers /account...')
         router.push('/account')
-      })
+        return
+      }
+
+      addLog('Pas de code — vérification session...')
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user) {
+        addLog(`Session existante: ${session.user.email}`)
+        router.push('/account')
+        return
+      }
+
+      addLog('Aucune session — redirection login dans 3s')
+      setTimeout(() => router.push('/login'), 3000)
     }
 
-    // Timeout fallback
-    const timeout = setTimeout(() => {
-      subscription.unsubscribe()
-      router.push('/')
-    }, 10000)
-
-    return () => {
-      subscription.unsubscribe()
-      clearTimeout(timeout)
-    }
+    handleCallback()
   }, [router, searchParams])
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center bg-slate-900">
       <div className="text-center p-8 rounded-xl border border-slate-700 bg-slate-800 max-w-sm w-full">
-        <div className="text-2xl mb-3 animate-pulse">🔄</div>
-        <p className="text-slate-300 text-sm">{status}</p>
+        <div className="text-2xl mb-3 animate-spin">⚙️</div>
+        <p className="text-white font-bold mb-4">Authentification</p>
+        <div className="text-left space-y-1">
+          {logs.map((log, i) => (
+            <p key={i} className="text-xs text-slate-400 font-mono">{log}</p>
+          ))}
+        </div>
       </div>
     </div>
   )
