@@ -79,7 +79,7 @@ export default function RootLayout({
               <span className="mx-2">·</span>
               <a href="/mentions-legales" className="hover:text-slate-300 transition">Mentions légales</a>
               <span>·</span>
-              <a href="/mentions-legales" className="hover:text-slate-300 transition">Politique de confidentialité</a>
+              <a href="/privacy" className="hover:text-slate-300 transition">Politique de confidentialité</a>
               <span className="mx-2">·</span>
               <a href="/cgv" className="hover:text-slate-300 transition">CGV</a>
             </footer>
