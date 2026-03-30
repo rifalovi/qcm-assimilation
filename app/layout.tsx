@@ -77,6 +77,8 @@ export default function RootLayout({
               <a href="/contact" className="hover:text-slate-300 transition">Contact</a>
               <span className="mx-2">·</span>
               <a href="/mentions-legales" className="hover:text-slate-300 transition">Mentions légales</a>
+              <span>·</span>
+              <a href="/mentions-legales" className="hover:text-slate-300 transition">Politique de confidentialité</a>
               <span className="mx-2">·</span>
               <a href="/cgv" className="hover:text-slate-300 transition">CGV</a>
             </footer>
