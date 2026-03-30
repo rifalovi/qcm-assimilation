@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useUser } from "../../app/components/UserContext";
+import FeedbackModal from "../../app/components/FeedbackModal";
 
 const tabs = [
   { href: "/", label: "Accueil", icon: "🏠" },
@@ -18,6 +19,7 @@ export default function BottomNav() {
   const router = useRouter();
   const { role } = useUser();
   const [showStatsMenu, setShowStatsMenu] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   const [showTrainMenu, setShowTrainMenu] = useState(false);
   const [showInfoMenu, setShowInfoMenu] = useState(false);
   const [showCommunityMenu, setShowCommunityMenu] = useState(false);
@@ -25,22 +27,7 @@ export default function BottomNav() {
   if (pathname.startsWith('/admin')) return null
   const isPremium = ['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '')
 
-  // Scroll vers la section feedback — conditionnel selon la page courante
-  const handleNoterClick = () => {
-    setShowInfoMenu(false);
-    if (pathname === "/") {
-      // Déjà sur l'accueil → scroll direct
-      setTimeout(() => {
-        document.getElementById("feedback")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100); // léger délai pour que la popup se ferme d'abord
-    } else {
-      // Ailleurs → navigation puis scroll
-      router.push("/");
-      setTimeout(() => {
-        document.getElementById("feedback")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 600); // délai pour laisser Next.js charger la page
-    }
-  };
+
 
   return (
     <>
@@ -92,12 +79,19 @@ export default function BottomNav() {
             }
 
             return (
-              <Link key={tab.href} href={tab.href!}
-                className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
-                <span className="text-xl">{tab.icon}</span>
-                <span className={active ? "font-semibold" : ""}>{tab.label}</span>
-                {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
-              </Link>
+              <div key={tab.href} className="flex flex-1 flex-col items-center relative">
+                <Link href={tab.href!}
+                  className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs transition relative w-full ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
+                  <span className="text-xl">{tab.icon}</span>
+                  <span className={active ? "font-semibold" : ""}>{tab.label}</span>
+                  {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
+                </Link>
+                <button
+                  onClick={() => setShowFeedback(true)}
+                  className="absolute -top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-yellow-500/90 text-[9px] shadow-[0_2px_8px_rgba(234,179,8,0.5)] transition hover:scale-110"
+                  title="Noter l'application"
+                >⭐</button>
+              </div>
             );
           })}
         </div>
@@ -186,22 +180,11 @@ export default function BottomNav() {
                 </button>
               ))}
 
-              {/* Séparateur visuel */}
-              <div className="my-1 border-t border-white/10" />
-
-              {/* Bouton Noter l'application — scroll conditionnel vers #feedback */}
-              <button onClick={handleNoterClick}
-                className="flex items-center gap-3 rounded-2xl border border-yellow-400/30 bg-gradient-to-r from-yellow-500/15 to-amber-500/10 px-4 py-3.5 text-sm font-semibold transition hover:opacity-90 text-yellow-200">
-                <span className="text-xl">⭐</span>
-                <div className="text-left">
-                  <p className="font-semibold">Noter l'application</p>
-                  <p className="text-xs text-slate-400">Votre avis nous aide à progresser</p>
-                </div>
-              </button>
             </div>
           </div>
         </div>
       )}
+      <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
     </>
   );
 }

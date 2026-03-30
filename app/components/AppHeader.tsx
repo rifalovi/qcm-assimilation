@@ -3,12 +3,14 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "./UserContext";
+import FeedbackModal from "./FeedbackModal";
 
 export default function AppHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { username, role, loading, isAuthenticated, logout, email } = useUser();
   const [open, setOpen] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Fermer le dropdown si clic en dehors
@@ -34,20 +36,7 @@ export default function AppHeader() {
     router.refresh();
   }
 
-  // Scroll conditionnel vers #feedback
-  const handleNoterClick = () => {
-    setOpen(false);
-    if (pathname === "/") {
-      setTimeout(() => {
-        document.getElementById("feedback")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
-    } else {
-      router.push("/");
-      setTimeout(() => {
-        document.getElementById("feedback")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 600);
-    }
-  };
+
 
   if (pathname === "/" || pathname.startsWith("/admin")) return null;
 
@@ -186,7 +175,7 @@ export default function AppHeader() {
                     <div className="px-2 pt-2">
                       <div className="my-1 h-px bg-white/6" />
                       <button
-                        onClick={handleNoterClick}
+                        onClick={() => { setOpen(false); setShowFeedback(true); }}
                         className="flex w-full items-center gap-2.5 px-2 py-2.5 rounded-xl bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-400/20 transition"
                       >
                         <span className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-sm flex-shrink-0">⭐</span>
@@ -218,6 +207,7 @@ export default function AppHeader() {
           )}
         </div>
       </div>
+      <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
     </header>
   );
 }

@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useUser, ROLE_LIMITS } from "./components/UserContext";
 import EligibilityModalLauncher from "./components/EligibilityModalLauncher";
 import AvisSection from "./components/AvisSection";
+import FeedbackModal from "./components/FeedbackModal";
 
 type Level = 1 | 2 | 3;
 type Theme = "Valeurs" | "Institutions" | "Histoire" | "Société";
@@ -911,79 +912,7 @@ export default function HomePage() {
 
       <AvisSection />
 
-      {/* Modal — Noter l'application */}
-      {showFeedbackModal && (
-        <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowFeedbackModal(false)} />
-          <div className="relative z-[101] w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/98 to-slate-900/98 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]">
-            <button onClick={() => setShowFeedbackModal(false)}
-              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-slate-400 transition hover:text-white">✕</button>
-            <div className="mb-5">
-              <h3 className="text-lg font-extrabold text-white">Notez votre expérience</h3>
-              <p className="mt-1 text-sm text-slate-400">Votre avis nous aide à améliorer Cap Citoyen.</p>
-            </div>
-            {sent ? (
-              <div className="rounded-2xl border border-green-400/20 bg-green-500/10 p-4 text-center text-green-200">
-                Merci ✅ Votre avis a bien été enregistré !
-              </div>
-            ) : (
-              <>
-                <div className="flex justify-center gap-3 mb-5">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <button key={n} onClick={() => setRating(n)}
-                      className={`text-3xl transition-transform hover:scale-110 active:scale-95 ${rating >= n ? "opacity-100" : "opacity-30"}`}>
-                      ⭐
-                    </button>
-                  ))}
-                </div>
-                <div className="mb-4 text-center text-sm text-slate-400">
-                  {rating === 1 && "😔 Très décevant"}
-                  {rating === 2 && "😐 Peut mieux faire"}
-                  {rating === 3 && "🙂 Correct"}
-                  {rating === 4 && "😊 Bien !"}
-                  {rating === 5 && "🤩 Excellent !"}
-                </div>
-                <textarea
-                  className="w-full min-h-[110px] rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20"
-                  placeholder="Un commentaire (optionnel)…"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-                <div className="mt-4 flex gap-3">
-                  <button
-                    onClick={async () => {
-                      if (!rating || sending) return;
-                      setSending(true);
-                      try {
-                        const { loadUser } = await import("../src/lib/qcmUser");
-                        const u = loadUser();
-                        await saveFeedbackToSupabase({
-                          email: u?.email ?? "",
-                          pseudo: pseudo || "Anonyme",
-                          rating,
-                          comment: comment?.trim() ?? "",
-                          page: "home",
-                        });
-                        setSent(true);
-                        setTimeout(() => { setSent(false); setShowFeedbackModal(false); setRating(5); setComment(""); }, 2500);
-                      } catch { alert("Impossible d'envoyer l'avis. Réessaie."); }
-                      finally { setSending(false); }
-                    }}
-                    disabled={!rating || sending}
-                    className="flex-1 rounded-2xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-500 disabled:opacity-40"
-                  >
-                    {sending ? "Envoi…" : "Envoyer mon avis"}
-                  </button>
-                  <button onClick={() => { setRating(5); setComment(""); setShowFeedbackModal(false); }}
-                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10">
-                    Annuler
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      <FeedbackModal open={showFeedbackModal} onClose={() => setShowFeedbackModal(false)} pseudo={pseudo} email={email} />
     </main>
   );
 }
