@@ -161,14 +161,6 @@ function useAudioPlayer(
       nowActive.ontimeupdate = () => {
         setCurrentTime(nowActive.currentTime);
         setProgress((nowActive.currentTime / (nowActive.duration || 1)) * 100);
-        // 🎓 Fallback Android : onended ne se déclenche pas écran verrouillé
-        // ontimeupdate continue → on détecte la fin manuellement
-        // Guard anti-doublon : on vérifie que l'élément joue encore
-        const dur = nowActive.duration;
-        if (dur && dur > 0 && nowActive.currentTime >= dur - 0.3 && !nowActive.paused && nowActive === getActive()) {
-          nowActive.pause(); // stopper avant handleEnded pour éviter le doublon
-          handleEndedRef.current();
-        }
       };
       nowActive.onloadedmetadata = () => { setDuration(nowActive.duration ?? 0); setLoaded(true); };
       nowActive.onplay  = () => setPlaying(true);
@@ -188,17 +180,11 @@ setPlaying(true);
       // 🎓 onNextRef APRÈS play() pour éviter que le useEffect de chargement
       // ne recharge l'épisode que le ping-pong vient de charger.
       // Le guard loadedSlugMap dans le useEffect fait le vrai travail.
-      // 🎓 iOS : 100ms suffisent (JS rapide)
-      // Android/PC : 300ms pour laisser loadedSlugMap se stabiliser avant le useEffect
-      const isIOS = typeof window !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const delay = isIOS ? 100 : 300;
-      setTimeout(() => onNextRef.current(), delay);
+      setTimeout(() => onNextRef.current(), 100);
 
       // Preload N+2 sur l'ancien actif (maintenant inactif) — différé 3s
       if (nextNextEp && toPreload) {
         setTimeout(() => {
-          // 🎓 Guard : ne pas écraser les listeners si toPreload est devenu actif entre-temps
-          if (toPreload === getActive()) return;
           toPreload.onended = null; toPreload.ontimeupdate = null;
           toPreload.onloadedmetadata = null; toPreload.onplay = null; toPreload.onpause = null;
           fetch(`/api/audio/${nextNextEp.episodeSlug}`)
@@ -207,9 +193,6 @@ setPlaying(true);
               loadedSlugMap.current.set(toPreload, nextNextEp.episodeSlug);
               toPreload.src = d.url;
               toPreload.load();
-              // 🎓 Réassigner onended après le preload — sinon handleEnded
-              // ne se déclenche pas quand cet élément devient actif au prochain swap
-              toPreload.onended = () => handleEndedRef.current();
             })
             .catch(() => {});
         }, 3000);
