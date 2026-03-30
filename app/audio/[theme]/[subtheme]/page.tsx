@@ -161,6 +161,15 @@ function useAudioPlayer(
       nowActive.ontimeupdate = () => {
         setCurrentTime(nowActive.currentTime);
         setProgress((nowActive.currentTime / (nowActive.duration || 1)) * 100);
+        // 🎓 Fallback Android UNIQUEMENT — sans pause() pour ne pas casser iOS
+        const isAndroid = typeof window !== "undefined" && /Android/i.test(navigator.userAgent);
+        const isIOS = typeof window !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent);
+        if (!isIOS && isAndroid) {
+          const dur = nowActive.duration;
+          if (dur && dur > 0 && nowActive.currentTime >= dur - 0.3 && nowActive === getActive()) {
+            handleEndedRef.current();
+          }
+        }
       };
       nowActive.onloadedmetadata = () => { setDuration(nowActive.duration ?? 0); setLoaded(true); };
       nowActive.onplay  = () => setPlaying(true);
@@ -261,6 +270,13 @@ setPlaying(true);
         activeAudio.ontimeupdate = () => {
           setCurrentTime(activeAudio.currentTime);
           setProgress((activeAudio.currentTime / (activeAudio.duration || 1)) * 100);
+          // 🎓 Fallback Android écran verrouillé — sans pause() pour ne pas casser iOS
+          if (typeof window !== "undefined" && /Android/i.test(navigator.userAgent) && !/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            const dur = activeAudio.duration;
+            if (dur && dur > 0 && activeAudio.currentTime >= dur - 0.3 && activeAudio === getActive()) {
+              handleEndedRef.current();
+            }
+          }
         };
         activeAudio.onloadedmetadata = () => {
           setDuration(activeAudio.duration ?? 0);
@@ -287,6 +303,13 @@ setPlaying(true);
         audio.ontimeupdate = () => {
           setCurrentTime(audio.currentTime);
           setProgress((audio.currentTime / (audio.duration || 1)) * 100);
+          // 🎓 Fallback Android écran verrouillé — sans pause() pour ne pas casser iOS
+          if (typeof window !== "undefined" && /Android/i.test(navigator.userAgent) && !/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            const dur = audio.duration;
+            if (dur && dur > 0 && audio.currentTime >= dur - 0.3 && audio === getActive()) {
+              handleEndedRef.current();
+            }
+          }
         };
         audio.onloadedmetadata = () => {
           setDuration(audio.duration ?? 0);
