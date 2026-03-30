@@ -9,7 +9,7 @@ import FeedbackModal from "../../app/components/FeedbackModal";
 const tabs = [
   { href: "/", label: "Accueil", icon: "🏠" },
   { href: null, label: "Préparation", icon: "📚" },
-  { href: "/exam", label: "Examen", icon: "🎯" },
+  { href: null, label: "Audio", icon: "🎧" },
   { href: null, label: "Communauté", icon: "👥" },
   { href: null, label: "Info", icon: "ℹ️" },
 ];
@@ -20,6 +20,9 @@ export default function BottomNav() {
   const { role } = useUser();
   const [showStatsMenu, setShowStatsMenu] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [showHomeMenu, setShowHomeMenu] = useState(false);
+  const [showAudioMenu, setShowAudioMenu] = useState(false);
+  const [showResultsMenu, setShowResultsMenu] = useState(false);
   const [showTrainMenu, setShowTrainMenu] = useState(false);
   const [showInfoMenu, setShowInfoMenu] = useState(false);
   const [showCommunityMenu, setShowCommunityMenu] = useState(false);
@@ -47,7 +50,7 @@ export default function BottomNav() {
             if (tab.label === "Préparation") {
               return (
                 <button key="train" onClick={() => setShowTrainMenu(true)}
-                  className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
+                  className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
                   <span className="text-xl">{tab.icon}</span>
                   <span className={active ? "font-semibold" : ""}>{tab.label}</span>
                   {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
@@ -58,7 +61,7 @@ export default function BottomNav() {
             if (tab.label === "Communauté") {
               return (
                 <button key="community" onClick={() => isPremium ? setShowCommunityMenu(true) : router.push('/pricing')}
-                  className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs transition relative ${active ? "text-teal-400" : "text-slate-400 hover:text-slate-200"}`}>
+                  className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-teal-400" : "text-slate-400 hover:text-slate-200"}`}>
                   <span className="text-xl">{tab.icon}</span>
                   <span className={active ? "font-semibold" : ""}>{tab.label}</span>
                   {!isPremium && <span className="absolute top-1.5 right-3 text-[8px] bg-amber-500 text-black px-1 rounded-full font-bold">PRO</span>}
@@ -67,10 +70,21 @@ export default function BottomNav() {
               );
             }
 
+            if (tab.label === "Audio") {
+              return (
+                <button key="audio" onClick={() => setShowAudioMenu(true)}
+                  className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-emerald-400" : "text-slate-400 hover:text-slate-200"}`}>
+                  <span className="text-xl">{tab.icon}</span>
+                  <span className={active ? "font-semibold" : ""}>{tab.label}</span>
+                  {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-emerald-400" />}
+                </button>
+              );
+            }
+
             if (tab.label === "Info") {
               return (
                 <button key="info" onClick={() => setShowInfoMenu(true)}
-                  className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
+                  className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
                   <span className="text-xl">{tab.icon}</span>
                   <span className={active ? "font-semibold" : ""}>{tab.label}</span>
                   {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
@@ -79,23 +93,46 @@ export default function BottomNav() {
             }
 
             return (
-              <div key={tab.href} className="flex flex-1 flex-col items-center relative">
-                <Link href={tab.href!}
-                  className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs transition relative w-full ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
-                  <span className="text-xl">{tab.icon}</span>
-                  <span className={active ? "font-semibold" : ""}>{tab.label}</span>
-                  {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
-                </Link>
-                <button
-                  onClick={() => setShowFeedback(true)}
-                  className="absolute -top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-yellow-500/90 text-[9px] shadow-[0_2px_8px_rgba(234,179,8,0.5)] transition hover:scale-110"
-                  title="Noter l'application"
-                >⭐</button>
-              </div>
+              <button key={tab.href} onClick={() => setShowHomeMenu(true)}
+                className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
+                <span className="text-xl">{tab.icon}</span>
+                <span className={active ? "font-semibold" : ""}>{tab.label}</span>
+                {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
+              </button>
             );
           })}
         </div>
       </nav>
+
+      {/* Popup Accueil */}
+      {showHomeMenu && (
+        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowHomeMenu(false)}>
+          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-sm font-semibold text-white">🏠 Accueil</p>
+              <button onClick={() => setShowHomeMenu(false)} className="text-slate-400 hover:text-white">✕</button>
+            </div>
+            <div className="flex flex-col gap-3">
+              <button onClick={() => { router.push("/"); setShowHomeMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-blue-200">
+                <span className="text-xl">🏠</span>
+                <div className="text-left">
+                  <p className="font-semibold">Page d'accueil</p>
+                  <p className="text-xs text-slate-400">Retour au menu principal</p>
+                </div>
+              </button>
+              <button onClick={() => { setShowHomeMenu(false); setShowFeedback(true); }}
+                className="flex w-full items-center gap-3 rounded-2xl border border-yellow-400/20 bg-yellow-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-yellow-200">
+                <span className="text-xl">⭐</span>
+                <div className="text-left">
+                  <p className="font-semibold">Noter l'application</p>
+                  <p className="text-xs text-slate-400">Votre avis nous aide à progresser</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Popup Préparation */}
       {showTrainMenu && (
@@ -108,11 +145,11 @@ export default function BottomNav() {
             <div className="flex flex-col gap-3">
               {[
                 { icon: "📱", label: "Réviser les cartes", desc: "Flash-cards thématiques", href: "/scroll", color: "border-amber-400/20 bg-amber-500/10 text-amber-200" },
-                { icon: "🎧", label: "Bibliothèque Audio", desc: "100 épisodes guidés", href: "/audio", color: "border-emerald-400/20 bg-emerald-500/10 text-emerald-200" },
                 { icon: "🎯", label: "Passer un test", desc: "QCM chronométré", href: "/quiz", color: "border-blue-400/20 bg-blue-500/10 text-blue-200" },
+                { icon: "📝", label: "Examen blanc", desc: "Simulation officielle", href: "/exam", color: "border-violet-400/20 bg-violet-500/10 text-violet-200" },
               ].map(({ icon, label, desc, href, color }) => (
                 <button key={href} onClick={() => { router.push(href); setShowTrainMenu(false); }}
-                  className={`flex items-center gap-3 rounded-2xl border px-4 py-3.5 text-sm font-semibold transition hover:opacity-90 ${color}`}>
+                  className={`flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 ${color}`}>
                   <span className="text-xl">{icon}</span>
                   <div className="text-left">
                     <p className="font-semibold">{label}</p>
@@ -120,6 +157,15 @@ export default function BottomNav() {
                   </div>
                 </button>
               ))}
+              {/* Résultats avec sous-choix */}
+              <button onClick={() => { setShowTrainMenu(false); setShowResultsMenu(true); }}
+                className="flex items-center gap-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-blue-200">
+                <span className="text-xl">📈</span>
+                <div className="text-left">
+                  <p className="font-semibold">Mes résultats</p>
+                  <p className="text-xs text-slate-400">Entraînement ou Examen</p>
+                </div>
+              </button>
             </div>
           </div>
         </div>
@@ -141,7 +187,7 @@ export default function BottomNav() {
                 { icon: "✉️", label: "Messages privés", desc: "Échangez en privé", href: "/communaute/messages", color: "border-blue-400/20 bg-blue-500/10 text-blue-200" },
               ].map(({ icon, label, desc, href, color }) => (
                 <button key={href} onClick={() => { router.push(href); setShowCommunityMenu(false); }}
-                  className={`flex items-center gap-3 rounded-2xl border px-4 py-3.5 text-sm font-semibold transition hover:opacity-90 ${color}`}>
+                  className={`flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 ${color}`}>
                   <span className="text-xl">{icon}</span>
                   <div className="text-left">
                     <p className="font-semibold">{label}</p>
@@ -164,14 +210,12 @@ export default function BottomNav() {
             </div>
             <div className="flex flex-col gap-3">
               {[
-                { icon: "📈", label: "Mes résultats", desc: "Entraînement & Examen", href: "/results", color: "border-blue-400/20 bg-blue-500/10 text-blue-200" },
-                { icon: "🏆", label: "Classement", desc: "Comparez vos scores", href: "/leaderboard", color: "border-amber-400/20 bg-amber-500/10 text-amber-200" },
                 { icon: "🏛️", label: "Ressources", desc: "Documents officiels", href: "/resources", color: "border-blue-400/20 bg-blue-500/10 text-blue-200" },
                 { icon: "📖", label: "À propos du QCM", desc: "Comprendre l'examen", href: "/info", color: "border-violet-400/20 bg-violet-500/10 text-violet-200" },
                 { icon: "👑", label: "Tarifs & Abonnements", desc: "Voir les plans", href: "/pricing", color: "border-amber-400/20 bg-amber-500/10 text-amber-200" },
               ].map(({ icon, label, desc, href, color }) => (
                 <button key={href} onClick={() => { router.push(href); setShowInfoMenu(false); }}
-                  className={`flex items-center gap-3 rounded-2xl border px-4 py-3.5 text-sm font-semibold transition hover:opacity-90 ${color}`}>
+                  className={`flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 ${color}`}>
                   <span className="text-xl">{icon}</span>
                   <div className="text-left">
                     <p className="font-semibold">{label}</p>
@@ -184,6 +228,66 @@ export default function BottomNav() {
           </div>
         </div>
       )}
+      {/* Popup Audio */}
+      {showAudioMenu && (
+        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowAudioMenu(false)}>
+          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-sm font-semibold text-white">🎧 Audio</p>
+              <button onClick={() => setShowAudioMenu(false)} className="text-slate-400 hover:text-white">✕</button>
+            </div>
+            <div className="flex flex-col gap-3">
+              <button onClick={() => { router.push("/audio/Quiz%20Audio/quiz_audio"); setShowAudioMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-amber-200">
+                <span className="text-xl">🎯</span>
+                <div className="text-left">
+                  <p className="font-semibold">Quiz Audio</p>
+                  <p className="text-xs text-slate-400">Questions d'intégration guidées</p>
+                </div>
+              </button>
+              <button onClick={() => { router.push("/audio"); setShowAudioMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-emerald-200">
+                <span className="text-xl">🎧</span>
+                <div className="text-left">
+                  <p className="font-semibold">Séries thématiques</p>
+                  <p className="text-xs text-slate-400">100 épisodes guidés</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Résultats */}
+      {showResultsMenu && (
+        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowResultsMenu(false)}>
+          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-sm font-semibold text-white">📈 Mes résultats</p>
+              <button onClick={() => setShowResultsMenu(false)} className="text-slate-400 hover:text-white">✕</button>
+            </div>
+            <div className="flex flex-col gap-3">
+              <button onClick={() => { router.push("/results?mode=train"); setShowResultsMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-blue-200">
+                <span className="text-xl">🎯</span>
+                <div className="text-left">
+                  <p className="font-semibold">Résultats entraînement</p>
+                  <p className="text-xs text-slate-400">Tests et QCM</p>
+                </div>
+              </button>
+              <button onClick={() => { router.push("/results?mode=exam"); setShowResultsMenu(false); }}
+                className="flex items-center gap-3 rounded-2xl border border-violet-400/20 bg-violet-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-violet-200">
+                <span className="text-xl">📝</span>
+                <div className="text-left">
+                  <p className="font-semibold">Résultats examen</p>
+                  <p className="text-xs text-slate-400">Examens blancs</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
     </>
   );
