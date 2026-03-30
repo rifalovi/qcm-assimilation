@@ -82,6 +82,9 @@ function useAudioPlayer(
   // 🎓 loadedSlugMap : mémorise quel slug est chargé sur chaque élément audio
   // Empêche le useEffect de rechargement de recharger un épisode déjà joué
   const loadedSlugMap    = useRef<Map<HTMLAudioElement, string>>(new Map());
+  // 🎓 Guard Android : empêche handleEnded d'être appelé plusieurs fois
+  // par ontimeupdate dans la zone finale (dur - 0.3s)
+  const androidEndedFired = useRef(false);
 
   const setAutoPlayImmediate = useCallback((v: boolean) => {
     autoPlayRef.current = v;
@@ -155,18 +158,20 @@ function useAudioPlayer(
     const nextNextEp  = nextNextIdx !== null ? episodesRef.current[nextNextIdx] : null;
 
     const executeSwap = () => {
+      androidEndedFired.current = false; // reset pour le prochain épisode
       swapActive();
       // Attacher les listeners sur le nouvel actif
       const nowActive = getActive()!;
       nowActive.ontimeupdate = () => {
         setCurrentTime(nowActive.currentTime);
         setProgress((nowActive.currentTime / (nowActive.duration || 1)) * 100);
-        // 🎓 Fallback Android UNIQUEMENT — sans pause() pour ne pas casser iOS
+        // 🎓 Fallback Android UNIQUEMENT — guard anti-doublon
         const isAndroid = typeof window !== "undefined" && /Android/i.test(navigator.userAgent);
         const isIOS = typeof window !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent);
         if (!isIOS && isAndroid) {
           const dur = nowActive.duration;
-          if (dur && dur > 0 && nowActive.currentTime >= dur - 0.3 && nowActive === getActive()) {
+          if (dur && dur > 0 && nowActive.currentTime >= dur - 0.3 && nowActive === getActive() && !androidEndedFired.current) {
+            androidEndedFired.current = true;
             handleEndedRef.current();
           }
         }
@@ -270,10 +275,11 @@ setPlaying(true);
         activeAudio.ontimeupdate = () => {
           setCurrentTime(activeAudio.currentTime);
           setProgress((activeAudio.currentTime / (activeAudio.duration || 1)) * 100);
-          // 🎓 Fallback Android écran verrouillé — sans pause() pour ne pas casser iOS
+          // 🎓 Fallback Android écran verrouillé — guard anti-doublon
           if (typeof window !== "undefined" && /Android/i.test(navigator.userAgent) && !/iPad|iPhone|iPod/.test(navigator.userAgent)) {
             const dur = activeAudio.duration;
-            if (dur && dur > 0 && activeAudio.currentTime >= dur - 0.3 && activeAudio === getActive()) {
+            if (dur && dur > 0 && activeAudio.currentTime >= dur - 0.3 && activeAudio === getActive() && !androidEndedFired.current) {
+              androidEndedFired.current = true;
               handleEndedRef.current();
             }
           }
@@ -303,10 +309,11 @@ setPlaying(true);
         audio.ontimeupdate = () => {
           setCurrentTime(audio.currentTime);
           setProgress((audio.currentTime / (audio.duration || 1)) * 100);
-          // 🎓 Fallback Android écran verrouillé — sans pause() pour ne pas casser iOS
+          // 🎓 Fallback Android écran verrouillé — guard anti-doublon
           if (typeof window !== "undefined" && /Android/i.test(navigator.userAgent) && !/iPad|iPhone|iPod/.test(navigator.userAgent)) {
             const dur = audio.duration;
-            if (dur && dur > 0 && audio.currentTime >= dur - 0.3 && audio === getActive()) {
+            if (dur && dur > 0 && audio.currentTime >= dur - 0.3 && audio === getActive() && !androidEndedFired.current) {
+              androidEndedFired.current = true;
               handleEndedRef.current();
             }
           }
