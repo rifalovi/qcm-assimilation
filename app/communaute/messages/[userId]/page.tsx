@@ -391,7 +391,7 @@ export default function ConversationPage() {
       {/* Messages */}
       <main
         ref={scrollRef}
-        className="flex-1 overflow-y-auto px-3 py-3"
+        className="min-h-0 flex-1 overflow-y-auto px-3 py-3"
         style={{
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
