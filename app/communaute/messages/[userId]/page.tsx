@@ -130,19 +130,13 @@ export default function ConversationPage() {
   const [sending, setSending] = useState(false)
 
   const scrollRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
     bottomRef.current?.scrollIntoView({ behavior, block: 'end' })
   }, [])
 
-  const resizeTextarea = useCallback(() => {
-    const el = inputRef.current
-    if (!el) return
-    el.style.height = 'auto'
-    el.style.height = `${Math.min(el.scrollHeight, 110)}px`
-  }, [])
 
   const markMessagesAsRead = useCallback(
     async (senderId: string, receiverId: string) => {
@@ -241,9 +235,6 @@ export default function ConversationPage() {
     }
   }, [currentUserId, otherUserId, markMessagesAsRead, scrollToBottom, supabase])
 
-  useEffect(() => {
-    resizeTextarea()
-  }, [newMessage, resizeTextarea])
 
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -270,7 +261,6 @@ export default function ConversationPage() {
     setNewMessage('')
 
     requestAnimationFrame(() => {
-      resizeTextarea()
       scrollToBottom('smooth')
     })
 
@@ -296,28 +286,31 @@ export default function ConversationPage() {
     )
 
     setSending(false)
-    inputRef.current?.focus({ preventScroll: true })
+    try {
+      inputRef.current?.focus({ preventScroll: true })
+    } catch {
+      inputRef.current?.focus()
+    }
   }, [
     currentUserId,
     newMessage,
     otherUserId,
-    resizeTextarea,
     scrollToBottom,
     sending,
     supabase,
   ])
 
-  const handleTextareaKeyDown = (
-    e: React.KeyboardEvent<HTMLTextAreaElement>
+  const handleInputKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter') {
       e.preventDefault()
       handleSend()
     }
   }
 
 
-  const handleTextareaFocus = useCallback(() => {
+  const handleInputFocus = useCallback(() => {
     requestAnimationFrame(() => {
       scrollToBottom('auto')
     })
@@ -463,18 +456,20 @@ export default function ConversationPage() {
         }}
       >
         <div className="flex items-end gap-2">
-          <div className="flex min-w-0 flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
-            <textarea
+          <div className="flex min-w-0 flex-1 items-center rounded-3xl bg-[#2a3942] px-3 py-3">
+            <input
               ref={inputRef}
+              type="text"
+              inputMode="text"
+              enterKeyHint="send"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={handleTextareaKeyDown}
-              onFocus={handleTextareaFocus}
-              rows={1}
+              onKeyDown={handleInputKeyDown}
+              onFocus={handleInputFocus}
               maxLength={2000}
               placeholder="Message"
-              className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
-            />
+              className="h-6 flex-1 bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
+/>
           </div>
 
           <button
