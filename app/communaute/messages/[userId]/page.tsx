@@ -359,13 +359,13 @@ export default function ConversationPage() {
 
   return (
     <div
-      className="fixed inset-0 flex min-h-0 flex-col overflow-hidden bg-[#0b141a]"
+      className="flex min-h-screen flex-col bg-[#0b141a]"
       style={{
         height: 'var(--app-height, 100vh)',
         paddingTop: 'env(safe-area-inset-top)',
       }}
     >
-      <header className="relative z-30 flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
         <button
           onClick={() => router.push('/communaute/messages')}
           className="rounded-full p-2 text-slate-300 transition hover:bg-white/10"
@@ -394,7 +394,7 @@ export default function ConversationPage() {
 
       <main
         ref={scrollRef}
-        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-2 py-3"
+        className="flex-1 overflow-y-auto overflow-x-hidden px-2 pt-20 pb-24 py-3 [scrollbar-width:none]"
         style={{
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
@@ -412,7 +412,7 @@ export default function ConversationPage() {
             </p>
           </div>
         ) : (
-          <div className="space-y-1">
+          <div className="space-y-1 overflow-x-hidden">
             {messages.map((msg, index) => {
               const prev = messages[index - 1]
               const next = messages[index + 1]
@@ -443,7 +443,7 @@ export default function ConversationPage() {
                   <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
                     <div
                       className={[
-                        'relative max-w-[78%] break-words px-3.5 py-2 text-[14px] leading-relaxed shadow-sm mx-1',
+                        'relative max-w-[75%] break-words overflow-hidden px-3.5 py-2 text-[14px] leading-relaxed shadow-sm mx-1',
                         isMe
                           ? 'rounded-2xl rounded-br-md bg-[#005c4b] text-white'
                           : 'rounded-2xl rounded-bl-md bg-[#202c33] text-slate-100',
@@ -472,8 +472,7 @@ export default function ConversationPage() {
         )}
       </main>
 
-      <footer
-        className="shrink-0 border-t border-white/10 bg-[#202c33]"
+      <footer className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#202c33] shrink-0 overflow-x-hidden border-t border-white/10 bg-[#202c33]"
         style={{
           paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
           paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
@@ -481,8 +480,8 @@ export default function ConversationPage() {
           paddingBottom: keyboardOpen ? '0.35rem' : 'max(0.5rem, env(safe-area-inset-bottom))',
         }}
       >
-        <div className="flex items-end gap-2">
-          <div className={`flex min-w-0 flex-1 items-center rounded-3xl bg-[#2a3942] px-3 ${keyboardOpen ? "py-2" : "py-3"}`}>
+        <div className="flex w-full items-end gap-2 overflow-x-hidden">
+          <div className={`flex min-w-0 flex-1 items-center overflow-hidden rounded-3xl bg-[#2a3942] px-3 ${keyboardOpen ? "py-2" : "py-3"}`}>
             <input
               ref={inputRef}
               type="text"
@@ -494,14 +493,14 @@ export default function ConversationPage() {
               onFocus={handleInputFocus}
               maxLength={2000}
               placeholder="Message"
-              className="h-6 flex-1 bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
+              className="h-6 min-w-0 flex-1 bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
 />
           </div>
 
           <button
             onClick={handleSend}
             disabled={!newMessage.trim() || sending}
-            className={`flex ${keyboardOpen ? "h-10 w-10" : "h-11 w-11"} flex-none items-center justify-center rounded-full transition ${
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition ${
               newMessage.trim()
                 ? 'bg-[#00a884] text-white hover:brightness-110'
                 : 'bg-[#2a3942] text-slate-500'

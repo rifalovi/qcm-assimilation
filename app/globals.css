@@ -399,3 +399,15 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
 }
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
