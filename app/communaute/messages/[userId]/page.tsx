@@ -264,10 +264,10 @@ export default function ConversationPage() {
     : '?'
 
   return (
-    <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-[#0b141a]">
+    <div className="fixed inset-0 flex h-dvh min-h-0 flex-col overflow-hidden bg-[#0b141a]">
 
       {/* Header */}
-      <header className="z-20 flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
+      <header className="relative z-30 flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3 shrink-0">
         <button
           onClick={() => router.push('/communaute/messages')}
           className="rounded-full p-2 text-slate-300 transition hover:bg-white/10"
@@ -287,7 +287,7 @@ export default function ConversationPage() {
       {/* Messages */}
       <main
         ref={scrollRef}
-        className="min-h-0 flex-1 overflow-y-auto px-3 py-3"
+        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-3 py-3"
         style={{
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
@@ -295,6 +295,7 @@ export default function ConversationPage() {
           backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
           backgroundSize: '22px 22px',
           paddingBottom: 'env(safe-area-inset-bottom)',
+          minHeight: 0,
         } as React.CSSProperties}
       >
         {messages.length === 0 ? (
@@ -350,7 +351,7 @@ export default function ConversationPage() {
       </main>
 
       {/* Input */}
-      <footer className="sticky bottom-0 z-20 flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
+      <footer className="relative z-30 flex flex-none shrink-0 items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <div className="flex flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
           <textarea
             ref={inputRef}
