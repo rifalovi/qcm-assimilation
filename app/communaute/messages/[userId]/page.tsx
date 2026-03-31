@@ -131,7 +131,6 @@ export default function ConversationPage() {
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
-  const [keyboardInset, setKeyboardInset] = useState(0)
 
   const pageRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -260,10 +259,6 @@ export default function ConversationPage() {
       const vv = window.visualViewport
       const appHeight = vv?.height ?? window.innerHeight
       document.documentElement.style.setProperty('--app-height', `${appHeight}px`)
-
-      const fullHeight = window.innerHeight
-      const keyboardHeight = Math.max(0, fullHeight - appHeight)
-      setKeyboardInset(keyboardHeight > 120 ? keyboardHeight : 0)
     }
 
     updateLayout()
@@ -408,7 +403,7 @@ export default function ConversationPage() {
         className="absolute left-0 right-0 overflow-y-auto overflow-x-hidden px-3 py-3"
         style={{
           top: `${HEADER_HEIGHT}px`,
-          bottom: `${FOOTER_HEIGHT + keyboardInset}px`,
+          bottom: `${FOOTER_HEIGHT}px`,
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
           backgroundColor: '#0b141a',
@@ -488,7 +483,7 @@ export default function ConversationPage() {
       <footer
         className="absolute left-0 right-0 z-40 border-t border-white/10 bg-[#202c33]"
         style={{
-          bottom: `${keyboardInset}px`,
+          bottom: 0,
           minHeight: `${FOOTER_HEIGHT}px`,
           paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
           paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
