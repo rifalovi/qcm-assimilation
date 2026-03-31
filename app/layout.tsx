@@ -5,7 +5,8 @@ import PostHogProvider from "./components/PostHogProvider";
 import { Suspense } from "react";
 import { UserProvider } from "./components/UserContext";
 import BottomNav from "@/components/BottomNav"
-import CapacitorProvider from "@/components/CapacitorProvider";
+import CapacitorProvider from "@/components/CapacitorProvider"
+import ConditionalFooter from "@/components/ConditionalFooter";
 
 export const metadata: Metadata = {
   title: "Cap Citoyen",
@@ -70,19 +71,7 @@ export default function RootLayout({
           <div className="min-h-screen flex flex-col">
             <AppHeader />
             <main className="flex-1 w-full overflow-x-hidden">{children}</main>
-            <footer className="mt-10 border-t border-white/10 bg-slate-950/30 px-4 py-6 text-center text-xs text-slate-400 backdrop-blur-sm sm:px-6">
-              © {new Date().getFullYear()} Cap Citoyen
-              <span className="mx-2">·</span>
-              <a href="/pricing" className="text-amber-400 hover:text-amber-300 transition">👑 Tarifs</a>
-              <span className="mx-2">·</span>
-              <a href="/contact" className="hover:text-slate-300 transition">Contact</a>
-              <span className="mx-2">·</span>
-              <a href="/mentions-legales" className="hover:text-slate-300 transition">Mentions légales</a>
-              <span>·</span>
-              <a href="/privacy" className="hover:text-slate-300 transition">Politique de confidentialité</a>
-              <span className="mx-2">·</span>
-              <a href="/cgv" className="hover:text-slate-300 transition">CGV</a>
-            </footer>
+            <ConditionalFooter />
           </div>
           <BottomNav />
         </PostHogProvider>

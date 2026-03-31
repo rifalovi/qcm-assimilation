@@ -63,22 +63,26 @@ export default function AvisSection() {
   return (
     <section id="avis-section" className="space-y-5 pt-8 mt-4 border-t border-white/10">
       {/* Header */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-xl font-extrabold text-white">Ce qu&apos;ils en pensent</h2>
-          <p className="mt-1 text-sm text-slate-400">
-            Avis de candidats qui ont préparé leur entretien avec Cap Citoyen
-          </p>
-        </div>
-        <div className="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-2.5">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-2xl font-extrabold text-amber-300">{avgRating}/5</p>
-            <Stars rating={Math.round(avgRating)} />
+            <h2 className="text-xl font-extrabold text-white">Ce qu&apos;ils en pensent</h2>
+            <p className="mt-1 text-sm text-slate-400">
+              Avis de candidats préparant leur naturalisation avec Cap Citoyen
+            </p>
           </div>
-          <div className="border-l border-white/10 pl-3">
-            <p className="text-xs text-slate-400">{avis.length} avis</p>
-            <p className="text-xs font-semibold text-white">Note moyenne</p>
-          </div>
+          {avis.length >= 2 && (
+            <div className="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 self-start sm:self-auto">
+              <div className="text-center">
+                <p className="text-2xl font-extrabold text-amber-300 leading-none">{avgRating}<span className="text-sm text-slate-400">/5</span></p>
+                <Stars rating={Math.round(avgRating)} />
+              </div>
+              <div className="border-l border-white/10 pl-3">
+                <p className="text-xs font-semibold text-white">{avis.length} avis</p>
+                <p className="text-xs text-slate-400">Note moyenne</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

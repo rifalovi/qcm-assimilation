@@ -122,12 +122,9 @@ export default function BottomNav() {
                 </div>
               </button>
               <button onClick={() => { setShowHomeMenu(false); setShowFeedback(true); }}
-                className="flex w-full items-center gap-3 rounded-2xl border border-yellow-400/20 bg-yellow-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-yellow-200">
-                <span className="text-xl">⭐</span>
-                <div className="text-left">
-                  <p className="font-semibold">Noter l'application</p>
-                  <p className="text-xs text-slate-400">Votre avis nous aide à progresser</p>
-                </div>
+                className="flex w-full items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-500 hover:text-slate-300">
+                <span className="text-xs">⭐</span>
+                <p className="text-xs">Noter l'application</p>
               </button>
             </div>
           </div>

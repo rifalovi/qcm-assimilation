@@ -172,17 +172,14 @@ export default function AppHeader() {
                     </div>
 
                     {/* Noter l'application */}
-                    <div className="px-2 pt-2">
+                    <div className="px-2 pt-1">
                       <div className="my-1 h-px bg-white/6" />
                       <button
                         onClick={() => { setOpen(false); setShowFeedback(true); }}
-                        className="flex w-full items-center gap-2.5 px-2 py-2.5 rounded-xl bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-400/20 transition"
+                        className="flex w-full items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-500 hover:text-slate-300"
                       >
-                        <span className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-sm flex-shrink-0">⭐</span>
-                        <div className="text-left">
-                          <p className="text-sm font-semibold text-yellow-200">Noter l'application</p>
-                          <p className="text-xs text-slate-500">Votre avis nous aide à progresser</p>
-                        </div>
+                        <span className="text-xs">⭐</span>
+                        <p className="text-xs">Noter l'application</p>
                       </button>
                     </div>
 

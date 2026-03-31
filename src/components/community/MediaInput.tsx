@@ -237,7 +237,7 @@ export default function MediaInput({
       )}
 
       {/* Barre d'outils */}
-      <div className="flex items-center justify-between px-3 py-2 border-t border-slate-700">
+      <div className="flex items-center justify-between px-2 py-2 border-t border-slate-700 gap-2">
         <div className="flex items-center gap-1">
 
           {/* Upload image */}
@@ -269,9 +269,9 @@ export default function MediaInput({
 
         {/* Bouton envoyer */}
         <button onClick={handleSubmit} disabled={!canSubmit}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-600 text-white text-xs font-medium rounded-xl hover:bg-teal-700 disabled:opacity-40 transition-colors">
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-600 text-white text-xs font-medium rounded-xl hover:bg-teal-700 disabled:opacity-40 transition-colors flex-shrink-0">
           {submitting ? <Loader size={13} className="animate-spin" /> : <Send size={13} />}
-          {submitLabel}
+          <span className="hidden sm:inline">{submitLabel}</span>
         </button>
       </div>
     </div>

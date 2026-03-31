@@ -124,6 +124,7 @@ export default async function CommunautePage() {
     { count: forumPostCount },
     { data: recentTestimonies },
     { count: unreadMessages },
+    { count: activeMembersCount },
   ] = await Promise.all([
     supabase.from('testimonials').select('*', { count: 'exact', head: true }).eq('is_hidden', false),
     supabase.from('forum_posts').select('*', { count: 'exact', head: true }).eq('is_hidden', false),
@@ -141,12 +142,16 @@ export default async function CommunautePage() {
       .select('*', { count: 'exact', head: true })
       .eq('receiver_id', session.id)
       .eq('is_read', false),
+    supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .in('role', ['premium', 'elite', 'moderator', 'admin', 'super_admin']),
   ])
 
   const stats: CommunityStats = {
     testimonialCount: testimonialCount ?? 0,
     forumPostCount: forumPostCount ?? 0,
-    activeMembersCount: 89, // à calculer dynamiquement plus tard
+    activeMembersCount: activeMembersCount ?? 0,
   }
 
   // ── Rendu ────────────────────────────────────────────────────
@@ -154,27 +159,27 @@ export default async function CommunautePage() {
     <main className="max-w-5xl mx-auto px-4 py-8">
 
       {/* En-tête */}
-      <div className="mb-8">
-        <span className="inline-flex items-center gap-1.5 bg-amber-900/40 text-amber-400 text-xs font-medium px-3 py-1 rounded-full mb-3">
+      <div className="mb-6">
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-300 mb-3">
           <Star size={11} className="fill-amber-400 text-amber-400" />
-          Premium
-        </span>
-        <h1 className="text-2xl font-medium text-white mb-1">Espace communauté</h1>
-        <p className="text-gray-500 text-sm">
+          Espace Premium
+        </div>
+        <h1 className="text-2xl font-extrabold tracking-tight text-white mb-1">Communauté</h1>
+        <p className="text-sm text-slate-400">
           Échangez avec d'autres candidats à la naturalisation
         </p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 mb-8">
+      <div className="grid grid-cols-3 gap-3 mb-6">
         {[
-          { num: stats.testimonialCount, label: 'Témoignages' },
-          { num: stats.forumPostCount, label: 'Discussions' },
-          { num: stats.activeMembersCount, label: 'Membres actifs' },
-        ].map(({ num, label }) => (
-          <div key={label} className="bg-slate-800 rounded-xl px-4 py-3 border border-slate-700">
-            <p className="text-2xl font-medium text-white">{num}</p>
-            <p className="text-xs text-slate-400 mt-0.5">{label}</p>
+          { num: stats.testimonialCount, label: 'Témoignages', color: 'text-teal-300' },
+          { num: stats.forumPostCount, label: 'Discussions', color: 'text-orange-300' },
+          { num: stats.activeMembersCount, label: 'Membres actifs', color: 'text-blue-300' },
+        ].map(({ num, label, color }) => (
+          <div key={label} className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/60 to-slate-900/60 px-3 py-3 text-center backdrop-blur-sm">
+            <p className={`text-xl font-extrabold ${color}`}>{num}</p>
+            <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">{label}</p>
           </div>
         ))}
       </div>
@@ -185,17 +190,17 @@ export default async function CommunautePage() {
         {/* Témoignages */}
         <Link
           href="/communaute/temoignages"
-          className="bg-slate-800 border border-slate-700 rounded-2xl p-5 hover:border-slate-500 transition-colors group"
+          className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/60 to-slate-900/60 p-5 hover:border-white/20 hover:bg-white/5 transition-all group backdrop-blur-sm"
         >
-          <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center mb-3">
-            <BookOpen size={18} className="text-teal-600" />
+          <div className="w-10 h-10 rounded-xl border border-teal-400/20 bg-teal-500/10 flex items-center justify-center mb-3">
+            <BookOpen size={18} className="text-teal-400" />
           </div>
           <h2 className="text-sm font-medium text-white mb-1">Retours d'expériences</h2>
           <p className="text-xs text-slate-400 leading-relaxed mb-3">
             Témoignages de candidats ayant passé le test ou l'entretien
           </p>
           <div className="flex items-center justify-between">
-            <span className="text-xs bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full font-medium">
+            <span className="text-xs border border-teal-400/20 bg-teal-500/10 text-teal-300 px-2.5 py-1 rounded-full font-medium">
               {stats.testimonialCount} témoignages
             </span>
             <ArrowRight size={14} className="text-slate-500 group-hover:translate-x-0.5 transition-transform" />
@@ -205,17 +210,17 @@ export default async function CommunautePage() {
         {/* Forum */}
         <Link
           href="/communaute/forum"
-          className="bg-slate-800 border border-slate-700 rounded-2xl p-5 hover:border-slate-500 transition-colors group"
+          className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/60 to-slate-900/60 p-5 hover:border-white/20 hover:bg-white/5 transition-all group backdrop-blur-sm"
         >
-          <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center mb-3">
-            <MessageSquare size={18} className="text-orange-600" />
+          <div className="w-10 h-10 rounded-xl border border-orange-400/20 bg-orange-500/10 flex items-center justify-center mb-3">
+            <MessageSquare size={18} className="text-orange-400" />
           </div>
           <h2 className="text-sm font-medium text-white mb-1">Forum</h2>
           <p className="text-xs text-slate-400 leading-relaxed mb-3">
             Posez vos questions, partagez vos conseils
           </p>
           <div className="flex items-center justify-between">
-            <span className="text-xs bg-orange-50 text-orange-700 px-2.5 py-1 rounded-full font-medium">
+            <span className="text-xs border border-orange-400/20 bg-orange-500/10 text-orange-300 px-2.5 py-1 rounded-full font-medium">
               {stats.forumPostCount} discussions
             </span>
             <ArrowRight size={14} className="text-slate-500 group-hover:translate-x-0.5 transition-transform" />
@@ -225,17 +230,17 @@ export default async function CommunautePage() {
         {/* Messages */}
         <Link
           href="/communaute/messages"
-          className="bg-slate-800 border border-slate-700 rounded-2xl p-5 hover:border-slate-500 transition-colors group"
+          className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/60 to-slate-900/60 p-5 hover:border-white/20 hover:bg-white/5 transition-all group backdrop-blur-sm"
         >
-          <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center mb-3">
-            <Users size={18} className="text-blue-600" />
+          <div className="w-10 h-10 rounded-xl border border-blue-400/20 bg-blue-500/10 flex items-center justify-center mb-3">
+            <Users size={18} className="text-blue-400" />
           </div>
           <h2 className="text-sm font-medium text-white mb-1">Messages privés</h2>
           <p className="text-xs text-slate-400 leading-relaxed mb-3">
             Échangez en privé avec d'autres membres
           </p>
           <div className="flex items-center justify-between">
-            <span className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">
+            <span className="text-xs border border-blue-400/20 bg-blue-500/10 text-blue-300 px-2.5 py-1 rounded-full font-medium">
               {(unreadMessages ?? 0) > 0 ? `${unreadMessages} non lus` : 'Aucun non lu'}
             </span>
             <ArrowRight size={14} className="text-slate-500 group-hover:translate-x-0.5 transition-transform" />
@@ -246,7 +251,7 @@ export default async function CommunautePage() {
 
       {/* Feed — derniers témoignages */}
       <div>
-        <h3 className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-4">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
           Derniers témoignages
         </h3>
 
@@ -286,7 +291,7 @@ export default async function CommunautePage() {
         {/* CTA partager */}
         <Link
           href="/communaute/temoignages/new"
-          className="mt-4 flex items-center justify-center gap-2 w-full border border-slate-600 rounded-xl py-3 text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors"
+          className="mt-4 flex items-center justify-center gap-2 w-full rounded-2xl border border-white/10 bg-white/5 py-3 text-sm font-semibold text-slate-300 hover:bg-white/10 transition-colors"
         >
           <Plus size={15} />
           Partager mon expérience
