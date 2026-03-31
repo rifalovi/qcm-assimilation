@@ -132,8 +132,6 @@ export default function ConversationPage() {
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
-
-  const pageRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -472,7 +470,7 @@ export default function ConversationPage() {
       </main>
 
       {/* Input */}
-      <footer className="z-20 flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 py-3">
+      <footer className="sticky bottom-0 z-20 flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <div className="flex flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
           <textarea
             ref={inputRef}
