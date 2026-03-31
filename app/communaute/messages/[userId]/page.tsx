@@ -3,9 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft } from 'lucide-react'
-import MediaInput from '@/components/community/MediaInput'
-import MediaDisplay from '@/components/community/MediaDisplay'
+import { ArrowLeft, Send, Phone } from 'lucide-react'
 
 type Message = {
   id: string
@@ -26,15 +24,15 @@ type OtherUser = {
 
 const AVATAR_COLORS = ['bg-teal-900/60 text-teal-300','bg-orange-900/60 text-orange-300','bg-blue-900/60 text-blue-300','bg-pink-900/60 text-pink-300','bg-purple-900/60 text-purple-300']
 function avatarColor(id: string) { const s = id.charCodeAt(0)+id.charCodeAt(id.length-1); return AVATAR_COLORS[s%AVATAR_COLORS.length] }
-function getInitials(fn: string|null, ln: string|null) { return ((fn?.charAt(0)??'')+(ln?.charAt(0)??'')).toUpperCase()||'M' }
-function formatName(fn: string|null, ln: string|null, username?: string) { if(!fn&&!ln) return username ?? 'Membre'; return `${fn??''} ${ln?ln.charAt(0).toUpperCase()+'.':''}`.trim() }
+function getInitials(fn: string|null, ln: string|null, un: string) { if(fn) return ((fn.charAt(0))+(ln?.charAt(0)??'')).toUpperCase(); return un.charAt(0).toUpperCase() }
+function formatName(fn: string|null, ln: string|null, un: string) { if(fn?.trim()) return `${fn} ${ln?ln.charAt(0).toUpperCase()+'.':''}`.trim(); return un }
 
 function formatTime(dateStr: string) {
   const d = new Date(dateStr)
   const now = new Date()
   const isToday = d.toDateString() === now.toDateString()
   if (isToday) return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }) + ' ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
 }
 
 export default function ConversationPage() {
@@ -52,7 +50,6 @@ export default function ConversationPage() {
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
-  // Scroll automatique vers le bas
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
@@ -63,7 +60,6 @@ export default function ConversationPage() {
       if (!user) { router.push('/login'); return }
       setCurrentUserId(user.id)
 
-      // Charge le profil de l'interlocuteur
       const { data: other } = await supabase
         .from('profiles')
         .select('id, first_name, last_name, username')
@@ -71,16 +67,14 @@ export default function ConversationPage() {
         .single()
       setOtherUser(other)
 
-      // Charge l'historique des messages
       const { data: msgs } = await supabase
         .from('direct_messages')
-        .select('id, sender_id, receiver_id, content, is_read, created_at')
+        .select('id, sender_id, receiver_id, content, attachments, is_read, created_at')
         .or(`and(sender_id.eq.${user.id},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${user.id})`)
         .order('created_at', { ascending: true })
 
       setMessages((msgs as Message[]) ?? [])
 
-      // Marque les messages reçus comme lus
       await supabase
         .from('direct_messages')
         .update({ is_read: true })
@@ -90,8 +84,6 @@ export default function ConversationPage() {
 
       setLoading(false)
 
-      // ── Supabase Realtime ──────────────────────────────────
-      // S'abonne aux nouveaux messages de cette conversation
       const channel = supabase
         .channel(`conv-${[user.id, otherUserId].sort().join('-')}`)
         .on('postgres_changes', {
@@ -101,15 +93,12 @@ export default function ConversationPage() {
           filter: `receiver_id=eq.${user.id}`,
         }, async (payload) => {
           const msg = payload.new as Message
-          // Filtre : seulement les messages de cet interlocuteur
           if (msg.sender_id !== otherUserId) return
           setMessages((m) => [...m, msg])
-          // Marque comme lu immédiatement
           await supabase.from('direct_messages').update({ is_read: true }).eq('id', msg.id)
         })
         .subscribe()
 
-      // Cleanup : se désabonne quand on quitte la page
       return () => { supabase.removeChannel(channel) }
     }
     load()
@@ -128,55 +117,58 @@ export default function ConversationPage() {
       created_at: new Date().toISOString(),
     }
 
-    // Optimistic update
     setMessages((m) => [...m, optimistic])
+    const text = newMessage.trim()
     setNewMessage('')
 
     const { data, error } = await supabase
       .from('direct_messages')
-      .insert({ sender_id: currentUserId, receiver_id: otherUserId, content: optimistic.content })
-      .select('id, sender_id, receiver_id, content, is_read, created_at')
+      .insert({ sender_id: currentUserId, receiver_id: otherUserId, content: text })
+      .select('id, sender_id, receiver_id, content, attachments, is_read, created_at')
       .single()
 
     if (!error && data) {
-      // Remplace le message optimiste par le vrai
       setMessages((m) => m.map((msg) => msg.id === optimistic.id ? data as Message : msg))
     } else {
-      // Rollback si erreur
       setMessages((m) => m.filter((msg) => msg.id !== optimistic.id))
-      setNewMessage(optimistic.content)
+      setNewMessage(text)
     }
 
     setSending(false)
     inputRef.current?.focus()
   }
 
-  if (loading) return <main className="flex flex-col h-screen max-w-lg mx-auto px-4 py-16 items-center justify-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
+  if (loading) return (
+    <div className="flex h-screen items-center justify-center bg-slate-900">
+      <p className="text-slate-400 text-sm">Chargement…</p>
+    </div>
+  )
+
+  const displayName = otherUser ? formatName(otherUser.first_name, otherUser.last_name, otherUser.username) : 'Membre'
+  const initials = otherUser ? getInitials(otherUser.first_name, otherUser.last_name, otherUser.username) : 'M'
 
   return (
-    <main className="flex flex-col max-w-lg mx-auto" style={{ height: "calc(100svh - 120px)", position: "fixed", top: "56px", left: 0, right: 0, bottom: "64px", maxWidth: "512px", margin: "0 auto" }}>
+    <div className="flex flex-col bg-slate-900" style={{ height: '100dvh' }}>
 
-      {/* Header fixe */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-700 bg-slate-900 flex-shrink-0">
+      {/* Header fixe — toujours visible */}
+      <div className="flex-shrink-0 flex items-center gap-3 px-3 py-3 bg-slate-800 border-b border-slate-700 shadow-sm">
         <button onClick={() => router.push('/communaute/messages')}
-          className="text-slate-400 hover:text-slate-200 transition-colors">
-          <ArrowLeft size={18} />
+          className="p-1.5 rounded-full hover:bg-slate-700 transition-colors text-slate-300">
+          <ArrowLeft size={20} />
         </button>
         {otherUser && (
-          <>
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium ${avatarColor(otherUser.id)}`}>
-              {getInitials(otherUser.first_name, otherUser.last_name)}
-            </div>
-            <div>
-              <p className="text-sm font-medium text-white">{formatName(otherUser.first_name, otherUser.last_name, otherUser.username)}</p>
-              <p className="text-xs text-slate-500">@{otherUser.username}</p>
-            </div>
-          </>
+          <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 ${avatarColor(otherUser.id)}`}>
+            {initials}
+          </div>
         )}
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-white truncate">{displayName}</p>
+          <p className="text-xs text-slate-400">En ligne</p>
+        </div>
       </div>
 
-      {/* Zone messages scrollable */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0">
+      {/* Zone messages — scrollable */}
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5" style={{ overscrollBehavior: 'contain' }}>
         {messages.length === 0 && (
           <div className="text-center py-12">
             <p className="text-slate-500 text-sm">Début de la conversation</p>
@@ -188,20 +180,32 @@ export default function ConversationPage() {
           const isMe = msg.sender_id === currentUserId
           const prevMsg = messages[i - 1]
           const showTime = !prevMsg || new Date(msg.created_at).getTime() - new Date(prevMsg.created_at).getTime() > 5 * 60 * 1000
+          const nextMsg = messages[i + 1]
+          const isLastInGroup = !nextMsg || nextMsg.sender_id !== msg.sender_id
 
           return (
             <div key={msg.id}>
               {showTime && (
-                <p className="text-center text-[10px] text-slate-600 my-2">{formatTime(msg.created_at)}</p>
+                <p className="text-center text-[10px] text-slate-500 my-3">{formatTime(msg.created_at)}</p>
               )}
-              <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+              <div className={`flex ${isMe ? 'justify-end' : 'justify-start'} items-end gap-1.5`}>
+                {!isMe && isLastInGroup && otherUser && (
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0 mb-0.5 ${avatarColor(otherUser.id)}`}>
+                    {initials}
+                  </div>
+                )}
+                {!isMe && !isLastInGroup && <div className="w-6 flex-shrink-0" />}
+                <div className={`max-w-[75%] px-3.5 py-2 text-sm leading-relaxed break-words ${
                   isMe
-                    ? 'bg-teal-600 text-white rounded-br-sm'
-                    : 'bg-slate-700 text-slate-100 rounded-bl-sm'
-                } ${msg.id.startsWith('temp-') ? 'opacity-70' : ''}`}>
+                    ? 'bg-teal-600 text-white rounded-2xl rounded-br-sm'
+                    : 'bg-slate-700 text-slate-100 rounded-2xl rounded-bl-sm'
+                } ${msg.id.startsWith('temp-') ? 'opacity-60' : ''}`}>
                   {msg.content}
-                  {msg.attachments && msg.attachments.length > 0 && <MediaDisplay attachments={msg.attachments} content={msg.content} />}
+                  {isMe && isLastInGroup && (
+                    <span className="text-[10px] text-teal-200/70 ml-2 float-right mt-1">
+                      {msg.id.startsWith('temp-') ? '⏳' : '✓'}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -210,37 +214,41 @@ export default function ConversationPage() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Zone de saisie fixe */}
-      <div className="px-4 py-3 border-t border-slate-700 bg-slate-900 flex-shrink-0">
-        <MediaInput
-          onSubmit={async (content, attachments) => {
-            if (!content.trim() && attachments.length === 0) return
-            const optimistic: Message = {
-              id: `temp-${Date.now()}`,
-              sender_id: currentUserId,
-              receiver_id: otherUserId,
-              content,
-              attachments,
-              is_read: false,
-              created_at: new Date().toISOString(),
-            }
-            setMessages((m) => [...m, optimistic])
-            const { data, error } = await supabase
-              .from('direct_messages')
-              .insert({ sender_id: currentUserId, receiver_id: otherUserId, content, attachments })
-              .select('id, sender_id, receiver_id, content, attachments, is_read, created_at')
-              .single()
-            if (!error && data) {
-              setMessages((m) => m.map((msg) => msg.id === optimistic.id ? data as Message : msg))
-            } else {
-              setMessages((m) => m.filter((msg) => msg.id !== optimistic.id))
+      {/* Barre de saisie — style WhatsApp */}
+      <div className="flex-shrink-0 flex items-end gap-2 px-3 py-3 bg-slate-800 border-t border-slate-700">
+        <textarea
+          ref={inputRef}
+          value={newMessage}
+          onChange={(e) => {
+            setNewMessage(e.target.value)
+            e.target.style.height = 'auto'
+            e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px'
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault()
+              handleSend()
             }
           }}
           placeholder="Message…"
-          submitLabel="Envoyer"
           rows={1}
+          maxLength={2000}
+          className="flex-1 bg-slate-700 border border-slate-600 rounded-2xl px-4 py-2.5 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:border-teal-500 resize-none leading-relaxed"
+          style={{ minHeight: '42px', maxHeight: '100px' }}
         />
+        {/* Bouton envoi — visible seulement si texte */}
+        <button
+          onClick={handleSend}
+          disabled={!newMessage.trim() || sending}
+          className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+            newMessage.trim()
+              ? 'bg-teal-600 hover:bg-teal-500 text-white shadow-lg scale-100'
+              : 'bg-slate-700 text-slate-500 scale-95'
+          } disabled:opacity-40`}
+        >
+          <Send size={18} />
+        </button>
       </div>
-    </main>
+    </div>
   )
 }
