@@ -203,7 +203,7 @@ export default function ConversationPage() {
 
   return (
     <div
-      className="chat-page flex flex-col bg-[#0b141a]"
+      className="flex flex-col bg-[#0b141a]"
       style={{
         height: '100dvh',
         paddingTop: 'env(safe-area-inset-top)',
