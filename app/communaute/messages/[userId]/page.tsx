@@ -264,10 +264,10 @@ export default function ConversationPage() {
     : '?'
 
   return (
-    <div className="fixed inset-0 flex h-dvh min-h-0 flex-col overflow-hidden bg-[#0b141a]">
+    <div style={{ height: "calc(100dvh - 56px - 64px)", display: "flex", flexDirection: "column", overflow: "hidden", background: "#0b141a" }}>
 
       {/* Header */}
-      <header className="relative z-30 flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3 shrink-0">
+      <header style={{ flexShrink: 0 }} className="flex items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
         <button
           onClick={() => router.push('/communaute/messages')}
           className="rounded-full p-2 text-slate-300 transition hover:bg-white/10"
@@ -287,7 +287,7 @@ export default function ConversationPage() {
       {/* Messages */}
       <main
         ref={scrollRef}
-        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-3 py-3"
+        style={{ flex: 1, overflowY: "auto", overflowX: "hidden", minHeight: 0 }} className="px-3 py-3"
         style={{
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
@@ -351,7 +351,7 @@ export default function ConversationPage() {
       </main>
 
       {/* Input */}
-      <footer className="relative z-30 flex flex-none shrink-0 items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <footer style={{ flexShrink: 0 }} className="flex items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 py-3">
         <div className="flex flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
           <textarea
             ref={inputRef}
