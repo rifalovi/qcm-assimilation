@@ -128,6 +128,7 @@ export default function ConversationPage() {
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
+  const [keyboardOpen, setKeyboardOpen] = useState(false)
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -242,6 +243,30 @@ export default function ConversationPage() {
     })
   }, [messages, scrollToBottom])
 
+  useEffect(() => {
+    const updateViewport = () => {
+      const vv = window.visualViewport
+      const height = vv?.height ?? window.innerHeight
+      document.documentElement.style.setProperty('--app-height', `${height}px`)
+
+      const keyboardLikelyOpen =
+        !!vv && window.innerHeight - vv.height > 120
+      setKeyboardOpen(keyboardLikelyOpen)
+    }
+
+    updateViewport()
+
+    window.visualViewport?.addEventListener('resize', updateViewport)
+    window.visualViewport?.addEventListener('scroll', updateViewport)
+    window.addEventListener('orientationchange', updateViewport)
+
+    return () => {
+      window.visualViewport?.removeEventListener('resize', updateViewport)
+      window.visualViewport?.removeEventListener('scroll', updateViewport)
+      window.removeEventListener('orientationchange', updateViewport)
+    }
+  }, [])
+
   const handleSend = useCallback(async () => {
     const content = newMessage.trim()
     if (!content || sending || !currentUserId) return
@@ -311,9 +336,9 @@ export default function ConversationPage() {
 
 
   const handleInputFocus = useCallback(() => {
-    requestAnimationFrame(() => {
+    setTimeout(() => {
       scrollToBottom('auto')
-    })
+    }, 120)
   }, [scrollToBottom])
 
   if (loading) {
@@ -336,6 +361,7 @@ export default function ConversationPage() {
     <div
       className="fixed inset-0 flex min-h-0 flex-col overflow-hidden bg-[#0b141a]"
       style={{
+        height: 'var(--app-height, 100vh)',
         paddingTop: 'env(safe-area-inset-top)',
       }}
     >
@@ -368,7 +394,7 @@ export default function ConversationPage() {
 
       <main
         ref={scrollRef}
-        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-3 py-3"
+        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-2 py-3"
         style={{
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
@@ -417,7 +443,7 @@ export default function ConversationPage() {
                   <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
                     <div
                       className={[
-                        'relative max-w-[82%] break-words px-3.5 py-2 text-[14px] leading-relaxed shadow-sm',
+                        'relative max-w-[78%] break-words px-3.5 py-2 text-[14px] leading-relaxed shadow-sm mx-1',
                         isMe
                           ? 'rounded-2xl rounded-br-md bg-[#005c4b] text-white'
                           : 'rounded-2xl rounded-bl-md bg-[#202c33] text-slate-100',
@@ -451,12 +477,12 @@ export default function ConversationPage() {
         style={{
           paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
           paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
-          paddingTop: '0.5rem',
-          paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))',
+          paddingTop: keyboardOpen ? '0.35rem' : '0.5rem',
+          paddingBottom: keyboardOpen ? '0.35rem' : 'max(0.5rem, env(safe-area-inset-bottom))',
         }}
       >
         <div className="flex items-end gap-2">
-          <div className="flex min-w-0 flex-1 items-center rounded-3xl bg-[#2a3942] px-3 py-3">
+          <div className={`flex min-w-0 flex-1 items-center rounded-3xl bg-[#2a3942] px-3 ${keyboardOpen ? "py-2" : "py-3"}`}>
             <input
               ref={inputRef}
               type="text"
@@ -475,7 +501,7 @@ export default function ConversationPage() {
           <button
             onClick={handleSend}
             disabled={!newMessage.trim() || sending}
-            className={`flex h-11 w-11 flex-none items-center justify-center rounded-full transition ${
+            className={`flex ${keyboardOpen ? "h-10 w-10" : "h-11 w-11"} flex-none items-center justify-center rounded-full transition ${
               newMessage.trim()
                 ? 'bg-[#00a884] text-white hover:brightness-110'
                 : 'bg-[#2a3942] text-slate-500'
