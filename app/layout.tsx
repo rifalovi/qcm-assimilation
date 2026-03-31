@@ -75,11 +75,9 @@ export default function RootLayout({
         <CapacitorProvider>
         <Suspense fallback={null}>
         <PostHogProvider>
-          <div className="min-h-screen flex flex-col">
-            <AppHeader />
-            <main className="flex-1 w-full min-w-0 min-h-0">{children}</main>
-            <ConditionalFooter />
-          </div>
+          <ConditionalShell>
+            {children}
+          </ConditionalShell>
           <BottomNav />
         </PostHogProvider>
         </Suspense>
