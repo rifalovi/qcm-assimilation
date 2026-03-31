@@ -128,7 +128,10 @@ export default function ConversationPage() {
   const otherUserId = params.userId as string
   const supabase = useMemo(() => createClient(), [])
 
-  const [currentUserId, setCurrentUserId] = useState('')
+  // CONCEPT : `null` = pas encore chargé, '' = chargé mais vide
+  // On ne rend les messages QUE quand currentUserId est connu,
+  // sinon isMe sera toujours false → toutes les bulles à gauche.
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [otherUser, setOtherUser] = useState<OtherUser | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
@@ -212,7 +215,7 @@ export default function ConversationPage() {
       return
     }
 
-    setCurrentUserId(user.id)
+
 
     const [{ data: other }, { data: msgs }] = await Promise.all([
       supabase
@@ -461,8 +464,20 @@ export default function ConversationPage() {
             </p>
           </div>
         ) : (
-          <div className="space-y-1">
-            {messages.map((msg, index) => {
+          // CONCEPT : w-full + overflow-hidden sur le conteneur liste
+          // Sans overflow-hidden, les enfants flex peuvent dépasser la largeur
+          // du parent sur Android (min-width: auto par défaut en flex).
+          // w-full force le conteneur à prendre exactement la largeur du main.
+          <div className="w-full overflow-hidden space-y-1">
+            {/* CONCEPT : on ne rend les bulles QUE si currentUserId est chargé.
+                Si currentUserId est null (auth pas encore résolue), on montre
+                un skeleton neutre. Cela évite le flash où tous les messages
+                apparaissent à gauche (isMe = false) puis sautent à droite. */}
+            {currentUserId === null ? (
+              <div className="flex justify-center py-8">
+                <span className="text-xs text-slate-500">Chargement…</span>
+              </div>
+            ) : messages.map((msg, index) => {
               const prev = messages[index - 1]
               const next = messages[index + 1]
               const isMe = msg.sender_id === currentUserId
@@ -489,21 +504,25 @@ export default function ConversationPage() {
                     </div>
                   )}
 
-                  {/* CONCEPT : max-w avec padding latéral
-                      On utilise max-w-[75%] sur la bulle, mais le conteneur
-                      flex a du padding px-2 pour éviter que les bulles
-                      touchent les bords de l'écran (évite la troncature). */}
-                  <div className={`flex px-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
+                  {/* CONCEPT : troncature Android
+                      - Le conteneur flex row a w-full pour ne pas dépasser
+                      - La bulle a max-w-[75%] pour limiter sa largeur
+                      - overflow-hidden sur la bulle clip le contenu débordant
+                      - break-words + word-break: break-word gère les longs mots */}
+                  <div
+                    className={`flex w-full px-2 ${isMe ? 'justify-end' : 'justify-start'}`}
+                  >
                     <div
                       className={[
-                        'relative max-w-[75%] break-words px-3.5 py-2 text-[14px] leading-relaxed shadow-sm',
+                        'max-w-[75%] overflow-hidden break-words px-3.5 py-2 text-[14px] leading-relaxed shadow-sm',
                         isMe
                           ? 'rounded-2xl rounded-br-md bg-[#005c4b] text-white'
                           : 'rounded-2xl rounded-bl-md bg-[#202c33] text-slate-100',
                         msg.id.startsWith('temp-') ? 'opacity-70' : '',
                       ].join(' ')}
+                      style={{ wordBreak: 'break-word' }}
                     >
-                      <div className="whitespace-pre-wrap break-words">{msg.content}</div>
+                      <div className="whitespace-pre-wrap">{msg.content}</div>
 
                       <div
                         className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${
