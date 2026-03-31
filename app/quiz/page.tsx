@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { saveResultToSupabase } from "../../src/lib/saveResult";
 import { trackEvent } from "../../src/lib/posthog";
@@ -12,6 +13,48 @@ import { generateQuiz, scoreQuiz, markQuestionsAsSeen } from "../../src/lib/quiz
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 
+
+
+// ── StarBurst — burst plein écran bonne réponse ──────────────
+const EMOJIS_Q = ["⭐","✨","💫","🌟","✦","·","*","★","✩","⚡"];
+const BURST_PARTICLES_Q = Array.from({ length: 60 }, (_, i) => {
+  const angle = Math.random() * 360;
+  const rad = (angle * Math.PI) / 180;
+  const dist = 80 + Math.random() * 280;
+  return {
+    tx: `${Math.cos(rad) * dist}px`,
+    ty: `${Math.sin(rad) * dist}px`,
+    delay: `${Math.floor(Math.random() * 200)}ms`,
+    dur: `${0.5 + Math.random() * 0.7}s`,
+    fs: `${8 + Math.floor(Math.random() * 10)}px`,
+    rot: `${Math.floor(Math.random() * 720)}deg`,
+    sz: `${0.3 + Math.random() * 0.6}`,
+    glow: i % 4 === 0 ? "rgba(251,191,36,0.9)" : i % 4 === 1 ? "rgba(167,243,208,0.9)" : i % 4 === 2 ? "rgba(196,181,253,0.9)" : "rgba(251,146,60,0.9)",
+    emoji: EMOJIS_Q[i % EMOJIS_Q.length],
+  };
+});
+
+function StarBurstQuiz({ show }: { show: boolean }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  if (!show || !mounted) return null;
+  return createPortal(
+    <div className="star-burst-overlay">
+      <div className="star-burst-bg" />
+      {BURST_PARTICLES_Q.map((p, i) => (
+        <span key={i} className="star-particle"
+          style={{
+            "--tx": p.tx, "--ty": p.ty, "--delay": p.delay,
+            "--dur": p.dur, "--fs": p.fs, "--rot": p.rot,
+            "--sz": p.sz, "--glow": p.glow,
+          } as React.CSSProperties}>
+          {p.emoji}
+        </span>
+      ))}
+    </div>,
+    document.body
+  );
+}
 
 export default function QuizPage() {
   const router = useRouter();
@@ -36,6 +79,7 @@ export default function QuizPage() {
   const [mode, setMode] = useState<"train" | "exam">("train");
   const [globalTime, setGlobalTime] = useState<number | null>(null);
   const [focusWarn, setFocusWarn] = useState(0);
+  const [showBurst, setShowBurst] = useState(false);
 
   useEffect(() => {
     if (mode !== "exam") return;
@@ -227,6 +271,11 @@ useEffect(() => {
 function selectAnswer(choice: ChoiceKey) {
   if (!current) return;
   setAnswers((prev) => ({ ...prev, [current.id]: choice }));
+  // Burst si bonne réponse en mode train
+  if (mode !== "exam" && choice === current.answer) {
+    setShowBurst(true);
+    setTimeout(() => setShowBurst(false), 1000);
+  }
   if (tickRef.current) window.clearInterval(tickRef.current);
   setRemaining(mode === "exam" ? 30 : 20);
   if (idx < questions.length - 1) setIdx(idx + 1);
@@ -505,6 +554,7 @@ function selectAnswer(choice: ChoiceKey) {
   </Button>
 </div>
 
+          <StarBurstQuiz show={showBurst} />
           {!canSubmit && (
             <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
               ⚠️ Validation possible uniquement si vous avez répondu à au moins{" "}
