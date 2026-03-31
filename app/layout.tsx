@@ -7,6 +7,7 @@ import { UserProvider } from "./components/UserContext";
 import BottomNav from "@/components/BottomNav"
 import CapacitorProvider from "@/components/CapacitorProvider"
 import ConditionalFooter from "@/components/ConditionalFooter";
+import ConditionalShell from "@/components/ConditionalShell";
 
 export const viewport = {
   width: "device-width",
