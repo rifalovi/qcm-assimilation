@@ -34,8 +34,6 @@ const AVATAR_COLORS = [
   'bg-pink-900/60 text-pink-300',
 ]
 
-const HEADER_HEIGHT = 76
-
 function avatarColor(id: string) {
   if (!id) return AVATAR_COLORS[0]
   return AVATAR_COLORS[
@@ -130,12 +128,9 @@ export default function ConversationPage() {
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
-  const [footerHeight, setFooterHeight] = useState(84)
 
-  const pageRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const footerRef = useRef<HTMLElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
@@ -190,6 +185,7 @@ export default function ConversationPage() {
 
     setOtherUser((other as OtherUser) ?? null)
     setMessages((msgs as Message[]) ?? [])
+
     await markMessagesAsRead(otherUserId, user.id)
     setLoading(false)
 
@@ -254,50 +250,6 @@ export default function ConversationPage() {
       scrollToBottom('smooth')
     })
   }, [messages, scrollToBottom])
-
-  useEffect(() => {
-    const updateLayout = () => {
-      const vv = window.visualViewport
-      const appHeight = vv?.height ?? window.innerHeight
-      document.documentElement.style.setProperty('--app-height', `${appHeight}px`)
-    }
-
-    updateLayout()
-
-    window.visualViewport?.addEventListener('resize', updateLayout)
-    window.visualViewport?.addEventListener('scroll', updateLayout)
-    window.addEventListener('orientationchange', updateLayout)
-
-    return () => {
-      window.visualViewport?.removeEventListener('resize', updateLayout)
-      window.visualViewport?.removeEventListener('scroll', updateLayout)
-      window.removeEventListener('orientationchange', updateLayout)
-    }
-  }, [])
-
-  useEffect(() => {
-    const el = footerRef.current
-    if (!el) return
-
-    const update = () => {
-      const h = el.getBoundingClientRect().height
-      if (h > 0) setFooterHeight(Math.ceil(h))
-    }
-
-    update()
-
-    const ro = new ResizeObserver(update)
-    ro.observe(el)
-
-    window.addEventListener('resize', update)
-    window.addEventListener('orientationchange', update)
-
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', update)
-      window.removeEventListener('orientationchange', update)
-    }
-  }, [])
 
   const handleSend = useCallback(async () => {
     const content = newMessage.trim()
@@ -380,23 +332,14 @@ export default function ConversationPage() {
     ? getInitials(otherUser.first_name, otherUser.last_name, otherUser.username)
     : '?'
 
-  const topInset = 'env(safe-area-inset-top)'
-  const bottomInset = 'env(safe-area-inset-bottom)'
-
   return (
     <div
-      ref={pageRef}
-      className="fixed inset-0 overflow-hidden bg-[#0b141a]"
-      style={{ height: 'var(--app-height, 100vh)' }}
+      className="flex h-[100dvh] min-h-0 flex-col overflow-hidden bg-[#0b141a]"
+      style={{
+        paddingTop: 'env(safe-area-inset-top)',
+      }}
     >
-      <header
-        className="absolute left-0 right-0 z-40 flex items-center gap-3 border-b border-white/10 bg-[#202c33] px-3"
-        style={{
-          top: 0,
-          height: `${HEADER_HEIGHT}px`,
-          paddingTop: topInset,
-        }}
-      >
+      <header className="flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
         <button
           onClick={() => router.push('/communaute/messages')}
           className="rounded-full p-2 text-slate-300 transition hover:bg-white/10"
@@ -425,10 +368,8 @@ export default function ConversationPage() {
 
       <main
         ref={scrollRef}
-        className="absolute left-0 right-0 overflow-y-auto overflow-x-hidden px-3 py-3"
+        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-3 py-3"
         style={{
-          top: `${HEADER_HEIGHT}px`,
-          bottom: `${footerHeight}px`,
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
           backgroundColor: '#0b141a',
@@ -506,14 +447,12 @@ export default function ConversationPage() {
       </main>
 
       <footer
-        ref={footerRef}
-        className="absolute left-0 right-0 z-40 border-t border-white/10 bg-[#202c33]"
+        className="shrink-0 border-t border-white/10 bg-[#202c33]"
         style={{
-          bottom: 0,
-                    paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
+          paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
           paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
           paddingTop: '0.5rem',
-          paddingBottom: `max(0.5rem, ${bottomInset})`,
+          paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))',
         }}
       >
         <div className="flex items-end gap-2">
