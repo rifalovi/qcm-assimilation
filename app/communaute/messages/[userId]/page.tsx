@@ -264,7 +264,7 @@ export default function ConversationPage() {
     : '?'
 
   return (
-    <div style={{ height: "calc(100dvh - 56px - 64px)", display: "flex", flexDirection: "column", overflow: "hidden", background: "#0b141a" }}>
+    <div style={{ height: "100dvh", display: "flex", flexDirection: "column", overflow: "hidden", background: "#0b141a", paddingTop: "56px", paddingBottom: "64px", boxSizing: "border-box" }}>
 
       {/* Header */}
       <header style={{ flexShrink: 0 }} className="flex items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
