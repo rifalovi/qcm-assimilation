@@ -76,7 +76,7 @@ export default function RootLayout({
         <PostHogProvider>
           <div className="min-h-screen flex flex-col">
             <AppHeader />
-            <main className="flex-1 w-full overflow-x-hidden">{children}</main>
+            <main className="flex-1 w-full min-w-0 min-h-0">{children}</main>
             <ConditionalFooter />
           </div>
           <BottomNav />
