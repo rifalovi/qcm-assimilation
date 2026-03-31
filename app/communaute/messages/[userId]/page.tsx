@@ -357,13 +357,12 @@ export default function ConversationPage() {
   return (
     <div
       ref={pageRef}
-      className="fixed inset-0 flex min-h-0 flex-col overflow-hidden bg-[#0b141a]"
+      className="fixed inset-0 overflow-hidden bg-[#0b141a]"
       style={{ height: 'var(--app-height, 100vh)' }}
     >
       <header
-        className="relative z-40 flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3"
+        className="absolute left-0 right-0 top-0 z-40 flex items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3"
         style={{
-          flexShrink: 0,
           paddingTop: 'max(0.75rem, env(safe-area-inset-top))',
         }}
       >
@@ -397,16 +396,18 @@ export default function ConversationPage() {
 
       <main
         ref={scrollRef}
-        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-3 py-3"
+        className="absolute overflow-y-auto overflow-x-hidden px-3 py-3"
         style={{
+          top: '60px',
+          bottom: '64px',
+          left: 0,
+          right: 0,
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
           backgroundColor: '#0b141a',
           backgroundImage:
             'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
           backgroundSize: '22px 22px',
-          paddingBottom: '12px',
-          minHeight: 0,
         }}
       >
         {messages.length === 0 ? (
@@ -478,11 +479,8 @@ export default function ConversationPage() {
       </main>
 
       <footer
-        className="relative z-40 flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] py-3"
+        className="absolute bottom-0 left-0 right-0 z-40 flex items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 py-3"
         style={{
-          flexShrink: 0,
-          paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
-          paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
           paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))',
         }}
       >
