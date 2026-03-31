@@ -27,6 +27,26 @@ export default function ConversationPage() {
   const [loading, setLoading] = useState(true)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Fix iOS clavier — ajuste la hauteur via visualViewport
+  useEffect(() => {
+    const update = () => {
+      const h = window.visualViewport?.height ?? window.innerHeight
+      if (containerRef.current) {
+        containerRef.current.style.height = h + 'px'
+      }
+      // Scroll vers le bas quand le clavier apparaît
+      setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50)
+    }
+    update()
+    window.visualViewport?.addEventListener('resize', update)
+    window.visualViewport?.addEventListener('scroll', update)
+    return () => {
+      window.visualViewport?.removeEventListener('resize', update)
+      window.visualViewport?.removeEventListener('scroll', update)
+    }
+  }, [])
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
 
@@ -74,7 +94,7 @@ export default function ConversationPage() {
   const initials = otherUser ? getInitials(otherUser.first_name, otherUser.last_name, otherUser.username) : '?'
 
   return (
-    <div className="flex flex-col bg-slate-900" style={{ height: '100svh', overflow: 'hidden' }}>
+    <div ref={containerRef} className="flex flex-col bg-slate-900" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '100svh', overflow: 'hidden' }}>
 
       {/* ── Header fixe ── */}
       <div className="flex-none flex items-center gap-3 px-3 py-3 bg-slate-800 border-b border-slate-700 z-10">
