@@ -116,6 +116,12 @@ function shouldShowTimestampSeparator(current: Message, previous?: Message) {
   return diff > 5 * 60 * 1000
 }
 
+// ─────────────────────────────────────────────
+// HAUTEURS FIXES (à synchroniser avec votre design)
+// ─────────────────────────────────────────────
+const HEADER_HEIGHT = 64   // px — hauteur du header fixe
+const FOOTER_HEIGHT = 68   // px — hauteur minimale du footer (sans clavier)
+
 export default function ConversationPage() {
   const router = useRouter()
   const params = useParams()
@@ -128,16 +134,61 @@ export default function ConversationPage() {
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
-  const [keyboardOpen, setKeyboardOpen] = useState(false)
+
+  // Décalage du footer depuis le bas de l'écran (remonte quand le clavier s'ouvre)
+  const [footerBottom, setFooterBottom] = useState(0)
+  // Hauteur actuelle du footer (pour le padding-bottom du main)
+  const [footerHeight, setFooterHeight] = useState(FOOTER_HEIGHT)
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const footerRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
     bottomRef.current?.scrollIntoView({ behavior, block: 'end' })
   }, [])
 
+  // ─────────────────────────────────────────────
+  // CONCEPT : visualViewport listener
+  //
+  // Sur iOS Safari, quand le clavier s'ouvre :
+  //   - window.innerHeight reste identique (le layout viewport ne change pas)
+  //   - window.visualViewport.height rétrécit (ce que l'utilisateur voit vraiment)
+  //
+  // On calcule donc :
+  //   footerBottom = window.innerHeight - vv.height - vv.offsetTop
+  //
+  // Cela pousse le footer exactement au-dessus du clavier.
+  // On mesure aussi la hauteur réelle du footer pour ajuster le padding du main.
+  // ─────────────────────────────────────────────
+  useEffect(() => {
+    const vv = window.visualViewport
+
+    const update = () => {
+      if (!vv) return
+
+      // Décalage depuis le bas = espace occupé par le clavier
+      const keyboardOffset = window.innerHeight - vv.height - vv.offsetTop
+      setFooterBottom(Math.max(0, keyboardOffset))
+
+      // Hauteur réelle du footer DOM (pour padding-bottom du main)
+      const fh = footerRef.current?.offsetHeight ?? FOOTER_HEIGHT
+      setFooterHeight(fh)
+
+      // Scroll en bas quand le clavier s'ouvre
+      requestAnimationFrame(() => scrollToBottom('auto'))
+    }
+
+    update()
+    vv?.addEventListener('resize', update)
+    vv?.addEventListener('scroll', update)
+
+    return () => {
+      vv?.removeEventListener('resize', update)
+      vv?.removeEventListener('scroll', update)
+    }
+  }, [scrollToBottom])
 
   const markMessagesAsRead = useCallback(
     async (senderId: string, receiverId: string) => {
@@ -236,36 +287,12 @@ export default function ConversationPage() {
     }
   }, [currentUserId, otherUserId, markMessagesAsRead, scrollToBottom, supabase])
 
-
+  // Scroll automatique quand les messages changent
   useEffect(() => {
     requestAnimationFrame(() => {
       scrollToBottom('smooth')
     })
   }, [messages, scrollToBottom])
-
-  useEffect(() => {
-    const updateViewport = () => {
-      const vv = window.visualViewport
-      const height = vv?.height ?? window.innerHeight
-      document.documentElement.style.setProperty('--app-height', `${height}px`)
-
-      const keyboardLikelyOpen =
-        !!vv && window.innerHeight - vv.height > 120
-      setKeyboardOpen(keyboardLikelyOpen)
-    }
-
-    updateViewport()
-
-    window.visualViewport?.addEventListener('resize', updateViewport)
-    window.visualViewport?.addEventListener('scroll', updateViewport)
-    window.addEventListener('orientationchange', updateViewport)
-
-    return () => {
-      window.visualViewport?.removeEventListener('resize', updateViewport)
-      window.visualViewport?.removeEventListener('scroll', updateViewport)
-      window.removeEventListener('orientationchange', updateViewport)
-    }
-  }, [])
 
   const handleSend = useCallback(async () => {
     const content = newMessage.trim()
@@ -325,25 +352,21 @@ export default function ConversationPage() {
     supabase,
   ])
 
-  const handleInputKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       handleSend()
     }
   }
 
-
   const handleInputFocus = useCallback(() => {
-    setTimeout(() => {
-      scrollToBottom('auto')
-    }, 120)
+    // Petit délai pour laisser le clavier s'ouvrir avant de scroller
+    setTimeout(() => scrollToBottom('auto'), 150)
   }, [scrollToBottom])
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#0b141a]">
+      <div className="flex items-center justify-center bg-[#0b141a]" style={{ height: '100dvh' }}>
         <p className="text-sm text-slate-400">Chargement…</p>
       </div>
     )
@@ -358,14 +381,28 @@ export default function ConversationPage() {
     : '?'
 
   return (
+    // ─────────────────────────────────────────────
+    // CONCEPT : conteneur racine
+    //
+    // On utilise `100dvh` (dynamic viewport height) au lieu de `100vh`.
+    // - `100vh` = hauteur du layout viewport (ne change pas quand le clavier s'ouvre)
+    // - `100dvh` = hauteur du viewport visuel réel (rétrécit avec le clavier sur iOS 16+)
+    //
+    // `overflow: hidden` empêche le rebond de scroll natif iOS sur le conteneur.
+    // ─────────────────────────────────────────────
     <div
-      className="flex min-h-screen flex-col bg-[#0b141a]"
+      className="flex flex-col bg-[#0b141a]"
       style={{
-        height: 'var(--app-height, 100vh)',
+        height: '100dvh',
+        overflow: 'hidden',
         paddingTop: 'env(safe-area-inset-top)',
       }}
     >
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
+      {/* ── HEADER ── fixe, hauteur HEADER_HEIGHT */}
+      <header
+        className="flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#202c33] px-3"
+        style={{ height: `${HEADER_HEIGHT}px` }}
+      >
         <button
           onClick={() => router.push('/communaute/messages')}
           className="rounded-full p-2 text-slate-300 transition hover:bg-white/10"
@@ -392,9 +429,16 @@ export default function ConversationPage() {
         </div>
       </header>
 
+      {/* ── MAIN (messages) ──
+          CONCEPT : flex-1 + overflow-y-auto
+          - flex-1 prend tout l'espace restant entre header et footer
+          - overflow-y-auto permet le scroll interne sans déborder
+          - padding-bottom = footerHeight pour que le dernier message
+            reste visible au-dessus du footer fixe
+      */}
       <main
         ref={scrollRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden px-2 pt-20 pb-24 py-3 [scrollbar-width:none]"
+        className="flex-1 overflow-y-auto overflow-x-hidden [scrollbar-width:none]"
         style={{
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
@@ -402,6 +446,11 @@ export default function ConversationPage() {
           backgroundImage:
             'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
           backgroundSize: '22px 22px',
+          // Espace en bas pour ne pas être caché sous le footer
+          paddingBottom: `${footerHeight + 8}px`,
+          paddingTop: '12px',
+          paddingLeft: '8px',
+          paddingRight: '8px',
         }}
       >
         {messages.length === 0 ? (
@@ -412,7 +461,7 @@ export default function ConversationPage() {
             </p>
           </div>
         ) : (
-          <div className="space-y-1 overflow-x-hidden">
+          <div className="space-y-1">
             {messages.map((msg, index) => {
               const prev = messages[index - 1]
               const next = messages[index + 1]
@@ -440,17 +489,21 @@ export default function ConversationPage() {
                     </div>
                   )}
 
-                  <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+                  {/* CONCEPT : max-w avec padding latéral
+                      On utilise max-w-[75%] sur la bulle, mais le conteneur
+                      flex a du padding px-2 pour éviter que les bulles
+                      touchent les bords de l'écran (évite la troncature). */}
+                  <div className={`flex px-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
                     <div
                       className={[
-                        'relative max-w-[75%] break-words overflow-hidden px-3.5 py-2 text-[14px] leading-relaxed shadow-sm mx-1',
+                        'relative max-w-[75%] break-words px-3.5 py-2 text-[14px] leading-relaxed shadow-sm',
                         isMe
                           ? 'rounded-2xl rounded-br-md bg-[#005c4b] text-white'
                           : 'rounded-2xl rounded-bl-md bg-[#202c33] text-slate-100',
                         msg.id.startsWith('temp-') ? 'opacity-70' : '',
                       ].join(' ')}
                     >
-                      <div className="whitespace-pre-wrap">{msg.content}</div>
+                      <div className="whitespace-pre-wrap break-words">{msg.content}</div>
 
                       <div
                         className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${
@@ -472,16 +525,37 @@ export default function ConversationPage() {
         )}
       </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#202c33] shrink-0 overflow-x-hidden border-t border-white/10 bg-[#202c33]"
+      {/* ── FOOTER ──
+          CONCEPT : position fixed + bottom dynamique
+          
+          On positionne le footer avec `position: fixed` et `bottom: footerBottom`.
+          footerBottom = 0 quand le clavier est fermé.
+          footerBottom = hauteur du clavier quand il est ouvert.
+          
+          C'est le visualViewport listener (useEffect ci-dessus) qui calcule
+          cette valeur en temps réel.
+          
+          safe-area-inset-bottom : sur iPhone sans bouton home, la barre
+          de geste en bas nécessite un padding. On l'applique seulement
+          quand le clavier est fermé (footerBottom === 0), sinon le clavier
+          remplace cette zone.
+      */}
+      <footer
+        ref={footerRef}
+        className="left-0 right-0 z-50 border-t border-white/10 bg-[#202c33]"
         style={{
+          position: 'fixed',
+          bottom: footerBottom,
           paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
           paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
-          paddingTop: keyboardOpen ? '0.35rem' : '0.5rem',
-          paddingBottom: keyboardOpen ? '0.35rem' : 'max(0.5rem, env(safe-area-inset-bottom))',
+          paddingTop: '0.5rem',
+          paddingBottom: footerBottom === 0
+            ? 'max(0.5rem, env(safe-area-inset-bottom))'
+            : '0.5rem',
         }}
       >
-        <div className="flex w-full items-end gap-2 overflow-x-hidden">
-          <div className={`flex min-w-0 flex-1 items-center overflow-hidden rounded-3xl bg-[#2a3942] px-3 ${keyboardOpen ? "py-2" : "py-3"}`}>
+        <div className="flex w-full items-end gap-2">
+          <div className="flex min-w-0 flex-1 items-center overflow-hidden rounded-3xl bg-[#2a3942] px-3 py-2.5">
             <input
               ref={inputRef}
               type="text"
@@ -494,7 +568,7 @@ export default function ConversationPage() {
               maxLength={2000}
               placeholder="Message"
               className="h-6 min-w-0 flex-1 bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
-/>
+            />
           </div>
 
           <button
