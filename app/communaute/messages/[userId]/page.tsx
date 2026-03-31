@@ -296,7 +296,7 @@ export default function ConversationPage() {
     )
 
     setSending(false)
-    inputRef.current?.focus()
+    inputRef.current?.focus({ preventScroll: true })
   }, [
     currentUserId,
     newMessage,
@@ -316,6 +316,13 @@ export default function ConversationPage() {
     }
   }
 
+
+  const handleTextareaFocus = useCallback(() => {
+    requestAnimationFrame(() => {
+      scrollToBottom('auto')
+    })
+  }, [scrollToBottom])
+
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-[#0b141a]">
@@ -334,12 +341,12 @@ export default function ConversationPage() {
 
   return (
     <div
-      className="flex h-[100dvh] min-h-0 flex-col overflow-hidden bg-[#0b141a]"
+      className="fixed inset-0 flex min-h-0 flex-col overflow-hidden bg-[#0b141a]"
       style={{
         paddingTop: 'env(safe-area-inset-top)',
       }}
     >
-      <header className="flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
+      <header className="relative z-30 flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
         <button
           onClick={() => router.push('/communaute/messages')}
           className="rounded-full p-2 text-slate-300 transition hover:bg-white/10"
@@ -462,6 +469,7 @@ export default function ConversationPage() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleTextareaKeyDown}
+              onFocus={handleTextareaFocus}
               rows={1}
               maxLength={2000}
               placeholder="Message"
