@@ -34,6 +34,9 @@ const AVATAR_COLORS = [
   'bg-pink-900/60 text-pink-300',
 ]
 
+const HEADER_HEIGHT = 76
+const FOOTER_HEIGHT = 84
+
 function avatarColor(id: string) {
   if (!id) return AVATAR_COLORS[0]
   return AVATAR_COLORS[
@@ -110,11 +113,9 @@ function formatBubbleTime(date: string) {
 
 function shouldShowTimestampSeparator(current: Message, previous?: Message) {
   if (!previous) return true
-
   const diff =
     new Date(current.created_at).getTime() -
     new Date(previous.created_at).getTime()
-
   return diff > 5 * 60 * 1000
 }
 
@@ -130,6 +131,7 @@ export default function ConversationPage() {
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
+  const [keyboardInset, setKeyboardInset] = useState(0)
 
   const pageRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -188,7 +190,6 @@ export default function ConversationPage() {
 
     setOtherUser((other as OtherUser) ?? null)
     setMessages((msgs as Message[]) ?? [])
-
     await markMessagesAsRead(otherUserId, user.id)
     setLoading(false)
 
@@ -220,8 +221,8 @@ export default function ConversationPage() {
           const incoming = payload.new as Message
 
           setMessages((prev) => {
-            const alreadyExists = prev.some((m) => m.id === incoming.id)
-            if (alreadyExists) return prev
+            const exists = prev.some((m) => m.id === incoming.id)
+            if (exists) return prev
             return [...prev, incoming]
           })
 
@@ -242,7 +243,7 @@ export default function ConversationPage() {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [currentUserId, markMessagesAsRead, otherUserId, scrollToBottom, supabase])
+  }, [currentUserId, otherUserId, markMessagesAsRead, scrollToBottom, supabase])
 
   useEffect(() => {
     resizeTextarea()
@@ -255,21 +256,26 @@ export default function ConversationPage() {
   }, [messages, scrollToBottom])
 
   useEffect(() => {
-    const setAppHeight = () => {
-      const height = window.visualViewport?.height ?? window.innerHeight
-      document.documentElement.style.setProperty('--app-height', `${height}px`)
+    const updateLayout = () => {
+      const vv = window.visualViewport
+      const appHeight = vv?.height ?? window.innerHeight
+      document.documentElement.style.setProperty('--app-height', `${appHeight}px`)
+
+      const fullHeight = window.innerHeight
+      const keyboardHeight = Math.max(0, fullHeight - appHeight)
+      setKeyboardInset(keyboardHeight > 120 ? keyboardHeight : 0)
     }
 
-    setAppHeight()
+    updateLayout()
 
-    window.visualViewport?.addEventListener('resize', setAppHeight)
-    window.visualViewport?.addEventListener('scroll', setAppHeight)
-    window.addEventListener('orientationchange', setAppHeight)
+    window.visualViewport?.addEventListener('resize', updateLayout)
+    window.visualViewport?.addEventListener('scroll', updateLayout)
+    window.addEventListener('orientationchange', updateLayout)
 
     return () => {
-      window.visualViewport?.removeEventListener('resize', setAppHeight)
-      window.visualViewport?.removeEventListener('scroll', setAppHeight)
-      window.removeEventListener('orientationchange', setAppHeight)
+      window.visualViewport?.removeEventListener('resize', updateLayout)
+      window.visualViewport?.removeEventListener('scroll', updateLayout)
+      window.removeEventListener('orientationchange', updateLayout)
     }
   }, [])
 
@@ -354,6 +360,9 @@ export default function ConversationPage() {
     ? getInitials(otherUser.first_name, otherUser.last_name, otherUser.username)
     : '?'
 
+  const topInset = 'env(safe-area-inset-top)'
+  const bottomInset = 'env(safe-area-inset-bottom)'
+
   return (
     <div
       ref={pageRef}
@@ -361,9 +370,11 @@ export default function ConversationPage() {
       style={{ height: 'var(--app-height, 100vh)' }}
     >
       <header
-        className="absolute left-0 right-0 top-0 z-40 flex items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3"
+        className="absolute left-0 right-0 z-40 flex items-center gap-3 border-b border-white/10 bg-[#202c33] px-3"
         style={{
-          paddingTop: 'max(0.75rem, env(safe-area-inset-top))',
+          top: 0,
+          height: `${HEADER_HEIGHT}px`,
+          paddingTop: topInset,
         }}
       >
         <button
@@ -376,9 +387,7 @@ export default function ConversationPage() {
 
         <div
           className={`flex h-10 w-10 flex-none items-center justify-center rounded-full text-sm font-bold ${
-            otherUser
-              ? avatarColor(otherUser.id)
-              : 'bg-slate-700 text-slate-300'
+            otherUser ? avatarColor(otherUser.id) : 'bg-slate-700 text-slate-300'
           }`}
         >
           {initials}
@@ -396,12 +405,10 @@ export default function ConversationPage() {
 
       <main
         ref={scrollRef}
-        className="absolute overflow-y-auto overflow-x-hidden px-3 py-3"
+        className="absolute left-0 right-0 overflow-y-auto overflow-x-hidden px-3 py-3"
         style={{
-          top: '60px',
-          bottom: '64px',
-          left: 0,
-          right: 0,
+          top: `${HEADER_HEIGHT}px`,
+          bottom: `${FOOTER_HEIGHT + keyboardInset}px`,
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
           backgroundColor: '#0b141a',
@@ -479,36 +486,43 @@ export default function ConversationPage() {
       </main>
 
       <footer
-        className="absolute bottom-0 left-0 right-0 z-40 flex items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 py-3"
+        className="absolute left-0 right-0 z-40 border-t border-white/10 bg-[#202c33]"
         style={{
-          paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))',
+          bottom: `${keyboardInset}px`,
+          minHeight: `${FOOTER_HEIGHT}px`,
+          paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
+          paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
+          paddingTop: '0.75rem',
+          paddingBottom: `max(0.75rem, ${bottomInset})`,
         }}
       >
-        <div className="flex min-w-0 flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
-          <textarea
-            ref={inputRef}
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={handleTextareaKeyDown}
-            rows={1}
-            maxLength={2000}
-            placeholder="Message"
-            className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
-          />
-        </div>
+        <div className="flex items-end gap-2">
+          <div className="flex min-w-0 flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
+            <textarea
+              ref={inputRef}
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={handleTextareaKeyDown}
+              rows={1}
+              maxLength={2000}
+              placeholder="Message"
+              className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
+            />
+          </div>
 
-        <button
-          onClick={handleSend}
-          disabled={!newMessage.trim() || sending}
-          className={`flex h-10 w-10 flex-none items-center justify-center rounded-full transition ${
-            newMessage.trim()
-              ? 'bg-[#00a884] text-white hover:brightness-110'
-              : 'bg-[#2a3942] text-slate-500'
-          } disabled:opacity-60`}
-          aria-label="Envoyer"
-        >
-          <Send size={18} />
-        </button>
+          <button
+            onClick={handleSend}
+            disabled={!newMessage.trim() || sending}
+            className={`flex h-11 w-11 flex-none items-center justify-center rounded-full transition ${
+              newMessage.trim()
+                ? 'bg-[#00a884] text-white hover:brightness-110'
+                : 'bg-[#2a3942] text-slate-500'
+            } disabled:opacity-60`}
+            aria-label="Envoyer"
+          >
+            <Send size={18} />
+          </button>
+        </div>
       </footer>
     </div>
   )
