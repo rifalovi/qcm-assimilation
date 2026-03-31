@@ -41,22 +41,14 @@ function avatarColor(id: string) {
   ]
 }
 
-function getInitials(
-  firstName: string | null,
-  lastName: string | null,
-  username: string
-) {
+function getInitials(firstName: string | null, lastName: string | null, username: string) {
   if (firstName?.trim()) {
     return `${firstName.charAt(0)}${lastName?.charAt(0) ?? ''}`.toUpperCase()
   }
   return username.charAt(0).toUpperCase()
 }
 
-function formatName(
-  firstName: string | null,
-  lastName: string | null,
-  username: string
-) {
+function formatName(firstName: string | null, lastName: string | null, username: string) {
   if (firstName?.trim()) {
     return `${firstName} ${lastName ? `${lastName.charAt(0).toUpperCase()}.` : ''}`.trim()
   }
@@ -89,7 +81,7 @@ function formatDayLabel(date: string) {
     d.getMonth() === yesterday.getMonth() &&
     d.getFullYear() === yesterday.getFullYear()
 
-  if (isToday) return 'Aujourd’hui'
+  if (isToday) return "Aujourd'hui"
   if (isYesterday) return 'Hier'
 
   return d.toLocaleDateString('fr-FR', {
@@ -106,16 +98,11 @@ function formatBubbleTime(date: string) {
   })
 }
 
-function shouldShowTimestampSeparator(
-  current: Message,
-  previous?: Message
-) {
+function shouldShowTimestampSeparator(current: Message, previous?: Message) {
   if (!previous) return true
-
   const diff =
     new Date(current.created_at).getTime() -
     new Date(previous.created_at).getTime()
-
   return diff > 5 * 60 * 1000
 }
 
@@ -123,7 +110,6 @@ export default function ConversationPage() {
   const router = useRouter()
   const params = useParams()
   const otherUserId = params.userId as string
-
   const supabase = useMemo(() => createClient(), [])
 
   const [currentUserId, setCurrentUserId] = useState('')
@@ -132,6 +118,7 @@ export default function ConversationPage() {
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
+
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -160,15 +147,8 @@ export default function ConversationPage() {
   )
 
   const loadConversation = useCallback(async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      router.push('/login')
-      return
-    }
-
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { router.push('/login'); return }
     setCurrentUserId(user.id)
 
     const [{ data: other }, { data: msgs }] = await Promise.all([
@@ -180,107 +160,53 @@ export default function ConversationPage() {
       supabase
         .from('direct_messages')
         .select('id, sender_id, receiver_id, content, is_read, created_at')
-        .or(
-          `and(sender_id.eq.${user.id},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${user.id})`
-        )
+        .or(`and(sender_id.eq.${user.id},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${user.id})`)
         .order('created_at', { ascending: true }),
     ])
 
     setOtherUser((other as OtherUser) ?? null)
     setMessages((msgs as Message[]) ?? [])
-
     await markMessagesAsRead(otherUserId, user.id)
-
     setLoading(false)
-
-    requestAnimationFrame(() => {
-      scrollToBottom('auto')
-    })
+    requestAnimationFrame(() => scrollToBottom('auto'))
   }, [markMessagesAsRead, otherUserId, router, scrollToBottom, supabase])
 
-  useEffect(() => {
-    loadConversation()
-  }, [loadConversation])
+  useEffect(() => { loadConversation() }, [loadConversation])
 
   useEffect(() => {
     if (!currentUserId || !otherUserId) return
-
     const conversationKey = [currentUserId, otherUserId].sort().join('-')
-
     const channel = supabase
       .channel(`conversation-${conversationKey}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'direct_messages',
-          filter: `or(and(sender_id.eq.${currentUserId},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${currentUserId}))`,
-        },
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'direct_messages',
+          filter: `or(and(sender_id.eq.${currentUserId},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${currentUserId}))` },
         async (payload) => {
           const incoming = payload.new as Message
-
           setMessages((prev) => {
             const alreadyExists = prev.some((m) => m.id === incoming.id)
             if (alreadyExists) return prev
             return [...prev, incoming]
           })
-
           if (incoming.sender_id === otherUserId && incoming.receiver_id === currentUserId) {
             await markMessagesAsRead(otherUserId, currentUserId)
           }
-
-          requestAnimationFrame(() => {
-            scrollToBottom('smooth')
-          })
+          requestAnimationFrame(() => scrollToBottom('smooth'))
         }
       )
       .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [currentUserId, markMessagesAsRead, otherUserId, scrollToBottom, supabase])
 
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [
-    currentUserId,
-    markMessagesAsRead,
-    otherUserId,
-    scrollToBottom,
-    supabase,
-  ])
+  useEffect(() => { resizeTextarea() }, [newMessage, resizeTextarea])
 
   useEffect(() => {
-    resizeTextarea()
-  }, [newMessage, resizeTextarea])
-
-  useEffect(() => {
-    const updateViewportHeight = () => {
-      const height = window.visualViewport?.height ?? window.innerHeight
-      if (pageRef.current) {
-        pageRef.current.style.height = `${height}px`
-      }
-    }
-
-    updateViewportHeight()
-
-    window.visualViewport?.addEventListener('resize', updateViewportHeight)
-    window.visualViewport?.addEventListener('scroll', updateViewportHeight)
-
-    return () => {
-      window.visualViewport?.removeEventListener('resize', updateViewportHeight)
-      window.visualViewport?.removeEventListener('scroll', updateViewportHeight)
-    }
-  }, [])
-
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      scrollToBottom('smooth')
-    })
+    requestAnimationFrame(() => scrollToBottom('smooth'))
   }, [messages, scrollToBottom])
 
   const handleSend = useCallback(async () => {
     const content = newMessage.trim()
     if (!content || sending || !currentUserId) return
-
     setSending(true)
 
     const tempMessage: Message = {
@@ -294,19 +220,11 @@ export default function ConversationPage() {
 
     setMessages((prev) => [...prev, tempMessage])
     setNewMessage('')
-
-    requestAnimationFrame(() => {
-      resizeTextarea()
-      scrollToBottom('smooth')
-    })
+    requestAnimationFrame(() => { resizeTextarea(); scrollToBottom('smooth') })
 
     const { data, error } = await supabase
       .from('direct_messages')
-      .insert({
-        sender_id: currentUserId,
-        receiver_id: otherUserId,
-        content,
-      })
+      .insert({ sender_id: currentUserId, receiver_id: otherUserId, content })
       .select('id, sender_id, receiver_id, content, is_read, created_at')
       .single()
 
@@ -317,21 +235,10 @@ export default function ConversationPage() {
       return
     }
 
-    setMessages((prev) =>
-      prev.map((m) => (m.id === tempMessage.id ? (data as Message) : m))
-    )
-
+    setMessages((prev) => prev.map((m) => (m.id === tempMessage.id ? (data as Message) : m)))
     setSending(false)
     inputRef.current?.focus()
-  }, [
-    currentUserId,
-    newMessage,
-    otherUserId,
-    resizeTextarea,
-    scrollToBottom,
-    sending,
-    supabase,
-  ])
+  }, [currentUserId, newMessage, otherUserId, resizeTextarea, scrollToBottom, sending, supabase])
 
   const handleTextareaKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -357,11 +264,8 @@ export default function ConversationPage() {
     : '?'
 
   return (
-    <div
-      ref={pageRef}
-      className="fixed inset-0 flex flex-col overflow-hidden bg-[#0b141a]"
-      style={{ height: '100svh' }}
-    >
+    <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-[#0b141a]">
+
       {/* Header */}
       <header className="z-20 flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
         <button
@@ -371,20 +275,12 @@ export default function ConversationPage() {
         >
           <ArrowLeft size={20} />
         </button>
-
-        <div
-          className={`flex h-10 w-10 flex-none items-center justify-center rounded-full text-sm font-bold ${otherUser ? avatarColor(otherUser.id) : 'bg-slate-700 text-slate-300'}`}
-        >
+        <div className={`flex h-10 w-10 flex-none items-center justify-center rounded-full text-sm font-bold ${otherUser ? avatarColor(otherUser.id) : 'bg-slate-700 text-slate-300'}`}>
           {initials}
         </div>
-
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-white">
-            {displayName}
-          </p>
-          <p className="truncate text-xs text-slate-400">
-            @{otherUser?.username ?? 'utilisateur'}
-          </p>
+          <p className="truncate text-sm font-semibold text-white">{displayName}</p>
+          <p className="truncate text-xs text-slate-400">@{otherUser?.username ?? 'utilisateur'}</p>
         </div>
       </header>
 
@@ -396,24 +292,21 @@ export default function ConversationPage() {
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
           backgroundColor: '#0b141a',
-          backgroundImage:
-            'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
           backgroundSize: '22px 22px',
-        }}
+          paddingBottom: 'env(safe-area-inset-bottom)',
+        } as React.CSSProperties}
       >
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 py-12">
             <p className="text-sm text-slate-400">Début de la conversation</p>
-            <p className="text-xs text-slate-500">
-              Envoyez un message pour commencer
-            </p>
+            <p className="text-xs text-slate-500">Envoyez un message pour commencer</p>
           </div>
         ) : (
           <div className="space-y-1">
             {messages.map((msg, index) => {
               const prev = messages[index - 1]
               const next = messages[index + 1]
-
               const isMe = msg.sender_id === currentUserId
               const isLastInGroup = !next || next.sender_id !== msg.sender_id
               const isFirstOfDay = !prev || !isSameDay(msg.created_at, prev.created_at)
@@ -428,32 +321,19 @@ export default function ConversationPage() {
                       </span>
                     </div>
                   )}
-
                   {showMiniTimestamp && !isFirstOfDay && (
                     <div className="my-2 flex justify-center">
-                      <span className="text-[10px] text-slate-500">
-                        {formatBubbleTime(msg.created_at)}
-                      </span>
+                      <span className="text-[10px] text-slate-500">{formatBubbleTime(msg.created_at)}</span>
                     </div>
                   )}
-
                   <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                    <div
-                      className={[
-                        'relative max-w-[82%] break-words px-3.5 py-2 text-[14px] leading-relaxed shadow-sm',
-                        isMe
-                          ? 'rounded-2xl rounded-br-md bg-[#005c4b] text-white'
-                          : 'rounded-2xl rounded-bl-md bg-[#202c33] text-slate-100',
-                        msg.id.startsWith('temp-') ? 'opacity-70' : '',
-                      ].join(' ')}
-                    >
+                    <div className={[
+                      'relative max-w-[82%] break-words px-3.5 py-2 text-[14px] leading-relaxed shadow-sm',
+                      isMe ? 'rounded-2xl rounded-br-md bg-[#005c4b] text-white' : 'rounded-2xl rounded-bl-md bg-[#202c33] text-slate-100',
+                      msg.id.startsWith('temp-') ? 'opacity-70' : '',
+                    ].join(' ')}>
                       <div className="whitespace-pre-wrap">{msg.content}</div>
-
-                      <div
-                        className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${
-                          isMe ? 'text-emerald-100/70' : 'text-slate-400'
-                        }`}
-                      >
+                      <div className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${isMe ? 'text-emerald-100/70' : 'text-slate-400'}`}>
                         <span>{formatBubbleTime(msg.created_at)}</span>
                         {isMe && isLastInGroup && (
                           <span>{msg.id.startsWith('temp-') ? '⏳' : '✓'}</span>
@@ -470,7 +350,7 @@ export default function ConversationPage() {
       </main>
 
       {/* Input */}
-      <footer className="sticky bottom-0 z-20 flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <footer className="sticky bottom-0 z-20 flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
         <div className="flex flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
           <textarea
             ref={inputRef}
@@ -483,14 +363,11 @@ export default function ConversationPage() {
             className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
           />
         </div>
-
         <button
           onClick={handleSend}
           disabled={!newMessage.trim() || sending}
           className={`flex h-11 w-11 flex-none items-center justify-center rounded-full transition ${
-            newMessage.trim()
-              ? 'bg-[#00a884] text-white hover:brightness-110'
-              : 'bg-[#2a3942] text-slate-500'
+            newMessage.trim() ? 'bg-[#00a884] text-white hover:brightness-110' : 'bg-[#2a3942] text-slate-500'
           } disabled:opacity-60`}
           aria-label="Envoyer"
         >
