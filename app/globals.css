@@ -342,3 +342,50 @@ body.capacitor-ios {
 .bottom-nav-native {
   padding-bottom: calc(0.625rem + var(--safe-area-bottom));
 }
+
+
+
+/* ── Burst d'étoiles spectaculaire ───────────────────────── */
+@keyframes starFly {
+  0%   { transform: translate(-50%, -50%) translate(0, 0) scale(0) rotate(0deg); opacity: 1; }
+  20%  { opacity: 1; transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(1.4) rotate(var(--rot)); }
+  80%  { opacity: 0.8; transform: translate(-50%, -50%) translate(calc(var(--tx) * 2.2), calc(var(--ty) * 2.2)) scale(var(--sz)) rotate(calc(var(--rot) * 2)); }
+  100% { opacity: 0; transform: translate(-50%, -50%) translate(calc(var(--tx) * 3), calc(var(--ty) * 3)) scale(0) rotate(calc(var(--rot) * 3)); }
+}
+@keyframes burstBg {
+  0%   { opacity: 0; }
+  15%  { opacity: 0.15; }
+  60%  { opacity: 0.08; }
+  100% { opacity: 0; }
+}
+@keyframes starPop {
+  0%   { transform: scale(0) rotate(0deg); opacity: 0; }
+  50%  { transform: scale(1.5) rotate(15deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.star-burst-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+}
+.star-burst-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(251,191,36,0.3), transparent 70%);
+  animation: burstBg 0.8s ease-out forwards;
+}
+.star-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  animation: starFly var(--dur, 0.9s) cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+  animation-delay: var(--delay, 0ms);
+  font-size: var(--fs, 24px);
+  line-height: 1;
+  filter: drop-shadow(0 0 6px var(--glow, gold));
+}
+.star-correct-icon {
+  animation: starPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}

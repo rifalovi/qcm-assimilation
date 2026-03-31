@@ -15,6 +15,45 @@ function isCTA(card: CardItem): card is { type: "cta"; ctaRole: "anonymous" | "f
   return (card as any).type === "cta";
 }
 
+
+// ── StarBurst spectaculaire — plein écran ────────────────────
+const EMOJIS = ["⭐","✨","💫","🌟","✦","·","*","★","✩","⚡"];
+const BURST_PARTICLES = Array.from({ length: 60 }, (_, i) => {
+  const angle = Math.random() * 360;
+  const rad = (angle * Math.PI) / 180;
+  const dist = 80 + Math.random() * 280;
+  return {
+    tx: `${Math.cos(rad) * dist}px`,
+    ty: `${Math.sin(rad) * dist}px`,
+    delay: `${Math.floor(Math.random() * 200)}ms`,
+    dur: `${0.5 + Math.random() * 0.7}s`,
+    fs: `${8 + Math.floor(Math.random() * 10)}px`,
+    rot: `${Math.floor(Math.random() * 720)}deg`,
+    sz: `${0.3 + Math.random() * 0.6}`,
+    glow: i % 4 === 0 ? "rgba(251,191,36,0.9)" : i % 4 === 1 ? "rgba(167,243,208,0.9)" : i % 4 === 2 ? "rgba(196,181,253,0.9)" : "rgba(251,146,60,0.9)",
+    emoji: EMOJIS[i % EMOJIS.length],
+  };
+});
+
+function StarBurst({ show }: { show: boolean }) {
+  if (!show) return null;
+  return (
+    <div className="star-burst-overlay">
+      <div className="star-burst-bg" />
+      {BURST_PARTICLES.map((p, i) => (
+        <span key={i} className="star-particle"
+          style={{
+            "--tx": p.tx, "--ty": p.ty, "--delay": p.delay,
+            "--dur": p.dur, "--fs": p.fs, "--rot": p.rot,
+            "--sz": p.sz, "--glow": p.glow,
+          } as React.CSSProperties}>
+          {p.emoji}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 // Composant carte CTA
 function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "freemium" | "premium" | "elite"; hasTheme: boolean; cardsCount: number }) {
   const isAnon = ctaRole === "anonymous";
@@ -308,7 +347,17 @@ function MCQView({
   onBack: () => void;
 }) {
   const [selected, setSelected] = useState<number | null>(null);
+  const [showBurst, setShowBurst] = useState(false);
   const revealed = selected !== null;
+  useEffect(() => {
+    console.log("burst check:", { revealed, selected, correct: variant.correct, match: selected === variant.correct });
+    if (revealed && selected !== null && selected === variant.correct) {
+      console.log("🎉 BURST TRIGGERED!");
+      setShowBurst(true);
+      const t = setTimeout(() => setShowBurst(false), 1000);
+      return () => clearTimeout(t);
+    }
+  }, [revealed]);
   const { accent, bg, border, glow, softText, gradientA, gradientB } = themeColor(theme);
 
   return (
@@ -391,7 +440,7 @@ function MCQView({
           return (
             <button
               key={i}
-              onClick={() => !revealed && setSelected(i)}
+              onClick={() => { if (revealed) return; setSelected(i); }}
               className="flex w-full items-center justify-between gap-3 rounded-[1.2rem] px-4 py-3.5 text-left transition-all duration-200 hover:translate-y-[-1px]"
               style={{
                 background: bgColor,
@@ -405,10 +454,11 @@ function MCQView({
             >
               <span>{opt}</span>
               {revealed && isCorrect && (
-                <span style={{ color: "#34d399" }}>
+                <span style={{ color: "#34d399" }} className="star-correct-icon">
                   <IconCheck />
                 </span>
               )}
+              {selected === i && isCorrect && <StarBurst show={showBurst} />}
               {revealed && isSelected && !isCorrect && (
                 <span style={{ color: "#ef4444" }}>
                   <IconX />
