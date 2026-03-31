@@ -207,7 +207,6 @@ export default function ConversationPage() {
       style={{
         height: '100dvh',
         paddingTop: 'env(safe-area-inset-top)',
-        paddingBottom: 'env(safe-area-inset-bottom)',
       }}
     >
       <header className="z-20 flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
@@ -292,7 +291,7 @@ export default function ConversationPage() {
         )}
       </main>
 
-      <footer className="z-20 flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 py-3">
+      <footer className="z-20 flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] pl-3 pr-3 pt-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
         <div className="flex flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
           <textarea
             ref={inputRef}
@@ -308,7 +307,7 @@ export default function ConversationPage() {
         <button
           onClick={handleSend}
           disabled={!newMessage.trim() || sending}
-          className={`flex h-11 w-11 flex-none items-center justify-center rounded-full transition ${newMessage.trim() ? 'bg-[#00a884] text-white hover:brightness-110' : 'bg-[#2a3942] text-slate-500'} disabled:opacity-60`}
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition ${newMessage.trim() ? 'bg-[#00a884] text-white hover:brightness-110' : 'bg-[#2a3942] text-slate-500'} disabled:opacity-60`}
           aria-label="Envoyer"
         >
           <Send size={18} />
