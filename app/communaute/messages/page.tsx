@@ -9,7 +9,6 @@ import { ArrowLeft, Plus, Search } from 'lucide-react'
 type Conversation = {
   other_user_id: string
   other_first_name: string | null
-  other_username: string
   other_last_name: string | null
   other_username: string
   last_message: string
@@ -101,8 +100,8 @@ export default function MessagesPage() {
         return {
           other_user_id: otherId,
           other_first_name: p?.first_name ?? null,
-          other_username: p?.username ?? '',
           other_last_name: p?.last_name ?? null,
+          other_username: (p as { username?: string })?.username ?? '',
           last_message: msg.content,
           last_message_at: msg.created_at,
           unread_count: unreadMap[otherId] ?? 0,
