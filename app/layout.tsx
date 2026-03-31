@@ -8,6 +8,12 @@ import BottomNav from "@/components/BottomNav"
 import CapacitorProvider from "@/components/CapacitorProvider"
 import ConditionalFooter from "@/components/ConditionalFooter";
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  interactiveWidget: "resizes-content",
+}
+
 export const metadata: Metadata = {
   title: "Cap Citoyen",
   description: "Préparez votre test civique français — QCM, audio, examen blanc",
