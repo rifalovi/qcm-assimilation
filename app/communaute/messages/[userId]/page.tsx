@@ -287,16 +287,19 @@ export default function ConversationPage() {
       {/* Messages */}
       <main
         ref={scrollRef}
-        style={{ flex: 1, overflowY: "auto", overflowX: "hidden", minHeight: 0 }} className="px-3 py-3"
         style={{
+          flex: 1,
+          overflowY: "auto",
+          overflowX: "hidden",
+          minHeight: 0,
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
           backgroundColor: '#0b141a',
           backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
           backgroundSize: '22px 22px',
           paddingBottom: 'env(safe-area-inset-bottom)',
-          minHeight: 0,
         } as React.CSSProperties}
+        className="px-3 py-3"
       >
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 py-12">
