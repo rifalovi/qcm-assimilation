@@ -148,7 +148,7 @@ export default function ConversationPage() {
   const initials = otherUser ? getInitials(otherUser.first_name, otherUser.last_name, otherUser.username) : 'M'
 
   return (
-    <div className="flex flex-col bg-slate-900" style={{ height: '100dvh' }}>
+    <div className="flex flex-col bg-slate-900" style={{ height: '100dvh', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}>
 
       {/* Header fixe — toujours visible */}
       <div className="flex-shrink-0 flex items-center gap-3 px-3 py-3 bg-slate-800 border-b border-slate-700 shadow-sm">
