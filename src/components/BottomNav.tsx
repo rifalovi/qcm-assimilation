@@ -28,6 +28,7 @@ export default function BottomNav() {
   const [showCommunityMenu, setShowCommunityMenu] = useState(false);
 
   if (pathname.startsWith('/admin')) return null
+  if (pathname.startsWith('/communaute/messages/')) return null
   if (pathname.match(/^\/communaute\/messages\/.+/)) return null
   const isPremium = ['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '')
 

@@ -9,7 +9,9 @@ import { ArrowLeft, Plus, Search } from 'lucide-react'
 type Conversation = {
   other_user_id: string
   other_first_name: string | null
+  other_username: string
   other_last_name: string | null
+  other_username: string
   last_message: string
   last_message_at: string
   unread_count: number
@@ -99,6 +101,7 @@ export default function MessagesPage() {
         return {
           other_user_id: otherId,
           other_first_name: p?.first_name ?? null,
+          other_username: p?.username ?? '',
           other_last_name: p?.last_name ?? null,
           last_message: msg.content,
           last_message_at: msg.created_at,
@@ -164,7 +167,7 @@ export default function MessagesPage() {
                 {getInitials(member.first_name, member.last_name)}
               </div>
               <div className="text-left">
-                <p className="text-sm font-medium text-white">{formatName(member.first_name, member.last_name)}</p>
+                <p className="text-sm font-medium text-white">{formatName(member.first_name, member.last_name, member.username)}</p>
                 <p className="text-xs text-slate-500">@{member.username}</p>
               </div>
             </button>
@@ -199,7 +202,7 @@ export default function MessagesPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline justify-between mb-0.5">
                   <p className={`text-sm ${conv.unread_count > 0 ? 'font-semibold text-white' : 'font-medium text-white'}`}>
-                    {formatName(conv.other_first_name, conv.other_last_name)}
+                    {formatName(conv.other_first_name, conv.other_last_name, conv.other_username)}
                   </p>
                   <span className="text-xs text-slate-500 flex-shrink-0 ml-2">{timeAgo(conv.last_message_at)}</span>
                 </div>
