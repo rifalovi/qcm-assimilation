@@ -69,7 +69,7 @@ export default function RootLayout({
         <meta name="twitter:image" content="https://cap-citoyen.fr/og-image.png" />
       </head>
       <link rel="privacy-policy" href="https://cap-citoyen.fr/mentions-legales" />
-      <body className="min-h-full text-slate-100 antialiased pb-16">
+      <body className="min-h-full text-slate-100 antialiased">
         <UserProvider>
         <CapacitorProvider>
         <Suspense fallback={null}>

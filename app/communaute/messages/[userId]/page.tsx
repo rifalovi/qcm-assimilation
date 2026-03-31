@@ -203,16 +203,11 @@ export default function ConversationPage() {
 
   return (
     <div
-      className="flex flex-col bg-[#0b141a]"
+      className="chat-page flex flex-col bg-[#0b141a]"
       style={{
         height: '100dvh',
-        marginBottom: '-4rem', // neutralise pb-16 du body
         paddingTop: 'env(safe-area-inset-top)',
         overflow: 'hidden',
-        width: '100vw',
-        position: 'fixed',
-        top: 0,
-        left: 0,
       }}
     >
       <header className="z-20 flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
