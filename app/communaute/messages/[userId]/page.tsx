@@ -35,7 +35,6 @@ const AVATAR_COLORS = [
 ]
 
 const HEADER_HEIGHT = 76
-const FOOTER_HEIGHT = 84
 
 function avatarColor(id: string) {
   if (!id) return AVATAR_COLORS[0]
@@ -131,10 +130,12 @@ export default function ConversationPage() {
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
+  const [footerHeight, setFooterHeight] = useState(84)
 
   const pageRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const footerRef = useRef<HTMLElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
@@ -274,6 +275,30 @@ export default function ConversationPage() {
     }
   }, [])
 
+  useEffect(() => {
+    const el = footerRef.current
+    if (!el) return
+
+    const update = () => {
+      const h = el.getBoundingClientRect().height
+      if (h > 0) setFooterHeight(Math.ceil(h))
+    }
+
+    update()
+
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+
+    window.addEventListener('resize', update)
+    window.addEventListener('orientationchange', update)
+
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', update)
+      window.removeEventListener('orientationchange', update)
+    }
+  }, [])
+
   const handleSend = useCallback(async () => {
     const content = newMessage.trim()
     if (!content || sending || !currentUserId) return
@@ -403,7 +428,7 @@ export default function ConversationPage() {
         className="absolute left-0 right-0 overflow-y-auto overflow-x-hidden px-3 py-3"
         style={{
           top: `${HEADER_HEIGHT}px`,
-          bottom: `${FOOTER_HEIGHT}px`,
+          bottom: `${footerHeight}px`,
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
           backgroundColor: '#0b141a',
@@ -481,14 +506,14 @@ export default function ConversationPage() {
       </main>
 
       <footer
+        ref={footerRef}
         className="absolute left-0 right-0 z-40 border-t border-white/10 bg-[#202c33]"
         style={{
           bottom: 0,
-          minHeight: `${FOOTER_HEIGHT}px`,
-          paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
+                    paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
           paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
-          paddingTop: '0.75rem',
-          paddingBottom: `max(0.75rem, ${bottomInset})`,
+          paddingTop: '0.5rem',
+          paddingBottom: `max(0.5rem, ${bottomInset})`,
         }}
       >
         <div className="flex items-end gap-2">
