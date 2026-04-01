@@ -1,18 +1,16 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft } from 'lucide-react'
-import MediaInput from '@/components/community/MediaInput'
-import MediaDisplay from '@/components/community/MediaDisplay'
+import { ArrowLeft, Send } from 'lucide-react'
+import type { RealtimePostgresInsertPayload } from '@supabase/supabase-js'
 
 type Message = {
   id: string
   sender_id: string
   receiver_id: string
   content: string
-  attachments?: string[]
   is_read: boolean
   created_at: string
 }
@@ -24,223 +22,341 @@ type OtherUser = {
   username: string
 }
 
-const AVATAR_COLORS = ['bg-teal-900/60 text-teal-300','bg-orange-900/60 text-orange-300','bg-blue-900/60 text-blue-300','bg-pink-900/60 text-pink-300','bg-purple-900/60 text-purple-300']
-function avatarColor(id: string) { const s = id.charCodeAt(0)+id.charCodeAt(id.length-1); return AVATAR_COLORS[s%AVATAR_COLORS.length] }
-function getInitials(fn: string|null, ln: string|null) { return ((fn?.charAt(0)??'')+(ln?.charAt(0)??'')).toUpperCase()||'M' }
-function formatName(fn: string|null, ln: string|null, username?: string) { if(!fn&&!ln) return username ?? 'Membre'; return `${fn??''} ${ln?ln.charAt(0).toUpperCase()+'.':''}`.trim() }
+const AVATAR_COLORS = [
+  'bg-teal-900/60 text-teal-300',
+  'bg-orange-900/60 text-orange-300',
+  'bg-blue-900/60 text-blue-300',
+  'bg-pink-900/60 text-pink-300',
+  'bg-purple-900/60 text-purple-300',
+]
 
-function formatTime(dateStr: string) {
-  const d = new Date(dateStr)
-  const now = new Date()
-  const isToday = d.toDateString() === now.toDateString()
-  if (isToday) return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+function avatarColor(id: string) {
+  const s = id.charCodeAt(0) + id.charCodeAt(id.length - 1)
+  return AVATAR_COLORS[s % AVATAR_COLORS.length]
+}
+
+function getInitials(fn: string | null, ln: string | null) {
+  return ((fn?.charAt(0) ?? '') + (ln?.charAt(0) ?? '')).toUpperCase() || 'M'
+}
+
+function formatName(fn: string | null, ln: string | null, username?: string) {
+  if (!fn && !ln) return username ?? 'Membre'
+  return `${fn ?? ''} ${ln ? ln.charAt(0).toUpperCase() + '.' : ''}`.trim()
+}
+
+function isSameDay(a: string, b: string) {
+  const da = new Date(a), db = new Date(b)
+  return da.getFullYear() === db.getFullYear() &&
+    da.getMonth() === db.getMonth() &&
+    da.getDate() === db.getDate()
+}
+
+function formatDayLabel(date: string) {
+  const d = new Date(date)
+  const today = new Date()
+  const yesterday = new Date()
+  yesterday.setDate(today.getDate() - 1)
+  if (d.toDateString() === today.toDateString()) return "Aujourd'hui"
+  if (d.toDateString() === yesterday.toDateString()) return 'Hier'
+  return d.toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long' })
+}
+
+function formatBubbleTime(date: string) {
+  return new Date(date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+}
+
+function showSeparator(current: Message, previous?: Message) {
+  if (!previous) return true
+  return new Date(current.created_at).getTime() - new Date(previous.created_at).getTime() > 5 * 60 * 1000
 }
 
 export default function ConversationPage() {
   const router = useRouter()
   const params = useParams()
-  const otherUserId = params.userId as string
-  const supabase = createClient()
+  // Trailing slash strip — next.config trailingSlash:true
+  const otherUserId = (params.userId as string).replace(/\/$/, '')
+  const supabase = useMemo(() => createClient(), [])
 
-  const [currentUserId, setCurrentUserId] = useState('')
+  // null = auth pas encore résolue → évite le flash bulles à gauche
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [otherUser, setOtherUser] = useState<OtherUser | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true)
+
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
-  // Scroll automatique vers le bas
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
+    bottomRef.current?.scrollIntoView({ behavior, block: 'end' })
+  }, [])
+
+  const resizeTextarea = useCallback(() => {
+    const el = inputRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = `${Math.min(el.scrollHeight, 110)}px`
+  }, [])
+
+  // ─── CLEF DU SUCCÈS ───────────────────────────────────────────────────────
+  // useEffect avec cleanup — neutralise le layout global UNIQUEMENT sur cette
+  // page, sans toucher aux fichiers globaux (layout.tsx, globals.css, etc.)
+  // Le cleanup restore tout quand on quitte la page → autres pages non affectées
+  // ──────────────────────────────────────────────────────────────────────────
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    const globalMain = document.querySelector('body > div > div > main') as HTMLElement | null
+    const body = document.body
+
+    const prevMainCss = globalMain?.style.cssText ?? ''
+    const prevBodyPb = body.style.paddingBottom
+    const prevBodyOverflow = body.style.overflow
+
+    if (globalMain) {
+      globalMain.style.cssText = 'flex:none;height:0;min-height:0;overflow:visible;padding:0;margin:0'
+    }
+    body.style.paddingBottom = '0'
+    body.style.overflow = 'hidden'
+
+    return () => {
+      if (globalMain) globalMain.style.cssText = prevMainCss
+      body.style.paddingBottom = prevBodyPb
+      body.style.overflow = prevBodyOverflow
+    }
+  }, [])
+
+  useEffect(() => {
+    resizeTextarea()
+  }, [newMessage, resizeTextarea])
+
+  useEffect(() => {
+    requestAnimationFrame(() => scrollToBottom('smooth'))
+  }, [messages, scrollToBottom])
 
   useEffect(() => {
     async function load() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
-      setCurrentUserId(user.id)
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) { router.push('/login'); return }
+        setCurrentUserId(user.id)
 
-      // Charge le profil de l'interlocuteur
-      const { data: other } = await supabase
-        .from('profiles')
-        .select('id, first_name, last_name, username')
-        .eq('id', otherUserId)
-        .single()
-      setOtherUser(other)
+        const [{ data: other, error: profileError }, { data: msgs }] = await Promise.all([
+          supabase.from('profiles')
+            .select('id, first_name, last_name, username')
+            .eq('id', otherUserId)
+            .single(),
+          supabase.from('direct_messages')
+            .select('id, sender_id, receiver_id, content, is_read, created_at')
+            .or(`and(sender_id.eq.${user.id},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${user.id})`)
+            .order('created_at', { ascending: true }),
+        ])
 
-      // Charge l'historique des messages
-      const { data: msgs } = await supabase
-        .from('direct_messages')
-        .select('id, sender_id, receiver_id, content, is_read, created_at')
-        .or(`and(sender_id.eq.${user.id},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${user.id})`)
-        .order('created_at', { ascending: true })
+        if (profileError) console.error('[Chat] profile error:', profileError.message)
+        setOtherUser(other ?? null)
+        setMessages((msgs as Message[]) ?? [])
 
-      setMessages((msgs as Message[]) ?? [])
+        await supabase.from('direct_messages')
+          .update({ is_read: true })
+          .eq('sender_id', otherUserId)
+          .eq('receiver_id', user.id)
+          .eq('is_read', false)
 
-      // Marque les messages reçus comme lus
-      await supabase
-        .from('direct_messages')
-        .update({ is_read: true })
-        .eq('sender_id', otherUserId)
-        .eq('receiver_id', user.id)
-        .eq('is_read', false)
-
-      setLoading(false)
-
-      // ── Supabase Realtime ──────────────────────────────────
-      // S'abonne aux nouveaux messages de cette conversation
-      const channel = supabase
-        .channel(`conv-${[user.id, otherUserId].sort().join('-')}`)
-        .on('postgres_changes', {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'direct_messages',
-          filter: `receiver_id=eq.${user.id}`,
-        }, async (payload) => {
-          const msg = payload.new as Message
-          // Filtre : seulement les messages de cet interlocuteur
-          if (msg.sender_id !== otherUserId) return
-          setMessages((m) => [...m, msg])
-          // Marque comme lu immédiatement
-          await supabase.from('direct_messages').update({ is_read: true }).eq('id', msg.id)
-        })
-        .subscribe()
-
-      // Cleanup : se désabonne quand on quitte la page
-      return () => { supabase.removeChannel(channel) }
+        requestAnimationFrame(() => scrollToBottom('auto'))
+      } catch (err) {
+        console.error('[Chat] load error:', err)
+      } finally {
+        setLoading(false)
+      }
     }
     load()
-  }, [otherUserId, router, supabase])
+  }, [otherUserId, router, scrollToBottom, supabase])
 
-  async function handleSend() {
-    if (!newMessage.trim() || sending) return
+  useEffect(() => {
+    if (!currentUserId || !otherUserId) return
+    const key = [currentUserId, otherUserId].sort().join('-')
+    const channel = supabase.channel(`conv-${key}`)
+      .on('postgres_changes', {
+        event: 'INSERT', schema: 'public', table: 'direct_messages',
+        filter: `receiver_id=eq.${currentUserId}`,
+      }, async (payload: RealtimePostgresInsertPayload<Message>) => {
+        const msg = payload.new as Message
+        if (msg.sender_id !== otherUserId) return
+        setMessages((m) => {
+          if (m.some((x) => x.id === msg.id)) return m
+          return [...m, msg]
+        })
+        await supabase.from('direct_messages').update({ is_read: true }).eq('id', msg.id)
+        requestAnimationFrame(() => scrollToBottom('smooth'))
+      })
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [currentUserId, otherUserId, scrollToBottom, supabase])
+
+  const handleSend = useCallback(async () => {
+    const content = newMessage.trim()
+    if (!content || sending || !currentUserId) return
     setSending(true)
 
     const optimistic: Message = {
       id: `temp-${Date.now()}`,
       sender_id: currentUserId,
       receiver_id: otherUserId,
-      content: newMessage.trim(),
+      content,
       is_read: false,
       created_at: new Date().toISOString(),
     }
-
-    // Optimistic update
     setMessages((m) => [...m, optimistic])
     setNewMessage('')
+    requestAnimationFrame(() => { resizeTextarea(); scrollToBottom('smooth') })
 
-    const { data, error } = await supabase
-      .from('direct_messages')
-      .insert({ sender_id: currentUserId, receiver_id: otherUserId, content: optimistic.content })
+    const { data, error } = await supabase.from('direct_messages')
+      .insert({ sender_id: currentUserId, receiver_id: otherUserId, content })
       .select('id, sender_id, receiver_id, content, is_read, created_at')
       .single()
 
     if (!error && data) {
-      // Remplace le message optimiste par le vrai
       setMessages((m) => m.map((msg) => msg.id === optimistic.id ? data as Message : msg))
     } else {
-      // Rollback si erreur
       setMessages((m) => m.filter((msg) => msg.id !== optimistic.id))
-      setNewMessage(optimistic.content)
+      setNewMessage(content)
     }
-
     setSending(false)
     inputRef.current?.focus()
+  }, [currentUserId, newMessage, otherUserId, resizeTextarea, scrollToBottom, sending, supabase])
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-[#0b141a] z-50">
+        <p className="text-sm text-slate-400">Chargement…</p>
+      </div>
+    )
   }
 
-  if (loading) return <main className="flex flex-col h-screen max-w-lg mx-auto px-4 py-16 items-center justify-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
+  const displayName = formatName(otherUser?.first_name ?? null, otherUser?.last_name ?? null, otherUser?.username)
+  const initials = getInitials(otherUser?.first_name ?? null, otherUser?.last_name ?? null)
 
   return (
-    <main className="flex flex-col max-w-lg mx-auto" style={{ height: "calc(100svh - 120px)", position: "fixed", top: "56px", left: 0, right: 0, bottom: "64px", maxWidth: "512px", margin: "0 auto" }}>
-
-      {/* Header fixe */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-700 bg-slate-900 flex-shrink-0">
-        <button onClick={() => router.push('/communaute/messages')}
-          className="text-slate-400 hover:text-slate-200 transition-colors">
-          <ArrowLeft size={18} />
+    // position: fixed; inset: 0 → occupe tout l'écran visible
+    // indépendamment du layout global
+    // z-40 → au-dessus du contenu mais sous les modals
+    <div
+      className="fixed inset-0 z-40 flex flex-col bg-[#0b141a]"
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+    >
+      {/* ── HEADER ── */}
+      <header className="flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
+        <button
+          onClick={() => router.push('/communaute/messages')}
+          className="rounded-full p-2 text-slate-300 transition hover:bg-white/10"
+          aria-label="Retour"
+        >
+          <ArrowLeft size={20} />
         </button>
-        {otherUser && (
-          <>
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium ${avatarColor(otherUser.id)}`}>
-              {getInitials(otherUser.first_name, otherUser.last_name)}
-            </div>
-            <div>
-              <p className="text-sm font-medium text-white">{formatName(otherUser.first_name, otherUser.last_name, otherUser.username)}</p>
-              <p className="text-xs text-slate-500">@{otherUser.username}</p>
-            </div>
-          </>
-        )}
-      </div>
+        <div className={`flex h-10 w-10 flex-none items-center justify-center rounded-full text-sm font-bold ${otherUser ? avatarColor(otherUser.id) : 'bg-slate-700 text-slate-300'}`}>
+          {initials}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-white">{displayName}</p>
+          <p className="truncate text-xs text-slate-400">@{otherUser?.username ?? 'utilisateur'}</p>
+        </div>
+      </header>
 
-      {/* Zone messages scrollable */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0">
-        {messages.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-slate-500 text-sm">Début de la conversation</p>
-            <p className="text-slate-600 text-xs mt-1">Envoyez un message pour démarrer</p>
+      {/* ── MESSAGES ── */}
+      <main
+        className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-3 [scrollbar-width:none]"
+        style={{
+          WebkitOverflowScrolling: 'touch',
+          overscrollBehavior: 'contain',
+          backgroundColor: '#0b141a',
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
+          backgroundSize: '22px 22px',
+        }}
+      >
+        {messages.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center gap-2">
+            <p className="text-sm text-slate-400">Début de la conversation</p>
+            <p className="text-xs text-slate-500">Envoyez un message pour commencer</p>
+          </div>
+        ) : (
+          <div className="w-full space-y-1">
+            {currentUserId === null ? (
+              <div className="flex justify-center py-8">
+                <span className="text-xs text-slate-500">Chargement…</span>
+              </div>
+            ) : messages.map((msg, index) => {
+              const prev = messages[index - 1]
+              const next = messages[index + 1]
+              const isMe = msg.sender_id === currentUserId
+              const isLastInGroup = !next || next.sender_id !== msg.sender_id
+              const isFirstOfDay = !prev || !isSameDay(msg.created_at, prev.created_at)
+              const showSep = showSeparator(msg, prev)
+
+              return (
+                <div key={msg.id}>
+                  {isFirstOfDay && (
+                    <div className="my-3 flex justify-center">
+                      <span className="rounded-lg bg-[#182229] px-3 py-1 text-[11px] text-slate-300 shadow-sm">
+                        {formatDayLabel(msg.created_at)}
+                      </span>
+                    </div>
+                  )}
+                  {showSep && !isFirstOfDay && (
+                    <div className="my-2 flex justify-center">
+                      <span className="text-[10px] text-slate-500">{formatBubbleTime(msg.created_at)}</span>
+                    </div>
+                  )}
+                  <div className={`flex w-full ${isMe ? 'justify-end' : 'justify-start'}`}>
+                    <div
+                      className={[
+                        'max-w-[78%] break-words px-3.5 py-2 text-[14px] leading-relaxed shadow-sm',
+                        isMe ? 'rounded-2xl rounded-br-md bg-[#005c4b] text-white' : 'rounded-2xl rounded-bl-md bg-[#202c33] text-slate-100',
+                        msg.id.startsWith('temp-') ? 'opacity-70' : '',
+                      ].join(' ')}
+                      style={{ wordBreak: 'break-word' }}
+                    >
+                      <div className="whitespace-pre-wrap">{msg.content}</div>
+                      <div className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${isMe ? 'text-emerald-100/70' : 'text-slate-400'}`}>
+                        <span>{formatBubbleTime(msg.created_at)}</span>
+                        {isMe && isLastInGroup && (
+                          <span>{msg.id.startsWith('temp-') ? '⏳' : '✓'}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+            <div ref={bottomRef} />
           </div>
         )}
+      </main>
 
-        {messages.map((msg, i) => {
-          const isMe = msg.sender_id === currentUserId
-          const prevMsg = messages[i - 1]
-          const showTime = !prevMsg || new Date(msg.created_at).getTime() - new Date(prevMsg.created_at).getTime() > 5 * 60 * 1000
-
-          return (
-            <div key={msg.id}>
-              {showTime && (
-                <p className="text-center text-[10px] text-slate-600 my-2">{formatTime(msg.created_at)}</p>
-              )}
-              <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
-                  isMe
-                    ? 'bg-teal-600 text-white rounded-br-sm'
-                    : 'bg-slate-700 text-slate-100 rounded-bl-sm'
-                } ${msg.id.startsWith('temp-') ? 'opacity-70' : ''}`}>
-                  {msg.content}
-                  {msg.attachments && msg.attachments.length > 0 && <MediaDisplay attachments={msg.attachments} content={msg.content} />}
-                </div>
-              </div>
-            </div>
-          )
-        })}
-        <div ref={bottomRef} />
-      </div>
-
-      {/* Zone de saisie fixe */}
-      <div className="px-4 py-3 border-t border-slate-700 bg-slate-900 flex-shrink-0">
-        <MediaInput
-          onSubmit={async (content, attachments) => {
-            if (!content.trim() && attachments.length === 0) return
-            const optimistic: Message = {
-              id: `temp-${Date.now()}`,
-              sender_id: currentUserId,
-              receiver_id: otherUserId,
-              content,
-              attachments,
-              is_read: false,
-              created_at: new Date().toISOString(),
-            }
-            setMessages((m) => [...m, optimistic])
-            const { data, error } = await supabase
-              .from('direct_messages')
-              .insert({ sender_id: currentUserId, receiver_id: otherUserId, content, attachments })
-              .select('id, sender_id, receiver_id, content, attachments, is_read, created_at')
-              .single()
-            if (!error && data) {
-              setMessages((m) => m.map((msg) => msg.id === optimistic.id ? data as Message : msg))
-            } else {
-              setMessages((m) => m.filter((msg) => msg.id !== optimistic.id))
-            }
-          }}
-          placeholder="Message…"
-          submitLabel="Envoyer"
-          rows={1}
-        />
-      </div>
-    </main>
+      {/* ── FOOTER ── */}
+      <footer
+        className="flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 pt-3"
+        style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+      >
+        <div className="flex flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
+          <textarea
+            ref={inputRef}
+            value={newMessage}
+            onChange={(e) => { setNewMessage(e.target.value); resizeTextarea() }}
+            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
+            rows={1}
+            maxLength={2000}
+            placeholder="Message"
+            className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
+          />
+        </div>
+        <button
+          onClick={handleSend}
+          disabled={!newMessage.trim() || sending}
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition ${newMessage.trim() ? 'bg-[#00a884] text-white hover:brightness-110' : 'bg-[#2a3942] text-slate-500'} disabled:opacity-60`}
+          aria-label="Envoyer"
+        >
+          <Send size={18} />
+        </button>
+      </footer>
+    </div>
   )
 }

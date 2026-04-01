@@ -253,6 +253,17 @@ export default function HomePage() {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   useEffect(() => {
+    document.documentElement.style.overflowY = "auto";
+    document.body.style.overflowY = "auto";
+    document.body.style.position = "static";
+    return () => {
+      document.documentElement.style.overflowY = "auto";
+      document.body.style.overflowY = "auto";
+      document.body.style.position = "static";
+    };
+  }, []);
+
+  useEffect(() => {
     const u = loadUserLocal();
     if (u) { setPseudo(u.pseudo); setEmail(u.email); setPseudoDraft(u.pseudo); setEmailDraft(u.email); }
     const t = setTimeout(() => setHeroVisible(true), 50);

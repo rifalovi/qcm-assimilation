@@ -38,7 +38,7 @@ export async function loadLastResultFromSupabase(
       .limit(1);
 
     if (error || !data || data.length === 0) return null;
-    return data[0]; // ✅ premier résultat au lieu de .single()
+    return data[0];
   } catch {
     return null;
   }
@@ -50,28 +50,47 @@ export async function hasAnyResult(email: string): Promise<boolean> {
       .from("results")
       .select("id", { count: "exact", head: true })
       .eq("email", email.trim().toLowerCase());
+
     return (count ?? 0) > 0;
   } catch {
     return false;
   }
 }
+
 type SaveFeedbackPayload = {
   email?: string;
   pseudo?: string;
   rating: number;
   comment?: string;
   page: string;
-  score_percent?: number;
+  score_percent?: number | null;
+  user_id?: string | null;
 };
 
 export async function saveFeedbackToSupabase(payload: SaveFeedbackPayload) {
   try {
-    const { error } = await supabase.from("feedbacks").insert([payload]);
-    if (error) console.error("Supabase feedback error:", error.message);
+    const cleanPayload = {
+      email: payload.email?.trim().toLowerCase() || "",
+      pseudo: payload.pseudo?.trim() || "Anonyme",
+      rating: payload.rating,
+      comment: payload.comment?.trim() || "",
+      page: payload.page?.trim() || "app",
+      score_percent: payload.score_percent ?? null,
+      user_id: payload.user_id ?? null,
+    };
+
+    const { error } = await supabase.from("feedbacks").insert([cleanPayload]);
+
+    if (error) {
+      console.error("Supabase feedback error:", error.message);
+      throw error;
+    }
   } catch (e) {
     console.error("Supabase feedback unreachable:", e);
+    throw e;
   }
 }
+
 export async function loadLastResultsFromSupabase(
   email: string,
   mode: "train" | "exam",
@@ -92,6 +111,7 @@ export async function loadLastResultsFromSupabase(
     return [];
   }
 }
+
 export async function loadLeaderboard(mode: "train" | "exam", limit = 10) {
   try {
     const { data, error } = await supabase
@@ -105,7 +125,6 @@ export async function loadLeaderboard(mode: "train" | "exam", limit = 10) {
 
     if (error || !data) return [];
 
-    // Garder seulement le meilleur score par email
     const best = new Map<string, typeof data[0]>();
     for (const row of data) {
       const existing = best.get(row.email);
