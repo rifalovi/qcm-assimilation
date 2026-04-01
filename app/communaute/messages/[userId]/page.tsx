@@ -121,13 +121,11 @@ export default function ConversationPage() {
       globalHeader.style.cssText = 'display:none'
     }
     body.style.paddingBottom = '0'
-    body.style.overflow = 'hidden'
 
     return () => {
       if (globalMain) globalMain.style.cssText = prevMainCss
       if (globalHeader) globalHeader.style.cssText = prevHeaderCss
       body.style.paddingBottom = prevBodyPb
-      body.style.overflow = prevBodyOverflow
     }
   }, [])
 
