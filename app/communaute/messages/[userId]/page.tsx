@@ -345,7 +345,7 @@ export default function ConversationPage() {
             rows={1}
             maxLength={2000}
             placeholder="Message"
-            className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-sm text-white placeholder:text-slate-400 focus:outline-none"
+            className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-white placeholder:text-slate-400 focus:outline-none" style={{fontSize: "16px"}}
           />
         </div>
         <button
