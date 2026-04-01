@@ -240,7 +240,7 @@ export default function ConversationPage() {
     // indépendamment du layout global
     // z-40 → au-dessus du contenu mais sous les modals
     <div
-      className="fixed inset-0 z-40 flex flex-col bg-[#0b141a]"
+      className="fixed inset-0 z-40 flex flex-col bg-[#0b141a] overflow-hidden w-screen"
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       {/* ── HEADER ── */}
@@ -333,7 +333,7 @@ export default function ConversationPage() {
 
       {/* ── FOOTER ── */}
       <footer
-        className="flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 pt-3"
+        className="flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 pt-3 overflow-hidden"
         style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
       >
         <div className="flex flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
@@ -351,7 +351,7 @@ export default function ConversationPage() {
         <button
           onClick={handleSend}
           disabled={!newMessage.trim() || sending}
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition ${newMessage.trim() ? 'bg-[#00a884] text-white hover:brightness-110' : 'bg-[#2a3942] text-slate-500'} disabled:opacity-60`}
+          style={{minWidth:'2.75rem', minHeight:'2.75rem', width:'2.75rem', height:'2.75rem'}} className={`flex shrink-0 items-center justify-center rounded-full transition ${newMessage.trim() ? 'bg-[#00a884] text-white hover:brightness-110' : 'bg-[#2a3942] text-slate-500'} disabled:opacity-60`}
           aria-label="Envoyer"
         >
           <Send size={18} />
