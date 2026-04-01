@@ -104,30 +104,7 @@ export default function ConversationPage() {
   // page, sans toucher aux fichiers globaux (layout.tsx, globals.css, etc.)
   // Le cleanup restore tout quand on quitte la page → autres pages non affectées
   // ──────────────────────────────────────────────────────────────────────────
-  useEffect(() => {
-    const globalMain = document.querySelector('body > div > div > main') as HTMLElement | null
-    const globalHeader = document.querySelector('body > div > div > header, body > div > div > nav') as HTMLElement | null
-    const body = document.body
 
-    const prevMainCss = globalMain?.style.cssText ?? ''
-    const prevHeaderCss = globalHeader?.style.cssText ?? ''
-    const prevBodyPb = body.style.paddingBottom
-    const prevBodyOverflow = body.style.overflow
-
-    if (globalMain) {
-      globalMain.style.cssText = 'flex:none;height:0;min-height:0;overflow:visible;padding:0;margin:0'
-    }
-    if (globalHeader) {
-      globalHeader.style.cssText = 'display:none'
-    }
-    body.style.paddingBottom = '0'
-
-    return () => {
-      if (globalMain) globalMain.style.cssText = prevMainCss
-      if (globalHeader) globalHeader.style.cssText = prevHeaderCss
-      body.style.paddingBottom = prevBodyPb
-    }
-  }, [])
 
   useEffect(() => {
     resizeTextarea()
