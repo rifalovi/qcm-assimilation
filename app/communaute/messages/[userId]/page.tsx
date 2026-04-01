@@ -318,10 +318,10 @@ export default function ConversationPage() {
 
       {/* ── FOOTER ── */}
       <footer
-        className="flex flex-none items-end gap-2 border-t border-white/10 bg-[#202c33] px-3 pt-3 overflow-hidden"
-        style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+        className="flex flex-none items-center gap-2 border-t border-white/10 bg-[#202c33] px-3 py-2 overflow-hidden"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
-        <div className="flex flex-1 items-end rounded-3xl bg-[#2a3942] px-3 py-2">
+        <div className="flex flex-1 items-center rounded-3xl bg-[#2a3942] px-3 py-1.5">
           <textarea
             ref={inputRef}
             value={newMessage}

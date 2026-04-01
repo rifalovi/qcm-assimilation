@@ -10,6 +10,7 @@ import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalShell from "@/components/ConditionalShell";
 
 export const viewport = {
+  colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
   interactiveWidget: "resizes-content",
