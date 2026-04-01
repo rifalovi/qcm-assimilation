@@ -133,6 +133,7 @@ export default function ConversationPage() {
         ])
 
         if (profileError) console.error('[Chat] profile error:', profileError.message)
+        console.log('[Chat] other:', JSON.stringify(other))
         setOtherUser(other ?? null)
         setMessages((msgs as Message[]) ?? [])
 
@@ -158,7 +159,8 @@ export default function ConversationPage() {
     const channel = supabase.channel(`conv-${key}`)
       .on('postgres_changes', {
         event: 'INSERT', schema: 'public', table: 'direct_messages',
-        filter: `receiver_id=eq.${currentUserId}`,
+        filter: `or(and(sender_id.eq.${currentUserId},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${currentUserId}))`,
+        // Écoute les deux sens de la conversation
       }, async (payload: RealtimePostgresInsertPayload<Message>) => {
         const msg = payload.new as Message
         if (msg.sender_id !== otherUserId) return

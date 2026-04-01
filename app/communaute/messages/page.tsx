@@ -78,7 +78,7 @@ export default function MessagesPage() {
 
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('id, first_name, last_name')
+        .select('id, first_name, last_name, username')
         .in('id', otherIds)
 
       // Compte les non-lus par conversation
