@@ -169,7 +169,9 @@ export default function ConversationPage() {
         await supabase.from('direct_messages').update({ is_read: true }).eq('id', msg.id)
         requestAnimationFrame(() => scrollToBottom('smooth'))
       })
-      .subscribe()
+      .subscribe((status) => {
+        console.log('[Realtime] status:', status)
+      })
     return () => { supabase.removeChannel(channel) }
   }, [currentUserId, otherUserId, scrollToBottom, supabase])
 
