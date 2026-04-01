@@ -106,20 +106,26 @@ export default function ConversationPage() {
   // ──────────────────────────────────────────────────────────────────────────
   useEffect(() => {
     const globalMain = document.querySelector('body > div > div > main') as HTMLElement | null
+    const globalHeader = document.querySelector('body > div > div > header, body > div > div > nav') as HTMLElement | null
     const body = document.body
 
     const prevMainCss = globalMain?.style.cssText ?? ''
+    const prevHeaderCss = globalHeader?.style.cssText ?? ''
     const prevBodyPb = body.style.paddingBottom
     const prevBodyOverflow = body.style.overflow
 
     if (globalMain) {
       globalMain.style.cssText = 'flex:none;height:0;min-height:0;overflow:visible;padding:0;margin:0'
     }
+    if (globalHeader) {
+      globalHeader.style.cssText = 'display:none'
+    }
     body.style.paddingBottom = '0'
     body.style.overflow = 'hidden'
 
     return () => {
       if (globalMain) globalMain.style.cssText = prevMainCss
+      if (globalHeader) globalHeader.style.cssText = prevHeaderCss
       body.style.paddingBottom = prevBodyPb
       body.style.overflow = prevBodyOverflow
     }
