@@ -38,7 +38,7 @@ export default function AppHeader() {
 
 
 
-  if (pathname === "/" || pathname.startsWith("/admin")) return null;
+  if (pathname === "/" || pathname.startsWith("/admin") || pathname.match(/^\/communaute\/messages\/.+/)) return null;
 
   const roleLabel = role === "elite" ? "👑 Élite" : role === "premium" ? "🎯 Premium" : role === "freemium" ? "✨ Freemium" : null;
 

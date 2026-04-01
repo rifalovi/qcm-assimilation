@@ -226,6 +226,24 @@ export default function ConversationPage() {
     >
 
 
+      {/* ── HEADER ── */}
+      <header className="flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
+        <button
+          onClick={() => router.push('/communaute/messages')}
+          className="rounded-full p-2 text-slate-300 transition hover:bg-white/10"
+          aria-label="Retour"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <div className={`flex h-10 w-10 flex-none items-center justify-center rounded-full text-sm font-bold ${otherUser ? avatarColor(otherUser.id) : 'bg-slate-700 text-slate-300'}`}>
+          {initials}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-white">{displayName}</p>
+          <p className="truncate text-xs text-slate-400">@{otherUser?.username ?? 'utilisateur'}</p>
+        </div>
+      </header>
+
       {/* ── MESSAGES ── */}
       <main
         className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-3 [scrollbar-width:none]"
