@@ -60,6 +60,7 @@ export default async function ScrollPage({ searchParams }: PageProps) {
   const { data, error } = await supabase
     .from("questions")
     .select("id, theme, question, best_answer, mcq_variants")
+    .limit(500)
     .order("id", { ascending: true });
 
   if (error || !data) {
