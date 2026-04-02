@@ -225,8 +225,13 @@ export default function ConversationPage() {
     // indépendamment du layout global
     // z-40 → au-dessus du contenu mais sous les modals
     <div
-      className="fixed inset-0 z-[100] flex flex-col bg-[#0b141a] overflow-hidden"
-      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      className="flex flex-col bg-[#0b141a] overflow-hidden"
+      style={{
+        height: '100dvh',
+        maxHeight: '100dvh',
+        paddingTop: 'env(safe-area-inset-top)',
+        overflow: 'hidden',
+      }}
     >
 
 
