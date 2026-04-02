@@ -218,6 +218,7 @@ export default function ResultsClient() {
       if (raw) {
         try {
           setData(JSON.parse(raw));
+          setLoading(false);
           return;
         } catch {}
       }
