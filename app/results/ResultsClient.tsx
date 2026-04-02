@@ -212,7 +212,8 @@ export default function ResultsClient() {
 
     async function fetchResult() {
       const storageKey = email ? `last_result:${mode}:${email}` : null;
-      const raw = storageKey ? localStorage.getItem(storageKey) : null;
+      // Fallback anonyme : last_result sans email
+      const raw = storageKey ? localStorage.getItem(storageKey) : localStorage.getItem('last_result');
       if (raw) {
         try {
           setData(JSON.parse(raw));
