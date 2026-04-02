@@ -62,6 +62,9 @@ export default function QuizPage() {
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showPremiumCTA, setShowPremiumCTA] = useState(false);
+  const [showAnonForm, setShowAnonForm] = useState(false);
+  const [anonPrenom, setAnonPrenom] = useState("");
+  const [anonEmail, setAnonEmail] = useState("");
   const [idx, setIdx] = useState(0);
   const [remaining, setRemaining] = useState(20);
   const [meta, setMeta] = useState<{
@@ -604,11 +607,42 @@ function selectAnswer(choice: ChoiceKey) {
               className="block w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-medium text-slate-300 transition hover:bg-white/10">
               J'ai déjà un compte
             </a>
-            <button
-              onClick={() => { setShowPremiumCTA(false); router.push(`/results?mode=${mode}`); }}
-              className="block w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-center text-xs font-medium text-slate-500 transition hover:text-slate-300">
-              Voir mes résultats sans compte →
-            </button>
+            {!showAnonForm ? (
+              <button
+                onClick={() => setShowAnonForm(true)}
+                className="block w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-center text-xs font-medium text-slate-500 transition hover:text-slate-300">
+                Voir mes résultats sans compte →
+              </button>
+            ) : (
+              <div className="mt-2 space-y-2">
+                <p className="text-center text-sm text-slate-300 font-medium">Où envoyer tes résultats ?</p>
+                <input
+                  type="text"
+                  placeholder="Ton prénom"
+                  value={anonPrenom}
+                  onChange={(e) => setAnonPrenom(e.target.value)}
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                />
+                <input
+                  type="email"
+                  placeholder="Ton email"
+                  value={anonEmail}
+                  onChange={(e) => setAnonEmail(e.target.value)}
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                />
+                <p className="text-center text-[10px] text-slate-600">Pas de spam, jamais.</p>
+                <button
+                  disabled={!anonPrenom.trim() || !anonEmail.trim()}
+                  onClick={() => {
+                    localStorage.setItem('qcm_user', JSON.stringify({ pseudo: anonPrenom.trim(), email: anonEmail.trim().toLowerCase() }));
+                    setShowPremiumCTA(false);
+                    router.push(`/results?mode=${mode}`);
+                  }}
+                  className="block w-full rounded-2xl bg-teal-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-teal-500 disabled:opacity-40">
+                  Voir mes résultats →
+                </button>
+              </div>
+            )}
           </>
         ) : (
           <button
