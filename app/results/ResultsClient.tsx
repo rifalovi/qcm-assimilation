@@ -183,6 +183,7 @@ export default function ResultsClient() {
   const wantRate = searchParams.get("rate") === "1";
 
   const [data, setData] = useState<StoredResult | null>(null);
+  const [loading, setLoading] = useState(true);
   const [copyMsg, setCopyMsg] = useState<string | null>(null);
   const [pseudo, setPseudo] = useState<string>("");
   const [rating, setRating] = useState<number | null>(null);
@@ -460,6 +461,17 @@ ${errorsText}
     } finally {
       setSendingFeedback(false);
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-teal-500 border-t-transparent" />
+          <p className="text-sm text-slate-400">Chargement des résultats…</p>
+        </div>
+      </div>
+    )
   }
 
   if (!data || !score || !stats || !rank || expertScore === null) {
