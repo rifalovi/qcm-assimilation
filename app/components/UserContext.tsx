@@ -4,6 +4,7 @@ const LocationModal = lazy(() => import("./LocationModal"));
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useMemo } from "react";
 
 type Role = "anonymous" | "freemium" | "premium" | "elite" | "moderator" | "admin" | "super_admin";
 
@@ -77,12 +78,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [tick, setTick] = useState(0);
 
+  // Instance unique Supabase — évite GoTrueClient multiple instances
+  const supabase = useMemo(() => createClient(), [])
+
   function refresh() {
     setTick((t) => t + 1);
   }
 
   async function logout() {
-    const supabase = createClient();
     await supabase.auth.signOut();
     clearQcmLocalState();
     setRole("anonymous");
@@ -95,7 +98,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const supabase = createClient();
 
       const {
         data: { user },
@@ -135,7 +137,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
     load();
 
-    const supabase = createClient();
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(() => {
