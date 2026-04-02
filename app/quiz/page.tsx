@@ -63,8 +63,14 @@ export default function QuizPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showPremiumCTA, setShowPremiumCTA] = useState(false);
   const [showAnonForm, setShowAnonForm] = useState(false);
-  const [anonPrenom, setAnonPrenom] = useState("");
-  const [anonEmail, setAnonEmail] = useState("");
+  const [anonPrenom, setAnonPrenom] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    try { const u = JSON.parse(localStorage.getItem('qcm_user') ?? '{}'); return u.pseudo ?? ''; } catch { return ''; }
+  });
+  const [anonEmail, setAnonEmail] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    try { const u = JSON.parse(localStorage.getItem('qcm_user') ?? '{}'); return u.email ?? ''; } catch { return ''; }
+  });
   const [idx, setIdx] = useState(0);
   const [remaining, setRemaining] = useState(20);
   const [meta, setMeta] = useState<{
@@ -609,9 +615,25 @@ function selectAnswer(choice: ChoiceKey) {
             </a>
             {!showAnonForm ? (
               <button
-                onClick={() => setShowAnonForm(true)}
+                onClick={() => {
+                  const u = (() => { try { return JSON.parse(localStorage.getItem('qcm_user') ?? '{}'); } catch { return {}; } })();
+                  const count = parseInt(localStorage.getItem('anon_test_count') ?? '0', 10);
+                  if (count >= 3 && !u.email) {
+                    // Forcer création compte après 3 tests
+                    window.location.href = '/register';
+                    return;
+                  }
+                  if (u.pseudo && u.email) {
+                    // Déjà saisi → aller directement aux résultats
+                    localStorage.setItem('anon_test_count', String(count + 1));
+                    setShowPremiumCTA(false);
+                    router.push('/results?mode=' + mode);
+                  } else {
+                    setShowAnonForm(true);
+                  }
+                }}
                 className="block w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-center text-xs font-medium text-slate-500 transition hover:text-slate-300">
-                Voir mes résultats sans compte →
+                {(() => { const c = parseInt(typeof window !== 'undefined' ? localStorage.getItem('anon_test_count') ?? '0' : '0', 10); return c >= 3 ? '🔒 Créer un compte pour continuer' : 'Voir mes résultats sans compte →'; })()}
               </button>
             ) : (
               <div className="mt-2 space-y-2">
@@ -635,6 +657,8 @@ function selectAnswer(choice: ChoiceKey) {
                   disabled={!anonPrenom.trim() || !anonEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(anonEmail.trim())}
                   onClick={() => {
                     localStorage.setItem('qcm_user', JSON.stringify({ pseudo: anonPrenom.trim(), email: anonEmail.trim().toLowerCase() }));
+                    const count = parseInt(localStorage.getItem('anon_test_count') ?? '0', 10);
+                    localStorage.setItem('anon_test_count', String(count + 1));
                     setShowPremiumCTA(false);
                     router.push(`/results?mode=${mode}`);
                   }}
