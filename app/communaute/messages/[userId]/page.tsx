@@ -228,9 +228,7 @@ export default function ConversationPage() {
       className="flex flex-col bg-[#0b141a] overflow-hidden"
       style={{
         height: '100dvh',
-        maxHeight: '100dvh',
         paddingTop: 'env(safe-area-inset-top)',
-        overflow: 'hidden',
       }}
     >
 
