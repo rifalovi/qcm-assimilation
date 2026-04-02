@@ -632,7 +632,7 @@ function selectAnswer(choice: ChoiceKey) {
                 />
                 <p className="text-center text-[10px] text-slate-600">Pas de spam, jamais.</p>
                 <button
-                  disabled={!anonPrenom.trim() || !anonEmail.trim()}
+                  disabled={!anonPrenom.trim() || !anonEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(anonEmail.trim())}
                   onClick={() => {
                     localStorage.setItem('qcm_user', JSON.stringify({ pseudo: anonPrenom.trim(), email: anonEmail.trim().toLowerCase() }));
                     setShowPremiumCTA(false);
