@@ -230,15 +230,6 @@ export default function ConversationPage() {
         height: '100dvh',
         paddingTop: 'env(safe-area-inset-top)',
       }}
-      ref={(el) => {
-        if (!el) return;
-        const update = () => {
-          const h = window.visualViewport?.height ?? window.innerHeight;
-          el.style.height = h + 'px';
-        };
-        update();
-        window.visualViewport?.addEventListener('resize', update);
-      }}
     >
 
 
