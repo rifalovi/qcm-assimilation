@@ -230,6 +230,15 @@ export default function ConversationPage() {
         height: '100dvh',
         paddingTop: 'env(safe-area-inset-top)',
       }}
+      ref={(el) => {
+        if (!el) return;
+        const update = () => {
+          const h = window.visualViewport?.height ?? window.innerHeight;
+          el.style.height = h + 'px';
+        };
+        update();
+        window.visualViewport?.addEventListener('resize', update);
+      }}
     >
 
 
@@ -335,6 +344,10 @@ export default function ConversationPage() {
             rows={1}
             maxLength={2000}
             placeholder="Message"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="sentences"
+            spellCheck={false}
             className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-white placeholder:text-slate-400 focus:outline-none" style={{fontSize: "16px"}}
           />
         </div>
