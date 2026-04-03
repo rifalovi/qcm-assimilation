@@ -38,6 +38,9 @@ const config: CapacitorConfig = {
     allowsLinkPreview: false,
     scrollEnabled: true,
     backgroundColor: '#0f172a',
+    // Rétrécit le WebView quand le clavier s'ouvre (comme adjustResize sur Android)
+    // Fixe le header qui remonte avec le clavier
+    keyboardResize: 'body',
   },
 
   android: {
