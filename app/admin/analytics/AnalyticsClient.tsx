@@ -1,187 +1,392 @@
 'use client'
 
-type Stats = {
-  totalUsers: number
-  premiumUsers: number
-  freemiumUsers: number
-  eliteUsers: number
-  recentSignups: { username: string; role: string; created_at: string; city: string | null }[]
-  topCities: { city: string; count: number }[]
-  topEvents: { event_type: string; count: number }[]
-  recentEvents: { event_type: string; properties: Record<string, unknown>; created_at: string }[]
+import { useEffect, useMemo, useState } from 'react'
+import {
+  ResponsiveContainer,
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
+  BarChart, Bar,
+} from 'recharts'
+
+// ─── Types ───────────────────────────────────────────────────────────────
+type Granularity = 'day' | 'week' | 'month'
+
+type AnalyticsPayload = {
+  range: { days: number; granularity: Granularity; since: string }
+  kpis: {
+    totalUsers: number
+    counts: Record<string, number>
+    paidUsers: number
+    conversionRate: number
+    allTimeSignups: number
+    totalAudioPlays: number
+    totalPageviews: number
+    quizTotal: number
+    avgScore: number
+  }
+  signups: { timeline: { date: string; count: number }[]; total: number; allTime: number }
+  pages: { total: number; top: { path: string; count: number }[] }
+  episodes: { total: number; top: { title: string; slug: string; count: number }[] }
+  quiz: {
+    total: number; passed: number; failed: number
+    exam: number; train: number; avgScore: number
+    timeline: { date: string; count: number }[]
+  }
 }
 
-// Labels lisibles pour chaque type d'événement
-const EVENT_LABELS: Record<string, { label: string; icon: string; color: string }> = {
-  '$pageview':        { label: 'Page visitée',         icon: '👁️',  color: 'text-slate-300' },
-  'quiz_started':     { label: 'Quiz démarré',          icon: '📝',  color: 'text-blue-300' },
-  'quiz_completed':   { label: 'Quiz terminé',          icon: '✅',  color: 'text-emerald-300' },
-  'audio_played':     { label: 'Audio écouté',          icon: '🎧',  color: 'text-purple-300' },
-  'scroll_card_viewed': { label: 'Flash-card vue',      icon: '🃏',  color: 'text-cyan-300' },
-  'upgrade_clicked':  { label: 'Upgrade cliqué',        icon: '👑',  color: 'text-amber-300' },
-  'register_completed': { label: 'Inscription',         icon: '🎉',  color: 'text-green-300' },
-  'location_collected': { label: 'Localisation',        icon: '📍',  color: 'text-rose-300' },
-  'location_skipped': { label: 'Localisation ignorée',  icon: '⏭️', color: 'text-slate-400' },
+// ─── Helpers ─────────────────────────────────────────────────────────────
+const RANGE_OPTIONS: { days: number; label: string }[] = [
+  { days: 7,  label: '7 j'  },
+  { days: 30, label: '30 j' },
+  { days: 90, label: '90 j' },
+]
+
+const GRANULARITY_OPTIONS: { value: Granularity; label: string }[] = [
+  { value: 'day',   label: 'Jour'    },
+  { value: 'week',  label: 'Semaine' },
+  { value: 'month', label: 'Mois'    },
+]
+
+function formatBucketLabel(key: string, granularity: Granularity): string {
+  if (granularity === 'day') {
+    const [, m, d] = key.split('-')
+    return `${d}/${m}`
+  }
+  if (granularity === 'week') {
+    const [, w] = key.split('-W')
+    return `S${w}`
+  }
+  // month
+  const [y, m] = key.split('-')
+  return `${m}/${y.slice(2)}`
 }
 
-function formatEventProps(type: string, props: Record<string, unknown>): string {
-  if (type === '$pageview') return `→ ${props.path ?? ''}`
-  if (type === 'quiz_started') return `Thème: ${props.theme ?? '—'}`
-  if (type === 'quiz_completed') return `Score: ${props.score ?? '—'} • ${props.theme ?? ''}`
-  if (type === 'audio_played') return `${props.episodeTitle ?? props.episodeId ?? '—'}`
-  if (type === 'scroll_card_viewed') return `Question #${props.questionId ?? '—'}`
-  if (type === 'upgrade_clicked') return `Source: ${props.source ?? '—'}`
-  if (type === 'location_collected') return `${props.city ?? '—'} ${props.postal_code ?? ''}`
-  return Object.entries(props).slice(0, 2).map(([k, v]) => `${k}: ${v}`).join(' • ')
-}
-
-function KPICard({ label, value, icon, color }: { label: string; value: number; icon: string; color: string }) {
+// ─── Composants visuels ──────────────────────────────────────────────────
+function KPICard({
+  label, value, sub, icon, color,
+}: {
+  label: string
+  value: string | number
+  sub?: string
+  icon: string
+  color: 'blue' | 'amber' | 'emerald' | 'yellow' | 'violet' | 'rose'
+}) {
   const colors: Record<string, string> = {
-    blue:    'border-blue-400/20 bg-blue-500/10 text-blue-300',
-    amber:   'border-amber-400/20 bg-amber-500/10 text-amber-300',
-    emerald: 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300',
-    yellow:  'border-yellow-400/20 bg-yellow-500/10 text-yellow-300',
+    blue:    'border-blue-400/20 bg-blue-500/10',
+    amber:   'border-amber-400/20 bg-amber-500/10',
+    emerald: 'border-emerald-400/20 bg-emerald-500/10',
+    yellow:  'border-yellow-400/20 bg-yellow-500/10',
+    violet:  'border-violet-400/20 bg-violet-500/10',
+    rose:    'border-rose-400/20 bg-rose-500/10',
   }
   return (
     <div className={`rounded-2xl border p-5 ${colors[color]}`}>
       <div className="text-2xl">{icon}</div>
       <div className="mt-3 text-3xl font-extrabold text-white">{value}</div>
-      <div className="mt-1 text-xs font-semibold">{label}</div>
+      <div className="mt-1 text-xs font-semibold text-slate-300">{label}</div>
+      {sub && <div className="mt-1 text-[10px] text-slate-500">{sub}</div>}
     </div>
   )
 }
 
-export default function AnalyticsClient({ stats }: { stats: Stats }) {
+function SectionCard({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+      <div className="mb-4">
+        <h2 className="text-sm font-bold text-white">{title}</h2>
+        {subtitle && <p className="mt-0.5 text-[11px] text-slate-500">{subtitle}</p>}
+      </div>
+      {children}
+    </div>
+  )
+}
+
+// ─── Page principale ─────────────────────────────────────────────────────
+export default function AnalyticsClient() {
+  const [data, setData] = useState<AnalyticsPayload | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [days, setDays] = useState<number>(30)
+  const [granularity, setGranularity] = useState<Granularity>('day')
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setError(null)
+    fetch(`/api/admin/analytics?days=${days}&granularity=${granularity}`, { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((json) => {
+        if (cancelled) return
+        if (json.error) { setError(json.error); return }
+        setData(json)
+      })
+      .catch((e) => !cancelled && setError(String(e)))
+      .finally(() => !cancelled && setLoading(false))
+    return () => { cancelled = true }
+  }, [days, granularity])
+
+  const signupsChart = useMemo(
+    () => (data?.signups.timeline ?? []).map((p) => ({
+      label: formatBucketLabel(p.date, data?.range.granularity ?? 'day'),
+      count: p.count,
+    })),
+    [data]
+  )
+
+  const quizChart = useMemo(
+    () => (data?.quiz.timeline ?? []).map((p) => ({
+      label: formatBucketLabel(p.date, data?.range.granularity ?? 'day'),
+      count: p.count,
+    })),
+    [data]
+  )
+
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-medium text-white mb-1">Analytics</h1>
-        <p className="text-sm text-slate-400">Activité et métriques de Cap Citoyen</p>
-      </div>
-
-      <div className="space-y-8">
-        {/* KPIs */}
-        <div className="grid gap-4 sm:grid-cols-4">
-          <KPICard label="Utilisateurs total" value={stats.totalUsers} icon="👥" color="blue" />
-          <KPICard label="Comptes Premium" value={stats.premiumUsers} icon="🎯" color="amber" />
-          <KPICard label="Comptes Élite" value={stats.eliteUsers} icon="👑" color="yellow" />
-          <KPICard label="Comptes Freemium" value={stats.freemiumUsers} icon="✨" color="emerald" />
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-medium text-white mb-1">Analytics</h1>
+          <p className="text-sm text-slate-400">Activité, conversion et usage de Cap Citoyen</p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Dernières inscriptions */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <h2 className="mb-4 text-sm font-bold text-white">Dernières inscriptions</h2>
-            <div className="space-y-2">
-              {stats.recentSignups.map((u, i) => (
-                <div key={i} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-3 py-2">
-                  <div>
-                    <span className="text-sm font-semibold text-white">{u.username}</span>
-                    {u.city && <span className="ml-2 text-xs text-slate-400">📍 {u.city}</span>}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                      u.role === 'premium' ? 'bg-amber-500/20 text-amber-300' :
-                      u.role === 'elite' ? 'bg-yellow-500/20 text-yellow-300' :
-                      u.role === 'freemium' ? 'bg-emerald-500/20 text-emerald-300' :
-                      'bg-white/10 text-slate-400'
-                    }`}>{u.role}</span>
-                    <span className="text-[10px] text-slate-500">
-                      {new Date(u.created_at).toLocaleDateString('fr-FR')}
-                    </span>
-                  </div>
-                </div>
+        {/* Sélecteurs */}
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-medium text-slate-500">Période</span>
+            <div className="flex gap-1 rounded-xl border border-white/10 bg-white/5 p-1">
+              {RANGE_OPTIONS.map((opt) => (
+                <button
+                  key={opt.days}
+                  onClick={() => setDays(opt.days)}
+                  className={`rounded-lg px-3 py-1 text-xs font-medium transition ${
+                    days === opt.days ? 'bg-teal-600 text-white' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {opt.label}
+                </button>
               ))}
             </div>
           </div>
-
-          {/* Répartition géographique */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <h2 className="mb-4 text-sm font-bold text-white">Répartition géographique</h2>
-            {stats.topCities.length === 0 ? (
-              <p className="text-sm text-slate-500">Aucune donnée encore collectée</p>
-            ) : (
-              <div className="space-y-2">
-                {stats.topCities.map((c, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <span className="w-4 text-xs text-slate-500">{i + 1}</span>
-                    <div className="flex-1">
-                      <div className="mb-1 flex justify-between">
-                        <span className="text-sm text-white">{c.city}</span>
-                        <span className="text-xs text-slate-400">{c.count}</span>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-white/10">
-                        <div className="h-1.5 rounded-full bg-blue-500"
-                          style={{ width: `${(c.count / stats.topCities[0].count) * 100}%` }} />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Fonctionnalités les plus utilisées */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <h2 className="mb-4 text-sm font-bold text-white">Fonctionnalités les plus utilisées</h2>
-            {stats.topEvents.length === 0 ? (
-              <p className="text-sm text-slate-500">Aucun événement encore enregistré</p>
-            ) : (
-              <div className="space-y-2">
-                {stats.topEvents.map((e, i) => {
-                  const meta = EVENT_LABELS[e.event_type]
-                  return (
-                    <div key={i} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-3 py-2">
-                      <div className="flex items-center gap-2">
-                        <span>{meta?.icon ?? '📊'}</span>
-                        <span className={`text-sm ${meta?.color ?? 'text-slate-300'}`}>
-                          {meta?.label ?? e.event_type}
-                        </span>
-                      </div>
-                      <span className="rounded-full bg-blue-500/20 px-2 py-0.5 text-xs font-bold text-blue-300">{e.count}</span>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* Événements récents */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <h2 className="mb-4 text-sm font-bold text-white">Événements récents</h2>
-            {stats.recentEvents.length === 0 ? (
-              <p className="text-sm text-slate-500">Aucun événement encore enregistré</p>
-            ) : (
-              <div className="max-h-80 space-y-2 overflow-y-auto">
-                {stats.recentEvents.map((e, i) => {
-                  const meta = EVENT_LABELS[e.event_type]
-                  const detail = formatEventProps(e.event_type, e.properties)
-                  return (
-                    <div key={i} className="rounded-xl border border-white/5 bg-white/5 px-3 py-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span>{meta?.icon ?? '📊'}</span>
-                          <span className={`text-xs font-semibold ${meta?.color ?? 'text-white'}`}>
-                            {meta?.label ?? e.event_type}
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-slate-500">
-                          {new Date(e.created_at).toLocaleString('fr-FR')}
-                        </span>
-                      </div>
-                      {detail && (
-                        <p className="mt-1 truncate text-[10px] text-slate-400">{detail}</p>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            )}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-medium text-slate-500">Granularité</span>
+            <div className="flex gap-1 rounded-xl border border-white/10 bg-white/5 p-1">
+              {GRANULARITY_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setGranularity(opt.value)}
+                  className={`rounded-lg px-3 py-1 text-xs font-medium transition ${
+                    granularity === opt.value ? 'bg-teal-600 text-white' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
+
+      {loading && <p className="text-sm text-slate-400">Chargement…</p>}
+      {error && <p className="text-sm text-red-400">Erreur : {error}</p>}
+
+      {data && (
+        <div className="space-y-6">
+          {/* ─── KPIs globaux ──────────────────────────────────────────── */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <KPICard
+              label="Utilisateurs total"
+              value={data.kpis.totalUsers}
+              sub={`${data.kpis.allTimeSignups} comptes auth depuis le début`}
+              icon="👥"
+              color="blue"
+            />
+            <KPICard
+              label="Comptes payants"
+              value={data.kpis.paidUsers}
+              sub={`${data.kpis.counts.premium ?? 0} Premium · ${data.kpis.counts.elite ?? 0} Élite`}
+              icon="👑"
+              color="amber"
+            />
+            <KPICard
+              label="Taux de conversion"
+              value={`${data.kpis.conversionRate}%`}
+              sub="freemium → premium/élite"
+              icon="📈"
+              color="emerald"
+            />
+            <KPICard
+              label="Quiz complétés"
+              value={data.kpis.quizTotal}
+              sub={`Score moyen ${data.kpis.avgScore}% · sur ${data.range.days} j`}
+              icon="✅"
+              color="violet"
+            />
+          </div>
+
+          {/* ─── Évolution inscriptions ──────────────────────────────── */}
+          <SectionCard
+            title={`📈 Évolution des inscriptions (${data.signups.total} sur ${data.range.days} jours)`}
+            subtitle={`Source : auth.users · Granularité : ${granularity}`}
+          >
+            {signupsChart.length === 0 ? (
+              <p className="text-sm text-slate-500 text-center py-12">Aucune inscription dans la période</p>
+            ) : (
+              <div className="h-64 w-full">
+                <ResponsiveContainer>
+                  <LineChart data={signupsChart} margin={{ top: 8, right: 12, left: -12, bottom: 0 }}>
+                    <CartesianGrid stroke="rgba(148,163,184,0.1)" strokeDasharray="3 3" />
+                    <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickMargin={6} />
+                    <YAxis stroke="#64748b" fontSize={11} allowDecimals={false} />
+                    <Tooltip
+                      contentStyle={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 12, fontSize: 12 }}
+                      labelStyle={{ color: '#cbd5e1' }}
+                      itemStyle={{ color: '#5eead4' }}
+                    />
+                    <Line type="monotone" dataKey="count" stroke="#14b8a6" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+          </SectionCard>
+
+          {/* ─── Conversion + répartition rôles ──────────────────────── */}
+          <div className="grid gap-6 lg:grid-cols-2">
+            <SectionCard title="🎯 Taux de conversion freemium → premium" subtitle="Calcul : (premium + élite) / (utilisateurs non anonymes)">
+              <div className="flex items-center gap-6">
+                <div className="relative h-32 w-32 flex-shrink-0">
+                  <svg viewBox="0 0 36 36" className="h-full w-full -rotate-90">
+                    <circle cx="18" cy="18" r="15.915" fill="none" stroke="rgba(148,163,184,0.15)" strokeWidth="3" />
+                    <circle
+                      cx="18" cy="18" r="15.915" fill="none"
+                      stroke="#10b981" strokeWidth="3" strokeLinecap="round"
+                      strokeDasharray={`${data.kpis.conversionRate}, 100`}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center text-2xl font-extrabold text-white">
+                    {data.kpis.conversionRate}%
+                  </div>
+                </div>
+                <div className="flex-1 space-y-2">
+                  <Stat label="Total comptes (non anonymes)" value={(data.kpis.totalUsers - (data.kpis.counts.anonymous ?? 0)).toString()} />
+                  <Stat label="Freemium" value={(data.kpis.counts.freemium ?? 0).toString()} dot="bg-blue-400" />
+                  <Stat label="Premium" value={(data.kpis.counts.premium ?? 0).toString()} dot="bg-amber-400" />
+                  <Stat label="Élite" value={(data.kpis.counts.elite ?? 0).toString()} dot="bg-yellow-400" />
+                </div>
+              </div>
+            </SectionCard>
+
+            <SectionCard title="📚 Tests passés (détails)" subtitle="Répartition réussite, mode et score moyen">
+              <div className="grid grid-cols-2 gap-3">
+                <Stat label="Réussis" value={data.quiz.passed.toString()} dot="bg-emerald-400" />
+                <Stat label="Échoués" value={data.quiz.failed.toString()} dot="bg-rose-400" />
+                <Stat label="Mode train" value={data.quiz.train.toString()} dot="bg-blue-400" />
+                <Stat label="Mode exam" value={data.quiz.exam.toString()} dot="bg-violet-400" />
+              </div>
+              <div className="mt-4 rounded-xl border border-white/5 bg-white/5 p-3">
+                <p className="text-[11px] text-slate-400">Score moyen</p>
+                <p className="text-2xl font-extrabold text-white">{data.quiz.avgScore}%</p>
+              </div>
+            </SectionCard>
+          </div>
+
+          {/* ─── Quiz timeline ──────────────────────────────────────── */}
+          <SectionCard
+            title={`📝 Quiz complétés sur ${data.range.days} jours`}
+            subtitle={`Source : table results · Granularité : ${granularity}`}
+          >
+            {quizChart.length === 0 ? (
+              <p className="text-sm text-slate-500 text-center py-12">Aucun quiz complété dans la période</p>
+            ) : (
+              <div className="h-64 w-full">
+                <ResponsiveContainer>
+                  <BarChart data={quizChart} margin={{ top: 8, right: 12, left: -12, bottom: 0 }}>
+                    <CartesianGrid stroke="rgba(148,163,184,0.1)" strokeDasharray="3 3" />
+                    <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickMargin={6} />
+                    <YAxis stroke="#64748b" fontSize={11} allowDecimals={false} />
+                    <Tooltip
+                      contentStyle={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 12, fontSize: 12 }}
+                      labelStyle={{ color: '#cbd5e1' }}
+                      itemStyle={{ color: '#a78bfa' }}
+                    />
+                    <Bar dataKey="count" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+          </SectionCard>
+
+          {/* ─── Top pages + Top épisodes ────────────────────────────── */}
+          <div className="grid gap-6 lg:grid-cols-2">
+            <SectionCard
+              title={`🌐 Pages les plus visitées (${data.pages.total} pageviews)`}
+              subtitle={`Source : user_events $pageview · ${data.range.days} derniers jours`}
+            >
+              <TopList
+                items={data.pages.top.map((p) => ({ key: p.path, label: p.path, count: p.count }))}
+                accent="text-blue-300"
+                bar="bg-blue-500"
+                emptyMsg="Aucun pageview enregistré"
+              />
+            </SectionCard>
+
+            <SectionCard
+              title={`🎧 Épisodes les plus écoutés (${data.episodes.total} lectures)`}
+              subtitle={`Source : user_events audio_played · ${data.range.days} derniers jours`}
+            >
+              <TopList
+                items={data.episodes.top.map((e) => ({ key: e.slug, label: e.title, count: e.count }))}
+                accent="text-purple-300"
+                bar="bg-purple-500"
+                emptyMsg="Aucun épisode encore écouté"
+              />
+            </SectionCard>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Sub-components ──────────────────────────────────────────────────────
+function Stat({ label, value, dot }: { label: string; value: string; dot?: string }) {
+  return (
+    <div className="flex items-center justify-between rounded-lg border border-white/5 bg-white/5 px-3 py-2">
+      <span className="flex items-center gap-2 text-xs text-slate-400">
+        {dot && <span className={`h-2 w-2 rounded-full ${dot}`} />}
+        {label}
+      </span>
+      <span className="text-sm font-bold text-white">{value}</span>
+    </div>
+  )
+}
+
+function TopList({
+  items, accent, bar, emptyMsg,
+}: {
+  items: { key: string; label: string; count: number }[]
+  accent: string
+  bar: string
+  emptyMsg: string
+}) {
+  if (items.length === 0) {
+    return <p className="text-sm text-slate-500 text-center py-6">{emptyMsg}</p>
+  }
+  const max = Math.max(...items.map((i) => i.count), 1)
+  return (
+    <div className="space-y-2">
+      {items.map((item, i) => (
+        <div key={item.key} className="flex items-center gap-3">
+          <span className="w-4 text-xs text-slate-500">{i + 1}</span>
+          <div className="min-w-0 flex-1">
+            <div className="mb-1 flex items-baseline justify-between gap-2">
+              <span className={`truncate text-sm ${accent}`}>{item.label}</span>
+              <span className="shrink-0 text-xs text-slate-400">{item.count}</span>
+            </div>
+            <div className="h-1.5 rounded-full bg-white/10">
+              <div className={`h-1.5 rounded-full ${bar}`} style={{ width: `${(item.count / max) * 100}%` }} />
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
