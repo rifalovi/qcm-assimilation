@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useUser } from "../components/UserContext";
-import { audioEpisodes } from "@/data/audioEpisodes";
 import { createClient } from "@/lib/supabase/client";
 import {
   fetchAudioSeries,
@@ -14,21 +13,7 @@ import {
 } from "@/lib/audioContent";
 import { useEffect, useMemo, useState } from "react";
 
-// ─── Fallback statique ─────────────────────────────────────────────────────
-// Tant que les épisodes ne sont pas encore en base, on dérive les compteurs
-// depuis src/data/audioEpisodes.ts. Une fois `audio_episodes` rempli, Supabase
-// prend le relais automatiquement.
-const STATIC_COUNTS = (() => {
-  const map = new Map<string, { count: number; seconds: number }>();
-  for (const ep of audioEpisodes) {
-    const cur = map.get(ep.subthemeKey) ?? { count: 0, seconds: 0 };
-    cur.count += 1;
-    cur.seconds += ep.durationTargetSeconds;
-    map.set(ep.subthemeKey, cur);
-  }
-  return map;
-})();
-
+// Icônes de secours si une série DB n'a pas d'emoji défini.
 const THEME_ICON_FALLBACK: Record<string, string> = {
   Valeurs: "🇫🇷",
   Institutions: "🏛️",
@@ -234,24 +219,15 @@ export default function AudioLibraryPage() {
     } catch { router.push("/pricing"); }
   };
 
-  // Fusion Supabase + fallback statique pour les compteurs d'épisodes
+  // Fusion series + compteurs d'épisodes venant de Supabase
   const albums = useMemo<Album[]>(() => {
     if (!seriesRows) return [];
     return seriesRows.map((s) => {
-      const fromDb = episodeCounts.get(s.id);
-      if (fromDb && fromDb.count > 0) {
-        return {
-          ...s,
-          episodeCount: fromDb.count,
-          totalMinutes: Math.round(fromDb.seconds / 60),
-        };
-      }
-      // Fallback : on dérive depuis src/data/audioEpisodes.ts
-      const fallback = STATIC_COUNTS.get(s.subtheme_key) ?? { count: 0, seconds: 0 };
+      const fromDb = episodeCounts.get(s.id) ?? { count: 0, seconds: 0 };
       return {
         ...s,
-        episodeCount: fallback.count,
-        totalMinutes: Math.round(fallback.seconds / 60),
+        episodeCount: fromDb.count,
+        totalMinutes: Math.round(fromDb.seconds / 60),
       };
     });
   }, [seriesRows, episodeCounts]);

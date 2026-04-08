@@ -5,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "../../../components/UserContext";
-import { audioEpisodes, type AudioEpisode, type AudioThemeKey } from "@/data/audioEpisodes";
+import { type AudioEpisode, type AudioThemeKey } from "@/data/audioEpisodes";
 import { createClient } from "@/lib/supabase/client";
 import { fetchAudioSeries, fetchAudioEpisodes, type AudioSeriesRow } from "@/lib/audioContent";
 import { trackEvent } from "@/lib/posthog";
@@ -593,11 +593,9 @@ export default function AudioSeriesPage() {
   const subthemeKey = decodeURIComponent(subtheme as string);
 
   // ─── Données Supabase (série + épisodes + toutes les séries) ─────────────
-  // Fallback : si Supabase ne renvoie rien (tables non peuplées), on garde
-  // les données statiques de src/data/audioEpisodes.ts pour ne rien casser.
   const [seriesRow, setSeriesRow] = useState<AudioSeriesRow | null>(null);
   const [allSeriesRows, setAllSeriesRows] = useState<AudioSeriesRow[]>([]);
-  const [dbEpisodes, setDbEpisodes] = useState<AudioEpisode[] | null>(null);
+  const [episodes, setEpisodes] = useState<AudioEpisode[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -612,7 +610,7 @@ export default function AudioSeriesPage() {
       ) ?? null;
       setSeriesRow(current);
 
-      if (!current) { setDbEpisodes([]); return; }
+      if (!current) { setEpisodes([]); return; }
 
       const rows = await fetchAudioEpisodes(sb, current.id);
       if (cancelled) return;
@@ -632,18 +630,10 @@ export default function AudioSeriesPage() {
           durationTargetSeconds: ep.duration_target_seconds,
           premium: ep.premium,
         }));
-      setDbEpisodes(mapped);
+      setEpisodes(mapped);
     })();
     return () => { cancelled = true; };
   }, [themeKey, subthemeKey]);
-
-  // Épisodes : DB si non vide, sinon fallback statique
-  const episodes = useMemo(() => {
-    if (dbEpisodes && dbEpisodes.length > 0) return dbEpisodes;
-    return audioEpisodes
-      .filter((ep) => ep.themeKey === themeKey && ep.subthemeKey === subthemeKey)
-      .sort((a, b) => a.episodeNumber - b.episodeNumber);
-  }, [dbEpisodes, themeKey, subthemeKey]);
 
   const [currentIdx,       setCurrentIdx]       = useState(0);
   const [autoPlay,         setAutoPlay]          = useState(false);
@@ -751,24 +741,14 @@ export default function AudioSeriesPage() {
     glow:        baseMeta.glow,
   }), [seriesRow, baseMeta]);
 
-  // Toutes les séries : Supabase si dispo, sinon fallback statique (unique par key)
-  const allSeries = useMemo(() => {
-    if (allSeriesRows.length > 0) {
-      return allSeriesRows.map((s) => ({
-        themeKey: s.theme_key as AudioThemeKey,
-        subthemeKey: s.subtheme_key,
-      }));
-    }
-    const seen = new Set<string>();
-    return audioEpisodes
-      .filter((ep) => {
-        const key = ep.themeKey + '|' + ep.subthemeKey;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      })
-      .map((ep) => ({ themeKey: ep.themeKey, subthemeKey: ep.subthemeKey }));
-  }, [allSeriesRows]);
+  // Toutes les séries pour la navigation « suivante »
+  const allSeries = useMemo(
+    () => allSeriesRows.map((s) => ({
+      themeKey: s.theme_key as AudioThemeKey,
+      subthemeKey: s.subtheme_key,
+    })),
+    [allSeriesRows]
+  );
 
   const currentSeriesIndex = allSeries.findIndex(s => s.themeKey === themeKey && s.subthemeKey === subthemeKey);
   const nextSeries    = allSeries.length > 0 ? allSeries[(currentSeriesIndex + 1) % allSeries.length] : null;
