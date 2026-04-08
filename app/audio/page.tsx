@@ -1,71 +1,42 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUser } from "../components/UserContext";
-import { audioEpisodes, type AudioThemeKey } from "@/data/audioEpisodes";
-import { useMemo, useState } from "react";
+import { audioEpisodes } from "@/data/audioEpisodes";
+import { createClient } from "@/lib/supabase/client";
+import {
+  fetchAudioSeries,
+  fetchAudioEpisodes,
+  fetchAudioMedia,
+  type AudioSeriesRow,
+  type AudioMediaRow,
+} from "@/lib/audioContent";
+import { useEffect, useMemo, useState } from "react";
 
-// ─── Config albums ─────────────────────────────────────────────────────────
-const SUBTHEME_CONFIG: Record<string, {
-  image: string;
-  accent: string;
-  border: string;
-  accentText: string;
-}> = {
-  valeurs_republique: {
-    image: "/themes/valeurs_republique.jpg",
-    accent: "from-blue-600/30 to-indigo-600/20",
-    border: "border-blue-400/20",
-    accentText: "text-blue-300",
-  },
-  droits_devoirs_citoyen: {
-    image: "/themes/droits_devoirs_citoyen.jpg",
-    accent: "from-sky-600/30 to-blue-600/20",
-    border: "border-sky-400/20",
-    accentText: "text-sky-300",
-  },
-  institutions: {
-    image: "/themes/institutions.jpg",
-    accent: "from-violet-600/30 to-purple-600/20",
-    border: "border-violet-400/20",
-    accentText: "text-violet-300",
-  },
-  histoire_geographie: {
-    image: "/themes/histoire_geographie.jpg",
-    accent: "from-amber-600/30 to-orange-600/20",
-    border: "border-amber-400/20",
-    accentText: "text-amber-300",
-  },
-  pourquoi_francais: {
-    image: "/themes/devenir_francais.jpg",
-    accent: "from-rose-600/30 to-pink-600/20",
-    border: "border-rose-400/20",
-    accentText: "text-rose-300",
-  },
-  societe: {
-    image: "/themes/societe.jpg",
-    accent: "from-emerald-600/30 to-teal-600/20",
-    border: "border-emerald-400/20",
-    accentText: "text-emerald-300",
-  },
-  quiz_audio: {
-    image: "/themes/quiz_audio.png",
-    accent: "from-teal-600/30 to-cyan-600/20",
-    border: "border-teal-400/20",
-    accentText: "text-teal-300",
-  },
-};
+// ─── Fallback statique ─────────────────────────────────────────────────────
+// Tant que les épisodes ne sont pas encore en base, on dérive les compteurs
+// depuis src/data/audioEpisodes.ts. Une fois `audio_episodes` rempli, Supabase
+// prend le relais automatiquement.
+const STATIC_COUNTS = (() => {
+  const map = new Map<string, { count: number; seconds: number }>();
+  for (const ep of audioEpisodes) {
+    const cur = map.get(ep.subthemeKey) ?? { count: 0, seconds: 0 };
+    cur.count += 1;
+    cur.seconds += ep.durationTargetSeconds;
+    map.set(ep.subthemeKey, cur);
+  }
+  return map;
+})();
 
-const THEME_ICONS: Record<string, string> = {
+const THEME_ICON_FALLBACK: Record<string, string> = {
   Valeurs: "🇫🇷",
   Institutions: "🏛️",
   Histoire: "📜",
   Société: "👥",
 };
 
-// Catégories à venir
+// Catégories à venir (pas encore pilotées par Supabase)
 const COMING_SOON = [
   {
     id: "podcasts",
@@ -94,60 +65,51 @@ const COMING_SOON = [
     iconBg: "bg-cyan-500/20 border-cyan-400/20",
     count: "Bientôt",
   },
-
 ];
 
 // ─── Composant Album Card ──────────────────────────────────────────────────
+type Album = AudioSeriesRow & { episodeCount: number; totalMinutes: number };
+
 function AlbumCard({
-  subthemeKey,
-  subthemeLabel,
-  themeLabel,
-  themeKey,
-  episodeCount,
-  totalMinutes,
+  album,
   isPremium,
   isFreemium,
   onUpgrade,
 }: {
-  subthemeKey: string;
-  subthemeLabel: string;
-  themeLabel: string;
-  themeKey: string;
-  episodeCount: number;
-  totalMinutes: number;
+  album: Album;
   isPremium: boolean;
   isFreemium: boolean;
   onUpgrade: () => void;
 }) {
-  const config = SUBTHEME_CONFIG[subthemeKey];
   const router = useRouter();
   const locked = !isPremium && !isFreemium;
 
   const handleClick = () => {
     if (locked) { onUpgrade(); return; }
-    router.push(`/audio/${encodeURIComponent(themeKey)}/${encodeURIComponent(subthemeKey)}`);
+    router.push(`/audio/${encodeURIComponent(album.theme_key)}/${encodeURIComponent(album.subtheme_key)}`);
   };
 
   return (
     <button
       onClick={handleClick}
-      className={`group relative overflow-hidden rounded-[1.5rem] border text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] active:scale-[0.98] ${config?.border ?? "border-white/10"}`}
+      className={`group relative overflow-hidden rounded-[1.5rem] border text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] active:scale-[0.98] ${album.accent_border ?? "border-white/10"}`}
     >
       {/* Image de couverture */}
       <div className="relative aspect-square w-full overflow-hidden">
-        {config?.image ? (
+        {album.image_url ? (
           <>
             <Image
-              src={config.image}
-              alt={subthemeLabel}
+              src={album.image_url}
+              alt={album.subtheme_label}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
+              unoptimized={album.image_url.startsWith("http")}
             />
-            <div className={`absolute inset-0 bg-gradient-to-b ${config.accent} opacity-60`} />
+            <div className={`absolute inset-0 bg-gradient-to-b ${album.accent_gradient ?? ""} opacity-60`} />
           </>
         ) : (
-          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${config?.accent ?? "from-slate-700 to-slate-800"}`}>
-            <span className="text-5xl">{THEME_ICONS[themeKey] ?? "🎧"}</span>
+          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${album.accent_gradient ?? "from-slate-700 to-slate-800"}`}>
+            <span className="text-5xl">{album.icon ?? THEME_ICON_FALLBACK[album.theme_key] ?? "🎧"}</span>
           </div>
         )}
 
@@ -182,14 +144,14 @@ function AlbumCard({
 
       {/* Infos */}
       <div className="bg-slate-900/95 px-3 py-3">
-        <p className={`text-[10px] font-bold uppercase tracking-widest ${config?.accentText ?? "text-slate-400"}`}>
-          {themeLabel}
+        <p className={`text-[10px] font-bold uppercase tracking-widest ${album.accent_text ?? "text-slate-400"}`}>
+          {album.theme_label}
         </p>
         <p className="mt-0.5 text-sm font-bold leading-tight text-white line-clamp-2">
-          {subthemeLabel}
+          {album.subtheme_label}
         </p>
         <p className="mt-1 text-[11px] text-slate-500">
-          {episodeCount} épisodes • ~{totalMinutes} min
+          {album.episodeCount} épisodes • ~{album.totalMinutes} min
         </p>
       </div>
     </button>
@@ -228,6 +190,41 @@ export default function AudioLibraryPage() {
 
   const [showInfo, setShowInfo] = useState(false);
 
+  // Données chargées depuis Supabase
+  const [seriesRows, setSeriesRows] = useState<AudioSeriesRow[] | null>(null);
+  const [episodeCounts, setEpisodeCounts] = useState<Map<string, { count: number; seconds: number }>>(new Map());
+  const [mediaRows, setMediaRows] = useState<AudioMediaRow[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const sb = createClient();
+      const [series, episodes, media] = await Promise.all([
+        fetchAudioSeries(sb),
+        fetchAudioEpisodes(sb),
+        fetchAudioMedia(sb),
+      ]);
+      if (cancelled) return;
+
+      // Comptage par series_id depuis audio_episodes
+      const counts = new Map<string, { count: number; seconds: number }>();
+      for (const ep of episodes) {
+        if (!ep.series_id) continue;
+        const cur = counts.get(ep.series_id) ?? { count: 0, seconds: 0 };
+        cur.count += 1;
+        cur.seconds += ep.duration_target_seconds ?? 0;
+        counts.set(ep.series_id, cur);
+      }
+
+      setSeriesRows(series);
+      setEpisodeCounts(counts);
+      setMediaRows(media);
+      setLoading(false);
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
   const handleUpgrade = async () => {
     try {
       const res = await fetch("/api/create-checkout", { method: "POST" });
@@ -237,35 +234,37 @@ export default function AudioLibraryPage() {
     } catch { router.push("/pricing"); }
   };
 
-  // Grouper les épisodes par sous-thème
-  const albums = useMemo(() => {
-    const map = new Map<string, {
-      subthemeKey: string;
-      subthemeLabel: string;
-      themeKey: string;
-      themeLabel: string;
-      episodes: typeof audioEpisodes;
-    }>();
-
-    for (const ep of audioEpisodes) {
-      if (!map.has(ep.subthemeKey)) {
-        map.set(ep.subthemeKey, {
-          subthemeKey: ep.subthemeKey,
-          subthemeLabel: ep.subthemeLabel,
-          themeKey: ep.themeKey,
-          themeLabel: ep.themeLabel,
-          episodes: [],
-        });
+  // Fusion Supabase + fallback statique pour les compteurs d'épisodes
+  const albums = useMemo<Album[]>(() => {
+    if (!seriesRows) return [];
+    return seriesRows.map((s) => {
+      const fromDb = episodeCounts.get(s.id);
+      if (fromDb && fromDb.count > 0) {
+        return {
+          ...s,
+          episodeCount: fromDb.count,
+          totalMinutes: Math.round(fromDb.seconds / 60),
+        };
       }
-      map.get(ep.subthemeKey)!.episodes.push(ep);
-    }
+      // Fallback : on dérive depuis src/data/audioEpisodes.ts
+      const fallback = STATIC_COUNTS.get(s.subtheme_key) ?? { count: 0, seconds: 0 };
+      return {
+        ...s,
+        episodeCount: fallback.count,
+        totalMinutes: Math.round(fallback.seconds / 60),
+      };
+    });
+  }, [seriesRows, episodeCounts]);
 
-    return Array.from(map.values()).map((album) => ({
-      ...album,
-      episodeCount: album.episodes.length,
-      totalMinutes: Math.round(album.episodes.reduce((acc, ep) => acc + ep.durationTargetSeconds, 0) / 60),
-    }));
-  }, []);
+  const featuredAlbum = useMemo<Album | null>(
+    () => albums.find((a) => a.featured) ?? albums[0] ?? null,
+    [albums]
+  );
+
+  const hymnes = useMemo(
+    () => mediaRows.filter((m) => m.section === "hymnes"),
+    [mediaRows]
+  );
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 pb-24 sm:px-6 sm:py-8 sm:pb-8 lg:px-8">
@@ -327,14 +326,23 @@ export default function AudioLibraryPage() {
         </section>
 
         {/* ── HERO BANNER NETFLIX ────────────────────────────────────── */}
-        {!isAnonymous && (
+        {!isAnonymous && featuredAlbum && (
           <section
             className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_25px_70px_rgba(2,8,23,0.6)]"
             style={{ minHeight: 320 }}
           >
             {/* Image de fond */}
             <div className="absolute inset-0">
-              <Image src="/themes/valeurs_republique.jpg" alt="Valeurs de la République" fill className="object-cover" priority />
+              {featuredAlbum.image_url && (
+                <Image
+                  src={featuredAlbum.image_url}
+                  alt={featuredAlbum.subtheme_label}
+                  fill
+                  className="object-cover"
+                  priority
+                  unoptimized={featuredAlbum.image_url.startsWith("http")}
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/60 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
             </div>
@@ -346,22 +354,24 @@ export default function AudioLibraryPage() {
                   ⭐ En vedette
                 </span>
                 <h2 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
-                  Valeurs de la République
+                  {featuredAlbum.subtheme_label}
                 </h2>
-                <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-300">
-                  Les valeurs fondamentales — Liberté, Égalité, Fraternité — au cœur de l'entretien civique. 10 épisodes pour maîtriser ce thème essentiel.
-                </p>
+                {featuredAlbum.description && (
+                  <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-300">
+                    {featuredAlbum.description}
+                  </p>
+                )}
                 <div className="mt-2 flex gap-3 text-xs text-slate-400">
-                  <span>10 épisodes</span>
+                  <span>{featuredAlbum.episodeCount} épisodes</span>
                   <span>•</span>
-                  <span>~15 min</span>
+                  <span>~{featuredAlbum.totalMinutes} min</span>
                   <span>•</span>
                   <span className="text-emerald-400">Disponible</span>
                 </div>
 
                 <div className="mt-5 flex flex-wrap gap-3">
                   <button
-                    onClick={() => router.push("/audio/Valeurs/valeurs_republique")}
+                    onClick={() => router.push(`/audio/${encodeURIComponent(featuredAlbum.theme_key)}/${encodeURIComponent(featuredAlbum.subtheme_key)}`)}
                     className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-bold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.2)] transition hover:bg-slate-100 active:scale-95"
                   >
                     <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
@@ -388,95 +398,52 @@ export default function AudioLibraryPage() {
                 <h2 className="text-lg font-extrabold text-white">🎓 Thématiques</h2>
                 <p className="mt-0.5 text-xs text-slate-500">Préparation civique • Entretien de naturalisation</p>
               </div>
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-400">
-                {albums.length} séries
-              </span>
+              {!loading && (
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-400">
+                  {albums.length} séries
+                </span>
+              )}
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-              {albums.map((album) => (
-                <AlbumCard
-                  key={album.subthemeKey}
-                  subthemeKey={album.subthemeKey}
-                  subthemeLabel={album.subthemeLabel}
-                  themeLabel={album.themeLabel}
-                  themeKey={album.themeKey}
-                  episodeCount={album.episodeCount}
-                  totalMinutes={album.totalMinutes}
-                  isPremium={isPremium}
-                  isFreemium={isFreemium}
-                  onUpgrade={handleUpgrade}
-                />
-              ))}
-            </div>
+            {loading ? (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="aspect-square rounded-[1.5rem] border border-white/10 bg-slate-900/60 animate-pulse" />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+                {albums.map((album) => (
+                  <AlbumCard
+                    key={album.id}
+                    album={album}
+                    isPremium={isPremium}
+                    isFreemium={isFreemium}
+                    onUpgrade={handleUpgrade}
+                  />
+                ))}
+              </div>
+            )}
           </section>
         )}
 
 
         {/* ── HYMNES & CHANTS ─────────────────────────────────────────── */}
-        <section>
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-extrabold text-white">🎵 Hymnes & Chants</h2>
-              <p className="mt-0.5 text-xs text-slate-500">Écouter et mémoriser les symboles sonores de la République</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="overflow-hidden rounded-[1.5rem] border border-blue-400/20 bg-slate-900/95">
-              <div className="relative aspect-video w-full overflow-hidden rounded-t-[1.5rem]">
-                <iframe
-                  src="https://www.youtube.com/embed/QY8tdnqdPwI"
-                  title="La Marseillaise — Hymne national français"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="h-full w-full border-0"
-                />
-              </div>
-              <div className="px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-blue-300">🇫🇷 Hymne national</p>
-                  <div className="group relative">
-                    <button
-                      type="button"
-                      className="flex items-center justify-center rounded-full p-0.5 text-slate-500 transition hover:text-slate-300 focus:outline-none"
-                      onClick={(e) => {
-                        const tip = e.currentTarget.nextElementSibling as HTMLElement;
-                        tip.classList.toggle("hidden");
-                      }}
-                    >
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                    </button>
-                    <div className="absolute bottom-full left-0 z-10 mb-2 hidden w-52 rounded-xl border border-white/10 bg-slate-800 p-2.5 text-[10px] leading-4 text-slate-300 shadow-xl">
-                      Contenu YouTube officiel • 3,9M de vues • Publié il y a 14 ans. La lecture se fait directement dans l&apos;app.
-                    </div>
-                  </div>
-                </div>
-                <p className="mt-0.5 text-sm font-bold text-white">La Marseillaise</p>
-                <p className="mt-0.5 text-[10px] text-slate-500">Publié par <span className="text-blue-400">@Hitoshi54140</span> sur YouTube</p>
-                <p className="mt-1 text-[11px] text-slate-500">Écrite en 1792 • Symbole de la République française</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <a
-                    href="https://www.youtube.com/watch?v=QY8tdnqdPwI"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-500/10 px-3 py-1.5 text-[11px] font-bold text-red-300 transition hover:bg-red-500/20"
-                  >
-                    <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
-                    Voir sur YouTube
-                  </a>
-                  <a
-                    href="/La-Marseillaise-lhymne-national.pdf?v=3"
-                    download
-                    className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-[11px] font-bold text-blue-300 transition hover:bg-blue-500/20"
-                  >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Télécharger le livret PDF
-                  </a>
-                </div>
+        {hymnes.length > 0 && (
+          <section>
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-extrabold text-white">🎵 Hymnes & Chants</h2>
+                <p className="mt-0.5 text-xs text-slate-500">Écouter et mémoriser les symboles sonores de la République</p>
               </div>
             </div>
-          </div>
-        </section>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {hymnes.map((m) => (
+                <MediaCard key={m.id} media={m} />
+              ))}
+            </div>
+          </section>
+        )}
         {isAnonymous && (
           <section>
             <div className="mb-4">
@@ -484,32 +451,35 @@ export default function AudioLibraryPage() {
               <p className="mt-0.5 text-xs text-slate-500">Créez un compte pour accéder aux épisodes</p>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-              {albums.map((album) => {
-                const config = SUBTHEME_CONFIG[album.subthemeKey];
-                return (
-                  <div key={album.subthemeKey} className={`relative overflow-hidden rounded-[1.5rem] border ${config?.border ?? "border-white/10"} opacity-50`}>
-                    <div className="relative aspect-square w-full overflow-hidden">
-                      {config?.image ? (
-                        <>
-                          <Image src={config.image} alt={album.subthemeLabel} fill className="object-cover" />
-                          <div className={`absolute inset-0 bg-gradient-to-b ${config.accent}`} />
-                        </>
-                      ) : (
-                        <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${config?.accent ?? "from-slate-700 to-slate-800"}`}>
-                          <span className="text-5xl">{THEME_ICONS[album.themeKey] ?? "🎧"}</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-                        <span className="text-3xl">🔒</span>
+              {albums.map((album) => (
+                <div key={album.id} className={`relative overflow-hidden rounded-[1.5rem] border ${album.accent_border ?? "border-white/10"} opacity-50`}>
+                  <div className="relative aspect-square w-full overflow-hidden">
+                    {album.image_url ? (
+                      <>
+                        <Image
+                          src={album.image_url}
+                          alt={album.subtheme_label}
+                          fill
+                          className="object-cover"
+                          unoptimized={album.image_url.startsWith("http")}
+                        />
+                        <div className={`absolute inset-0 bg-gradient-to-b ${album.accent_gradient ?? ""}`} />
+                      </>
+                    ) : (
+                      <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${album.accent_gradient ?? "from-slate-700 to-slate-800"}`}>
+                        <span className="text-5xl">{album.icon ?? THEME_ICON_FALLBACK[album.theme_key] ?? "🎧"}</span>
                       </div>
-                    </div>
-                    <div className="bg-slate-900/95 px-3 py-3">
-                      <p className="text-sm font-bold text-white">{album.subthemeLabel}</p>
-                      <p className="mt-1 text-[11px] text-slate-500">{album.episodeCount} épisodes</p>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                      <span className="text-3xl">🔒</span>
                     </div>
                   </div>
-                );
-              })}
+                  <div className="bg-slate-900/95 px-3 py-3">
+                    <p className="text-sm font-bold text-white">{album.subtheme_label}</p>
+                    <p className="mt-1 text-[11px] text-slate-500">{album.episodeCount} épisodes</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
         )}
@@ -529,28 +499,41 @@ export default function AudioLibraryPage() {
 
       </div>
       {/* ── MODAL INFOS ─────────────────────────────────────────────── */}
-      {showInfo && (
+      {showInfo && featuredAlbum && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowInfo(false)} />
           <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 shadow-[0_25px_70px_rgba(0,0,0,0.6)]">
             <div className="relative h-48 overflow-hidden">
-              <Image src="/themes/valeurs_republique.jpg" alt="" fill className="object-cover opacity-60" />
+              {featuredAlbum.image_url && (
+                <Image
+                  src={featuredAlbum.image_url}
+                  alt=""
+                  fill
+                  className="object-cover opacity-60"
+                  unoptimized={featuredAlbum.image_url.startsWith("http")}
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
               <button onClick={() => setShowInfo(false)} className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white transition hover:bg-black/70">✕</button>
             </div>
             <div className="px-6 pb-6">
-              <span className="inline-flex items-center rounded-full border border-blue-400/30 bg-blue-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-blue-300">Valeurs</span>
-              <h3 className="mt-2 text-xl font-extrabold text-white">Valeurs de la République</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-300">
-                Les valeurs fondamentales de la République française — Liberté, Égalité, Fraternité — sont au cœur de l&apos;entretien civique. Cette série de 10 épisodes couvre la devise nationale, les libertés fondamentales, la laïcité, les symboles républicains et bien plus. Format entretien réel, voix naturelle.
-              </p>
+              <span className={`inline-flex items-center rounded-full border border-blue-400/30 bg-blue-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${featuredAlbum.accent_text ?? "text-blue-300"}`}>
+                {featuredAlbum.theme_label}
+              </span>
+              <h3 className="mt-2 text-xl font-extrabold text-white">{featuredAlbum.subtheme_label}</h3>
+              {featuredAlbum.description && (
+                <p className="mt-3 text-sm leading-6 text-slate-300">{featuredAlbum.description}</p>
+              )}
               <div className="mt-3 flex gap-4 text-xs text-slate-400">
-                <span>🎙️ 10 épisodes</span>
-                <span>⏱️ ~15 min</span>
+                <span>🎙️ {featuredAlbum.episodeCount} épisodes</span>
+                <span>⏱️ ~{featuredAlbum.totalMinutes} min</span>
                 <span>🎧 Voix naturelle</span>
               </div>
               <button
-                onClick={() => { setShowInfo(false); router.push("/audio/Valeurs/valeurs_republique"); }}
+                onClick={() => {
+                  setShowInfo(false);
+                  router.push(`/audio/${encodeURIComponent(featuredAlbum.theme_key)}/${encodeURIComponent(featuredAlbum.subtheme_key)}`);
+                }}
                 className="mt-5 w-full rounded-2xl bg-white py-3 text-sm font-bold text-slate-950 transition hover:bg-slate-100"
               >
                 ▶ Écouter maintenant
@@ -560,5 +543,93 @@ export default function AudioLibraryPage() {
         </div>
       )}
     </main>
+  );
+}
+
+// ─── Composant Media Card (hymnes / vidéos / PDF) ──────────────────────────
+function MediaCard({ media }: { media: AudioMediaRow }) {
+  const youtubeWatchUrl =
+    media.media_type === "youtube"
+      ? media.media_url.replace("/embed/", "/watch?v=").replace("www.youtube.com/v/", "www.youtube.com/watch?v=")
+      : null;
+
+  return (
+    <div className="overflow-hidden rounded-[1.5rem] border border-blue-400/20 bg-slate-900/95">
+      <div className="relative aspect-video w-full overflow-hidden rounded-t-[1.5rem] bg-slate-950">
+        {media.media_type === "youtube" && (
+          <iframe
+            src={media.media_url}
+            title={media.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="h-full w-full border-0"
+          />
+        )}
+        {media.media_type === "video" && (
+          <video src={media.media_url} controls className="h-full w-full object-cover">
+            Votre navigateur ne supporte pas la lecture vidéo.
+          </video>
+        )}
+        {media.media_type === "audio" && (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-4">
+            {media.thumbnail_url ? (
+              <Image
+                src={media.thumbnail_url}
+                alt={media.title}
+                width={96}
+                height={96}
+                className="rounded-2xl object-cover"
+                unoptimized={media.thumbnail_url.startsWith("http")}
+              />
+            ) : (
+              <span className="text-5xl">{media.icon ?? "🎵"}</span>
+            )}
+            <audio src={media.media_url} controls className="w-full" />
+          </div>
+        )}
+        {media.media_type === "pdf" && (
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="text-5xl">{media.icon ?? "📄"}</span>
+          </div>
+        )}
+      </div>
+      <div className="px-4 py-3">
+        <p className={`text-[10px] font-bold uppercase tracking-widest ${media.accent ?? "text-blue-300"}`}>
+          {media.icon ?? "🎵"} {media.section === "hymnes" ? "Hymne national" : media.section === "podcasts" ? "Podcast" : "Média"}
+        </p>
+        <p className="mt-0.5 text-sm font-bold text-white">{media.title}</p>
+        {media.author && (
+          <p className="mt-0.5 text-[10px] text-slate-500">Publié par <span className="text-blue-400">{media.author}</span></p>
+        )}
+        {media.description && (
+          <p className="mt-1 text-[11px] text-slate-500">{media.description}</p>
+        )}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {youtubeWatchUrl && (
+            <a
+              href={youtubeWatchUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-500/10 px-3 py-1.5 text-[11px] font-bold text-red-300 transition hover:bg-red-500/20"
+            >
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
+              Voir sur YouTube
+            </a>
+          )}
+          {media.pdf_url && (
+            <a
+              href={media.pdf_url}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-[11px] font-bold text-blue-300 transition hover:bg-blue-500/20"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Télécharger le PDF
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
