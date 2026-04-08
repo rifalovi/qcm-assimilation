@@ -256,10 +256,35 @@ export default function AudioLibraryPage() {
     });
   }, [seriesRows, episodeCounts]);
 
-  const featuredAlbum = useMemo<Album | null>(
-    () => albums.find((a) => a.featured) ?? albums[0] ?? null,
+  // Carrousel « En vedette » : toutes les séries featured, auto-rotation 3 s
+  const featuredAlbums = useMemo<Album[]>(
+    () => {
+      const onlyFeatured = albums.filter((a) => a.featured);
+      if (onlyFeatured.length > 0) return onlyFeatured;
+      // Aucune série featured : on retombe sur la première pour éviter un trou
+      return albums[0] ? [albums[0]] : [];
+    },
     [albums]
   );
+
+  const [carouselIdx, setCarouselIdx] = useState(0);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+
+  // Reset de l'index si la liste change (ex : l'admin ajoute/retire une série)
+  useEffect(() => {
+    if (carouselIdx >= featuredAlbums.length) setCarouselIdx(0);
+  }, [featuredAlbums.length, carouselIdx]);
+
+  // Auto-rotation toutes les 3 s (désactivée s'il n'y a qu'une série ou au survol)
+  useEffect(() => {
+    if (featuredAlbums.length <= 1 || carouselPaused) return;
+    const id = window.setInterval(() => {
+      setCarouselIdx((i) => (i + 1) % featuredAlbums.length);
+    }, 3000);
+    return () => window.clearInterval(id);
+  }, [featuredAlbums.length, carouselPaused]);
+
+  const featuredAlbum = featuredAlbums[carouselIdx] ?? null;
 
   const hymnes = useMemo(
     () => mediaRows.filter((m) => m.section === "hymnes"),
@@ -325,68 +350,108 @@ export default function AudioLibraryPage() {
           </div>
         </section>
 
-        {/* ── HERO BANNER NETFLIX ────────────────────────────────────── */}
-        {!isAnonymous && featuredAlbum && (
+        {/* ── HERO BANNER NETFLIX (carrousel) ─────────────────────────── */}
+        {!isAnonymous && featuredAlbums.length > 0 && (
           <section
-            className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_25px_70px_rgba(2,8,23,0.6)]"
-            style={{ minHeight: 320 }}
+            className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_25px_70px_rgba(2,8,23,0.6)] min-h-[360px]"
+            onMouseEnter={() => setCarouselPaused(true)}
+            onMouseLeave={() => setCarouselPaused(false)}
+            onTouchStart={() => setCarouselPaused(true)}
+            onTouchEnd={() => setCarouselPaused(false)}
+            aria-roledescription="carousel"
+            aria-label="Séries en vedette"
           >
-            {/* Image de fond */}
-            <div className="absolute inset-0">
-              {featuredAlbum.image_url && (
-                <Image
-                  src={featuredAlbum.image_url}
-                  alt={featuredAlbum.subtheme_label}
-                  fill
-                  className="object-cover"
-                  priority
-                  unoptimized={featuredAlbum.image_url.startsWith("http")}
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/60 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-            </div>
+            {featuredAlbums.map((album, i) => {
+              const active = i === carouselIdx;
+              return (
+                <div
+                  key={album.id}
+                  className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${active ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"}`}
+                  aria-hidden={!active}
+                  aria-roledescription="slide"
+                  aria-label={`${i + 1} / ${featuredAlbums.length}`}
+                >
+                  {/* Image de fond */}
+                  <div className="absolute inset-0">
+                    {album.image_url && (
+                      <Image
+                        src={album.image_url}
+                        alt={album.subtheme_label}
+                        fill
+                        className="object-cover"
+                        priority={i === 0}
+                        unoptimized={album.image_url.startsWith("http")}
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                  </div>
 
-            {/* Contenu */}
-            <div className="relative flex h-full min-h-[320px] flex-col justify-end px-6 py-8 sm:px-10 sm:py-10 lg:justify-center">
-              <div className="max-w-lg">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-blue-300 backdrop-blur-sm">
-                  ⭐ En vedette
-                </span>
-                <h2 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
-                  {featuredAlbum.subtheme_label}
-                </h2>
-                {featuredAlbum.description && (
-                  <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-300">
-                    {featuredAlbum.description}
-                  </p>
-                )}
-                <div className="mt-2 flex gap-3 text-xs text-slate-400">
-                  <span>{featuredAlbum.episodeCount} épisodes</span>
-                  <span>•</span>
-                  <span>~{featuredAlbum.totalMinutes} min</span>
-                  <span>•</span>
-                  <span className="text-emerald-400">Disponible</span>
-                </div>
+                  {/* Contenu */}
+                  <div className="relative flex h-full min-h-[360px] flex-col justify-end px-6 py-8 sm:px-10 sm:py-10 lg:justify-center">
+                    <div className="max-w-lg">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-blue-300 backdrop-blur-sm">
+                        ⭐ En vedette
+                      </span>
+                      <h2 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+                        {album.subtheme_label}
+                      </h2>
+                      {album.description && (
+                        <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-300">
+                          {album.description}
+                        </p>
+                      )}
+                      <div className="mt-2 flex gap-3 text-xs text-slate-400">
+                        <span>{album.episodeCount} épisodes</span>
+                        <span>•</span>
+                        <span>~{album.totalMinutes} min</span>
+                        <span>•</span>
+                        <span className="text-emerald-400">Disponible</span>
+                      </div>
 
-                <div className="mt-5 flex flex-wrap gap-3">
-                  <button
-                    onClick={() => router.push(`/audio/${encodeURIComponent(featuredAlbum.theme_key)}/${encodeURIComponent(featuredAlbum.subtheme_key)}`)}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-bold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.2)] transition hover:bg-slate-100 active:scale-95"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
-                    Écouter maintenant
-                  </button>
-                  <button
-                    onClick={() => setShowInfo(true)}
-                    className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20 active:scale-95"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                    + Infos
-                  </button>
+                      <div className="mt-5 flex flex-wrap gap-3">
+                        <button
+                          onClick={() => router.push(`/audio/${encodeURIComponent(album.theme_key)}/${encodeURIComponent(album.subtheme_key)}`)}
+                          className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-bold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.2)] transition hover:bg-slate-100 active:scale-95"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
+                          Écouter maintenant
+                        </button>
+                        <button
+                          onClick={() => setShowInfo(true)}
+                          className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20 active:scale-95"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                          + Infos
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              );
+            })}
+
+            {/* Spacer : force la hauteur du conteneur puisque les slides sont absolus */}
+            <div className="pointer-events-none invisible min-h-[360px]" aria-hidden />
+
+            {/* Points de navigation */}
+            {featuredAlbums.length > 1 && (
+              <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center gap-2">
+                {featuredAlbums.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCarouselIdx(i)}
+                    aria-label={`Afficher le slide ${i + 1} sur ${featuredAlbums.length}`}
+                    aria-current={i === carouselIdx}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      i === carouselIdx
+                        ? "w-6 bg-white"
+                        : "w-2 bg-white/40 hover:bg-white/70"
+                    }`}
+                  />
+                ))}
               </div>
-            </div>
+            )}
           </section>
         )}
 

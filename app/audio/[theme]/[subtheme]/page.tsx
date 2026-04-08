@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "../../../components/UserContext";
 import { audioEpisodes, type AudioEpisode, type AudioThemeKey } from "@/data/audioEpisodes";
+import { createClient } from "@/lib/supabase/client";
+import { fetchAudioSeries, fetchAudioEpisodes, type AudioSeriesRow } from "@/lib/audioContent";
 import { trackEvent } from "@/lib/posthog";
 
 const SUBTHEME_IMAGES: Record<string, string> = {
@@ -440,7 +442,7 @@ function StickyPlayer({
       <div className="flex items-center gap-3 px-4 pt-3">
         {subthemeImage ? (
           <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-white/10">
-            <Image src={subthemeImage} alt={episode.subthemeLabel} fill className="object-cover" />
+            <Image src={subthemeImage} alt={episode.subthemeLabel} fill className="object-cover" unoptimized={subthemeImage.startsWith("http")} />
           </div>
         ) : (
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-2xl">{meta.icon}</div>
@@ -590,12 +592,58 @@ export default function AudioSeriesPage() {
   const themeKey    = decodeURIComponent(theme as string) as AudioThemeKey;
   const subthemeKey = decodeURIComponent(subtheme as string);
 
-  const episodes = useMemo(() =>
-    audioEpisodes
+  // ─── Données Supabase (série + épisodes + toutes les séries) ─────────────
+  // Fallback : si Supabase ne renvoie rien (tables non peuplées), on garde
+  // les données statiques de src/data/audioEpisodes.ts pour ne rien casser.
+  const [seriesRow, setSeriesRow] = useState<AudioSeriesRow | null>(null);
+  const [allSeriesRows, setAllSeriesRows] = useState<AudioSeriesRow[]>([]);
+  const [dbEpisodes, setDbEpisodes] = useState<AudioEpisode[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const sb = createClient();
+      const all = await fetchAudioSeries(sb);
+      if (cancelled) return;
+      setAllSeriesRows(all);
+
+      const current = all.find(
+        (s) => s.subtheme_key === subthemeKey && s.theme_key === themeKey
+      ) ?? null;
+      setSeriesRow(current);
+
+      if (!current) { setDbEpisodes([]); return; }
+
+      const rows = await fetchAudioEpisodes(sb, current.id);
+      if (cancelled) return;
+
+      // Convertit les lignes DB vers la forme AudioEpisode attendue par le hook
+      const mapped: AudioEpisode[] = rows
+        .sort((a, b) => a.episode_number - b.episode_number)
+        .map((ep) => ({
+          id: ep.id,
+          themeKey: current.theme_key as AudioThemeKey,
+          themeLabel: current.theme_label,
+          subthemeKey: current.subtheme_key,
+          subthemeLabel: current.subtheme_label,
+          episodeNumber: ep.episode_number,
+          episodeTitle: ep.episode_title,
+          episodeSlug: ep.episode_slug,
+          durationTargetSeconds: ep.duration_target_seconds,
+          premium: ep.premium,
+        }));
+      setDbEpisodes(mapped);
+    })();
+    return () => { cancelled = true; };
+  }, [themeKey, subthemeKey]);
+
+  // Épisodes : DB si non vide, sinon fallback statique
+  const episodes = useMemo(() => {
+    if (dbEpisodes && dbEpisodes.length > 0) return dbEpisodes;
+    return audioEpisodes
       .filter((ep) => ep.themeKey === themeKey && ep.subthemeKey === subthemeKey)
-      .sort((a, b) => a.episodeNumber - b.episodeNumber),
-    [themeKey, subthemeKey]
-  );
+      .sort((a, b) => a.episodeNumber - b.episodeNumber);
+  }, [dbEpisodes, themeKey, subthemeKey]);
 
   const [currentIdx,       setCurrentIdx]       = useState(0);
   const [autoPlay,         setAutoPlay]          = useState(false);
@@ -693,23 +741,40 @@ export default function AudioSeriesPage() {
     } catch { router.push("/pricing"); }
   };
 
-  const meta = THEME_META[themeKey] ?? THEME_META.Valeurs;
+  // Metadata visuelle : priorité Supabase, fallback THEME_META
+  const baseMeta = THEME_META[themeKey] ?? THEME_META.Valeurs;
+  const meta = useMemo(() => ({
+    icon:        seriesRow?.icon             ?? baseMeta.icon,
+    accent:      seriesRow?.accent_gradient  ?? baseMeta.accent,
+    accentText:  seriesRow?.accent_text      ?? baseMeta.accentText,
+    border:      seriesRow?.accent_border    ?? baseMeta.border,
+    glow:        baseMeta.glow,
+  }), [seriesRow, baseMeta]);
 
+  // Toutes les séries : Supabase si dispo, sinon fallback statique (unique par key)
   const allSeries = useMemo(() => {
+    if (allSeriesRows.length > 0) {
+      return allSeriesRows.map((s) => ({
+        themeKey: s.theme_key as AudioThemeKey,
+        subthemeKey: s.subtheme_key,
+      }));
+    }
     const seen = new Set<string>();
-    return audioEpisodes.filter(ep => {
-      const key = ep.themeKey + '|' + ep.subthemeKey;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  }, []);
+    return audioEpisodes
+      .filter((ep) => {
+        const key = ep.themeKey + '|' + ep.subthemeKey;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .map((ep) => ({ themeKey: ep.themeKey, subthemeKey: ep.subthemeKey }));
+  }, [allSeriesRows]);
 
-  const currentSeriesIndex = allSeries.findIndex(ep => ep.themeKey === themeKey && ep.subthemeKey === subthemeKey);
-  const nextSeries    = allSeries[(currentSeriesIndex + 1) % allSeries.length];
+  const currentSeriesIndex = allSeries.findIndex(s => s.themeKey === themeKey && s.subthemeKey === subthemeKey);
+  const nextSeries    = allSeries.length > 0 ? allSeries[(currentSeriesIndex + 1) % allSeries.length] : null;
   const nextSeriesUrl = nextSeries ? `/audio/${encodeURIComponent(nextSeries.themeKey)}/${encodeURIComponent(nextSeries.subthemeKey)}` : '/audio';
   const isDevenir      = themeKey === "Devenir français(e)" || themeKey === "Quiz Audio";
-  const subthemeImage  = SUBTHEME_IMAGES[subthemeKey] ?? null;
+  const subthemeImage  = seriesRow?.image_url ?? SUBTHEME_IMAGES[subthemeKey] ?? null;
   const currentEpisode = episodes[currentIdx];
   const isPlayerVisible = isPremium || (isFreemium && FREE_EPISODE_NUMBERS.has(currentEpisode?.episodeNumber ?? 0));
 
@@ -740,7 +805,7 @@ export default function AudioSeriesPage() {
         <div className={`relative overflow-hidden rounded-[1.8rem] border ${meta.border} shadow-[0_20px_50px_rgba(2,8,23,0.4)]`}>
           {subthemeImage && (
             <div className="absolute inset-0">
-              <Image src={subthemeImage} alt={subthemeLabel} fill className="object-cover opacity-20" />
+              <Image src={subthemeImage} alt={subthemeLabel} fill className="object-cover opacity-20" unoptimized={subthemeImage.startsWith("http")} />
               <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/80 to-slate-900/95" />
             </div>
           )}
@@ -761,7 +826,7 @@ export default function AudioSeriesPage() {
             <div className="flex items-center gap-4">
               {subthemeImage ? (
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
-                  <Image src={subthemeImage} alt={subthemeLabel} fill className="object-cover" />
+                  <Image src={subthemeImage} alt={subthemeLabel} fill className="object-cover" unoptimized={subthemeImage.startsWith("http")} />
                 </div>
               ) : (
                 <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-4xl">{meta.icon}</div>
@@ -918,7 +983,7 @@ export default function AudioSeriesPage() {
                     )}
                     {!isSelectionMode && (
                       subthemeImage
-                        ? <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-white/10"><Image src={subthemeImage} alt="" fill className="object-cover" /></div>
+                        ? <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-white/10"><Image src={subthemeImage} alt="" fill className="object-cover" unoptimized={subthemeImage.startsWith("http")} /></div>
                         : <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-lg">{meta.icon}</div>
                     )}
                     <div className="min-w-0 flex-1">
