@@ -8,8 +8,10 @@ import {
   fetchAudioSeries,
   fetchAudioEpisodes,
   fetchAudioMedia,
+  fetchAudioComingSoon,
   type AudioSeriesRow,
   type AudioMediaRow,
+  type AudioComingSoonRow,
 } from "@/lib/audioContent";
 import { useEffect, useMemo, useState } from "react";
 
@@ -20,37 +22,6 @@ const THEME_ICON_FALLBACK: Record<string, string> = {
   Histoire: "📜",
   Société: "👥",
 };
-
-// Catégories à venir (pas encore pilotées par Supabase)
-const COMING_SOON = [
-  {
-    id: "podcasts",
-    title: "Podcasts",
-    description: "Interviews et témoignages de candidats naturalisés",
-    icon: "🎙️",
-    color: "from-rose-600/20 to-pink-600/10 border-rose-400/20",
-    iconBg: "bg-rose-500/20 border-rose-400/20",
-    count: "Bientôt",
-  },
-  {
-    id: "conseils",
-    title: "Conseils pratiques",
-    description: "Préparer le jour J, gérer le stress, réussir l'oral",
-    icon: "💡",
-    color: "from-yellow-600/20 to-amber-600/10 border-yellow-400/20",
-    iconBg: "bg-yellow-500/20 border-yellow-400/20",
-    count: "Bientôt",
-  },
-  {
-    id: "parcours",
-    title: "Parcours guidés",
-    description: "Programmes de révision sur 7, 14 ou 30 jours",
-    icon: "🗺️",
-    color: "from-cyan-600/20 to-sky-600/10 border-cyan-400/20",
-    iconBg: "bg-cyan-500/20 border-cyan-400/20",
-    count: "Bientôt",
-  },
-];
 
 // ─── Composant Album Card ──────────────────────────────────────────────────
 type Album = AudioSeriesRow & { episodeCount: number; totalMinutes: number };
@@ -144,22 +115,24 @@ function AlbumCard({
 }
 
 // ─── Composant Coming Soon Card ────────────────────────────────────────────
-function ComingSoonCard({ item }: { item: typeof COMING_SOON[0] }) {
+function ComingSoonCard({ item }: { item: AudioComingSoonRow }) {
   return (
-    <div className={`relative overflow-hidden rounded-[1.5rem] border bg-gradient-to-br ${item.color} opacity-70`}>
+    <div className={`relative overflow-hidden rounded-[1.5rem] border bg-gradient-to-br ${item.color ?? ''} opacity-70`}>
       <div className="aspect-square w-full flex items-center justify-center bg-gradient-to-br from-slate-800/50 to-slate-900/50">
-        <div className={`flex h-16 w-16 items-center justify-center rounded-2xl border ${item.iconBg} text-3xl`}>
-          {item.icon}
+        <div className={`flex h-16 w-16 items-center justify-center rounded-2xl border ${item.icon_bg ?? ''} text-3xl`}>
+          {item.icon ?? '✨'}
         </div>
       </div>
       <div className="bg-slate-900/95 px-3 py-3">
         <div className="flex items-center justify-between">
           <p className="text-sm font-bold text-white">{item.title}</p>
           <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-400">
-            {item.count}
+            {item.count_label}
           </span>
         </div>
-        <p className="mt-1 text-[11px] leading-4 text-slate-500 line-clamp-2">{item.description}</p>
+        {item.description && (
+          <p className="mt-1 text-[11px] leading-4 text-slate-500 line-clamp-2">{item.description}</p>
+        )}
       </div>
     </div>
   );
@@ -179,16 +152,18 @@ export default function AudioLibraryPage() {
   const [seriesRows, setSeriesRows] = useState<AudioSeriesRow[] | null>(null);
   const [episodeCounts, setEpisodeCounts] = useState<Map<string, { count: number; seconds: number }>>(new Map());
   const [mediaRows, setMediaRows] = useState<AudioMediaRow[]>([]);
+  const [comingSoonRows, setComingSoonRows] = useState<AudioComingSoonRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       const sb = createClient();
-      const [series, episodes, media] = await Promise.all([
+      const [series, episodes, media, comingSoon] = await Promise.all([
         fetchAudioSeries(sb),
         fetchAudioEpisodes(sb),
         fetchAudioMedia(sb),
+        fetchAudioComingSoon(sb),
       ]);
       if (cancelled) return;
 
@@ -205,6 +180,7 @@ export default function AudioLibraryPage() {
       setSeriesRows(series);
       setEpisodeCounts(counts);
       setMediaRows(media);
+      setComingSoonRows(comingSoon);
       setLoading(false);
     })();
     return () => { cancelled = true; };
@@ -526,17 +502,19 @@ export default function AudioLibraryPage() {
         )}
 
         {/* ── BIENTÔT DISPONIBLE ───────────────────────────────────────── */}
-        <section>
-          <div className="mb-4">
-            <h2 className="text-lg font-extrabold text-white">🚀 Bientôt disponible</h2>
-            <p className="mt-0.5 text-xs text-slate-500">De nouvelles collections arrivent prochainement</p>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-            {COMING_SOON.map((item) => (
-              <ComingSoonCard key={item.id} item={item} />
-            ))}
-          </div>
-        </section>
+        {comingSoonRows.length > 0 && (
+          <section>
+            <div className="mb-4">
+              <h2 className="text-lg font-extrabold text-white">🚀 Bientôt disponible</h2>
+              <p className="mt-0.5 text-xs text-slate-500">De nouvelles collections arrivent prochainement</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+              {comingSoonRows.map((item) => (
+                <ComingSoonCard key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        )}
 
       </div>
       {/* ── MODAL INFOS ─────────────────────────────────────────────── */}

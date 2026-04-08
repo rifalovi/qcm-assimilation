@@ -51,6 +51,18 @@ export type AudioMediaRow = {
   position: number
 }
 
+export type AudioComingSoonRow = {
+  id: string
+  key: string
+  title: string
+  description: string | null
+  icon: string | null
+  color: string | null
+  icon_bg: string | null
+  count_label: string
+  position: number
+}
+
 // ─── Fetch helpers ──────────────────────────────────────────────────────────
 
 export async function fetchAudioSeries(sb: SupabaseClient): Promise<AudioSeriesRow[]> {
@@ -93,4 +105,16 @@ export async function fetchAudioMedia(sb: SupabaseClient, section?: string): Pro
     return []
   }
   return (data ?? []) as AudioMediaRow[]
+}
+
+export async function fetchAudioComingSoon(sb: SupabaseClient): Promise<AudioComingSoonRow[]> {
+  const { data, error } = await sb
+    .from('audio_coming_soon')
+    .select('id, key, title, description, icon, color, icon_bg, count_label, position')
+    .order('position', { ascending: true })
+  if (error) {
+    console.warn('[audioContent] fetchAudioComingSoon', error.message)
+    return []
+  }
+  return (data ?? []) as AudioComingSoonRow[]
 }

@@ -4,13 +4,15 @@ import { useState } from 'react'
 import SeriesManager from './SeriesManager'
 import EpisodesManager from './EpisodesManager'
 import MediaManager from './MediaManager'
+import ComingSoonManager from './ComingSoonManager'
 
-type Tab = 'series' | 'episodes' | 'media'
+type Tab = 'series' | 'episodes' | 'media' | 'coming_soon'
 
 const TABS: { key: Tab; label: string; desc: string }[] = [
-  { key: 'series',   label: 'Séries',   desc: 'Albums / sous-thèmes affichés sur /audio' },
-  { key: 'episodes', label: 'Épisodes', desc: 'Fichiers audio associés à chaque série' },
-  { key: 'media',    label: 'Médias',   desc: 'Hymnes, vidéos YouTube, PDF' },
+  { key: 'series',      label: 'Séries',   desc: 'Albums / sous-thèmes affichés sur /audio' },
+  { key: 'episodes',    label: 'Épisodes', desc: 'Fichiers audio associés à chaque série' },
+  { key: 'media',       label: 'Médias',   desc: 'Hymnes, vidéos YouTube, PDF' },
+  { key: 'coming_soon', label: 'Bientôt',  desc: 'Cartes « Bientôt disponible » affichées en bas de /audio' },
 ]
 
 export default function AdminAudioPage() {
@@ -45,9 +47,10 @@ export default function AdminAudioPage() {
         {TABS.find((t) => t.key === tab)?.desc}
       </p>
 
-      {tab === 'series'   && <SeriesManager />}
-      {tab === 'episodes' && <EpisodesManager />}
-      {tab === 'media'    && <MediaManager />}
+      {tab === 'series'      && <SeriesManager />}
+      {tab === 'episodes'    && <EpisodesManager />}
+      {tab === 'media'       && <MediaManager />}
+      {tab === 'coming_soon' && <ComingSoonManager />}
     </div>
   )
 }
