@@ -274,6 +274,9 @@ function EpisodeForm({
               <input type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadAudio('male', f) }} />
             </label>
           </div>
+          {!creating && form.episode_slug && (
+            <EpisodePreview slug={form.episode_slug} voice="male" />
+          )}
         </Field>
         <Field label="Audio — voix femme" full>
           <div className="flex gap-2">
@@ -283,6 +286,9 @@ function EpisodeForm({
               <input type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadAudio('female', f) }} />
             </label>
           </div>
+          {!creating && form.episode_slug && (
+            <EpisodePreview slug={form.episode_slug} voice="female" />
+          )}
         </Field>
         <Field label="Script" full>
           <textarea value={form.script ?? ''} onChange={(e) => patch('script', e.target.value)} rows={5} className={inputCls + ' resize-y font-mono text-xs'} />
@@ -331,6 +337,64 @@ function Field({ label, children, required, full }: { label: string; children: R
         {label}{required && <span className="text-rose-400"> *</span>}
       </label>
       {children}
+    </div>
+  )
+}
+
+// ─── Aperçu audio d'un épisode ──────────────────────────────────────────────
+// Utilise /api/audio/[slug] qui autorise les rôles admin/moderator et renvoie
+// une URL Supabase Storage signée (valable 60 s, suffisant pour lancer la
+// lecture — ensuite la donnée est en cache navigateur).
+function EpisodePreview({ slug, voice }: { slug: string; voice: 'male' | 'female' }) {
+  const [src, setSrc] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  async function load() {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetch(`/api/audio/${encodeURIComponent(slug)}?voice=${voice}`, { cache: 'no-store' })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error ?? `HTTP ${res.status}`)
+      setSrc(json.url)
+    } catch (e) {
+      setSrc(null)
+      setError(String(e))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { setSrc(null); setError(null) }, [slug, voice])
+
+  return (
+    <div className="mt-2 flex items-center gap-2">
+      {src ? (
+        <audio controls src={src} className="h-8 flex-1" preload="none">
+          Votre navigateur ne supporte pas la lecture audio.
+        </audio>
+      ) : (
+        <button
+          type="button"
+          onClick={load}
+          disabled={loading}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 px-3 py-1.5 text-[11px] font-medium text-white disabled:opacity-40"
+        >
+          {loading ? 'Chargement…' : '▶ Écouter'}
+        </button>
+      )}
+      {src && (
+        <button
+          type="button"
+          onClick={load}
+          className="rounded-lg bg-slate-700 hover:bg-slate-600 px-2 py-1 text-[10px] text-slate-300"
+          title="Rafraîchir l'URL signée"
+        >
+          ↻
+        </button>
+      )}
+      {error && <span className="text-[10px] text-rose-400 truncate max-w-[50%]" title={error}>⚠ {error}</span>}
     </div>
   )
 }

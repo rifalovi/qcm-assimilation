@@ -247,6 +247,7 @@ function MediaForm({
               </label>
             )}
           </div>
+          {form.media_url && <MediaPreview mediaType={form.media_type} url={form.media_url} thumbnail={form.thumbnail_url} />}
         </Field>
         <Field label="Miniature (thumbnail_url)" full>
           <div className="flex gap-2">
@@ -310,6 +311,61 @@ function Field({ label, children, required, full }: { label: string; children: R
         {label}{required && <span className="text-rose-400"> *</span>}
       </label>
       {children}
+    </div>
+  )
+}
+
+// ─── Aperçu du média dans le formulaire ─────────────────────────────────────
+// Lit directement media_url (URL YouTube embed, fichier public, ou data-URL).
+// Aucun fetch nécessaire : les fichiers media vivent dans le bucket
+// public-assets (URLs publiques) et YouTube est un simple iframe.
+function MediaPreview({
+  mediaType, url, thumbnail,
+}: {
+  mediaType: AudioMedia['media_type']
+  url: string
+  thumbnail: string | null
+}) {
+  return (
+    <div className="mt-3 rounded-xl border border-slate-700 bg-slate-900/60 p-3">
+      <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">Aperçu</p>
+      {mediaType === 'youtube' && (
+        <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg bg-black">
+          <iframe
+            src={url}
+            title="Aperçu YouTube"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="h-full w-full border-0"
+          />
+        </div>
+      )}
+      {mediaType === 'audio' && (
+        <audio controls src={url} preload="none" className="w-full max-w-md">
+          Votre navigateur ne supporte pas la lecture audio.
+        </audio>
+      )}
+      {mediaType === 'video' && (
+        <video
+          controls
+          src={url}
+          poster={thumbnail ?? undefined}
+          preload="none"
+          className="w-full max-w-md rounded-lg bg-black"
+        >
+          Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+      )}
+      {mediaType === 'pdf' && (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-lg border border-blue-400/30 bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-300 hover:bg-blue-500/20"
+        >
+          📄 Ouvrir le PDF dans un nouvel onglet
+        </a>
+      )}
     </div>
   )
 }
