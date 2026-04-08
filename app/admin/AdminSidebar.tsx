@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, Flag, Ban,
   Shield, BarChart2, FileEdit, LogOut,
-  ChevronRight, TrendingUp, Menu, X
+  ChevronRight, TrendingUp, Menu, X, Headphones
 } from 'lucide-react'
 
 const NAV = [
@@ -17,6 +17,7 @@ const NAV = [
   { href: '/admin/moderators', label: 'Modérateurs',     icon: Shield },
   { href: '/admin/stats',      label: 'Statistiques',    icon: BarChart2 },
   { href: '/admin/analytics',  label: 'Analytics',       icon: TrendingUp },
+  { href: '/admin/audio',      label: 'Audio',           icon: Headphones },
   { href: '/admin/content',    label: 'Contenu',         icon: FileEdit },
 ]
 
@@ -62,7 +63,7 @@ export default function AdminSidebar({ role, username, logoutButton }: Props) {
 
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {NAV.map(({ href, label, icon: Icon }) => {
-          if (role === 'moderator' && ['/admin/moderators', '/admin/content', '/admin/users'].includes(href)) return null
+          if (role === 'moderator' && ['/admin/moderators', '/admin/content', '/admin/audio', '/admin/users'].includes(href)) return null
           const isActive = pathname === href
           return (
             <Link key={href} href={href} onClick={() => setOpen(false)}
