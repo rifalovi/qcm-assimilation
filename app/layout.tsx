@@ -5,6 +5,7 @@ import PostHogProvider from "./components/PostHogProvider";
 import { Suspense } from "react";
 import { UserProvider } from "./components/UserContext";
 import BottomNav from "@/components/BottomNav"
+import FloatingChat from "./components/FloatingChat"
 import CapacitorProvider from "@/components/CapacitorProvider"
 import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalShell from "@/components/ConditionalShell";
@@ -80,6 +81,7 @@ export default function RootLayout({
             {children}
           </ConditionalShell>
           <BottomNav />
+          <FloatingChat />
         </PostHogProvider>
         </Suspense>
         </CapacitorProvider>

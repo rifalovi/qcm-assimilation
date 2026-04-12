@@ -117,18 +117,18 @@ export default function AiCoachCard({
       {/* Diagnostic */}
       <div className="rounded-xl border border-white/10 bg-white/5 p-4">
         <p className="text-xs font-bold text-sky-300 uppercase tracking-wider mb-2">Diagnostic</p>
-        <p className="text-sm text-slate-200 leading-relaxed">{data.diagnosis}</p>
+        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.diagnosis}</p>
       </div>
 
       {/* Forces & Faiblesses */}
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4">
           <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Point fort</p>
-          <p className="text-sm text-emerald-100 leading-relaxed">{data.strength}</p>
+          <p className="text-sm text-emerald-100 leading-relaxed text-justify">{data.strength}</p>
         </div>
         <div className="rounded-xl border border-red-400/20 bg-red-500/10 p-4">
           <p className="text-xs font-bold text-red-300 uppercase tracking-wider mb-1">Point faible</p>
-          <p className="text-sm text-red-100 leading-relaxed">{data.weakness}</p>
+          <p className="text-sm text-red-100 leading-relaxed text-justify">{data.weakness}</p>
         </div>
       </div>
 

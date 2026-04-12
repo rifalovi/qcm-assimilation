@@ -243,22 +243,22 @@ export default function AssistantPage() {
 
               <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                 <p className="text-xs font-bold text-blue-300 uppercase tracking-wider mb-1">Résumé</p>
-                <p className="text-sm text-slate-200 leading-relaxed">{data.summary}</p>
+                <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.summary}</p>
               </div>
 
               <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                 <p className="text-xs font-bold text-violet-300 uppercase tracking-wider mb-1">Ce que ça signifie</p>
-                <p className="text-sm text-slate-200 leading-relaxed">{data.what_it_means}</p>
+                <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.what_it_means}</p>
               </div>
 
               <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                 <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Ce qu'il faut faire</p>
-                <p className="text-sm text-slate-200 leading-relaxed">{data.what_to_do}</p>
+                <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.what_to_do}</p>
               </div>
 
               <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4">
                 <p className="text-xs font-bold text-amber-300 uppercase tracking-wider mb-1">Points de vigilance</p>
-                <p className="text-sm text-amber-100 leading-relaxed">{data.watch_out}</p>
+                <p className="text-sm text-amber-100 leading-relaxed text-justify">{data.watch_out}</p>
               </div>
 
               {data.official_links && data.official_links.length > 0 && (

@@ -121,22 +121,22 @@ export default function AiExplanationCard({
 
       <div className="rounded-xl border border-white/10 bg-white/5 p-3">
         <p className="text-xs font-bold text-blue-300 uppercase tracking-wider mb-1">Explication simple</p>
-        <p className="text-sm text-slate-200 leading-relaxed">{data.simple_explanation}</p>
+        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.simple_explanation}</p>
       </div>
 
       <div className="rounded-xl border border-white/10 bg-white/5 p-3">
         <p className="text-xs font-bold text-red-300 uppercase tracking-wider mb-1">Pourquoi c'est faux</p>
-        <p className="text-sm text-slate-200 leading-relaxed">{data.why_wrong}</p>
+        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.why_wrong}</p>
       </div>
 
       <div className="rounded-xl border border-white/10 bg-white/5 p-3">
         <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Exemple concret</p>
-        <p className="text-sm text-slate-200 leading-relaxed">{data.example}</p>
+        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.example}</p>
       </div>
 
       <div className="rounded-xl border border-white/10 bg-white/5 p-3">
         <p className="text-xs font-bold text-amber-300 uppercase tracking-wider mb-1">Piège à éviter</p>
-        <p className="text-sm text-slate-200 leading-relaxed">{data.trap}</p>
+        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.trap}</p>
       </div>
 
       <div className="rounded-xl border border-violet-400/20 bg-violet-500/10 p-3">
