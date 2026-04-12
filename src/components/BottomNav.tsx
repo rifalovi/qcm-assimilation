@@ -209,6 +209,7 @@ export default function BottomNav() {
             </div>
             <div className="flex flex-col gap-3">
               {[
+                { icon: "🤖", label: "Assistant IA", desc: "Aide aux démarches", href: "/assistant", color: "border-violet-400/20 bg-violet-500/10 text-violet-200" },
                 { icon: "🏛️", label: "Ressources", desc: "Documents officiels", href: "/resources", color: "border-blue-400/20 bg-blue-500/10 text-blue-200" },
                 { icon: "📖", label: "À propos du QCM", desc: "Comprendre l'examen", href: "/info", color: "border-violet-400/20 bg-violet-500/10 text-violet-200" },
                 { icon: "👑", label: "Tarifs & Abonnements", desc: "Voir les plans", href: "/pricing", color: "border-amber-400/20 bg-amber-500/10 text-amber-200" },
