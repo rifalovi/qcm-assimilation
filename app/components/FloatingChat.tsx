@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { useUser } from "./UserContext";
 import AiPaywall from "./AiPaywall";
 
@@ -29,6 +30,7 @@ export default function FloatingChat() {
   const [showPaywall, setShowPaywall] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -38,6 +40,23 @@ export default function FloatingChat() {
     if (open && inputRef.current) {
       inputRef.current.focus();
     }
+  }, [open]);
+
+  // Fix mobile keyboard: ajuste la hauteur du panel quand le clavier s'ouvre
+  useEffect(() => {
+    if (!open) return;
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    function onResize() {
+      if (!panelRef.current || !vv) return;
+      const maxH = vv.height - 80; // 80px de marge pour le bouton flottant
+      panelRef.current.style.height = `${Math.min(420, maxH)}px`;
+      panelRef.current.style.bottom = `${window.innerHeight - vv.height - vv.offsetTop + 16}px`;
+    }
+
+    vv.addEventListener("resize", onResize);
+    return () => vv.removeEventListener("resize", onResize);
   }, [open]);
 
   // Détermine si le chat doit être masqué
@@ -133,7 +152,7 @@ export default function FloatingChat() {
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         ) : (
-          <span className="text-xl">🤖</span>
+          <Image src="/cap-citoyen.png" alt="Assistant" width={32} height={32} className="rounded-full" />
         )}
       </button>
 
@@ -149,6 +168,7 @@ export default function FloatingChat() {
       {/* Panel chat */}
       {open && (
         <div
+          ref={panelRef}
           className="fixed z-[59] bottom-4 right-4 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-white/10 shadow-[0_25px_70px_rgba(0,0,0,0.5)] md:bottom-6"
           style={{
             height: "min(420px, calc(100vh - 120px))",

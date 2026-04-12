@@ -55,6 +55,16 @@ export default function AppHeader() {
 
         <div className="flex items-center gap-3 text-xs text-slate-400">
 
+          {/* Bouton Assistant IA */}
+          {pathname !== "/assistant" && (
+            <Link
+              href="/assistant"
+              className="hidden sm:inline-flex rounded-xl border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 text-violet-300 hover:bg-violet-500/20 transition font-medium"
+            >
+              🤖 Assistant IA
+            </Link>
+          )}
+
           {/* Bouton Trouver un centre agréé */}
           <a
             href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"

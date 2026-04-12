@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useUser } from "../components/UserContext";
 import { useEffect, useState } from "react";
+import StoreButtons from "../components/StoreButtons";
 import ScrollDemo from "@/components/ScrollDemo";
 import EligibilityModalLauncher from "../components/EligibilityModalLauncher";
 
@@ -465,6 +466,8 @@ export default function InfoPage() {
             Retour à l'accueil
           </button>
         </div>
+
+        <StoreButtons />
 
       </div>
     </main>

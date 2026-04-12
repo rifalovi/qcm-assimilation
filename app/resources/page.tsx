@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import StoreButtons from "../components/StoreButtons";
 import { useUser } from "../components/UserContext";
 
 type LocalUser = { pseudo?: string; email?: string };
@@ -426,6 +427,9 @@ export default function ResourcesPage() {
               <ResourceLinkCard icon="📜" title="Charte des droits et devoirs" source="République française" text="Document officiel remis lors de la naturalisation. Il résume les valeurs, principes et responsabilités du citoyen français." href={OFFICIAL_LINKS.charter} note="PDF officiel — à lire pour bien comprendre les valeurs de la République." />
             </div>
           </SectionCard>
+
+          {/* ── TÉLÉCHARGER L'APP ── */}
+          <StoreButtons />
 
         </div>
       </main>

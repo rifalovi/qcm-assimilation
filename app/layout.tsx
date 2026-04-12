@@ -7,6 +7,7 @@ import { UserProvider } from "./components/UserContext";
 import BottomNav from "@/components/BottomNav"
 import FloatingChat from "./components/FloatingChat"
 import PushNotificationManager from "./components/PushNotificationManager"
+import PwaInstallBanner from "./components/PwaInstallBanner"
 import CapacitorProvider from "@/components/CapacitorProvider"
 import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalShell from "@/components/ConditionalShell";
@@ -84,6 +85,7 @@ export default function RootLayout({
           <BottomNav />
           <FloatingChat />
           <PushNotificationManager />
+          <PwaInstallBanner />
         </PostHogProvider>
         </Suspense>
         </CapacitorProvider>

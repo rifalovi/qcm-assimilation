@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import StoreButtons from "../components/StoreButtons";
 
 const SUBJECTS = [
   { group: "Compte & Accès", options: [
@@ -213,6 +214,10 @@ export default function ContactPage() {
             </p>
           </form>
         )}
+      </div>
+
+      <div className="mt-8 max-w-xl mx-auto">
+        <StoreButtons />
       </div>
 
       <div className="mt-6 flex justify-center gap-6 text-xs text-slate-500">
