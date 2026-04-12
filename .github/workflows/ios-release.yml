@@ -108,6 +108,13 @@ jobs:
             -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
             -exportPath $RUNNER_TEMP/export
 
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Cap-Citoyen-iOS-1.0.0
+          path: ${{ runner.temp }}/export/App.ipa
+          retention-days: 30
+
       - name: Upload to App Store Connect
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
