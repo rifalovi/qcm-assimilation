@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { UserProvider } from "./components/UserContext";
 import BottomNav from "@/components/BottomNav"
 import FloatingChat from "./components/FloatingChat"
+import PushNotificationManager from "./components/PushNotificationManager"
 import CapacitorProvider from "@/components/CapacitorProvider"
 import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalShell from "@/components/ConditionalShell";
@@ -82,6 +83,7 @@ export default function RootLayout({
           </ConditionalShell>
           <BottomNav />
           <FloatingChat />
+          <PushNotificationManager />
         </PostHogProvider>
         </Suspense>
         </CapacitorProvider>

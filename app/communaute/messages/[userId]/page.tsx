@@ -106,6 +106,32 @@ export default function ConversationPage() {
   // ──────────────────────────────────────────────────────────────────────────
 
 
+  // ── FIX MOBILE KEYBOARD ──
+  // Quand le clavier virtuel s'ouvre, on ajuste la hauteur du container
+  // pour que l'input reste visible sans pousser le header
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv) return
+
+    function onResize() {
+      if (!containerRef.current) return
+      // La hauteur visible réelle (exclut le clavier)
+      containerRef.current.style.height = `${vv!.height}px`
+      // Scroll l'input en vue
+      requestAnimationFrame(() => scrollToBottom('smooth'))
+    }
+
+    vv.addEventListener('resize', onResize)
+    vv.addEventListener('scroll', onResize)
+
+    return () => {
+      vv.removeEventListener('resize', onResize)
+      vv.removeEventListener('scroll', onResize)
+    }
+  }, [scrollToBottom])
+
   useEffect(() => {
     resizeTextarea()
   }, [newMessage, resizeTextarea])
@@ -201,6 +227,18 @@ export default function ConversationPage() {
 
     if (!error && data) {
       setMessages((m) => m.map((msg) => msg.id === optimistic.id ? data as Message : msg))
+      // Envoyer une notification push au destinataire (fire-and-forget)
+      fetch('/api/push/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: otherUserId,
+          title: `Message de ${otherUser ? formatName(otherUser.first_name, otherUser.last_name, otherUser.username) : 'un membre'}`,
+          body: content.length > 100 ? content.slice(0, 100) + '…' : content,
+          url: `/communaute/messages/${currentUserId}`,
+          tag: `msg-${currentUserId}`,
+        }),
+      }).catch(() => {}) // ignore les erreurs push
     } else {
       setMessages((m) => m.filter((msg) => msg.id !== optimistic.id))
       setNewMessage(content)
@@ -225,9 +263,9 @@ export default function ConversationPage() {
     // indépendamment du layout global
     // z-40 → au-dessus du contenu mais sous les modals
     <div
-      className="flex flex-col bg-[#0b141a] overflow-hidden"
+      ref={containerRef}
+      className="fixed inset-0 flex flex-col bg-[#0b141a] overflow-hidden z-40"
       style={{
-        height: '100dvh',
         paddingTop: 'env(safe-area-inset-top)',
       }}
     >

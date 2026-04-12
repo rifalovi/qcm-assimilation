@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { ArrowLeft, Plus, Search } from 'lucide-react'
+import type { RealtimePostgresInsertPayload } from '@supabase/supabase-js'
 
 type Conversation = {
   other_user_id: string
@@ -39,7 +40,7 @@ function timeAgo(dateStr: string) {
 
 export default function MessagesPage() {
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
   const [currentUserId, setCurrentUserId] = useState('')
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [loading, setLoading] = useState(true)
@@ -49,6 +50,11 @@ export default function MessagesPage() {
   const [searching, setSearching] = useState(false)
 
   useEffect(() => {
+    // Marquer que l'utilisateur a visité la messagerie → activer les push au prochain chargement
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('push_asked', '1')
+    }
+
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
@@ -113,6 +119,67 @@ export default function MessagesPage() {
     }
     load()
   }, [router, supabase])
+
+  // ── REALTIME : mise à jour instantanée de la liste ──
+  useEffect(() => {
+    if (!currentUserId) return
+
+    const channel = supabase.channel('messages-list')
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'direct_messages',
+        filter: `receiver_id=eq.${currentUserId}`,
+      }, async (payload: RealtimePostgresInsertPayload<{ id: string; sender_id: string; receiver_id: string; content: string; is_read: boolean; created_at: string }>) => {
+        const msg = payload.new
+        if (!msg) return
+
+        const senderId = msg.sender_id
+
+        // Charge le profil de l'expéditeur si pas encore connu
+        let senderProfile: { first_name: string | null; last_name: string | null; username: string } | null = null
+        const existing = conversations.find(c => c.other_user_id === senderId)
+        if (!existing) {
+          const { data } = await supabase
+            .from('profiles')
+            .select('first_name, last_name, username')
+            .eq('id', senderId)
+            .single()
+          senderProfile = data
+        }
+
+        setConversations(prev => {
+          const idx = prev.findIndex(c => c.other_user_id === senderId)
+          if (idx >= 0) {
+            // Conversation existante → mettre à jour et remonter en haut
+            const updated = [...prev]
+            updated[idx] = {
+              ...updated[idx],
+              last_message: msg.content,
+              last_message_at: msg.created_at,
+              unread_count: updated[idx].unread_count + 1,
+            }
+            // Remonter en tête de liste
+            const [conv] = updated.splice(idx, 1)
+            return [conv, ...updated]
+          } else {
+            // Nouvelle conversation
+            return [{
+              other_user_id: senderId,
+              other_first_name: senderProfile?.first_name ?? null,
+              other_last_name: senderProfile?.last_name ?? null,
+              other_username: senderProfile?.username ?? '',
+              last_message: msg.content,
+              last_message_at: msg.created_at,
+              unread_count: 1,
+            }, ...prev]
+          }
+        })
+      })
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [currentUserId, supabase])
 
   // Recherche de membres
   useEffect(() => {
