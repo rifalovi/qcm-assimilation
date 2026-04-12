@@ -31,6 +31,7 @@ export default function FloatingChat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const [keyboardH, setKeyboardH] = useState(0);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,21 +43,29 @@ export default function FloatingChat() {
     }
   }, [open]);
 
-  // Fix mobile keyboard: ajuste la hauteur du panel quand le clavier s'ouvre
+  // Fix mobile keyboard: écoute visualViewport + CSS custom property (Capacitor)
   useEffect(() => {
     if (!open) return;
-    const vv = window.visualViewport;
-    if (!vv) return;
 
-    function onResize() {
-      if (!panelRef.current || !vv) return;
-      const maxH = vv.height - 80; // 80px de marge pour le bouton flottant
-      panelRef.current.style.height = `${Math.min(420, maxH)}px`;
-      panelRef.current.style.bottom = `${window.innerHeight - vv.height - vv.offsetTop + 16}px`;
+    // visualViewport (web / PWA)
+    const vv = window.visualViewport;
+    if (vv) {
+      function onResize() {
+        if (!vv) return;
+        const kbH = window.innerHeight - vv.height;
+        setKeyboardH(kbH > 100 ? kbH : 0);
+      }
+      vv.addEventListener("resize", onResize);
+      return () => vv.removeEventListener("resize", onResize);
     }
 
-    vv.addEventListener("resize", onResize);
-    return () => vv.removeEventListener("resize", onResize);
+    // Fallback Capacitor natif: observer --keyboard-height
+    const observer = new MutationObserver(() => {
+      const val = getComputedStyle(document.documentElement).getPropertyValue("--keyboard-height");
+      setKeyboardH(parseInt(val, 10) || 0);
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["style"] });
+    return () => observer.disconnect();
   }, [open]);
 
   // Détermine si le chat doit être masqué
@@ -142,9 +151,14 @@ export default function FloatingChat() {
         onClick={() => setOpen(!open)}
         className={`fixed z-[60] flex items-center justify-center rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 active:scale-95 ${
           open
-            ? "bottom-[440px] right-4 h-10 w-10 bg-slate-800 border border-white/10 sm:bottom-[520px]"
+            ? "right-4 h-10 w-10 bg-slate-800 border border-white/10"
             : "bottom-20 right-4 h-14 w-14 bg-gradient-to-br from-blue-600 to-indigo-600 border border-blue-400/30 md:bottom-6"
         }`}
+        style={open ? {
+          bottom: keyboardH > 0
+            ? `${keyboardH + Math.min(360, window.innerHeight - keyboardH - 60) + 16}px`
+            : `${Math.min(420, window.innerHeight - 120) + 24}px`,
+        } : undefined}
         aria-label={open ? "Fermer l'assistant" : "Ouvrir l'assistant IA"}
       >
         {open ? (
@@ -169,11 +183,15 @@ export default function FloatingChat() {
       {open && (
         <div
           ref={panelRef}
-          className="fixed z-[59] bottom-4 right-4 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-white/10 shadow-[0_25px_70px_rgba(0,0,0,0.5)] md:bottom-6"
+          className="fixed z-[59] right-4 left-4 sm:left-auto w-auto sm:w-[380px] overflow-hidden rounded-2xl border border-white/10 shadow-[0_25px_70px_rgba(0,0,0,0.5)]"
           style={{
-            height: "min(420px, calc(100vh - 120px))",
+            bottom: keyboardH > 0 ? `${keyboardH + 8}px` : '16px',
+            height: keyboardH > 0
+              ? `${Math.min(360, window.innerHeight - keyboardH - 60)}px`
+              : 'min(420px, calc(100vh - 120px))',
             background: "linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(10,15,30,0.98) 100%)",
             backdropFilter: "blur(20px)",
+            transition: 'bottom 0.2s ease, height 0.2s ease',
           }}
         >
           {/* Header */}

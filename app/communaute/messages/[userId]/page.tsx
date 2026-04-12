@@ -73,20 +73,21 @@ function showSeparator(current: Message, previous?: Message) {
 export default function ConversationPage() {
   const router = useRouter()
   const params = useParams()
-  // Trailing slash strip — next.config trailingSlash:true
   const otherUserId = (params.userId as string).replace(/\/$/, '')
   const supabase = useMemo(() => createClient(), [])
 
-  // null = auth pas encore résolue → évite le flash bulles à gauche
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [otherUser, setOtherUser] = useState<OtherUser | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [keyboardHeight, setKeyboardHeight] = useState(0)
 
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const messagesRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
     bottomRef.current?.scrollIntoView({ behavior, block: 'end' })
@@ -99,38 +100,44 @@ export default function ConversationPage() {
     el.style.height = `${Math.min(el.scrollHeight, 110)}px`
   }, [])
 
-  // ─── CLEF DU SUCCÈS ───────────────────────────────────────────────────────
-  // useEffect avec cleanup — neutralise le layout global UNIQUEMENT sur cette
-  // page, sans toucher aux fichiers globaux (layout.tsx, globals.css, etc.)
-  // Le cleanup restore tout quand on quitte la page → autres pages non affectées
-  // ──────────────────────────────────────────────────────────────────────────
-
-
-  // ── FIX MOBILE KEYBOARD ──
-  // Quand le clavier virtuel s'ouvre, on ajuste la hauteur du container
-  // pour que l'input reste visible sans pousser le header
-  const containerRef = useRef<HTMLDivElement>(null)
-
+  // ── KEYBOARD HANDLING ──
+  // Stratégie : on écoute à la fois visualViewport (web/PWA) et
+  // la CSS custom property --keyboard-height (Capacitor natif via CapacitorProvider)
   useEffect(() => {
+    // 1. visualViewport (fonctionne sur Safari web, Chrome mobile, PWA)
     const vv = window.visualViewport
-    if (!vv) return
+    if (vv) {
+      let prevHeight = vv.height
 
-    function onResize() {
-      if (!containerRef.current) return
-      // La hauteur visible réelle (exclut le clavier)
-      containerRef.current.style.height = `${vv!.height}px`
-      // Scroll l'input en vue
-      requestAnimationFrame(() => scrollToBottom('smooth'))
+      function onVVResize() {
+        if (!vv) return
+        const kbH = window.innerHeight - vv.height
+        // Seulement si le clavier est ouvert (différence > 100px)
+        if (kbH > 100) {
+          setKeyboardHeight(kbH)
+        } else {
+          setKeyboardHeight(0)
+        }
+        prevHeight = vv.height
+      }
+
+      vv.addEventListener('resize', onVVResize)
+      return () => vv.removeEventListener('resize', onVVResize)
     }
 
-    vv.addEventListener('resize', onResize)
-    vv.addEventListener('scroll', onResize)
+    // 2. Observer la CSS custom property --keyboard-height (Capacitor natif)
+    const observer = new MutationObserver(() => {
+      const val = getComputedStyle(document.documentElement).getPropertyValue('--keyboard-height')
+      setKeyboardHeight(parseInt(val, 10) || 0)
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] })
+    return () => observer.disconnect()
+  }, [])
 
-    return () => {
-      vv.removeEventListener('resize', onResize)
-      vv.removeEventListener('scroll', onResize)
-    }
-  }, [scrollToBottom])
+  // Quand le clavier s'ouvre/ferme, scroll en bas
+  useEffect(() => {
+    requestAnimationFrame(() => scrollToBottom('smooth'))
+  }, [keyboardHeight, scrollToBottom])
 
   useEffect(() => {
     resizeTextarea()
@@ -140,6 +147,7 @@ export default function ConversationPage() {
     requestAnimationFrame(() => scrollToBottom('smooth'))
   }, [messages, scrollToBottom])
 
+  // ── LOAD ──
   useEffect(() => {
     async function load() {
       try {
@@ -159,7 +167,6 @@ export default function ConversationPage() {
         ])
 
         if (profileError) console.error('[Chat] profile error:', profileError.message)
-        console.log('[Chat] other:', JSON.stringify(other))
         setOtherUser(other ?? null)
         setMessages((msgs as Message[]) ?? [])
 
@@ -179,6 +186,7 @@ export default function ConversationPage() {
     load()
   }, [otherUserId, router, scrollToBottom, supabase])
 
+  // ── REALTIME ──
   useEffect(() => {
     if (!currentUserId || !otherUserId) return
     const key = [currentUserId, otherUserId].sort().join('-')
@@ -186,7 +194,6 @@ export default function ConversationPage() {
       .on('postgres_changes', {
         event: 'INSERT', schema: 'public', table: 'direct_messages',
         filter: `or(and(sender_id.eq.${currentUserId},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${currentUserId}))`,
-        // Écoute les deux sens de la conversation
       }, async (payload: RealtimePostgresInsertPayload<Message>) => {
         const msg = payload.new as Message
         if (msg.sender_id !== otherUserId) return
@@ -203,6 +210,7 @@ export default function ConversationPage() {
     return () => { supabase.removeChannel(channel) }
   }, [currentUserId, otherUserId, scrollToBottom, supabase])
 
+  // ── SEND ──
   const handleSend = useCallback(async () => {
     const content = newMessage.trim()
     if (!content || sending || !currentUserId) return
@@ -227,7 +235,6 @@ export default function ConversationPage() {
 
     if (!error && data) {
       setMessages((m) => m.map((msg) => msg.id === optimistic.id ? data as Message : msg))
-      // Envoyer une notification push au destinataire (fire-and-forget)
       fetch('/api/push/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -238,14 +245,14 @@ export default function ConversationPage() {
           url: `/communaute/messages/${currentUserId}`,
           tag: `msg-${currentUserId}`,
         }),
-      }).catch(() => {}) // ignore les erreurs push
+      }).catch(() => {})
     } else {
       setMessages((m) => m.filter((msg) => msg.id !== optimistic.id))
       setNewMessage(content)
     }
     setSending(false)
     inputRef.current?.focus()
-  }, [currentUserId, newMessage, otherUserId, resizeTextarea, scrollToBottom, sending, supabase])
+  }, [currentUserId, newMessage, otherUserId, otherUser, resizeTextarea, scrollToBottom, sending, supabase])
 
   if (loading) {
     return (
@@ -258,20 +265,24 @@ export default function ConversationPage() {
   const displayName = formatName(otherUser?.first_name ?? null, otherUser?.last_name ?? null, otherUser?.username)
   const initials = getInitials(otherUser?.first_name ?? null, otherUser?.last_name ?? null)
 
+  // Hauteur dynamique : 100vh moins le clavier (si ouvert)
+  const containerHeight = keyboardHeight > 0
+    ? `calc(100vh - ${keyboardHeight}px)`
+    : '100dvh'
+
   return (
-    // position: fixed; inset: 0 → occupe tout l'écran visible
-    // indépendamment du layout global
-    // z-40 → au-dessus du contenu mais sous les modals
     <div
       ref={containerRef}
-      className="fixed inset-0 flex flex-col bg-[#0b141a] overflow-hidden z-40"
+      className="fixed inset-x-0 top-0 flex flex-col bg-[#0b141a] overflow-hidden z-40"
       style={{
+        height: containerHeight,
         paddingTop: 'env(safe-area-inset-top)',
+        // Empêcher tout scroll du body
+        touchAction: 'none',
       }}
     >
 
-
-      {/* ── HEADER ── */}
+      {/* ── HEADER ── position fixe, ne bouge jamais */}
       <header className="flex flex-none items-center gap-3 border-b border-white/10 bg-[#202c33] px-3 py-3">
         <button
           onClick={() => router.push('/communaute/messages')}
@@ -289,8 +300,9 @@ export default function ConversationPage() {
         </div>
       </header>
 
-      {/* ── MESSAGES ── */}
+      {/* ── MESSAGES ── flex-1, occupe tout l'espace entre header et footer */}
       <main
+        ref={messagesRef}
         className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-3 [scrollbar-width:none]"
         style={{
           WebkitOverflowScrolling: 'touch',
@@ -359,10 +371,12 @@ export default function ConversationPage() {
         )}
       </main>
 
-      {/* ── FOOTER ── */}
+      {/* ── FOOTER ── flex-none, collé en bas, au-dessus du clavier */}
       <footer
         className="flex flex-none items-center gap-2 border-t border-white/10 bg-[#202c33] px-3 py-2 overflow-hidden"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        style={{
+          paddingBottom: keyboardHeight > 0 ? '8px' : 'max(8px, env(safe-area-inset-bottom))',
+        }}
       >
         <div className="flex flex-1 items-center rounded-3xl bg-[#2a3942] px-3 py-1.5">
           <textarea
@@ -377,13 +391,15 @@ export default function ConversationPage() {
             autoCorrect="off"
             autoCapitalize="sentences"
             spellCheck={false}
-            className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-white placeholder:text-slate-400 focus:outline-none" style={{fontSize: "16px"}}
+            className="max-h-[110px] min-h-[24px] flex-1 resize-none bg-transparent px-1 text-white placeholder:text-slate-400 focus:outline-none"
+            style={{ fontSize: '16px' }}
           />
         </div>
         <button
           onClick={handleSend}
           disabled={!newMessage.trim() || sending}
-          style={{minWidth:'2.75rem', minHeight:'2.75rem', width:'2.75rem', height:'2.75rem'}} className={`flex shrink-0 items-center justify-center rounded-full transition ${newMessage.trim() ? 'bg-[#00a884] text-white hover:brightness-110' : 'bg-[#2a3942] text-slate-500'} disabled:opacity-60`}
+          style={{ minWidth: '2.75rem', minHeight: '2.75rem', width: '2.75rem', height: '2.75rem' }}
+          className={`flex shrink-0 items-center justify-center rounded-full transition ${newMessage.trim() ? 'bg-[#00a884] text-white hover:brightness-110' : 'bg-[#2a3942] text-slate-500'} disabled:opacity-60`}
           aria-label="Envoyer"
         >
           <Send size={18} />
