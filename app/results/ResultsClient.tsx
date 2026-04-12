@@ -16,6 +16,8 @@ import StatsDashboard from "../../components/StatsDashboard";
 import type { ChoiceKey, Question, Theme } from "../../src/data/questions";
 import { loadUser } from "../../src/lib/qcmUser";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
+import AiExplanationCard from "../components/AiExplanationCard";
+import AiCoachCard from "../components/AiCoachCard";
 
 // Précharge la page scroll au survol
 
@@ -687,16 +689,16 @@ ${errorsText}
     </div>
 
     <a
-      href="https://www.service-public.gouv.fr/particuliers/vosdroits/R74875"
+      href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
       target="_blank"
       rel="noopener noreferrer"
       className="block w-full rounded-2xl border border-amber-400/20 bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 px-4 py-3 text-center text-sm font-semibold text-slate-950 shadow-[0_10px_30px_rgba(251,191,36,0.22)] transition hover:-translate-y-0.5 hover:brightness-105 active:scale-95"
     >
-      Passer l’examen dans un centre ↗
+      📍 Trouver un centre agréé ↗
     </a>
 
     <p className="mt-3 text-xs text-slate-500 text-center">
-      Lien officiel Service-Public • Tarifs et disponibilités variables selon le centre
+      Lien officiel CCI France • Tarifs et disponibilités variables selon le centre
     </p>
   </div>
 
@@ -708,6 +710,27 @@ ${errorsText}
     </p>
   )}
 </Card>
+
+      {/* Coaching IA personnalisé */}
+      {data && score && stats && (
+        <Card>
+          <AiCoachCard
+            scorePercent={score.percent}
+            correctCount={score.correct}
+            totalQuestions={score.total}
+            strengths={
+              Object.entries(stats.themeStats)
+                .filter(([, v]) => v.total > 0 && (v.correct / v.total) >= 0.7)
+                .map(([k]) => k)
+            }
+            weaknesses={
+              Object.entries(stats.themeStats)
+                .filter(([, v]) => v.total > 0 && (v.correct / v.total) < 0.7)
+                .map(([k]) => k)
+            }
+          />
+        </Card>
+      )}
 
       
         {!limits.canSeeThemeStats ? (
@@ -843,6 +866,15 @@ ${errorsText}
                       <span className="font-semibold text-white">Explication :</span>{" "}
                       {d.explanation}
                     </div>
+                    <AiExplanationCard
+                      questionId={d.id}
+                      question={d.question}
+                      userAnswer={d.user ?? ""}
+                      correctAnswer={d.correct}
+                      explanation={d.explanation}
+                      choices={d.choices}
+                      theme={d.theme}
+                    />
                   </div>
                 ))}
               </div>

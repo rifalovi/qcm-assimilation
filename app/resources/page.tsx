@@ -360,6 +360,63 @@ export default function ResourcesPage() {
             )}
           </SectionCard>
 
+          {/* ── LIENS RAPIDES ── */}
+          <SectionCard icon="🔗" title="Accès rapides" subtitle="Liens essentiels pour votre parcours de préparation.">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <a href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine" target="_blank" rel="noopener noreferrer"
+                className="group rounded-[1.4rem] border border-blue-400/20 bg-blue-500/10 p-5 transition hover:-translate-y-0.5 hover:border-blue-400/30">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-500/10 text-2xl">📍</div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Trouver un centre agréé</p>
+                    <p className="text-xs text-blue-300">CCI France</p>
+                  </div>
+                </div>
+                <p className="text-sm leading-7 text-slate-300">Trouvez le centre d'examen CCI le plus proche de chez vous pour passer le test d'intégration républicaine.</p>
+                <p className="mt-3 text-sm font-semibold text-blue-300 group-hover:text-blue-200 transition">Voir les centres ↗</p>
+              </a>
+
+              <a href="https://formation-civique.interieur.gouv.fr" target="_blank" rel="noopener noreferrer"
+                className="group rounded-[1.4rem] border border-emerald-400/20 bg-emerald-500/10 p-5 transition hover:-translate-y-0.5 hover:border-emerald-400/30">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-2xl">📘</div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Questions officielles de révision</p>
+                    <p className="text-xs text-emerald-300">formation-civique.interieur.gouv.fr</p>
+                  </div>
+                </div>
+                <p className="text-sm leading-7 text-slate-300">Accédez aux questions officielles de formation civique pour compléter vos révisions.</p>
+                <p className="mt-3 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200 transition">Consulter ↗</p>
+              </a>
+
+              <a href="https://www.service-public.fr/particuliers/vosdroits/F2213" target="_blank" rel="noopener noreferrer"
+                className="group rounded-[1.4rem] border border-violet-400/20 bg-violet-500/10 p-5 transition hover:-translate-y-0.5 hover:border-violet-400/30">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-2xl">📋</div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Informations examen civique</p>
+                    <p className="text-xs text-violet-300">service-public.fr</p>
+                  </div>
+                </div>
+                <p className="text-sm leading-7 text-slate-300">Informations officielles sur l'examen civique : modalités, contenu, déroulement.</p>
+                <p className="mt-3 text-sm font-semibold text-violet-300 group-hover:text-violet-200 transition">En savoir plus ↗</p>
+              </a>
+
+              <a href="https://www.service-public.fr/particuliers/vosdroits/N111" target="_blank" rel="noopener noreferrer"
+                className="group rounded-[1.4rem] border border-amber-400/20 bg-amber-500/10 p-5 transition hover:-translate-y-0.5 hover:border-amber-400/30">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-2xl">🏛️</div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Démarches naturalisation</p>
+                    <p className="text-xs text-amber-300">service-public.fr</p>
+                  </div>
+                </div>
+                <p className="text-sm leading-7 text-slate-300">Toutes les démarches pour la naturalisation française : conditions, dossier, procédure.</p>
+                <p className="mt-3 text-sm font-semibold text-amber-300 group-hover:text-amber-200 transition">Voir les démarches ↗</p>
+              </a>
+            </div>
+          </SectionCard>
+
           {/* ── RESSOURCES OFFICIELLES ── */}
           <SectionCard icon="🏛️" title="Ressources utiles à consulter au bon moment" subtitle="Des compléments officiels à utiliser sans quitter trop tôt votre parcours de révision.">
             <div className="grid gap-5 lg:grid-cols-4">

@@ -802,6 +802,26 @@ export default function HomePage() {
           ))}
         </section>
 
+        {/* ══════════════════════════════════════════
+            SECTION 5 — LIEN CENTRE AGRÉÉ
+        ══════════════════════════════════════════ */}
+        <section className="rounded-[1.6rem] border border-blue-400/20 bg-gradient-to-r from-blue-500/10 via-indigo-500/8 to-sky-500/10 p-5 text-center">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:text-left">
+            <div>
+              <p className="text-sm font-bold text-white">Prêt à passer l'examen ?</p>
+              <p className="mt-0.5 text-xs text-slate-300">Trouvez le centre CCI agréé le plus proche de chez vous.</p>
+            </div>
+            <a
+              href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-2xl border border-blue-400/20 bg-blue-500/15 px-5 py-2.5 text-sm font-bold text-blue-200 transition hover:bg-blue-500/25 hover:-translate-y-0.5"
+            >
+              📍 Trouver un centre agréé ↗
+            </a>
+          </div>
+        </section>
+
       </div>
 
       {/* ══════════════════════════════════════════

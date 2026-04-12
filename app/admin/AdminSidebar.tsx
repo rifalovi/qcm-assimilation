@@ -6,12 +6,13 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, Flag, Ban,
   Shield, BarChart2, FileEdit, LogOut,
-  ChevronRight, TrendingUp, Menu, X, Headphones
+  ChevronRight, TrendingUp, Menu, X, Headphones, Mail
 } from 'lucide-react'
 
 const NAV = [
   { href: '/admin',            label: 'Vue globale',     icon: LayoutDashboard },
   { href: '/admin/users',      label: 'Utilisateurs',    icon: Users },
+  { href: '/admin/emails',     label: 'Emails',          icon: Mail },
   { href: '/admin/reports',    label: 'Signalements',    icon: Flag },
   { href: '/admin/bans',       label: 'Bannis',          icon: Ban },
   { href: '/admin/moderators', label: 'Modérateurs',     icon: Shield },

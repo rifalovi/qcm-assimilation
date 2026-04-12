@@ -55,6 +55,16 @@ export default function AppHeader() {
 
         <div className="flex items-center gap-3 text-xs text-slate-400">
 
+          {/* Bouton Trouver un centre agréé */}
+          <a
+            href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-blue-300 hover:bg-blue-500/20 transition font-medium"
+          >
+            📍 Centre agréé
+          </a>
+
           {/* Lien Tarifs — caché si déjà sur /pricing */}
           {pathname !== "/pricing" && (
             <Link
@@ -159,6 +169,7 @@ export default function AppHeader() {
                       <div className="grid grid-cols-2 gap-0.5">
                         {[
                           { href: "/results", icon: "📊", label: "Résultats" },
+                          { href: "/assistant", icon: "🤖", label: "Assistant IA" },
                           { href: "/account", icon: "👤", label: "Mon compte" },
                           { href: "/resources", icon: "🏛️", label: "Ressources" },
                           { href: "/pricing", icon: "👑", label: "Tarifs" },
