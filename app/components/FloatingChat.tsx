@@ -17,6 +17,8 @@ type Message = {
   };
 };
 
+const HIDDEN_PATHS = ["/admin", "/login", "/register", "/reset-password", "/quiz", "/exam", "/assistant"];
+
 export default function FloatingChat() {
   const pathname = usePathname();
   const { isAuthenticated, role } = useUser();
@@ -28,20 +30,6 @@ export default function FloatingChat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Hide on admin, login, register, quiz (distraction-free)
-  if (
-    pathname.startsWith("/admin") ||
-    pathname === "/login" ||
-    pathname === "/register" ||
-    pathname === "/reset-password" ||
-    pathname === "/quiz" ||
-    pathname === "/exam" ||
-    pathname === "/assistant" ||
-    pathname.match(/^\/communaute\/messages\/.+/)
-  ) {
-    return null;
-  }
-
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
@@ -51,6 +39,11 @@ export default function FloatingChat() {
       inputRef.current.focus();
     }
   }, [open]);
+
+  // Détermine si le chat doit être masqué
+  const hidden =
+    HIDDEN_PATHS.some((p) => pathname.startsWith(p)) ||
+    !!pathname.match(/^\/communaute\/messages\/.+/);
 
   async function send(e: React.FormEvent) {
     e.preventDefault();
@@ -120,6 +113,8 @@ export default function FloatingChat() {
       setLoading(false);
     }
   }
+
+  if (hidden) return null;
 
   return (
     <>
