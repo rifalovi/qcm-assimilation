@@ -2,11 +2,8 @@ name: iOS Release
 
 on:
   push:
-    branches: [main]
-    paths:
-      - 'ios/**'
-      - 'capacitor.config.ts'
-      - '.github/workflows/ios-release.yml'
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -21,39 +18,45 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Capacitor sync
-        run: npx cap sync ios
+      - name: Build Next.js (static export)
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: true
+      - name: Capacitor sync iOS
+        run: npx cap sync ios
 
       - name: Install CocoaPods
         run: |
-          cd ios/App
-          pod install --repo-update
+          if [ -f "ios/App/Podfile" ]; then
+            cd ios/App
+            pod install --repo-update
+          else
+            echo "No Podfile found, skipping CocoaPods"
+          fi
 
-      - name: Import certificate
+      # ── SIGNING ──────────────────────────────────────────────
+      - name: Import certificate & provisioning profile
         env:
           CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE }}
           CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE }}
         run: |
-          # Crée un keychain temporaire
+          # Créer un keychain temporaire
+          KEYCHAIN_PASSWORD=$(openssl rand -base64 32)
           security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security set-keychain-settings -t 3600 -u build.keychain
-          
-          # Importe le certificat
+
+          # Importer le certificat .p12
           echo "$CERTIFICATE_BASE64" | base64 --decode > certificate.p12
           security import certificate.p12 \
             -k build.keychain \
@@ -63,15 +66,16 @@ jobs:
             -S apple-tool:,apple: \
             -s -k "$KEYCHAIN_PASSWORD" build.keychain
 
-      - name: Import provisioning profile
-        env:
-          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE }}
-        run: |
+          # Importer le provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo "$PROVISIONING_PROFILE_BASE64" | base64 --decode \
             > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
 
-      - name: Build iOS app
+          # Sauvegarder le mot de passe du keychain pour cleanup
+          echo "KEYCHAIN_PASSWORD=$KEYCHAIN_PASSWORD" >> $GITHUB_ENV
+
+      # ── BUILD ────────────────────────────────────────────────
+      - name: Archive iOS app
         run: |
           cd ios/App
           xcodebuild \
@@ -79,59 +83,75 @@ jobs:
             -scheme App \
             -configuration Release \
             -archivePath $RUNNER_TEMP/App.xcarchive \
+            -destination 'generic/platform=iOS' \
             archive \
             CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE_SPECIFIER="Cap Citoyen Distribution" \
-            CODE_SIGN_IDENTITY="iPhone Distribution"
+            PROVISIONING_PROFILE_SPECIFIER="${{ secrets.PROVISIONING_PROFILE_NAME }}" \
+            CODE_SIGN_IDENTITY="iPhone Distribution" \
+            MARKETING_VERSION="1.0.0" \
+            CURRENT_PROJECT_VERSION="1"
 
       - name: Export IPA
         run: |
-          cat << 'EOF' > $RUNNER_TEMP/ExportOptions.plist
+          cat << EOF > $RUNNER_TEMP/ExportOptions.plist
           <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+            "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
             <key>method</key>
             <string>app-store</string>
+            <key>teamID</key>
+            <string>${{ secrets.APPLE_TEAM_ID }}</string>
             <key>uploadBitcode</key>
             <false/>
             <key>compileBitcode</key>
             <false/>
             <key>uploadSymbols</key>
             <true/>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>fr.capcitoyen.app</key>
+              <string>${{ secrets.PROVISIONING_PROFILE_NAME }}</string>
+            </dict>
           </dict>
           </plist>
           EOF
-          
+
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/App.xcarchive \
             -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
             -exportPath $RUNNER_TEMP/export
 
+      # ── ARTIFACTS ────────────────────────────────────────────
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
           name: Cap-Citoyen-iOS-1.0.0
-          path: ${{ runner.temp }}/export/App.ipa
-          retention-days: 30
+          path: ${{ runner.temp }}/export/*.ipa
+          retention-days: 90
 
+      # ── UPLOAD APP STORE (optionnel — skip si secrets manquants) ──
       - name: Upload to App Store Connect
+        if: ${{ secrets.APP_STORE_CONNECT_KEY_ID != '' }}
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
         run: |
-          # Crée le fichier de clé API
           mkdir -p ~/.appstoreconnect/private_keys
           echo "$APP_STORE_CONNECT_API_KEY" \
             > ~/.appstoreconnect/private_keys/AuthKey_${APP_STORE_CONNECT_API_KEY_ID}.p8
-          
+
           xcrun altool --upload-app \
             --type ios \
-            --file "$RUNNER_TEMP/export/App.ipa" \
+            --file "$(find $RUNNER_TEMP/export -name '*.ipa' | head -1)" \
             --apiKey "$APP_STORE_CONNECT_API_KEY_ID" \
             --apiIssuer "$APP_STORE_CONNECT_ISSUER_ID"
 
+      # ── CLEANUP ──────────────────────────────────────────────
       - name: Cleanup keychain
         if: always()
-        run: security delete-keychain build.keychain
+        run: security delete-keychain build.keychain 2>/dev/null || true
