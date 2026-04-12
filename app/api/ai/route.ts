@@ -25,18 +25,18 @@ export async function POST(req: NextRequest) {
     )
 
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+
+    // Anonymes : autorisés mais quotas gérés côté client (localStorage)
+    // L'API ne bloque plus les anonymes — elle traite la requête sans tracker
+    let role: 'anonymous' | 'freemium' | 'premium' | 'elite' | 'moderator' | 'admin' | 'super_admin' = 'anonymous'
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role, username')
+        .eq('id', user.id)
+        .single()
+      role = (profile?.role as typeof role) ?? 'freemium'
     }
-
-    // Récupérer le profil et le rôle
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role, username')
-      .eq('id', user.id)
-      .single()
-
-    const role = profile?.role ?? 'freemium'
     const body = await req.json()
     const { mode, question, userAnswer, correctAnswer, explanation, choices, theme,
             scorePercent, strengths, weaknesses, totalQuestions, correctCount,
@@ -61,10 +61,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Mode invalide' }, { status: 400 })
     }
 
-    // Vérifier le quota
+    // Vérifier le quota (authentifiés uniquement — anonymes gérés côté client)
     const quota = getQuotaForRole(role, mode)
-    if (quota < 999) {
-      // Compter les usages du jour
+    if (user && quota < 999) {
       const todayStart = new Date()
       todayStart.setHours(0, 0, 0, 0)
 
@@ -82,16 +81,19 @@ export async function POST(req: NextRequest) {
           quota,
           used: count ?? 0,
           mode,
+          role,
         }, { status: 429 })
       }
     }
 
-    // Tracker l'usage
-    await supabase.from('user_events').insert({
-      user_id: user.id,
-      event_type: 'ai_usage',
-      properties: { mode, question_id: body.questionId, theme },
-    })
+    // Tracker l'usage (authentifiés uniquement)
+    if (user) {
+      await supabase.from('user_events').insert({
+        user_id: user.id,
+        event_type: 'ai_usage',
+        properties: { mode, question_id: body.questionId, theme },
+      })
+    }
 
     // Appeler OpenAI selon le mode
     let systemPrompt: string

@@ -28,6 +28,7 @@ export default function FloatingChat() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showSignupCta, setShowSignupCta] = useState(false);
   const [keyboardH, setKeyboardH] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -84,13 +85,43 @@ export default function FloatingChat() {
     HIDDEN_PATHS.some((p) => pathname.startsWith(p)) ||
     !!pathname.match(/^\/communaute\/messages\/.+/);
 
+  // Vérifier le quota côté client pour les anonymes
+  function checkClientQuota(): boolean {
+    if (isAuthenticated) return true; // géré côté serveur
+
+    const today = new Date().toDateString();
+    const key = "chatbot_anon_usage";
+    const raw = localStorage.getItem(key);
+    let usage = { date: today, count: 0 };
+
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed.date === today) usage = parsed;
+      } catch {}
+    }
+
+    if (usage.count >= 3) return false;
+
+    usage.count++;
+    localStorage.setItem(key, JSON.stringify(usage));
+    return true;
+  }
+
   async function send(e: React.FormEvent) {
     e.preventDefault();
     const text = input.trim();
     if (!text || loading) return;
 
+    // Quota anonyme côté client
+    if (!isAuthenticated && !checkClientQuota()) {
+      setShowSignupCta(true);
+      return;
+    }
+
     setInput("");
     setShowPaywall(false);
+    setShowSignupCta(false);
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setLoading(true);
 
@@ -106,16 +137,13 @@ export default function FloatingChat() {
       });
 
       if (res.status === 429) {
-        setShowPaywall(true);
-        setLoading(false);
-        return;
-      }
-
-      if (res.status === 401) {
-        setMessages((prev) => [
-          ...prev,
-          { role: "assistant", content: "Connectez-vous pour utiliser l'assistant IA." },
-        ]);
+        const body = await res.json();
+        // Freemium → CTA premium
+        if (body.role === 'freemium') {
+          setShowPaywall(true);
+        } else {
+          setShowPaywall(true);
+        }
         setLoading(false);
         return;
       }
@@ -154,10 +182,10 @@ export default function FloatingChat() {
         <>
           <button
             onClick={() => setOpen(true)}
-            className="fixed z-[60] bottom-20 right-4 h-14 w-14 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 border border-blue-400/30 shadow-[0_8px_30px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 active:scale-95 md:bottom-6"
+            className="fixed z-[60] bottom-20 right-4 h-14 w-14 flex items-center justify-center rounded-full bg-slate-900 border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-300 hover:scale-105 hover:border-white/20 active:scale-95 md:bottom-6"
             aria-label="Ouvrir l'assistant IA"
           >
-            <Image src="/cap-citoyen.png" alt="Assistant" width={32} height={32} className="rounded-full" />
+            <Image src="/cap-citoyen.png" alt="Assistant" width={36} height={36} className="rounded-full" />
           </button>
           {messages.length === 0 && isAuthenticated && (
             <div className="fixed z-[59] bottom-[88px] right-3 md:bottom-[52px] pointer-events-none">
@@ -286,6 +314,33 @@ export default function FloatingChat() {
               {showPaywall && (
                 <div className="px-1">
                   <AiPaywall mode="assistant" />
+                </div>
+              )}
+
+              {showSignupCta && (
+                <div className="px-1">
+                  <div className="rounded-2xl border border-blue-400/20 bg-gradient-to-b from-blue-500/10 to-blue-900/10 p-4 text-center">
+                    <p className="text-sm font-bold text-white mb-1">
+                      Vous avez utilisé vos 3 questions gratuites
+                    </p>
+                    <p className="text-xs text-slate-400 mb-4 leading-relaxed">
+                      Créez un compte gratuit pour continuer à poser vos questions et sauvegarder vos conversations.
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      <a
+                        href="/register"
+                        className="block w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-500"
+                      >
+                        Créer un compte gratuit
+                      </a>
+                      <a
+                        href="/login"
+                        className="block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-400 transition hover:text-white"
+                      >
+                        J'ai déjà un compte
+                      </a>
+                    </div>
+                  </div>
                 </div>
               )}
 

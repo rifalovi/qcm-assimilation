@@ -59,15 +59,29 @@ export default function AssistantPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showSignupCta, setShowSignupCta] = useState(false);
   const [history, setHistory] = useState<Array<{ category: string; question: string; data: AssistantData }>>([]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedCategory || !question.trim()) return;
 
+    // Quota anonyme côté client
+    if (!isAuthenticated) {
+      const today = new Date().toDateString();
+      const key = "ai_assistant_anon_usage";
+      const raw = localStorage.getItem(key);
+      let usage = { date: today, count: 0 };
+      if (raw) { try { const p = JSON.parse(raw); if (p.date === today) usage = p; } catch {} }
+      if (usage.count >= 3) { setShowSignupCta(true); return; }
+      usage.count++;
+      localStorage.setItem(key, JSON.stringify(usage));
+    }
+
     setLoading(true);
     setError(null);
     setShowPaywall(false);
+    setShowSignupCta(false);
     setData(null);
 
     try {
@@ -116,21 +130,7 @@ export default function AssistantPage() {
     setData(null);
     setError(null);
     setShowPaywall(false);
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-        <div className="rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-8 text-center">
-          <span className="text-4xl">🤖</span>
-          <h1 className="mt-4 text-2xl font-extrabold text-white">Assistant démarches</h1>
-          <p className="mt-2 text-sm text-slate-400">Connectez-vous pour accéder à l'assistant IA.</p>
-          <Link href="/login" className="mt-5 inline-flex rounded-2xl bg-blue-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-blue-500">
-            Se connecter
-          </Link>
-        </div>
-      </main>
-    );
+    setShowSignupCta(false);
   }
 
   return (
@@ -225,6 +225,23 @@ export default function AssistantPage() {
 
           {/* Paywall */}
           {showPaywall && <AiPaywall mode="assistant" />}
+
+          {showSignupCta && (
+            <div className="rounded-2xl border border-blue-400/20 bg-gradient-to-b from-blue-500/10 to-blue-900/10 p-5 text-center">
+              <p className="text-lg font-bold text-white mb-2">Vos 3 questions gratuites sont utilisées</p>
+              <p className="text-sm text-slate-400 mb-4 leading-relaxed">
+                Créez un compte gratuit pour poser jusqu'à 10 questions par jour et accéder à toutes les catégories.
+              </p>
+              <div className="flex flex-col gap-2 max-w-xs mx-auto">
+                <a href="/register" className="block rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-500">
+                  Créer un compte gratuit
+                </a>
+                <a href="/login" className="block rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-xs text-slate-400 transition hover:text-white">
+                  J'ai déjà un compte
+                </a>
+              </div>
+            </div>
+          )}
 
           {/* Erreur */}
           {error && (

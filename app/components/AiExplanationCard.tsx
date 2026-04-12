@@ -25,16 +25,30 @@ interface Props {
 export default function AiExplanationCard({
   questionId, question, userAnswer, correctAnswer, explanation, choices, theme,
 }: Props) {
-  const { role } = useUser();
+  const { role, isAuthenticated } = useUser();
   const [data, setData] = useState<ExplanationData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showSignupCta, setShowSignupCta] = useState(false);
 
   async function fetchExplanation() {
+    // Quota anonyme côté client
+    if (!isAuthenticated) {
+      const today = new Date().toDateString();
+      const key = "ai_explain_anon_usage";
+      const raw = localStorage.getItem(key);
+      let usage = { date: today, count: 0 };
+      if (raw) { try { const p = JSON.parse(raw); if (p.date === today) usage = p; } catch {} }
+      if (usage.count >= 3) { setShowSignupCta(true); return; }
+      usage.count++;
+      localStorage.setItem(key, JSON.stringify(usage));
+    }
+
     setLoading(true);
     setError(null);
     setShowPaywall(false);
+    setShowSignupCta(false);
 
     try {
       const res = await fetch("/api/ai", {
@@ -77,6 +91,18 @@ export default function AiExplanationCard({
 
   if (showPaywall) {
     return <AiPaywall mode="explain" />;
+  }
+
+  if (showSignupCta) {
+    return (
+      <div className="mt-3 rounded-2xl border border-blue-400/20 bg-gradient-to-b from-blue-500/10 to-blue-900/10 p-4 text-center">
+        <p className="text-sm font-bold text-white mb-1">Vos 3 explications gratuites sont utilisées</p>
+        <p className="text-xs text-slate-400 mb-3">Créez un compte gratuit pour obtenir 10 explications IA par jour.</p>
+        <a href="/register" className="inline-block rounded-xl bg-blue-600 px-5 py-2 text-sm font-bold text-white transition hover:bg-blue-500">
+          Créer un compte gratuit
+        </a>
+      </div>
+    );
   }
 
   if (!data && !loading) {

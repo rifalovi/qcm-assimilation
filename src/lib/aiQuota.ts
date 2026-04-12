@@ -6,8 +6,8 @@ export type AiMode = "explain" | "coach" | "assistant";
 
 // Quotas journaliers par rôle pour chaque mode
 export const AI_QUOTAS: Record<string, Record<AiMode, number>> = {
-  anonymous: { explain: 0, coach: 0, assistant: 0 },
-  freemium: { explain: 3, coach: 1, assistant: 4 },
+  anonymous: { explain: 3, coach: 0, assistant: 3 },
+  freemium: { explain: 10, coach: 3, assistant: 10 },
   premium: { explain: 999, coach: 999, assistant: 999 },
   elite: { explain: 999, coach: 999, assistant: 999 },
   moderator: { explain: 999, coach: 999, assistant: 999 },
