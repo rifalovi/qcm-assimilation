@@ -58,19 +58,27 @@ export default function AdminEmailsPage() {
   const [aiGenerated, setAiGenerated] = useState<{ subject: string; html: string } | null>(null);
   const [savedTemplates, setSavedTemplates] = useState<{ id: string; theme: string; subject: string; html_content: string; created_at: string }[]>([]);
 
+  const [apiError, setApiError] = useState<string | null>(null);
+
   async function loadData(p = page, q = searchDebounced) {
     setLoading(true);
+    setApiError(null);
     try {
       const params = new URLSearchParams({ page: String(p) });
       if (q) params.set('search', q);
       const res = await fetch(`/api/admin/email-sequences?${params}`);
-      if (!res.ok) throw new Error();
       const json = await res.json();
+      if (!res.ok) {
+        setApiError(json.error ?? `Erreur ${res.status}`);
+        return;
+      }
       setUsers(json.users ?? []);
       setTemplates(json.templates ?? []);
       setStats(json.stats ?? null);
       setTotalUsers(json.pagination?.total ?? 0);
-    } catch { }
+    } catch (e) {
+      setApiError(`Erreur réseau: ${e}`);
+    }
     finally { setLoading(false); }
   }
 
@@ -260,6 +268,12 @@ export default function AdminEmailsPage() {
               ))}
             </div>
           </div>
+
+          {apiError && (
+            <div className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              Erreur API : {apiError}
+            </div>
+          )}
 
           {loading ? (
             <div className="flex justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" /></div>

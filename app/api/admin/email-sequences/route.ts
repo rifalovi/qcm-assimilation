@@ -1,13 +1,15 @@
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { getEmailTemplate, STEP_DELAYS_DAYS, STEP_LABELS, type EmailStep } from '../../../../src/lib/emailTemplates'
 
+// Client admin avec accès complet (service_role) — supporte auth.admin
 function createAdminClient() {
-  return createServerClient(
+  return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { cookies: { getAll() { return [] }, setAll() {} } }
+    { auth: { persistSession: false, autoRefreshToken: false } }
   )
 }
 
@@ -48,8 +50,14 @@ export async function GET(req: NextRequest) {
     query = query.or(`username.ilike.%${search}%`)
   }
 
-  const { data: profiles, count: totalCount } = await query.range(page * pageSize, (page + 1) * pageSize - 1)
-  if (!profiles) return NextResponse.json({ error: 'No profiles' }, { status: 500 })
+  const { data: profiles, count: totalCount, error: profilesError } = await query.range(page * pageSize, (page + 1) * pageSize - 1)
+  if (profilesError) {
+    console.error('[CRM] Profiles error:', profilesError.message)
+    return NextResponse.json({ error: profilesError.message }, { status: 500 })
+  }
+  if (!profiles || profiles.length === 0) {
+    return NextResponse.json({ users: [], templates: [], pagination: { page, pageSize, total: totalCount ?? 0 }, stats: { total_users: 0, with_sequence: 0, without_sequence: 0, total_sent: 0, total_pending: 0, total_failed: 0 } })
+  }
 
   const userIds = profiles.map(p => p.id)
 
@@ -58,14 +66,17 @@ export async function GET(req: NextRequest) {
     ? await adminClient.from('email_sequences').select('user_id, step, status, scheduled_at, sent_at').in('user_id', userIds)
     : { data: [] }
 
-  // Charger les emails via auth admin (un seul appel paginé)
+  // Charger les emails via auth admin
   const emailMap: Record<string, string> = {}
   try {
-    const { data: { users: authUsers } } = await adminClient.auth.admin.listUsers({ perPage: 500 })
-    for (const u of authUsers ?? []) {
+    const { data, error: authError } = await adminClient.auth.admin.listUsers({ perPage: 500 })
+    if (authError) console.error('[CRM] Auth listUsers error:', authError.message)
+    for (const u of data?.users ?? []) {
       if (u.email) emailMap[u.id] = u.email
     }
-  } catch {}
+  } catch (e) {
+    console.error('[CRM] Auth listUsers exception:', e)
+  }
 
   const users = profiles.map(p => {
     const userSeqs = (sequences ?? []).filter(s => s.user_id === p.id)
