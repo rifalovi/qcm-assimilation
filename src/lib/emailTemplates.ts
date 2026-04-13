@@ -110,8 +110,11 @@ export function getEmailTemplate(
           <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 16px;">
             Vous n'avez pas encore passé de test. C'est le moment idéal pour évaluer votre niveau !
           </p>`}
-          <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 24px;">
+          <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 16px;">
             Continuez à progresser ! Avec le <strong style="color:#fff;">mode Premium</strong>, accédez à tous les niveaux, l'examen blanc illimité et les statistiques détaillées.
+          </p>
+          <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 24px;">
+            Nouveau : notre <strong style="color:#fff;">Coach IA</strong> analyse vos résultats et vous propose un plan de révision personnalisé après chaque quiz.
           </p>
           <div style="text-align:center;">
             <a href="https://cap-citoyen.fr/pricing" style="display:inline-block;background:linear-gradient(135deg,#f59e0b,#f97316);color:#0f172a;padding:14px 32px;border-radius:14px;text-decoration:none;font-weight:700;font-size:14px;">
