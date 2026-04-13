@@ -51,6 +51,8 @@ export default function AdminEmailsPage() {
   const [customSubject, setCustomSubject] = useState("");
   const [customContent, setCustomContent] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
+  const [selectedStep, setSelectedStep] = useState<EmailStep>(1);
+  const [sendMode, setSendMode] = useState<"template" | "custom">("template");
 
   async function loadData(p = page, q = searchDebounced) {
     setLoading(true);
@@ -140,6 +142,23 @@ export default function AdminEmailsPage() {
     loadCaptured();
   }
 
+  async function sendTemplateToSelected() {
+    if (selectedUsers.size === 0) return;
+    setSending("tpl-selected");
+    let sent = 0, failed = 0;
+    for (const uid of Array.from(selectedUsers)) {
+      const res = await fetch("/api/admin/email-sequences", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "send_email", user_id: uid, step: selectedStep }),
+      });
+      const json = await res.json();
+      if (json.success) sent++; else failed++;
+    }
+    alert(`Template J${[1,3,7,14,30][selectedStep-1]} envoyé : ${sent}/${selectedUsers.size} — Échecs : ${failed}`);
+    setSending(null);
+    await loadData();
+  }
+
   async function sendCustomEmail() {
     if (!customSubject.trim() || !customContent.trim() || selectedUsers.size === 0) return;
     setSending("custom");
@@ -213,6 +232,12 @@ export default function AdminEmailsPage() {
           <div className="flex flex-wrap items-center gap-3">
             <input type="text" placeholder="Rechercher..." value={search} onChange={e => setSearch(e.target.value)}
               className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-slate-500 w-full sm:w-64 focus:outline-none focus:border-blue-400/30" />
+            <button onClick={() => {
+              if (selectedUsers.size === filtered.length) setSelectedUsers(new Set());
+              else setSelectedUsers(new Set(filtered.map(u => u.id)));
+            }} className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">
+              {selectedUsers.size === filtered.length && filtered.length > 0 ? "Tout désélectionner" : "Tout sélectionner"}
+            </button>
             <div className="flex gap-1.5">
               {(["all", "no_sequence", "active", "completed"] as const).map(f => (
                 <button key={f} onClick={() => setFilter(f)}
@@ -293,23 +318,56 @@ export default function AdminEmailsPage() {
             </div>
           )}
 
-          {/* Envoi personnalisé aux sélectionnés */}
+          {/* Barre d'action — sélection */}
           {selectedUsers.size > 0 && (
             <div className="rounded-2xl border border-blue-400/20 bg-blue-500/10 p-4 space-y-3">
-              <p className="text-sm font-bold text-blue-200">{selectedUsers.size} utilisateur(s) sélectionné(s)</p>
-              <input type="text" placeholder="Objet de l'email..." value={customSubject} onChange={e => setCustomSubject(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none" />
-              <textarea placeholder="Contenu HTML de l'email..." value={customContent} onChange={e => setCustomContent(e.target.value)}
-                className="w-full min-h-[100px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none" style={{ resize: 'vertical' }} />
-              <div className="flex gap-2">
-                <button onClick={sendCustomEmail} disabled={!customSubject.trim() || !customContent.trim() || sending === "custom"}
-                  className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-500 disabled:opacity-50">
-                  {sending === "custom" ? "Envoi..." : "Envoyer aux sélectionnés"}
-                </button>
-                <button onClick={() => setSelectedUsers(new Set())} className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-400 hover:text-white">
-                  Tout désélectionner
-                </button>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <p className="text-sm font-bold text-blue-200">{selectedUsers.size} utilisateur(s) sélectionné(s)</p>
+                <div className="flex gap-1.5">
+                  <button onClick={() => setSendMode("template")}
+                    className={`rounded-lg px-3 py-1 text-xs font-semibold transition ${sendMode === "template" ? "bg-blue-600 text-white" : "border border-white/10 bg-white/5 text-slate-400"}`}>
+                    Envoyer un template
+                  </button>
+                  <button onClick={() => setSendMode("custom")}
+                    className={`rounded-lg px-3 py-1 text-xs font-semibold transition ${sendMode === "custom" ? "bg-blue-600 text-white" : "border border-white/10 bg-white/5 text-slate-400"}`}>
+                    Email personnalisé
+                  </button>
+                </div>
               </div>
+
+              {sendMode === "template" ? (
+                <div className="flex flex-wrap items-end gap-3">
+                  <div className="flex-1 min-w-[180px]">
+                    <label className="text-xs text-slate-400 mb-1 block">Template</label>
+                    <select value={selectedStep} onChange={e => setSelectedStep(Number(e.target.value) as EmailStep)}
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
+                      {([1,2,3,4,5] as EmailStep[]).map(s => (
+                        <option key={s} value={s} className="bg-slate-800">{STEP_LABELS[s]}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <button onClick={sendTemplateToSelected} disabled={sending === "tpl-selected"}
+                    className="rounded-xl bg-blue-600 px-5 py-2 text-sm font-bold text-white hover:bg-blue-500 disabled:opacity-50">
+                    {sending === "tpl-selected" ? "Envoi..." : `Envoyer J${[1,3,7,14,30][selectedStep-1]} →`}
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <input type="text" placeholder="Objet de l'email..." value={customSubject} onChange={e => setCustomSubject(e.target.value)}
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none" />
+                  <textarea placeholder="Contenu HTML de l'email..." value={customContent} onChange={e => setCustomContent(e.target.value)}
+                    className="w-full min-h-[80px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none" style={{ resize: 'vertical' }} />
+                  <button onClick={sendCustomEmail} disabled={!customSubject.trim() || !customContent.trim() || sending === "custom"}
+                    className="rounded-xl bg-blue-600 px-5 py-2 text-sm font-bold text-white hover:bg-blue-500 disabled:opacity-50">
+                    {sending === "custom" ? "Envoi..." : "Envoyer l'email personnalisé →"}
+                  </button>
+                </>
+              )}
+
+              <button onClick={() => setSelectedUsers(new Set())}
+                className="text-xs text-slate-500 hover:text-slate-300 transition">
+                Tout désélectionner
+              </button>
             </div>
           )}
         </div>
