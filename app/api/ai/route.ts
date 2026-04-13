@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { mode, question, userAnswer, correctAnswer, explanation, choices, theme,
             scorePercent, strengths, weaknesses, totalQuestions, correctCount,
-            category, userQuestion } = body as {
+            category, userQuestion, chatHistory } = body as {
       mode: AiMode
       question?: string
       userAnswer?: string
@@ -55,6 +55,7 @@ export async function POST(req: NextRequest) {
       correctCount?: number
       category?: string
       userQuestion?: string
+      chatHistory?: { role: 'user' | 'assistant'; content: string }[]
     }
 
     if (!mode || !['explain', 'coach', 'assistant', 'chat'].includes(mode)) {
@@ -242,7 +243,9 @@ Ne mets RIEN en dehors du JSON.`
     }
 
     // Pour chat et assistant: vérification hors-sujet AVANT appel OpenAI (économie tokens)
-    if ((mode === 'chat' || mode === 'assistant') && userQuestion) {
+    // Skip si la conversation a un historique (réponses courtes comme "Non" ou "Oui" = continuation)
+    const hasHistory = chatHistory && chatHistory.length > 0
+    if ((mode === 'chat' || mode === 'assistant') && userQuestion && !hasHistory) {
       const q = userQuestion.toLowerCase()
       const offTopicPatterns = [
         /recette/i, /cuisine/i, /football/i, /météo/i, /jeu.?vidéo/i,
@@ -276,12 +279,27 @@ Ne mets RIEN en dehors du JSON.`
       }
     }
 
+    // Construire les messages pour OpenAI
+    const openaiMessages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
+      { role: 'system', content: systemPrompt },
+    ]
+
+    // Pour le mode chat, inclure l'historique conversationnel (max 10 derniers messages)
+    if (mode === 'chat' && chatHistory && chatHistory.length > 0) {
+      const recentHistory = chatHistory.slice(-10)
+      for (const msg of recentHistory) {
+        openaiMessages.push({
+          role: msg.role === 'user' ? 'user' : 'assistant',
+          content: msg.role === 'assistant' ? msg.content : msg.content,
+        })
+      }
+    }
+
+    openaiMessages.push({ role: 'user', content: userPrompt })
+
     const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
+      messages: openaiMessages,
       temperature: 0.8,
       max_tokens: mode === 'chat' ? 500 : 1500,
       response_format: { type: 'json_object' },

@@ -115,16 +115,25 @@ export default function FloatingChat() {
     setInput("");
     setShowPaywall(false);
     setShowSignupCta(false);
-    setMessages((prev) => [...prev, { role: "user", content: text }]);
+
+    const updatedMessages: Message[] = [...messages, { role: "user" as const, content: text }];
+    setMessages(updatedMessages);
     setLoading(true);
 
     try {
+      // Envoyer l'historique conversationnel (max 10 derniers messages)
+      const historyForApi = updatedMessages.slice(-10).map(m => ({
+        role: m.role,
+        content: m.content,
+      }));
+
       const res = await fetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode: "chat",
           userQuestion: text,
+          chatHistory: historyForApi.slice(0, -1), // exclure le dernier (= userQuestion)
         }),
       });
 
