@@ -60,6 +60,7 @@ export default function AssistantPage() {
   const [error, setError] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showSignupCta, setShowSignupCta] = useState(false);
+  const [offTopicMsg, setOffTopicMsg] = useState(false);
   const [history, setHistory] = useState<Array<{ category: string; question: string; data: AssistantData }>>([]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -82,6 +83,7 @@ export default function AssistantPage() {
     setError(null);
     setShowPaywall(false);
     setShowSignupCta(false);
+    setOffTopicMsg(false);
     setData(null);
 
     try {
@@ -114,7 +116,15 @@ export default function AssistantPage() {
       }
 
       const json = await res.json();
-      const result = json.data as AssistantData;
+      const result = json.data as AssistantData & { off_topic?: boolean };
+
+      if (result.off_topic) {
+        setOffTopicMsg(true);
+        setQuestion("");
+        setLoading(false);
+        return;
+      }
+
       setData(result);
       setHistory(prev => [{ category: selectedCategory, question, data: result }, ...prev]);
     } catch {
@@ -190,17 +200,32 @@ export default function AssistantPage() {
               </button>
             </div>
 
+            {/* Alerte hors-sujet */}
+            {offTopicMsg && (
+              <div className="mb-3 flex items-start gap-2.5 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-xs text-red-300">!</span>
+                <div>
+                  <p className="text-sm font-semibold text-red-200">Question hors-sujet</p>
+                  <p className="mt-0.5 text-xs text-red-300/80 leading-relaxed">
+                    L'assistant est spécialisé dans les démarches administratives en France. Posez une question liée à la naturalisation, l'examen civique, le titre de séjour ou toute autre démarche.
+                  </p>
+                </div>
+                <button onClick={() => setOffTopicMsg(false)} className="shrink-0 text-red-400/60 hover:text-red-300 text-xs">✕</button>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-3">
               <textarea
                 value={question}
-                onChange={(e) => setQuestion(e.target.value)}
+                onChange={(e) => { setQuestion(e.target.value); setOffTopicMsg(false); }}
                 placeholder="Décrivez votre situation ou posez votre question..."
-                className="w-full min-h-[120px] rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-400/30 resize-none"
+                className="w-full min-h-[72px] max-h-[200px] rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-400/30"
+                style={{ resize: 'vertical' }}
                 disabled={loading}
               />
               <div className="flex items-center justify-between gap-3">
                 <p className="text-xs text-slate-500">
-                  {role === 'freemium' ? '4 questions/jour en gratuit' : 'Illimité'}
+                  {!isAuthenticated ? '3 questions/jour' : role === 'freemium' ? '10 questions/jour' : 'Illimité'}
                 </p>
                 <button
                   type="submit"
