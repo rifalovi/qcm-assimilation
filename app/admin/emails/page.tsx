@@ -344,7 +344,7 @@ export default function AdminEmailsPage() {
                 <button onClick={() => setPreviewHtml(null)} className="text-slate-400 hover:text-white text-xs">✕ Fermer</button>
               </div>
               <div className="rounded-xl border border-white/10 bg-white overflow-hidden">
-                <iframe srcDoc={previewHtml} className="w-full h-[500px] border-0" title="Preview" />
+                <iframe srcDoc={previewHtml} sandbox="" className="w-full h-[500px] border-0" title="Preview" />
               </div>
             </div>
           )}
@@ -405,7 +405,7 @@ export default function AdminEmailsPage() {
                 <button onClick={() => setPreviewHtml(null)} className="text-slate-400 hover:text-white text-xs">✕</button>
               </div>
               <div className="rounded-xl border border-white/10 bg-white overflow-hidden">
-                <iframe srcDoc={previewHtml} className="w-full h-[400px] border-0" title="Preview" />
+                <iframe srcDoc={previewHtml} sandbox="" className="w-full h-[400px] border-0" title="Preview" />
               </div>
             </div>
           )}
