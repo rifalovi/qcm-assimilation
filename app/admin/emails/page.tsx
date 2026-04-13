@@ -56,6 +56,7 @@ export default function AdminEmailsPage() {
   const [aiTheme, setAiTheme] = useState("bienvenue");
   const [aiGenerating, setAiGenerating] = useState(false);
   const [aiGenerated, setAiGenerated] = useState<{ subject: string; html: string } | null>(null);
+  const [savedTemplates, setSavedTemplates] = useState<{ id: string; theme: string; subject: string; html_content: string; created_at: string }[]>([]);
 
   async function loadData(p = page, q = searchDebounced) {
     setLoading(true);
@@ -71,6 +72,15 @@ export default function AdminEmailsPage() {
       setTotalUsers(json.pagination?.total ?? 0);
     } catch { }
     finally { setLoading(false); }
+  }
+
+  async function loadSavedTemplates() {
+    const res = await fetch("/api/admin/email-sequences", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "list_templates" }),
+    });
+    const json = await res.json();
+    setSavedTemplates(json.templates ?? []);
   }
 
   async function loadCaptured() {
@@ -222,7 +232,7 @@ export default function AdminEmailsPage() {
           { id: "capture" as Tab, label: "Capture emails" },
           { id: "share" as Tab, label: "Lien de partage" },
         ]).map(t => (
-          <button key={t.id} onClick={() => { setTab(t.id); if (t.id === "capture") loadCaptured(); }}
+          <button key={t.id} onClick={() => { setTab(t.id); if (t.id === "capture") loadCaptured(); if (t.id === "templates") loadSavedTemplates(); }}
             className={`rounded-xl px-4 py-2 text-xs font-semibold transition ${tab === t.id ? "bg-blue-500/15 border border-blue-400/20 text-blue-200" : "text-slate-400 hover:text-white"}`}>
             {t.label}
           </button>
@@ -455,13 +465,55 @@ export default function AdminEmailsPage() {
                 <div className="rounded-xl border border-white/10 bg-white overflow-hidden">
                   <iframe srcDoc={aiGenerated.html} sandbox="" className="w-full h-[350px] border-0" title="AI Preview" />
                 </div>
-                <button onClick={() => { setCustomSubject(aiGenerated.subject); setCustomContent(aiGenerated.html); setTab("users"); setSendMode("custom"); }}
-                  className="rounded-xl border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-xs font-semibold text-violet-200 hover:bg-violet-500/20">
-                  Utiliser comme email personnalisé →
-                </button>
+                <div className="flex flex-wrap gap-2">
+                  <button onClick={async () => {
+                    await fetch("/api/admin/email-sequences", {
+                      method: "POST", headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ action: "save_template", theme: aiTheme, subject: aiGenerated.subject, html_content: aiGenerated.html }),
+                    });
+                    loadSavedTemplates();
+                  }} className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-500">
+                    Sauvegarder
+                  </button>
+                  <button onClick={() => { setCustomSubject(aiGenerated.subject); setCustomContent(aiGenerated.html); setTab("users"); setSendMode("custom"); }}
+                    className="rounded-xl border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-xs font-semibold text-violet-200 hover:bg-violet-500/20">
+                    Utiliser comme email →
+                  </button>
+                </div>
               </div>
             )}
           </div>
+
+          {/* Templates sauvegardés */}
+          {savedTemplates.length > 0 && (
+            <div className="rounded-2xl border border-white/10 bg-slate-800/60 p-5 space-y-3">
+              <h2 className="text-sm font-bold text-white">Templates IA sauvegardés ({savedTemplates.length})</h2>
+              <div className="space-y-2">
+                {savedTemplates.map(t => (
+                  <div key={t.id} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-white truncate">{t.subject}</p>
+                      <p className="text-xs text-slate-400">{t.theme} · {new Date(t.created_at).toLocaleDateString('fr-FR')}</p>
+                    </div>
+                    <div className="flex gap-1.5 shrink-0">
+                      <button onClick={() => { setPreviewSubject(t.subject); setPreviewHtml(t.html_content); }}
+                        className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-slate-300 hover:text-white">Voir</button>
+                      <button onClick={() => { setCustomSubject(t.subject); setCustomContent(t.html_content); setTab("users"); setSendMode("custom"); }}
+                        className="rounded-lg border border-blue-400/20 bg-blue-500/10 px-2.5 py-1 text-[10px] text-blue-200">Utiliser</button>
+                      <button onClick={async () => {
+                        if (!confirm("Supprimer ce template ?")) return;
+                        await fetch("/api/admin/email-sequences", {
+                          method: "POST", headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ action: "delete_template", template_id: t.id }),
+                        });
+                        loadSavedTemplates();
+                      }} className="rounded-lg border border-red-400/20 bg-red-500/10 px-2.5 py-1 text-[10px] text-red-300">✕</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
