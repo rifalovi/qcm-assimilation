@@ -53,6 +53,9 @@ export default function AdminEmailsPage() {
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [selectedStep, setSelectedStep] = useState<EmailStep>(1);
   const [sendMode, setSendMode] = useState<"template" | "custom">("template");
+  const [aiTheme, setAiTheme] = useState("bienvenue");
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiGenerated, setAiGenerated] = useState<{ subject: string; html: string } | null>(null);
 
   async function loadData(p = page, q = searchDebounced) {
     setLoading(true);
@@ -406,6 +409,59 @@ export default function AdminEmailsPage() {
               </div>
             </div>
           )}
+
+          {/* Générer un template avec IA */}
+          <div className="rounded-2xl border border-violet-400/20 bg-violet-500/10 p-5 space-y-3">
+            <h2 className="text-sm font-bold text-violet-200">Générer un template avec IA</h2>
+            <div className="flex flex-wrap items-end gap-3">
+              <div className="flex-1 min-w-[180px]">
+                <label className="text-xs text-slate-400 mb-1 block">Thème</label>
+                <select value={aiTheme} onChange={e => setAiTheme(e.target.value)}
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
+                  <option value="bienvenue" className="bg-slate-800">Bienvenue / Onboarding</option>
+                  <option value="relance" className="bg-slate-800">Relance utilisateur inactif</option>
+                  <option value="promotion" className="bg-slate-800">Promotion Premium</option>
+                  <option value="conseil" className="bg-slate-800">Conseil du jour</option>
+                  <option value="nouveaute" className="bg-slate-800">Nouvelle fonctionnalité</option>
+                </select>
+              </div>
+              <button
+                onClick={async () => {
+                  setAiGenerating(true); setAiGenerated(null);
+                  try {
+                    const res = await fetch("/api/ai", {
+                      method: "POST", headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        mode: "assistant",
+                        category: "Génération email",
+                        userQuestion: `Génère un email marketing pour Cap Citoyen sur le thème "${aiTheme}". L'email doit être engageant, utiliser un ton chaleureux, mentionner les fonctionnalités IA (Coach IA, Assistant démarches, Explications IA). Retourne le résultat avec summary = objet de l'email, what_to_do = contenu HTML complet de l'email (avec balises HTML inline style, fond sombre #0f172a, texte clair). what_it_means et watch_out peuvent être vides.`,
+                      }),
+                    });
+                    const json = await res.json();
+                    const d = json.data;
+                    setAiGenerated({ subject: d?.summary ?? "Email généré", html: d?.what_to_do ?? "<p>Contenu généré</p>" });
+                  } catch { alert("Erreur de génération"); }
+                  finally { setAiGenerating(false); }
+                }}
+                disabled={aiGenerating}
+                className="rounded-xl bg-violet-600 px-5 py-2 text-sm font-bold text-white hover:bg-violet-500 disabled:opacity-50">
+                {aiGenerating ? "Génération..." : "Générer avec IA"}
+              </button>
+            </div>
+
+            {aiGenerated && (
+              <div className="space-y-2 mt-3">
+                <p className="text-xs text-slate-400">Objet : <span className="text-white font-medium">{aiGenerated.subject}</span></p>
+                <div className="rounded-xl border border-white/10 bg-white overflow-hidden">
+                  <iframe srcDoc={aiGenerated.html} sandbox="" className="w-full h-[350px] border-0" title="AI Preview" />
+                </div>
+                <button onClick={() => { setCustomSubject(aiGenerated.subject); setCustomContent(aiGenerated.html); setTab("users"); setSendMode("custom"); }}
+                  className="rounded-xl border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-xs font-semibold text-violet-200 hover:bg-violet-500/20">
+                  Utiliser comme email personnalisé →
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
