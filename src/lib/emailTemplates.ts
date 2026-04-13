@@ -135,7 +135,7 @@ export function getEmailTemplate(
             <p style="color:#fde68a;font-size:13px;margin:8px 0 0;">soit seulement 6,66€/mois</p>
           </div>
           <div style="margin:16px 0;">
-            ${['800+ questions sur tous les niveaux', 'Examen blanc illimité', '100 épisodes audio guidés', 'Statistiques détaillées par thème', 'Accès communauté & forum'].map(f =>
+            ${['800+ questions sur tous les niveaux', 'Examen blanc illimité', '100 épisodes audio guidés', 'Coach IA personnalisé après chaque quiz', 'Assistant IA démarches illimité', 'Explications IA détaillées', 'Statistiques détaillées par thème', 'Accès communauté & forum'].map(f =>
               `<div style="display:flex;align-items:center;gap:10px;margin:8px 0;">
                 <span style="color:#22c55e;font-size:16px;">✓</span>
                 <span style="color:#e2e8f0;font-size:14px;">${f}</span>

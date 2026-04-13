@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 
 type EmailStep = 1 | 2 | 3 | 4 | 5;
 type TemplateInfo = { step: number; label: string; delay_days: number };
+type StepInfo = { step: number; status: string | null; scheduled_at: string | null; sent_at: string | null };
 type UserSeq = {
   id: string; username: string; email: string | null; role: string;
-  created_at: string; sequences: { step: number; status: string; scheduled_at: string; sent_at: string | null }[];
-  last_step_sent: number;
+  created_at: string; steps: StepInfo[]; last_step_sent: number;
 };
 type Stats = {
   total_users: number; with_sequence: number; without_sequence: number;
-  completed: number; total_sent: number; total_pending: number; total_failed: number;
+  total_sent: number; total_pending: number; total_failed: number;
 };
 type CapturedEmail = { email: string; source: string; created_at: string };
 
@@ -32,7 +32,10 @@ export default function AdminEmailsPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [search, setSearch] = useState("");
+  const [searchDebounced, setSearchDebounced] = useState("");
   const [filter, setFilter] = useState<"all" | "no_sequence" | "active" | "completed">("all");
   const [tab, setTab] = useState<Tab>("users");
   const [previewHtml, setPreviewHtml] = useState<string | null>(null);
@@ -47,30 +50,38 @@ export default function AdminEmailsPage() {
   const [customContent, setCustomContent] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
 
-  async function loadData() {
+  async function loadData(p = page, q = searchDebounced) {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/email-sequences");
+      const params = new URLSearchParams({ page: String(p) });
+      if (q) params.set('search', q);
+      const res = await fetch(`/api/admin/email-sequences?${params}`);
       if (!res.ok) throw new Error();
       const json = await res.json();
       setUsers(json.users ?? []);
       setTemplates(json.templates ?? []);
       setStats(json.stats ?? null);
+      setTotalUsers(json.pagination?.total ?? 0);
     } catch { }
     finally { setLoading(false); }
   }
 
   async function loadCaptured() {
     const res = await fetch("/api/admin/email-sequences", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "get_captured_emails" }),
     });
     const json = await res.json();
     setCapturedEmails(json.emails ?? []);
   }
 
-  useEffect(() => { loadData(); }, []);
+  useEffect(() => { loadData(page, searchDebounced); }, [page, searchDebounced]);
+
+  // Debounce search
+  useEffect(() => {
+    const t = setTimeout(() => { setSearchDebounced(search); setPage(0); }, 400);
+    return () => clearTimeout(t);
+  }, [search]);
 
   async function sendEmail(userId: string, step: EmailStep) {
     setSending(`${userId}-${step}`);
@@ -143,16 +154,9 @@ export default function AdminEmailsPage() {
     setSelectedUsers(new Set());
   }
 
-  const filtered = users.filter(u => {
-    if (search) {
-      const s = search.toLowerCase();
-      if (!u.username?.toLowerCase().includes(s) && !u.email?.toLowerCase().includes(s)) return false;
-    }
-    if (filter === "no_sequence") return u.sequences.length === 0;
-    if (filter === "active") return u.sequences.length > 0 && u.last_step_sent < 5;
-    if (filter === "completed") return u.last_step_sent >= 5;
-    return true;
-  });
+  // Filtrage côté serveur via pagination — on affiche directement users
+  const filtered = users;
+  const totalPages = Math.ceil(totalUsers / 30);
 
   const STEP_LABELS: Record<number, string> = {
     1: "J1 — Bienvenue", 2: "J3 — Conseil", 3: "J7 — Progression",
@@ -168,12 +172,11 @@ export default function AdminEmailsPage() {
 
       {/* Stats */}
       {stats && (
-        <div className="grid gap-3 sm:grid-cols-4 lg:grid-cols-7">
+        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {[
             { l: "Utilisateurs", v: stats.total_users, c: "border-blue-400/20 bg-blue-500/10 text-blue-100" },
+            { l: "Avec séquence", v: stats.with_sequence, c: "border-emerald-400/20 bg-emerald-500/10 text-emerald-100" },
             { l: "Sans séquence", v: stats.without_sequence, c: "border-amber-400/20 bg-amber-500/10 text-amber-100" },
-            { l: "Séquence active", v: stats.with_sequence - stats.completed, c: "border-emerald-400/20 bg-emerald-500/10 text-emerald-100" },
-            { l: "Terminées", v: stats.completed, c: "border-violet-400/20 bg-violet-500/10 text-violet-100" },
             { l: "Emails envoyés", v: stats.total_sent, c: "border-sky-400/20 bg-sky-500/10 text-sky-100" },
             { l: "En attente", v: stats.total_pending, c: "border-slate-400/20 bg-slate-500/10 text-slate-100" },
             { l: "Échoués", v: stats.total_failed, c: "border-red-400/20 bg-red-500/10 text-red-100" },
@@ -221,7 +224,7 @@ export default function AdminEmailsPage() {
             <div className="flex justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" /></div>
           ) : (
             <div className="space-y-2">
-              {filtered.slice(0, 50).map(user => (
+              {filtered.map(user => (
                 <div key={user.id} className="rounded-2xl border border-white/10 bg-slate-800/60 p-4">
                   <div className="flex items-start justify-between gap-3 flex-wrap">
                     <div>
@@ -234,7 +237,7 @@ export default function AdminEmailsPage() {
                       </div>
                       <p className="text-xs text-slate-400">{user.email ?? "—"} · inscrit il y a {timeAgo(user.created_at)}</p>
                     </div>
-                    {user.sequences.length === 0 && (
+                    {user.steps.every(s => !s.status) && (
                       <button onClick={() => triggerSequence(user.id)} disabled={sending === `seq-${user.id}`}
                         className="rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-200 hover:bg-blue-500/20 disabled:opacity-50">
                         {sending === `seq-${user.id}` ? "..." : "Lancer séquence"}
@@ -244,26 +247,25 @@ export default function AdminEmailsPage() {
 
                   {/* Étapes */}
                   <div className="mt-3 flex flex-wrap gap-1.5">
-                    {([1, 2, 3, 4, 5] as EmailStep[]).map(step => {
-                      const seq = user.sequences.find(s => s.step === step);
-                      const isSending = sending === `${user.id}-${step}`;
+                    {user.steps.map(s => {
+                      const isSending = sending === `${user.id}-${s.step}`;
                       return (
-                        <div key={step} className="flex items-center gap-1">
+                        <div key={s.step} className="flex items-center gap-1">
                           <div className={`rounded-lg border px-2 py-1 text-[10px] ${
-                            seq?.status === 'sent' ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300' :
-                            seq?.status === 'pending' ? 'border-amber-400/20 bg-amber-500/10 text-amber-300' :
-                            seq?.status === 'failed' ? 'border-red-400/20 bg-red-500/10 text-red-300' :
+                            s.status === 'sent' ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300' :
+                            s.status === 'pending' ? 'border-amber-400/20 bg-amber-500/10 text-amber-300' :
+                            s.status === 'failed' ? 'border-red-400/20 bg-red-500/10 text-red-300' :
                             'border-white/10 bg-white/5 text-slate-500'
                           }`}>
-                            <span className="font-bold">J{[1,3,7,14,30][step-1]}</span>
-                            {seq?.status === 'sent' && <span className="ml-1">✓</span>}
-                            {seq?.status === 'pending' && seq.scheduled_at && (
-                              <span className="ml-1 opacity-70">{new Date(seq.scheduled_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</span>
+                            <span className="font-bold">J{[1,3,7,14,30][s.step-1]}</span>
+                            {s.status === 'sent' && <span className="ml-1">✓</span>}
+                            {s.status === 'pending' && s.scheduled_at && (
+                              <span className="ml-1 opacity-70">{new Date(s.scheduled_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</span>
                             )}
                           </div>
-                          <button onClick={() => sendEmail(user.id, step)} disabled={isSending}
+                          <button onClick={() => sendEmail(user.id, s.step as EmailStep)} disabled={isSending}
                             className="rounded-lg border border-white/10 bg-white/5 px-1.5 py-1 text-[10px] text-slate-400 hover:bg-white/10 hover:text-white disabled:opacity-50"
-                            title={`Envoyer ${STEP_LABELS[step]}`}>
+                            title={`Envoyer ${STEP_LABELS[s.step]}`}>
                             {isSending ? "..." : "→"}
                           </button>
                         </div>
@@ -275,8 +277,15 @@ export default function AdminEmailsPage() {
               {filtered.length === 0 && (
                 <p className="text-center text-sm text-slate-400 py-8">Aucun utilisateur trouvé</p>
               )}
-              {filtered.length > 50 && (
-                <p className="text-center text-xs text-slate-500">Affichage limité à 50 — utilisez la recherche</p>
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 pt-2">
+                  <button onClick={() => setPage(Math.max(0, page - 1))} disabled={page === 0}
+                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 hover:text-white disabled:opacity-30">← Précédent</button>
+                  <span className="text-xs text-slate-400">Page {page + 1} / {totalPages}</span>
+                  <button onClick={() => setPage(Math.min(totalPages - 1, page + 1))} disabled={page >= totalPages - 1}
+                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 hover:text-white disabled:opacity-30">Suivant →</button>
+                </div>
               )}
             </div>
           )}
