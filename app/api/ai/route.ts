@@ -87,14 +87,8 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Tracker l'usage (authentifiés uniquement)
-    if (user) {
-      await supabase.from('user_events').insert({
-        user_id: user.id,
-        event_type: 'ai_usage',
-        properties: { mode, question_id: body.questionId, theme },
-      })
-    }
+    // Tracker l'usage APRÈS l'appel OpenAI (pour inclure les tokens)
+    // Le tracking est déplacé après la completion ci-dessous
 
     // Appeler OpenAI selon le mode
     let systemPrompt: string
@@ -311,6 +305,46 @@ Ne mets RIEN en dehors du JSON.`
       parsed = JSON.parse(rawContent)
     } catch {
       parsed = { error: 'Impossible de parser la réponse IA' }
+    }
+
+    // Capturer les tokens et tracker l'usage
+    const usage = completion.usage
+    const tokenData = {
+      prompt_tokens: usage?.prompt_tokens ?? 0,
+      completion_tokens: usage?.completion_tokens ?? 0,
+      total_tokens: usage?.total_tokens ?? 0,
+      model: 'gpt-4o-mini',
+    }
+
+    // Tracker dans user_events (authentifiés et anonymes)
+    const trackProps = {
+      mode,
+      question_id: body.questionId ?? null,
+      theme: theme ?? null,
+      ...tokenData,
+      off_topic: parsed.off_topic === true,
+    }
+
+    if (user) {
+      await supabase.from('user_events').insert({
+        user_id: user.id,
+        event_type: 'ai_usage',
+        properties: trackProps,
+      })
+    } else {
+      // Anonymes : tracker sans user_id pour le suivi global des tokens
+      const adminClient = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { cookies: { getAll() { return [] }, setAll() {} } }
+      )
+      try {
+        await adminClient.from('user_events').insert({
+          user_id: null,
+          event_type: 'ai_usage',
+          properties: trackProps,
+        })
+      } catch {} // ignore si RLS bloque
     }
 
     return NextResponse.json({ mode, data: parsed })

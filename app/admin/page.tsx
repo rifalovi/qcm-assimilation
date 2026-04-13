@@ -135,12 +135,13 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Accès rapides */}
-      <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="mt-6 grid grid-cols-2 sm:grid-cols-5 gap-3">
         {[
           { href: '/admin/reports', label: 'Traiter signalements', icon: Flag, urgent: (pendingReports ?? 0) > 0 },
           { href: '/admin/users', label: 'Gérer utilisateurs', icon: Users, urgent: false },
-          { href: '/admin/moderators', label: 'Gérer modérateurs', icon: TrendingUp, urgent: false },
-          { href: '/admin/content', label: 'Éditer contenu', icon: MessageSquare, urgent: false },
+          { href: '/admin/ai-usage', label: 'Usage IA & tokens', icon: TrendingUp, urgent: false },
+          { href: '/admin/emails', label: 'Séquences emails', icon: MessageSquare, urgent: false },
+          { href: '/admin/content', label: 'Éditer contenu', icon: BookOpen, urgent: false },
         ].map(({ href, label, icon: Icon, urgent }) => (
           <Link key={href} href={href}
             className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-colors text-center ${urgent ? 'border-red-500/50 bg-red-900/10 hover:bg-red-900/20' : 'border-slate-700 bg-slate-800 hover:border-slate-600'}`}>
