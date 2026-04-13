@@ -199,7 +199,7 @@ export async function POST(req: NextRequest) {
         const res = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ from: 'Cap Citoyen <no-reply@cap-citoyen.fr>', to: [email], subject, html: html_content }),
+          body: JSON.stringify({ from: 'Cap Citoyen <no-reply@send.cap-citoyen.fr>', to: [email], subject, html: html_content }),
         })
         if (res.ok) sent++; else failed++
       } catch { failed++ }
@@ -304,7 +304,7 @@ async function sendSingleEmail(adminClient: ReturnType<typeof createAdminClient>
     const resendRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: 'Cap Citoyen <no-reply@cap-citoyen.fr>', to: [email], subject: template.subject, html: template.html }),
+      body: JSON.stringify({ from: 'Cap Citoyen <no-reply@send.cap-citoyen.fr>', to: [email], subject: template.subject, html: template.html }),
     })
     const sendSuccess = resendRes.ok
     let resendError = ''

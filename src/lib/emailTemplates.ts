@@ -28,7 +28,7 @@ function baseLayout(content: string): string {
     <div style="text-align:center;margin-bottom:24px;">
       <span style="font-size:14px;font-weight:600;color:#e2e8f0;letter-spacing:0.05em;">🇫🇷 Cap Citoyen</span>
     </div>
-    <div style="background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%);border-radius:20px;padding:32px;border:1px solid rgba(255,255,255,0.08);">
+    <div style="background-color:#0f172a;border-radius:20px;padding:32px;border:1px solid rgba(255,255,255,0.08);">
       ${content}
     </div>
     <div style="text-align:center;margin-top:20px;">
@@ -60,7 +60,7 @@ export function getEmailTemplate(
             Comment se passe votre préparation ? N'hésitez pas à commencer par un premier test pour identifier vos points forts et vos axes de progression.
           </p>
           <div style="text-align:center;">
-            <a href="https://cap-citoyen.fr/" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;padding:14px 32px;border-radius:14px;text-decoration:none;font-weight:700;font-size:14px;">
+            <a href="https://cap-citoyen.fr/" style="display:inline-block;background-color:#2563EB;color:#FFFFFF;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">
               Commencer mon premier test
             </a>
           </div>
@@ -84,7 +84,7 @@ export function getEmailTemplate(
             <p style="color:#fff;font-size:15px;line-height:1.6;margin:0;">${extra.questionDuJour}</p>
           </div>` : ''}
           <div style="text-align:center;margin-top:24px;">
-            <a href="https://cap-citoyen.fr/scroll" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;padding:14px 32px;border-radius:14px;text-decoration:none;font-weight:700;font-size:14px;">
+            <a href="https://cap-citoyen.fr/scroll" style="display:inline-block;background-color:#2563EB;color:#FFFFFF;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">
               Réviser en scroll
             </a>
           </div>
@@ -117,7 +117,7 @@ export function getEmailTemplate(
             Nouveau : notre <strong style="color:#fff;">Coach IA</strong> analyse vos résultats et vous propose un plan de révision personnalisé après chaque quiz.
           </p>
           <div style="text-align:center;">
-            <a href="https://cap-citoyen.fr/pricing" style="display:inline-block;background:linear-gradient(135deg,#f59e0b,#f97316);color:#0f172a;padding:14px 32px;border-radius:14px;text-decoration:none;font-weight:700;font-size:14px;">
+            <a href="https://cap-citoyen.fr/pricing" style="display:inline-block;background-color:#2563EB;color:#FFFFFF;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">
               Découvrir Premium
             </a>
           </div>
@@ -132,7 +132,7 @@ export function getEmailTemplate(
           <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 16px;">
             Vous utilisez Cap Citoyen depuis 2 semaines. Pour vous aider à aller plus loin dans votre préparation, nous avons une offre spéciale :
           </p>
-          <div style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(249,115,22,0.15));border:1px solid rgba(245,158,11,0.25);border-radius:16px;padding:24px;text-align:center;margin:20px 0;">
+          <div style="background-color:#2a1f0a;border:1px solid rgba(245,158,11,0.25);border-radius:16px;padding:24px;text-align:center;margin:20px 0;">
             <p style="color:#fbbf24;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 8px;">Offre Premium</p>
             <p style="color:#fff;font-size:28px;font-weight:800;margin:0;">19,99€ <span style="font-size:14px;color:#94a3b8;font-weight:400;">/ 3 mois</span></p>
             <p style="color:#fde68a;font-size:13px;margin:8px 0 0;">soit seulement 6,66€/mois</p>
@@ -146,7 +146,7 @@ export function getEmailTemplate(
             ).join('')}
           </div>
           <div style="text-align:center;margin-top:24px;">
-            <a href="https://cap-citoyen.fr/pricing" style="display:inline-block;background:linear-gradient(135deg,#f59e0b,#f97316);color:#0f172a;padding:16px 40px;border-radius:14px;text-decoration:none;font-weight:700;font-size:15px;">
+            <a href="https://cap-citoyen.fr/pricing" style="display:inline-block;background-color:#2563EB;color:#FFFFFF;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">
               Passer à Premium →
             </a>
           </div>
@@ -168,7 +168,7 @@ export function getEmailTemplate(
             N'hésitez pas à revenir quand vous le souhaitez — votre progression est sauvegardée.
           </p>
           <div style="text-align:center;">
-            <a href="https://cap-citoyen.fr/" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;padding:14px 32px;border-radius:14px;text-decoration:none;font-weight:700;font-size:14px;">
+            <a href="https://cap-citoyen.fr/" style="display:inline-block;background-color:#2563EB;color:#FFFFFF;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">
               Reprendre ma préparation
             </a>
           </div>
