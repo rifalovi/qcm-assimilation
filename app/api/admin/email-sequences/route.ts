@@ -220,9 +220,13 @@ export async function POST(req: NextRequest) {
 
   if (action === 'preview_template') {
     const { step } = body as { step: EmailStep }
+    let questionDuJour = 'Quel est le principe fondamental de la République française inscrit dans sa devise ?'
+    try {
+      const { QUESTIONS } = await import('../../../../src/data/questions')
+      questionDuJour = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)].question
+    } catch {}
     const template = getEmailTemplate(step, '[Prénom utilisateur]', {
-      questionDuJour: 'Quel est le principe fondamental de la République française inscrit dans sa devise ?',
-      scorePercent: 72, quizCount: 5,
+      questionDuJour, scorePercent: 72, quizCount: 5,
     })
     return NextResponse.json({ subject: template.subject, html: template.html })
   }
