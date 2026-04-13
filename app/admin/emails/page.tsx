@@ -130,7 +130,7 @@ export default function AdminEmailsPage() {
       body: JSON.stringify({ action: "bulk_send", step: bulkStep, target: bulkTarget }),
     });
     const json = await res.json();
-    setBulkResult(`Envoyé : ${json.sent}/${json.total} — Échecs : ${json.failed}`);
+    setBulkResult(`Envoyé : ${json.sent}/${json.total} — Échecs : ${json.failed}${json.firstError ? `\nErreur : ${json.firstError}` : ''}`);
     await loadData();
     setSending(null);
   }

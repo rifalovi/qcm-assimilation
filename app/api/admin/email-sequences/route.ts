@@ -58,17 +58,14 @@ export async function GET(req: NextRequest) {
     ? await adminClient.from('email_sequences').select('user_id, step, status, scheduled_at, sent_at').in('user_id', userIds)
     : { data: [] }
 
-  // Charger les emails via auth admin (seulement pour les IDs de cette page)
+  // Charger les emails via auth admin (un seul appel paginé)
   const emailMap: Record<string, string> = {}
-  if (userIds.length > 0) {
-    // Batch par petits groupes pour éviter le timeout
-    for (const uid of userIds) {
-      try {
-        const { data } = await adminClient.auth.admin.getUserById(uid)
-        if (data?.user?.email) emailMap[uid] = data.user.email
-      } catch {}
+  try {
+    const { data: { users: authUsers } } = await adminClient.auth.admin.listUsers({ perPage: 500 })
+    for (const u of authUsers ?? []) {
+      if (u.email) emailMap[u.id] = u.email
     }
-  }
+  } catch {}
 
   const users = profiles.map(p => {
     const userSeqs = (sequences ?? []).filter(s => s.user_id === p.id)
@@ -167,13 +164,14 @@ export async function POST(req: NextRequest) {
       targetIds = targetIds.filter(id => !alreadyHave.has(id))
     }
 
-    let sent = 0, failed = 0
-    for (const uid of targetIds.slice(0, 100)) { // max 100 par batch
+    let sent = 0, failed = 0, firstError = ''
+    for (const uid of targetIds.slice(0, 100)) {
       const result = await sendSingleEmail(adminClient, uid, step)
       const json = await result.json()
-      if (json.success) sent++; else failed++
+      if (json.success) sent++
+      else { failed++; if (!firstError && json.error) firstError = json.error }
     }
-    return NextResponse.json({ success: true, sent, failed, total: targetIds.length })
+    return NextResponse.json({ success: true, sent, failed, total: targetIds.length, firstError: firstError || undefined })
   }
 
   if (action === 'send_custom') {
@@ -272,12 +270,17 @@ async function sendSingleEmail(adminClient: ReturnType<typeof createAdminClient>
       body: JSON.stringify({ from: 'Cap Citoyen <no-reply@cap-citoyen.fr>', to: [email], subject: template.subject, html: template.html }),
     })
     const sendSuccess = resendRes.ok
+    let resendError = ''
+    if (!sendSuccess) {
+      try { resendError = await resendRes.text() } catch {}
+      console.error('[Email] Resend error:', resendError)
+    }
     const now = new Date().toISOString()
     await adminClient.from('email_sequences').insert({
       user_id: userId, sequence_name: 'onboarding', step,
       scheduled_at: now, sent_at: sendSuccess ? now : null, status: sendSuccess ? 'sent' : 'failed',
     })
-    return NextResponse.json({ success: sendSuccess, step, email })
+    return NextResponse.json({ success: sendSuccess, step, email, error: resendError || undefined })
   } catch (e) {
     return NextResponse.json({ success: false, error: String(e) }, { status: 500 })
   }
