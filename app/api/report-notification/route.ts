@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Cap Citoyen <no-reply@send.cap-citoyen.fr>',
+        from: 'Cap Citoyen <no-reply@cap-citoyen.fr>',
         to: [process.env.ADMIN_EMAIL ?? 'admin@cap-citoyen.fr'],
         subject: `🚨 Nouveau signalement — ${targetType}`,
         html: `
