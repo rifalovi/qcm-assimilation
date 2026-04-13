@@ -236,6 +236,31 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ link })
   }
 
+  // ── Templates custom CRUD ──
+  if (action === 'save_template') {
+    const { theme, subject, html_content } = body as { theme: string; subject: string; html_content: string }
+    if (!theme || !subject || !html_content) return NextResponse.json({ error: 'Champs requis' }, { status: 400 })
+    const { data, error } = await adminClient.from('email_templates_custom').insert({
+      created_by: admin.id, theme, subject, html_content,
+    }).select('id').single()
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ success: true, id: data.id })
+  }
+
+  if (action === 'list_templates') {
+    const { data } = await adminClient.from('email_templates_custom')
+      .select('id, theme, subject, html_content, created_at')
+      .order('created_at', { ascending: false }).limit(50)
+    return NextResponse.json({ templates: data ?? [] })
+  }
+
+  if (action === 'delete_template') {
+    const { template_id } = body as { template_id: string }
+    if (!template_id) return NextResponse.json({ error: 'ID requis' }, { status: 400 })
+    await adminClient.from('email_templates_custom').delete().eq('id', template_id)
+    return NextResponse.json({ success: true })
+  }
+
   return NextResponse.json({ error: 'Action invalide' }, { status: 400 })
 }
 
