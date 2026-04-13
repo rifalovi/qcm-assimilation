@@ -43,8 +43,7 @@ export async function GET(req: NextRequest) {
   // Charger les profils paginés
   let query = adminClient
     .from('profiles')
-    .select('id, username, role, created_at', { count: 'exact' })
-    .order('created_at', { ascending: false })
+    .select('id, username, role', { count: 'exact' })
 
   if (search) {
     query = query.or(`username.ilike.%${search}%`)
@@ -66,13 +65,15 @@ export async function GET(req: NextRequest) {
     ? await adminClient.from('email_sequences').select('user_id, step, status, scheduled_at, sent_at').in('user_id', userIds)
     : { data: [] }
 
-  // Charger les emails via auth admin
+  // Charger les emails + dates depuis auth admin
   const emailMap: Record<string, string> = {}
+  const createdAtMap: Record<string, string> = {}
   try {
     const { data, error: authError } = await adminClient.auth.admin.listUsers({ perPage: 500 })
     if (authError) console.error('[CRM] Auth listUsers error:', authError.message)
     for (const u of data?.users ?? []) {
       if (u.email) emailMap[u.id] = u.email
+      if (u.created_at) createdAtMap[u.id] = u.created_at
     }
   } catch (e) {
     console.error('[CRM] Auth listUsers exception:', e)
@@ -86,7 +87,7 @@ export async function GET(req: NextRequest) {
       username: p.username,
       email: emailMap[p.id] ?? null,
       role: p.role,
-      created_at: p.created_at,
+      created_at: createdAtMap[p.id] ?? new Date().toISOString(),
       last_step_sent: lastSent?.step ?? 0,
       steps: ([1,2,3,4,5] as const).map(step => {
         const s = userSeqs.find(x => x.step === step)
