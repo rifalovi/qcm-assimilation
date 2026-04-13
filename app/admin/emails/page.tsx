@@ -24,7 +24,7 @@ function timeAgo(d: string) {
   return `${Math.floor(hours / 24)}j`;
 }
 
-type Tab = "users" | "templates" | "bulk" | "capture";
+type Tab = "users" | "templates" | "bulk" | "capture" | "share";
 
 export default function AdminEmailsPage() {
   const [users, setUsers] = useState<UserSeq[]>([]);
@@ -46,6 +46,8 @@ export default function AdminEmailsPage() {
   const [captureEmail, setCaptureEmail] = useState("");
   const [captureSource, setCaptureSource] = useState("forum");
   const [capturedEmails, setCapturedEmails] = useState<CapturedEmail[]>([]);
+  const [shareCampaign, setShareCampaign] = useState("whatsapp_group");
+  const [shareLink, setShareLink] = useState<string | null>(null);
   const [customSubject, setCustomSubject] = useState("");
   const [customContent, setCustomContent] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
@@ -196,6 +198,7 @@ export default function AdminEmailsPage() {
           { id: "templates" as Tab, label: "Templates" },
           { id: "bulk" as Tab, label: "Envoi groupé" },
           { id: "capture" as Tab, label: "Capture emails" },
+          { id: "share" as Tab, label: "Lien de partage" },
         ]).map(t => (
           <button key={t.id} onClick={() => { setTab(t.id); if (t.id === "capture") loadCaptured(); }}
             className={`rounded-xl px-4 py-2 text-xs font-semibold transition ${tab === t.id ? "bg-blue-500/15 border border-blue-400/20 text-blue-200" : "text-slate-400 hover:text-white"}`}>
@@ -446,6 +449,75 @@ export default function AdminEmailsPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── TAB: LIEN DE PARTAGE ── */}
+      {tab === "share" && (
+        <div className="space-y-4">
+          <div className="rounded-2xl border border-white/10 bg-slate-800/60 p-5 space-y-4">
+            <h2 className="text-sm font-bold text-white">Générer un lien d'invitation</h2>
+            <p className="text-xs text-slate-400">Créez un lien avec UTM tracking à partager dans les groupes WhatsApp, Facebook, forums, etc.</p>
+
+            <div>
+              <label className="text-xs text-slate-400 mb-1 block">Campagne / Source</label>
+              <select value={shareCampaign} onChange={e => setShareCampaign(e.target.value)}
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
+                <option value="whatsapp_group" className="bg-slate-800">Groupe WhatsApp</option>
+                <option value="facebook_group" className="bg-slate-800">Groupe Facebook</option>
+                <option value="forum_immigration" className="bg-slate-800">Forum immigration</option>
+                <option value="telegram" className="bg-slate-800">Telegram</option>
+                <option value="flyer_event" className="bg-slate-800">Flyer / Événement</option>
+                <option value="email_signature" className="bg-slate-800">Signature email</option>
+                <option value="custom" className="bg-slate-800">Personnalisé</option>
+              </select>
+              {shareCampaign === "custom" && (
+                <input type="text" placeholder="Nom de la campagne..." value={shareCampaign} onChange={e => setShareCampaign(e.target.value)}
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none" />
+              )}
+            </div>
+
+            <button
+              onClick={() => {
+                const link = `https://cap-citoyen.fr/?utm_source=referral&utm_campaign=${shareCampaign}&utm_medium=social`;
+                setShareLink(link);
+              }}
+              className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-blue-500">
+              Générer le lien
+            </button>
+          </div>
+
+          {shareLink && (
+            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-5 space-y-4">
+              <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider">Lien généré</p>
+              <div className="flex items-center gap-2">
+                <input type="text" readOnly value={shareLink}
+                  className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
+                <button onClick={() => { navigator.clipboard.writeText(shareLink); }}
+                  className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-500">
+                  Copier
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-xs font-bold text-white">Messages prêts à copier :</p>
+
+                <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                  <p className="text-xs text-slate-400 mb-1">WhatsApp / Telegram</p>
+                  <p className="text-sm text-slate-200 whitespace-pre-line">{"🇫🇷 Tu prépares ton examen civique ou ta naturalisation ?\n\nJ'ai trouvé une super app gratuite — Cap Citoyen.\n800+ questions, audio guidé, examen blanc, et un assistant IA qui répond à tes questions sur les démarches.\n\n👉 " + shareLink}</p>
+                  <button onClick={() => navigator.clipboard.writeText("🇫🇷 Tu prépares ton examen civique ou ta naturalisation ?\n\nJ'ai trouvé une super app gratuite — Cap Citoyen.\n800+ questions, audio guidé, examen blanc, et un assistant IA qui répond à tes questions sur les démarches.\n\n👉 " + shareLink)}
+                    className="mt-2 text-xs text-blue-300 hover:text-blue-200">Copier ce message</button>
+                </div>
+
+                <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                  <p className="text-xs text-slate-400 mb-1">Facebook</p>
+                  <p className="text-sm text-slate-200 whitespace-pre-line">{"Vous préparez votre entretien civique pour la naturalisation ? 🇫🇷\n\nCap Citoyen est une plateforme gratuite avec :\n✅ Quiz et examen blanc\n✅ 100 épisodes audio\n✅ Assistant IA pour vos démarches\n✅ Coach IA personnalisé\n\nTestez gratuitement → " + shareLink}</p>
+                  <button onClick={() => navigator.clipboard.writeText("Vous préparez votre entretien civique pour la naturalisation ? 🇫🇷\n\nCap Citoyen est une plateforme gratuite avec :\n✅ Quiz et examen blanc\n✅ 100 épisodes audio\n✅ Assistant IA pour vos démarches\n✅ Coach IA personnalisé\n\nTestez gratuitement → " + shareLink)}
+                    className="mt-2 text-xs text-blue-300 hover:text-blue-200">Copier ce message</button>
+                </div>
               </div>
             </div>
           )}
