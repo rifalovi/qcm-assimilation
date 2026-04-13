@@ -292,12 +292,24 @@ export default function AdminEmailsPage() {
                       </div>
                       <p className="text-xs text-slate-400">{user.email ?? "—"} · inscrit il y a {timeAgo(user.created_at)}</p>
                     </div>
-                    {user.steps.every(s => !s.status) && (
-                      <button onClick={() => triggerSequence(user.id)} disabled={sending === `seq-${user.id}`}
-                        className="rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-200 hover:bg-blue-500/20 disabled:opacity-50">
-                        {sending === `seq-${user.id}` ? "..." : "Lancer séquence"}
-                      </button>
-                    )}
+                    <div className="flex items-center gap-2 shrink-0">
+                      {user.steps.every(s => !s.status) && (
+                        <button onClick={() => triggerSequence(user.id)} disabled={sending === `seq-${user.id}`}
+                          className="rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-200 hover:bg-blue-500/20 disabled:opacity-50">
+                          {sending === `seq-${user.id}` ? "..." : "Lancer séquence"}
+                        </button>
+                      )}
+                      <select
+                        onChange={e => { const step = Number(e.target.value) as EmailStep; if (step) sendEmail(user.id, step); e.target.value = ""; }}
+                        className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-2 py-1.5 text-xs font-semibold text-emerald-200 focus:outline-none cursor-pointer"
+                        defaultValue=""
+                      >
+                        <option value="" disabled className="bg-slate-800">Envoyer ▾</option>
+                        {([1,2,3,4,5] as EmailStep[]).map(s => (
+                          <option key={s} value={s} className="bg-slate-800">{STEP_LABELS[s]}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
                   {/* Étapes */}
