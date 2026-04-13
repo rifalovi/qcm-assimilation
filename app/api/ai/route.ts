@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
       userQuestion?: string
     }
 
-    if (!mode || !['explain', 'coach', 'assistant'].includes(mode)) {
+    if (!mode || !['explain', 'coach', 'assistant', 'chat'].includes(mode)) {
       return NextResponse.json({ error: 'Mode invalide' }, { status: 400 })
     }
 
@@ -187,10 +187,14 @@ STRUCTURE JSON OBLIGATOIRE :
   "official_links": ["liens officiels RÉELS et pertinents — uniquement des vrais liens service-public.fr, interieur.gouv.fr ou immigration.interieur.gouv.fr"]
 }
 
+QUESTIONS HORS-SUJET :
+Si la question n'a AUCUN rapport avec les démarches administratives en France, l'immigration, la naturalisation, l'examen civique ou une situation de vie liée à l'intégration en France, tu dois répondre avec off_topic: true dans le JSON et inviter l'utilisateur à poser une question pertinente.
+
 RÈGLES :
 - Chaque champ doit être SUBSTANTIEL — jamais de réponse en une phrase.
 - Ne mets RIEN en dehors du JSON. Pas de markdown, pas de texte avant ou après.
-- Les liens dans official_links doivent être des URLs réelles et vérifiables. Si tu n'es pas sûr d'un lien, mets uniquement https://www.service-public.fr`
+- Les liens dans official_links doivent être des URLs réelles et vérifiables. Si tu n'es pas sûr d'un lien, mets uniquement https://www.service-public.fr
+- Si la question est hors-sujet, ajoute "off_topic": true au JSON.`
 
         userPrompt = `Catégorie : ${category}
 Question de l'utilisateur : ${userQuestion}
@@ -199,8 +203,77 @@ Rappel : Raisonne en profondeur. La personne qui pose cette question est probabl
         break
       }
 
+      case 'chat': {
+        if (!userQuestion) {
+          return NextResponse.json({ error: 'Question requise' }, { status: 400 })
+        }
+        systemPrompt = `Tu es l'assistant conversationnel de Cap Citoyen, une plateforme de préparation à l'examen civique français et d'accompagnement aux démarches de naturalisation en France.
+
+RÔLE STRICT :
+Tu réponds UNIQUEMENT aux questions liées à :
+- Les démarches administratives en France (naturalisation, titre de séjour, carte de résident, regroupement familial, etc.)
+- L'examen civique / test d'intégration républicaine
+- La préparation à l'entretien de naturalisation
+- Les valeurs de la République, les institutions françaises
+- Les situations de vie concrètes liées à l'intégration en France (travail, logement, scolarité, santé — UNIQUEMENT si la question a un lien avec une démarche administrative)
+
+QUESTIONS HORS-SUJET :
+Si la question n'a AUCUN rapport avec les thèmes ci-dessus (ex: "c'est quoi un graphiste", "où aller en vacances", "recette de cuisine", "c'est quoi une navette spatiale", questions de culture générale sans lien avec la France/démarches, etc.), tu dois répondre :
+{"response": "Je suis spécialisé dans les démarches administratives en France et la préparation à l'examen civique. Je ne peux pas répondre à cette question, mais je serais ravi de vous aider sur :\\n\\n• Vos démarches de naturalisation\\n• La préparation de l'entretien civique\\n• Le suivi de votre dossier\\n• La compréhension d'un courrier administratif\\n\\nQue puis-je faire pour vous ?", "off_topic": true}
+
+STYLE CONVERSATIONNEL :
+- Tu es direct, clair et chaleureux.
+- Tu réponds de façon concise (3-6 phrases max).
+- Tu poses des questions de suivi pour affiner le besoin ("Avez-vous déjà déposé votre dossier ?", "De quel type de titre s'agit-il ?").
+- Tu peux orienter vers les pages de l'app quand c'est pertinent : "/assistant" pour les questions détaillées, "/resources" pour les liens officiels, "/quiz" pour s'entraîner.
+- JAMAIS de réponse structurée en 4 sections. Juste de la conversation naturelle.
+
+STRUCTURE JSON OBLIGATOIRE :
+{"response": "Ta réponse conversationnelle ici", "off_topic": false}
+Si tu veux suggérer un lien interne : {"response": "...", "off_topic": false, "suggest_page": "/assistant"}
+Ne mets RIEN en dehors du JSON.`
+
+        userPrompt = userQuestion
+        break
+      }
+
       default:
         return NextResponse.json({ error: 'Mode invalide' }, { status: 400 })
+    }
+
+    // Pour chat et assistant: vérification hors-sujet AVANT appel OpenAI (économie tokens)
+    if ((mode === 'chat' || mode === 'assistant') && userQuestion) {
+      const q = userQuestion.toLowerCase()
+      const offTopicPatterns = [
+        /recette/i, /cuisine/i, /football/i, /météo/i, /jeu.?vidéo/i,
+        /manga/i, /anime/i, /film/i, /série tv/i, /musique/i,
+        /navette spatiale/i, /planète/i, /astronomie/i,
+        /crypto/i, /bitcoin/i, /bourse/i, /trading/i,
+        /graphiste/i, /design/i, /logo/i,
+        /vacances/i, /voyage(?!.*visa|.*séjour|.*france)/i,
+        /pokemon/i, /minecraft/i, /fortnite/i,
+        /blague/i, /humour/i, /drôle/i,
+        /qui a gagné/i, /match/i, /coupe du monde/i,
+        /intelligence artificielle/i, /chatgpt/i, /comment tu marche/i,
+      ]
+
+      const isObviouslyOffTopic = offTopicPatterns.some(p => p.test(q))
+      if (isObviouslyOffTopic) {
+        const offTopicResponse = mode === 'chat'
+          ? {
+              response: "Je suis spécialisé dans les démarches administratives en France et la préparation à l'examen civique. Je ne peux pas répondre à cette question, mais je serais ravi de vous aider sur :\n\n• Vos démarches de naturalisation\n• La préparation de l'entretien civique\n• Le suivi de votre dossier\n• La compréhension d'un courrier administratif\n\nQue puis-je faire pour vous ?",
+              off_topic: true,
+            }
+          : {
+              summary: "Cette question sort du cadre de mes compétences.",
+              what_it_means: "Je suis spécialisé dans les démarches administratives en France : naturalisation, titre de séjour, examen civique, entretien de naturalisation.",
+              what_to_do: "Posez-moi une question liée à vos démarches en France — je suis là pour vous accompagner dans votre parcours d'intégration.",
+              watch_out: "Pour des questions hors démarches, consultez les moteurs de recherche classiques.",
+              official_links: ["https://www.service-public.fr"],
+              off_topic: true,
+            }
+        return NextResponse.json({ mode, data: offTopicResponse })
+      }
     }
 
     const completion = await getOpenAI().chat.completions.create({
@@ -210,7 +283,7 @@ Rappel : Raisonne en profondeur. La personne qui pose cette question est probabl
         { role: 'user', content: userPrompt },
       ],
       temperature: 0.8,
-      max_tokens: 1500,
+      max_tokens: mode === 'chat' ? 500 : 1500,
       response_format: { type: 'json_object' },
     })
 

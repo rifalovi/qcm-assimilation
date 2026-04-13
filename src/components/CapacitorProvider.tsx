@@ -15,16 +15,13 @@ export default function CapacitorProvider({ children }: { children: React.ReactN
     if (platform === 'ios') document.body.classList.add('capacitor-ios')
     if (platform === 'android') document.body.classList.add('capacitor-android')
 
-    // Configurer le plugin Keyboard — empêche le resize du webview
-    // Le clavier ne poussera plus le contenu, on gère manuellement via CSS/JS
+    // Exposer la hauteur du clavier via CSS custom property
+    // Le resize mode reste NATIF (par défaut) — les pages normales (login, register)
+    // scrollent normalement. Les pages chat/messagerie gèrent le clavier elles-mêmes.
     async function setupKeyboard() {
       try {
-        const { Keyboard, KeyboardResize } = await import('@capacitor/keyboard')
+        const { Keyboard } = await import('@capacitor/keyboard')
 
-        // Ne pas resize le body quand le clavier s'ouvre
-        await Keyboard.setResizeMode({ mode: KeyboardResize.None })
-
-        // Écouter les événements clavier pour exposer la hauteur via CSS custom property
         Keyboard.addListener('keyboardWillShow', (info) => {
           document.documentElement.style.setProperty('--keyboard-height', `${info.keyboardHeight}px`)
           document.body.classList.add('keyboard-open')
@@ -35,7 +32,6 @@ export default function CapacitorProvider({ children }: { children: React.ReactN
           document.body.classList.remove('keyboard-open')
         })
       } catch (e) {
-        // Plugin pas disponible (web ou erreur d'import) — ignore
         console.log('[Capacitor] Keyboard plugin not available:', e)
       }
     }

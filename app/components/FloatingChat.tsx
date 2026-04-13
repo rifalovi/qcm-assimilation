@@ -9,13 +9,6 @@ import AiPaywall from "./AiPaywall";
 type Message = {
   role: "user" | "assistant";
   content: string;
-  data?: {
-    summary?: string;
-    what_it_means?: string;
-    what_to_do?: string;
-    watch_out?: string;
-    official_links?: string[];
-  };
 };
 
 const HIDDEN_PATHS = ["/admin", "/login", "/register", "/reset-password", "/quiz", "/exam", "/assistant"];
@@ -130,20 +123,13 @@ export default function FloatingChat() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          mode: "assistant",
-          category: "Question libre",
+          mode: "chat",
           userQuestion: text,
         }),
       });
 
       if (res.status === 429) {
-        const body = await res.json();
-        // Freemium → CTA premium
-        if (body.role === 'freemium') {
-          setShowPaywall(true);
-        } else {
-          setShowPaywall(true);
-        }
+        setShowPaywall(true);
         setLoading(false);
         return;
       }
@@ -158,10 +144,12 @@ export default function FloatingChat() {
       }
 
       const json = await res.json();
-      const d = json.data as Message["data"];
+      const d = json.data as { response?: string; off_topic?: boolean; suggest_page?: string };
+      const responseText = d?.response ?? "Je n'ai pas pu traiter votre question.";
+
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: d?.summary ?? "Réponse reçue.", data: d },
+        { role: "assistant", content: responseText },
       ]);
     } catch {
       setMessages((prev) => [
@@ -278,19 +266,8 @@ export default function FloatingChat() {
                       <p className="text-sm text-blue-100">{msg.content}</p>
                     </div>
                   ) : (
-                    <div className="max-w-[92%] space-y-2">
-                      <div className="rounded-2xl rounded-bl-md bg-white/5 border border-white/10 px-3 py-2.5">
-                        <p className="text-sm text-slate-200 leading-relaxed text-justify">{msg.content}</p>
-                      </div>
-                      {msg.data && (msg.data.what_it_means || msg.data.what_to_do || msg.data.watch_out) && (
-                        <ChatDetails data={msg.data} />
-                      )}
-                      <p className="text-[10px] text-slate-500 px-1">
-                        Indicatif — vérifiez sur{" "}
-                        <a href="https://www.service-public.fr" target="_blank" rel="noopener noreferrer" className="text-blue-400/70 hover:text-blue-300 underline">
-                          service-public.fr
-                        </a>
-                      </p>
+                    <div className="max-w-[92%] rounded-2xl rounded-bl-md bg-white/5 border border-white/10 px-3 py-2.5">
+                      <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-line">{msg.content}</p>
                     </div>
                   )}
                 </div>
@@ -383,57 +360,3 @@ export default function FloatingChat() {
   );
 }
 
-function ChatDetails({ data }: { data: NonNullable<Message["data"]> }) {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] overflow-hidden">
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="flex w-full items-center justify-between px-3 py-2 text-left transition hover:bg-white/5"
-      >
-        <span className="text-[11px] font-semibold text-slate-400">Voir les détails</span>
-        <svg
-          width="12" height="12" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
-          className={`text-slate-500 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-        >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </button>
-
-      {expanded && (
-        <div className="border-t border-white/5 px-3 py-2.5 space-y-2.5">
-          {data.what_it_means && (
-            <div>
-              <p className="text-[10px] font-bold text-violet-300 uppercase tracking-wider mb-0.5">Ce que ça signifie</p>
-              <p className="text-xs text-slate-300 leading-relaxed text-justify">{data.what_it_means}</p>
-            </div>
-          )}
-          {data.what_to_do && (
-            <div>
-              <p className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider mb-0.5">Ce qu'il faut faire</p>
-              <p className="text-xs text-slate-300 leading-relaxed text-justify">{data.what_to_do}</p>
-            </div>
-          )}
-          {data.watch_out && (
-            <div>
-              <p className="text-[10px] font-bold text-amber-300 uppercase tracking-wider mb-0.5">Vigilance</p>
-              <p className="text-xs text-amber-200/80 leading-relaxed text-justify">{data.watch_out}</p>
-            </div>
-          )}
-          {data.official_links && data.official_links.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {data.official_links.map((link, i) => (
-                <a key={i} href={link} target="_blank" rel="noopener noreferrer"
-                  className="text-[10px] text-blue-300 hover:text-blue-200 underline truncate max-w-full">
-                  {link.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]} ↗
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
