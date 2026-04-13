@@ -467,6 +467,26 @@ export default function AdminEmailsPage() {
               </div>
             </div>
           )}
+
+          {/* Lien d'invitation à partager */}
+          <div className="rounded-2xl border border-white/10 bg-slate-800/60 p-5 space-y-3">
+            <h2 className="text-sm font-bold text-white">Lien d'invitation à partager</h2>
+            <p className="text-xs text-slate-400">Copiez ce lien et partagez-le dans vos groupes pour inviter des candidats à tester Cap Citoyen.</p>
+            <div className="flex items-center gap-2">
+              <input type="text" readOnly value="https://cap-citoyen.fr/?utm_source=email&utm_campaign=invite"
+                className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
+              <button onClick={() => navigator.clipboard.writeText("https://cap-citoyen.fr/?utm_source=email&utm_campaign=invite")}
+                className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-500 shrink-0">
+                Copier
+              </button>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+              <p className="text-xs text-slate-400 mb-1">Message prêt à coller (WhatsApp / Facebook)</p>
+              <p className="text-sm text-slate-200 whitespace-pre-line">{"🇫🇷 Tu prépares ton examen civique ou ta naturalisation ?\n\nTeste Cap Citoyen gratuitement : quiz, audio, assistant IA démarches.\n\n👉 https://cap-citoyen.fr/?utm_source=email&utm_campaign=invite"}</p>
+              <button onClick={() => navigator.clipboard.writeText("🇫🇷 Tu prépares ton examen civique ou ta naturalisation ?\n\nTeste Cap Citoyen gratuitement : quiz, audio, assistant IA démarches.\n\n👉 https://cap-citoyen.fr/?utm_source=email&utm_campaign=invite")}
+                className="mt-2 text-xs text-blue-300 hover:text-blue-200">Copier ce message</button>
+            </div>
+          </div>
         </div>
       )}
 
