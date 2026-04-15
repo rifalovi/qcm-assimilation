@@ -95,8 +95,10 @@ export default function AdminQuizQuestionsPage() {
       body: JSON.stringify({ action: "migrate_from_files" }),
     });
     const json = await res.json();
-    if (res.ok) alert(`✓ ${json.migrated} QCM importés depuis les ${json.total_in_files} dans les fichiers`);
-    else alert("Erreur : " + json.error);
+    if (res.ok) {
+      const dupMsg = json.duplicates_skipped > 0 ? ` (${json.duplicates_skipped} doublons d'ID ignorés)` : '';
+      alert(`✓ ${json.migrated} QCM importés sur ${json.total_in_files}${dupMsg}`);
+    } else alert("Erreur : " + json.error);
     setMigrating(false);
     load();
   }

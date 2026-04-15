@@ -147,9 +147,8 @@ export async function POST(req: NextRequest) {
 
   // Migration des fichiers statiques vers la base (une seule fois)
   if (action === 'migrate_from_files') {
-    // Import dynamique — charge QUESTIONS depuis les fichiers .ts
     const { QUESTIONS } = await import('../../../../src/data/questions')
-    const toInsert = (QUESTIONS as Array<{
+    const allRows = (QUESTIONS as Array<{
       id: string; level: 1 | 2 | 3; theme: string; question: string;
       choices: Array<{ key: string; label: string }>; answer: string; explanation: string;
     }>).map(q => {
@@ -169,12 +168,25 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    // Upsert par external_id pour éviter les doublons
+    // Dédupliquer par external_id (garde la dernière occurrence) — évite
+    // l'erreur "ON CONFLICT DO UPDATE cannot affect row a second time"
+    const byId = new Map<string, typeof allRows[0]>()
+    for (const r of allRows) byId.set(r.external_id, r)
+    const toInsert = Array.from(byId.values())
+    const duplicates = allRows.length - toInsert.length
+
+    // Upsert par external_id
     const { error, count } = await admin
       .from('quiz_questions')
       .upsert(toInsert, { onConflict: 'external_id', count: 'exact' })
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    return NextResponse.json({ success: true, migrated: count ?? toInsert.length, total_in_files: toInsert.length })
+    return NextResponse.json({
+      success: true,
+      migrated: count ?? toInsert.length,
+      total_in_files: allRows.length,
+      unique_ids: toInsert.length,
+      duplicates_skipped: duplicates,
+    })
   }
 
   return NextResponse.json({ error: 'Action invalide' }, { status: 400 })
