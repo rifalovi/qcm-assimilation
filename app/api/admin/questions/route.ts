@@ -41,18 +41,37 @@ export async function GET(req: NextRequest) {
   const search = url.searchParams.get('search')
   const pageSize = 30
 
-  let query = admin.from('questions').select('*', { count: 'exact' }).order('created_at', { ascending: false })
-  if (level) query = query.eq('level', parseInt(level, 10))
-  if (theme) query = query.eq('theme', theme)
-  if (status) query = query.eq('status', status)
+  // Détecter les colonnes disponibles (cache simple sur la 1ère row)
+  const { data: sample } = await admin.from('questions').select('*').limit(1)
+  const availableCols = new Set(sample && sample[0] ? Object.keys(sample[0]) : [])
+
+  let query = admin.from('questions').select('*', { count: 'exact' })
+  if (availableCols.has('created_at')) query = query.order('created_at', { ascending: false })
+
+  if (level && availableCols.has('level')) query = query.eq('level', parseInt(level, 10))
+  if (theme && availableCols.has('theme')) query = query.eq('theme', theme)
+  if (status && availableCols.has('status')) query = query.eq('status', status)
+
+  // Recherche élargie uniquement sur les colonnes qui existent
   if (search) {
     const safe = escapeSupabasePattern(search)
-    if (safe) query = query.ilike('question', `%${safe}%`)
+    if (safe) {
+      const searchCols = ['question', 'choice_a', 'choice_b', 'choice_c', 'choice_d', 'explanation']
+        .filter(c => availableCols.has(c))
+      if (searchCols.length > 0) {
+        query = query.or(searchCols.map(c => `${c}.ilike.%${safe}%`).join(','))
+      }
+    }
   }
 
   const { data, count, error } = await query.range(page * pageSize, (page + 1) * pageSize - 1)
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json({ questions: data ?? [], total: count ?? 0, page, pageSize })
+  if (error) return NextResponse.json({ error: error.message, availableCols: [...availableCols] }, { status: 500 })
+  return NextResponse.json({
+    questions: data ?? [],
+    total: count ?? 0,
+    page, pageSize,
+    availableCols: [...availableCols],
+  })
 }
 
 // POST — Create, update, delete, import CSV, export CSV

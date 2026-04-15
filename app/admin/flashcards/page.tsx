@@ -30,6 +30,7 @@ export default function AdminFlashcardsPage() {
   const [search, setSearch] = useState("");
   const [editing, setEditing] = useState<Flashcard | Omit<Flashcard, "id" | "created_at"> | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [availableCols, setAvailableCols] = useState<Set<string>>(new Set());
 
   async function load() {
     setLoading(true);
@@ -40,6 +41,7 @@ export default function AdminFlashcardsPage() {
     if (search) params.set("search", search);
     const res = await fetch(`/api/admin/flashcards?${params}`);
     const json = await res.json();
+    if (json.availableCols) setAvailableCols(new Set(json.availableCols));
     if (!res.ok) { setError(json.error); setLoading(false); return; }
     setCards(json.flashcards);
     setTotal(json.total);
@@ -105,23 +107,29 @@ export default function AdminFlashcardsPage() {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <input placeholder="Rechercher..." value={search} onChange={e => setSearch(e.target.value)}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none flex-1 min-w-[200px]" />
-        <select value={filterLevel} onChange={e => { setFilterLevel(e.target.value); setPage(0); }}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-          <option value="" className="bg-slate-800">Tous niveaux</option>
-          {LEVELS.map(l => <option key={l} value={l} className="bg-slate-800">Niveau {l}</option>)}
-        </select>
-        <select value={filterTheme} onChange={e => { setFilterTheme(e.target.value); setPage(0); }}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-          <option value="" className="bg-slate-800">Tous thèmes</option>
-          {THEMES.map(t => <option key={t} value={t} className="bg-slate-800">{t}</option>)}
-        </select>
-        <select value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setPage(0); }}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-          <option value="" className="bg-slate-800">Tous statuts</option>
-          {STATUSES.map(s => <option key={s} value={s} className="bg-slate-800">{s}</option>)}
-        </select>
+        <input placeholder="Rechercher (recto, verso)..." value={search} onChange={e => setSearch(e.target.value)}
+          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none flex-1 min-w-[240px]" />
+        {availableCols.has('level') && (
+          <select value={filterLevel} onChange={e => { setFilterLevel(e.target.value); setPage(0); }}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
+            <option value="" className="bg-slate-800">Tous niveaux</option>
+            {LEVELS.map(l => <option key={l} value={l} className="bg-slate-800">Niveau {l}</option>)}
+          </select>
+        )}
+        {availableCols.has('theme') && (
+          <select value={filterTheme} onChange={e => { setFilterTheme(e.target.value); setPage(0); }}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
+            <option value="" className="bg-slate-800">Tous thèmes</option>
+            {THEMES.map(t => <option key={t} value={t} className="bg-slate-800">{t}</option>)}
+          </select>
+        )}
+        {availableCols.has('status') && (
+          <select value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setPage(0); }}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
+            <option value="" className="bg-slate-800">Tous statuts</option>
+            {STATUSES.map(s => <option key={s} value={s} className="bg-slate-800">{s}</option>)}
+          </select>
+        )}
         <button onClick={() => setEditing(empty())}
           className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-500">+ Nouvelle</button>
         <button onClick={exportCSV}
