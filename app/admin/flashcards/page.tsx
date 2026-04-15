@@ -209,12 +209,12 @@ export default function AdminFlashcardsPage() {
             </div>
             <div>
               <label className="text-xs text-slate-400">Recto (question / terme)</label>
-              <textarea value={editing.recto} onChange={e => setEditing({ ...editing, recto: e.target.value })}
+              <textarea value={editing.recto ?? ""} onChange={e => setEditing({ ...editing, recto: e.target.value })}
                 className="w-full min-h-[70px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
             </div>
             <div>
               <label className="text-xs text-slate-400">Verso (réponse / définition)</label>
-              <textarea value={editing.verso} onChange={e => setEditing({ ...editing, verso: e.target.value })}
+              <textarea value={editing.verso ?? ""} onChange={e => setEditing({ ...editing, verso: e.target.value })}
                 className="w-full min-h-[100px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
             </div>
             <div className="flex justify-end gap-2">

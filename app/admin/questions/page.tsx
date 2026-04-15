@@ -168,7 +168,11 @@ export default function AdminQuestionsPage() {
                     {q.external_id && <span className="text-[10px] text-slate-500 font-mono">{q.external_id}</span>}
                   </div>
                   <p className="text-sm text-white font-medium">{q.question}</p>
-                  <p className="text-xs text-slate-400 mt-1">Réponse : {q.answer}) {q[`choice_${q.answer.toLowerCase()}` as "choice_a"]}</p>
+                  {q.answer && (
+                    <p className="text-xs text-slate-400 mt-1">
+                      Réponse : {q.answer}) {q[`choice_${q.answer.toLowerCase()}` as "choice_a"] ?? ""}
+                    </p>
+                  )}
                 </div>
                 <div className="flex gap-1.5 shrink-0">
                   <button onClick={() => setEditing(q)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:text-white">Éditer</button>
@@ -226,13 +230,13 @@ export default function AdminQuestionsPage() {
             </div>
             <div>
               <label className="text-xs text-slate-400">Énoncé</label>
-              <textarea value={editing.question} onChange={e => setEditing({ ...editing, question: e.target.value })}
+              <textarea value={editing.question ?? ""} onChange={e => setEditing({ ...editing, question: e.target.value })}
                 className="w-full min-h-[80px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
             </div>
             {(["a", "b", "c", "d"] as const).map(k => (
               <div key={k} className="flex gap-2">
                 <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 text-sm font-bold text-white">{k.toUpperCase()}</div>
-                <input value={editing[`choice_${k}` as "choice_a"]} onChange={e => setEditing({ ...editing, [`choice_${k}`]: e.target.value })}
+                <input value={editing[`choice_${k}` as "choice_a"] ?? ""} onChange={e => setEditing({ ...editing, [`choice_${k}`]: e.target.value })}
                   className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" placeholder={`Option ${k.toUpperCase()}`} />
               </div>
             ))}
@@ -249,7 +253,7 @@ export default function AdminQuestionsPage() {
             </div>
             <div>
               <label className="text-xs text-slate-400">Explication</label>
-              <textarea value={editing.explanation} onChange={e => setEditing({ ...editing, explanation: e.target.value })}
+              <textarea value={editing.explanation ?? ""} onChange={e => setEditing({ ...editing, explanation: e.target.value })}
                 className="w-full min-h-[60px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
             </div>
             <div className="flex justify-end gap-2">
