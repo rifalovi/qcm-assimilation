@@ -114,7 +114,7 @@ function RegisterForm() {
 
   if (step === "confirmed") {
     return (
-      <main className="mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-7xl items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-7xl items-center justify-center px-4 py-8 sm:px-6 lg:px-8 bg-slate-950">
         <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <section className="hidden lg:block">
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 p-8 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
@@ -189,7 +189,7 @@ function RegisterForm() {
 
   if (step === "otp") {
     return (
-      <main className="mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-7xl items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-7xl items-center justify-center px-4 py-8 sm:px-6 lg:px-8 bg-slate-950">
         <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <section className="hidden lg:block">
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 p-8 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
@@ -329,7 +329,7 @@ function RegisterForm() {
   }
 
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-7xl items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-7xl items-center justify-center px-4 py-8 sm:px-6 lg:px-8 bg-slate-950">
       <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <section className="hidden lg:block">
           <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 p-8 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
@@ -538,7 +538,7 @@ export default function RegisterPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center text-slate-300">
+        <div className="flex min-h-screen items-center justify-center bg-slate-950 text-slate-300">
           Chargement...
         </div>
       }
