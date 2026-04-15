@@ -40,14 +40,28 @@ export async function GET(req: NextRequest) {
   const search = url.searchParams.get('search')
   const pageSize = 30
 
-  // Détecter les colonnes disponibles
+  const sort = url.searchParams.get('sort') ?? 'newest'
+
+  // Détecter les colonnes disponibles + le nom réel de la colonne niveau
   const { data: sample } = await admin.from('flashcards').select('*').limit(1)
   const availableCols = new Set(sample && sample[0] ? Object.keys(sample[0]) : [])
+  const levelCol = ['level', 'niveau', 'difficulty'].find(c => availableCols.has(c)) ?? null
 
   let query = admin.from('flashcards').select('*', { count: 'exact' })
-  if (availableCols.has('created_at')) query = query.order('created_at', { ascending: false })
 
-  if (level && availableCols.has('level')) query = query.eq('level', parseInt(level, 10))
+  // Tri
+  if (sort === 'level_asc' && levelCol) {
+    query = query.order(levelCol, { ascending: true })
+  } else if (sort === 'level_desc' && levelCol) {
+    query = query.order(levelCol, { ascending: false })
+  } else if (sort === 'theme' && availableCols.has('theme')) {
+    query = query.order('theme', { ascending: true })
+    if (levelCol) query = query.order(levelCol, { ascending: true })
+  } else if (availableCols.has('created_at')) {
+    query = query.order('created_at', { ascending: false })
+  }
+
+  if (level && levelCol) query = query.eq(levelCol, parseInt(level, 10))
   if (theme && availableCols.has('theme')) query = query.eq('theme', theme)
   if (status && availableCols.has('status')) query = query.eq('status', status)
 
@@ -63,12 +77,13 @@ export async function GET(req: NextRequest) {
   }
 
   const { data, count, error } = await query.range(page * pageSize, (page + 1) * pageSize - 1)
-  if (error) return NextResponse.json({ error: error.message, availableCols: [...availableCols] }, { status: 500 })
+  if (error) return NextResponse.json({ error: error.message, availableCols: [...availableCols], levelCol }, { status: 500 })
   return NextResponse.json({
     flashcards: data ?? [],
     total: count ?? 0,
     page, pageSize,
     availableCols: [...availableCols],
+    levelCol,
   })
 }
 

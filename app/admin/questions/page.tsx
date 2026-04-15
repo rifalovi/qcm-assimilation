@@ -40,10 +40,12 @@ export default function AdminQuestionsPage() {
   const [editing, setEditing] = useState<Question | Omit<Question, "id" | "created_at"> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [availableCols, setAvailableCols] = useState<Set<string>>(new Set());
+  const [levelCol, setLevelCol] = useState<string | null>(null);
+  const [sort, setSort] = useState<"newest" | "level_asc" | "level_desc" | "theme">("newest");
 
   async function load() {
     setLoading(true);
-    const params = new URLSearchParams({ page: String(page) });
+    const params = new URLSearchParams({ page: String(page), sort });
     if (filterLevel) params.set("level", filterLevel);
     if (filterTheme) params.set("theme", filterTheme);
     if (filterStatus) params.set("status", filterStatus);
@@ -51,6 +53,7 @@ export default function AdminQuestionsPage() {
     const res = await fetch(`/api/admin/questions?${params}`);
     const json = await res.json();
     if (json.availableCols) setAvailableCols(new Set(json.availableCols));
+    if (json.levelCol !== undefined) setLevelCol(json.levelCol);
     if (!res.ok) { setError(json.error); setLoading(false); return; }
     setQuestions(json.questions);
     setTotal(json.total);
@@ -58,7 +61,7 @@ export default function AdminQuestionsPage() {
     setLoading(false);
   }
 
-  useEffect(() => { load(); }, [page, filterLevel, filterTheme, filterStatus]);
+  useEffect(() => { load(); }, [page, filterLevel, filterTheme, filterStatus, sort]);
   useEffect(() => { const t = setTimeout(() => { setPage(0); load(); }, 400); return () => clearTimeout(t); }, [search]);
 
   async function save() {
@@ -140,6 +143,13 @@ export default function AdminQuestionsPage() {
             {STATUSES.map(s => <option key={s} value={s} className="bg-slate-800">{s}</option>)}
           </select>
         )}
+        <select value={sort} onChange={e => { setSort(e.target.value as typeof sort); setPage(0); }}
+          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
+          <option value="newest" className="bg-slate-800">Plus récent</option>
+          {levelCol && <option value="level_asc" className="bg-slate-800">Niveau ↑</option>}
+          {levelCol && <option value="level_desc" className="bg-slate-800">Niveau ↓</option>}
+          {availableCols.has('theme') && <option value="theme" className="bg-slate-800">Par thème</option>}
+        </select>
         <button onClick={() => setEditing(emptyQuestion())}
           className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-500">+ Nouvelle</button>
         <button onClick={exportCSV}
@@ -166,7 +176,9 @@ export default function AdminQuestionsPage() {
               <div className="flex items-start justify-between gap-3 flex-wrap">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-900/40 text-blue-300">N{q.level}</span>
+                    {levelCol && (q as unknown as Record<string, unknown>)[levelCol] != null && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-900/40 text-blue-300">N{String((q as unknown as Record<string, unknown>)[levelCol])}</span>
+                    )}
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-700 text-slate-300">{q.theme}</span>
                     <span className={`text-[10px] px-2 py-0.5 rounded-full ${
                       q.status === 'active' ? 'bg-emerald-900/40 text-emerald-300' :
