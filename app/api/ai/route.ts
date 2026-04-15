@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { getQuotaForRole, type AiMode } from '../../../src/lib/aiQuota'
+import { rateLimit, cleanupExpired } from '../../../src/lib/rateLimit'
 
 function getOpenAI() {
   return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
@@ -10,6 +11,18 @@ function getOpenAI() {
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit IP global — 30 requêtes / 5 min par IP
+    cleanupExpired()
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim()
+      ?? req.headers.get('x-real-ip') ?? 'unknown'
+    const rl = rateLimit(`ai:${ip}`, { limit: 30, windowMs: 5 * 60 * 1000 })
+    if (!rl.ok) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes, réessayez plus tard', retryAfter: rl.retryAfter },
+        { status: 429, headers: { 'Retry-After': String(rl.retryAfter ?? 60) } }
+      )
+    }
+
     const cookieStore = await cookies()
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

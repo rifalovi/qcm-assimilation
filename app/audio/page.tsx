@@ -579,8 +579,10 @@ function MediaCard({ media }: { media: AudioMediaRow }) {
           <iframe
             src={media.media_url}
             title={media.title}
+            sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
             className="h-full w-full border-0"
           />
         )}

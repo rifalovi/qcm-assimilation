@@ -189,7 +189,7 @@ export default function MessagesPage() {
       const { data } = await supabase
         .from('profiles')
         .select('id, first_name, last_name, username')
-        .or(`first_name.ilike.%${searchQuery}%,last_name.ilike.%${searchQuery}%,username.ilike.%${searchQuery}%`)
+        .or((() => { const s = searchQuery.replace(/[%_\\,()'"]/g, '').slice(0, 50); return `first_name.ilike.%${s}%,last_name.ilike.%${s}%,username.ilike.%${s}%`; })())
         .neq('id', currentUserId)
         .in('role', ['premium', 'elite'])
         .limit(8)

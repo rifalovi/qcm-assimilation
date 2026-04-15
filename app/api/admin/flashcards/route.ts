@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
+import { escapeSupabasePattern } from '../../../../src/lib/escape'
 
 function createAdminClient() {
   return createSupabaseClient(
@@ -43,7 +44,10 @@ export async function GET(req: NextRequest) {
   if (level) query = query.eq('level', parseInt(level, 10))
   if (theme) query = query.eq('theme', theme)
   if (status) query = query.eq('status', status)
-  if (search) query = query.or(`recto.ilike.%${search}%,verso.ilike.%${search}%`)
+  if (search) {
+    const safe = escapeSupabasePattern(search)
+    if (safe) query = query.or(`recto.ilike.%${safe}%,verso.ilike.%${safe}%`)
+  }
 
   const { data, count, error } = await query.range(page * pageSize, (page + 1) * pageSize - 1)
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

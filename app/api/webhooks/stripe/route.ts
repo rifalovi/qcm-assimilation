@@ -30,12 +30,23 @@ export async function POST(req: NextRequest) {
   })
 
   const body = await req.text()
-  const signature = req.headers.get("stripe-signature")!
+  const signature = req.headers.get("stripe-signature")
+
+  // Signature obligatoire — refuser explicitement si absente
+  if (!signature) {
+    return NextResponse.json({ error: "Signature manquante" }, { status: 401 })
+  }
+
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error('[Stripe] STRIPE_WEBHOOK_SECRET not configured')
+    return NextResponse.json({ error: "Webhook mal configuré" }, { status: 500 })
+  }
 
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!)
-  } catch {
+    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET)
+  } catch (err) {
+    console.error('[Stripe] Signature verification failed:', err)
     return NextResponse.json({ error: "Signature invalide" }, { status: 400 })
   }
 

@@ -35,7 +35,7 @@ export default function ModeratorsPage() {
       const { data } = await supabase
         .from('profiles')
         .select('id, username, role, created_at')
-        .ilike('username', `%${search}%`)
+        .ilike('username', `%${search.replace(/[%_\\,()'"]/g, '').slice(0, 50)}%`)
         .in('role', ['premium', 'elite', 'freemium'])
         .limit(5)
       setSearchResults(data ?? [])

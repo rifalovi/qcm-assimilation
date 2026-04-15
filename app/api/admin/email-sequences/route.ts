@@ -3,6 +3,7 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { getEmailTemplate, STEP_DELAYS_DAYS, STEP_LABELS, type EmailStep } from '../../../../src/lib/emailTemplates'
+import { escapeSupabasePattern } from '../../../../src/lib/escape'
 
 // Client admin avec accès complet (service_role) — supporte auth.admin
 function createAdminClient() {
@@ -46,7 +47,8 @@ export async function GET(req: NextRequest) {
     .select('id, username, role', { count: 'exact' })
 
   if (search) {
-    query = query.or(`username.ilike.%${search}%`)
+    const safe = escapeSupabasePattern(search)
+    if (safe) query = query.or(`username.ilike.%${safe}%`)
   }
 
   const { data: profiles, count: totalCount, error: profilesError } = await query.range(page * pageSize, (page + 1) * pageSize - 1)
