@@ -25,6 +25,51 @@ function shuffleArray<T>(items: T[]): T[] {
  */
 const sessionSeen: Set<string> = new Set()
 
+/**
+ * Version ASYNC : lit les questions depuis la base (quiz_questions) via /api/quiz/questions.
+ * Fallback automatique vers les fichiers statiques si la base est vide.
+ */
+export async function generateQuizAsync(params: {
+  level: Level;
+  themes: Theme[];
+  count: number;
+}): Promise<Question[]> {
+  const { level, themes, count } = params
+
+  try {
+    const res = await fetch(`/api/quiz/questions?level=${level}&themes=${encodeURIComponent(themes.join(','))}`)
+    if (res.ok) {
+      const json = await res.json()
+      const pool = (json.questions ?? []) as Question[]
+      if (pool.length > 0) {
+        return pickFromPool(pool, count)
+      }
+    }
+  } catch (e) {
+    console.error('[generateQuizAsync] fallback to sync:', e)
+  }
+
+  // Fallback : utilise les fichiers statiques
+  return generateQuiz(params)
+}
+
+function pickFromPool(allPool: Question[], count: number): Question[] {
+  const longTermSeen = getSeenIds()
+  const effectiveCount = Math.min(count, allPool.length)
+  let pool = allPool.filter(q => !longTermSeen.has(q.id) && !sessionSeen.has(q.id))
+  if (pool.length < effectiveCount) {
+    resetSeenIds()
+    pool = allPool.filter(q => !sessionSeen.has(q.id))
+  }
+  if (pool.length < effectiveCount) {
+    sessionSeen.clear()
+    pool = [...allPool]
+  }
+  const picked = shuffleArray(pool).slice(0, effectiveCount)
+  picked.forEach(q => sessionSeen.add(q.id))
+  return picked
+}
+
 export function generateQuiz(params: {
   level: Level;
   themes: Theme[];

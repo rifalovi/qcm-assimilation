@@ -6,22 +6,23 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, Flag, Ban,
   Shield, BarChart2, FileEdit, LogOut,
-  ChevronRight, TrendingUp, Menu, X, Headphones, Mail, Bot, Layers
+  ChevronRight, TrendingUp, Menu, X, Headphones, Mail, Bot, Layers, ListChecks
 } from 'lucide-react'
 
 const NAV = [
-  { href: '/admin',            label: 'Vue globale',     icon: LayoutDashboard },
-  { href: '/admin/users',      label: 'Utilisateurs',    icon: Users },
-  { href: '/admin/ai-usage',   label: 'Usage IA',        icon: Bot },
-  { href: '/admin/emails',     label: 'Emails',          icon: Mail },
-  { href: '/admin/questions',  label: 'Flashcards & QCM', icon: Layers },
-  { href: '/admin/reports',    label: 'Signalements',    icon: Flag },
-  { href: '/admin/bans',       label: 'Bannis',          icon: Ban },
-  { href: '/admin/moderators', label: 'Modérateurs',     icon: Shield },
-  { href: '/admin/stats',      label: 'Statistiques',    icon: BarChart2 },
-  { href: '/admin/analytics',  label: 'Analytics',       icon: TrendingUp },
-  { href: '/admin/audio',      label: 'Audio',           icon: Headphones },
-  { href: '/admin/content',    label: 'Contenu',         icon: FileEdit },
+  { href: '/admin',                label: 'Vue globale',       icon: LayoutDashboard },
+  { href: '/admin/users',          label: 'Utilisateurs',      icon: Users },
+  { href: '/admin/ai-usage',       label: 'Usage IA',          icon: Bot },
+  { href: '/admin/emails',         label: 'Emails',            icon: Mail },
+  { href: '/admin/questions',      label: 'Flashcards & QCM',  icon: Layers },
+  { href: '/admin/quiz-questions', label: 'QCM Tests & Examens', icon: ListChecks },
+  { href: '/admin/reports',        label: 'Signalements',      icon: Flag },
+  { href: '/admin/bans',           label: 'Bannis',            icon: Ban },
+  { href: '/admin/moderators',     label: 'Modérateurs',       icon: Shield },
+  { href: '/admin/stats',          label: 'Statistiques',      icon: BarChart2 },
+  { href: '/admin/analytics',      label: 'Analytics',         icon: TrendingUp },
+  { href: '/admin/audio',          label: 'Audio',             icon: Headphones },
+  { href: '/admin/content',        label: 'Contenu',           icon: FileEdit },
 ]
 
 interface Props {

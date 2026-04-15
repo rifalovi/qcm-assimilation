@@ -8,7 +8,7 @@ import { trackEvent } from "../../src/lib/posthog";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
 
 import type { ChoiceKey, Level, Theme, Question } from "../../src/data/questions";
-import { generateQuiz, scoreQuiz, markQuestionsAsSeen } from "../../src/lib/quizEngine";
+import { generateQuiz, generateQuizAsync, scoreQuiz, markQuestionsAsSeen } from "../../src/lib/quizEngine";
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -164,15 +164,28 @@ export default function QuizPage() {
   const allowedCount = Math.min(parsed.count, limits.quizCount);
   console.log('role:', role, 'limits:', limits.quizCount, 'allowedCount:', allowedCount)
 
-  const quiz = generateQuiz({
+  // Tentative async (base), fallback automatique sur les fichiers si vide
+  generateQuizAsync({
     level: parsed.level,
     themes: parsed.themes,
     count: allowedCount,
+  }).then((quiz) => {
+    setQuestions(quiz);
+    const init: Record<string, ChoiceKey | null> = {};
+    for (const q of quiz) init[q.id] = null;
+    setAnswers(init);
+  }).catch((e: Error) => {
+    // Dernier recours : sync
+    try {
+      const quiz = generateQuiz({ level: parsed.level, themes: parsed.themes, count: allowedCount });
+      setQuestions(quiz);
+      const init: Record<string, ChoiceKey | null> = {};
+      for (const q of quiz) init[q.id] = null;
+      setAnswers(init);
+    } catch {
+      setError(e?.message ?? "Erreur lors de la génération du test.");
+    }
   });
-  setQuestions(quiz);
-  const init: Record<string, ChoiceKey | null> = {};
-  for (const q of quiz) init[q.id] = null;
-  setAnswers(init);
 } catch (e: any) {
   setError(e?.message ?? "Erreur lors de la génération du test.");
 }
