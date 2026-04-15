@@ -17,7 +17,14 @@ function shuffleArray<T>(items: T[]): T[] {
 
 /**
  * Génère un quiz aléatoire à partir du niveau, des thèmes et du nombre demandé.
+ * Tirage SANS REMISE :
+ * - Un set de session (mémoire, reset à chaque nouveau chargement de l'app) exclut
+ *   les IDs déjà tirés dans la session courante → pas de doublon dans une session.
+ * - Un set long-terme (localStorage) exclut les questions déjà vues précédemment.
+ * - Si le pool s'épuise, on reset le long-terme mais on garde l'exclusion session.
  */
+const sessionSeen: Set<string> = new Set()
+
 export function generateQuiz(params: {
   level: Level;
   themes: Theme[];
@@ -31,11 +38,34 @@ export function generateQuiz(params: {
 
   if (allPool.length === 0) throw new Error("Aucune question disponible pour ces critères.");
 
-  const seen = getSeenIds();
+  const longTermSeen = getSeenIds();
   const effectiveCount = Math.min(count, allPool.length);
-  let pool = allPool.filter(q => !seen.has(q.id));
-  if (pool.length < count) { resetSeenIds(); pool = [...allPool]; }
-  return shuffleArray(pool).slice(0, effectiveCount);
+
+  // Exclure session + long terme
+  let pool = allPool.filter(q => !longTermSeen.has(q.id) && !sessionSeen.has(q.id))
+
+  // Si insuffisant, reset le long-terme mais on exclut toujours la session
+  if (pool.length < effectiveCount) {
+    resetSeenIds()
+    pool = allPool.filter(q => !sessionSeen.has(q.id))
+  }
+
+  // Si encore insuffisant (pool session plus grand que allPool), on reset la session aussi
+  if (pool.length < effectiveCount) {
+    sessionSeen.clear()
+    pool = [...allPool]
+  }
+
+  const picked = shuffleArray(pool).slice(0, effectiveCount)
+
+  // Marquer les IDs tirés dans la session (prévention immédiate de doublon)
+  picked.forEach(q => sessionSeen.add(q.id))
+
+  return picked
+}
+
+export function resetSessionSeen() {
+  sessionSeen.clear()
 }
 
 const SEEN_KEY = 'qcm_seen_ids';

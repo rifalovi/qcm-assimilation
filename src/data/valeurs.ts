@@ -459,14 +459,6 @@ makeQuestion("v1-050",1,"Valeurs","La fraternité suppose :",
 "La fraternité implique la solidarité."
 ),
 
-makeQuestion("v1-051",1,"Valeurs","L’égalité devant la loi signifie :",
-"Des lois différentes",
-"Les mêmes règles pour tous",
-"Des privilèges",
-"Une hiérarchie",
-"B",
-"Tous sont égaux devant la loi."
-),
 
 makeQuestion("v1-052",1,"Valeurs","La liberté ne permet pas :",
 "De s’exprimer",
@@ -558,14 +550,6 @@ makeQuestion("v1-061",1,"Valeurs","La République repose sur :",
 "Les valeurs structurent la République."
 ),
 
-makeQuestion("v1-062",1,"Valeurs","La liberté implique :",
-"Aucune règle",
-"Des responsabilités",
-"L’autorité",
-"La contrainte",
-"B",
-"La liberté suppose des devoirs."
-),
 
 makeQuestion("v1-063",1,"Valeurs","La République garantit :",
 "L’injustice",
@@ -594,14 +578,6 @@ makeQuestion("v1-065",1,"Valeurs","La liberté d’expression permet :",
 "Elle permet d’exprimer ses opinions."
 ),
 
-makeQuestion("v1-066",1,"Valeurs","La République garantit :",
-"Les droits",
-"Les privilèges",
-"L’inégalité",
-"La domination",
-"A",
-"Elle protège les droits."
-),
 
 makeQuestion("v1-067",1,"Valeurs","La fraternité implique :",
 "L’indifférence",
@@ -630,14 +606,6 @@ makeQuestion("v1-069",1,"Valeurs","La liberté s’arrête :",
 "La liberté doit respecter celle des autres."
 ),
 
-makeQuestion("v1-070",1,"Valeurs","La dignité humaine signifie :",
-"Respecter chacun",
-"Hiérarchiser",
-"Exclure",
-"Favoriser",
-"A",
-"Chaque individu mérite respect."
-),
 
 makeQuestion("v1-071",1,"Valeurs","Quel texte fonde les droits en France ?",
 "La Constitution",
@@ -657,23 +625,7 @@ makeQuestion("v1-072",1,"Valeurs","Quel texte date de la Révolution française 
 "La DDHC date de 1789."
 ),
 
-makeQuestion("v1-073",1,"Valeurs","Une femme peut avorter :",
-"Jamais",
-"Dans un cadre légal",
-"Uniquement à l’étranger",
-"Avec autorisation",
-"B",
-"L’IVG est autorisée."
-),
 
-makeQuestion("v1-074",1,"Valeurs","Le divorce est :",
-"Interdit",
-"Autorisé",
-"Rare",
-"Impossible",
-"B",
-"Le divorce est légal."
-),
 
 makeQuestion("v1-075",1,"Valeurs","Les libertés sont limitées pour :",
 "Protéger les autres",
@@ -684,14 +636,6 @@ makeQuestion("v1-075",1,"Valeurs","Les libertés sont limitées pour :",
 "Elles protègent la société."
 ),
 
-makeQuestion("v1-076",1,"Valeurs","Ne pas respecter la loi entraîne :",
-"Une récompense",
-"Une sanction",
-"Rien",
-"Un vote",
-"B",
-"Il existe des sanctions."
-),
 
 makeQuestion("v1-077",1,"Valeurs","Se défendre en justice implique :",
 "Un avocat",
@@ -702,41 +646,9 @@ makeQuestion("v1-077",1,"Valeurs","Se défendre en justice implique :",
 "Droit à la défense."
 ),
 
-makeQuestion("v1-078",1,"Valeurs","La peine de mort est :",
-"Autorisée",
-"Interdite",
-"Limitée",
-"Rare",
-"B",
-"Abolie en France."
-),
 
-makeQuestion("v1-079",1,"Valeurs","La polygamie est :",
-"Autorisée",
-"Interdite",
-"Acceptée",
-"Rare",
-"B",
-"Elle est interdite."
-),
 
-makeQuestion("v1-080",1,"Valeurs","Une infraction est :",
-"Un acte interdit",
-"Une opinion",
-"Une règle",
-"Une tradition",
-"A",
-"Violation de la loi."
-),
 
-makeQuestion("v1-081",1,"Valeurs","L’infraction la plus grave est :",
-"Contravention",
-"Délit",
-"Crime",
-"Erreur",
-"C",
-"Le crime est le plus grave."
-),
 
 ];
 export const VALEURS_L2: Question[] = [

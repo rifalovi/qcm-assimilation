@@ -196,14 +196,6 @@ makeQuestion("s1-022",1,"Société","La liberté de religion signifie :",
 "La liberté de religion fait partie des libertés fondamentales."
 ),
 
-makeQuestion("s1-023",1,"Société","Respecter la loi signifie :",
-"Choisir les lois que l’on veut",
-"Refuser les institutions",
-"Suivre uniquement ses opinions",
-"Respecter les règles communes",
-"D",
-"Le respect des lois permet le fonctionnement de la société."
-),
 
 makeQuestion("s1-024",1,"Société","L’école permet notamment :",
 "Uniquement jouer",
@@ -476,14 +468,6 @@ makeQuestion("s1-053",1,"Société","Un logement est :",
 "Le logement est un lieu de vie."
 ),
 
-makeQuestion("s1-054",1,"Société","Le respect de la loi est :",
-"Obligatoire",
-"Optionnel",
-"Interdit",
-"Rare",
-"A",
-"La loi s’impose à tous."
-),
 
 makeQuestion("s1-055",1,"Société","Une carte de séjour permet :",
 "De voter automatiquement",
@@ -602,14 +586,6 @@ makeQuestion("s1-067",1,"Société","Un propriétaire est :",
 "Le propriétaire possède le logement."
 ),
 
-makeQuestion("s1-068",1,"Société","La liberté signifie :",
-"Faire tout ce qu’on veut",
-"Refuser les règles",
-"Pouvoir agir dans le respect des lois",
-"Imposer ses idées",
-"C",
-"La liberté s’exerce dans le cadre de la loi."
-),
 
 makeQuestion("s1-069",1,"Société","Une règle est :",
 "Une opinion",
@@ -1318,14 +1294,6 @@ makeQuestion("s3-022",3,"Société","Les citoyens européens peuvent notamment :
   "Ils peuvent voter aux élections locales du pays de l’Union où ils sont installés."
 ),
 
-makeQuestion("s3-023",3,"Société","La France est membre permanent du Conseil de sécurité de :",
-  "L’OTAN",
-  "L’Union européenne",
-  "L’ONU",
-  "L’UNESCO",
-  "C",
-  "La France est membre permanent du Conseil de sécurité de l’ONU."
-),
 
 makeQuestion("s3-024",3,"Société","Le français est parlé dans environ :",
   "20 pays",
