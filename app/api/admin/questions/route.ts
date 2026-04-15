@@ -27,7 +27,6 @@ async function verifyAdmin() {
   return user
 }
 
-// GET — Liste paginée avec filtres
 export async function GET(req: NextRequest) {
   const user = await verifyAdmin()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
@@ -35,68 +34,41 @@ export async function GET(req: NextRequest) {
   const admin = createAdminClient()
   const url = new URL(req.url)
   const page = parseInt(url.searchParams.get('page') ?? '0', 10)
-  const level = url.searchParams.get('level')
   const theme = url.searchParams.get('theme')
-  const status = url.searchParams.get('status')
   const search = url.searchParams.get('search')
-  const sort = url.searchParams.get('sort') ?? 'newest' // newest | level_asc | level_desc | theme
+  const sort = url.searchParams.get('sort') ?? 'id_asc'
   const pageSize = 30
-
-  // Détecter les colonnes disponibles + le nom réel de la colonne niveau
-  const { data: sample } = await admin.from('questions').select('*').limit(1)
-  const availableCols = new Set(sample && sample[0] ? Object.keys(sample[0]) : [])
-  const levelCol = ['level', 'niveau', 'difficulty'].find(c => availableCols.has(c)) ?? null
 
   let query = admin.from('questions').select('*', { count: 'exact' })
 
-  // Tri
-  if (sort === 'level_asc' && levelCol) {
-    query = query.order(levelCol, { ascending: true })
-  } else if (sort === 'level_desc' && levelCol) {
-    query = query.order(levelCol, { ascending: false })
-  } else if (sort === 'theme' && availableCols.has('theme')) {
-    query = query.order('theme', { ascending: true })
-    if (levelCol) query = query.order(levelCol, { ascending: true })
-  } else if (availableCols.has('created_at')) {
-    query = query.order('created_at', { ascending: false })
-  }
+  if (sort === 'theme') query = query.order('theme', { ascending: true }).order('id', { ascending: true })
+  else if (sort === 'id_desc') query = query.order('id', { ascending: false })
+  else query = query.order('id', { ascending: true })
 
-  if (level && levelCol) query = query.eq(levelCol, parseInt(level, 10))
-  if (theme && availableCols.has('theme')) query = query.eq('theme', theme)
-  if (status && availableCols.has('status')) query = query.eq('status', status)
+  if (theme) query = query.eq('theme', theme)
 
-  // Recherche élargie uniquement sur les colonnes qui existent
   if (search) {
     const safe = escapeSupabasePattern(search)
     if (safe) {
-      const searchCols = ['question', 'choice_a', 'choice_b', 'choice_c', 'choice_d', 'explanation']
-        .filter(c => availableCols.has(c))
-      if (searchCols.length > 0) {
-        query = query.or(searchCols.map(c => `${c}.ilike.%${safe}%`).join(','))
-      }
+      query = query.or(`question.ilike.%${safe}%,best_answer.ilike.%${safe}%`)
     }
   }
 
-  // Récupérer les thèmes distincts (pour le filtre)
-  let distinctThemes: string[] = []
-  if (availableCols.has('theme')) {
-    const { data: themesData } = await admin.from('questions').select('theme').limit(1000)
-    distinctThemes = Array.from(new Set((themesData ?? []).map(r => r.theme).filter(Boolean))).sort()
-  }
-
   const { data, count, error } = await query.range(page * pageSize, (page + 1) * pageSize - 1)
-  if (error) return NextResponse.json({ error: error.message, availableCols: [...availableCols], levelCol }, { status: 500 })
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  // Thèmes distincts pour le filtre
+  const { data: themesData } = await admin.from('questions').select('theme').limit(1000)
+  const distinctThemes = Array.from(new Set((themesData ?? []).map(r => r.theme).filter(Boolean))).sort() as string[]
+
   return NextResponse.json({
     questions: data ?? [],
     total: count ?? 0,
     page, pageSize,
-    availableCols: [...availableCols],
-    levelCol,
     distinctThemes,
   })
 }
 
-// POST — Create, update, delete, import CSV, export CSV
 export async function POST(req: NextRequest) {
   const user = await verifyAdmin()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
@@ -106,56 +78,55 @@ export async function POST(req: NextRequest) {
   const { action } = body as { action: string }
 
   if (action === 'create') {
-    const { question, choice_a, choice_b, choice_c, choice_d, answer, explanation, level, theme, status, external_id } = body
+    const { theme, question, best_answer, mcq_variants } = body
     const { data, error } = await admin.from('questions').insert({
-      question, choice_a, choice_b, choice_c, choice_d, answer, explanation,
-      level, theme, status: status ?? 'active', external_id: external_id ?? null,
-      created_by: user.id,
+      theme, question, best_answer, mcq_variants: mcq_variants ?? [],
     }).select('id').single()
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
     return NextResponse.json({ success: true, id: data.id })
   }
 
   if (action === 'update') {
-    const { id, ...fields } = body as { id: string; [k: string]: unknown }
-    delete (fields as { action?: string }).action
+    const { id, theme, question, best_answer, mcq_variants } = body as {
+      id: number; theme?: string; question?: string; best_answer?: string;
+      mcq_variants?: unknown[];
+    }
+    const fields: Record<string, unknown> = {}
+    if (theme !== undefined) fields.theme = theme
+    if (question !== undefined) fields.question = question
+    if (best_answer !== undefined) fields.best_answer = best_answer
+    if (mcq_variants !== undefined) fields.mcq_variants = mcq_variants
     const { error } = await admin.from('questions').update(fields).eq('id', id)
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
     return NextResponse.json({ success: true })
   }
 
   if (action === 'delete') {
-    const { id } = body as { id: string }
+    const { id } = body as { id: number }
     const { error } = await admin.from('questions').delete().eq('id', id)
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
     return NextResponse.json({ success: true })
+  }
+
+  if (action === 'export_csv') {
+    const { data } = await admin.from('questions').select('*').order('id', { ascending: true })
+    return NextResponse.json({ rows: data ?? [] })
   }
 
   if (action === 'import_csv') {
     const { rows } = body as { rows: Record<string, string>[] }
     if (!Array.isArray(rows)) return NextResponse.json({ error: 'rows requis' }, { status: 400 })
     const toInsert = rows.map(r => ({
-      external_id: r.external_id || null,
-      level: parseInt(r.level, 10),
       theme: r.theme,
       question: r.question,
-      choice_a: r.choice_a,
-      choice_b: r.choice_b,
-      choice_c: r.choice_c,
-      choice_d: r.choice_d,
-      answer: r.answer?.toUpperCase(),
-      explanation: r.explanation,
-      status: r.status || 'active',
-      created_by: user.id,
+      best_answer: r.best_answer,
+      mcq_variants: (() => {
+        try { return JSON.parse(r.mcq_variants ?? '[]') } catch { return [] }
+      })(),
     }))
     const { error, count } = await admin.from('questions').insert(toInsert, { count: 'exact' })
     if (error) return NextResponse.json({ error: error.message, partial: count ?? 0 }, { status: 500 })
     return NextResponse.json({ success: true, inserted: count ?? toInsert.length })
-  }
-
-  if (action === 'export_csv') {
-    const { data } = await admin.from('questions').select('*').order('level').order('theme')
-    return NextResponse.json({ rows: data ?? [] })
   }
 
   return NextResponse.json({ error: 'Action invalide' }, { status: 400 })
