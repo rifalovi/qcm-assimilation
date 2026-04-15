@@ -869,6 +869,15 @@ export default function HomePage() {
                 </div>
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 text-emerald-400"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
               </button>
+              <button onClick={() => { setShowReviseModal(false); router.push("/assistant"); }}
+                className="flex items-center gap-4 rounded-2xl border border-violet-400/20 bg-violet-500/10 p-4 text-left transition hover:border-violet-400/40 hover:bg-violet-500/15 active:scale-[0.98]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/20 text-2xl">🤖</div>
+                <div className="flex-1">
+                  <p className="font-bold text-white">Assistant IA Démarches</p>
+                  <p className="mt-0.5 text-xs text-slate-400">Posez vos questions sur la naturalisation et l&apos;examen civique.</p>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 text-violet-400"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
+              </button>
             </div>
           </div>
         </div>
