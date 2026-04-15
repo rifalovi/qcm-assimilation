@@ -42,6 +42,7 @@ export default function AdminQuestionsPage() {
   const [availableCols, setAvailableCols] = useState<Set<string>>(new Set());
   const [levelCol, setLevelCol] = useState<string | null>(null);
   const [sort, setSort] = useState<"newest" | "level_asc" | "level_desc" | "theme">("newest");
+  const [distinctThemes, setDistinctThemes] = useState<string[]>([]);
 
   async function load() {
     setLoading(true);
@@ -54,6 +55,7 @@ export default function AdminQuestionsPage() {
     const json = await res.json();
     if (json.availableCols) setAvailableCols(new Set(json.availableCols));
     if (json.levelCol !== undefined) setLevelCol(json.levelCol);
+    if (Array.isArray(json.distinctThemes)) setDistinctThemes(json.distinctThemes);
     if (!res.ok) { setError(json.error); setLoading(false); return; }
     setQuestions(json.questions);
     setTotal(json.total);
@@ -129,11 +131,11 @@ export default function AdminQuestionsPage() {
             {LEVELS.map(l => <option key={l} value={l} className="bg-slate-800">Niveau {l}</option>)}
           </select>
         )}
-        {availableCols.has('theme') && (
+        {availableCols.has('theme') && distinctThemes.length > 0 && (
           <select value={filterTheme} onChange={e => { setFilterTheme(e.target.value); setPage(0); }}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none max-w-[240px]">
             <option value="" className="bg-slate-800">Tous thèmes</option>
-            {THEMES.map(t => <option key={t} value={t} className="bg-slate-800">{t}</option>)}
+            {distinctThemes.map(t => <option key={t} value={t} className="bg-slate-800">{t}</option>)}
           </select>
         )}
         {availableCols.has('status') && (

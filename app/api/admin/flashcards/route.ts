@@ -76,6 +76,12 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  let distinctThemes: string[] = []
+  if (availableCols.has('theme')) {
+    const { data: themesData } = await admin.from('flashcards').select('theme').limit(1000)
+    distinctThemes = Array.from(new Set((themesData ?? []).map(r => r.theme).filter(Boolean))).sort()
+  }
+
   const { data, count, error } = await query.range(page * pageSize, (page + 1) * pageSize - 1)
   if (error) return NextResponse.json({ error: error.message, availableCols: [...availableCols], levelCol }, { status: 500 })
   return NextResponse.json({
@@ -84,6 +90,7 @@ export async function GET(req: NextRequest) {
     page, pageSize,
     availableCols: [...availableCols],
     levelCol,
+    distinctThemes,
   })
 }
 
