@@ -228,6 +228,9 @@ STYLE :
 - Tu PEUX répondre aux questions sur la culture civique française, l'histoire de France, les institutions — c'est ton domaine.
 - Oriente vers "/assistant" pour les questions détaillées, "/resources" pour les liens officiels, "/quiz" pour s'entraîner.
 
+INFORMATIONS LOCALES / TEMPS RÉEL :
+Tu n'as PAS accès aux informations en temps réel ni aux données locales spécifiques (nom du maire actuel d'une ville, élus locaux, horaires d'une mairie, événements locaux, résultats récents, etc.). Ne JAMAIS inventer un nom de maire ou une information locale. Pour ces questions, redirige poliment vers le site officiel de la commune concernée ou annuaire-des-mairies.com / service-public.fr, et mets off_topic: true.
+
 HORS-SUJET :
 Pour les questions sans AUCUN rapport avec la France, l'intégration, la culture française ou les démarches (ex: recettes, sport, jeux vidéo, crypto), réponds avec off_topic: true.
 
@@ -249,6 +252,48 @@ Ne mets RIEN en dehors du JSON.`
     const hasHistory = chatHistory && chatHistory.length > 0
     if ((mode === 'chat' || mode === 'assistant') && userQuestion && !hasHistory) {
       const q = userQuestion.toLowerCase()
+
+      // Questions nécessitant des infos en temps réel / locales (maires, élus, horaires, etc.)
+      // Le modèle n'a pas ces données et hallucinerait. On redirige vers les sources officielles.
+      // Patterns ciblés : on bloque uniquement les questions qui cherchent une info locale
+      // spécifique (nom, élu actuel, horaires, contact), pas les questions institutionnelles
+      // générales comme "quels sont les droits d'un maire".
+      const realtimeLocalPatterns = [
+        // "qui est le maire de X" / "quel est le nom du maire de X"
+        /\b(qui|quel(le)?)\s+est\s+(le|la|l'|le\s+nom\s+du|le\s+nouveau|la\s+nouvelle|l'actuel(le)?)\s*(maire|préfet|député|sénateur|conseiller)/i,
+        // "nom du maire" / "coordonnées du maire" / "contact de la mairie"
+        /\b(nom|coordonnées|contact|identité)\s+(du|de\s+la|de\s+l'|des)\s+(maire|mairie|adjoint|préfet|député|sénateur|conseiller)/i,
+        // "nouveau maire de X" / "maire actuel de X"
+        /\b(nouveau|nouvelle|actuel(le)?)\s+(maire|préfet|député|sénateur|conseiller(ère)?)\b/i,
+        /\b(maire|préfet|député|sénateur|conseiller(ère)?)\s+actuel(le)?\b/i,
+        // "maire de <commune>" — maire suivi d'une préposition + un mot (typiquement un lieu)
+        /\bmaires?\s+(de|du|des|d')\s+\S+/i,
+        /\badjoint(e|s)?\s+au\s+maire\s+(de|du|des|d')/i,
+        // Horaires / contact d'une administration locale
+        /\bhoraires?\s+(de\s+la\s+|du\s+|de\s+l')?(mairie|préfecture|sous-préfecture)/i,
+        /\b(téléphone|numéro|adresse|mail|email|courriel)\s+(de\s+la\s+|du\s+|de\s+l')?(mairie|préfecture|sous-préfecture)/i,
+      ]
+      const isRealtimeLocal = realtimeLocalPatterns.some(p => p.test(q))
+      if (isRealtimeLocal) {
+        const realtimeResponse = mode === 'chat'
+          ? {
+              response: "Je n'ai pas accès aux informations locales en temps réel (noms des maires actuels, élus, horaires d'une mairie, etc.) et je ne veux pas vous donner une information erronée.\n\nPour ces informations, consultez :\n• Le site officiel de la commune concernée\n• L'annuaire des mairies : annuaire-des-mairies.com\n• service-public.fr pour les coordonnées des administrations\n\nJe peux en revanche vous aider sur les institutions, vos démarches ou la préparation de l'examen civique.\n\nRéponse indicative — vérifiez sur service-public.fr",
+              off_topic: true,
+            }
+          : {
+              summary: "Je ne peux pas vous donner cette information locale en temps réel — je risquerais de vous induire en erreur.",
+              what_it_means: "Je n'ai pas accès aux données actuelles des communes (maires, élus locaux, horaires de mairie, coordonnées à jour). Mes connaissances portent sur le cadre institutionnel, les démarches administratives et la préparation à l'examen civique.",
+              what_to_do: "Consultez le site officiel de la commune concernée, l'annuaire-des-mairies.com, ou service-public.fr qui propose un annuaire des mairies à jour. Pour les élus (députés, sénateurs), consultez assemblee-nationale.fr ou senat.fr.",
+              watch_out: "Méfiez-vous des informations non sourcées : les élus locaux changent régulièrement. Vérifiez toujours sur le site officiel de la commune.",
+              official_links: [
+                "https://www.service-public.fr/particuliers/vosdroits/services-en-ligne-et-formulaires/AnnuaireMairie",
+                "https://www.annuaire-des-mairies.com",
+              ],
+              off_topic: true,
+            }
+        return NextResponse.json({ mode, data: realtimeResponse })
+      }
+
       const offTopicPatterns = [
         /recette/i, /cuisine/i, /football/i, /météo/i, /jeu.?vidéo/i,
         /manga/i, /anime/i, /film/i, /série tv/i, /musique/i,
