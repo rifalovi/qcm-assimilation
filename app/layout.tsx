@@ -13,7 +13,7 @@ import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalShell from "@/components/ConditionalShell";
 
 export const viewport = {
-  colorScheme: "dark",
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "Cap Citoyen",
   },
   icons: {
@@ -76,7 +76,7 @@ export default function RootLayout({
         <meta name="twitter:image" content="https://cap-citoyen.fr/cap-citoyen.png" />
       </head>
       <link rel="privacy-policy" href="https://cap-citoyen.fr/mentions-legales" />
-      <body className="min-h-full bg-slate-950 text-slate-100 antialiased">
+      <body className="min-h-full bg-white text-[#161616] antialiased">
         <UserProvider>
         <CapacitorProvider>
         <Suspense fallback={null}>

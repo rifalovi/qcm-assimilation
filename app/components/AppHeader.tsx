@@ -13,7 +13,6 @@ export default function AppHeader() {
   const [showFeedback, setShowFeedback] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Fermer le dropdown si clic en dehors
   useEffect(() => {
     if (!open) return;
     function handleClick(e: MouseEvent) {
@@ -25,10 +24,7 @@ export default function AppHeader() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [open]);
 
-  // Fermer le dropdown à chaque changement de page
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  useEffect(() => { setOpen(false); }, [pathname]);
 
   async function handleLogout() {
     await logout();
@@ -36,179 +32,202 @@ export default function AppHeader() {
     router.refresh();
   }
 
-
-
   if (pathname === "/" || pathname.startsWith("/admin") || pathname.match(/^\/communaute\/messages\/.+/)) return null;
 
-  const roleLabel = role === "elite" ? "👑 Élite" : role === "premium" ? "🎯 Premium" : role === "freemium" ? "✨ Freemium" : null;
+  const roleLabel =
+    role === "elite"   ? "Élite" :
+    role === "premium" ? "Premium" :
+    role === "freemium"? "Freemium" : null;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950">
+    <header
+      role="banner"
+      className="sticky top-0 z-50 w-full border-b border-[#dddddd] bg-white"
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
 
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <span className="text-sm font-semibold tracking-wide text-slate-200">
-            🇫🇷 Cap Citoyen
+        {/* Marque */}
+        <Link
+          href="/"
+          className="flex items-center gap-3 no-underline"
+          aria-label="Cap Citoyen — Accueil"
+        >
+          {/* Drapeau symbolique sobre */}
+          <span className="flex h-6 w-9 overflow-hidden rounded-sm border border-[#dddddd]" aria-hidden="true">
+            <span className="flex-1 bg-[#000091]" />
+            <span className="flex-1 bg-white" />
+            <span className="flex-1 bg-[#ce0500]" />
+          </span>
+          <span className="text-sm font-bold tracking-wide text-[#000091]">
+            Cap Citoyen
           </span>
         </Link>
 
-        <div className="flex items-center gap-3 text-xs text-slate-400">
+        <nav className="flex items-center gap-2 text-sm" aria-label="Navigation principale">
 
-          {/* Bouton Assistant IA */}
+          {/* Assistant IA */}
           {pathname !== "/assistant" && (
             <Link
               href="/assistant"
-              className="hidden sm:inline-flex rounded-xl border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 text-violet-300 hover:bg-violet-500/20 transition font-medium"
+              className="hidden sm:inline-flex items-center rounded border border-[#dddddd] bg-[#f6f6f6] px-3 py-1.5 text-xs font-medium text-[#3a3a3a] no-underline hover:border-[#000091] hover:text-[#000091] transition-colors"
             >
-              🤖 Assistant IA
+              Assistant IA
             </Link>
           )}
 
-          {/* Bouton Trouver un centre agréé */}
+          {/* Centre agréé */}
           <a
             href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-blue-300 hover:bg-blue-500/20 transition font-medium"
+            className="hidden sm:inline-flex items-center rounded border border-[#dddddd] bg-[#f6f6f6] px-3 py-1.5 text-xs font-medium text-[#3a3a3a] no-underline hover:border-[#000091] hover:text-[#000091] transition-colors"
           >
-            📍 Centre agréé
+            Centre agréé
           </a>
 
-          {/* Lien Tarifs — caché si déjà sur /pricing */}
+          {/* Tarifs */}
           {pathname !== "/pricing" && (
             <Link
               href="/pricing"
-              className="rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-1.5 text-amber-300 hover:bg-amber-500/20 transition font-medium"
+              className="inline-flex items-center rounded border border-[#dddddd] bg-[#f6f6f6] px-3 py-1.5 text-xs font-medium text-[#3a3a3a] no-underline hover:border-[#000091] hover:text-[#000091] transition-colors"
             >
-              👑 Tarifs
+              Abonnements
             </Link>
           )}
 
-          {/* Bouton compte avec dropdown */}
+          {/* Compte */}
           {!loading && (
             isAuthenticated ? (
               <div className="relative" ref={dropdownRef}>
-                {/* Bouton trigger */}
                 <button
                   onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
-                  className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-slate-200 hover:bg-white/10 transition"
+                  className="flex items-center gap-2 rounded border border-[#dddddd] bg-white px-3 py-1.5 text-xs font-medium text-[#161616] hover:border-[#000091] hover:text-[#000091] transition-colors"
+                  aria-expanded={open}
+                  aria-haspopup="true"
                 >
-                  <span className="text-slate-400">👤</span>
-                  <span className="font-medium">{username}</span>
+                  <span className="font-semibold">{username}</span>
+                  {roleLabel && (
+                    <span className="rounded bg-[#ececfe] px-1.5 py-0.5 text-[10px] font-bold text-[#000091]">
+                      {roleLabel}
+                    </span>
+                  )}
                   <svg
-                    width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    width="10" height="10" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-                    className="transition-transform duration-200"
-                    style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+                    aria-hidden="true"
+                    style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.15s" }}
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
                 </button>
 
-                {/* Dropdown menu */}
                 {open && (
                   <div
-                    className="absolute right-0 top-full mt-2 w-72 max-w-[calc(100vw-1rem)] overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.50)]"
-                    style={{
-                      background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)",
-                      backdropFilter: "blur(16px)",
-                    }}
+                    className="absolute right-0 top-full mt-1 w-72 max-w-[calc(100vw-1rem)] overflow-hidden rounded border border-[#dddddd] bg-white shadow-md"
+                    role="menu"
+                    aria-label="Menu utilisateur"
                   >
-                    {/* En-tête profil */}
-                    <div className="border-b border-white/10 px-3 py-2">
-                      <p className="text-sm font-semibold text-white">{username}</p>
+                    {/* Profil */}
+                    <div className="border-b border-[#dddddd] bg-[#f6f6f6] px-4 py-3">
+                      <p className="text-sm font-bold text-[#161616]">{username}</p>
+                      {email && <p className="text-xs text-[#666666]">{email}</p>}
                       {roleLabel && (
-                        <p className="mt-0.5 text-xs text-slate-400">{roleLabel}</p>
+                        <span className="mt-1 inline-block rounded bg-[#ececfe] px-2 py-0.5 text-[10px] font-bold text-[#000091]">
+                          {roleLabel}
+                        </span>
                       )}
                     </div>
 
-                    {/* Admin */}
+                    {/* Administration */}
                     {['super_admin','admin','moderator'].includes(role ?? '') && (
-                      <div className="px-2 pt-2">
-                        <Link href="/admin" className="flex items-center gap-2.5 px-2 py-2 rounded-xl bg-red-500/5 hover:bg-red-500/10 transition">
-                          <span className="w-7 h-7 rounded-lg bg-red-900/40 flex items-center justify-center text-sm flex-shrink-0">⚙️</span>
-                          <div><p className="text-xs font-medium text-red-300">Administration</p><p className="text-xs text-slate-500">Dashboard & modération</p></div>
+                      <div className="border-b border-[#dddddd] p-2">
+                        <Link
+                          href="/admin"
+                          className="flex items-center gap-2 rounded px-2 py-2 text-xs font-medium text-[#ce0500] no-underline hover:bg-[#fff5f5] transition-colors"
+                          role="menuitem"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+                          Administration
                         </Link>
-                        <div className="my-2 h-px bg-white/6" />
                       </div>
                     )}
 
                     {/* Apprendre */}
-                    <div className="px-2 pt-1">
-                      <p className="text-xs text-slate-500 uppercase tracking-wider px-2 mb-1">Apprendre</p>
-                      <div className="grid grid-cols-2 gap-0.5">
-                        {[
-                          { href: "/scroll", icon: "📱", label: "Réviser", sub: "Flash-cards" },
-                          { href: "/quiz", icon: "🎯", label: "S'entraîner", sub: "QCM" },
-                          { href: "/exam", icon: "📝", label: "Examen", sub: "Blanc" },
-                          { href: "/audio", icon: "🎧", label: "Audio", sub: "100 épisodes" },
-                        ].map(({ href, icon, label, sub }) => (
-                          <Link key={href} href={href} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-white/5 transition">
-                            <span className="w-8 h-8 rounded-lg bg-blue-900/40 flex items-center justify-center text-sm flex-shrink-0">{icon}</span>
-                            <div><p className="text-sm text-slate-300">{label}</p><p className="text-xs text-slate-500">{sub}</p></div>
-                          </Link>
-                        ))}
-                      </div>
+                    <div className="p-2">
+                      <p className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-[#929292]">Se préparer</p>
+                      {[
+                        { href: "/scroll", label: "Révision par fiches" },
+                        { href: "/quiz",   label: "Entraînement QCM" },
+                        { href: "/exam",   label: "Examen blanc" },
+                        { href: "/audio",  label: "Bibliothèque audio" },
+                      ].map(({ href, label }) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="flex items-center gap-2 rounded px-2 py-2 text-sm text-[#161616] no-underline hover:bg-[#f6f6f6] transition-colors"
+                          role="menuitem"
+                        >
+                          {label}
+                        </Link>
+                      ))}
                     </div>
 
                     {/* Communauté */}
                     {['premium','elite','moderator','admin','super_admin'].includes(role ?? '') && (
-                      <div className="px-2 pt-2">
-                        <div className="my-1 h-px bg-white/6" />
-                        <p className="text-xs text-slate-500 uppercase tracking-wider px-2 mb-1">Communauté</p>
-                        <div className="grid grid-cols-2 gap-0.5">
-                          {[
-                            { href: "/communaute/temoignages", icon: "💬", label: "Témoignages", sub: "Retours" },
-                            { href: "/communaute/forum", icon: "🗣️", label: "Forum", sub: "Discussions" },
-                            { href: "/communaute/messages", icon: "✉️", label: "Messages", sub: "Privés" },
-                            { href: "/communaute", icon: "👥", label: "Hub", sub: "Communauté" },
-                          ].map(({ href, icon, label, sub }) => (
-                            <Link key={href} href={href} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-white/5 transition">
-                              <span className="w-8 h-8 rounded-lg bg-teal-900/40 flex items-center justify-center text-sm flex-shrink-0">{icon}</span>
-                              <div><p className="text-sm text-slate-300">{label}</p><p className="text-xs text-slate-500">{sub}</p></div>
-                            </Link>
-                          ))}
-                        </div>
+                      <div className="border-t border-[#dddddd] p-2">
+                        <p className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-[#929292]">Communauté</p>
+                        {[
+                          { href: "/communaute/temoignages", label: "Témoignages" },
+                          { href: "/communaute/forum",       label: "Forum" },
+                          { href: "/communaute/messages",    label: "Messages privés" },
+                        ].map(({ href, label }) => (
+                          <Link
+                            key={href}
+                            href={href}
+                            className="flex items-center gap-2 rounded px-2 py-2 text-sm text-[#161616] no-underline hover:bg-[#f6f6f6] transition-colors"
+                            role="menuitem"
+                          >
+                            {label}
+                          </Link>
+                        ))}
                       </div>
                     )}
 
                     {/* Autres */}
-                    <div className="px-2 pt-2">
-                      <div className="my-1 h-px bg-white/6" />
-                      <div className="grid grid-cols-2 gap-0.5">
-                        {[
-                          { href: "/results", icon: "📊", label: "Résultats" },
-                          { href: "/assistant", icon: "🤖", label: "Assistant IA" },
-                          { href: "/account", icon: "👤", label: "Mon compte" },
-                          { href: "/resources", icon: "🏛️", label: "Ressources" },
-                          { href: "/pricing", icon: "👑", label: "Tarifs" },
-                        ].map(({ href, icon, label }) => (
-                          <Link key={href} href={href} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-white/5 transition">
-                            <span className="w-8 h-8 rounded-lg bg-slate-700/60 flex items-center justify-center text-sm flex-shrink-0">{icon}</span>
-                            <p className="text-sm text-slate-300">{label}</p>
-                          </Link>
-                        ))}
-                      </div>
+                    <div className="border-t border-[#dddddd] p-2">
+                      {[
+                        { href: "/results",   label: "Mes résultats" },
+                        { href: "/assistant", label: "Assistant IA" },
+                        { href: "/account",   label: "Mon compte" },
+                        { href: "/resources", label: "Ressources" },
+                        { href: "/pricing",   label: "Abonnements" },
+                      ].map(({ href, label }) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="flex items-center gap-2 rounded px-2 py-2 text-sm text-[#161616] no-underline hover:bg-[#f6f6f6] transition-colors"
+                          role="menuitem"
+                        >
+                          {label}
+                        </Link>
+                      ))}
                     </div>
 
-                    {/* Noter l'application */}
-                    <div className="px-2 pt-1">
-                      <div className="my-1 h-px bg-white/6" />
+                    {/* Feedback & Déconnexion */}
+                    <div className="border-t border-[#dddddd] p-2">
                       <button
                         onClick={() => { setOpen(false); setShowFeedback(true); }}
-                        className="flex w-full items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-500 hover:text-slate-300"
+                        className="flex w-full items-center gap-2 rounded px-2 py-2 text-sm text-[#666666] hover:bg-[#f6f6f6] transition-colors"
+                        role="menuitem"
                       >
-                        <span className="text-xs">⭐</span>
-                        <p className="text-xs">Noter l'application</p>
+                        Évaluer le service
                       </button>
-                    </div>
-
-                    {/* Déconnexion */}
-                    <div className="border-t border-white/10 px-2 py-2 mt-1">
-                      <button onClick={handleLogout}
-                        className="flex w-full items-center gap-2 px-2 py-2 rounded-xl text-xs text-red-400 transition hover:bg-red-500/10">
-                        <span>🚪</span>Déconnexion
+                      <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-2 rounded px-2 py-2 text-sm text-[#ce0500] hover:bg-[#fff5f5] transition-colors"
+                        role="menuitem"
+                      >
+                        Déconnexion
                       </button>
                     </div>
                   </div>
@@ -217,14 +236,15 @@ export default function AppHeader() {
             ) : (
               <Link
                 href="/login"
-                className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-slate-200 hover:bg-white/10 transition"
+                className="inline-flex items-center rounded border border-[#000091] bg-[#000091] px-3 py-1.5 text-xs font-bold text-white no-underline hover:bg-[#1212ff] transition-colors"
               >
                 Se connecter
               </Link>
             )
           )}
-        </div>
+        </nav>
       </div>
+
       <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
     </header>
   );

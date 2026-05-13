@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { hasAnyResult, saveFeedbackToSupabase } from "../src/lib/saveResult";
+import { hasAnyResult } from "../src/lib/saveResult";
 import { createClient } from "@/lib/supabase/client";
 import { useUser, ROLE_LIMITS } from "./components/UserContext";
 import EligibilityModalLauncher from "./components/EligibilityModalLauncher";
@@ -36,7 +36,6 @@ function saveUser(u: QcmUser) {
   localStorage.setItem("qcm_user", JSON.stringify(u));
 }
 
-// ─── Calcul du streak ──────────────────────────────────────────────────────
 function getStreak(): number {
   try {
     const raw = localStorage.getItem("qcm_streak");
@@ -68,23 +67,26 @@ function updateStreak() {
   } catch {}
 }
 
-// ─── Pill ──────────────────────────────────────────────────────────────────
+/* ── Pill thème ──────────────────────────────────────────────── */
 function Pill({ children, active = false, onClick }: {
   children: React.ReactNode; active?: boolean; onClick?: () => void;
 }) {
   return (
-    <button type="button" onClick={onClick}
-      className={`rounded-full border px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded border px-3 py-1.5 text-sm font-medium transition-colors ${
         active
-          ? "border-blue-400/30 bg-blue-500/15 text-blue-200"
-          : "border-white/10 bg-white/5 text-slate-300 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
-      }`}>
+          ? "border-[#000091] bg-[#ececfe] text-[#000091]"
+          : "border-[#dddddd] bg-white text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091]"
+      }`}
+    >
       {children}
     </button>
   );
 }
 
-// ─── Modal Onboarding ──────────────────────────────────────────────────────
+/* ── Modal Onboarding ─────────────────────────────────────────── */
 function OnboardingModal({ onClose, onAction, role = "anonymous" }: {
   onClose: () => void;
   onAction: (action: "scroll" | "quiz" | "audio") => void;
@@ -92,108 +94,78 @@ function OnboardingModal({ onClose, onAction, role = "anonymous" }: {
 }) {
   const [step, setStep] = useState(0);
 
-  const basSteps = [
+  const baseSteps = [
     {
-      icon: "📱",
-      title: "Révisez en scrollant",
-      desc: "Swipez verticalement pour changer de question, horizontalement pour voir les QCM associés. Aussi rapide qu'un fil d'actu.",
+      title: "Réviser par fiches",
+      desc: "Faites défiler les questions verticalement pour mémoriser les réponses à votre rythme.",
       action: "scroll" as const,
-      cta: "Essayer le Scroll",
-      color: "border-amber-400/20 bg-amber-500/10 text-amber-200",
-      btnColor: "bg-amber-500 text-slate-950 hover:bg-amber-400",
+      cta: "Essayer les fiches",
       premium: false,
     },
     {
-      icon: "🎯",
-      title: "Testez votre niveau",
-      desc: "Faites un premier test de 10 questions pour savoir où vous en êtes. Vos erreurs seront expliquées en détail.",
+      title: "Passer un test QCM",
+      desc: "Faites un premier test de 10 questions pour évaluer votre niveau. Chaque erreur est expliquée.",
       action: "quiz" as const,
-      cta: "Faire un test",
-      color: "border-blue-400/20 bg-blue-500/10 text-blue-200",
-      btnColor: "bg-blue-600 text-white hover:bg-blue-500",
+      cta: "Commencer un test",
       premium: false,
     },
     {
-      icon: "🎧",
-      title: "Écoutez en déplacement",
-      desc: "100 épisodes audio guidés au format entretien réel. Révisez dans le métro, en cuisine, partout.",
+      title: "Écouter en déplacement",
+      desc: "100 épisodes audio au format entretien réel. Préparez-vous dans les transports, au quotidien.",
       action: "audio" as const,
       cta: "Découvrir l'audio",
-      color: "border-emerald-400/20 bg-emerald-500/10 text-emerald-200",
-      btnColor: "bg-emerald-600 text-white hover:bg-emerald-500",
       premium: false,
     },
     {
-      icon: "💬",
       title: "Retours d'expériences",
-      desc: "Lisez les témoignages de candidats ayant passé le test ou l'entretien. Questions posées, notes d'accueil, conseils — tout y est.",
+      desc: "Lisez les témoignages de candidats ayant passé l'entretien : questions posées, conseils, notes.",
       action: "scroll" as const,
-      cta: "Voir les témoignages",
-      color: "border-teal-400/20 bg-teal-500/10 text-teal-200",
-      btnColor: "bg-teal-600 text-white hover:bg-teal-500",
+      cta: "Lire les témoignages",
       premium: true,
       href: "/communaute/temoignages",
     },
     {
-      icon: "🗣️",
       title: "Forum communauté",
-      desc: "Posez vos questions, partagez vos conseils avec d'autres candidats. Une communauté d'entraide pour réussir ensemble.",
+      desc: "Posez vos questions et partagez vos conseils avec d'autres candidats.",
       action: "scroll" as const,
       cta: "Rejoindre le forum",
-      color: "border-orange-400/20 bg-orange-500/10 text-orange-200",
-      btnColor: "bg-orange-500 text-white hover:bg-orange-400",
       premium: true,
       href: "/communaute/forum",
     },
-    {
-      icon: "✉️",
-      title: "Messagerie instantanée",
-      desc: "Échangez en privé avec d'autres membres. Posez vos questions directement à ceux qui ont déjà réussi leur entretien.",
-      action: "scroll" as const,
-      cta: "Découvrir la messagerie",
-      color: "border-blue-400/20 bg-blue-500/10 text-blue-200",
-      btnColor: "bg-blue-600 text-white hover:bg-blue-500",
-      premium: true,
-      href: "/communaute/messages",
-    },
   ];
 
-
-
-  const steps = basSteps.filter(s => !s.premium || role === "premium" || role === "elite" || role === "super_admin" || role === "admin")
+  const steps = baseSteps.filter(s => !s.premium || ['premium','elite','super_admin','admin'].includes(role));
   const current = steps[step];
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-[101] w-full max-w-sm overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/98 to-slate-900/98 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]">
+      <div className="absolute inset-0 bg-[#161616]/50" onClick={onClose} />
+      <div className="relative z-[101] w-full max-w-sm rounded border border-[#dddddd] bg-white p-6 shadow-lg">
 
-        {/* Header */}
+        {/* En-tête */}
         <div className="mb-5 flex items-center justify-between">
-          <div className="flex gap-1.5">
+          <div className="flex gap-1">
             {steps.map((_, i) => (
-              <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === step ? "w-6 bg-blue-400" : i < step ? "w-3 bg-blue-400/50" : "w-3 bg-white/15"
+              <div key={i} className={`h-1 rounded-full transition-all ${
+                i === step ? "w-6 bg-[#000091]" : i < step ? "w-3 bg-[#000091]/50" : "w-3 bg-[#dddddd]"
               }`} />
             ))}
           </div>
-          <button onClick={onClose} className="text-slate-500 hover:text-white transition text-lg">✕</button>
+          <button onClick={onClose} className="text-[#666666] hover:text-[#161616] text-xl leading-none" aria-label="Fermer">×</button>
         </div>
 
-        {/* Bienvenue */}
         {step === 0 && (
-          <div className="mb-5 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-            <p className="text-xs text-slate-400">
-              🇫🇷 Bienvenue sur <span className="font-semibold text-white">Cap Citoyen</span> — la meilleure façon de préparer votre entretien civique.
+          <div className="mb-5 rounded border-l-4 border-[#000091] bg-[#ececfe] px-4 py-3">
+            <p className="text-sm text-[#161616]">
+              Bienvenue sur <strong>Cap Citoyen</strong> — votre outil de préparation à l'entretien civique 2026.
             </p>
           </div>
         )}
 
         {/* Contenu étape */}
-        <div className={`mb-5 rounded-2xl border p-4 ${current.color}`}>
-          <div className="mb-2 text-3xl">{current.icon}</div>
-          <h3 className="mb-1 text-base font-extrabold text-white">{current.title}</h3>
-          <p className="text-xs leading-5 opacity-80">{current.desc}</p>
+        <div className="mb-5 rounded border border-[#dddddd] bg-[#f6f6f6] p-4">
+          <h3 className="mb-1 text-base font-bold text-[#161616]">{current.title}</h3>
+          <p className="text-sm leading-6 text-[#3a3a3a]">{current.desc}</p>
         </div>
 
         {/* Actions */}
@@ -202,37 +174,37 @@ function OnboardingModal({ onClose, onAction, role = "anonymous" }: {
             <a
               href={(current as { href?: string }).href}
               onClick={onClose}
-              className={`block w-full rounded-2xl py-3 text-center text-sm font-bold transition active:scale-[0.98] ${current.btnColor}`}
+              className="cc-btn cc-btn-primary w-full justify-center text-center no-underline"
             >
-              {current.cta} →
+              {current.cta}
             </a>
           ) : (
             <button
               onClick={() => { onAction(current.action); onClose(); }}
-              className={`w-full rounded-2xl py-3 text-sm font-bold transition active:scale-[0.98] ${current.btnColor}`}
+              className="cc-btn cc-btn-primary w-full justify-center"
             >
-              {current.cta} →
+              {current.cta}
             </button>
           )}
           {step < steps.length - 1 ? (
-            <button onClick={() => setStep(s => s + 1)}
-              className="w-full rounded-2xl border border-white/10 bg-white/5 py-2.5 text-sm font-medium text-slate-400 transition hover:bg-white/10">
+            <button
+              onClick={() => setStep(s => s + 1)}
+              className="cc-btn cc-btn-secondary w-full justify-center"
+            >
               Étape suivante
             </button>
           ) : (
-            <button onClick={onClose}
-              className="w-full rounded-2xl border border-white/10 bg-white/5 py-2.5 text-sm font-medium text-slate-400 transition hover:bg-white/10">
+            <button onClick={onClose} className="cc-btn cc-btn-secondary w-full justify-center">
               Commencer librement
             </button>
           )}
         </div>
-
       </div>
     </div>
   );
 }
 
-// ─── Page principale ───────────────────────────────────────────────────────
+/* ── Page principale ─────────────────────────────────────────── */
 export default function HomePage() {
   const router = useRouter();
   const { role, username: authUsername, loading: authLoading, isAuthenticated, logout } = useUser();
@@ -267,17 +239,9 @@ export default function HomePage() {
     const u = loadUserLocal();
     if (u) { setPseudo(u.pseudo); setEmail(u.email); setPseudoDraft(u.pseudo); setEmailDraft(u.email); }
     const t = setTimeout(() => setHeroVisible(true), 50);
-
-    // Streak
     setStreak(getStreak());
-
-    // Onboarding — afficher seulement à la 1ère visite pour les anonymes/freemium
-    // Les comptes premium/elite/admin voient un accueil VIP, pas le tutoriel de base
     const onboarded = localStorage.getItem("qcm_onboarded");
-    if (!onboarded) {
-      setTimeout(() => setShowOnboarding(true), 800);
-    }
-
+    if (!onboarded) setTimeout(() => setShowOnboarding(true), 800);
     return () => clearTimeout(t);
   }, []);
 
@@ -313,19 +277,7 @@ export default function HomePage() {
     action();
   }
 
-  function openPseudoModal() {
-    try {
-      const raw = localStorage.getItem("qcm_user");
-      if (raw) {
-        const u = JSON.parse(raw) as { pseudo?: string; email?: string };
-        setPseudoDraft(u.pseudo ?? pseudo ?? "");
-        setEmailDraft(u.email ?? email ?? "");
-      } else { setPseudoDraft(pseudo ?? ""); setEmailDraft(email ?? ""); }
-    } catch { setPseudoDraft(pseudo ?? ""); setEmailDraft(email ?? ""); }
-    setPseudoOpen(true);
-  }
-
-  async function clearPseudo() {
+async function clearPseudo() {
     await logout();
     setPseudo(""); setEmail(""); setPseudoDraft(""); setEmailDraft("");
     setHasLastResult(false); setPseudoOpen(false); setHomeMenuOpen(false);
@@ -376,167 +328,112 @@ export default function HomePage() {
     setShowOnboarding(false);
   }, []);
 
-  const streakMessage = streak >= 7 ? "🔥 Incroyable !" : streak >= 3 ? "💪 Continue !" : streak >= 1 ? "✨ Bonne habitude !" : "";
-
-  const [rating, setRating] = useState<number>(5);
-  const [comment, setComment] = useState("");
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
-
-  async function submitFeedback(e: React.FormEvent) {
-    e.preventDefault();
-    if (sending) return;
-    setSending(true);
-    const payload: Record<string, string> = {
-      "form-name": "feedback-qcm", rating: String(rating), comment: comment.trim(),
-      pseudo: pseudo.trim() || "", page: "home", level: String(level),
-      themes: themes.join(", "), count: String(COUNT), mode: "train",
-    };
-    try {
-      const res = await fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: encode(payload) });
-      if (!res.ok) throw new Error("failed");
-      setSent(true); setComment("");
-    } catch { alert("Erreur d'envoi. Réessaie."); }
-    finally { setSending(false); }
-  }
+  const displayName = authUsername?.trim() || pseudo.trim();
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <EligibilityModalLauncher isAuthenticated={!!pseudo.trim() && !!email.trim()} />
+
       <div className="space-y-8 sm:space-y-10">
 
         {/* ══════════════════════════════════════════
             SECTION 1 — HERO
         ══════════════════════════════════════════ */}
-        <section className={`relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${heroVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
-          <div className="flex h-1.5 w-full">
-            <div className="flex-1 bg-blue-600"/><div className="flex-1 bg-white"/><div className="flex-1 bg-red-600"/>
+        <section
+          className={`border border-[#dddddd] bg-white transition-all duration-500 ${
+            heroVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+          }`}
+          style={{ borderRadius: "4px" }}
+        >
+          {/* Bandeau tricolore */}
+          <div className="flex h-1 w-full">
+            <div className="flex-1 bg-[#000091]" />
+            <div className="flex-1 bg-white border-y border-[#dddddd]" />
+            <div className="flex-1 bg-[#ce0500]" />
           </div>
-          <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl"/>
-          <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl"/>
 
-          <div className="relative px-5 py-7 sm:px-8 sm:py-9">
+          <div className="px-5 py-7 sm:px-8 sm:py-9">
 
-            {/* Nav */}
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+            {/* Nav du hero */}
+            <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <span className="inline-flex h-10 w-14 overflow-hidden rounded-lg border border-white/10 shadow-md">
-                  <span className="flex-1 bg-blue-700"/><span className="flex-1 bg-white"/><span className="flex-1 bg-red-600"/>
+                <span className="flex h-6 w-9 overflow-hidden rounded-sm border border-[#dddddd]" aria-hidden="true">
+                  <span className="flex-1 bg-[#000091]" />
+                  <span className="flex-1 bg-white" />
+                  <span className="flex-1 bg-[#ce0500]" />
                 </span>
                 <div>
-                  <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">République française</div>
-                  <div className="text-xs text-slate-400">Plateforme d'entraînement 2026</div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#666666]">Cap Citoyen</p>
+                  <p className="text-xs text-[#666666]">Plateforme de préparation civique 2026</p>
                 </div>
               </div>
 
               {!authLoading && isAuthenticated ? (
                 <div className="relative flex justify-end">
-                  <button onClick={() => setHomeMenuOpen(!homeMenuOpen)}
-                    className="flex items-center gap-2 rounded-3xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 hover:bg-white/10 transition">
-                    <span>Bonjour <span className="font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</span> 👋</span>
+                  <button
+                    onClick={() => setHomeMenuOpen(!homeMenuOpen)}
+                    className="flex items-center gap-2 rounded border border-[#dddddd] bg-white px-3 py-2 text-sm text-[#161616] hover:border-[#000091] transition-colors"
+                    aria-expanded={homeMenuOpen}
+                    aria-haspopup="true"
+                  >
+                    <span>Bonjour, <span className="font-bold">{displayName}</span></span>
                     {streak > 0 && (
-                      <span className="rounded-full border border-orange-400/30 bg-orange-500/10 px-2 py-0.5 text-[10px] font-bold text-orange-300">
-                        🔥 {streak}j
+                      <span className="rounded bg-[#ececfe] px-2 py-0.5 text-[10px] font-bold text-[#000091]">
+                        {streak}j de révision
                       </span>
                     )}
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{transform: homeMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s"}}><polyline points="6 9 12 15 18 9"/></svg>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"
+                      style={{ transform: homeMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.15s" }}>
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
                   </button>
+
                   {homeMenuOpen && (
                     <>
-                      <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm sm:bg-transparent sm:backdrop-blur-0" onClick={() => setHomeMenuOpen(false)} />
-                      <div className="fixed right-4 top-20 z-50 w-72 rounded-[1.6rem] border border-white/10 shadow-[0_24px_70px_rgba(0,0,0,0.62)] backdrop-blur-xl sm:absolute sm:right-0 sm:top-full sm:mt-2"
-                        style={{ background: "linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(10,15,26,0.98) 100%)" }}>
-                        <div className="border-b border-white/10 px-3 py-2.5">
-                          <p className="text-sm font-semibold text-white">{authUsername?.trim() || pseudo.trim()}</p>
-                          <p className="mt-0.5 text-xs text-slate-400">{role === "elite" ? "👑 Élite" : role === "premium" ? "🎯 Premium" : "✨ Freemium"}</p>
+                      <div className="fixed inset-0 z-40" onClick={() => setHomeMenuOpen(false)} />
+                      <div className="absolute right-0 top-full z-50 mt-1 w-64 rounded border border-[#dddddd] bg-white shadow-md">
+                        <div className="border-b border-[#dddddd] bg-[#f6f6f6] px-4 py-3">
+                          <p className="text-sm font-bold text-[#161616]">{displayName}</p>
+                          {role && role !== "anonymous" && (
+                            <span className="mt-1 inline-block rounded bg-[#ececfe] px-2 py-0.5 text-[10px] font-bold text-[#000091] capitalize">
+                              {role}
+                            </span>
+                          )}
                           {streak > 0 && (
-                            <p className="mt-1 text-xs text-orange-300">🔥 {streak} jour{streak > 1 ? "s" : ""} de suite {streakMessage}</p>
+                            <p className="mt-1 text-xs text-[#666666]">{streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""}</p>
                           )}
                         </div>
-                        {/* Admin */}
                         {['super_admin','admin','moderator'].includes(role ?? '') && (
-                          <div className="px-2 pt-1">
+                          <div className="border-b border-[#dddddd] p-2">
                             <button onClick={() => { setHomeMenuOpen(false); router.push("/admin"); }}
-                              className="flex w-full items-center gap-2.5 px-2 py-2 rounded-xl bg-red-500/5 hover:bg-red-500/10 transition">
-                              <span className="w-8 h-8 rounded-lg bg-red-900/40 flex items-center justify-center text-base flex-shrink-0">⚙️</span>
-                              <div className="text-left"><p className="text-xs font-medium text-red-300">Administration</p><p className="text-xs text-slate-500">Dashboard & modération</p></div>
+                              className="flex w-full items-center gap-2 rounded px-2 py-2 text-xs font-medium text-[#ce0500] hover:bg-[#fff5f5] transition-colors">
+                              Administration
                             </button>
-                            <div className="my-1 h-px bg-white/6" />
                           </div>
                         )}
-                        {/* Apprendre */}
-                        <div className="px-2 pt-0.5">
-                          <p className="text-xs text-slate-500 uppercase tracking-wider px-2 mb-1">Apprendre</p>
-                          <div className="grid grid-cols-2 gap-0">
-                            {[
-                              { href: "/scroll", icon: "📱", label: "Réviser", sub: "Flash-cards" },
-                              { href: "/quiz", icon: "🎯", label: "S'entraîner", sub: "QCM" },
-                              { href: "/exam", icon: "📝", label: "Examen", sub: "Blanc" },
-                              { href: "/audio", icon: "🎧", label: "Audio", sub: "100 épisodes" },
-                            ].map(({ href, icon, label, sub }) => (
-                              <button key={href} onClick={() => { setHomeMenuOpen(false); router.push(href); }}
-                                className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-white/5 transition text-left w-full">
-                                <span className="w-8 h-8 rounded-lg bg-blue-900/40 flex items-center justify-center text-sm flex-shrink-0">{icon}</span>
-                                <div><p className="text-sm text-slate-300">{label}</p><p className="text-xs text-slate-500">{sub}</p></div>
-                              </button>
-                            ))}
-                          </div>
+                        <div className="p-2">
+                          {[
+                            { href: "/scroll",  label: "Révision par fiches" },
+                            { href: "/quiz",    label: "Entraînement QCM" },
+                            { href: "/exam",    label: "Examen blanc" },
+                            { href: "/audio",   label: "Bibliothèque audio" },
+                            { href: "/results", label: "Mes résultats" },
+                            { href: "/account", label: "Mon compte" },
+                          ].map(({ href, label }) => (
+                            <button key={href} onClick={() => { setHomeMenuOpen(false); router.push(href); }}
+                              className="flex w-full items-center rounded px-2 py-2 text-sm text-[#161616] hover:bg-[#f6f6f6] transition-colors text-left">
+                              {label}
+                            </button>
+                          ))}
                         </div>
-                        {/* Communauté */}
-                        {['premium','elite','moderator','admin','super_admin'].includes(role ?? '') && (
-                          <div className="px-2 pt-1">
-                            <div className="my-0.5 h-px bg-white/6" />
-                            <p className="text-xs text-slate-500 uppercase tracking-wider px-2 mb-1">Communauté</p>
-                            <div className="grid grid-cols-2 gap-0">
-                              {[
-                                { href: "/communaute/temoignages", icon: "💬", label: "Témoignages", sub: "Retours" },
-                                { href: "/communaute/forum", icon: "🗣️", label: "Forum", sub: "Discussions" },
-                                { href: "/communaute/messages", icon: "✉️", label: "Messages", sub: "Privés" },
-                                { href: "/communaute", icon: "👥", label: "Hub", sub: "Communauté" },
-                              ].map(({ href, icon, label, sub }) => (
-                                <button key={href} onClick={() => { setHomeMenuOpen(false); router.push(href); }}
-                                  className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-white/5 transition text-left w-full">
-                                  <span className="w-8 h-8 rounded-lg bg-teal-900/40 flex items-center justify-center text-sm flex-shrink-0">{icon}</span>
-                                  <div><p className="text-sm text-slate-300">{label}</p><p className="text-xs text-slate-500">{sub}</p></div>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        {/* Autres */}
-                        <div className="px-2 pt-1">
-                          <div className="my-0.5 h-px bg-white/6" />
-                          <div className="grid grid-cols-2 gap-0">
-                            {[
-                              { href: "/results", icon: "📊", label: "Résultats" },
-                              { href: "/account", icon: "👤", label: "Mon compte" },
-                              { href: "/resources", icon: "🏛️", label: "Ressources" },
-                              { href: "/pricing", icon: "👑", label: "Tarifs" },
-                            ].map(({ href, icon, label }) => (
-                              <button key={href} onClick={() => { setHomeMenuOpen(false); router.push(href); }}
-                                className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-white/5 transition text-left w-full">
-                                <span className="w-8 h-8 rounded-lg bg-slate-700/60 flex items-center justify-center text-sm flex-shrink-0">{icon}</span>
-                                <p className="text-sm text-slate-300">{label}</p>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                        {/* Noter l'application */}
-                        <div className="px-2 pt-1">
-                          <div className="my-0.5 h-px bg-white/6" />
-                          <button
-                            onClick={() => { setHomeMenuOpen(false); setShowFeedbackModal(true); }}
-                            className="flex w-full items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-500 hover:text-slate-300"
-                          >
-                            <span className="text-xs">⭐</span>
-                            <p className="text-xs">Noter l'application</p>
+                        <div className="border-t border-[#dddddd] p-2">
+                          <button onClick={() => { setHomeMenuOpen(false); setShowFeedbackModal(true); }}
+                            className="flex w-full items-center rounded px-2 py-2 text-sm text-[#666666] hover:bg-[#f6f6f6] transition-colors">
+                            Évaluer le service
                           </button>
-                        </div>
-
-                        <div className="border-t border-white/10 py-0.5">
                           <button onClick={clearPseudo}
-                            className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/10">
-                            <span>🚪</span>Déconnexion
+                            className="flex w-full items-center rounded px-2 py-2 text-sm text-[#ce0500] hover:bg-[#fff5f5] transition-colors">
+                            Déconnexion
                           </button>
                         </div>
                       </div>
@@ -546,122 +443,127 @@ export default function HomePage() {
               ) : (
                 <div className="flex items-center gap-2">
                   <button onClick={() => router.push("/login")}
-                    className="rounded-2xl border border-white/15 bg-white/8 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/15 hover:text-white">
+                    className="cc-btn cc-btn-secondary px-4 py-2 text-sm">
                     Se connecter
                   </button>
                   <button onClick={() => router.push("/register")}
-                    className="rounded-2xl border border-blue-400/30 bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-[0_4px_14px_rgba(37,99,235,0.3)] transition hover:brightness-110">
+                    className="cc-btn cc-btn-primary px-4 py-2 text-sm">
                     Créer un compte
                   </button>
                 </div>
               )}
             </div>
 
-            {/* ── ANGLE ÉMOTIONNEL ── */}
+            {/* Alerte si non connecté */}
             {!isAuthenticated && (
-              <div className="mb-5 rounded-2xl border border-red-400/15 bg-red-500/8 px-4 py-3 text-center">
-                <p className="text-sm font-semibold leading-6 text-slate-200">
-                  <span className="text-red-300">Des milliers de candidats échouent faute de préparation.</span>
-                  <span className="ml-1 text-white">Vous, vous serez prêt.</span>
+              <div className="mb-6 cc-notice">
+                <p className="text-sm text-[#161616]">
+                  Chaque année, des milliers de candidats se présentent sans préparation. Entraînez-vous dès aujourd'hui pour mettre toutes les chances de votre côté.
                 </p>
               </div>
             )}
 
-            {/* ── STREAK pour utilisateurs connectés ── */}
+            {/* Révision consécutive */}
             {isAuthenticated && streak > 0 && (
-              <div className="mb-5 rounded-2xl border border-orange-400/20 bg-orange-500/8 px-4 py-3 text-center">
-                <p className="text-sm font-semibold text-orange-200">
-                  🔥 {streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""} — {streakMessage}
+              <div className="mb-6 rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3">
+                <p className="text-sm font-medium text-[#161616]">
+                  {streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""}. Continuez aujourd'hui pour maintenir votre rythme.
                 </p>
-                <p className="mt-0.5 text-xs text-orange-300/70">Continuez aujourd'hui pour maintenir votre série !</p>
               </div>
             )}
 
-            {/* ── STREAK vide pour utilisateurs connectés ── */}
             {isAuthenticated && streak === 0 && (
-              <div className="mb-5 rounded-2xl border border-slate-400/10 bg-white/3 px-4 py-3 text-center">
-                <p className="text-xs text-slate-400">
-                  🎯 Faites un exercice aujourd'hui pour démarrer votre série de révisions
+              <div className="mb-6 rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3">
+                <p className="text-sm text-[#666666]">
+                  Commencez un exercice aujourd'hui pour démarrer votre série de révisions.
                 </p>
               </div>
             )}
 
             {/* Badge + Titre */}
-            <div className="mb-3 mx-auto block text-center w-fit rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
-              Plus de 800 questions-réponses
+            <div className="mb-2 flex justify-center">
+              <span className="cc-badge cc-badge-info">Plus de 800 questions-réponses</span>
             </div>
-            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center">
-              Préparez votre <span className="text-blue-400">parcours</span> en <span className="text-blue-400">France</span>.
+
+            <h1 className="text-center text-2xl font-bold leading-tight text-[#161616] sm:text-3xl lg:text-[2.25rem]">
+              Préparez votre entretien d'intégration républicaine
             </h1>
-            <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center max-w-xl mx-auto">
-              Valeurs de la République • Institutions • Histoire • Vie en société — entraînement progressif conforme à l'examen civique 2026.
+            <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-7 text-[#3a3a3a]">
+              Valeurs de la République · Institutions · Histoire · Vie en société — entraînement progressif conforme à l'examen civique officiel.
             </p>
 
-            {/* ── STATS de réassurance ── */}
-            <div className="mt-4 flex flex-wrap justify-center gap-3">
+            {/* Chiffres clés */}
+            <div className="mt-5 flex flex-wrap justify-center gap-3">
               {[
-                { val: "93%", label: "taux de réussite", color: "text-emerald-300", bg: "border-emerald-400/20 bg-emerald-500/8" },
-                { val: "800+", label: "questions", color: "text-blue-300", bg: "border-blue-400/20 bg-blue-500/8" },
-                { val: "2 sem.", label: "pour être prêt", color: "text-amber-300", bg: "border-amber-400/20 bg-amber-500/8" },
-              ].map((s) => (
-                <div key={s.label} className={`rounded-2xl border px-4 py-2 text-center ${s.bg}`}>
-                  <div className={`text-base font-extrabold ${s.color}`}>{s.val}</div>
-                  <div className="text-[10px] text-slate-400">{s.label}</div>
+                { val: "93 %",    label: "taux de réussite" },
+                { val: "800 +",   label: "questions" },
+                { val: "2 sem.",  label: "pour être prêt" },
+              ].map(s => (
+                <div key={s.label} className="rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-2 text-center">
+                  <div className="text-base font-bold text-[#000091]">{s.val}</div>
+                  <div className="text-[10px] text-[#666666]">{s.label}</div>
                 </div>
               ))}
             </div>
 
+            {/* Tags */}
             <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">📝 Entraînement progressif</span>
-              <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">✓ Corrections détaillées</span>
-              <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">🎯 Simulation réaliste</span>
+              <span className="cc-badge cc-badge-neutral">Entraînement progressif</span>
+              <span className="cc-badge cc-badge-success">Corrections détaillées</span>
+              <span className="cc-badge cc-badge-info">Simulation réaliste</span>
             </div>
 
             {/* CTA principaux */}
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-              <button onClick={start}
-                className="inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-2xl border border-blue-400/30 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-6 py-4 text-base font-bold text-white shadow-[0_12px_32px_rgba(37,99,235,0.35)] transition hover:brightness-110 active:scale-[0.98] sm:w-auto">
-                <svg width="18" height="18" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
-                Commencer un test
+              <button
+                onClick={start}
+                className="cc-btn cc-btn-primary w-full max-w-xs sm:w-auto px-6 py-3 text-base gap-3"
+              >
+                <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+                  <path d="M3 1.5l10 5.5-10 5.5V1.5z" />
+                </svg>
+                Commencer un entraînement
               </button>
-              <button onClick={() => setShowReviseModal(true)}
-                className="inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-2xl border border-amber-400/30 bg-amber-500/10 px-6 py-4 text-base font-bold text-amber-200 transition hover:border-amber-400/50 hover:bg-amber-500/15 active:scale-[0.98] sm:w-auto">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>
+              <button
+                onClick={() => setShowReviseModal(true)}
+                className="cc-btn cc-btn-secondary w-full max-w-xs sm:w-auto px-6 py-3 text-base gap-3"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect width="14" height="20" x="5" y="2" rx="2" /><path d="M12 18h.01" />
+                </svg>
                 Réviser
               </button>
             </div>
 
             {/* Actions secondaires */}
-            <div className="mt-5 flex flex-wrap justify-center gap-2">
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
               <button onClick={() => router.push("/audio")}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
-                🎧 Bibliothèque audio
+                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                Bibliothèque audio
               </button>
               <button onClick={() => { const el = document.getElementById("avis-section"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
-                ⭐ Voir les avis
+                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                Avis des utilisateurs
               </button>
               <button onClick={() => router.push("/leaderboard")}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
-                🏆 Classement
+                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                Classement
               </button>
               <button onClick={() => router.push("/resources")}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white">
-                🏛️ Ressources
+                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                Ressources officielles
               </button>
               <button onClick={() => router.push("/assistant")}
-                className="inline-flex items-center gap-1.5 rounded-full border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-xs font-semibold text-violet-300 transition hover:bg-violet-500/15 hover:text-violet-200">
-                🤖 Assistant IA
+                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                Assistant IA démarches
               </button>
-              {/* Bouton guide onboarding */}
               {!isAuthenticated && (
                 <button onClick={() => setShowOnboarding(true)}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-xs font-semibold text-violet-300 transition hover:bg-violet-500/15">
-                  🗺️ Guide de démarrage
+                  className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                  Guide de démarrage
                 </button>
               )}
             </div>
-
           </div>
         </section>
 
@@ -671,52 +573,52 @@ export default function HomePage() {
         <ScrollDemo />
 
         {/* ══════════════════════════════════════════
-            SECTION 3 — PARAMÉTRAGE
+            SECTION 3 — PARAMÉTRAGE DE SESSION
         ══════════════════════════════════════════ */}
         <section className="grid gap-6 lg:grid-cols-3">
+
           {/* Niveau */}
           <Card>
             <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/10 text-xl">🎯</div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Choisissez votre niveau</h3>
-                  <p className="mt-0.5 text-xs text-slate-400">Ajustez la difficulté selon votre progression.</p>
-                </div>
+              <div>
+                <h3 className="text-base font-bold text-[#161616]">Niveau de difficulté</h3>
+                <p className="mt-0.5 text-xs text-[#666666]">Ajustez selon votre avancement.</p>
               </div>
-              <div className="shrink-0 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-slate-300">3 niveaux</div>
+              <span className="cc-badge cc-badge-neutral">3 niveaux</span>
             </div>
             <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
               {[1, 2, 3].map((n) => {
                 const active = level === n;
                 const locked = !limits.levels.includes(n);
                 return (
-                  <button key={n} type="button" onClick={() => !locked && setLevel(n as Level)}
-                    className={`relative rounded-2xl border px-4 py-4 text-center transition-all duration-200 ${locked ? "cursor-not-allowed border-white/5 bg-white/[0.02] text-slate-600" : active ? "border-blue-400/30 bg-gradient-to-br from-blue-500/15 to-indigo-500/15 text-blue-200 shadow-[0_10px_30px_rgba(37,99,235,0.18)]" : "border-white/10 bg-white/5 text-slate-300 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"}`}>
-                    <div className="text-sm font-semibold">Niveau {n}</div>
-                    {locked && <div className="mt-1 text-xs text-amber-400/70">🔒 Premium</div>}
+                  <button key={n} type="button"
+                    onClick={() => !locked && setLevel(n as Level)}
+                    className={`relative rounded border px-4 py-4 text-center transition-colors ${
+                      locked
+                        ? "cursor-not-allowed border-[#dddddd] bg-[#f6f6f6] text-[#929292]"
+                        : active
+                        ? "border-[#000091] bg-[#ececfe] text-[#000091]"
+                        : "border-[#dddddd] bg-white text-[#3a3a3a] hover:border-[#000091]"
+                    }`}
+                  >
+                    <div className="text-sm font-bold">Niveau {n}</div>
+                    {locked && <div className="mt-1 text-xs text-[#b34000]">Abonnement requis</div>}
                   </button>
                 );
               })}
             </div>
-            <div className="mt-5 rounded-3xl border border-white/10 bg-white/5 p-4">
-              <div className="mb-2 text-sm font-semibold text-white">Conseil</div>
-              <ul className="space-y-2 text-sm text-slate-300">
-                <li>• Niveau 1 : bases et repères essentiels</li>
-                <li>• Niveau 2 : précision et pièges fréquents</li>
-                <li>• Niveau 3 : approfondissement et maîtrise</li>
+            <div className="mt-5 rounded border border-[#dddddd] bg-[#f6f6f6] p-4">
+              <p className="mb-2 text-sm font-bold text-[#161616]">Repères</p>
+              <ul className="space-y-1.5 text-sm text-[#3a3a3a]">
+                <li>Niveau 1 — bases et repères essentiels</li>
+                <li>Niveau 2 — précision et pièges fréquents</li>
+                <li>Niveau 3 — approfondissement et maîtrise</li>
               </ul>
             </div>
-            {(!['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '')) && (
+            {!(['premium','elite','moderator','admin','super_admin'].includes(role ?? '')) && (
               <button onClick={() => router.push("/pricing")}
-                className="mt-4 w-full rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-left transition hover:bg-amber-500/15">
-                <div className="flex items-center justify-between gap-2">
-                  <div>
-                    <p className="text-xs font-bold text-amber-300">👑 Passer en Premium</p>
-                    <p className="mt-0.5 text-[11px] text-amber-200/60">Débloquez niveaux 2 & 3 + 40 questions + examen blanc</p>
-                  </div>
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 text-amber-400"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
-                </div>
+                className="mt-4 w-full rounded border border-[#000091] bg-[#ececfe] px-4 py-3 text-left text-sm font-bold text-[#000091] hover:bg-[#000091] hover:text-white transition-colors">
+                Accéder aux niveaux 2 et 3 avec un abonnement
               </button>
             )}
           </Card>
@@ -724,25 +626,22 @@ export default function HomePage() {
           {/* Thèmes */}
           <Card>
             <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/10 text-xl">📚</div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Sélectionnez vos thèmes</h3>
-                  <p className="mt-0.5 text-xs text-slate-400">Ciblez vos révisions selon vos besoins.</p>
-                </div>
+              <div>
+                <h3 className="text-base font-bold text-[#161616]">Thèmes de révision</h3>
+                <p className="mt-0.5 text-xs text-[#666666]">Concentrez vos révisions sur les domaines ciblés.</p>
               </div>
-              <div className="shrink-0 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-slate-300">{themes.length}/{THEMES.length}</div>
+              <span className="cc-badge cc-badge-neutral">{themes.length}/{THEMES.length}</span>
             </div>
-            <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
+            <div className="mt-5 flex flex-wrap gap-2">
               {THEMES.map((t) => <Pill key={t} active={themes.includes(t)} onClick={() => toggleTheme(t)}>{t}</Pill>)}
             </div>
-            <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
-              <Button variant="secondary" onClick={() => setThemes([...THEMES])}>Tout sélectionner</Button>
-              <Button variant="secondary" onClick={() => setThemes([])}>Tout retirer</Button>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <Button variant="secondary" size="sm" onClick={() => setThemes([...THEMES])}>Tout sélectionner</Button>
+              <Button variant="secondary" size="sm" onClick={() => setThemes([])}>Tout retirer</Button>
             </div>
             {!canStart && (
-              <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-center text-sm text-red-200 sm:text-left">
-                ⚠️ Sélectionnez au moins un thème pour démarrer.
+              <div className="mt-4 cc-notice cc-notice-warning">
+                <p className="text-sm text-[#161616]">Sélectionnez au moins un thème pour démarrer.</p>
               </div>
             )}
           </Card>
@@ -750,41 +649,52 @@ export default function HomePage() {
           {/* Résumé */}
           <Card>
             <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/10 text-xl">📋</div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Résumé de votre session</h3>
-                  <p className="mt-0.5 text-xs text-slate-400">Vérifiez les paramètres avant de lancer le test.</p>
-                </div>
+              <div>
+                <h3 className="text-base font-bold text-[#161616]">Résumé de la session</h3>
+                <p className="mt-0.5 text-xs text-[#666666]">Vérifiez les paramètres avant de commencer.</p>
               </div>
-              <div className="shrink-0 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-300">Prêt</div>
+              <span className="cc-badge cc-badge-success">Prêt</span>
             </div>
-            <div className="mt-5 space-y-3 rounded-3xl border border-white/10 bg-white/5 p-4 text-sm">
-              {[["Questions", `${limits.quizCount} questions`], ["Temps / question", `${PER_QUESTION_SECONDS}s`], ["Niveau", `Niveau ${level}`]].map(([label, value]) => (
+            <div className="mt-5 space-y-3 rounded border border-[#dddddd] bg-[#f6f6f6] p-4 text-sm">
+              {[
+                ["Questions",        `${limits.quizCount} questions`],
+                ["Temps / question", `${PER_QUESTION_SECONDS}s`],
+                ["Niveau",          `Niveau ${level}`],
+              ].map(([label, value]) => (
                 <div key={String(label)} className="flex items-center justify-between gap-3">
-                  <span className="text-slate-400">{label}</span>
-                  <span className="font-semibold text-white">{value}</span>
+                  <span className="text-[#666666]">{label}</span>
+                  <span className="font-bold text-[#161616]">{value}</span>
                 </div>
               ))}
-              {(role !== "premium" && role !== "elite") && (
-                <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
-                  {role === "anonymous" ? "👤 Crée un compte gratuit pour accéder à 20 questions" : "✨ Passe en Premium pour accéder à 40 questions et tous les niveaux"}
+              {role !== "premium" && role !== "elite" && (
+                <div className="mt-3 cc-notice cc-notice-warning">
+                  <p className="text-xs text-[#161616]">
+                    {role === "anonymous"
+                      ? "Créez un compte gratuit pour accéder à 20 questions."
+                      : "Abonnez-vous pour accéder à 40 questions et tous les niveaux."}
+                  </p>
                 </div>
               )}
             </div>
             <div className="mt-6 flex flex-col gap-3">
-              <Button className="w-full" onClick={start} disabled={!canStart}>Faire un test</Button>
+              <Button className="w-full" onClick={start} disabled={!canStart}>
+                Commencer le test
+              </Button>
               {limits.canExam ? (
-                <Button variant="danger" className="w-full" onClick={startExam}>Examen blanc</Button>
+                <Button variant="secondary" className="w-full" onClick={startExam}>
+                  Simulation d'examen blanc
+                </Button>
               ) : (
-                <div className="relative">
-                  <button disabled className="w-full rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-600 cursor-not-allowed">Examen blanc</button>
-                  <div className="mt-1 text-center text-xs text-amber-400/70">🔒 Disponible en Premium — essai gratuit pour Freemium</div>
+                <div>
+                  <button disabled className="w-full rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3 text-sm font-bold text-[#929292] cursor-not-allowed">
+                    Simulation d'examen blanc
+                  </button>
+                  <p className="mt-1 text-center text-xs text-[#b34000]">Disponible avec un abonnement</p>
                 </div>
               )}
             </div>
-            <p className="mt-4 text-center text-xs leading-6 text-slate-400 sm:text-left">
-              Votre résultat affichera vos erreurs, vos bonnes réponses et les explications pour progresser plus vite.
+            <p className="mt-4 text-xs leading-6 text-[#666666]">
+              Votre résultat affichera vos erreurs, vos bonnes réponses et les explications pour progresser.
             </p>
           </Card>
         </section>
@@ -792,150 +702,182 @@ export default function HomePage() {
         {/* ══════════════════════════════════════════
             SECTION 4 — BÉNÉFICES
         ══════════════════════════════════════════ */}
-        <section className="grid gap-4 md:grid-cols-3">
-          {[
-            { icon: "🧠", title: "Comprenez vos erreurs et progressez rapidement", text: "Chaque question est accompagnée d'une explication détaillée pour transformer chaque erreur en véritable leçon." },
-            { icon: "📌", title: "Travaillez uniquement vos points faibles", text: "Ciblez les thèmes qui vous manquent, ajustez le niveau de difficulté et concentrez-vous sur ce qui compte vraiment." },
-            { icon: "🏁", title: "Simulez l'examen réel et gagnez en confiance", text: "Le mode examen blanc reproduit les conditions réelles de l'entretien civique — pour arriver préparé le jour J." },
-          ].map((item) => (
-            <div key={item.title} className="rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 text-center shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20 md:text-left">
-              <div className="mb-3 text-2xl">{item.icon}</div>
-              <h3 className="text-base font-bold text-white">{item.title}</h3>
-              <p className="mt-2 text-sm leading-7 text-slate-300">{item.text}</p>
-            </div>
-          ))}
+        <section>
+          <h2 className="mb-6 text-xl font-bold text-[#161616]">Une préparation complète et progressive</h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                num: "01",
+                title: "Comprendre ses erreurs pour progresser",
+                text: "Chaque question est accompagnée d'une explication détaillée pour transformer chaque erreur en véritable leçon.",
+              },
+              {
+                num: "02",
+                title: "Concentrer ses révisions sur les points faibles",
+                text: "Sélectionnez les thèmes qui vous manquent, ajustez le niveau de difficulté et optimisez votre temps de préparation.",
+              },
+              {
+                num: "03",
+                title: "Simuler les conditions réelles de l'entretien",
+                text: "La simulation d'examen blanc reproduit les conditions officielles — durée, nombre de questions, format — pour arriver préparé le jour J.",
+              },
+            ].map(item => (
+              <div key={item.title} className="rounded border border-[#dddddd] bg-white p-5">
+                <div className="mb-3 text-2xl font-bold text-[#000091]">{item.num}</div>
+                <h3 className="text-base font-bold text-[#161616]">{item.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-[#3a3a3a]">{item.text}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* ══════════════════════════════════════════
             SECTION 5 — LIEN CENTRE AGRÉÉ
         ══════════════════════════════════════════ */}
-        <section className="rounded-[1.6rem] border border-blue-400/20 bg-gradient-to-r from-blue-500/10 via-indigo-500/8 to-sky-500/10 p-5 text-center">
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:text-left">
+        <section className="rounded border-l-4 border-[#000091] bg-[#ececfe] p-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-bold text-white">Prêt à passer l'examen ?</p>
-              <p className="mt-0.5 text-xs text-slate-300">Trouvez le centre CCI agréé le plus proche de chez vous.</p>
+              <p className="text-sm font-bold text-[#161616]">Prêt à vous présenter à l'entretien ?</p>
+              <p className="mt-0.5 text-xs text-[#3a3a3a]">Trouvez le centre CCI agréé le plus proche de chez vous.</p>
             </div>
             <a
               href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-2xl border border-blue-400/20 bg-blue-500/15 px-5 py-2.5 text-sm font-bold text-blue-200 transition hover:bg-blue-500/25 hover:-translate-y-0.5"
+              className="cc-btn cc-btn-primary shrink-0 no-underline"
             >
-              📍 Trouver un centre agréé ↗
+              Trouver un centre agréé
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
             </a>
           </div>
         </section>
 
       </div>
 
-      {/* ══════════════════════════════════════════
-          MODAL — Onboarding
-      ══════════════════════════════════════════ */}
-      {showOnboarding && !['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '') && (
-        <OnboardingModal
-          role={role}
-          onClose={closeOnboarding}
-          onAction={handleOnboardingAction}
-        />
+      {/* ══ MODAL — Onboarding ══════════════════════ */}
+      {showOnboarding && !['premium','elite','moderator','admin','super_admin'].includes(role ?? '') && (
+        <OnboardingModal role={role} onClose={closeOnboarding} onAction={handleOnboardingAction} />
       )}
 
-      {/* ══════════════════════════════════════════
-          MODAL — Réviser
-      ══════════════════════════════════════════ */}
+      {/* ══ MODAL — Mode de révision ════════════════ */}
       {showReviseModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowReviseModal(false)} />
-          <div className="relative z-[101] w-full max-w-sm overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/98 to-slate-900/98 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]">
+          <div className="absolute inset-0 bg-[#161616]/50" onClick={() => setShowReviseModal(false)} />
+          <div className="relative z-[101] w-full max-w-sm rounded border border-[#dddddd] bg-white p-6 shadow-lg">
             <button onClick={() => setShowReviseModal(false)}
-              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-slate-400 transition hover:text-white">✕</button>
-            <h3 className="text-lg font-extrabold text-white">Comment voulez-vous réviser ?</h3>
-            <p className="mt-1 text-sm text-slate-400">Choisissez votre mode de révision préféré.</p>
+              className="absolute right-4 top-4 text-[#666666] hover:text-[#161616] text-xl leading-none" aria-label="Fermer">×</button>
+            <h3 className="text-lg font-bold text-[#161616]">Mode de révision</h3>
+            <p className="mt-1 text-sm text-[#666666]">Choisissez votre format de révision préféré.</p>
             <div className="mt-5 flex flex-col gap-3">
-              <button onClick={() => { setShowReviseModal(false); router.push("/scroll"); }}
-                className="flex items-center gap-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4 text-left transition hover:border-amber-400/40 hover:bg-amber-500/15 active:scale-[0.98]">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-500/20 text-2xl">📱</div>
-                <div className="flex-1">
-                  <p className="font-bold text-white">Flash-cards Scroll</p>
-                  <p className="mt-0.5 text-xs text-slate-400">Swipez verticalement pour réviser — rapide et immersif.</p>
-                </div>
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 text-amber-400"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
-              </button>
-              <button onClick={() => { setShowReviseModal(false); router.push("/audio"); }}
-                className="flex items-center gap-4 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-left transition hover:border-emerald-400/40 hover:bg-emerald-500/15 active:scale-[0.98]">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-500/20 text-2xl">🎧</div>
-                <div className="flex-1">
-                  <p className="font-bold text-white">Bibliothèque Audio</p>
-                  <p className="mt-0.5 text-xs text-slate-400">Écoutez les épisodes guidés — format entretien réel, voix naturelle.</p>
-                </div>
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 text-emerald-400"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
-              </button>
-              <button onClick={() => { setShowReviseModal(false); router.push("/assistant"); }}
-                className="flex items-center gap-4 rounded-2xl border border-violet-400/20 bg-violet-500/10 p-4 text-left transition hover:border-violet-400/40 hover:bg-violet-500/15 active:scale-[0.98]">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-500/20 text-2xl">🤖</div>
-                <div className="flex-1">
-                  <p className="font-bold text-white">Assistant IA Démarches</p>
-                  <p className="mt-0.5 text-xs text-slate-400">Posez vos questions sur la naturalisation et l&apos;examen civique.</p>
-                </div>
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0 text-violet-400"><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
-              </button>
+              {[
+                { label: "Révision par fiches", desc: "Défilement vertical des questions — rapide et efficace.", href: "/scroll" },
+                { label: "Bibliothèque audio",  desc: "Épisodes guidés au format entretien réel, voix naturelle.", href: "/audio" },
+                { label: "Assistant IA démarches", desc: "Posez vos questions sur la naturalisation et l'entretien civique.", href: "/assistant" },
+              ].map(({ label, desc, href }) => (
+                <button key={href}
+                  onClick={() => { setShowReviseModal(false); router.push(href); }}
+                  className="flex items-start gap-4 rounded border border-[#dddddd] bg-[#f6f6f6] p-4 text-left hover:border-[#000091] hover:bg-[#ececfe] transition-colors">
+                  <div className="flex-1">
+                    <p className="font-bold text-[#161616] text-sm">{label}</p>
+                    <p className="mt-0.5 text-xs text-[#666666]">{desc}</p>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="mt-0.5 shrink-0 text-[#000091]" aria-hidden="true">
+                    <path d="M5 4l6 4-6 4V4z" fill="currentColor"/>
+                  </svg>
+                </button>
+              ))}
             </div>
           </div>
         </div>
       )}
 
-      {/* Modal identité */}
+      {/* ══ MODAL — Identité ════════════════════════ */}
       {pseudoOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setPseudoOpen(false)} />
-          <div className="relative z-[101] w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_25px_70px_rgba(2,8,23,0.55)] sm:p-6">
-            <div className="mb-4 text-center sm:text-left">
-              <h3 className="text-lg sm:text-xl font-semibold text-white">Avant de commencer</h3>
-              <p className="mt-1.5 text-xs sm:text-sm leading-5 text-slate-400">Créez un compte pour sauvegarder vos résultats, ou continuez sans compte.</p>
-            </div>
-            <div className="flex flex-col gap-3">
+          <div className="absolute inset-0 bg-[#161616]/50" onClick={() => setPseudoOpen(false)} />
+          <div className="relative z-[101] w-full max-w-md rounded border border-[#dddddd] bg-white p-6 shadow-lg">
+            <h3 className="text-lg font-bold text-[#161616]">Avant de commencer</h3>
+            <p className="mt-1.5 text-sm text-[#666666]">Créez un compte pour sauvegarder vos résultats, ou continuez sans compte.</p>
+
+            <div className="mt-5 flex flex-col gap-3">
               <a href={`/register?email=${encodeURIComponent(emailDraft)}&pseudo=${encodeURIComponent(pseudoDraft)}`}
-                className="w-full rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:brightness-105">
+                className="cc-btn cc-btn-primary w-full justify-center no-underline">
                 Créer un compte gratuit
               </a>
-              <a href="/login" className="w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-slate-200 transition hover:bg-white/10">
+              <a href="/login"
+                className="cc-btn cc-btn-secondary w-full justify-center no-underline">
                 J'ai déjà un compte
               </a>
             </div>
-            <div className="mt-4 border-t border-white/10 pt-4">
-              <p className="mb-2.5 text-center text-xs text-slate-500">Ou continuer sans compte</p>
-              <input value={pseudoDraft} onChange={(e) => setPseudoDraft(e.target.value)} placeholder="Pseudo (ex : Carlos)"
-                className="w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20"
-                maxLength={20} autoFocus />
-              <input type="email" value={emailDraft} onChange={(e) => setEmailDraft(e.target.value)} placeholder="Adresse email"
-                className="mt-3 w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 focus:ring-2 focus:ring-blue-400/20" />
-              <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:justify-end">
-                <Button variant="secondary" type="button" onClick={() => setPseudoOpen(false)}>Annuler</Button>
-                <Button type="button" onClick={confirmIdentity} disabled={!pseudoDraft.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailDraft.trim().toLowerCase())}>
-                  Continuer sans compte
-                </Button>
+
+            <div className="mt-5 border-t border-[#dddddd] pt-5">
+              <p className="mb-3 text-xs text-[#666666]">Ou continuer sans compte</p>
+              <div className="space-y-3">
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-[#161616]" htmlFor="pseudo-input">Pseudo</label>
+                  <input
+                    id="pseudo-input"
+                    value={pseudoDraft}
+                    onChange={e => setPseudoDraft(e.target.value)}
+                    placeholder="ex : Carlos"
+                    maxLength={20}
+                    autoFocus
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-[#161616]" htmlFor="email-input">Adresse email</label>
+                  <input
+                    id="email-input"
+                    type="email"
+                    value={emailDraft}
+                    onChange={e => setEmailDraft(e.target.value)}
+                    placeholder="votre@email.fr"
+                    className="w-full"
+                  />
+                </div>
+                <p className="text-xs text-[#666666]">
+                  Vos données sont utilisées uniquement pour sauvegarder vos résultats.
+                  Conformément au RGPD, vous pouvez les supprimer à tout moment depuis votre compte.
+                </p>
+                <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+                  <Button variant="secondary" type="button" onClick={() => setPseudoOpen(false)}>Annuler</Button>
+                  <Button
+                    type="button"
+                    onClick={confirmIdentity}
+                    disabled={!pseudoDraft.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailDraft.trim().toLowerCase())}
+                  >
+                    Continuer sans compte
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Modal upgrade examen */}
+      {/* ══ MODAL — Accès examen ═════════════════════ */}
       {openExamUpgrade && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpenExamUpgrade(false)} />
-          <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
-            <div className="text-center">
-              <div className="text-4xl mb-3">👑</div>
-              <h3 className="text-xl font-extrabold text-white">Créez un compte pour accéder à l'examen blanc</h3>
-              <p className="mt-2 text-sm leading-7 text-slate-400">L'examen blanc est accessible aux comptes Freemium avec un essai gratuit limité, puis en illimité avec Premium.</p>
-            </div>
-            <div className="mt-6 space-y-3">
-              <button onClick={() => { setOpenExamUpgrade(false); router.push("/pricing"); }}
-                className="w-full rounded-2xl bg-amber-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-400">
-                ✨ Créer un compte / Voir les offres
+          <div className="absolute inset-0 bg-[#161616]/50" onClick={() => setOpenExamUpgrade(false)} />
+          <div className="relative w-full max-w-md rounded border border-[#dddddd] bg-white p-6 shadow-lg">
+            <h3 className="text-xl font-bold text-[#161616]">Accès à la simulation d'examen</h3>
+            <p className="mt-2 text-sm leading-7 text-[#3a3a3a]">
+              La simulation d'examen blanc est accessible aux comptes Freemium avec un essai gratuit limité, puis en illimité avec un abonnement Premium.
+            </p>
+            <div className="mt-6 flex flex-col gap-3">
+              <button
+                onClick={() => { setOpenExamUpgrade(false); router.push("/pricing"); }}
+                className="cc-btn cc-btn-primary w-full justify-center"
+              >
+                Créer un compte ou voir les abonnements
               </button>
-              <button onClick={() => setOpenExamUpgrade(false)}
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10">
+              <button
+                onClick={() => setOpenExamUpgrade(false)}
+                className="cc-btn cc-btn-secondary w-full justify-center"
+              >
                 Fermer
               </button>
             </div>
