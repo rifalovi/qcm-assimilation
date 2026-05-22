@@ -40,25 +40,25 @@ type Result = {
 const ROLE_CONFIG = {
   anonymous: {
     label: "Anonyme",
-    color: "border-slate-400/20 bg-slate-500/10 text-slate-200",
+    color: "border-slate-400/20 bg-slate-500/10 text-slate-600",
     description: "10 questions • Pas de sauvegarde",
     icon: "👤",
   },
   freemium: {
     label: "Freemium",
-    color: "border-blue-400/20 bg-blue-500/10 text-blue-200",
+    color: "border-blue-400/20 bg-blue-500/10 text-blue-700",
     description: "20 questions • Score sauvegardé • Niveau 1",
     icon: "✨",
   },
   premium: {
     label: "Premium",
-    color: "border-amber-400/20 bg-amber-500/10 text-amber-200",
+    color: "border-amber-400/20 bg-amber-500/10 text-amber-700",
     description: "Accès complet • Tous niveaux • Stats détaillées",
     icon: "🎯",
   },
   elite: {
     label: "Élite",
-    color: "border-yellow-400/20 bg-yellow-500/10 text-yellow-200",
+    color: "border-yellow-400/20 bg-yellow-500/10 text-yellow-700",
     description: "Accès à vie • Contenu exclusif expert • Support prioritaire",
     icon: "👑",
   },
@@ -68,9 +68,9 @@ function StatCard({ label, value, accent = "blue" }: {
   label: string; value: string; accent?: "blue" | "emerald" | "amber";
 }) {
   const styles = {
-    blue: "border-blue-400/20 bg-blue-500/10 text-blue-100",
-    emerald: "border-emerald-400/20 bg-emerald-500/10 text-emerald-100",
-    amber: "border-amber-400/20 bg-amber-500/10 text-amber-100",
+    blue: "border-blue-400/20 bg-blue-500/10 text-blue-700",
+    emerald: "border-emerald-400/20 bg-emerald-500/10 text-emerald-700",
+    amber: "border-amber-400/20 bg-amber-500/10 text-amber-700",
   };
   return (
     <div className={`rounded-2xl border p-4 text-center ${styles[accent]}`}>
@@ -216,7 +216,7 @@ export default function AccountPage() {
   if (loading) {
     return (
       <main className="mx-auto flex min-h-[calc(100vh-120px)] max-w-5xl items-center justify-center px-4 py-8">
-        <div className="w-full rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-8 text-center text-slate-300">
+        <div className="w-full rounded-[2rem] p-8 text-center" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>
           Chargement...
         </div>
       </main>
@@ -228,7 +228,7 @@ export default function AccountPage() {
       <div className="space-y-6">
 
         {/* ── PROFIL ── */}
-        <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
+        <section className="relative overflow-hidden rounded-[2rem] shadow-[0_25px_70px_rgba(2,8,23,0.42)]" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)" }}>
           <div className="flex h-1.5 w-full">
             <div className="flex-1 bg-blue-600" /><div className="flex-1 bg-white" /><div className="flex-1 bg-red-600" />
           </div>
@@ -239,15 +239,15 @@ export default function AccountPage() {
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-3">
-                  <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                  <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl" style={{ color: "var(--cc-text)" }}>
                     {profile?.username ?? "Mon compte"}
                   </h1>
                   <span className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-semibold ${roleConfig.color}`}>
                     <span>{roleConfig.icon}</span>{roleConfig.label}
                   </span>
                 </div>
-                <p className="mt-2 break-all text-sm text-slate-300">{email}</p>
-                <p className="mt-1 text-xs text-slate-400">{roleConfig.description}</p>
+                <p className="mt-2 break-all text-sm" style={{ color: "var(--cc-text-muted)" }}>{email}</p>
+                <p className="mt-1 text-xs" style={{ color: "var(--cc-text-muted)" }}>{roleConfig.description}</p>
                 <Link href="/pricing" className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-amber-400 hover:text-amber-300 transition">
                   👑 Voir les tarifs & abonnements →
                 </Link>
@@ -260,8 +260,8 @@ export default function AccountPage() {
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">👑</span>
                   <div>
-                    <p className="text-sm font-bold text-yellow-200">Accès Élite — À vie</p>
-                    <p className="text-xs text-yellow-300/70">Paiement unique · Toutes les mises à jour incluses · Contenu expert exclusif</p>
+                    <p className="text-sm font-bold text-yellow-700">Accès Élite — À vie</p>
+                    <p className="text-xs text-yellow-600/80">Paiement unique · Toutes les mises à jour incluses · Contenu expert exclusif</p>
                   </div>
                 </div>
               </div>
@@ -273,9 +273,9 @@ export default function AccountPage() {
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">🎯</span>
                     <div>
-                      <p className="text-sm font-bold text-blue-200">Abonnement Premium actif</p>
+                      <p className="text-sm font-bold text-blue-700">Abonnement Premium actif</p>
                       {daysLeft !== null && (
-                        <p className="text-xs text-blue-300/70">
+                        <p className="text-xs text-blue-600/70">
                           {daysLeft > 0
                             ? `⏳ Expire dans ${daysLeft} jour${daysLeft > 1 ? "s" : ""} — ${new Date(subscription!.expires_at!).toLocaleDateString("fr-FR")}`
                             : "⚠️ Abonnement expiré"}
@@ -285,11 +285,11 @@ export default function AccountPage() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <button onClick={handlePortal} disabled={portalLoading}
-                      className="rounded-xl border border-blue-400/20 bg-blue-500/15 px-4 py-2 text-xs font-semibold text-blue-200 transition hover:bg-blue-500/25 disabled:opacity-50">
+                      className="rounded-xl border border-blue-400/20 bg-blue-500/15 px-4 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-500/25 disabled:opacity-50">
                       {portalLoading ? "Redirection..." : "⚙️ Gérer mon abonnement"}
                     </button>
                     <button onClick={handleUpgradeElite}
-                      className="rounded-xl border border-yellow-400/20 bg-yellow-500/10 px-4 py-2 text-xs font-semibold text-yellow-200 transition hover:bg-yellow-500/20">
+                      className="rounded-xl border border-yellow-400/20 bg-yellow-500/10 px-4 py-2 text-xs font-semibold text-yellow-700 transition hover:bg-yellow-500/20">
                       👑 Passer en Élite
                     </button>
                   </div>
@@ -301,8 +301,8 @@ export default function AccountPage() {
               <div className="mt-6 rounded-[1.5rem] border border-amber-400/20 bg-amber-500/10 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <p className="text-sm font-semibold text-amber-100">Passer en Premium</p>
-                    <p className="mt-1 text-xs text-amber-200/80">Accès complet — tous niveaux, mode examen, statistiques détaillées</p>
+                    <p className="text-sm font-semibold text-amber-700">Passer en Premium</p>
+                    <p className="mt-1 text-xs text-amber-600/80">Accès complet — tous niveaux, mode examen, statistiques détaillées</p>
                   </div>
                   <button onClick={handleUpgrade}
                     className="rounded-xl border border-amber-400/20 bg-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-amber-400">
@@ -314,7 +314,7 @@ export default function AccountPage() {
 
             {/* ── Informations personnelles (communauté) ── */}
             <div className="mt-6">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-500">Informations personnelles</p>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--cc-text-disabled)" }}>Informations personnelles</p>
               <ProfileNameForm
                 userId={userId}
                 initialFirstName={profile?.first_name ?? null}
@@ -327,7 +327,7 @@ export default function AccountPage() {
             {(['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role)) && (
               <div className="mt-6">
                 <div className="mb-3 flex items-center justify-between">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Voix audio</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--cc-text-disabled)" }}>Voix audio</p>
                   <button onClick={() => { const last = localStorage.getItem("last_audio_page"); router.push(last ?? "/audio"); }}
                     className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-400 transition hover:text-blue-300">
                     <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -340,7 +340,7 @@ export default function AccountPage() {
 
             {/* ── Sécurité ── */}
             <div className="mt-6">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-slate-500">Sécurité</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--cc-text-disabled)" }}>Sécurité</p>
               <MFASetup />
             </div>
           </div>
@@ -356,29 +356,29 @@ export default function AccountPage() {
         )}
 
         {/* ── HISTORIQUE ── */}
-        <section className="rounded-[1.8rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_18px_45px_rgba(2,8,23,0.28)]">
-          <h2 className="text-lg font-bold text-white">Historique des résultats</h2>
+        <section className="rounded-[1.8rem] p-6 shadow-[0_18px_45px_rgba(2,8,23,0.28)]" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)" }}>
+          <h2 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Historique des résultats</h2>
           {results.length === 0 ? (
             <div className="py-10 text-center">
-              <p className="text-sm text-slate-400">Aucun résultat pour l&apos;instant.</p>
+              <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Aucun résultat pour l&apos;instant.</p>
               <Link href="/" className="mt-3 inline-block text-sm font-medium text-blue-400 transition hover:text-blue-300 hover:underline">Faire un test →</Link>
             </div>
           ) : (
             <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {results.map((r) => (
-                <div key={r.id} className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition hover:bg-white/[0.07]">
-                  <span className={`shrink-0 rounded-lg px-1.5 py-0.5 text-[10px] font-semibold ${r.mode === "exam" ? "border border-red-400/20 bg-red-500/10 text-red-200" : "border border-blue-400/20 bg-blue-500/10 text-blue-200"}`}>
+                <div key={r.id} className="flex items-center gap-2 rounded-xl px-3 py-2.5 transition" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+                  <span className={`shrink-0 rounded-lg px-1.5 py-0.5 text-[10px] font-semibold ${r.mode === "exam" ? "border border-red-400/20 bg-red-500/10 text-red-700" : "border border-blue-400/20 bg-blue-500/10 text-blue-700"}`}>
                     {r.mode === "exam" ? "Exam" : "Train"}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-white">{r.score_correct}/{r.score_total} — {(r.score_percent ?? 0).toFixed(0)}%</p>
-                    <p className="truncate text-[10px] text-slate-500">Niv.{r.level} • {Array.isArray(r.themes) ? r.themes.join(", ") : r.themes}</p>
+                    <p className="text-xs font-semibold" style={{ color: "var(--cc-text)" }}>{r.score_correct}/{r.score_total} — {(r.score_percent ?? 0).toFixed(0)}%</p>
+                    <p className="truncate text-[10px]" style={{ color: "var(--cc-text-disabled)" }}>Niv.{r.level} • {Array.isArray(r.themes) ? r.themes.join(", ") : r.themes}</p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <span className={`rounded-lg px-1.5 py-0.5 text-[10px] font-semibold ${r.passed ? "border border-emerald-400/20 bg-emerald-500/10 text-emerald-200" : "border border-red-400/20 bg-red-500/10 text-red-200"}`}>
+                    <span className={`rounded-lg px-1.5 py-0.5 text-[10px] font-semibold ${r.passed ? "border border-emerald-400/20 bg-emerald-500/10 text-emerald-700" : "border border-red-400/20 bg-red-500/10 text-red-700"}`}>
                       {r.passed ? "✓ OK" : "✗"}
                     </span>
-                    <p className="mt-0.5 text-[10px] text-slate-500">{new Date(r.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short" })}</p>
+                    <p className="mt-0.5 text-[10px]" style={{ color: "var(--cc-text-disabled)" }}>{new Date(r.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short" })}</p>
                   </div>
                 </div>
               ))}
@@ -388,15 +388,15 @@ export default function AccountPage() {
 
         {/* ── ACTIONS ── */}
         <section className="flex flex-wrap justify-center gap-3">
-          <Link href="/results" className="rounded-xl border border-blue-400/20 bg-blue-500/10 px-5 py-2.5 text-sm font-medium text-blue-200 transition hover:bg-blue-500/15">
+          <Link href="/results" className="rounded-xl border border-blue-400/20 bg-blue-500/10 px-5 py-2.5 text-sm font-medium text-blue-700 transition hover:bg-blue-500/15">
             Voir le dernier résultat
           </Link>
           <button onClick={() => setShowPasswordModal(true)}
-            className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10">
+            className="rounded-xl px-5 py-2.5 text-sm font-medium transition" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
             🔑 Changer le mot de passe
           </button>
           <button onClick={handleLogout}
-            className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10">
+            className="rounded-xl px-5 py-2.5 text-sm font-medium transition" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
             🚪 Déconnexion
           </button>
           <button onClick={() => setShowDeleteModal(true)}
@@ -411,21 +411,21 @@ export default function AccountPage() {
       {showPasswordModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowPasswordModal(false)} />
-          <div className="relative w-full max-w-md rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/98 to-slate-900/98 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]">
-            <h3 className="text-lg font-bold text-white mb-1">Changer le mot de passe</h3>
-            <p className="text-xs text-slate-400 mb-5">Minimum 8 caractères.</p>
+          <div className="relative w-full max-w-md rounded-[2rem] p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)" }}>
+            <h3 className="text-lg font-bold mb-1" style={{ color: "var(--cc-text)" }}>Changer le mot de passe</h3>
+            <p className="text-xs mb-5" style={{ color: "var(--cc-text-muted)" }}>Minimum 8 caractères.</p>
             <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Nouveau mot de passe"
-              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30 mb-3" />
+              className="w-full rounded-2xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-400/30 mb-3" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }} />
             <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirmer le mot de passe"
-              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30" />
+              className="w-full rounded-2xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-400/30" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }} />
             {passwordMsg && (
               <p className={`mt-3 text-xs ${passwordMsg.startsWith("✓") ? "text-emerald-400" : "text-red-400"}`}>{passwordMsg}</p>
             )}
             <div className="mt-5 flex gap-3">
               <button onClick={() => setShowPasswordModal(false)}
-                className="flex-1 rounded-2xl border border-white/10 bg-white/5 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10">
+                className="flex-1 rounded-2xl py-3 text-sm font-medium transition" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
                 Annuler
               </button>
               <button onClick={handlePasswordChange} disabled={passwordLoading}
@@ -441,21 +441,21 @@ export default function AccountPage() {
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowDeleteModal(false)} />
-          <div className="relative w-full max-w-md rounded-[2rem] border border-red-400/20 bg-gradient-to-b from-slate-800/98 to-slate-900/98 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]">
+          <div className="relative w-full max-w-md rounded-[2rem] border border-red-400/20 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]" style={{ background: "var(--cc-surface-raised)" }}>
             <div className="mb-4 text-center">
               <div className="text-4xl mb-2">⚠️</div>
-              <h3 className="text-lg font-bold text-white">Supprimer mon compte</h3>
-              <p className="mt-2 text-sm text-slate-400 leading-6">
+              <h3 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Supprimer mon compte</h3>
+              <p className="mt-2 text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>
                 Cette action est <span className="font-semibold text-red-300">irréversible</span>. Toutes vos données seront supprimées — historique, résultats, abonnement.
               </p>
             </div>
-            <p className="mb-2 text-xs text-slate-400">Tapez <span className="font-bold text-red-300">SUPPRIMER</span> pour confirmer :</p>
+            <p className="mb-2 text-xs" style={{ color: "var(--cc-text-muted)" }}>Tapez <span className="font-bold text-red-300">SUPPRIMER</span> pour confirmer :</p>
             <input value={deleteConfirm} onChange={(e) => setDeleteConfirm(e.target.value)}
               placeholder="SUPPRIMER"
-              className="w-full rounded-2xl border border-red-400/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-red-400/40" />
+              className="w-full rounded-2xl border border-red-400/20 px-4 py-3 text-sm outline-none focus:border-red-400/40" style={{ background: "var(--cc-surface-alt)", color: "var(--cc-text)" }} />
             <div className="mt-5 flex gap-3">
               <button onClick={() => { setShowDeleteModal(false); setDeleteConfirm(""); }}
-                className="flex-1 rounded-2xl border border-white/10 bg-white/5 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10">
+                className="flex-1 rounded-2xl py-3 text-sm font-medium transition" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
                 Annuler
               </button>
               <button onClick={handleDeleteAccount}

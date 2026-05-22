@@ -117,10 +117,10 @@ function ThemeRevisionCard({
       }`}
     >
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold text-white">{theme}</p>
+        <p className="truncate text-sm font-semibold" style={{ color: "var(--cc-text)" }}>{theme}</p>
         <p
           className={`mt-0.5 text-xs ${
-            isPoor ? "text-red-200" : "text-emerald-200"
+            isPoor ? "text-red-400" : "text-emerald-400"
           }`}
         >
           {correct}/{total} correct{correct > 1 ? "s" : ""} · {pct}%
@@ -129,7 +129,7 @@ function ThemeRevisionCard({
 
       <span
         className={`shrink-0 text-base font-bold ${
-          isPoor ? "text-red-300" : "text-emerald-300"
+          isPoor ? "text-red-400" : "text-emerald-500"
         }`}
       >
         {pct}%
@@ -159,10 +159,10 @@ function StatTile({
   accent?: "blue" | "emerald" | "red" | "amber";
 }) {
   const styles = {
-    blue: "border-blue-400/20 bg-blue-500/10 text-blue-100",
-    emerald: "border-emerald-400/20 bg-emerald-500/10 text-emerald-100",
-    red: "border-red-400/20 bg-red-500/10 text-red-100",
-    amber: "border-amber-400/20 bg-amber-500/10 text-amber-100",
+    blue: "border-blue-400/20 bg-blue-500/10 text-blue-700",
+    emerald: "border-emerald-400/20 bg-emerald-500/10 text-emerald-700",
+    red: "border-red-400/20 bg-red-500/10 text-red-700",
+    amber: "border-amber-400/20 bg-amber-500/10 text-amber-700",
   };
 
   return (
@@ -468,10 +468,10 @@ ${errorsText}
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+      <div className="flex min-h-screen items-center justify-center" style={{ background: "var(--cc-surface)" }}>
         <div className="flex flex-col items-center gap-3">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-teal-500 border-t-transparent" />
-          <p className="text-sm text-slate-400">Chargement des résultats…</p>
+          <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement des résultats…</p>
         </div>
       </div>
     )
@@ -481,8 +481,8 @@ ${errorsText}
     return (
       <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
         <Card>
-          <h1 className="text-xl font-bold text-white">Aucun résultat</h1>
-          <p className="mt-2 text-slate-300">
+          <h1 className="text-xl font-bold" style={{ color: "var(--cc-text)" }}>Aucun résultat</h1>
+          <p className="mt-2" style={{ color: "var(--cc-text-muted)" }}>
             Lance un test pour voir tes résultats ici.
           </p>
           <Button className="mt-4" onClick={() => router.push("/")}>
@@ -495,7 +495,7 @@ ${errorsText}
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-4 space-y-6 sm:px-6 sm:py-8">
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
+      <section className="relative overflow-hidden rounded-[2rem] shadow-[0_25px_70px_rgba(2,8,23,0.42)]" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)" }}>
         <div className="flex h-1.5 w-full">
           <div className="flex-1 bg-blue-600" />
           <div className="flex-1 bg-white" />
@@ -508,13 +508,13 @@ ${errorsText}
         <div className="relative p-5 sm:p-6 lg:p-8">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl backdrop-blur-md" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)" }}>
                 <svg
                   width="18"
                   height="18"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-slate-200"
+                  style={{ color: "var(--cc-text)" }}
                 >
                   <path
                     d="M20 21a8 8 0 0 0-16 0"
@@ -532,16 +532,16 @@ ${errorsText}
               </div>
 
               <div>
-                <div className="text-[11px] uppercase tracking-widest text-slate-400">
+                <div className="text-[11px] uppercase tracking-widest" style={{ color: "var(--cc-text-muted)" }}>
                   République française
                 </div>
-                <div className="text-sm font-semibold text-white">
+                <div className="text-sm font-semibold" style={{ color: "var(--cc-text)" }}>
                   {modeLabel} • Simulation 2026
                 </div>
               </div>
 
-              <span className="ml-1 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
-                <span className="inline-flex h-3 w-5 overflow-hidden rounded-sm border border-white/10">
+              <span className="ml-1 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
+                <span className="inline-flex h-3 w-5 overflow-hidden rounded-sm" style={{ border: "1px solid var(--cc-border)" }}>
                   <span className="w-1/3 bg-blue-600" />
                   <span className="w-1/3 bg-white" />
                   <span className="w-1/3 bg-red-600" />
@@ -557,10 +557,10 @@ ${errorsText}
 
           <div className="mt-8 flex items-start justify-between gap-4 flex-wrap">
             <div>
-              <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+              <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl" style={{ color: "var(--cc-text)" }}>
                 {pseudo ? `${pseudo}, voici ton résultat` : "Résultats"}
               </h1>
-              <p className="mt-2 text-slate-300">
+              <p className="mt-2" style={{ color: "var(--cc-text-muted)" }}>
                 Niveau {data.meta?.level ?? "—"} •{" "}
                 {data.meta?.themes?.join(", ") ?? "—"} • {score.total} questions
               </p>
@@ -569,13 +569,13 @@ ${errorsText}
             {limits.canSeeThemeStats ? (
               <span className={`rounded-full border px-3 py-1 text-sm font-semibold ${
                 score.passed
-                  ? "border-emerald-400/20 bg-emerald-500/10 text-emerald-200"
-                  : "border-red-400/20 bg-red-500/10 text-red-200"
+                  ? "border-emerald-400/20 bg-emerald-500/10 text-emerald-700"
+                  : "border-red-400/20 bg-red-500/10 text-red-700"
               }`}>
                 {score.passed ? "VALIDÉ ✅" : "NON VALIDÉ ❌"}
               </span>
             ) : (
-              <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-200">
+              <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-700">
                 {rank}
               </span>
             )}
@@ -590,11 +590,11 @@ ${errorsText}
     <StatTile label="Erreurs" value={String(wrong.length)} accent="red" />
   </div>
 
-  <div className="mt-6 rounded-[1.6rem] border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.03] p-6">
-    <div className="text-sm text-slate-400">Classement</div>
-    <div className="mt-1 text-2xl font-extrabold text-white">{rank}</div>
-    <div className="mt-2 text-sm text-slate-300">
-      Score expert : <span className="font-bold text-white">{expertScore}</span>
+  <div className="mt-6 rounded-[1.6rem] p-6" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+    <div className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Classement</div>
+    <div className="mt-1 text-2xl font-extrabold" style={{ color: "var(--cc-text)" }}>{rank}</div>
+    <div className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>
+      Score expert : <span className="font-bold" style={{ color: "var(--cc-text)" }}>{expertScore}</span>
     </div>
   </div>
 
@@ -611,32 +611,32 @@ ${errorsText}
       <span className="text-[10px] font-medium leading-tight text-center">Nouveau test</span>
     </button>
     <button onClick={copyDetailedResult}
-      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      className="flex flex-col items-center gap-1.5 rounded-2xl px-2 py-3 transition active:scale-95" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
       <span className="text-[10px] font-medium leading-tight text-center">Copier</span>
     </button>
     <button onClick={mailResult}
-      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      className="flex flex-col items-center gap-1.5 rounded-2xl px-2 py-3 transition active:scale-95" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
       <span className="text-[10px] font-medium leading-tight text-center text-sky-400">Email</span>
     </button>
     <button onClick={() => { const el = document.getElementById("feedback"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }}
-      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      className="flex flex-col items-center gap-1.5 rounded-2xl px-2 py-3 transition active:scale-95" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
       <span className="text-[10px] font-medium leading-tight text-center text-amber-400">Avis</span>
     </button>
     <button onClick={() => router.push("/leaderboard")}
-      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      className="flex flex-col items-center gap-1.5 rounded-2xl px-2 py-3 transition active:scale-95" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#facc15" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
       <span className="text-[10px] font-medium leading-tight text-center text-yellow-400">Classement</span>
     </button>
     <button onClick={share}
-      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      className="flex flex-col items-center gap-1.5 rounded-2xl px-2 py-3 transition active:scale-95" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
       <span className="text-[10px] font-medium leading-tight text-center text-emerald-400">Partager</span>
     </button>
     <button onClick={() => router.push("/resources")}
-      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 px-2 py-3 text-slate-200 transition hover:bg-white/10 active:scale-95">
+      className="flex flex-col items-center gap-1.5 rounded-2xl px-2 py-3 transition active:scale-95" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span className="text-[10px] font-medium leading-tight text-center text-violet-400">Liens officiels</span>
     </button>
@@ -652,8 +652,8 @@ ${errorsText}
         📱
       </div>
       <div>
-        <p className="text-sm font-bold text-white">Révise comme sur TikTok</p>
-        <p className="text-xs text-slate-400">
+        <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Révise comme sur TikTok</p>
+        <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>
           Swipe les questions •scroll vertical • scroll horizontal
         </p>
       </div>
@@ -679,10 +679,10 @@ ${errorsText}
         📍
       </div>
       <div>
-        <p className="text-sm font-bold text-white">
+        <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>
           Passer l’examen dans un centre
         </p>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>
           Consulte la carte officielle pour trouver un centre agréé proche de chez toi.
         </p>
       </div>
@@ -697,16 +697,16 @@ ${errorsText}
       📍 Trouver un centre agréé ↗
     </a>
 
-    <p className="mt-3 text-xs text-slate-500 text-center">
+    <p className="mt-3 text-xs text-center" style={{ color: "var(--cc-text-disabled)" }}>
       Lien officiel CCI France • Tarifs et disponibilités variables selon le centre
     </p>
   </div>
 
-  {copyMsg && <p className="mt-3 text-sm text-slate-300">{copyMsg}</p>}
+  {copyMsg && <p className="mt-3 text-sm" style={{ color: "var(--cc-text-muted)" }}>{copyMsg}</p>}
 
   {limits.canSeeThemeStats && (
-    <p className="mt-4 text-sm text-slate-400">
-      Règle : validation si <strong className="text-white">≥ 32</strong> réponses correctes sur 40.
+    <p className="mt-4 text-sm" style={{ color: "var(--cc-text-muted)" }}>
+      Règle : validation si <strong style={{ color: "var(--cc-text)" }}>≥ 32</strong> réponses correctes sur 40.
     </p>
   )}
 </Card>
@@ -739,16 +739,16 @@ ${errorsText}
     {/* Aperçu flouté — visible mais illisible */}
     <div className="pointer-events-none select-none blur-sm opacity-60">
       <Card>
-        <h2 className="text-lg font-bold text-white">Performance par thème</h2>
+        <h2 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Performance par thème</h2>
         <div className="mt-4 space-y-3">
           {["Valeurs", "Institutions", "Histoire", "Société"].map((theme) => (
-            <div key={theme} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-3">
-              <span className="text-sm text-slate-300">{theme}</span>
+            <div key={theme} className="flex items-center justify-between rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+              <span className="text-sm" style={{ color: "var(--cc-text-muted)" }}>{theme}</span>
               <div className="flex items-center gap-2">
-                <div className="h-2 w-24 rounded-full bg-white/10">
+                <div className="h-2 w-24 rounded-full" style={{ background: "var(--cc-border)" }}>
                   <div className="h-2 rounded-full bg-blue-500" style={{ width: "65%" }} />
                 </div>
-                <span className="text-xs text-slate-400">65%</span>
+                <span className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>65%</span>
               </div>
             </div>
           ))}
@@ -757,9 +757,9 @@ ${errorsText}
     </div>
 
     {/* Overlay avec CTA */}
-    <div className="absolute inset-0 flex flex-col items-center justify-center rounded-[1.8rem] bg-slate-900/80 backdrop-blur-[2px] p-6 text-center">
+    <div className="absolute inset-0 flex flex-col items-center justify-center rounded-[1.8rem] p-6 text-center" style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(2px)" }}>
       <p className="text-3xl mb-3">🔒</p>
-      <h2 className="text-xl font-bold text-white mb-2">
+      <h2 className="text-xl font-bold mb-2" style={{ color: "var(--cc-text)" }}>
         {role === "anonymous"
   ? score?.percent === 100
     ? "🎉 Score parfait — sauvegarde cette performance !"
@@ -768,7 +768,7 @@ ${errorsText}
     : "💡 Inscris-toi pour comprendre et progresser"
   : "👑 Passe en Premium pour débloquer tout"}
       </h2>
-      <p className="text-slate-300 text-sm mb-6 max-w-md mx-auto">
+      <p className="text-sm mb-6 max-w-md mx-auto" style={{ color: "var(--cc-text-muted)" }}>
         {role === "anonymous"
           ? score?.percent === 100
   ? "Tu viens de faire un sans-faute ! Crée un compte pour sauvegarder ce résultat et suivre ta progression."
@@ -783,7 +783,7 @@ ${errorsText}
             <a href="/register" className="rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 text-sm transition">
               Créer un compte gratuit
             </a>
-            <a href="/login" className="rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-slate-200 font-semibold px-6 py-3 text-sm transition">
+            <a href="/login" className="rounded-2xl border font-semibold px-6 py-3 text-sm transition" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
               J'ai déjà un compte
             </a>
           </>
@@ -801,13 +801,13 @@ ${errorsText}
       ) : (
         <>
           <Card>
-            <h2 className="text-lg font-bold text-white">Performance par thème</h2>
-            <p className="mt-1 text-slate-300">Analyse stratégique de tes résultats.</p>
+            <h2 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Performance par thème</h2>
+            <p className="mt-1" style={{ color: "var(--cc-text-muted)" }}>Analyse stratégique de tes résultats.</p>
             <div className="mt-6">
               <StatsDashboard themeStats={stats.themeStats} />
             </div>
             <div className="mt-6 space-y-3">
-              <p className="text-sm font-semibold text-slate-200">
+              <p className="text-sm font-semibold" style={{ color: "var(--cc-text)" }}>
                 📚 Révise un thème en mode flash-cards
               </p>
               {Object.entries(stats.themeStats).map(([theme, { correct, total }]) => (
@@ -817,8 +817,8 @@ ${errorsText}
           </Card>
 
           <Card>
-            <h2 className="text-lg font-bold text-white">Heatmap des réponses</h2>
-            <p className="mt-1 text-slate-300">Vert = bonne réponse • Rouge = erreur</p>
+            <h2 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Heatmap des réponses</h2>
+            <p className="mt-1" style={{ color: "var(--cc-text-muted)" }}>Vert = bonne réponse • Rouge = erreur</p>
             <div className="mt-6 grid grid-cols-10 gap-2">
               {data.questions.map((q, i) => (
                 <div key={q.id}
@@ -835,35 +835,35 @@ ${errorsText}
           <ProgressionChart entries={history} />
 
           <Card>
-            <h2 className="text-lg font-bold text-white">Réviser mes erreurs</h2>
-            <p className="mt-1 text-slate-300">Lis l'explication et refais un test pour consolider.</p>
+            <h2 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Réviser mes erreurs</h2>
+            <p className="mt-1" style={{ color: "var(--cc-text-muted)" }}>Lis l'explication et refais un test pour consolider.</p>
             {wrong.length === 0 ? (
-              <div className="mt-4 rounded-2xl border border-green-400/20 bg-green-500/10 p-4 text-green-200">
+              <div className="mt-4 rounded-2xl border border-green-400/20 bg-green-500/10 p-4 text-green-400">
                 Bravo 🎉 Aucune erreur sur ce test.
               </div>
             ) : (
               <div className="mt-4 space-y-4">
                 {wrong.slice(0, 20).map((d, i) => (
-                  <div key={d.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div key={d.id} className="rounded-2xl p-4" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)" }}>
                     <div className="flex items-center justify-between gap-3 flex-wrap">
-                      <div className="text-sm text-slate-400">#{i + 1} • {d.theme}</div>
-                      <span className="rounded-full border border-red-400/20 bg-red-500/10 px-2 py-1 text-xs font-semibold text-red-200">Faux</span>
+                      <div className="text-sm" style={{ color: "var(--cc-text-muted)" }}>#{i + 1} • {d.theme}</div>
+                      <span className="rounded-full border border-red-400/20 bg-red-500/10 px-2 py-1 text-xs font-semibold text-red-400">Faux</span>
                     </div>
-                    <div className="mt-2 font-semibold text-white">{d.question}</div>
+                    <div className="mt-2 font-semibold" style={{ color: "var(--cc-text)" }}>{d.question}</div>
                     <div className="mt-3 rounded-xl border border-red-400/20 bg-red-500/10 px-3 py-2 text-sm">
-                      <span className="font-semibold text-red-300">✗ Ta réponse :</span>{" "}
-                      <span className="text-red-200">
+                      <span className="font-semibold text-red-400">✗ Ta réponse :</span>{" "}
+                      <span className="text-red-400">
                         {d.user ? `${d.user}) ${d.choices.find(c => c.key === d.user)?.label ?? ""}` : "— (non répondu)"}
                       </span>
                     </div>
                     <div className="mt-2 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-sm">
-                      <span className="font-semibold text-emerald-300">✓ Bonne réponse :</span>{" "}
-                      <span className="text-emerald-200">
+                      <span className="font-semibold text-emerald-400">✓ Bonne réponse :</span>{" "}
+                      <span className="text-emerald-400">
                         {d.correct}) {d.choices.find(c => c.key === d.correct)?.label ?? ""}
                       </span>
                     </div>
-                    <div className="mt-3 text-sm text-slate-300">
-                      <span className="font-semibold text-white">Explication :</span>{" "}
+                    <div className="mt-3 text-sm" style={{ color: "var(--cc-text-muted)" }}>
+                      <span className="font-semibold" style={{ color: "var(--cc-text)" }}>Explication :</span>{" "}
                       {d.explanation}
                     </div>
                     <AiExplanationCard
@@ -885,13 +885,13 @@ ${errorsText}
 
       <div id="feedback">
         <Card>
-          <h2 className="text-lg font-bold text-white">Notez votre expérience</h2>
-          <p className="mt-1 text-slate-300">
+          <h2 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Notez votre expérience</h2>
+          <p className="mt-1" style={{ color: "var(--cc-text-muted)" }}>
             Votre avis nous aide à améliorer la simulation.
           </p>
 
           {sentFeedback ? (
-            <div className="mt-4 rounded-2xl border border-green-400/20 bg-green-500/10 p-4 text-green-200">
+            <div className="mt-4 rounded-2xl border border-green-400/20 bg-green-500/10 p-4 text-green-400">
               Merci ✅ Avis enregistré.
             </div>
           ) : (
@@ -904,9 +904,10 @@ ${errorsText}
                     onClick={() => setRating(n)}
                     className={`h-10 w-10 rounded-xl border font-semibold transition ${
                       rating === n
-                        ? "border-blue-400/30 bg-blue-500/15 text-blue-200"
-                        : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white"
+                        ? "border-blue-400/30 bg-blue-500/15 text-blue-700"
+                        : ""
                     }`}
+                    style={rating !== n ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" } : {}}
                   >
                     {n}
                   </button>
@@ -914,7 +915,8 @@ ${errorsText}
               </div>
 
               <textarea
-                className="mt-4 min-h-[130px] w-full rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20"
+                className="mt-4 min-h-[130px] w-full rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/20"
+                style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}
                 placeholder="Un commentaire (optionnel) : ce que tu as aimé / à améliorer…"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
@@ -936,7 +938,7 @@ ${errorsText}
                 </Button>
               </div>
 
-              <p className="mt-3 text-xs text-slate-400">
+              <p className="mt-3 text-xs" style={{ color: "var(--cc-text-muted)" }}>
                 Choisis une note (1 à 5).
               </p>
             </>

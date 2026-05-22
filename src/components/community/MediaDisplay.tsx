@@ -37,7 +37,7 @@ export default function MediaDisplay({ attachments, content }: Props) {
       {attachments.length > 0 && (
         <div className={`grid gap-2 mt-2 ${attachments.length === 1 ? 'grid-cols-1' : attachments.length === 2 ? 'grid-cols-2' : 'grid-cols-2'}`}>
           {attachments.map((url) => (
-            <button key={url} onClick={() => setLightbox(url)} className="relative overflow-hidden rounded-xl border border-slate-600 group">
+            <button key={url} onClick={() => setLightbox(url)} className="relative overflow-hidden rounded-xl group" style={{ border: "1px solid var(--cc-border)" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt="" className="w-full object-cover max-h-64 group-hover:scale-105 transition-transform duration-200" />
             </button>
@@ -48,7 +48,7 @@ export default function MediaDisplay({ attachments, content }: Props) {
       {/* Liens détectés */}
       {urls.map((url) => (
         <a key={url} href={url} target="_blank" rel="noopener noreferrer"
-          className="flex items-center gap-2 mt-2 bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 hover:border-slate-500 transition-colors">
+          className="flex items-center gap-2 mt-2 rounded-xl px-3 py-2 transition-colors" style={{ background: "var(--cc-surface-raised)", border: "1px solid var(--cc-border)" }}>
           <LinkIcon size={12} className="text-slate-400 flex-shrink-0" />
           <span className="text-xs text-teal-400 truncate">{url}</span>
         </a>

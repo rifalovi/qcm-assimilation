@@ -78,7 +78,7 @@ export default function AiCoachCard({
     return (
       <button
         onClick={fetchCoaching}
-        className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-sky-400/20 bg-sky-500/10 px-5 py-3.5 text-sm font-bold text-sky-200 transition hover:bg-sky-500/20"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-sky-400/20 bg-sky-500/10 px-5 py-3.5 text-sm font-bold text-sky-700 transition hover:bg-sky-500/20"
       >
         <span>🧠</span>
         Obtenir mon coaching IA personnalisé
@@ -91,7 +91,7 @@ export default function AiCoachCard({
       <div className="mt-4 rounded-2xl border border-sky-400/20 bg-sky-500/10 p-5">
         <div className="flex items-center justify-center gap-3">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
-          <span className="text-sm text-sky-200">Analyse de vos résultats...</span>
+          <span className="text-sm text-sky-700">Analyse de vos résultats...</span>
         </div>
       </div>
     );
@@ -99,7 +99,7 @@ export default function AiCoachCard({
 
   if (error && !showPaywall) {
     return (
-      <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-200">
+      <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-700">
         {error}
       </div>
     );
@@ -111,37 +111,37 @@ export default function AiCoachCard({
     <div className="mt-4 rounded-[1.6rem] border border-sky-400/20 bg-gradient-to-b from-sky-500/10 to-sky-900/10 p-5 space-y-4">
       <div className="flex items-center gap-2 mb-1">
         <span className="text-xl">🧠</span>
-        <span className="text-base font-bold text-sky-200">Coaching IA personnalisé</span>
+        <span className="text-base font-bold text-sky-700">Coaching IA personnalisé</span>
       </div>
 
       {/* Diagnostic */}
-      <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-        <p className="text-xs font-bold text-sky-300 uppercase tracking-wider mb-2">Diagnostic</p>
-        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.diagnosis}</p>
+      <div className="rounded-xl border p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+        <p className="text-xs font-bold text-sky-700 uppercase tracking-wider mb-2">Diagnostic</p>
+        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.diagnosis}</p>
       </div>
 
       {/* Forces & Faiblesses */}
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4">
-          <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Point fort</p>
-          <p className="text-sm text-emerald-100 leading-relaxed text-justify">{data.strength}</p>
+          <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">Point fort</p>
+          <p className="text-sm text-emerald-800 leading-relaxed text-justify">{data.strength}</p>
         </div>
         <div className="rounded-xl border border-red-400/20 bg-red-500/10 p-4">
-          <p className="text-xs font-bold text-red-300 uppercase tracking-wider mb-1">Point faible</p>
-          <p className="text-sm text-red-100 leading-relaxed text-justify">{data.weakness}</p>
+          <p className="text-xs font-bold text-red-700 uppercase tracking-wider mb-1">Point faible</p>
+          <p className="text-sm text-red-800 leading-relaxed text-justify">{data.weakness}</p>
         </div>
       </div>
 
       {/* Plan d'action */}
-      <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-        <p className="text-xs font-bold text-amber-300 uppercase tracking-wider mb-3">Plan d'action</p>
+      <div className="rounded-xl border p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+        <p className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-3">Plan d'action</p>
         <div className="space-y-2.5">
           {data.plan.map((step, i) => (
             <div key={i} className="flex items-start gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-xs font-bold text-amber-200">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-xs font-bold text-amber-700">
                 {i + 1}
               </span>
-              <p className="text-sm text-slate-200 leading-relaxed">{step}</p>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--cc-text)" }}>{step}</p>
             </div>
           ))}
         </div>

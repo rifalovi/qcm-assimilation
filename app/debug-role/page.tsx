@@ -5,7 +5,7 @@ export default function DebugRole() {
   const { role, username, email } = useUser()
   const limits = ROLE_LIMITS[role as keyof typeof ROLE_LIMITS]
   return (
-    <div style={{ padding: 40, fontFamily: 'monospace', color: 'white', background: '#0f172a', minHeight: '100vh' }}>
+    <div style={{ padding: 40, fontFamily: 'monospace', color: 'var(--cc-text)', background: 'var(--cc-surface)', minHeight: '100vh' }}>
       <h1>Debug Role</h1>
       <p>Username: {String(username)}</p>
       <p>Email: {String(email)}</p>

@@ -32,11 +32,11 @@ export default function ScrollDemo() {
         <span className="inline-flex items-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
           Fonctionnalité principale
         </span>
-        <h2 className="mt-4 text-2xl font-extrabold text-white sm:text-3xl">
+        <h2 className="mt-4 text-2xl font-extrabold sm:text-3xl" style={{ color: "var(--cc-text)" }}>
           Révisez comme vous{" "}
-          <span className="text-blue-400">scrolLez</span>.
+          <span style={{ color: "var(--cc-primary)" }}>scrolLez</span>.
         </h2>
-        <p className="mt-3 text-sm text-slate-400 max-w-md mx-auto">
+        <p className="mt-3 text-sm max-w-md mx-auto" style={{ color: "var(--cc-text-muted)" }}>
           Swipez verticalement pour passer d'une question à l'autre. Swipez horizontalement pour voir les QCM associés. Simple, rapide, efficace.
         </p>
       </div>
@@ -77,8 +77,8 @@ export default function ScrollDemo() {
         ].map((f) => (
           <div key={f.label} className="rounded-2xl border border-white/10 bg-white/5 p-3">
             <div className="text-xl mb-1">{f.icon}</div>
-            <p className="text-xs font-semibold text-white">{f.label}</p>
-            <p className="text-xs text-slate-400 mt-0.5">{f.desc}</p>
+            <p className="text-xs font-semibold" style={{ color: "var(--cc-text)" }}>{f.label}</p>
+            <p className="text-xs mt-0.5" style={{ color: "var(--cc-text-muted)" }}>{f.desc}</p>
           </div>
         ))}
       </div>

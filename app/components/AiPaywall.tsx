@@ -13,10 +13,10 @@ export default function AiPaywall({ mode }: Props) {
   return (
     <div className="mt-4 rounded-[1.6rem] border border-amber-400/25 bg-gradient-to-br from-amber-500/12 via-orange-500/10 to-amber-500/12 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)]">
       <div className="text-center">
-        <p className="text-lg font-extrabold text-white mb-2">
+        <p className="text-lg font-extrabold mb-2" style={{ color: "var(--cc-text)" }}>
           Vous avez utilisé vos {label} aujourd'hui
         </p>
-        <p className="text-sm text-slate-300 mb-5">
+        <p className="text-sm mb-5" style={{ color: "var(--cc-text-muted)" }}>
           Les membres Premium ont accès à :
         </p>
 
@@ -29,7 +29,7 @@ export default function AiPaywall({ mode }: Props) {
           ].map((feature) => (
             <div key={feature} className="flex items-center gap-2.5">
               <span className="text-emerald-400 text-sm">✓</span>
-              <span className="text-sm text-slate-200">{feature}</span>
+              <span className="text-sm" style={{ color: "var(--cc-text)" }}>{feature}</span>
             </div>
           ))}
         </div>

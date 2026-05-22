@@ -15,16 +15,16 @@ export default async function DebugPage() {
     : { data: null, error: null }
 
   return (
-    <div style={{ padding: 40, fontFamily: 'monospace', color: 'white', background: '#0f172a', minHeight: '100vh' }}>
+    <div style={{ padding: 40, fontFamily: 'monospace', color: 'var(--cc-text)', background: 'var(--cc-surface)', minHeight: '100vh' }}>
       <h1 style={{ marginBottom: 20 }}>Admin Debug</h1>
       <p><strong>Auth error:</strong> {authError?.message ?? 'none'}</p>
       <p><strong>User ID:</strong> {user?.id ?? 'NOT LOGGED IN'}</p>
       <p><strong>Email:</strong> {user?.email ?? 'none'}</p>
-      <hr style={{ margin: '20px 0', borderColor: '#334155' }} />
+      <hr style={{ margin: '20px 0', borderColor: 'var(--cc-border)' }} />
       <p><strong>Profile error:</strong> {profileError?.message ?? 'none'}</p>
       <p><strong>Username:</strong> {profile?.username ?? 'none'}</p>
       <p><strong>Role:</strong> {profile?.role ?? 'none'}</p>
-      <hr style={{ margin: '20px 0', borderColor: '#334155' }} />
+      <hr style={{ margin: '20px 0', borderColor: 'var(--cc-border)' }} />
       <p><strong>Allowed?</strong> {['super_admin','admin','moderator'].includes(profile?.role ?? '') ? 'OUI' : 'NON'}</p>
     </div>
   )

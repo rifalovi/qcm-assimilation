@@ -29,8 +29,9 @@ function HeroButton({ children, onClick, variant = "primary" }: {
   const base = "inline-flex min-w-[210px] items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200";
   const styles = variant === "primary"
     ? "border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 text-white shadow-[0_12px_30px_rgba(37,99,235,0.28)] hover:-translate-y-0.5 hover:brightness-105 active:scale-[0.98]"
-    : "border border-white/10 bg-slate-800/80 text-slate-100 backdrop-blur-md hover:-translate-y-0.5 hover:border-blue-400/25 hover:bg-slate-700/85 active:scale-[0.98]";
-  return <button type="button" onClick={onClick} className={`${base} ${styles}`}>{children}</button>;
+    : "hover:-translate-y-0.5 active:scale-[0.98]";
+  const style = variant === "secondary" ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" } : undefined;
+  return <button type="button" onClick={onClick} className={`${base} ${styles}`} style={style}>{children}</button>;
 }
 
 function SectionCard({ title, subtitle, children, icon }: {
@@ -40,11 +41,11 @@ function SectionCard({ title, subtitle, children, icon }: {
     <section className="card">
       <div className="mb-5 flex items-start gap-3">
         {icon && (
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">{icon}</div>
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl text-2xl" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)" }}>{icon}</div>
         )}
         <div>
           <h2 className="section-title text-2xl">{title}</h2>
-          {subtitle && <p className="mt-1 text-sm text-slate-400">{subtitle}</p>}
+          {subtitle && <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>{subtitle}</p>}
         </div>
       </div>
       {children}
@@ -54,12 +55,12 @@ function SectionCard({ title, subtitle, children, icon }: {
 
 function ChecklistItem({ title, text }: { title: string; text: string }) {
   return (
-    <div className="rounded-[1.3rem] border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-400/20">
+    <div className="rounded-[1.3rem] p-4 transition-all duration-300 hover:-translate-y-0.5" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)" }}>
       <div className="flex items-start gap-3">
-        <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-sm text-emerald-300">✓</div>
+        <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-sm" style={{ background: "var(--cc-success-soft)", color: "var(--cc-success)" }}>✓</div>
         <div>
-          <h3 className="text-sm font-bold text-white">{title}</h3>
-          <p className="mt-1 text-sm leading-7 text-slate-300">{text}</p>
+          <h3 className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>{title}</h3>
+          <p className="mt-1 text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>{text}</p>
         </div>
       </div>
     </div>
@@ -70,16 +71,16 @@ function PathStep({ step, title, text, accent = "blue" }: {
   step: string; title: string; text: string; accent?: "blue" | "violet" | "amber" | "emerald";
 }) {
   const styles = {
-    blue: "border-blue-400/20 bg-blue-500/10 text-blue-100",
-    violet: "border-violet-400/20 bg-violet-500/10 text-violet-100",
-    amber: "border-amber-400/20 bg-amber-500/10 text-amber-100",
-    emerald: "border-emerald-400/20 bg-emerald-500/10 text-emerald-100",
+    blue: "border-blue-400/30 bg-blue-500/10",
+    violet: "border-violet-400/30 bg-violet-500/10",
+    amber: "border-amber-400/30 bg-amber-500/10",
+    emerald: "border-emerald-400/30 bg-emerald-500/10",
   };
   return (
-    <div className={`rounded-[1.4rem] border p-5 ${styles[accent]} shadow-[0_18px_45px_rgba(2,8,23,0.22)]`}>
-      <div className="mb-3 inline-flex rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs font-black uppercase tracking-[0.18em]">Étape {step}</div>
-      <h3 className="text-lg font-bold text-white">{title}</h3>
-      <p className="mt-2 text-sm leading-7">{text}</p>
+    <div className={`rounded-[1.4rem] border p-5 ${styles[accent]}`}>
+      <div className="mb-3 inline-flex rounded-full border px-3 py-1 text-xs font-black uppercase tracking-[0.18em]" style={{ borderColor: "var(--cc-border)", color: "var(--cc-text-muted)", background: "var(--cc-surface-alt)" }}>Étape {step}</div>
+      <h3 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>{title}</h3>
+      <p className="mt-2 text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>{text}</p>
     </div>
   );
 }
@@ -88,26 +89,33 @@ function FeatureCard({ icon, title, description, href, cta, featured = false, ba
   icon: string; title: string; description: string; href: string; cta: string; featured?: boolean; badge?: string;
 }) {
   return (
-    <div className={`group relative overflow-hidden rounded-[1.6rem] border p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:-translate-y-1 ${
-      featured ? "border-blue-400/25 bg-gradient-to-br from-blue-500/12 via-indigo-500/10 to-sky-500/12" : "border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95"
-    }`}>
+    <div
+      className={`group relative overflow-hidden rounded-[1.6rem] border p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:-translate-y-1 ${
+        featured ? "border-blue-400/25 bg-gradient-to-br from-blue-500/12 via-indigo-500/10 to-sky-500/12" : ""
+      }`}
+      style={!featured ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" } : {}}
+    >
       <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_right,rgba(96,165,250,0.12),transparent_35%)]" />
       <div className="relative">
         <div className="mb-4 flex items-center gap-3">
-          <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border text-2xl ${featured ? "border-blue-400/20 bg-blue-500/10" : "border-white/10 bg-white/5"}`}>{icon}</div>
+          <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border text-2xl ${featured ? "border-blue-400/20 bg-blue-500/10" : ""}`} style={!featured ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" } : {}}>{icon}</div>
           <div>
-            {featured && <div className="mb-1 inline-flex rounded-full border border-blue-400/20 bg-blue-500/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-200">Fonctionnalité phare</div>}
-            {badge && <div className="mb-1 inline-flex rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-bold text-emerald-300">{badge}</div>}
-            <h3 className="text-lg font-bold text-white">{title}</h3>
+            {featured && <div className="mb-1 inline-flex rounded-full border border-blue-400/20 bg-blue-500/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--cc-primary)" }}>Fonctionnalité phare</div>}
+            {badge && <div className="mb-1 inline-flex rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-bold" style={{ color: "var(--cc-success)" }}>{badge}</div>}
+            <h3 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>{title}</h3>
           </div>
         </div>
-        <p className="text-sm leading-7 text-slate-300">{description}</p>
+        <p className="text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>{description}</p>
         <div className="mt-5">
-          <Link href={href} className={`inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-bold transition-all duration-200 ${
-            featured
-              ? "border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 text-white shadow-[0_10px_30px_rgba(37,99,235,0.24)] hover:-translate-y-0.5 hover:brightness-105"
-              : "border border-white/10 bg-white/5 text-slate-100 hover:bg-white/10"
-          } active:scale-[0.98]`}>
+          <Link
+            href={href}
+            className={`inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-bold transition-all duration-200 ${
+              featured
+                ? "border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 text-white shadow-[0_10px_30px_rgba(37,99,235,0.24)] hover:-translate-y-0.5 hover:brightness-105"
+                : "border hover:bg-white/10"
+            } active:scale-[0.98]`}
+            style={!featured ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" } : {}}
+          >
             {cta}
           </Link>
         </div>
@@ -118,11 +126,11 @@ function FeatureCard({ icon, title, description, href, cta, featured = false, ba
 
 function MindNode({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-[1.4rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.22)]">
-      <h3 className="text-lg font-bold text-white">{title}</h3>
+    <div className="rounded-[1.4rem] p-5 shadow-[0_18px_45px_rgba(2,8,23,0.22)]" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+      <h3 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>{title}</h3>
       <ul className="mt-3 space-y-2">
         {items.map((item) => (
-          <li key={item} className="flex items-start gap-3 text-sm leading-6 text-slate-300">
+          <li key={item} className="flex items-start gap-3 text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>
             <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" /><span>{item}</span>
           </li>
         ))}
@@ -135,19 +143,19 @@ function ResourceLinkCard({ icon, title, source, text, href, note }: {
   icon: string; title: string; source: string; text: string; href: string; note: string;
 }) {
   return (
-    <div className="rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.22)]">
+    <div className="rounded-[1.6rem] p-5 shadow-[0_18px_45px_rgba(2,8,23,0.22)]" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)" }}>
       <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">{icon}</div>
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border text-2xl" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>{icon}</div>
         <div>
-          <p className="text-sm font-bold text-white">{title}</p>
-          <p className="text-xs text-slate-400">{source}</p>
+          <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>{title}</p>
+          <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>{source}</p>
         </div>
       </div>
-      <p className="text-sm leading-7 text-slate-300">{text}</p>
+      <p className="text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>{text}</p>
       <div className="mt-5">
-        <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-300 transition hover:text-blue-200">Voir plus ↗</a>
+        <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-400 transition hover:text-blue-300">Voir plus ↗</a>
       </div>
-      <p className="mt-3 text-xs leading-6 text-slate-500">{note}</p>
+      <p className="mt-3 text-xs leading-6" style={{ color: "var(--cc-text-disabled)" }}>{note}</p>
     </div>
   );
 }
@@ -157,21 +165,21 @@ function AccountModal({ open, onClose, onTest }: { open: boolean; onClose: () =>
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
+      <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface)" }}>
         <div className="mb-5 flex items-start justify-between gap-3">
           <div>
-            <div className="mb-2 inline-flex rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-200">Commencez intelligemment</div>
-            <h3 className="text-xl font-extrabold text-white">Testez votre niveau et créez votre compte</h3>
-            <p className="mt-2 text-sm leading-7 text-slate-300">Faites d'abord un test pour voir votre niveau, puis créez un compte gratuit pour sauvegarder vos résultats.</p>
+            <div className="mb-2 inline-flex rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--cc-primary)" }}>Commencez intelligemment</div>
+            <h3 className="text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>Testez votre niveau et créez votre compte</h3>
+            <p className="mt-2 text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>Faites d'abord un test pour voir votre niveau, puis créez un compte gratuit pour sauvegarder vos résultats.</p>
           </div>
-          <button onClick={onClose} className="text-slate-500 transition hover:text-white">✕</button>
+          <button onClick={onClose} className="transition" style={{ color: "var(--cc-text-disabled)" }}>✕</button>
         </div>
-        <div className="rounded-[1.4rem] border border-white/10 bg-white/5 p-4">
+        <div className="rounded-[1.4rem] border p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)" }}>
           <div className="flex items-start gap-3">
             <div className="text-2xl">🎯</div>
             <div>
-              <p className="text-sm font-bold text-white">Pourquoi commencer par un test ?</p>
-              <p className="mt-1 text-sm leading-7 text-slate-300">Vous identifiez rapidement vos points forts, vos lacunes et les thèmes à réviser en priorité.</p>
+              <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Pourquoi commencer par un test ?</p>
+              <p className="mt-1 text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>Vous identifiez rapidement vos points forts, vos lacunes et les thèmes à réviser en priorité.</p>
             </div>
           </div>
         </div>
@@ -179,7 +187,7 @@ function AccountModal({ open, onClose, onTest }: { open: boolean; onClose: () =>
           <button onClick={onTest} className="inline-flex w-full items-center justify-center rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-4 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:brightness-105">
             Tester mes connaissances
           </button>
-          <Link href="/register" className="inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-white/10">
+          <Link href="/register" className="inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold transition hover:bg-white/10" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>
             Créer un compte gratuit
           </Link>
         </div>
@@ -193,16 +201,16 @@ function PremiumModal({ open, onClose }: { open: boolean; onClose: () => void })
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
+      <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface)" }}>
         <div className="mb-5 flex items-start justify-between gap-3">
           <div>
-            <div className="mb-2 inline-flex rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-amber-200">Débloquez le niveau supérieur</div>
-            <h3 className="text-xl font-extrabold text-white">Passez en Premium ou Élite pour aller plus loin</h3>
-            <p className="mt-2 text-sm leading-7 text-slate-300">800+ questions, 100 épisodes audio, tous les niveaux, statistiques détaillées, examen blanc illimité.</p>
+            <div className="mb-2 inline-flex rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--cc-warning)" }}>Débloquez le niveau supérieur</div>
+            <h3 className="text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>Passez en Premium ou Élite pour aller plus loin</h3>
+            <p className="mt-2 text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>800+ questions, 100 épisodes audio, tous les niveaux, statistiques détaillées, examen blanc illimité.</p>
           </div>
-          <button onClick={onClose} className="text-slate-500 transition hover:text-white">✕</button>
+          <button onClick={onClose} className="transition" style={{ color: "var(--cc-text-disabled)" }}>✕</button>
         </div>
-        <div className="space-y-3 rounded-[1.4rem] border border-white/10 bg-white/5 p-4">
+        <div className="space-y-3 rounded-[1.4rem] border p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)" }}>
           {[
             { icon: "🎯", text: "Premium 19,99€/3 mois — accès complet pour se préparer à son rythme." },
             { icon: "👑", text: "Élite 49,99€ à vie — tout Premium + contenu exclusif expert + mises à jour futures incluses." },
@@ -210,7 +218,7 @@ function PremiumModal({ open, onClose }: { open: boolean; onClose: () => void })
           ].map((item) => (
             <div key={item.text} className="flex items-start gap-3">
               <div className="text-xl">{item.icon}</div>
-              <p className="text-sm leading-7 text-slate-300">{item.text}</p>
+              <p className="text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>{item.text}</p>
             </div>
           ))}
         </div>
@@ -218,7 +226,7 @@ function PremiumModal({ open, onClose }: { open: boolean; onClose: () => void })
           <Link href="/pricing" className="inline-flex w-full items-center justify-center rounded-2xl border border-amber-400/20 bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 px-4 py-3 text-sm font-bold text-slate-950 transition hover:-translate-y-0.5 hover:brightness-105">
             Voir les offres →
           </Link>
-          <button onClick={onClose} className="inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-white/10">
+          <button onClick={onClose} className="inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold transition hover:bg-white/10" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>
             Continuer gratuitement
           </button>
         </div>
@@ -267,7 +275,7 @@ export default function ResourcesPage() {
         <div className="space-y-8 sm:space-y-10">
 
           {/* ── HERO ── */}
-          <section className="relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
+          <section className="relative overflow-visible rounded-[2rem] shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface)" }}>
             <div className="flex h-1.5 w-full">
               <div className="flex-1 bg-blue-600" /><div className="flex-1 bg-white" /><div className="flex-1 bg-red-600" />
             </div>
@@ -281,8 +289,8 @@ export default function ResourcesPage() {
                     <span className="flex-1 bg-blue-700" /><span className="flex-1 bg-white" /><span className="flex-1 bg-red-600" />
                   </span>
                   <div>
-                    <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">République française</div>
-                    <div className="text-xs text-slate-400">Plateforme d'entraînement 2026</div>
+                    <div className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--cc-text-muted)" }}>République française</div>
+                    <div className="text-xs" style={{ color: "var(--cc-text-muted)" }}>Plateforme d'entraînement 2026</div>
                   </div>
                 </div>
               </div>
@@ -291,10 +299,10 @@ export default function ResourcesPage() {
                 <div className="mb-3 inline-flex w-fit items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300 mx-auto">
                   Ressources utiles
                 </div>
-                <h1 className="mx-auto max-w-5xl text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
-                  Organisez votre <span className="text-blue-400">révision</span>, structurez votre <span className="text-blue-400">parcours</span> et avancez avec méthode.
+                <h1 className="mx-auto max-w-5xl text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl lg:text-4xl" style={{ color: "var(--cc-text)" }}>
+                  Organisez votre <span style={{ color: "var(--cc-primary)" }}>révision</span>, structurez votre <span style={{ color: "var(--cc-primary)" }}>parcours</span> et avancez avec méthode.
                 </h1>
-                <p className="mx-auto mt-4 max-w-4xl text-sm leading-8 text-slate-300 sm:text-base">
+                <p className="mx-auto mt-4 max-w-4xl text-sm leading-8 sm:text-base" style={{ color: "var(--cc-text-muted)" }}>
                   Cette page vous aide à mieux utiliser la plateforme, à prioriser vos efforts et à construire un parcours de préparation plus efficace.
                 </p>
                 <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
@@ -352,8 +360,8 @@ export default function ResourcesPage() {
             {/* CTA upgrade */}
             {(!['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role)) && (
               <div className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-5 text-center">
-                <p className="text-sm font-semibold text-amber-100 mb-1">🔓 Débloquez tout — 800+ questions, 100 épisodes audio, examen blanc illimité</p>
-                <p className="text-xs text-amber-200/70 mb-4">Premium 19,99€/3 mois · Élite 49,99€ accès à vie</p>
+                <p className="text-sm font-semibold text-amber-300 mb-1">🔓 Débloquez tout — 800+ questions, 100 épisodes audio, examen blanc illimité</p>
+                <p className="text-xs text-amber-400/70 mb-4">Premium 19,99€/3 mois · Élite 49,99€ accès à vie</p>
                 <Link href="/pricing" className="inline-flex items-center gap-2 rounded-2xl bg-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-amber-400">
                   Voir les offres →
                 </Link>
@@ -369,12 +377,12 @@ export default function ResourcesPage() {
                 <div className="flex items-center gap-3 mb-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-500/10 text-2xl">📍</div>
                   <div>
-                    <p className="text-sm font-bold text-white">Trouver un centre agréé</p>
-                    <p className="text-xs text-blue-300">CCI France</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Trouver un centre agréé</p>
+                    <p className="text-xs text-blue-600">CCI France</p>
                   </div>
                 </div>
-                <p className="text-sm leading-7 text-slate-300">Trouvez le centre d'examen CCI le plus proche de chez vous pour passer le test d'intégration républicaine.</p>
-                <p className="mt-3 text-sm font-semibold text-blue-300 group-hover:text-blue-200 transition">Voir les centres ↗</p>
+                <p className="text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>Trouvez le centre d'examen CCI le plus proche de chez vous pour passer le test d'intégration républicaine.</p>
+                <p className="mt-3 text-sm font-semibold text-blue-600 group-hover:text-blue-700 transition">Voir les centres ↗</p>
               </a>
 
               <a href="https://formation-civique.interieur.gouv.fr" target="_blank" rel="noopener noreferrer"
@@ -382,12 +390,12 @@ export default function ResourcesPage() {
                 <div className="flex items-center gap-3 mb-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-2xl">📘</div>
                   <div>
-                    <p className="text-sm font-bold text-white">Questions officielles de révision</p>
-                    <p className="text-xs text-emerald-300">formation-civique.interieur.gouv.fr</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Questions officielles de révision</p>
+                    <p className="text-xs text-emerald-600">formation-civique.interieur.gouv.fr</p>
                   </div>
                 </div>
-                <p className="text-sm leading-7 text-slate-300">Accédez aux questions officielles de formation civique pour compléter vos révisions.</p>
-                <p className="mt-3 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200 transition">Consulter ↗</p>
+                <p className="text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>Accédez aux questions officielles de formation civique pour compléter vos révisions.</p>
+                <p className="mt-3 text-sm font-semibold text-emerald-600 group-hover:text-emerald-700 transition">Consulter ↗</p>
               </a>
 
               <a href="https://www.service-public.fr/particuliers/vosdroits/F2213" target="_blank" rel="noopener noreferrer"
@@ -395,12 +403,12 @@ export default function ResourcesPage() {
                 <div className="flex items-center gap-3 mb-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-2xl">📋</div>
                   <div>
-                    <p className="text-sm font-bold text-white">Informations examen civique</p>
-                    <p className="text-xs text-violet-300">service-public.fr</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Informations examen civique</p>
+                    <p className="text-xs text-violet-600">service-public.fr</p>
                   </div>
                 </div>
-                <p className="text-sm leading-7 text-slate-300">Informations officielles sur l'examen civique : modalités, contenu, déroulement.</p>
-                <p className="mt-3 text-sm font-semibold text-violet-300 group-hover:text-violet-200 transition">En savoir plus ↗</p>
+                <p className="text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>Informations officielles sur l'examen civique : modalités, contenu, déroulement.</p>
+                <p className="mt-3 text-sm font-semibold text-violet-600 group-hover:text-violet-700 transition">En savoir plus ↗</p>
               </a>
 
               <a href="https://www.service-public.fr/particuliers/vosdroits/N111" target="_blank" rel="noopener noreferrer"
@@ -408,12 +416,12 @@ export default function ResourcesPage() {
                 <div className="flex items-center gap-3 mb-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-2xl">🏛️</div>
                   <div>
-                    <p className="text-sm font-bold text-white">Démarches naturalisation</p>
-                    <p className="text-xs text-amber-300">service-public.fr</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Démarches naturalisation</p>
+                    <p className="text-xs text-amber-600">service-public.fr</p>
                   </div>
                 </div>
-                <p className="text-sm leading-7 text-slate-300">Toutes les démarches pour la naturalisation française : conditions, dossier, procédure.</p>
-                <p className="mt-3 text-sm font-semibold text-amber-300 group-hover:text-amber-200 transition">Voir les démarches ↗</p>
+                <p className="text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>Toutes les démarches pour la naturalisation française : conditions, dossier, procédure.</p>
+                <p className="mt-3 text-sm font-semibold text-amber-600 group-hover:text-amber-700 transition">Voir les démarches ↗</p>
               </a>
             </div>
           </SectionCard>

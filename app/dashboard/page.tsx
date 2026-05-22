@@ -54,19 +54,19 @@ export default function DashboardPage() {
   }
 
   if (loading || !isAuthenticated || email !== ADMIN_EMAIL) {
-    return <div className="flex h-screen items-center justify-center text-slate-400">Vérification...</div>;
+    return <div className="flex h-screen items-center justify-center" style={{ color: "var(--cc-text-muted)" }}>Vérification...</div>;
   }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
       <div className="mb-8">
-        <div className="inline-flex rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-violet-300">Admin Dashboard</div>
-        <h1 className="mt-3 text-3xl font-extrabold text-white">Tableau de bord</h1>
-        <p className="mt-1 text-sm text-slate-400">Activité et métriques de Cap Citoyen</p>
+        <div className="inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-widest" style={{ borderColor: "var(--cc-primary)", color: "var(--cc-primary)", background: "var(--cc-primary-soft)" }}>Admin Dashboard</div>
+        <h1 className="mt-3 text-3xl font-extrabold" style={{ color: "var(--cc-text)" }}>Tableau de bord</h1>
+        <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>Activité et métriques de Cap Citoyen</p>
       </div>
       {loadingStats ? (
         <div className="grid gap-4 sm:grid-cols-3">
-          {[...Array(6)].map((_, i) => <div key={i} className="h-28 animate-pulse rounded-2xl border border-white/10 bg-white/5" />)}
+          {[...Array(6)].map((_, i) => <div key={i} className="h-28 animate-pulse rounded-2xl border" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }} />)}
         </div>
       ) : stats ? (
         <div className="space-y-8">
@@ -76,30 +76,40 @@ export default function DashboardPage() {
             <KPICard label="Comptes Freemium" value={stats.freemiumUsers} icon="🆓" color="emerald" />
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-              <h2 className="mb-4 text-sm font-bold text-white">Dernières inscriptions</h2>
+            <div className="rounded-2xl border p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
+              <h2 className="mb-4 text-sm font-bold" style={{ color: "var(--cc-text)" }}>Dernières inscriptions</h2>
               <div className="space-y-2">
                 {stats.recentSignups.map((u, i) => (
-                  <div key={i} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-3 py-2">
-                    <div><span className="text-sm font-semibold text-white">{u.username}</span>{u.city && <span className="ml-2 text-xs text-slate-400">📍 {u.city}</span>}</div>
+                  <div key={i} className="flex items-center justify-between rounded-xl border px-3 py-2" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+                    <div>
+                      <span className="text-sm font-semibold" style={{ color: "var(--cc-text)" }}>{u.username}</span>
+                      {u.city && <span className="ml-2 text-xs" style={{ color: "var(--cc-text-disabled)" }}>📍 {u.city}</span>}
+                    </div>
                     <div className="flex items-center gap-2">
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${u.role === "premium" ? "bg-amber-500/20 text-amber-300" : u.role === "freemium" ? "bg-emerald-500/20 text-emerald-300" : "bg-white/10 text-slate-400"}`}>{u.role}</span>
-                      <span className="text-[10px] text-slate-500">{new Date(u.created_at).toLocaleDateString("fr-FR")}</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${u.role === "premium" ? "bg-amber-500/20 text-amber-600 dark:text-amber-300" : u.role === "freemium" ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300" : "bg-gray-100 dark:bg-white/10"}`} style={u.role !== "premium" && u.role !== "freemium" ? { color: "var(--cc-text-muted)" } : {}}>{u.role}</span>
+                      <span className="text-[10px]" style={{ color: "var(--cc-text-disabled)" }}>{new Date(u.created_at).toLocaleDateString("fr-FR")}</span>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-              <h2 className="mb-4 text-sm font-bold text-white">Répartition géographique</h2>
-              {stats.topCities.length === 0 ? <p className="text-sm text-slate-500">Aucune donnée encore collectée</p> : (
+            <div className="rounded-2xl border p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
+              <h2 className="mb-4 text-sm font-bold" style={{ color: "var(--cc-text)" }}>Répartition géographique</h2>
+              {stats.topCities.length === 0 ? (
+                <p className="text-sm" style={{ color: "var(--cc-text-disabled)" }}>Aucune donnée encore collectée</p>
+              ) : (
                 <div className="space-y-2">
                   {stats.topCities.map((c, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <span className="w-4 text-xs text-slate-500">{i + 1}</span>
+                      <span className="w-4 text-xs" style={{ color: "var(--cc-text-disabled)" }}>{i + 1}</span>
                       <div className="flex-1">
-                        <div className="mb-1 flex justify-between"><span className="text-sm text-white">{c.city}</span><span className="text-xs text-slate-400">{c.count}</span></div>
-                        <div className="h-1.5 rounded-full bg-white/10"><div className="h-1.5 rounded-full bg-blue-500" style={{ width: `${(c.count / stats.topCities[0].count) * 100}%` }} /></div>
+                        <div className="mb-1 flex justify-between">
+                          <span className="text-sm" style={{ color: "var(--cc-text)" }}>{c.city}</span>
+                          <span className="text-xs" style={{ color: "var(--cc-text-muted)" }}>{c.count}</span>
+                        </div>
+                        <div className="h-1.5 rounded-full" style={{ background: "var(--cc-border)" }}>
+                          <div className="h-1.5 rounded-full" style={{ width: `${(c.count / stats.topCities[0].count) * 100}%`, background: "var(--cc-primary)" }} />
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -108,30 +118,34 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-              <h2 className="mb-4 text-sm font-bold text-white">Fonctionnalités les plus utilisées</h2>
-              {stats.topEvents.length === 0 ? <p className="text-sm text-slate-500">Aucun événement encore enregistré</p> : (
+            <div className="rounded-2xl border p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
+              <h2 className="mb-4 text-sm font-bold" style={{ color: "var(--cc-text)" }}>Fonctionnalités les plus utilisées</h2>
+              {stats.topEvents.length === 0 ? (
+                <p className="text-sm" style={{ color: "var(--cc-text-disabled)" }}>Aucun événement encore enregistré</p>
+              ) : (
                 <div className="space-y-2">
                   {stats.topEvents.map((e, i) => (
-                    <div key={i} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-3 py-2">
-                      <span className="text-sm text-slate-300">{e.event_type}</span>
-                      <span className="rounded-full bg-blue-500/20 px-2 py-0.5 text-xs font-bold text-blue-300">{e.count}</span>
+                    <div key={i} className="flex items-center justify-between rounded-xl border px-3 py-2" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+                      <span className="text-sm" style={{ color: "var(--cc-text-muted)" }}>{e.event_type}</span>
+                      <span className="cc-badge cc-badge-info">{e.count}</span>
                     </div>
                   ))}
                 </div>
               )}
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-              <h2 className="mb-4 text-sm font-bold text-white">Événements récents</h2>
-              {stats.recentEvents.length === 0 ? <p className="text-sm text-slate-500">Aucun événement encore enregistré</p> : (
+            <div className="rounded-2xl border p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
+              <h2 className="mb-4 text-sm font-bold" style={{ color: "var(--cc-text)" }}>Événements récents</h2>
+              {stats.recentEvents.length === 0 ? (
+                <p className="text-sm" style={{ color: "var(--cc-text-disabled)" }}>Aucun événement encore enregistré</p>
+              ) : (
                 <div className="max-h-80 space-y-2 overflow-y-auto">
                   {stats.recentEvents.map((e, i) => (
-                    <div key={i} className="rounded-xl border border-white/5 bg-white/5 px-3 py-2">
+                    <div key={i} className="rounded-xl border px-3 py-2" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-white">{e.event_type}</span>
-                        <span className="text-[10px] text-slate-500">{new Date(e.created_at).toLocaleString("fr-FR")}</span>
+                        <span className="text-xs font-semibold" style={{ color: "var(--cc-text)" }}>{e.event_type}</span>
+                        <span className="text-[10px]" style={{ color: "var(--cc-text-disabled)" }}>{new Date(e.created_at).toLocaleString("fr-FR")}</span>
                       </div>
-                      {Object.keys(e.properties).length > 0 && <p className="mt-1 truncate text-[10px] text-slate-400">{JSON.stringify(e.properties)}</p>}
+                      {Object.keys(e.properties).length > 0 && <p className="mt-1 truncate text-[10px]" style={{ color: "var(--cc-text-muted)" }}>{JSON.stringify(e.properties)}</p>}
                     </div>
                   ))}
                 </div>
@@ -145,16 +159,17 @@ export default function DashboardPage() {
 }
 
 function KPICard({ label, value, icon, color }: { label: string; value: number; icon: string; color: string }) {
-  const colors: Record<string, string> = {
-    blue: "border-blue-400/20 bg-blue-500/10 text-blue-300",
-    amber: "border-amber-400/20 bg-amber-500/10 text-amber-300",
-    emerald: "border-emerald-400/20 bg-emerald-500/10 text-emerald-300",
+  const colorStyles: Record<string, { border: string; bg: string; text: string }> = {
+    blue: { border: "var(--cc-primary)", bg: "var(--cc-primary-soft)", text: "var(--cc-primary)" },
+    amber: { border: "var(--cc-warning)", bg: "var(--cc-warning-soft)", text: "var(--cc-warning)" },
+    emerald: { border: "var(--cc-success)", bg: "var(--cc-success-soft)", text: "var(--cc-success)" },
   };
+  const c = colorStyles[color] ?? colorStyles.blue;
   return (
-    <div className={`rounded-2xl border p-5 ${colors[color]}`}>
+    <div className="rounded-2xl border p-5" style={{ borderColor: c.border, background: c.bg }}>
       <div className="text-2xl">{icon}</div>
-      <div className="mt-3 text-3xl font-extrabold text-white">{value}</div>
-      <div className="mt-1 text-xs font-semibold">{label}</div>
+      <div className="mt-3 text-3xl font-extrabold" style={{ color: "var(--cc-text)" }}>{value}</div>
+      <div className="mt-1 text-xs font-semibold" style={{ color: c.text }}>{label}</div>
     </div>
   );
 }

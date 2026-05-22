@@ -35,26 +35,24 @@ export default function LeaderboardPage() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
       <div className="space-y-6">
-        <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl">
+        <section className="relative overflow-hidden rounded-[2rem] border shadow-lg" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
+          {/* Drapeau français */}
           <div className="flex h-1.5 w-full">
-            <div className="flex-1 bg-blue-600" />
+            <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
             <div className="flex-1 bg-white" />
-            <div className="flex-1 bg-red-600" />
+            <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
           </div>
-
-          <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl" />
-          <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl" />
 
           <div className="relative p-5 sm:p-6 lg:p-8">
             <div className="flex items-start justify-between gap-4 flex-wrap">
               <div>
-                <div className="text-[11px] uppercase tracking-widest text-slate-400">
+                <div className="text-[11px] uppercase tracking-widest" style={{ color: "var(--cc-text-disabled)" }}>
                   République Française
                 </div>
-                <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                <h1 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl" style={{ color: "var(--cc-text)" }}>
                   🏆 Classement général
                 </h1>
-                <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-300">
+                <p className="mt-2 max-w-2xl text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>
                   Compare les meilleurs scores enregistrés en mode examen blanc
                   ou en mode entraînement.
                 </p>
@@ -72,35 +70,35 @@ export default function LeaderboardPage() {
             <button
               key={m}
               onClick={() => setMode(m)}
-              className={`rounded-xl border px-4 py-2 text-sm font-semibold transition-all duration-200 ${
-                mode === m
-                  ? "border-blue-400/30 bg-blue-500/15 text-blue-200 shadow-[0_10px_30px_rgba(37,99,235,0.12)]"
-                  : "border-white/10 bg-white/5 text-slate-300 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
-              }`}
+              className="rounded-xl border px-4 py-2 text-sm font-semibold transition-all duration-200"
+              style={mode === m
+                ? { borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }
+                : { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }
+              }
             >
               {m === "exam" ? "Examen blanc" : "Entraînement"}
             </button>
           ))}
         </section>
 
-        <section className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 shadow-[0_18px_45px_rgba(2,8,23,0.28)]">
+        <section className="overflow-hidden rounded-[1.8rem] border shadow-md" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
           {loading ? (
-            <div className="p-6 text-sm text-slate-300">Chargement…</div>
+            <div className="p-6 text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</div>
           ) : data.length === 0 ? (
-            <div className="p-6 text-sm text-slate-300">
+            <div className="p-6 text-sm" style={{ color: "var(--cc-text-muted)" }}>
               Aucun résultat validé pour le moment.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px] text-sm">
                 <thead>
-                  <tr className="border-b border-white/10 bg-white/5">
-                    <th className="px-4 py-4 text-left font-medium text-slate-400">#</th>
-                    <th className="px-4 py-4 text-left font-medium text-slate-400">Pseudo</th>
-                    <th className="px-4 py-4 text-left font-medium text-slate-400">Score</th>
-                    <th className="px-4 py-4 text-left font-medium text-slate-400">Statut</th>
-                    <th className="px-4 py-4 text-left font-medium text-slate-400">Niveau</th>
-                    <th className="px-4 py-4 text-left font-medium text-slate-400">Date</th>
+                  <tr className="border-b" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+                    <th className="px-4 py-4 text-left font-medium" style={{ color: "var(--cc-text-muted)" }}>#</th>
+                    <th className="px-4 py-4 text-left font-medium" style={{ color: "var(--cc-text-muted)" }}>Pseudo</th>
+                    <th className="px-4 py-4 text-left font-medium" style={{ color: "var(--cc-text-muted)" }}>Score</th>
+                    <th className="px-4 py-4 text-left font-medium" style={{ color: "var(--cc-text-muted)" }}>Statut</th>
+                    <th className="px-4 py-4 text-left font-medium" style={{ color: "var(--cc-text-muted)" }}>Niveau</th>
+                    <th className="px-4 py-4 text-left font-medium" style={{ color: "var(--cc-text-muted)" }}>Date</th>
                   </tr>
                 </thead>
 
@@ -108,39 +106,34 @@ export default function LeaderboardPage() {
                   {data.map((e, i) => (
                     <tr
                       key={`${e.email}-${i}`}
-                      className="border-b border-white/5 transition hover:bg-white/[0.04]"
+                      className="border-b transition"
+                      style={{ borderColor: "var(--cc-border)" }}
                     >
-                      <td className="px-4 py-4 font-bold text-white">
+                      <td className="px-4 py-4 font-bold" style={{ color: "var(--cc-text)" }}>
                         {MEDALS[i] ?? `#${i + 1}`}
                       </td>
 
                       <td className="px-4 py-4">
-                        <div className="font-semibold text-white">{e.pseudo}</div>
-                        <div className="text-xs text-slate-500">{e.email}</div>
+                        <div className="font-semibold" style={{ color: "var(--cc-text)" }}>{e.pseudo}</div>
+                        <div className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>{e.email}</div>
                       </td>
 
                       <td className="px-4 py-4">
-                        <span className="font-bold text-blue-300">
+                        <span className="font-bold" style={{ color: "var(--cc-primary)" }}>
                           {e.score_correct}/{e.score_total}
                         </span>{" "}
-                        <span className="text-slate-400">({e.score_percent}%)</span>
+                        <span style={{ color: "var(--cc-text-muted)" }}>({e.score_percent}%)</span>
                       </td>
 
                       <td className="px-4 py-4">
-                        <span
-                          className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${
-                            e.passed
-                              ? "border-emerald-400/20 bg-emerald-500/10 text-emerald-200"
-                              : "border-red-400/20 bg-red-500/10 text-red-200"
-                          }`}
-                        >
+                        <span className={e.passed ? "cc-badge cc-badge-success" : "cc-badge cc-badge-danger"}>
                           {e.passed ? "Validé" : "Non validé"}
                         </span>
                       </td>
 
-                      <td className="px-4 py-4 text-slate-300">Niveau {e.level}</td>
+                      <td className="px-4 py-4" style={{ color: "var(--cc-text-muted)" }}>Niveau {e.level}</td>
 
-                      <td className="px-4 py-4 text-slate-400">
+                      <td className="px-4 py-4" style={{ color: "var(--cc-text-disabled)" }}>
                         {new Date(e.created_at).toLocaleDateString("fr-FR", {
                           day: "numeric",
                           month: "short",

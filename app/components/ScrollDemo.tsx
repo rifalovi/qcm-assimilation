@@ -213,8 +213,8 @@ export default function ScrollDemo() {
     <div className="w-full">
       <div className="mb-8 text-center">
         <span className="mb-3 inline-block rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-blue-300">Fonctionnalité principale</span>
-        <h2 className="text-2xl font-extrabold leading-tight text-white sm:text-3xl">Révisez comme vous <span className="text-blue-400">scrollez</span>.</h2>
-        <p className="mx-auto mt-2 max-w-lg text-sm text-slate-400">Swipez, répondez, progressez — une expérience immersive qui transforme chaque minute en révision efficace.</p>
+        <h2 className="text-2xl font-extrabold leading-tight sm:text-3xl" style={{ color: "var(--cc-text)" }}>Révisez comme vous <span style={{ color: "var(--cc-primary)" }}>scrollez</span>.</h2>
+        <p className="mx-auto mt-2 max-w-lg text-sm" style={{ color: "var(--cc-text-muted)" }}>Swipez, répondez, progressez — une expérience immersive qui transforme chaque minute en révision efficace.</p>
       </div>
 
       <div className="hidden sm:flex sm:justify-center sm:gap-10">
@@ -231,7 +231,7 @@ export default function ScrollDemo() {
             </div>
             <div className="text-center">
               <p className={`text-sm font-bold ${step.color}`}>{step.label}</p>
-              <p className="text-xs text-slate-500">{step.sub}</p>
+              <p className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>{step.sub}</p>
             </div>
           </div>
         ))}
@@ -241,10 +241,10 @@ export default function ScrollDemo() {
         <div className="text-center">
           <div className={`mx-auto mb-2 flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold ${STEPS[active].numBg} ${STEPS[active].color}`}>{active + 1}</div>
           <p className={`text-sm font-bold ${STEPS[active].color}`}>{STEPS[active].label}</p>
-          <p className="text-xs text-slate-500">{STEPS[active].sub}</p>
+          <p className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>{STEPS[active].sub}</p>
         </div>
         <div className="flex items-center gap-4">
-          <button onClick={() => setActive((a) => Math.max(0, a - 1))} disabled={active === 0} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 disabled:opacity-20">
+          <button onClick={() => setActive((a) => Math.max(0, a - 1))} disabled={active === 0} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 transition hover:bg-white/10 disabled:opacity-20" style={{ color: "var(--cc-text-muted)" }}>
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>
           <div className="relative" style={{ width: 180, height: 390 }}>
@@ -255,7 +255,7 @@ export default function ScrollDemo() {
             <div className="absolute -left-[5px] top-24 h-5 w-1 rounded-l-sm bg-[#1e2d45]" />
             <div className="absolute inset-[4px] overflow-hidden rounded-[24px]">{SCREENS[active]}</div>
           </div>
-          <button onClick={() => setActive((a) => Math.min(STEPS.length - 1, a + 1))} disabled={active === STEPS.length - 1} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 disabled:opacity-20">
+          <button onClick={() => setActive((a) => Math.min(STEPS.length - 1, a + 1))} disabled={active === STEPS.length - 1} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 transition hover:bg-white/10 disabled:opacity-20" style={{ color: "var(--cc-text-muted)" }}>
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>
         </div>
@@ -267,7 +267,7 @@ export default function ScrollDemo() {
       </div>
 
       <div className="mt-10 flex justify-center">
-        <button onClick={() => router.push("/scroll")} className="inline-flex items-center gap-3 rounded-2xl border border-amber-400/30 bg-amber-500/10 px-6 py-4 text-base font-bold text-amber-200 shadow-[0_12px_32px_rgba(251,191,36,0.12)] transition hover:border-amber-400/50 hover:bg-amber-500/15 active:scale-[0.98]">
+        <button onClick={() => router.push("/scroll")} className="inline-flex items-center gap-3 rounded-2xl border border-amber-400/30 bg-amber-500/10 px-6 py-4 text-base font-bold text-amber-700 shadow-[0_12px_32px_rgba(251,191,36,0.12)] transition hover:border-amber-400/50 hover:bg-amber-500/15 active:scale-[0.98]">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>
           Essayer le scroll
         </button>

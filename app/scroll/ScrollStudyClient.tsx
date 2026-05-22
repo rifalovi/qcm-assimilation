@@ -71,8 +71,8 @@ function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "fr
 
       <div>
         <p
-          className="text-xl font-extrabold leading-tight text-white"
-          style={{ letterSpacing: "-0.01em" }}
+          className="text-xl font-extrabold leading-tight"
+          style={{ letterSpacing: "-0.01em", color: "var(--cc-text)" }}
         >
           {`Tu as vu les ${cardsCount} cartes ${hasTheme ? "de ce thème" : "gratuites"} !`}
         </p>
@@ -368,7 +368,7 @@ function MCQView({
           className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 hover:scale-[1.02]"
           style={{
             background: "rgba(255,255,255,0.07)",
-            color: "#cbd5e1",
+            color: "var(--cc-text-muted)",
             border: "1px solid rgba(255,255,255,0.08)",
           }}
         >
@@ -706,16 +706,16 @@ function ThemeDrawer({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-1 flex items-center justify-between">
-          <p className="text-lg font-bold text-white">Choisir une thématique</p>
+          <p className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Choisir une thématique</p>
           <button
             onClick={onClose}
-            className="text-xl leading-none text-gray-400 transition hover:text-white"
+            className="text-xl leading-none transition hover:opacity-80" style={{ color: "var(--cc-text-muted)" }}
           >
             ×
           </button>
         </div>
 
-        <p className="text-sm" style={{ color: "#94a3b8" }}>
+        <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>
           Sélectionne un thème pour cibler ta révision
         </p>
 
@@ -741,7 +741,7 @@ function ThemeDrawer({
                   "linear-gradient(135deg, #60a5fa, #a78bfa, #34d399)",
               }}
             />
-            <span className="font-medium text-white">Toutes les thématiques</span>
+            <span className="font-medium" style={{ color: "var(--cc-text)" }}>Toutes les thématiques</span>
           </div>
           {activeTheme === null && <IconCheck />}
         </button>
@@ -768,7 +768,7 @@ function ThemeDrawer({
                 <div className="h-3 w-3 rounded-full" style={{ background: accent }} />
                 <span
                   className="font-medium"
-                  style={{ color: isActive ? accent : "#cbd5e1" }}
+                  style={{ color: isActive ? accent : "var(--cc-text-muted)" }}
                 >
                   {theme}
                 </span>
@@ -810,8 +810,8 @@ function ExamModal({
       >
         <div className="text-center">
           <div className="mb-3 text-4xl">🎓</div>
-          <p className="text-lg font-bold text-white">Passer en mode Examen ?</p>
-          <p className="mt-1 text-sm" style={{ color: "#94a3b8" }}>
+          <p className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Passer en mode Examen ?</p>
+          <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>
             Questions chronométrées, sans correction immédiate.
           </p>
         </div>
@@ -833,7 +833,7 @@ function ExamModal({
           className="w-full rounded-2xl py-3 text-sm font-medium transition hover:bg-white/10"
           style={{
             background: "rgba(255,255,255,0.06)",
-            color: "#94a3b8",
+            color: "var(--cc-text-muted)",
             border: "1px solid rgba(255,255,255,0.08)",
           }}
         >
@@ -973,17 +973,18 @@ useEffect(() => {
   <div className="flex items-center gap-3">
     <button
       onClick={() => router.push("/")}
-      className="flex items-center justify-center rounded-xl border border-white/10 bg-white/5 p-2 transition hover:bg-white/10"
+      className="flex items-center justify-center rounded-xl border p-2 transition hover:bg-white/10"
+      style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
     >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-300">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--cc-text-muted)" }}>
         <path d="M19 12H5M12 5l-7 7 7 7"/>
       </svg>
     </button>
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "#94a3b8" }}>
+      <p className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--cc-text-disabled)" }}>
         Révision immersive
       </p>
-      <p className="mt-1 text-sm font-semibold text-white">Flash-cards thématiques</p>
+      <p className="mt-1 text-sm font-semibold" style={{ color: "var(--cc-text)" }}>Flash-cards thématiques</p>
     </div>
   </div>
 
@@ -992,7 +993,7 @@ useEffect(() => {
             style={{
               background: "rgba(255,255,255,0.06)",
               border: "1px solid rgba(255,255,255,0.08)",
-              color: "#cbd5e1",
+              color: "var(--cc-text-muted)",
             }}
           >
             {filteredQuestions.length} cartes
@@ -1038,8 +1039,8 @@ useEffect(() => {
 
             <button
               onClick={() => setShowExamModal(true)}
-              className="rounded-full px-3 py-1.5 text-xs font-semibold transition hover:text-white"
-              style={{ color: "rgba(255,255,255,0.55)" }}
+              className="rounded-full px-3 py-1.5 text-xs font-semibold transition hover:opacity-100"
+              style={{ color: "var(--cc-text-muted)" }}
             >
               Examen
             </button>
@@ -1088,8 +1089,8 @@ useEffect(() => {
           <div className="flex h-full items-center justify-center px-8 text-center">
             <div>
               <p className="mb-4 text-4xl">🔍</p>
-              <p className="font-semibold text-white">Aucune question pour ce thème</p>
-              <p className="mt-2 text-sm" style={{ color: "#64748b" }}>
+              <p className="font-semibold" style={{ color: "var(--cc-text)" }}>Aucune question pour ce thème</p>
+              <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>
                 Essaie un autre thème ou reviens plus tard.
               </p>
             </div>

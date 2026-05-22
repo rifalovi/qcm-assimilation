@@ -72,7 +72,7 @@ export default function PwaInstallBanner() {
 
   return (
     <div className="fixed bottom-16 left-3 right-3 z-[70] md:bottom-4 md:left-auto md:right-4 md:max-w-sm animate-in slide-in-from-bottom-4">
-      <div className="rounded-2xl border border-blue-400/20 bg-gradient-to-r from-slate-900/98 via-slate-800/98 to-slate-900/98 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+      <div className="rounded-2xl border border-blue-400/20 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl" style={{ background: "var(--cc-surface-alt)" }}>
         <div className="flex items-start gap-3">
           <Image
             src="/cap-citoyen.png"
@@ -82,14 +82,14 @@ export default function PwaInstallBanner() {
             className="rounded-xl shrink-0"
           />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-white">Installer Cap Citoyen</p>
-            <p className="mt-0.5 text-xs text-slate-400 leading-relaxed">
+            <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Installer Cap Citoyen</p>
+            <p className="mt-0.5 text-xs leading-relaxed" style={{ color: "var(--cc-text-muted)" }}>
               Accédez à la plateforme directement depuis votre écran d'accueil
             </p>
           </div>
           <button
             onClick={dismiss}
-            className="shrink-0 flex h-7 w-7 items-center justify-center rounded-lg text-slate-500 hover:text-white hover:bg-white/10 transition"
+            className="shrink-0 flex h-7 w-7 items-center justify-center rounded-lg hover:text-white hover:bg-white/10 transition" style={{ color: "var(--cc-text-disabled)" }}
             aria-label="Fermer"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">

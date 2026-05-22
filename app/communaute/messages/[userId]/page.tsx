@@ -257,7 +257,7 @@ export default function ConversationPage() {
   if (loading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-[#0b141a] z-50">
-        <p className="text-sm text-slate-400">Chargement…</p>
+        <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</p>
       </div>
     )
   }

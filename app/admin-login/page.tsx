@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "var(--cc-surface-alt)" }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="mb-5 flex justify-center">
@@ -45,30 +45,32 @@ export default function AdminLoginPage() {
           </div>
           <div className="inline-flex items-center gap-2 mb-4">
             <span className="text-2xl">🇫🇷</span>
-            <span className="text-lg font-semibold text-white">Cap Citoyen</span>
+            <span className="text-lg font-semibold" style={{ color: "var(--cc-text)" }}>Cap Citoyen</span>
           </div>
           <div className="inline-flex items-center gap-2 bg-red-900/20 border border-red-500/20 rounded-full px-4 py-1.5 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
             <span className="text-xs font-medium text-red-400 uppercase tracking-widest">Zone réservée</span>
           </div>
-          <h1 className="text-xl font-medium text-white mb-1">Administration</h1>
-          <p className="text-sm text-slate-500">Accès réservé aux équipes autorisées</p>
+          <h1 className="text-xl font-medium mb-1" style={{ color: "var(--cc-text)" }}>Administration</h1>
+          <p className="text-sm" style={{ color: "var(--cc-text-disabled)" }}>Accès réservé aux équipes autorisées</p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+        <div className="rounded-2xl border p-6 space-y-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1.5">Adresse email</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--cc-text-muted)" }}>Adresse email</label>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
               placeholder="admin@cap-citoyen.fr" autoComplete="email"
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-slate-500 transition" />
+              className="w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400/50 transition"
+              style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1.5">Mot de passe</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--cc-text-muted)" }}>Mot de passe</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
               placeholder="••••••••" autoComplete="current-password"
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-slate-500 transition" />
+              className="w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400/50 transition"
+              style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }} />
           </div>
           {error && (
             <div className="flex items-center gap-2 bg-red-900/20 border border-red-500/20 rounded-xl px-3 py-2.5">
@@ -76,14 +78,15 @@ export default function AdminLoginPage() {
             </div>
           )}
           <button onClick={handleLogin} disabled={!email.trim() || !password.trim() || loading}
-            className="w-full bg-white text-slate-900 font-medium text-sm py-2.5 rounded-xl hover:bg-slate-100 disabled:opacity-40 transition mt-2">
+            className="w-full font-medium text-sm py-2.5 rounded-xl disabled:opacity-40 transition mt-2 hover:opacity-90"
+            style={{ background: "var(--cc-text)", color: "var(--cc-surface)" }}>
             {loading ? 'Vérification…' : 'Accéder au panneau'}
           </button>
         </div>
 
         <div className="text-center mt-6 space-y-2">
-          <p className="text-xs text-slate-600">Toutes les connexions sont enregistrées.</p>
-          <a href="/" className="text-xs text-slate-600 hover:text-slate-400 transition">← Retour au site</a>
+          <p className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>Toutes les connexions sont enregistrées.</p>
+          <a href="/" className="text-xs transition hover:opacity-80" style={{ color: "var(--cc-text-disabled)" }}>← Retour au site</a>
         </div>
       </div>
     </div>

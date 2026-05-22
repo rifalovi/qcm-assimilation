@@ -41,11 +41,11 @@ export default function NameGuard({ userId, firstName, lastName, onComplete }: P
 
   return (
     // Bandeau doux — non bloquant visuellement mais nécessaire pour continuer
-    <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 mb-6">
-      <p className="text-sm font-medium text-amber-800 mb-1">
+    <div className="rounded-2xl p-4 mb-6" style={{ background: "var(--cc-warning-soft)", border: "1px solid var(--cc-border)" }}>
+      <p className="text-sm font-medium mb-1" style={{ color: "var(--cc-warning)" }}>
         Avant de partager votre témoignage
       </p>
-      <p className="text-xs text-amber-600 mb-4">
+      <p className="text-xs mb-4" style={{ color: "var(--cc-warning)" }}>
         Votre témoignage sera signé <strong>Prénom N.</strong> — renseignez votre identité d'abord.
       </p>
 
@@ -55,19 +55,19 @@ export default function NameGuard({ userId, firstName, lastName, onComplete }: P
           value={first}
           onChange={(e) => setFirst(e.target.value)}
           placeholder="Prénom"
-          className="border border-amber-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+          className="rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/30" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface)", color: "var(--cc-text)" }}
         />
         <input
           type="text"
           value={last}
           onChange={(e) => setLast(e.target.value)}
           placeholder="Nom"
-          className="border border-amber-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+          className="rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/30" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface)", color: "var(--cc-text)" }}
         />
       </div>
 
       {(first || last) && (
-        <p className="text-xs text-amber-600 mb-3">
+        <p className="text-xs mb-3" style={{ color: "var(--cc-warning)" }}>
           Apparaîtra comme :{' '}
           <span className="font-medium">{first} {last.charAt(0).toUpperCase()}{last ? '.' : ''}</span>
         </p>
@@ -83,7 +83,7 @@ export default function NameGuard({ userId, firstName, lastName, onComplete }: P
         </button>
         <Link
           href="/account"
-          className="text-xs text-amber-600 underline underline-offset-2"
+          className="text-xs underline underline-offset-2" style={{ color: "var(--cc-warning)" }}
         >
           Gérer mon profil
         </Link>

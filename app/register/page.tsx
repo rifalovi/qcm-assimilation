@@ -119,7 +119,7 @@ function RegisterForm() {
 
   const infoColumn = (title: string, subtitle: string, items: { title: string; text: string }[]) => (
     <section className="hidden lg:block">
-      <div className="rounded border border-[var(--cc-border)] bg-white overflow-hidden">
+      <div className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] overflow-hidden">
         <TricolorBar />
         <div className="p-8">
           <span className="cc-badge cc-badge-info mb-4 inline-block">Inscription gratuite</span>
@@ -140,7 +140,7 @@ function RegisterForm() {
 
   const formColumn = (children: React.ReactNode) => (
     <section className="w-full">
-      <div className="rounded border border-[var(--cc-border)] bg-white overflow-hidden">
+      <div className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] overflow-hidden">
         <TricolorBar />
         <div className="p-6 sm:p-8">
           {children}

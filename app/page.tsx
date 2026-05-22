@@ -78,7 +78,7 @@ function Pill({ children, active = false, onClick }: {
       className={`rounded border px-3 py-1.5 text-sm font-medium transition-colors ${
         active
           ? "border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] text-[var(--cc-primary)]"
-          : "border-[var(--cc-border)] bg-white text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)]"
+          : "border-[var(--cc-border)] bg-[var(--cc-surface)] text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)]"
       }`}
     >
       {children}
@@ -140,7 +140,7 @@ function OnboardingModal({ onClose, onAction, role = "anonymous" }: {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-[var(--cc-text)]/50" onClick={onClose} />
-      <div className="relative z-[101] w-full max-w-sm rounded border border-[var(--cc-border)] bg-white p-6 shadow-lg">
+      <div className="relative z-[101] w-full max-w-sm rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] p-6 shadow-lg">
 
         {/* En-tête */}
         <div className="mb-5 flex items-center justify-between">
@@ -340,7 +340,7 @@ async function clearPseudo() {
             SECTION 1 — HERO
         ══════════════════════════════════════════ */}
         <section
-          className={`border border-[var(--cc-border)] bg-white transition-all duration-500 ${
+          className={`border border-[var(--cc-border)] bg-[var(--cc-surface)] transition-all duration-500 ${
             heroVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
           }`}
           style={{ borderRadius: "4px" }}
@@ -372,7 +372,7 @@ async function clearPseudo() {
                 <div className="relative flex justify-end">
                   <button
                     onClick={() => setHomeMenuOpen(!homeMenuOpen)}
-                    className="flex items-center gap-2 rounded border border-[var(--cc-border)] bg-white px-3 py-2 text-sm text-[var(--cc-text)] hover:border-[var(--cc-primary)] transition-colors"
+                    className="flex items-center gap-2 rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm text-[var(--cc-text)] hover:border-[var(--cc-primary)] transition-colors"
                     aria-expanded={homeMenuOpen}
                     aria-haspopup="true"
                   >
@@ -391,7 +391,7 @@ async function clearPseudo() {
                   {homeMenuOpen && (
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setHomeMenuOpen(false)} />
-                      <div className="absolute right-0 top-full z-50 mt-1 w-64 rounded border border-[var(--cc-border)] bg-white shadow-md">
+                      <div className="absolute right-0 top-full z-50 mt-1 w-64 rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md">
                         <div className="border-b border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
                           <p className="text-sm font-bold text-[var(--cc-text)]">{displayName}</p>
                           {role && role !== "anonymous" && (
@@ -538,28 +538,28 @@ async function clearPseudo() {
             {/* Actions secondaires */}
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <button onClick={() => router.push("/audio")}
-                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Bibliothèque audio
               </button>
               <button onClick={() => { const el = document.getElementById("avis-section"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
-                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Avis des utilisateurs
               </button>
               <button onClick={() => router.push("/leaderboard")}
-                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Classement
               </button>
               <button onClick={() => router.push("/resources")}
-                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Ressources officielles
               </button>
               <button onClick={() => router.push("/assistant")}
-                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Assistant IA démarches
               </button>
               {!isAuthenticated && (
                 <button onClick={() => setShowOnboarding(true)}
-                  className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
+                  className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                   Guide de démarrage
                 </button>
               )}
@@ -598,7 +598,7 @@ async function clearPseudo() {
                         ? "cursor-not-allowed border-[var(--cc-border)] bg-[var(--cc-surface-alt)] text-[var(--cc-text-disabled)]"
                         : active
                         ? "border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] text-[var(--cc-primary)]"
-                        : "border-[var(--cc-border)] bg-white text-[var(--cc-text)] hover:border-[var(--cc-primary)]"
+                        : "border-[var(--cc-border)] bg-[var(--cc-surface)] text-[var(--cc-text)] hover:border-[var(--cc-primary)]"
                     }`}
                   >
                     <div className="text-sm font-bold">Niveau {n}</div>
@@ -722,7 +722,7 @@ async function clearPseudo() {
                 text: "La simulation d'examen blanc reproduit les conditions officielles — durée, nombre de questions, format — pour arriver préparé le jour J.",
               },
             ].map(item => (
-              <div key={item.title} className="rounded border border-[var(--cc-border)] bg-white p-5">
+              <div key={item.title} className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] p-5">
                 <div className="mb-3 text-2xl font-bold text-[var(--cc-primary)]">{item.num}</div>
                 <h3 className="text-base font-bold text-[var(--cc-text)]">{item.title}</h3>
                 <p className="mt-2 text-sm leading-7 text-[var(--cc-text)]">{item.text}</p>
@@ -765,7 +765,7 @@ async function clearPseudo() {
       {showReviseModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-[var(--cc-text)]/50" onClick={() => setShowReviseModal(false)} />
-          <div className="relative z-[101] w-full max-w-sm rounded border border-[var(--cc-border)] bg-white p-6 shadow-lg">
+          <div className="relative z-[101] w-full max-w-sm rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] p-6 shadow-lg">
             <button onClick={() => setShowReviseModal(false)}
               className="absolute right-4 top-4 text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-xl leading-none" aria-label="Fermer">×</button>
             <h3 className="text-lg font-bold text-[var(--cc-text)]">Mode de révision</h3>
@@ -797,7 +797,7 @@ async function clearPseudo() {
       {pseudoOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-[var(--cc-text)]/50" onClick={() => setPseudoOpen(false)} />
-          <div className="relative z-[101] w-full max-w-md rounded border border-[var(--cc-border)] bg-white p-6 shadow-lg">
+          <div className="relative z-[101] w-full max-w-md rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] p-6 shadow-lg">
             <h3 className="text-lg font-bold text-[var(--cc-text)]">Avant de commencer</h3>
             <p className="mt-1.5 text-sm text-[var(--cc-text-muted)]">Créez un compte pour sauvegarder vos résultats, ou continuez sans compte.</p>
 
@@ -862,7 +862,7 @@ async function clearPseudo() {
       {openExamUpgrade && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-[var(--cc-text)]/50" onClick={() => setOpenExamUpgrade(false)} />
-          <div className="relative w-full max-w-md rounded border border-[var(--cc-border)] bg-white p-6 shadow-lg">
+          <div className="relative w-full max-w-md rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] p-6 shadow-lg">
             <h3 className="text-xl font-bold text-[var(--cc-text)]">Accès à la simulation d'examen</h3>
             <p className="mt-2 text-sm leading-7 text-[var(--cc-text)]">
               La simulation d'examen blanc est accessible aux comptes Freemium avec un essai gratuit limité, puis en illimité avec un abonnement Premium.

@@ -78,7 +78,7 @@ export default function BottomNav() {
   return (
     <>
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--cc-border)] bg-white md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--cc-border)] bg-[var(--cc-surface)] md:hidden"
         aria-label="Navigation principale mobile"
       >
         <div className="mx-auto flex max-w-lg">
@@ -113,7 +113,7 @@ export default function BottomNav() {
       {/* Popup Préparation */}
       {showTrainMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowTrainMenu(false)}>
-          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-[var(--cc-surface)] p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <p className="text-sm font-bold text-[var(--cc-text)]">Se préparer</p>
               <button onClick={() => setShowTrainMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
@@ -141,7 +141,7 @@ export default function BottomNav() {
       {/* Popup Audio */}
       {showAudioMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowAudioMenu(false)}>
-          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-[var(--cc-surface)] p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <p className="text-sm font-bold text-[var(--cc-text)]">Bibliothèque audio</p>
               <button onClick={() => setShowAudioMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
@@ -167,7 +167,7 @@ export default function BottomNav() {
       {/* Popup Communauté */}
       {showCommunityMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowCommunityMenu(false)}>
-          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-[var(--cc-surface)] p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <p className="text-sm font-bold text-[var(--cc-text)]">Espace communauté</p>
               <button onClick={() => setShowCommunityMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
@@ -192,7 +192,7 @@ export default function BottomNav() {
       {/* Popup Info */}
       {showInfoMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowInfoMenu(false)}>
-          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-[var(--cc-surface)] p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <p className="text-sm font-bold text-[var(--cc-text)]">Informations</p>
               <button onClick={() => setShowInfoMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>

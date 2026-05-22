@@ -32,7 +32,7 @@ export default function AppHeader() {
     router.refresh();
   }
 
-  if (pathname === "/" || pathname.startsWith("/admin") || pathname.match(/^\/communaute\/messages\/.+/)) return null;
+  if (pathname === "/" || pathname === "/design-system" || pathname.startsWith("/admin") || pathname.match(/^\/communaute\/messages\/.+/)) return null;
 
   const roleLabel =
     role === "elite"   ? "Élite" :
@@ -42,7 +42,7 @@ export default function AppHeader() {
   return (
     <header
       role="banner"
-      className="sticky top-0 z-50 w-full border-b border-[var(--cc-border)] bg-white"
+      className="sticky top-0 z-50 w-full border-b border-[var(--cc-border)] bg-[var(--cc-surface)]"
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
 
@@ -101,7 +101,7 @@ export default function AppHeader() {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
-                  className="flex items-center gap-2 rounded border border-[var(--cc-border)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors"
+                  className="flex items-center gap-2 rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-1.5 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors"
                   aria-expanded={open}
                   aria-haspopup="true"
                 >
@@ -123,7 +123,7 @@ export default function AppHeader() {
 
                 {open && (
                   <div
-                    className="absolute right-0 top-full mt-1 w-72 max-w-[calc(100vw-1rem)] overflow-hidden rounded border border-[var(--cc-border)] bg-white shadow-md"
+                    className="absolute right-0 top-full mt-1 w-72 max-w-[calc(100vw-1rem)] overflow-hidden rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md"
                     role="menu"
                     aria-label="Menu utilisateur"
                   >

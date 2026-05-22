@@ -44,10 +44,13 @@ function CallbackHandler() {
   }, [router, searchParams])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900">
-      <div className="text-center p-8 rounded-xl border border-slate-700 bg-slate-800 max-w-sm w-full">
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--cc-surface-alt)" }}>
+      <div
+        className="text-center p-8 rounded-xl border max-w-sm w-full"
+        style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}
+      >
         <div className="text-2xl mb-3 animate-pulse">🔄</div>
-        <p className="text-slate-300 text-sm">{status}</p>
+        <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>{status}</p>
       </div>
     </div>
   )
@@ -55,7 +58,7 @@ function CallbackHandler() {
 
 export default function CallbackPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-500">Connexion en cours...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{ color: "var(--cc-text-disabled)" }}>Connexion en cours...</div>}>
       <CallbackHandler />
     </Suspense>
   )

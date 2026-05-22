@@ -148,10 +148,19 @@ function ActionButton({ children, onClick, variant = "primary" }: {
   children: React.ReactNode; onClick: () => void; variant?: "primary" | "secondary";
 }) {
   const base = "w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400/40";
-  const styles = variant === "primary"
-    ? "border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 text-white shadow-[0_12px_30px_rgba(37,99,235,0.28)] hover:-translate-y-0.5 hover:brightness-105"
-    : "border border-white/10 bg-slate-800/80 text-slate-100 backdrop-blur-md hover:-translate-y-0.5 hover:border-blue-400/25 hover:bg-slate-700/85";
-  return <button onClick={onClick} className={`${base} ${styles}`}>{children}</button>;
+  const primaryStyles = "border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 text-white shadow-[0_12px_30px_rgba(37,99,235,0.28)] hover:-translate-y-0.5 hover:brightness-105";
+  if (variant === "primary") {
+    return <button onClick={onClick} className={`${base} ${primaryStyles}`}>{children}</button>;
+  }
+  return (
+    <button
+      onClick={onClick}
+      className={`${base} border backdrop-blur-md hover:-translate-y-0.5 hover:border-blue-400/25`}
+      style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}
+    >
+      {children}
+    </button>
+  );
 }
 
 export default function InfoPage() {
@@ -177,7 +186,10 @@ export default function InfoPage() {
       <div className="space-y-8 sm:space-y-10">
 
         {/* ── HERO ── */}
-        <section className={`relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
+        <section
+          className={`relative overflow-visible rounded-[2rem] border shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
+          style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}
+        >
           <div className="flex h-1.5 w-full">
             <div className="flex-1 bg-blue-600" /><div className="flex-1 bg-white" /><div className="flex-1 bg-red-600" />
           </div>
@@ -192,19 +204,22 @@ export default function InfoPage() {
                   <span className="flex-1 bg-blue-700"/><span className="flex-1 bg-white"/><span className="flex-1 bg-red-600"/>
                 </div>
                 <div>
-                  <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">République française</div>
-                  <div className="text-xs text-slate-400">Plateforme d'entraînement 2026</div>
+                  <div className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--cc-text-muted)" }}>République française</div>
+                  <div className="text-xs" style={{ color: "var(--cc-text-muted)" }}>Plateforme d'entraînement 2026</div>
                 </div>
               </div>
               {!authLoading && !isAuthenticated && user?.pseudo?.trim() ? (
-                <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 backdrop-blur-md">
-                  <span>Bonjour <span className="font-semibold text-white">{authUsername?.trim() || user?.pseudo?.trim()}</span> 👋</span>
-                  <span className="text-slate-500">•</span>
-                  <button onClick={clearIdentity} className="text-slate-400 transition hover:text-red-400 hover:underline">Déconnexion</button>
+                <div
+                  className="flex flex-wrap items-center gap-2 rounded-2xl border px-3 py-2 text-sm backdrop-blur-md"
+                  style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}
+                >
+                  <span>Bonjour <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{authUsername?.trim() || user?.pseudo?.trim()}</span> 👋</span>
+                  <span style={{ color: "var(--cc-text-disabled)" }}>•</span>
+                  <button onClick={clearIdentity} className="transition hover:text-red-400 hover:underline" style={{ color: "var(--cc-text-muted)" }}>Déconnexion</button>
                 </div>
               ) : (
-                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-300">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   En vigueur depuis le 1er janvier 2026
                 </div>
               )}
@@ -212,13 +227,13 @@ export default function InfoPage() {
 
             <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
               <div className="text-center lg:text-left">
-                <div className="mb-3 mx-auto block text-center w-fit rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300 lg:mx-0">
+                <div className="mb-3 mx-auto block text-center w-fit rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-600 lg:mx-0">
                   Préparez-vous avec méthode
                 </div>
-                <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
-                  L'examen civique — <span className="text-blue-400">informations</span> essentielles.
+                <h1 className="text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl lg:text-4xl" style={{ color: "var(--cc-text)" }}>
+                  L'examen civique — <span style={{ color: "var(--cc-primary)" }}>informations</span> essentielles.
                 </h1>
-                <p className="mt-3 text-sm leading-relaxed text-slate-400 max-w-xl mx-auto lg:mx-0">
+                <p className="mt-3 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0" style={{ color: "var(--cc-text-muted)" }}>
                   Comprendre le format, les thèmes et les conditions de l'examen civique avant de vous entraîner dans les meilleures conditions.
                 </p>
                 <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center lg:justify-start">
@@ -227,14 +242,14 @@ export default function InfoPage() {
                   <ActionButton onClick={() => router.push("/pricing")} variant="secondary">👑 Voir les offres</ActionButton>
                 </div>
 
-                <div className="mt-6 rounded-[1.5rem] border border-blue-400/20 bg-white/[0.04] p-4 shadow-[0_18px_40px_rgba(2,8,23,0.22)] backdrop-blur-md sm:p-5">
+                <div className="mt-6 rounded-[1.5rem] border p-4 sm:p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", boxShadow: "var(--cc-shadow-sm)" }}>
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
-                      <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-200">
+                      <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700">
                         🏛️ Ressources officielles
                       </div>
-                      <p className="mt-3 text-sm font-semibold text-white">Centres agréés et informations officielles</p>
-                      <p className="mt-1 text-xs leading-6 text-slate-400">Retrouvez les liens officiels pour mieux comprendre l'examen.</p>
+                      <p className="mt-3 text-sm font-semibold" style={{ color: "var(--cc-text)" }}>Centres agréés et informations officielles</p>
+                      <p className="mt-1 text-xs leading-6" style={{ color: "var(--cc-text-muted)" }}>Retrouvez les liens officiels pour mieux comprendre l'examen.</p>
                     </div>
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[200px]">
                       <button onClick={() => router.push("/resources")}
@@ -242,38 +257,46 @@ export default function InfoPage() {
                         Voir les ressources
                       </button>
                       <a href="https://www.service-public.gouv.fr/particuliers/vosdroits/R74875" target="_blank" rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-white/10">
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10"
+                        style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>
                         Centres agréés ↗
                       </a>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-7 flex flex-wrap gap-3 text-xs text-slate-400 sm:text-sm">
+                <div className="mt-7 flex flex-wrap gap-3 text-xs sm:text-sm" style={{ color: "var(--cc-text-muted)" }}>
                   {["Format QCM", "Conditions réelles", "Préparation progressive"].map(t => (
-                    <div key={t} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">{t}</div>
+                    <div key={t} className="rounded-full border px-3 py-1.5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>{t}</div>
                   ))}
                 </div>
               </div>
 
               <div className="relative">
-                <div className="rounded-[1.75rem] border border-white/10 bg-gradient-to-b from-slate-800/90 to-slate-900/95 p-5 shadow-[0_20px_55px_rgba(2,8,23,0.4)] backdrop-blur-md sm:p-6">
+                <div
+                  className="rounded-[1.75rem] border p-5 shadow-[0_20px_55px_rgba(2,8,23,0.4)] backdrop-blur-md sm:p-6"
+                  style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
+                >
                   <div className="mb-5 flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Aperçu rapide</div>
-                      <div className="mt-1 text-lg font-bold text-white">Les essentiels à retenir</div>
+                      <div className="text-xs font-bold uppercase tracking-[0.16em]" style={{ color: "var(--cc-text-muted)" }}>Aperçu rapide</div>
+                      <div className="mt-1 text-lg font-bold" style={{ color: "var(--cc-text)" }}>Les essentiels à retenir</div>
                     </div>
-                    <div className="rounded-2xl border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-200">2026</div>
+                    <div className="rounded-2xl border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-700">2026</div>
                   </div>
                   <div className="space-y-3">
                     {[["40", "questions à choix multiples"], ["32/40", "score minimum pour réussir"], ["45 min", "durée indicative de l'épreuve"]].map(([strong, text]) => (
-                      <div key={text} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                      <div
+                        key={text}
+                        className="flex items-center gap-3 rounded-2xl border px-4 py-3"
+                        style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)" }}
+                      >
                         <div className="min-w-[72px] rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-2 text-center text-sm font-extrabold text-white">{strong}</div>
-                        <div className="text-sm text-slate-300">{text}</div>
+                        <div className="text-sm" style={{ color: "var(--cc-text-muted)" }}>{text}</div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-5 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-4 text-sm leading-6 text-amber-100">
+                  <div className="mt-5 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-4 text-sm leading-6 text-amber-700">
                     <span className="font-bold">Conseil :</span> comprendre les attentes de l'examen vous aidera à vous entraîner plus efficacement.
                   </div>
                 </div>
@@ -285,11 +308,11 @@ export default function InfoPage() {
         {/* ── OUTILS DE PRÉPARATION ── */}
         <section className={`transition-all duration-700 delay-100 ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
           <div className="mb-6 text-center">
-            <div className="mb-2 inline-block rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-300">
+            <div className="mb-2 inline-block rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-600">
               Vos outils de préparation
             </div>
-            <h2 className="text-2xl font-extrabold text-white">4 façons de vous préparer</h2>
-            <p className="mt-2 text-sm text-slate-400">Du plus rapide au plus complet — choisissez selon votre emploi du temps.</p>
+            <h2 className="text-2xl font-extrabold" style={{ color: "var(--cc-text)" }}>4 façons de vous préparer</h2>
+            <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>Du plus rapide au plus complet — choisissez selon votre emploi du temps.</p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {TOOLS.map((tool) => (
@@ -297,15 +320,16 @@ export default function InfoPage() {
                 <div className={`mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${tool.color} text-xl text-white shadow-lg`}>
                   {tool.icon}
                 </div>
-                <h3 className="text-base font-bold text-white">{tool.title}</h3>
-                <p className="mt-1 flex-1 text-xs leading-5 text-slate-400">{tool.desc}</p>
+                <h3 className="text-base font-bold" style={{ color: "var(--cc-text)" }}>{tool.title}</h3>
+                <p className="mt-1 flex-1 text-xs leading-5" style={{ color: "var(--cc-text-muted)" }}>{tool.desc}</p>
                 <div className="mt-3 mb-4">
-                  <span className={`rounded-full border ${tool.border} bg-white/5 px-2.5 py-0.5 text-[10px] font-semibold text-slate-300`}>
+                  <span className={`rounded-full border ${tool.border} px-2.5 py-0.5 text-[10px] font-semibold`} style={{ background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>
                     {tool.badge}
                   </span>
                 </div>
                 <button onClick={() => router.push(tool.href)}
-                  className={`w-full rounded-2xl border ${tool.border} bg-white/10 py-2.5 text-xs font-bold text-white transition hover:bg-white/15 active:scale-95`}>
+                  className={`w-full rounded-2xl border ${tool.border} bg-white/10 py-2.5 text-xs font-bold transition hover:bg-white/15 active:scale-95`}
+                  style={{ color: "var(--cc-text)" }}>
                   {tool.cta}
                 </button>
               </div>
@@ -315,7 +339,7 @@ export default function InfoPage() {
           {/* CTA upgrade */}
           {(!['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '')) && (
             <div className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-5 text-center">
-              <p className="text-sm font-semibold text-amber-100 mb-3">
+              <p className="text-sm font-semibold text-amber-700 mb-3">
                 🔓 Débloquez tout — 800+ questions, 100 épisodes audio, examen blanc illimité
               </p>
               <div className="flex flex-wrap justify-center gap-3">
@@ -324,7 +348,8 @@ export default function InfoPage() {
                   Voir les offres →
                 </button>
                 <button onClick={() => router.push("/register")}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-semibold text-slate-300 transition hover:bg-white/10">
+                  className="rounded-2xl border px-5 py-2.5 text-sm font-semibold transition hover:bg-white/10"
+                  style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>
                   Créer un compte gratuit
                 </button>
               </div>
@@ -340,12 +365,16 @@ export default function InfoPage() {
         {/* ── SECTIONS INFO ── */}
         <section className={`grid gap-5 lg:grid-cols-3 transition-all duration-700 delay-200 ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
           {SECTIONS.map((s) => (
-            <div key={s.title} className={`group rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] ring-1 ${s.ring} transition-all duration-300 hover:border-blue-400/20 sm:p-6`}>
+            <div
+              key={s.title}
+              className={`group rounded-[1.6rem] border p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] ring-1 ${s.ring} transition-all duration-300 hover:border-blue-400/20 sm:p-6`}
+              style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
+            >
               <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${s.color} text-xl text-white shadow-lg`}>{s.icon}</div>
-              <h2 className="mb-4 text-lg font-extrabold text-white">{s.title}</h2>
+              <h2 className="mb-4 text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>{s.title}</h2>
               <ul className="space-y-3">
                 {s.items.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm leading-6 text-slate-300">
+                  <li key={item} className="flex items-start gap-3 text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" /><span>{item}</span>
                   </li>
                 ))}
@@ -359,19 +388,23 @@ export default function InfoPage() {
           <div className="mb-5 flex items-center gap-3">
             <div className="h-10 w-1 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
             <div>
-              <h2 className="text-2xl font-extrabold text-white">Dans quelles situations ?</h2>
-              <p className="text-sm text-slate-400">Les principaux contextes dans lesquels l'examen civique peut être demandé.</p>
+              <h2 className="text-2xl font-extrabold" style={{ color: "var(--cc-text)" }}>Dans quelles situations ?</h2>
+              <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Les principaux contextes dans lesquels l'examen civique peut être demandé.</p>
             </div>
           </div>
           <div className="grid gap-4 lg:grid-cols-3">
             {SITUATIONS.map((s) => (
-              <div key={s.title} className="group rounded-[1.6rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20">
+              <div
+                key={s.title}
+                className="group rounded-[1.6rem] border p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] transition-all duration-300 hover:border-blue-400/20"
+                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
+              >
                 <div className="mb-4 flex items-center justify-between">
                   <div className="text-3xl">{s.icon}</div>
-                  <div className="text-xs font-black tracking-[0.18em] text-slate-600">{s.num}</div>
+                  <div className="text-xs font-black tracking-[0.18em]" style={{ color: "var(--cc-text-disabled)" }}>{s.num}</div>
                 </div>
-                <h3 className="text-lg font-bold text-white">{s.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-300">{s.description}</p>
+                <h3 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>{s.title}</h3>
+                <p className="mt-3 text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>{s.description}</p>
               </div>
             ))}
           </div>
@@ -383,15 +416,15 @@ export default function InfoPage() {
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-xl">⚠️</div>
               <div>
-                <h2 className="text-lg font-extrabold text-amber-100">Cas où l'examen n'est pas demandé</h2>
-                <p className="text-sm text-amber-200/80">Quelques situations dans lesquelles cette exigence ne s'applique pas.</p>
+                <h2 className="text-lg font-extrabold text-amber-700">Cas où l'examen n'est pas demandé</h2>
+                <p className="text-sm text-amber-600/80">Quelques situations dans lesquelles cette exigence ne s'applique pas.</p>
               </div>
             </div>
             <div className="grid gap-3 md:grid-cols-3">
               {EXEMPTIONS.map((item) => (
-                <div key={item.text} className="rounded-2xl border border-amber-400/15 bg-black/10 p-4 backdrop-blur-sm">
+                <div key={item.text} className="rounded-2xl border border-amber-400/20 p-4" style={{ background: "var(--cc-surface-raised)" }}>
                   <div className="mb-2 text-lg">{item.icon}</div>
-                  <p className="text-sm leading-6 text-amber-100">{item.text}</p>
+                  <p className="text-sm leading-6 text-amber-700">{item.text}</p>
                 </div>
               ))}
             </div>
@@ -403,19 +436,19 @@ export default function InfoPage() {
           <div className="mb-5 flex items-center gap-3">
             <div className="h-10 w-1 rounded-full bg-gradient-to-b from-red-500 to-green-500" />
             <div>
-              <h2 className="text-2xl font-extrabold text-white">Ce qui a changé en 2026</h2>
-              <p className="text-sm text-slate-400">Une évolution importante vers un cadre plus uniforme et plus lisible.</p>
+              <h2 className="text-2xl font-extrabold" style={{ color: "var(--cc-text)" }}>Ce qui a changé en 2026</h2>
+              <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Une évolution importante vers un cadre plus uniforme et plus lisible.</p>
             </div>
           </div>
           <div className="grid gap-4 lg:grid-cols-2">
             <div className="rounded-[1.6rem] border border-red-400/20 bg-gradient-to-br from-red-500/10 to-rose-500/10 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.2)] sm:p-6">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-3 py-1.5">
-                <span className="text-xs font-black uppercase tracking-[0.18em] text-red-300">Avant 2026</span>
+                <span className="text-xs font-black uppercase tracking-[0.18em] text-red-700">Avant 2026</span>
               </div>
               <ul className="space-y-3">
                 {BEFORE_2026.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm leading-6 text-red-100">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-400/20 text-[11px] font-bold text-red-300">✕</span>
+                  <li key={item} className="flex items-start gap-3 text-sm leading-6 text-red-700">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-400/20 text-[11px] font-bold text-red-700">✕</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -424,12 +457,12 @@ export default function InfoPage() {
             <div className="rounded-[1.6rem] border border-green-400/20 bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.2)] sm:p-6">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-400/20 bg-green-500/10 px-3 py-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-xs font-black uppercase tracking-[0.18em] text-green-300">Depuis 2026</span>
+                <span className="text-xs font-black uppercase tracking-[0.18em] text-green-700">Depuis 2026</span>
               </div>
               <ul className="space-y-3">
                 {SINCE_2026.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm leading-6 text-green-100">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-400/20 text-[11px] font-bold text-green-300">✓</span>
+                  <li key={item} className="flex items-start gap-3 text-sm leading-6 text-green-700">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-400/20 text-[11px] font-bold text-green-700">✓</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -440,15 +473,18 @@ export default function InfoPage() {
 
         {/* ── CTA FINAL ── */}
         <section className={`transition-all duration-700 delay-[400ms] ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 px-5 py-8 text-center shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl sm:px-8 sm:py-10">
+          <div
+            className="relative overflow-hidden rounded-[2rem] border px-5 py-8 text-center shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl sm:px-8 sm:py-10"
+            style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}
+          >
             <div className="pointer-events-none absolute -left-20 top-0 h-56 w-56 rounded-full bg-blue-500/15 blur-3xl" />
             <div className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-indigo-500/15 blur-3xl" />
             <div className="relative">
               <div className="mb-3 text-4xl">🎯</div>
-              <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
+              <h2 className="text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl lg:text-4xl" style={{ color: "var(--cc-text)" }}>
                 Prêt à passer à l'action ?
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 sm:text-base" style={{ color: "var(--cc-text-muted)" }}>
                 800+ questions, 100 épisodes audio, 3 niveaux de difficulté — tout ce qu'il faut pour réussir votre entretien civique.
               </p>
               <div className="mt-7 flex flex-wrap justify-center gap-3">
@@ -461,7 +497,7 @@ export default function InfoPage() {
         </section>
 
         <div className="flex justify-center pb-2">
-          <button onClick={() => router.push("/")} className="group inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-blue-300">
+          <button onClick={() => router.push("/")} className="group inline-flex items-center gap-2 text-sm transition hover:text-blue-600" style={{ color: "var(--cc-text-muted)" }}>
             <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
             Retour à l'accueil
           </button>

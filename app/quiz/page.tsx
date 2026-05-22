@@ -361,10 +361,10 @@ function selectAnswer(choice: ChoiceKey) {
     return (
       <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8">
         <Card>
-          <h1 className="text-xl font-bold text-white">
+          <h1 className="text-xl font-bold" style={{ color: "var(--cc-text)" }}>
             Impossible de générer le test
           </h1>
-          <p className="mt-2 text-slate-300">{error}</p>
+          <p className="mt-2" style={{ color: "var(--cc-text-muted)" }}>{error}</p>
           <Button className="mt-4" variant="secondary" onClick={() => router.push(`/results?mode=${mode}`)}>
             Retour
           </Button>
@@ -375,8 +375,8 @@ function selectAnswer(choice: ChoiceKey) {
 
   if (!questions.length || !current || !meta) {
     return (
-      <main className="mx-auto max-w-4xl px-4 py-6 text-slate-300 sm:px-6 sm:py-8">
-        <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_18px_45px_rgba(2,8,23,0.28)]">
+      <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8" style={{ color: "var(--cc-text)" }}>
+        <div className="rounded-xl border p-6" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
           Chargement…
         </div>
       </main>
@@ -418,47 +418,48 @@ function selectAnswer(choice: ChoiceKey) {
     <main className="mx-auto max-w-4xl px-3 py-2 sm:px-6 sm:py-4">
       <div className="space-y-4">
         {/* Bandeau compact */}
-        <div className="rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 p-3 shadow-[0_20px_50px_rgba(2,8,23,0.40)]">
+        <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)", boxShadow: "var(--cc-shadow)" }}>
           <div className="flex items-center justify-between gap-3 flex-wrap">
   <div className="flex items-center gap-3 flex-wrap">
     <button
       type="button"
       onClick={leaveQuiz}
-      className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
+      className="rounded-full border px-3 py-1.5 text-xs font-semibold transition"
+      style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
     >
       ← Quitter
     </button>
 
-    <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-200">
+    <span className="cc-badge cc-badge-info">
       {mode === "exam" ? "Mode examen" : "Mode entraînement"}
     </span>
 
-    <span className="text-sm text-slate-300">
-      Niveau <span className="font-semibold text-white">{meta.level}</span>
+    <span className="text-sm" style={{ color: "var(--cc-text-muted)" }}>
+      Niveau <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{meta.level}</span>
     </span>
 
-    <span className="text-sm font-semibold text-white">
+    <span className="text-sm font-semibold" style={{ color: "var(--cc-text)" }}>
       Question {idx + 1} / {questions.length}
     </span>
   </div>
 
-  <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+  <div className="flex items-center gap-2 rounded-full border px-3 py-1.5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
     <div
       className={`h-2.5 w-2.5 rounded-full ${
         remaining <= 3 ? "bg-red-500 animate-pulse" : "bg-emerald-400"
       }`}
     />
-    <span className="font-semibold text-white">{Math.max(0, remaining)}s</span>
+    <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{Math.max(0, remaining)}s</span>
   </div>
 </div>
 
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <div>
-              <div className="mb-1 flex items-center justify-between text-[11px] text-slate-400">
+              <div className="mb-1 flex items-center justify-between text-[11px]" style={{ color: "var(--cc-text-muted)" }}>
                 <span>Progression</span>
-                <span className="font-semibold text-slate-200">{progressPct}%</span>
+                <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{progressPct}%</span>
               </div>
-              <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: "var(--cc-border)" }}>
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 transition-all duration-300"
                   style={{ width: `${progressPct}%` }}
@@ -467,11 +468,11 @@ function selectAnswer(choice: ChoiceKey) {
             </div>
 
             <div>
-              <div className="mb-1 flex items-center justify-between text-[11px] text-slate-400">
+              <div className="mb-1 flex items-center justify-between text-[11px]" style={{ color: "var(--cc-text-muted)" }}>
                 <span>Temps question</span>
-                <span className="font-semibold text-slate-200">{timeRatio}%</span>
+                <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{timeRatio}%</span>
               </div>
-              <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: "var(--cc-border)" }}>
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     remaining <= 5
@@ -484,22 +485,22 @@ function selectAnswer(choice: ChoiceKey) {
             </div>
           </div>
 
-          <div className="mt-3 flex items-center justify-between gap-3 flex-wrap text-xs text-slate-400">
+          <div className="mt-3 flex items-center justify-between gap-3 flex-wrap text-xs" style={{ color: "var(--cc-text-muted)" }}>
             <span>
-              Répondu : <span className="font-semibold text-white">{answeredCount}/{questions.length}</span>
+              Répondu : <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{answeredCount}/{questions.length}</span>
             </span>
             <span>
-              Validation : <span className="font-semibold text-white">≥ {minToSubmit}</span>
+              Validation : <span className="font-semibold" style={{ color: "var(--cc-text)" }}>≥ {minToSubmit}</span>
             </span>
             {mode === "exam" && globalTime !== null && (
               <span>
-                Temps global : <span className="font-semibold text-white">{formatGlobalTime(globalTime)}</span>
+                Temps global : <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{formatGlobalTime(globalTime)}</span>
               </span>
             )}
           </div>
 
           {mode === "exam" && focusWarn > 0 && (
-            <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
+            <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-700">
               Onglet quitté : <span className="font-semibold">{focusWarn}</span>/3
             </div>
           )}
@@ -507,12 +508,12 @@ function selectAnswer(choice: ChoiceKey) {
 
         {/* Question directement visible */}
         <Card className="overflow-hidden">
-          <div className="rounded-[1.4rem] border border-white/10 bg-white/5 p-4 sm:p-5">
-            <div className="mb-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+          <div className="rounded-xl border p-4 sm:p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+            <div className="mb-2 text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: "var(--cc-text-muted)" }}>
               {current.theme} • Niveau {current.level}
             </div>
 
-            <h2 className="text-lg font-semibold leading-snug text-white sm:text-xl">
+            <h2 className="text-lg font-semibold leading-snug sm:text-xl" style={{ color: "var(--cc-text)" }}>
               {current.question}
             </h2>
           </div>
@@ -524,18 +525,19 @@ function selectAnswer(choice: ChoiceKey) {
                 <button
                   key={c.key}
                   onClick={() => selectAnswer(c.key)}
-                  className={`w-full rounded-xl border px-3 py-2 text-left transition-all duration-200 ${
-                    selected
-                      ? "border-blue-400/30 bg-blue-500/15 text-white shadow-[0_10px_30px_rgba(37,99,235,0.14)]"
-                      : "border-white/10 bg-white/5 text-slate-200 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
-                  }`}
+                  className="w-full rounded-xl border px-3 py-2 text-left transition-all duration-200"
+                  style={{
+                    borderColor: selected ? "var(--cc-primary)" : "var(--cc-border)",
+                    background: selected ? "var(--cc-primary-soft)" : "var(--cc-surface)",
+                    color: "var(--cc-text)",
+                  }}
                 >
                   <span
-                    className={`mr-3 inline-flex h-8 w-8 items-center justify-center rounded-xl text-sm font-bold ${
-                      selected
-                        ? "bg-blue-500/20 text-blue-200"
-                        : "bg-white/5 text-slate-300"
-                    }`}
+                    className="mr-3 inline-flex h-8 w-8 items-center justify-center rounded-xl text-sm font-bold"
+                    style={{
+                      background: selected ? "var(--cc-primary)" : "var(--cc-surface-alt)",
+                      color: selected ? "#fff" : "var(--cc-text-muted)",
+                    }}
                   >
                     {c.key}
                   </span>
@@ -550,7 +552,8 @@ function selectAnswer(choice: ChoiceKey) {
     <button
       type="button"
       onClick={leaveQuiz}
-      className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
+      className="rounded-xl border px-4 py-2 transition"
+      style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
     >
       Quitter
     </button>
@@ -560,7 +563,8 @@ function selectAnswer(choice: ChoiceKey) {
         <button
           onClick={() => setIdx((i) => Math.max(0, i - 1))}
           disabled={idx === 0}
-          className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-slate-300 transition hover:bg-white/10 hover:text-white disabled:opacity-50"
+          className="rounded-xl border px-4 py-2 transition disabled:opacity-50"
+          style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
         >
           Précédent
         </button>
@@ -578,16 +582,16 @@ function selectAnswer(choice: ChoiceKey) {
 
           <StarBurstQuiz show={showBurst} />
           {!canSubmit && (
-            <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+            <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-700">
               ⚠️ Validation possible uniquement si vous avez répondu à au moins{" "}
               <strong>{minToSubmit}</strong> questions.
             </div>
           )}
 
           {score && (
-            <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-300">
+            <div className="mt-5 rounded-xl border px-4 py-3 text-sm" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
               Score provisoire :{" "}
-              <span className="font-semibold text-white">
+              <span className="font-semibold" style={{ color: "var(--cc-text)" }}>
                 {score.correct}/{score.total}
               </span>{" "}
               — {score.percent}%
@@ -599,16 +603,16 @@ function selectAnswer(choice: ChoiceKey) {
       {showPremiumCTA && (
   <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
   style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}>
-  <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
-      
+  <div className="w-full max-w-md rounded-2xl border p-6" style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)", boxShadow: "var(--cc-shadow-lg)" }}>
+
       <div className="text-center mb-5">
         <div className="text-4xl mb-3">{role === "anonymous" ? "✨" : "👑"}</div>
-        <h2 className="text-xl font-extrabold text-white">
-          {role === "anonymous" 
-            ? "Crée un compte gratuit !" 
+        <h2 className="text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>
+          {role === "anonymous"
+            ? "Crée un compte gratuit !"
             : "Passe en Premium !"}
         </h2>
-        <p className="mt-2 text-sm text-slate-400">
+        <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>
           {role === "anonymous"
             ? "Tu viens de faire 10 questions 🎉. Crée un compte gratuit pour sauvegarder tes résultats et accéder à 20 questions."
             : "Tu viens de terminer tes 20 questions 😉. Passe en Premium pour accéder à 40 questions, tous les niveaux, l'examen blanc et les statistiques détaillées."}
@@ -619,11 +623,11 @@ function selectAnswer(choice: ChoiceKey) {
         {role === "anonymous" ? (
           <>
             <a href={`/register?redirect=/results?mode=${mode}`}
-              className="block w-full rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-bold text-white transition hover:bg-blue-500">
+              className="cc-btn cc-btn-primary w-full justify-center rounded-xl py-3"
               🚀 Créer un compte pour sauvegarder
             </a>
             <a href={`/login?redirect=/results?mode=${mode}`}
-              className="block w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-medium text-slate-300 transition hover:bg-white/10">
+              className="cc-btn cc-btn-secondary w-full justify-center rounded-xl py-3">
               J'ai déjà un compte
             </a>
             {!showAnonForm ? (
@@ -645,27 +649,28 @@ function selectAnswer(choice: ChoiceKey) {
                     setShowAnonForm(true);
                   }
                 }}
-                className="block w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-center text-xs font-medium text-slate-500 transition hover:text-slate-300">
+                className="block w-full rounded-xl border px-4 py-2.5 text-center text-xs font-medium transition"
+                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-disabled)" }}>
                 {(() => { const c = parseInt(typeof window !== 'undefined' ? localStorage.getItem('anon_test_count') ?? '0' : '0', 10); return c >= 3 ? '🔒 Créer un compte pour continuer' : 'Voir mes résultats sans compte →'; })()}
               </button>
             ) : (
               <div className="mt-2 space-y-2">
-                <p className="text-center text-sm text-slate-300 font-medium">Où envoyer tes résultats ?</p>
+                <p className="text-center text-sm font-medium" style={{ color: "var(--cc-text)" }}>Où envoyer tes résultats ?</p>
                 <input
                   type="text"
                   placeholder="Ton prénom"
                   value={anonPrenom}
                   onChange={(e) => setAnonPrenom(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                  className="w-full"
                 />
                 <input
                   type="email"
                   placeholder="Ton email"
                   value={anonEmail}
                   onChange={(e) => setAnonEmail(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                  className="w-full"
                 />
-                <p className="text-center text-[10px] text-slate-600">Pas de spam, jamais.</p>
+                <p className="text-center text-[10px]" style={{ color: "var(--cc-text-disabled)" }}>Pas de spam, jamais.</p>
                 <button
                   disabled={!anonPrenom.trim() || !anonEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(anonEmail.trim())}
                   onClick={() => {
@@ -695,13 +700,15 @@ function selectAnswer(choice: ChoiceKey) {
         <div className="flex gap-2">
   <button
     onClick={() => router.push("/pricing")}
-    className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center text-xs font-medium text-slate-400 transition hover:text-white"
+    className="flex-1 rounded-xl border px-4 py-3 text-center text-xs font-medium transition"
+    style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
   >
     Voir les tarifs
   </button>
   <button
     onClick={() => { setShowPremiumCTA(false); router.push(`/results?mode=${mode}`); }}
-    className={`flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-medium text-slate-400 transition hover:text-white ${role === "anonymous" ? "hidden" : ""}`}
+    className={`flex-1 rounded-xl border px-4 py-3 text-center text-sm font-medium transition ${role === "anonymous" ? "hidden" : ""}`}
+    style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
   >
     Mes résultats →
   </button>

@@ -80,7 +80,7 @@ export default async function TemoignagesPage({ searchParams }: { searchParams: 
   return (
     <main className="max-w-5xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
-        <Link href="/communaute" className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors">
+        <Link href="/communaute" className="inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: "var(--cc-text-muted)" }}>
           <ArrowLeft size={15} />Communauté
         </Link>
         <Link href="/communaute/temoignages/new" className="inline-flex items-center gap-1.5 bg-teal-600 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-teal-700 transition-colors">
@@ -89,8 +89,8 @@ export default async function TemoignagesPage({ searchParams }: { searchParams: 
       </div>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-medium text-white mb-1">Retours d&apos;expériences</h1>
-        <p className="text-sm text-slate-400">{enriched.length} témoignage{enriched.length > 1 ? 's' : ''} partagé{enriched.length > 1 ? 's' : ''}</p>
+        <h1 className="text-2xl font-medium mb-1" style={{ color: "var(--cc-text)" }}>Retours d&apos;expériences</h1>
+        <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>{enriched.length} témoignage{enriched.length > 1 ? 's' : ''} partagé{enriched.length > 1 ? 's' : ''}</p>
       </div>
 
       <div className="flex gap-2 mb-6">
@@ -99,7 +99,7 @@ export default async function TemoignagesPage({ searchParams }: { searchParams: 
           { label: 'Test civique', href: '/communaute/temoignages?type=test_civique', active: typeFilter === 'test_civique', color: 'bg-teal-600 text-white' },
           { label: 'Entretien', href: '/communaute/temoignages?type=entretien_naturalisation', active: typeFilter === 'entretien_naturalisation', color: 'bg-orange-500 text-white' },
         ].map(({ label, href, active, color }) => (
-          <Link key={label} href={href} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${active ? color : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>
+          <Link key={label} href={href} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${active ? color : ''}`} style={!active ? { background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" } : {}}>
             {label}
           </Link>
         ))}
@@ -107,7 +107,7 @@ export default async function TemoignagesPage({ searchParams }: { searchParams: 
 
       {enriched.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-slate-500 text-sm mb-4">Aucun témoignage pour l&apos;instant.</p>
+          <p className="text-sm mb-4" style={{ color: "var(--cc-text-disabled)" }}>Aucun témoignage pour l&apos;instant.</p>
           <Link href="/communaute/temoignages/new" className="inline-flex items-center gap-2 bg-teal-600 text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-teal-700 transition-colors">
             <Plus size={15} />Soyez le premier à partager
           </Link>

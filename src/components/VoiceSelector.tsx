@@ -87,12 +87,12 @@ export function VoiceSelector() {
   }
 
   return (
-    <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-br from-slate-900 to-slate-800 p-6 shadow-[0_20px_50px_rgba(2,8,23,0.24)]">
+    <div className="rounded-[1.8rem] border p-6 shadow-[0_20px_50px_rgba(2,8,23,0.24)]" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
       {/* En-tête */}
       <div className="mb-5 flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-white">Voix de narration</h3>
-          <p className="mt-1 text-sm text-slate-400">
+          <h3 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Voix de narration</h3>
+          <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>
             Choisissez la voix pour tous vos épisodes audio
           </p>
         </div>
@@ -156,10 +156,10 @@ export function VoiceSelector() {
                 </div>
               </div>
 
-              <p className={`font-semibold ${isSelected ? "text-white" : "text-slate-300"}`}>
+              <p className="font-semibold" style={{ color: isSelected ? "var(--cc-text)" : "var(--cc-text-muted)" }}>
                 {option.label}
               </p>
-              <p className="mt-1 text-xs leading-5 text-slate-400">
+              <p className="mt-1 text-xs leading-5" style={{ color: "var(--cc-text-muted)" }}>
                 {option.description}
               </p>
 
@@ -196,7 +196,7 @@ export function VoiceSelector() {
       </div>
 
       {/* Note */}
-      <p className="mt-4 text-center text-xs text-slate-500">
+      <p className="mt-4 text-center text-xs" style={{ color: "var(--cc-text-disabled)" }}>
         La préférence est synchronisée sur tous vos appareils
       </p>
     </div>

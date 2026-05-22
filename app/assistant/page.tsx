@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useUser } from "../components/UserContext";
 import AiPaywall from "../components/AiPaywall";
-import Link from "next/link";
 
 const CATEGORIES = [
   {
@@ -11,35 +10,30 @@ const CATEGORIES = [
     icon: "📝",
     label: "Déposer une demande",
     description: "Comment constituer et déposer un dossier",
-    color: "border-blue-400/20 bg-blue-500/10 text-blue-200",
   },
   {
     id: "suivre",
     icon: "📊",
     label: "Suivre mon dossier",
     description: "Vérifier l'état d'avancement de votre demande",
-    color: "border-emerald-400/20 bg-emerald-500/10 text-emerald-200",
   },
   {
     id: "entretien",
     icon: "🎤",
     label: "Préparer l'entretien",
     description: "Conseils pour l'entretien de naturalisation",
-    color: "border-violet-400/20 bg-violet-500/10 text-violet-200",
   },
   {
     id: "courrier",
     icon: "📬",
     label: "Comprendre un courrier",
     description: "Décrypter une lettre de la préfecture",
-    color: "border-amber-400/20 bg-amber-500/10 text-amber-200",
   },
   {
     id: "examen",
     icon: "📋",
     label: "Question sur l'examen civique",
     description: "Informations sur l'épreuve et les modalités",
-    color: "border-sky-400/20 bg-sky-500/10 text-sky-200",
   },
 ];
 
@@ -97,23 +91,9 @@ export default function AssistantPage() {
         }),
       });
 
-      if (res.status === 429) {
-        setShowPaywall(true);
-        setLoading(false);
-        return;
-      }
-
-      if (res.status === 401) {
-        setError("Vous devez être connecté pour utiliser l'assistant.");
-        setLoading(false);
-        return;
-      }
-
-      if (!res.ok) {
-        setError("Erreur lors de la génération de la réponse");
-        setLoading(false);
-        return;
-      }
+      if (res.status === 429) { setShowPaywall(true); setLoading(false); return; }
+      if (res.status === 401) { setError("Vous devez être connecté pour utiliser l'assistant."); setLoading(false); return; }
+      if (!res.ok) { setError("Erreur lors de la génération de la réponse"); setLoading(false); return; }
 
       const json = await res.json();
       const result = json.data as AssistantData & { off_topic?: boolean };
@@ -145,37 +125,57 @@ export default function AssistantPage() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8 space-y-6">
-      {/* Header */}
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)]">
-        <div className="flex h-1.5 w-full">
-          <div className="flex-1 bg-blue-600" /><div className="flex-1 bg-white" /><div className="flex-1 bg-red-600" />
+
+      {/* ── Header ── */}
+      <section
+        className="overflow-hidden rounded-2xl border"
+        style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)", boxShadow: "var(--cc-shadow)" }}
+      >
+        {/* Bande tricolore */}
+        <div className="flex h-1">
+          <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
+          <div className="flex-1" style={{ background: "var(--cc-surface)" }} />
+          <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
         </div>
         <div className="p-5 sm:p-6">
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-3">
             <span className="text-2xl">🤖</span>
             <div>
-              <h1 className="text-xl font-extrabold text-white sm:text-2xl">Assistant démarches</h1>
-              <p className="text-sm text-slate-400">Posez vos questions sur les démarches administratives</p>
+              <h1 className="text-xl font-extrabold sm:text-2xl" style={{ color: "var(--cc-text)" }}>
+                Assistant démarches
+              </h1>
+              <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>
+                Posez vos questions sur les démarches administratives
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Sélection catégorie */}
+      {/* ── Sélection catégorie ── */}
       {!selectedCategory ? (
         <section className="space-y-3">
-          <p className="text-sm font-semibold text-slate-300">Choisissez une catégorie :</p>
+          <p className="text-sm font-semibold" style={{ color: "var(--cc-text)" }}>
+            Choisissez une catégorie :
+          </p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 ${cat.color}`}
+                className="flex items-start gap-3 rounded-xl border p-4 text-left transition hover:-translate-y-0.5"
+                style={{
+                  background: "var(--cc-surface)",
+                  borderColor: "var(--cc-border)",
+                  boxShadow: "var(--cc-shadow-sm)",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--cc-primary)")}
+                onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--cc-border)")}
               >
                 <span className="text-2xl">{cat.icon}</span>
                 <div>
-                  <p className="text-sm font-bold text-white">{cat.label}</p>
-                  <p className="mt-0.5 text-xs opacity-80">{cat.description}</p>
+                  <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>{cat.label}</p>
+                  <p className="mt-0.5 text-xs" style={{ color: "var(--cc-text-muted)" }}>{cat.description}</p>
                 </div>
               </button>
             ))}
@@ -183,18 +183,26 @@ export default function AssistantPage() {
         </section>
       ) : (
         <>
-          {/* Catégorie sélectionnée + formulaire */}
-          <section className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5">
+          {/* ── Catégorie sélectionnée + formulaire ── */}
+          <section
+            className="rounded-2xl border p-5"
+            style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)" }}
+          >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="text-lg">{CATEGORIES.find(c => c.id === selectedCategory)?.icon}</span>
-                <span className="text-sm font-bold text-white">
+                <span className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>
                   {CATEGORIES.find(c => c.id === selectedCategory)?.label}
                 </span>
               </div>
               <button
                 onClick={resetForm}
-                className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 transition hover:text-white"
+                className="rounded-lg border px-3 py-1.5 text-xs transition"
+                style={{
+                  borderColor: "var(--cc-border)",
+                  color: "var(--cc-text-muted)",
+                  background: "var(--cc-surface-alt)",
+                }}
               >
                 Changer de catégorie
               </button>
@@ -202,15 +210,23 @@ export default function AssistantPage() {
 
             {/* Alerte hors-sujet */}
             {offTopicMsg && (
-              <div className="mb-3 flex items-start gap-2.5 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-xs text-red-300">!</span>
-                <div>
-                  <p className="text-sm font-semibold text-red-200">Question hors-sujet</p>
-                  <p className="mt-0.5 text-xs text-red-300/80 leading-relaxed">
-                    L'assistant est spécialisé dans les démarches administratives en France. Posez une question liée à la naturalisation, l'examen civique, le titre de séjour ou toute autre démarche.
+              <div className="cc-notice cc-notice-danger mb-3">
+                <div className="flex-1">
+                  <p className="text-sm font-semibold" style={{ color: "var(--cc-danger)" }}>
+                    Question hors-sujet
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed" style={{ color: "var(--cc-text-muted)" }}>
+                    L'assistant est spécialisé dans les démarches administratives en France. Posez une question
+                    liée à la naturalisation, l'examen civique, le titre de séjour ou toute autre démarche.
                   </p>
                 </div>
-                <button onClick={() => setOffTopicMsg(false)} className="shrink-0 text-red-400/60 hover:text-red-300 text-xs">✕</button>
+                <button
+                  onClick={() => setOffTopicMsg(false)}
+                  className="shrink-0 text-xs"
+                  style={{ color: "var(--cc-text-disabled)" }}
+                >
+                  ✕
+                </button>
               </div>
             )}
 
@@ -219,93 +235,145 @@ export default function AssistantPage() {
                 value={question}
                 onChange={(e) => { setQuestion(e.target.value); setOffTopicMsg(false); }}
                 placeholder="Décrivez votre situation ou posez votre question..."
-                className="w-full min-h-[72px] max-h-[200px] rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-400/30"
-                style={{ resize: 'vertical' }}
+                className="w-full min-h-[72px] max-h-[200px]"
+                style={{ resize: "vertical" }}
                 disabled={loading}
               />
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xs text-slate-500">
-                  {!isAuthenticated ? '3 questions/jour' : role === 'freemium' ? '10 questions/jour' : 'Illimité'}
+                <p className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>
+                  {!isAuthenticated ? "3 questions/jour" : role === "freemium" ? "10 questions/jour" : "Illimité"}
                 </p>
                 <button
                   type="submit"
                   disabled={!question.trim() || loading}
-                  className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-blue-500 disabled:opacity-50"
+                  className="cc-btn cc-btn-primary"
                 >
-                  {loading ? "Analyse..." : "Envoyer"}
+                  {loading ? "Analyse..." : "Envoyer →"}
                 </button>
               </div>
             </form>
           </section>
 
-          {/* Loading */}
+          {/* ── Loading ── */}
           {loading && (
-            <div className="rounded-2xl border border-blue-400/20 bg-blue-500/10 p-5">
+            <div
+              className="rounded-2xl border p-5"
+              style={{ background: "var(--cc-primary-soft)", borderColor: "var(--cc-primary)" }}
+            >
               <div className="flex items-center justify-center gap-3">
-                <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" />
-                <span className="text-sm text-blue-200">Analyse de votre question...</span>
+                <div
+                  className="h-5 w-5 animate-spin rounded-full border-2 border-t-transparent"
+                  style={{ borderColor: "var(--cc-primary)" }}
+                />
+                <span className="text-sm" style={{ color: "var(--cc-primary)" }}>
+                  Analyse de votre question...
+                </span>
               </div>
             </div>
           )}
 
-          {/* Paywall */}
+          {/* ── Paywall ── */}
           {showPaywall && <AiPaywall mode="assistant" />}
 
+          {/* ── CTA inscription ── */}
           {showSignupCta && (
-            <div className="rounded-2xl border border-blue-400/20 bg-gradient-to-b from-blue-500/10 to-blue-900/10 p-5 text-center">
-              <p className="text-lg font-bold text-white mb-2">Vos 3 questions gratuites sont utilisées</p>
-              <p className="text-sm text-slate-400 mb-4 leading-relaxed">
+            <div
+              className="rounded-2xl border p-5 text-center"
+              style={{ background: "var(--cc-primary-soft)", borderColor: "var(--cc-primary)" }}
+            >
+              <p className="text-lg font-bold mb-2" style={{ color: "var(--cc-text)" }}>
+                Vos 3 questions gratuites sont utilisées
+              </p>
+              <p className="text-sm mb-4 leading-relaxed" style={{ color: "var(--cc-text-muted)" }}>
                 Créez un compte gratuit pour poser jusqu'à 10 questions par jour et accéder à toutes les catégories.
               </p>
               <div className="flex flex-col gap-2 max-w-xs mx-auto">
-                <a href="/register" className="block rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-500">
+                <a href="/register" className="cc-btn cc-btn-primary w-full justify-center">
                   Créer un compte gratuit
                 </a>
-                <a href="/login" className="block rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-xs text-slate-400 transition hover:text-white">
+                <a href="/login" className="cc-btn cc-btn-secondary w-full justify-center">
                   J'ai déjà un compte
                 </a>
               </div>
             </div>
           )}
 
-          {/* Erreur */}
+          {/* ── Erreur ── */}
           {error && (
-            <div className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-200">
-              {error}
+            <div className="cc-notice cc-notice-danger">
+              <p className="text-sm" style={{ color: "var(--cc-danger)" }}>{error}</p>
             </div>
           )}
 
-          {/* Résultat */}
+          {/* ── Résultat ── */}
           {data && (
-            <section className="rounded-[1.6rem] border border-blue-400/20 bg-gradient-to-b from-blue-500/10 to-blue-900/10 p-5 space-y-4">
+            <section
+              className="rounded-2xl border p-5 space-y-4"
+              style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)", boxShadow: "var(--cc-shadow)" }}
+            >
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-lg">🤖</span>
-                <span className="text-base font-bold text-blue-200">Réponse de l'assistant</span>
+                <span className="text-base font-bold" style={{ color: "var(--cc-primary)" }}>
+                  Réponse de l'assistant
+                </span>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                <p className="text-xs font-bold text-blue-300 uppercase tracking-wider mb-1">Résumé</p>
-                <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.summary}</p>
+              <div
+                className="rounded-xl border p-4"
+                style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)" }}
+              >
+                <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "var(--cc-primary)" }}>
+                  Résumé
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--cc-text)" }}>
+                  {data.summary}
+                </p>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                <p className="text-xs font-bold text-violet-300 uppercase tracking-wider mb-1">Ce que ça signifie</p>
-                <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.what_it_means}</p>
+              <div
+                className="rounded-xl border p-4"
+                style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)" }}
+              >
+                <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "var(--cc-info)" }}>
+                  Ce que ça signifie
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--cc-text)" }}>
+                  {data.what_it_means}
+                </p>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Ce qu'il faut faire</p>
-                <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.what_to_do}</p>
+              <div
+                className="rounded-xl border p-4"
+                style={{ background: "var(--cc-success-soft)", borderColor: "var(--cc-success)" }}
+              >
+                <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "var(--cc-success)" }}>
+                  Ce qu'il faut faire
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--cc-text)" }}>
+                  {data.what_to_do}
+                </p>
               </div>
 
-              <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-4">
-                <p className="text-xs font-bold text-amber-300 uppercase tracking-wider mb-1">Points de vigilance</p>
-                <p className="text-sm text-amber-100 leading-relaxed text-justify">{data.watch_out}</p>
+              <div
+                className="rounded-xl border p-4"
+                style={{ background: "var(--cc-warning-soft)", borderColor: "var(--cc-warning)" }}
+              >
+                <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "var(--cc-warning)" }}>
+                  Points de vigilance
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--cc-text)" }}>
+                  {data.watch_out}
+                </p>
               </div>
 
               {data.official_links && data.official_links.length > 0 && (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                  <p className="text-xs font-bold text-sky-300 uppercase tracking-wider mb-2">Liens officiels</p>
+                <div
+                  className="rounded-xl border p-4"
+                  style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)" }}
+                >
+                  <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "var(--cc-info)" }}>
+                    Liens officiels
+                  </p>
                   <div className="space-y-1.5">
                     {data.official_links.map((link, i) => (
                       <a
@@ -313,7 +381,8 @@ export default function AssistantPage() {
                         href={link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block text-sm text-blue-300 hover:text-blue-200 transition truncate"
+                        className="block text-sm truncate"
+                        style={{ color: "var(--cc-primary)" }}
                       >
                         {link} ↗
                       </a>
@@ -323,10 +392,17 @@ export default function AssistantPage() {
               )}
 
               {/* Mention obligatoire */}
-              <div className="rounded-xl border border-slate-500/20 bg-slate-800/50 p-3 text-center">
-                <p className="text-xs text-slate-400">
+              <div
+                className="rounded-xl border p-3 text-center"
+                style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)" }}
+              >
+                <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>
                   Réponse indicative — vérifiez toujours sur{" "}
-                  <a href="https://www.service-public.fr" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">
+                  <a
+                    href="https://www.service-public.fr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     service-public.fr
                   </a>
                 </p>
@@ -335,7 +411,7 @@ export default function AssistantPage() {
               {/* Nouvelle question */}
               <button
                 onClick={() => { setData(null); setQuestion(""); }}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+                className="cc-btn cc-btn-secondary w-full justify-center"
               >
                 Poser une autre question
               </button>
@@ -344,21 +420,36 @@ export default function AssistantPage() {
         </>
       )}
 
-      {/* Historique de la session */}
+      {/* ── Historique de la session ── */}
       {history.length > 1 && (
-        <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Historique de la session</p>
+        <section
+          className="rounded-2xl border p-4"
+          style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)" }}
+        >
+          <p
+            className="text-xs font-bold uppercase tracking-wider mb-3"
+            style={{ color: "var(--cc-text-muted)" }}
+          >
+            Historique de la session
+          </p>
           <div className="space-y-2">
             {history.slice(1).map((h, i) => (
               <div
                 key={i}
-                className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/5 p-3 cursor-pointer hover:bg-white/10 transition"
+                className="flex items-start gap-2 rounded-xl border p-3 cursor-pointer transition"
+                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
                 onClick={() => { setSelectedCategory(h.category); setQuestion(h.question); setData(h.data); }}
+                onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--cc-primary)")}
+                onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--cc-border)")}
               >
                 <span className="text-sm">{CATEGORIES.find(c => c.id === h.category)?.icon}</span>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-white truncate">{h.question}</p>
-                  <p className="text-xs text-slate-400 truncate">{h.data.summary}</p>
+                  <p className="text-xs font-semibold truncate" style={{ color: "var(--cc-text)" }}>
+                    {h.question}
+                  </p>
+                  <p className="text-xs truncate" style={{ color: "var(--cc-text-muted)" }}>
+                    {h.data.summary}
+                  </p>
                 </div>
               </div>
             ))}
