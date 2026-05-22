@@ -1,350 +1,364 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..800;1,14..32,300..800&display=swap');
 
-/* ── Typographie : Marianne (DSFR, libre de droits) ─────────
-   Télécharger depuis https://www.numerique.gouv.fr/publications/marianne/
-   et placer dans /public/fonts/
-────────────────────────────────────────────────────────────── */
-@font-face {
-  font-family: 'Marianne';
-  src: url('/fonts/Marianne-Light.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Marianne';
-  src: url('/fonts/Marianne-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Marianne';
-  src: url('/fonts/Marianne-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Marianne';
-  src: url('/fonts/Marianne-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Marianne';
-  src: url('/fonts/Marianne-ExtraBold.woff2') format('woff2');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — CAP CITOYEN
+   Référence : edtech sérieuse (préparation d'examen), 2026
+   Tri Rassurer / Déstresser / Faire progresser
+   ═══════════════════════════════════════════════════════════════ */
 
-/* ── Design System Cap Citoyen (inspiration DSFR, Scénario B) ─
-   Palette institutionnelle — aucune couleur hors de ces tokens
-────────────────────────────────────────────────────────────── */
+/* ── MODE JOUR (défaut) ──────────────────────────────────────── */
 :root {
-  /* Bleu institutionnel */
-  --cc-blue:        #000091;
-  --cc-blue-hover:  #1212ff;
-  --cc-blue-soft:   #ececfe;
+  /* ─ Couleur principale */
+  --cc-primary:          #1B5299;
+  --cc-primary-hover:    #15407A;
+  --cc-primary-soft:     #E8EFF7;
 
-  /* Textes */
-  --cc-text:        #161616;
-  --cc-text-alt:    #3a3a3a;
-  --cc-text-mention: #666666;
-  --cc-text-disabled: #929292;
+  /* ─ Statuts */
+  --cc-success:          #2E7D4F;
+  --cc-success-soft:     #E6F2EB;
+  --cc-danger:           #C0392B;
+  --cc-danger-soft:      #FDECEA;
+  --cc-warning:          #B8730E;
+  --cc-warning-soft:     #FEF3E2;
+  --cc-info:             #1B5299;
+  --cc-info-soft:        #E8EFF7;
 
-  /* Fonds */
-  --cc-bg:          #ffffff;
-  --cc-bg-alt:      #f6f6f6;
-  --cc-bg-raised:   #f0f0f0;
+  /* ─ Textes */
+  --cc-text:             #1A1D24;
+  --cc-text-muted:       #5B6472;
+  --cc-text-disabled:    #9AA1AD;
 
-  /* Bordures */
-  --cc-border:      #dddddd;
-  --cc-border-dark: #aaaaaa;
+  /* ─ Surfaces */
+  --cc-surface:          #FFFFFF;
+  --cc-surface-alt:      #F5F6F8;
+  --cc-surface-raised:   #ECEEF1;
 
-  /* Statuts */
-  --cc-success:     #18753c;
-  --cc-success-bg:  #b8fec9;
-  --cc-warning:     #b34000;
-  --cc-warning-bg:  #ffe9e6;
-  --cc-error:       #ce0500;
-  --cc-error-bg:    #ffe9e8;
-  --cc-info:        #0063cb;
-  --cc-info-bg:     #dce9ff;
+  /* ─ Bordures */
+  --cc-border:           #E0E3E8;
+  --cc-border-strong:    #C4C9D2;
 
-  /* Mise en forme */
-  --cc-radius:      4px;
-  --cc-focus:       0 0 0 2px #ffffff, 0 0 0 4px var(--cc-blue);
+  /* ─ Drapeau (invariant — couleurs officielles, ne changent pas en mode nuit) */
+  --cc-flag-blue:        #002395;
+  --cc-flag-red:         #ED2939;
 
-  /* Safe areas Capacitor */
-  --safe-area-top:    env(safe-area-inset-top, 0px);
-  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-area-left:   env(safe-area-inset-left, 0px);
-  --safe-area-right:  env(safe-area-inset-right, 0px);
+  /* ─ Mise en forme */
+  --cc-radius:           8px;
+  --cc-radius-lg:        12px;
+  --cc-radius-xl:        16px;
+  --cc-radius-full:      9999px;
+
+  /* ─ Ombres */
+  --cc-shadow-sm:        0 1px 3px rgba(26, 29, 36, 0.08);
+  --cc-shadow:           0 2px 8px rgba(26, 29, 36, 0.10);
+  --cc-shadow-lg:        0 4px 20px rgba(26, 29, 36, 0.12);
+
+  /* ─ Focus */
+  --cc-focus:            0 0 0 2px var(--cc-surface), 0 0 0 4px var(--cc-primary);
+
+  /* ─ Safe areas Capacitor */
+  --safe-area-top:       env(safe-area-inset-top, 0px);
+  --safe-area-bottom:    env(safe-area-inset-bottom, 0px);
+  --safe-area-left:      env(safe-area-inset-left, 0px);
+  --safe-area-right:     env(safe-area-inset-right, 0px);
 }
 
-/* ── Base ──────────────────────────────────────────────────── */
-html {
-  color-scheme: light;
+/* ── MODE NUIT ───────────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* ─ Couleur principale (éclaircie pour contraste sur fond sombre) */
+  --cc-primary:          #5B9BD5;
+  --cc-primary-hover:    #7AB1DF;
+  --cc-primary-soft:     #1A2A3E;
+
+  /* ─ Statuts */
+  --cc-success:          #4CAF80;
+  --cc-success-soft:     #172B21;
+  --cc-danger:           #E57373;
+  --cc-danger-soft:      #2D1A1A;
+  --cc-warning:          #FFB74D;
+  --cc-warning-soft:     #2D2010;
+  --cc-info:             #5B9BD5;
+  --cc-info-soft:        #1A2A3E;
+
+  /* ─ Textes */
+  --cc-text:             #E8EAED;
+  --cc-text-muted:       #9AA1AD;
+  --cc-text-disabled:    #5B6472;
+
+  /* ─ Surfaces */
+  --cc-surface:          #15181E;
+  --cc-surface-alt:      #1E222B;
+  --cc-surface-raised:   #252A35;
+
+  /* ─ Bordures */
+  --cc-border:           #2C313B;
+  --cc-border-strong:    #3E4554;
+
+  /* ─ Ombres */
+  --cc-shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.30);
+  --cc-shadow:           0 2px 8px rgba(0, 0, 0, 0.38);
+  --cc-shadow-lg:        0 4px 20px rgba(0, 0, 0, 0.50);
+
+  /* ─ Focus (ring blanc sur fond sombre) */
+  --cc-focus:            0 0 0 2px var(--cc-surface), 0 0 0 4px var(--cc-primary);
 }
 
+/* ── color-scheme ────────────────────────────────────────────── */
+html                   { color-scheme: light; }
+[data-theme="dark"]    { color-scheme: dark; }
+
+/* ── Base ────────────────────────────────────────────────────── */
 body {
-  font-family: 'Marianne', 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--cc-bg);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--cc-surface);
   color: var(--cc-text);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-::selection {
-  background: var(--cc-blue-soft);
-  color: var(--cc-blue);
-}
-
+/* ── Scrollbar ───────────────────────────────────────────────── */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #dddddd #f6f6f6;
+  scrollbar-color: var(--cc-border-strong) var(--cc-surface-alt);
+}
+*::-webkit-scrollbar        { width: 6px; height: 6px; }
+*::-webkit-scrollbar-track  { background: var(--cc-surface-alt); }
+*::-webkit-scrollbar-thumb  { background: var(--cc-border-strong); border-radius: 3px; }
+
+/* ── Sélection ───────────────────────────────────────────────── */
+::selection {
+  background: var(--cc-primary-soft);
+  color: var(--cc-primary);
 }
 
-*::-webkit-scrollbar       { width: 6px; height: 6px; }
-*::-webkit-scrollbar-track { background: var(--cc-bg-alt); }
-*::-webkit-scrollbar-thumb { background: var(--cc-border-dark); border-radius: 3px; }
-
+/* ── Liens ───────────────────────────────────────────────────── */
 a {
-  color: var(--cc-blue);
+  color: var(--cc-primary);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
+a:hover { color: var(--cc-primary-hover); }
 
-a:hover {
-  color: var(--cc-blue-hover);
-}
-
-/* ── Accessibilité : focus visible ─────────────────────────── */
+/* ── Focus visible ───────────────────────────────────────────── */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--cc-blue);
+  outline: 2px solid var(--cc-primary);
   outline-offset: 2px;
 }
 
-/* ── Typographie institutionnelle ─────────────────────────── */
+/* ── Typographie ─────────────────────────────────────────────── */
 h1 {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 700;
   line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--cc-text);
+}
+h2 {
+  font-size: clamp(1.25rem, 3vw, 1.625rem);
+  font-weight: 700;
+  line-height: 1.3;
   letter-spacing: -0.01em;
   color: var(--cc-text);
 }
-
-h2 {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
-  font-weight: 700;
-  line-height: 1.3;
-  color: var(--cc-text);
-}
-
 h3 {
   font-size: 1.125rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.4;
   color: var(--cc-text);
 }
-
 h4 {
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.5;
   color: var(--cc-text);
 }
 
-/* ── Composants institutionnels ────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   COMPOSANTS .cc-*
+   Noms stables — valeurs définies par les tokens ci-dessus
+   ═══════════════════════════════════════════════════════════════ */
 
-/* Carte */
+/* ── Carte ───────────────────────────────────────────────────── */
 .cc-card {
-  background: var(--cc-bg);
+  background: var(--cc-surface);
   border: 1px solid var(--cc-border);
-  border-radius: var(--cc-radius);
+  border-radius: var(--cc-radius-lg);
   padding: 1.5rem;
+  box-shadow: var(--cc-shadow-sm);
 }
 
-/* Bouton primaire */
+/* ── Boutons ─────────────────────────────────────────────────── */
 .cc-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   border-radius: var(--cc-radius);
-  padding: 0.625rem 1rem;
+  padding: 0.625rem 1.125rem;
   font-family: inherit;
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 0.9375rem;
+  font-weight: 600;
   line-height: 1.5;
   cursor: pointer;
   text-decoration: none;
   border: 1px solid transparent;
-  transition: background-color 140ms ease, border-color 140ms ease;
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
   white-space: nowrap;
 }
-
 .cc-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .cc-btn-primary {
-  background: var(--cc-blue);
-  color: #ffffff;
-  border-color: var(--cc-blue);
+  background: var(--cc-primary);
+  color: #fff;
+  border-color: var(--cc-primary);
+  box-shadow: 0 1px 4px rgba(27, 82, 153, 0.22);
 }
-
 .cc-btn-primary:hover:not(:disabled) {
-  background: var(--cc-blue-hover);
-  border-color: var(--cc-blue-hover);
-  color: #ffffff;
+  background: var(--cc-primary-hover);
+  border-color: var(--cc-primary-hover);
+  box-shadow: 0 2px 10px rgba(27, 82, 153, 0.30);
+  color: #fff;
   text-decoration: none;
 }
-
 .cc-btn-primary:focus-visible {
   box-shadow: var(--cc-focus);
   outline: none;
 }
 
 .cc-btn-secondary {
-  background: var(--cc-bg);
-  color: var(--cc-blue);
-  border-color: var(--cc-blue);
+  background: var(--cc-surface);
+  color: var(--cc-primary);
+  border-color: var(--cc-primary);
 }
-
 .cc-btn-secondary:hover:not(:disabled) {
-  background: var(--cc-blue-soft);
-  color: var(--cc-blue);
+  background: var(--cc-primary-soft);
+  color: var(--cc-primary);
   text-decoration: none;
+}
+.cc-btn-secondary:focus-visible {
+  box-shadow: var(--cc-focus);
+  outline: none;
 }
 
 .cc-btn-tertiary {
   background: transparent;
-  color: var(--cc-blue);
+  color: var(--cc-primary);
   border-color: transparent;
   text-decoration: underline;
   text-underline-offset: 2px;
   padding-left: 0;
   padding-right: 0;
 }
-
 .cc-btn-tertiary:hover:not(:disabled) {
-  background: var(--cc-blue-soft);
+  background: var(--cc-primary-soft);
   text-decoration: underline;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
 
 .cc-btn-danger {
-  background: var(--cc-error);
-  color: #ffffff;
-  border-color: var(--cc-error);
+  background: var(--cc-danger);
+  color: #fff;
+  border-color: var(--cc-danger);
 }
-
 .cc-btn-danger:hover:not(:disabled) {
-  background: #a40400;
-  border-color: #a40400;
-  color: #ffffff;
+  filter: brightness(0.88);
+  color: #fff;
   text-decoration: none;
 }
+.cc-btn-danger:focus-visible {
+  box-shadow: var(--cc-focus);
+  outline: none;
+}
 
-/* Badge statut */
+/* ── Badges ──────────────────────────────────────────────────── */
 .cc-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.125rem 0.5rem;
-  border-radius: 2px;
+  padding: 0.2rem 0.625rem;
+  border-radius: var(--cc-radius-full);
   font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
+.cc-badge-info    { background: var(--cc-info-soft);    color: var(--cc-info); }
+.cc-badge-success { background: var(--cc-success-soft); color: var(--cc-success); }
+.cc-badge-warning { background: var(--cc-warning-soft); color: var(--cc-warning); }
+.cc-badge-error,
+.cc-badge-danger  { background: var(--cc-danger-soft);  color: var(--cc-danger); }
+.cc-badge-neutral { background: var(--cc-surface-alt);  color: var(--cc-text-muted); }
 
-.cc-badge-info    { background: var(--cc-info-bg);    color: var(--cc-info); }
-.cc-badge-success { background: var(--cc-success-bg); color: var(--cc-success); }
-.cc-badge-warning { background: var(--cc-warning-bg); color: var(--cc-warning); }
-.cc-badge-error   { background: var(--cc-error-bg);   color: var(--cc-error); }
-.cc-badge-neutral { background: var(--cc-bg-alt);     color: var(--cc-text-mention); }
-
-/* Notice latérale (style DSFR) */
+/* ── Notices ─────────────────────────────────────────────────── */
 .cc-notice {
   display: flex;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 0.875rem 1rem;
   border-left: 4px solid var(--cc-info);
-  background: var(--cc-info-bg);
+  background: var(--cc-info-soft);
   border-radius: 0 var(--cc-radius) var(--cc-radius) 0;
 }
+.cc-notice-success { border-left-color: var(--cc-success); background: var(--cc-success-soft); }
+.cc-notice-warning { border-left-color: var(--cc-warning); background: var(--cc-warning-soft); }
+.cc-notice-error,
+.cc-notice-danger  { border-left-color: var(--cc-danger);  background: var(--cc-danger-soft); }
 
-.cc-notice-success { border-left-color: var(--cc-success); background: #f0fdf4; }
-.cc-notice-warning { border-left-color: var(--cc-warning); background: var(--cc-warning-bg); }
-.cc-notice-error   { border-left-color: var(--cc-error);   background: var(--cc-error-bg); }
-
-/* Formulaires */
+/* ── Formulaires ─────────────────────────────────────────────── */
 input,
 select,
 textarea {
-  background: var(--cc-bg);
+  background: var(--cc-surface);
   color: var(--cc-text);
-  border: 1px solid var(--cc-border-dark);
+  border: 1px solid var(--cc-border-strong);
   border-radius: var(--cc-radius);
   padding: 0.5rem 0.75rem;
   font-family: inherit;
   font-size: 1rem;
   line-height: 1.5;
-  transition: border-color 140ms ease;
+  transition: border-color 150ms ease;
 }
-
 input:hover,
 select:hover,
-textarea:hover {
-  border-color: var(--cc-text-mention);
-}
-
+textarea:hover { border-color: var(--cc-text-muted); }
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: var(--cc-blue);
-  outline: 2px solid var(--cc-blue);
+  border-color: var(--cc-primary);
+  outline: 2px solid var(--cc-primary);
   outline-offset: 2px;
 }
-
 input::placeholder,
-textarea::placeholder {
-  color: var(--cc-text-disabled);
-}
+textarea::placeholder { color: var(--cc-text-disabled); }
 
-/* ── Capacitor / Safe areas ─────────────────────────────────── */
+/* ── Capacitor / Safe areas ──────────────────────────────────── */
 body.capacitor-ios {
   padding-top: var(--safe-area-top);
   padding-bottom: var(--safe-area-bottom);
 }
-
 .bottom-nav-native {
   padding-bottom: calc(0.625rem + var(--safe-area-bottom));
 }
 
-/* ── Animation sobre ───────────────────────────────────────── */
+/* ── Animations ──────────────────────────────────────────────── */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 .animate-fade-in-up {
   animation: fadeInUp 250ms ease-out both;
 }
 
-/* ── Célébration quiz (particules) — fonctionnel, pas décoratif ─ */
+/* ── Célébration quiz (particules) — fonctionnel ─────────────── */
 @keyframes starFly {
   0%   { transform: translate(-50%,-50%) translate(0,0) scale(0) rotate(0deg); opacity: 1; }
   20%  { opacity: 1; transform: translate(-50%,-50%) translate(var(--tx),var(--ty)) scale(1.4) rotate(var(--rot)); }
@@ -353,8 +367,8 @@ body.capacitor-ios {
 }
 @keyframes burstBg {
   0%   { opacity: 0; }
-  15%  { opacity: 0.12; }
-  60%  { opacity: 0.06; }
+  15%  { opacity: 0.09; }
+  60%  { opacity: 0.04; }
   100% { opacity: 0; }
 }
 @keyframes starPop {
@@ -362,7 +376,6 @@ body.capacitor-ios {
   50%  { transform: scale(1.5) rotate(15deg); opacity: 1; }
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
-
 .star-burst-overlay {
   position: fixed;
   inset: 0;
@@ -370,24 +383,21 @@ body.capacitor-ios {
   pointer-events: none;
   overflow: hidden;
 }
-
 .star-burst-bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(0,0,145,.12), transparent 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(27, 82, 153, 0.09), transparent 70%);
   animation: burstBg 0.8s ease-out forwards;
 }
-
 .star-particle {
   position: absolute;
   top: 50%;
   left: 50%;
-  animation: starFly var(--dur, 0.9s) cubic-bezier(0.2,0.8,0.4,1) forwards;
+  animation: starFly var(--dur, 0.9s) cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
   animation-delay: var(--delay, 0ms);
   font-size: var(--fs, 24px);
   line-height: 1;
 }
-
 .star-correct-icon {
-  animation: starPop 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  animation: starPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }

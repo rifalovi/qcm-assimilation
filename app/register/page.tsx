@@ -12,9 +12,9 @@ type Step = "form" | "otp" | "confirmed";
 function TricolorBar() {
   return (
     <div className="flex h-1 w-full">
-      <div className="flex-1 bg-[#000091]" />
-      <div className="flex-1 bg-white border-y border-[#dddddd]" />
-      <div className="flex-1 bg-[#ce0500]" />
+      <div className="flex-1 bg-[var(--cc-primary)]" />
+      <div className="flex-1 bg-white border-y border-[var(--cc-border)]" />
+      <div className="flex-1 bg-[var(--cc-danger)]" />
     </div>
   );
 }
@@ -119,17 +119,17 @@ function RegisterForm() {
 
   const infoColumn = (title: string, subtitle: string, items: { title: string; text: string }[]) => (
     <section className="hidden lg:block">
-      <div className="rounded border border-[#dddddd] bg-white overflow-hidden">
+      <div className="rounded border border-[var(--cc-border)] bg-white overflow-hidden">
         <TricolorBar />
         <div className="p-8">
           <span className="cc-badge cc-badge-info mb-4 inline-block">Inscription gratuite</span>
-          <h1 className="text-2xl font-bold text-[#161616]">{title}</h1>
-          <p className="mt-3 text-sm leading-7 text-[#3a3a3a]">{subtitle}</p>
+          <h1 className="text-2xl font-bold text-[var(--cc-text)]">{title}</h1>
+          <p className="mt-3 text-sm leading-7 text-[var(--cc-text)]">{subtitle}</p>
           <div className="mt-6 space-y-4">
             {items.map(item => (
-              <div key={item.title} className="rounded border border-[#dddddd] bg-[#f6f6f6] p-4">
-                <h3 className="text-sm font-bold text-[#161616]">{item.title}</h3>
-                <p className="mt-1 text-sm leading-6 text-[#3a3a3a]">{item.text}</p>
+              <div key={item.title} className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] p-4">
+                <h3 className="text-sm font-bold text-[var(--cc-text)]">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-[var(--cc-text)]">{item.text}</p>
               </div>
             ))}
           </div>
@@ -140,7 +140,7 @@ function RegisterForm() {
 
   const formColumn = (children: React.ReactNode) => (
     <section className="w-full">
-      <div className="rounded border border-[#dddddd] bg-white overflow-hidden">
+      <div className="rounded border border-[var(--cc-border)] bg-white overflow-hidden">
         <TricolorBar />
         <div className="p-6 sm:p-8">
           {children}
@@ -165,8 +165,8 @@ function RegisterForm() {
         <>
           <div className="cc-notice cc-notice-success mb-6">
             <div>
-              <p className="font-bold text-[#161616]">Compte confirmé</p>
-              <p className="text-sm text-[#3a3a3a]">Bienvenue, {username}. Votre espace est prêt.</p>
+              <p className="font-bold text-[var(--cc-text)]">Compte confirmé</p>
+              <p className="text-sm text-[var(--cc-text)]">Bienvenue, {username}. Votre espace est prêt.</p>
             </div>
           </div>
           <a href="/" className="cc-btn cc-btn-primary w-full justify-center no-underline">
@@ -193,21 +193,21 @@ function RegisterForm() {
         <>
           <button
             onClick={() => { setStep("form"); setError(null); setOtp(""); }}
-            className="mb-5 inline-flex items-center gap-1.5 text-sm text-[#000091] hover:underline no-underline"
+            className="mb-5 inline-flex items-center gap-1.5 text-sm text-[var(--cc-primary)] hover:underline no-underline"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
             Modifier l'adresse email
           </button>
 
           <span className="cc-badge cc-badge-info mb-4 inline-block">Confirmation</span>
-          <h1 className="text-2xl font-bold text-[#161616]">Confirmez votre adresse email</h1>
-          <p className="mt-2 text-sm text-[#666666]">
-            Code envoyé à <strong className="text-[#161616]">{email}</strong>. Entrez-le ci-dessous.
+          <h1 className="text-2xl font-bold text-[var(--cc-text)]">Confirmez votre adresse email</h1>
+          <p className="mt-2 text-sm text-[var(--cc-text-muted)]">
+            Code envoyé à <strong className="text-[var(--cc-text)]">{email}</strong>. Entrez-le ci-dessous.
           </p>
 
           <form onSubmit={handleVerifyOtp} className="mt-6 space-y-4">
             <div>
-              <label htmlFor="otp-input" className="mb-1 block text-sm font-bold text-[#161616]">Code de confirmation</label>
+              <label htmlFor="otp-input" className="mb-1 block text-sm font-bold text-[var(--cc-text)]">Code de confirmation</label>
               <input
                 id="otp-input"
                 type="text"
@@ -219,13 +219,13 @@ function RegisterForm() {
                 className="text-center text-2xl tracking-[0.4em] w-full"
               />
             </div>
-            {error && <div role="alert" className="cc-notice cc-notice-error text-sm text-[#161616]">{error}</div>}
+            {error && <div role="alert" className="cc-notice cc-notice-error text-sm text-[var(--cc-text)]">{error}</div>}
             <button type="submit" disabled={loading} className="cc-btn cc-btn-primary w-full justify-center">
               {loading ? "Vérification…" : "Confirmer mon compte"}
             </button>
           </form>
 
-          <p className="mt-5 text-center text-sm text-[#666666]">
+          <p className="mt-5 text-center text-sm text-[var(--cc-text-muted)]">
             Code non reçu ?{" "}
             <button
               onClick={async () => {
@@ -234,7 +234,7 @@ function RegisterForm() {
                 const { error } = await supabase.auth.resend({ type: "signup", email });
                 if (error) setError("Erreur lors du renvoi. Réessayez.");
               }}
-              className="text-[#000091] hover:underline font-medium"
+              className="text-[var(--cc-primary)] hover:underline font-medium"
             >
               Renvoyer le code
             </button>
@@ -257,23 +257,23 @@ function RegisterForm() {
     ),
     formColumn(
       <>
-        <Link href="/" className="mb-5 inline-flex items-center gap-1.5 text-sm text-[#000091] hover:underline no-underline">
+        <Link href="/" className="mb-5 inline-flex items-center gap-1.5 text-sm text-[var(--cc-primary)] hover:underline no-underline">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
           Retour à l'accueil
         </Link>
 
         <span className="cc-badge cc-badge-info mb-4 inline-block">Création de compte</span>
-        <h1 className="text-2xl font-bold text-[#161616]">Créer un compte</h1>
-        <p className="mt-2 text-sm text-[#666666]">Gratuit — vérification par email requise.</p>
+        <h1 className="text-2xl font-bold text-[var(--cc-text)]">Créer un compte</h1>
+        <p className="mt-2 text-sm text-[var(--cc-text-muted)]">Gratuit — vérification par email requise.</p>
 
-        <div className="mt-4 rounded border-l-4 border-[#dddddd] bg-[#f6f6f6] px-4 py-3 text-xs text-[#666666]">
+        <div className="mt-4 rounded border-l-4 border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-xs text-[var(--cc-text-muted)]">
           Vos données sont traitées conformément au RGPD.{" "}
-          <Link href="/privacy" className="text-[#000091] hover:underline">En savoir plus</Link>
+          <Link href="/privacy" className="text-[var(--cc-primary)] hover:underline">En savoir plus</Link>
         </div>
 
         <form onSubmit={handleRegister} className="mt-6 space-y-4">
           <div>
-            <label htmlFor="reg-username" className="mb-1 block text-sm font-bold text-[#161616]">Pseudo</label>
+            <label htmlFor="reg-username" className="mb-1 block text-sm font-bold text-[var(--cc-text)]">Pseudo</label>
             <input
               id="reg-username"
               type="text"
@@ -286,7 +286,7 @@ function RegisterForm() {
           </div>
 
           <div>
-            <label htmlFor="reg-email" className="mb-1 block text-sm font-bold text-[#161616]">Adresse email</label>
+            <label htmlFor="reg-email" className="mb-1 block text-sm font-bold text-[var(--cc-text)]">Adresse email</label>
             <input
               id="reg-email"
               type="email"
@@ -300,7 +300,7 @@ function RegisterForm() {
           </div>
 
           <div>
-            <label htmlFor="reg-password" className="mb-1 block text-sm font-bold text-[#161616]">Mot de passe</label>
+            <label htmlFor="reg-password" className="mb-1 block text-sm font-bold text-[var(--cc-text)]">Mot de passe</label>
             <div className="relative">
               <input
                 id="reg-password"
@@ -316,7 +316,7 @@ function RegisterForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#666666] hover:text-[#161616] transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] transition-colors"
                 aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
               >
                 {showPassword ? <EyeClosed /> : <EyeOpen />}
@@ -325,10 +325,10 @@ function RegisterForm() {
           </div>
 
           {error && (
-            <div role="alert" className="cc-notice cc-notice-error text-sm text-[#161616]">
+            <div role="alert" className="cc-notice cc-notice-error text-sm text-[var(--cc-text)]">
               {error}
               {error.includes("existe déjà") && (
-                <> — <Link href="/login" className="font-bold text-[#000091] hover:underline">Se connecter</Link></>
+                <> — <Link href="/login" className="font-bold text-[var(--cc-primary)] hover:underline">Se connecter</Link></>
               )}
             </div>
           )}
@@ -338,9 +338,9 @@ function RegisterForm() {
           </button>
 
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-[#dddddd]" />
-            <span className="text-xs text-[#929292]">ou</span>
-            <div className="flex-1 h-px bg-[#dddddd]" />
+            <div className="flex-1 h-px bg-[var(--cc-border)]" />
+            <span className="text-xs text-[var(--cc-text-disabled)]">ou</span>
+            <div className="flex-1 h-px bg-[var(--cc-border)]" />
           </div>
 
           <button type="button" onClick={handleGoogleLogin}
@@ -350,9 +350,9 @@ function RegisterForm() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-[#666666]">
+        <p className="mt-6 text-center text-sm text-[var(--cc-text-muted)]">
           Déjà un compte ?{" "}
-          <Link href="/login" className="font-bold text-[#000091] hover:underline">
+          <Link href="/login" className="font-bold text-[var(--cc-primary)] hover:underline">
             Se connecter
           </Link>
         </p>
@@ -364,7 +364,7 @@ function RegisterForm() {
 export default function RegisterPage() {
   return (
     <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center text-[#666666]">
+      <div className="flex min-h-screen items-center justify-center text-[var(--cc-text-muted)]">
         Chargement…
       </div>
     }>

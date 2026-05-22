@@ -77,8 +77,8 @@ function Pill({ children, active = false, onClick }: {
       onClick={onClick}
       className={`rounded border px-3 py-1.5 text-sm font-medium transition-colors ${
         active
-          ? "border-[#000091] bg-[#ececfe] text-[#000091]"
-          : "border-[#dddddd] bg-white text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091]"
+          ? "border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] text-[var(--cc-primary)]"
+          : "border-[var(--cc-border)] bg-white text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)]"
       }`}
     >
       {children}
@@ -139,33 +139,33 @@ function OnboardingModal({ onClose, onAction, role = "anonymous" }: {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[#161616]/50" onClick={onClose} />
-      <div className="relative z-[101] w-full max-w-sm rounded border border-[#dddddd] bg-white p-6 shadow-lg">
+      <div className="absolute inset-0 bg-[var(--cc-text)]/50" onClick={onClose} />
+      <div className="relative z-[101] w-full max-w-sm rounded border border-[var(--cc-border)] bg-white p-6 shadow-lg">
 
         {/* En-tête */}
         <div className="mb-5 flex items-center justify-between">
           <div className="flex gap-1">
             {steps.map((_, i) => (
               <div key={i} className={`h-1 rounded-full transition-all ${
-                i === step ? "w-6 bg-[#000091]" : i < step ? "w-3 bg-[#000091]/50" : "w-3 bg-[#dddddd]"
+                i === step ? "w-6 bg-[var(--cc-primary)]" : i < step ? "w-3 bg-[var(--cc-primary)]/50" : "w-3 bg-[var(--cc-border)]"
               }`} />
             ))}
           </div>
-          <button onClick={onClose} className="text-[#666666] hover:text-[#161616] text-xl leading-none" aria-label="Fermer">×</button>
+          <button onClick={onClose} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-xl leading-none" aria-label="Fermer">×</button>
         </div>
 
         {step === 0 && (
-          <div className="mb-5 rounded border-l-4 border-[#000091] bg-[#ececfe] px-4 py-3">
-            <p className="text-sm text-[#161616]">
+          <div className="mb-5 rounded border-l-4 border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] px-4 py-3">
+            <p className="text-sm text-[var(--cc-text)]">
               Bienvenue sur <strong>Cap Citoyen</strong> — votre outil de préparation à l'entretien civique 2026.
             </p>
           </div>
         )}
 
         {/* Contenu étape */}
-        <div className="mb-5 rounded border border-[#dddddd] bg-[#f6f6f6] p-4">
-          <h3 className="mb-1 text-base font-bold text-[#161616]">{current.title}</h3>
-          <p className="text-sm leading-6 text-[#3a3a3a]">{current.desc}</p>
+        <div className="mb-5 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] p-4">
+          <h3 className="mb-1 text-base font-bold text-[var(--cc-text)]">{current.title}</h3>
+          <p className="text-sm leading-6 text-[var(--cc-text)]">{current.desc}</p>
         </div>
 
         {/* Actions */}
@@ -340,16 +340,16 @@ async function clearPseudo() {
             SECTION 1 — HERO
         ══════════════════════════════════════════ */}
         <section
-          className={`border border-[#dddddd] bg-white transition-all duration-500 ${
+          className={`border border-[var(--cc-border)] bg-white transition-all duration-500 ${
             heroVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
           }`}
           style={{ borderRadius: "4px" }}
         >
           {/* Bandeau tricolore */}
           <div className="flex h-1 w-full">
-            <div className="flex-1 bg-[#000091]" />
-            <div className="flex-1 bg-white border-y border-[#dddddd]" />
-            <div className="flex-1 bg-[#ce0500]" />
+            <div className="flex-1 bg-[var(--cc-primary)]" />
+            <div className="flex-1 bg-white border-y border-[var(--cc-border)]" />
+            <div className="flex-1 bg-[var(--cc-danger)]" />
           </div>
 
           <div className="px-5 py-7 sm:px-8 sm:py-9">
@@ -357,14 +357,14 @@ async function clearPseudo() {
             {/* Nav du hero */}
             <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <span className="flex h-6 w-9 overflow-hidden rounded-sm border border-[#dddddd]" aria-hidden="true">
-                  <span className="flex-1 bg-[#000091]" />
+                <span className="flex h-6 w-9 overflow-hidden rounded-sm border border-[var(--cc-border)]" aria-hidden="true">
+                  <span className="flex-1 bg-[var(--cc-primary)]" />
                   <span className="flex-1 bg-white" />
-                  <span className="flex-1 bg-[#ce0500]" />
+                  <span className="flex-1 bg-[var(--cc-danger)]" />
                 </span>
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#666666]">Cap Citoyen</p>
-                  <p className="text-xs text-[#666666]">Plateforme de préparation civique 2026</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--cc-text-muted)]">Cap Citoyen</p>
+                  <p className="text-xs text-[var(--cc-text-muted)]">Plateforme de préparation civique 2026</p>
                 </div>
               </div>
 
@@ -372,13 +372,13 @@ async function clearPseudo() {
                 <div className="relative flex justify-end">
                   <button
                     onClick={() => setHomeMenuOpen(!homeMenuOpen)}
-                    className="flex items-center gap-2 rounded border border-[#dddddd] bg-white px-3 py-2 text-sm text-[#161616] hover:border-[#000091] transition-colors"
+                    className="flex items-center gap-2 rounded border border-[var(--cc-border)] bg-white px-3 py-2 text-sm text-[var(--cc-text)] hover:border-[var(--cc-primary)] transition-colors"
                     aria-expanded={homeMenuOpen}
                     aria-haspopup="true"
                   >
                     <span>Bonjour, <span className="font-bold">{displayName}</span></span>
                     {streak > 0 && (
-                      <span className="rounded bg-[#ececfe] px-2 py-0.5 text-[10px] font-bold text-[#000091]">
+                      <span className="rounded bg-[var(--cc-primary-soft)] px-2 py-0.5 text-[10px] font-bold text-[var(--cc-primary)]">
                         {streak}j de révision
                       </span>
                     )}
@@ -391,22 +391,22 @@ async function clearPseudo() {
                   {homeMenuOpen && (
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setHomeMenuOpen(false)} />
-                      <div className="absolute right-0 top-full z-50 mt-1 w-64 rounded border border-[#dddddd] bg-white shadow-md">
-                        <div className="border-b border-[#dddddd] bg-[#f6f6f6] px-4 py-3">
-                          <p className="text-sm font-bold text-[#161616]">{displayName}</p>
+                      <div className="absolute right-0 top-full z-50 mt-1 w-64 rounded border border-[var(--cc-border)] bg-white shadow-md">
+                        <div className="border-b border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
+                          <p className="text-sm font-bold text-[var(--cc-text)]">{displayName}</p>
                           {role && role !== "anonymous" && (
-                            <span className="mt-1 inline-block rounded bg-[#ececfe] px-2 py-0.5 text-[10px] font-bold text-[#000091] capitalize">
+                            <span className="mt-1 inline-block rounded bg-[var(--cc-primary-soft)] px-2 py-0.5 text-[10px] font-bold text-[var(--cc-primary)] capitalize">
                               {role}
                             </span>
                           )}
                           {streak > 0 && (
-                            <p className="mt-1 text-xs text-[#666666]">{streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""}</p>
+                            <p className="mt-1 text-xs text-[var(--cc-text-muted)]">{streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""}</p>
                           )}
                         </div>
                         {['super_admin','admin','moderator'].includes(role ?? '') && (
-                          <div className="border-b border-[#dddddd] p-2">
+                          <div className="border-b border-[var(--cc-border)] p-2">
                             <button onClick={() => { setHomeMenuOpen(false); router.push("/admin"); }}
-                              className="flex w-full items-center gap-2 rounded px-2 py-2 text-xs font-medium text-[#ce0500] hover:bg-[#fff5f5] transition-colors">
+                              className="flex w-full items-center gap-2 rounded px-2 py-2 text-xs font-medium text-[var(--cc-danger)] hover:bg-[var(--cc-danger-soft)] transition-colors">
                               Administration
                             </button>
                           </div>
@@ -421,18 +421,18 @@ async function clearPseudo() {
                             { href: "/account", label: "Mon compte" },
                           ].map(({ href, label }) => (
                             <button key={href} onClick={() => { setHomeMenuOpen(false); router.push(href); }}
-                              className="flex w-full items-center rounded px-2 py-2 text-sm text-[#161616] hover:bg-[#f6f6f6] transition-colors text-left">
+                              className="flex w-full items-center rounded px-2 py-2 text-sm text-[var(--cc-text)] hover:bg-[var(--cc-surface-alt)] transition-colors text-left">
                               {label}
                             </button>
                           ))}
                         </div>
-                        <div className="border-t border-[#dddddd] p-2">
+                        <div className="border-t border-[var(--cc-border)] p-2">
                           <button onClick={() => { setHomeMenuOpen(false); setShowFeedbackModal(true); }}
-                            className="flex w-full items-center rounded px-2 py-2 text-sm text-[#666666] hover:bg-[#f6f6f6] transition-colors">
+                            className="flex w-full items-center rounded px-2 py-2 text-sm text-[var(--cc-text-muted)] hover:bg-[var(--cc-surface-alt)] transition-colors">
                             Évaluer le service
                           </button>
                           <button onClick={clearPseudo}
-                            className="flex w-full items-center rounded px-2 py-2 text-sm text-[#ce0500] hover:bg-[#fff5f5] transition-colors">
+                            className="flex w-full items-center rounded px-2 py-2 text-sm text-[var(--cc-danger)] hover:bg-[var(--cc-danger-soft)] transition-colors">
                             Déconnexion
                           </button>
                         </div>
@@ -457,7 +457,7 @@ async function clearPseudo() {
             {/* Alerte si non connecté */}
             {!isAuthenticated && (
               <div className="mb-6 cc-notice">
-                <p className="text-sm text-[#161616]">
+                <p className="text-sm text-[var(--cc-text)]">
                   Chaque année, des milliers de candidats se présentent sans préparation. Entraînez-vous dès aujourd'hui pour mettre toutes les chances de votre côté.
                 </p>
               </div>
@@ -465,16 +465,16 @@ async function clearPseudo() {
 
             {/* Révision consécutive */}
             {isAuthenticated && streak > 0 && (
-              <div className="mb-6 rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3">
-                <p className="text-sm font-medium text-[#161616]">
+              <div className="mb-6 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
+                <p className="text-sm font-medium text-[var(--cc-text)]">
                   {streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""}. Continuez aujourd'hui pour maintenir votre rythme.
                 </p>
               </div>
             )}
 
             {isAuthenticated && streak === 0 && (
-              <div className="mb-6 rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3">
-                <p className="text-sm text-[#666666]">
+              <div className="mb-6 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
+                <p className="text-sm text-[var(--cc-text-muted)]">
                   Commencez un exercice aujourd'hui pour démarrer votre série de révisions.
                 </p>
               </div>
@@ -485,10 +485,10 @@ async function clearPseudo() {
               <span className="cc-badge cc-badge-info">Plus de 800 questions-réponses</span>
             </div>
 
-            <h1 className="text-center text-2xl font-bold leading-tight text-[#161616] sm:text-3xl lg:text-[2.25rem]">
+            <h1 className="text-center text-2xl font-bold leading-tight text-[var(--cc-text)] sm:text-3xl lg:text-[2.25rem]">
               Préparez votre entretien d'intégration républicaine
             </h1>
-            <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-7 text-[#3a3a3a]">
+            <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-7 text-[var(--cc-text)]">
               Valeurs de la République · Institutions · Histoire · Vie en société — entraînement progressif conforme à l'examen civique officiel.
             </p>
 
@@ -499,9 +499,9 @@ async function clearPseudo() {
                 { val: "800 +",   label: "questions" },
                 { val: "2 sem.",  label: "pour être prêt" },
               ].map(s => (
-                <div key={s.label} className="rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-2 text-center">
-                  <div className="text-base font-bold text-[#000091]">{s.val}</div>
-                  <div className="text-[10px] text-[#666666]">{s.label}</div>
+                <div key={s.label} className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-2 text-center">
+                  <div className="text-base font-bold text-[var(--cc-primary)]">{s.val}</div>
+                  <div className="text-[10px] text-[var(--cc-text-muted)]">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -538,28 +538,28 @@ async function clearPseudo() {
             {/* Actions secondaires */}
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <button onClick={() => router.push("/audio")}
-                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Bibliothèque audio
               </button>
               <button onClick={() => { const el = document.getElementById("avis-section"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
-                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Avis des utilisateurs
               </button>
               <button onClick={() => router.push("/leaderboard")}
-                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Classement
               </button>
               <button onClick={() => router.push("/resources")}
-                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Ressources officielles
               </button>
               <button onClick={() => router.push("/assistant")}
-                className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                 Assistant IA démarches
               </button>
               {!isAuthenticated && (
                 <button onClick={() => setShowOnboarding(true)}
-                  className="rounded border border-[#dddddd] bg-white px-4 py-2 text-xs font-medium text-[#3a3a3a] hover:border-[#000091] hover:text-[#000091] transition-colors">
+                  className="rounded border border-[var(--cc-border)] bg-white px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
                   Guide de démarrage
                 </button>
               )}
@@ -581,8 +581,8 @@ async function clearPseudo() {
           <Card>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h3 className="text-base font-bold text-[#161616]">Niveau de difficulté</h3>
-                <p className="mt-0.5 text-xs text-[#666666]">Ajustez selon votre avancement.</p>
+                <h3 className="text-base font-bold text-[var(--cc-text)]">Niveau de difficulté</h3>
+                <p className="mt-0.5 text-xs text-[var(--cc-text-muted)]">Ajustez selon votre avancement.</p>
               </div>
               <span className="cc-badge cc-badge-neutral">3 niveaux</span>
             </div>
@@ -595,21 +595,21 @@ async function clearPseudo() {
                     onClick={() => !locked && setLevel(n as Level)}
                     className={`relative rounded border px-4 py-4 text-center transition-colors ${
                       locked
-                        ? "cursor-not-allowed border-[#dddddd] bg-[#f6f6f6] text-[#929292]"
+                        ? "cursor-not-allowed border-[var(--cc-border)] bg-[var(--cc-surface-alt)] text-[var(--cc-text-disabled)]"
                         : active
-                        ? "border-[#000091] bg-[#ececfe] text-[#000091]"
-                        : "border-[#dddddd] bg-white text-[#3a3a3a] hover:border-[#000091]"
+                        ? "border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] text-[var(--cc-primary)]"
+                        : "border-[var(--cc-border)] bg-white text-[var(--cc-text)] hover:border-[var(--cc-primary)]"
                     }`}
                   >
                     <div className="text-sm font-bold">Niveau {n}</div>
-                    {locked && <div className="mt-1 text-xs text-[#b34000]">Abonnement requis</div>}
+                    {locked && <div className="mt-1 text-xs text-[var(--cc-warning)]">Abonnement requis</div>}
                   </button>
                 );
               })}
             </div>
-            <div className="mt-5 rounded border border-[#dddddd] bg-[#f6f6f6] p-4">
-              <p className="mb-2 text-sm font-bold text-[#161616]">Repères</p>
-              <ul className="space-y-1.5 text-sm text-[#3a3a3a]">
+            <div className="mt-5 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] p-4">
+              <p className="mb-2 text-sm font-bold text-[var(--cc-text)]">Repères</p>
+              <ul className="space-y-1.5 text-sm text-[var(--cc-text)]">
                 <li>Niveau 1 — bases et repères essentiels</li>
                 <li>Niveau 2 — précision et pièges fréquents</li>
                 <li>Niveau 3 — approfondissement et maîtrise</li>
@@ -617,7 +617,7 @@ async function clearPseudo() {
             </div>
             {!(['premium','elite','moderator','admin','super_admin'].includes(role ?? '')) && (
               <button onClick={() => router.push("/pricing")}
-                className="mt-4 w-full rounded border border-[#000091] bg-[#ececfe] px-4 py-3 text-left text-sm font-bold text-[#000091] hover:bg-[#000091] hover:text-white transition-colors">
+                className="mt-4 w-full rounded border border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] px-4 py-3 text-left text-sm font-bold text-[var(--cc-primary)] hover:bg-[var(--cc-primary)] hover:text-white transition-colors">
                 Accéder aux niveaux 2 et 3 avec un abonnement
               </button>
             )}
@@ -627,8 +627,8 @@ async function clearPseudo() {
           <Card>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h3 className="text-base font-bold text-[#161616]">Thèmes de révision</h3>
-                <p className="mt-0.5 text-xs text-[#666666]">Concentrez vos révisions sur les domaines ciblés.</p>
+                <h3 className="text-base font-bold text-[var(--cc-text)]">Thèmes de révision</h3>
+                <p className="mt-0.5 text-xs text-[var(--cc-text-muted)]">Concentrez vos révisions sur les domaines ciblés.</p>
               </div>
               <span className="cc-badge cc-badge-neutral">{themes.length}/{THEMES.length}</span>
             </div>
@@ -641,7 +641,7 @@ async function clearPseudo() {
             </div>
             {!canStart && (
               <div className="mt-4 cc-notice cc-notice-warning">
-                <p className="text-sm text-[#161616]">Sélectionnez au moins un thème pour démarrer.</p>
+                <p className="text-sm text-[var(--cc-text)]">Sélectionnez au moins un thème pour démarrer.</p>
               </div>
             )}
           </Card>
@@ -650,25 +650,25 @@ async function clearPseudo() {
           <Card>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h3 className="text-base font-bold text-[#161616]">Résumé de la session</h3>
-                <p className="mt-0.5 text-xs text-[#666666]">Vérifiez les paramètres avant de commencer.</p>
+                <h3 className="text-base font-bold text-[var(--cc-text)]">Résumé de la session</h3>
+                <p className="mt-0.5 text-xs text-[var(--cc-text-muted)]">Vérifiez les paramètres avant de commencer.</p>
               </div>
               <span className="cc-badge cc-badge-success">Prêt</span>
             </div>
-            <div className="mt-5 space-y-3 rounded border border-[#dddddd] bg-[#f6f6f6] p-4 text-sm">
+            <div className="mt-5 space-y-3 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] p-4 text-sm">
               {[
                 ["Questions",        `${limits.quizCount} questions`],
                 ["Temps / question", `${PER_QUESTION_SECONDS}s`],
                 ["Niveau",          `Niveau ${level}`],
               ].map(([label, value]) => (
                 <div key={String(label)} className="flex items-center justify-between gap-3">
-                  <span className="text-[#666666]">{label}</span>
-                  <span className="font-bold text-[#161616]">{value}</span>
+                  <span className="text-[var(--cc-text-muted)]">{label}</span>
+                  <span className="font-bold text-[var(--cc-text)]">{value}</span>
                 </div>
               ))}
               {role !== "premium" && role !== "elite" && (
                 <div className="mt-3 cc-notice cc-notice-warning">
-                  <p className="text-xs text-[#161616]">
+                  <p className="text-xs text-[var(--cc-text)]">
                     {role === "anonymous"
                       ? "Créez un compte gratuit pour accéder à 20 questions."
                       : "Abonnez-vous pour accéder à 40 questions et tous les niveaux."}
@@ -686,14 +686,14 @@ async function clearPseudo() {
                 </Button>
               ) : (
                 <div>
-                  <button disabled className="w-full rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3 text-sm font-bold text-[#929292] cursor-not-allowed">
+                  <button disabled className="w-full rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-sm font-bold text-[var(--cc-text-disabled)] cursor-not-allowed">
                     Simulation d'examen blanc
                   </button>
-                  <p className="mt-1 text-center text-xs text-[#b34000]">Disponible avec un abonnement</p>
+                  <p className="mt-1 text-center text-xs text-[var(--cc-warning)]">Disponible avec un abonnement</p>
                 </div>
               )}
             </div>
-            <p className="mt-4 text-xs leading-6 text-[#666666]">
+            <p className="mt-4 text-xs leading-6 text-[var(--cc-text-muted)]">
               Votre résultat affichera vos erreurs, vos bonnes réponses et les explications pour progresser.
             </p>
           </Card>
@@ -703,7 +703,7 @@ async function clearPseudo() {
             SECTION 4 — BÉNÉFICES
         ══════════════════════════════════════════ */}
         <section>
-          <h2 className="mb-6 text-xl font-bold text-[#161616]">Une préparation complète et progressive</h2>
+          <h2 className="mb-6 text-xl font-bold text-[var(--cc-text)]">Une préparation complète et progressive</h2>
           <div className="grid gap-4 md:grid-cols-3">
             {[
               {
@@ -722,10 +722,10 @@ async function clearPseudo() {
                 text: "La simulation d'examen blanc reproduit les conditions officielles — durée, nombre de questions, format — pour arriver préparé le jour J.",
               },
             ].map(item => (
-              <div key={item.title} className="rounded border border-[#dddddd] bg-white p-5">
-                <div className="mb-3 text-2xl font-bold text-[#000091]">{item.num}</div>
-                <h3 className="text-base font-bold text-[#161616]">{item.title}</h3>
-                <p className="mt-2 text-sm leading-7 text-[#3a3a3a]">{item.text}</p>
+              <div key={item.title} className="rounded border border-[var(--cc-border)] bg-white p-5">
+                <div className="mb-3 text-2xl font-bold text-[var(--cc-primary)]">{item.num}</div>
+                <h3 className="text-base font-bold text-[var(--cc-text)]">{item.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-[var(--cc-text)]">{item.text}</p>
               </div>
             ))}
           </div>
@@ -734,11 +734,11 @@ async function clearPseudo() {
         {/* ══════════════════════════════════════════
             SECTION 5 — LIEN CENTRE AGRÉÉ
         ══════════════════════════════════════════ */}
-        <section className="rounded border-l-4 border-[#000091] bg-[#ececfe] p-5">
+        <section className="rounded border-l-4 border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-bold text-[#161616]">Prêt à vous présenter à l'entretien ?</p>
-              <p className="mt-0.5 text-xs text-[#3a3a3a]">Trouvez le centre CCI agréé le plus proche de chez vous.</p>
+              <p className="text-sm font-bold text-[var(--cc-text)]">Prêt à vous présenter à l'entretien ?</p>
+              <p className="mt-0.5 text-xs text-[var(--cc-text)]">Trouvez le centre CCI agréé le plus proche de chez vous.</p>
             </div>
             <a
               href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
@@ -764,12 +764,12 @@ async function clearPseudo() {
       {/* ══ MODAL — Mode de révision ════════════════ */}
       {showReviseModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[#161616]/50" onClick={() => setShowReviseModal(false)} />
-          <div className="relative z-[101] w-full max-w-sm rounded border border-[#dddddd] bg-white p-6 shadow-lg">
+          <div className="absolute inset-0 bg-[var(--cc-text)]/50" onClick={() => setShowReviseModal(false)} />
+          <div className="relative z-[101] w-full max-w-sm rounded border border-[var(--cc-border)] bg-white p-6 shadow-lg">
             <button onClick={() => setShowReviseModal(false)}
-              className="absolute right-4 top-4 text-[#666666] hover:text-[#161616] text-xl leading-none" aria-label="Fermer">×</button>
-            <h3 className="text-lg font-bold text-[#161616]">Mode de révision</h3>
-            <p className="mt-1 text-sm text-[#666666]">Choisissez votre format de révision préféré.</p>
+              className="absolute right-4 top-4 text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-xl leading-none" aria-label="Fermer">×</button>
+            <h3 className="text-lg font-bold text-[var(--cc-text)]">Mode de révision</h3>
+            <p className="mt-1 text-sm text-[var(--cc-text-muted)]">Choisissez votre format de révision préféré.</p>
             <div className="mt-5 flex flex-col gap-3">
               {[
                 { label: "Révision par fiches", desc: "Défilement vertical des questions — rapide et efficace.", href: "/scroll" },
@@ -778,12 +778,12 @@ async function clearPseudo() {
               ].map(({ label, desc, href }) => (
                 <button key={href}
                   onClick={() => { setShowReviseModal(false); router.push(href); }}
-                  className="flex items-start gap-4 rounded border border-[#dddddd] bg-[#f6f6f6] p-4 text-left hover:border-[#000091] hover:bg-[#ececfe] transition-colors">
+                  className="flex items-start gap-4 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] p-4 text-left hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
                   <div className="flex-1">
-                    <p className="font-bold text-[#161616] text-sm">{label}</p>
-                    <p className="mt-0.5 text-xs text-[#666666]">{desc}</p>
+                    <p className="font-bold text-[var(--cc-text)] text-sm">{label}</p>
+                    <p className="mt-0.5 text-xs text-[var(--cc-text-muted)]">{desc}</p>
                   </div>
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="mt-0.5 shrink-0 text-[#000091]" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="mt-0.5 shrink-0 text-[var(--cc-primary)]" aria-hidden="true">
                     <path d="M5 4l6 4-6 4V4z" fill="currentColor"/>
                   </svg>
                 </button>
@@ -796,10 +796,10 @@ async function clearPseudo() {
       {/* ══ MODAL — Identité ════════════════════════ */}
       {pseudoOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[#161616]/50" onClick={() => setPseudoOpen(false)} />
-          <div className="relative z-[101] w-full max-w-md rounded border border-[#dddddd] bg-white p-6 shadow-lg">
-            <h3 className="text-lg font-bold text-[#161616]">Avant de commencer</h3>
-            <p className="mt-1.5 text-sm text-[#666666]">Créez un compte pour sauvegarder vos résultats, ou continuez sans compte.</p>
+          <div className="absolute inset-0 bg-[var(--cc-text)]/50" onClick={() => setPseudoOpen(false)} />
+          <div className="relative z-[101] w-full max-w-md rounded border border-[var(--cc-border)] bg-white p-6 shadow-lg">
+            <h3 className="text-lg font-bold text-[var(--cc-text)]">Avant de commencer</h3>
+            <p className="mt-1.5 text-sm text-[var(--cc-text-muted)]">Créez un compte pour sauvegarder vos résultats, ou continuez sans compte.</p>
 
             <div className="mt-5 flex flex-col gap-3">
               <a href={`/register?email=${encodeURIComponent(emailDraft)}&pseudo=${encodeURIComponent(pseudoDraft)}`}
@@ -812,11 +812,11 @@ async function clearPseudo() {
               </a>
             </div>
 
-            <div className="mt-5 border-t border-[#dddddd] pt-5">
-              <p className="mb-3 text-xs text-[#666666]">Ou continuer sans compte</p>
+            <div className="mt-5 border-t border-[var(--cc-border)] pt-5">
+              <p className="mb-3 text-xs text-[var(--cc-text-muted)]">Ou continuer sans compte</p>
               <div className="space-y-3">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-[#161616]" htmlFor="pseudo-input">Pseudo</label>
+                  <label className="mb-1 block text-sm font-medium text-[var(--cc-text)]" htmlFor="pseudo-input">Pseudo</label>
                   <input
                     id="pseudo-input"
                     value={pseudoDraft}
@@ -828,7 +828,7 @@ async function clearPseudo() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-[#161616]" htmlFor="email-input">Adresse email</label>
+                  <label className="mb-1 block text-sm font-medium text-[var(--cc-text)]" htmlFor="email-input">Adresse email</label>
                   <input
                     id="email-input"
                     type="email"
@@ -838,7 +838,7 @@ async function clearPseudo() {
                     className="w-full"
                   />
                 </div>
-                <p className="text-xs text-[#666666]">
+                <p className="text-xs text-[var(--cc-text-muted)]">
                   Vos données sont utilisées uniquement pour sauvegarder vos résultats.
                   Conformément au RGPD, vous pouvez les supprimer à tout moment depuis votre compte.
                 </p>
@@ -861,10 +861,10 @@ async function clearPseudo() {
       {/* ══ MODAL — Accès examen ═════════════════════ */}
       {openExamUpgrade && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[#161616]/50" onClick={() => setOpenExamUpgrade(false)} />
-          <div className="relative w-full max-w-md rounded border border-[#dddddd] bg-white p-6 shadow-lg">
-            <h3 className="text-xl font-bold text-[#161616]">Accès à la simulation d'examen</h3>
-            <p className="mt-2 text-sm leading-7 text-[#3a3a3a]">
+          <div className="absolute inset-0 bg-[var(--cc-text)]/50" onClick={() => setOpenExamUpgrade(false)} />
+          <div className="relative w-full max-w-md rounded border border-[var(--cc-border)] bg-white p-6 shadow-lg">
+            <h3 className="text-xl font-bold text-[var(--cc-text)]">Accès à la simulation d'examen</h3>
+            <p className="mt-2 text-sm leading-7 text-[var(--cc-text)]">
               La simulation d'examen blanc est accessible aux comptes Freemium avec un essai gratuit limité, puis en illimité avec un abonnement Premium.
             </p>
             <div className="mt-6 flex flex-col gap-3">

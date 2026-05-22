@@ -78,7 +78,7 @@ export default function BottomNav() {
   return (
     <>
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#dddddd] bg-white md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--cc-border)] bg-white md:hidden"
         aria-label="Navigation principale mobile"
       >
         <div className="mx-auto flex max-w-lg">
@@ -89,7 +89,7 @@ export default function BottomNav() {
                 key={tab.label}
                 onClick={() => handleTabPress(tab.label)}
                 className={`relative flex flex-1 flex-col items-center gap-1 py-2 text-[10px] font-medium transition-colors ${
-                  active ? "text-[#000091]" : "text-[#666666] hover:text-[#161616]"
+                  active ? "text-[var(--cc-primary)]" : "text-[var(--cc-text-muted)] hover:text-[var(--cc-text)]"
                 }`}
                 aria-label={tab.label}
                 aria-current={active ? "page" : undefined}
@@ -97,12 +97,12 @@ export default function BottomNav() {
                 <NavIcon name={tab.label} />
                 <span>{tab.label}</span>
                 {tab.label === "Communauté" && !isPremium && (
-                  <span className="absolute right-2 top-1.5 rounded bg-[#000091] px-1 py-0.5 text-[8px] font-bold text-white leading-none">
+                  <span className="absolute right-2 top-1.5 rounded bg-[var(--cc-primary)] px-1 py-0.5 text-[8px] font-bold text-white leading-none">
                     PRO
                   </span>
                 )}
                 {active && (
-                  <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#000091]" />
+                  <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[var(--cc-primary)]" />
                 )}
               </button>
             );
@@ -113,10 +113,10 @@ export default function BottomNav() {
       {/* Popup Préparation */}
       {showTrainMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowTrainMenu(false)}>
-          <div className="w-full rounded-t border-t border-[#dddddd] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-bold text-[#161616]">Se préparer</p>
-              <button onClick={() => setShowTrainMenu(false)} className="text-[#666666] hover:text-[#161616] text-lg leading-none" aria-label="Fermer">×</button>
+              <p className="text-sm font-bold text-[var(--cc-text)]">Se préparer</p>
+              <button onClick={() => setShowTrainMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
             </div>
             <div className="flex flex-col gap-2">
               {[
@@ -126,10 +126,10 @@ export default function BottomNav() {
                 { label: "Mes résultats",          desc: "Entraînement et examens",  href: "/results" },
               ].map(({ label, desc, href }) => (
                 <button key={href} onClick={() => { router.push(href); setShowTrainMenu(false); }}
-                  className="flex items-start gap-3 rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3 text-left hover:border-[#000091] hover:bg-[#ececfe] transition-colors">
+                  className="flex items-start gap-3 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
                   <div>
-                    <p className="text-sm font-bold text-[#161616]">{label}</p>
-                    <p className="text-xs text-[#666666]">{desc}</p>
+                    <p className="text-sm font-bold text-[var(--cc-text)]">{label}</p>
+                    <p className="text-xs text-[var(--cc-text-muted)]">{desc}</p>
                   </div>
                 </button>
               ))}
@@ -141,10 +141,10 @@ export default function BottomNav() {
       {/* Popup Audio */}
       {showAudioMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowAudioMenu(false)}>
-          <div className="w-full rounded-t border-t border-[#dddddd] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-bold text-[#161616]">Bibliothèque audio</p>
-              <button onClick={() => setShowAudioMenu(false)} className="text-[#666666] hover:text-[#161616] text-lg leading-none" aria-label="Fermer">×</button>
+              <p className="text-sm font-bold text-[var(--cc-text)]">Bibliothèque audio</p>
+              <button onClick={() => setShowAudioMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
             </div>
             <div className="flex flex-col gap-2">
               {[
@@ -152,10 +152,10 @@ export default function BottomNav() {
                 { label: "Séries thématiques",  desc: "100 épisodes, format entretien réel", href: "/audio" },
               ].map(({ label, desc, href }) => (
                 <button key={href} onClick={() => { router.push(href); setShowAudioMenu(false); }}
-                  className="flex items-start gap-3 rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3 text-left hover:border-[#000091] hover:bg-[#ececfe] transition-colors">
+                  className="flex items-start gap-3 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
                   <div>
-                    <p className="text-sm font-bold text-[#161616]">{label}</p>
-                    <p className="text-xs text-[#666666]">{desc}</p>
+                    <p className="text-sm font-bold text-[var(--cc-text)]">{label}</p>
+                    <p className="text-xs text-[var(--cc-text-muted)]">{desc}</p>
                   </div>
                 </button>
               ))}
@@ -167,10 +167,10 @@ export default function BottomNav() {
       {/* Popup Communauté */}
       {showCommunityMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowCommunityMenu(false)}>
-          <div className="w-full rounded-t border-t border-[#dddddd] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-bold text-[#161616]">Espace communauté</p>
-              <button onClick={() => setShowCommunityMenu(false)} className="text-[#666666] hover:text-[#161616] text-lg leading-none" aria-label="Fermer">×</button>
+              <p className="text-sm font-bold text-[var(--cc-text)]">Espace communauté</p>
+              <button onClick={() => setShowCommunityMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
             </div>
             <div className="flex flex-col gap-2">
               {[
@@ -180,7 +180,7 @@ export default function BottomNav() {
                 { label: "Messages privés",      href: "/communaute/messages" },
               ].map(({ label, href }) => (
                 <button key={href} onClick={() => { router.push(href); setShowCommunityMenu(false); }}
-                  className="rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3 text-left text-sm font-bold text-[#161616] hover:border-[#000091] hover:bg-[#ececfe] transition-colors">
+                  className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left text-sm font-bold text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
                   {label}
                 </button>
               ))}
@@ -192,10 +192,10 @@ export default function BottomNav() {
       {/* Popup Info */}
       {showInfoMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowInfoMenu(false)}>
-          <div className="w-full rounded-t border-t border-[#dddddd] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-white p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-bold text-[#161616]">Informations</p>
-              <button onClick={() => setShowInfoMenu(false)} className="text-[#666666] hover:text-[#161616] text-lg leading-none" aria-label="Fermer">×</button>
+              <p className="text-sm font-bold text-[var(--cc-text)]">Informations</p>
+              <button onClick={() => setShowInfoMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
             </div>
             <div className="flex flex-col gap-2">
               {[
@@ -205,16 +205,16 @@ export default function BottomNav() {
                 { label: "Abonnements",             desc: "Plans et tarifs",                href: "/pricing" },
               ].map(({ label, desc, href }) => (
                 <button key={href} onClick={() => { router.push(href); setShowInfoMenu(false); }}
-                  className="flex items-start gap-3 rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3 text-left hover:border-[#000091] hover:bg-[#ececfe] transition-colors">
+                  className="flex items-start gap-3 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
                   <div>
-                    <p className="text-sm font-bold text-[#161616]">{label}</p>
-                    <p className="text-xs text-[#666666]">{desc}</p>
+                    <p className="text-sm font-bold text-[var(--cc-text)]">{label}</p>
+                    <p className="text-xs text-[var(--cc-text-muted)]">{desc}</p>
                   </div>
                 </button>
               ))}
               <button
                 onClick={() => { setShowInfoMenu(false); setShowFeedback(true); }}
-                className="rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3 text-left text-sm text-[#666666] hover:border-[#000091] hover:bg-[#ececfe] transition-colors"
+                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left text-sm text-[var(--cc-text-muted)] hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors"
               >
                 Évaluer le service
               </button>

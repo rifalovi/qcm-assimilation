@@ -11,16 +11,16 @@ type Mode = "login" | "forgot" | "otp" | "newpassword" | "totp";
 function TricolorBar() {
   return (
     <div className="flex h-1 w-full">
-      <div className="flex-1 bg-[#000091]" />
-      <div className="flex-1 bg-white border-y border-[#dddddd]" />
-      <div className="flex-1 bg-[#ce0500]" />
+      <div className="flex-1 bg-[var(--cc-primary)]" />
+      <div className="flex-1 bg-white border-y border-[var(--cc-border)]" />
+      <div className="flex-1 bg-[var(--cc-danger)]" />
     </div>
   );
 }
 
 function BackLink() {
   return (
-    <Link href="/" className="mb-5 inline-flex items-center gap-1.5 text-sm text-[#000091] hover:text-[#1212ff] no-underline hover:underline">
+    <Link href="/" className="mb-5 inline-flex items-center gap-1.5 text-sm text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)] no-underline hover:underline">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M19 12H5M12 5l-7 7 7 7" />
       </svg>
@@ -31,13 +31,13 @@ function BackLink() {
 
 function ErrorNotice({ message }: { message: string }) {
   return (
-    <div role="alert" className="cc-notice cc-notice-error text-sm text-[#161616]">{message}</div>
+    <div role="alert" className="cc-notice cc-notice-error text-sm text-[var(--cc-text)]">{message}</div>
   );
 }
 
 function SuccessNotice({ message }: { message: string }) {
   return (
-    <div role="status" className="cc-notice cc-notice-success text-sm text-[#161616]">{message}</div>
+    <div role="status" className="cc-notice cc-notice-success text-sm text-[var(--cc-text)]">{message}</div>
   );
 }
 
@@ -154,19 +154,19 @@ export default function LoginPage() {
   /* ── Colonne gauche ── */
   const infoColumn = (title: string, subtitle: string, items: string[]) => (
     <section className="hidden lg:block">
-      <div className="rounded border border-[#dddddd] bg-white overflow-hidden">
+      <div className="rounded border border-[var(--cc-border)] bg-white overflow-hidden">
         <TricolorBar />
         <div className="p-8">
           <span className="cc-badge cc-badge-info mb-4 inline-block">Connexion sécurisée</span>
-          <h1 className="text-2xl font-bold text-[#161616]">{title}</h1>
-          <p className="mt-3 text-sm leading-7 text-[#3a3a3a]">{subtitle}</p>
+          <h1 className="text-2xl font-bold text-[var(--cc-text)]">{title}</h1>
+          <p className="mt-3 text-sm leading-7 text-[var(--cc-text)]">{subtitle}</p>
           <ul className="mt-6 space-y-3">
             {items.map(item => (
-              <li key={item} className="flex items-start gap-3 rounded border border-[#dddddd] bg-[#f6f6f6] px-4 py-3">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0 text-[#18753c]" aria-hidden="true">
+              <li key={item} className="flex items-start gap-3 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0 text-[var(--cc-success)]" aria-hidden="true">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
-                <span className="text-sm text-[#161616]">{item}</span>
+                <span className="text-sm text-[var(--cc-text)]">{item}</span>
               </li>
             ))}
           </ul>
@@ -178,7 +178,7 @@ export default function LoginPage() {
   /* ── Colonne formulaire ── */
   const formColumn = (children: React.ReactNode) => (
     <section className="w-full">
-      <div className="rounded border border-[#dddddd] bg-white overflow-hidden">
+      <div className="rounded border border-[var(--cc-border)] bg-white overflow-hidden">
         <TricolorBar />
         <div className="p-6 sm:p-8">
           {children}
@@ -199,11 +199,11 @@ export default function LoginPage() {
         <>
           <BackLink />
           <span className="cc-badge cc-badge-info mb-4 inline-block">Vérification 2FA</span>
-          <h1 className="text-2xl font-bold text-[#161616]">Double authentification</h1>
-          <p className="mt-2 text-sm text-[#666666]">Entrez le code à 6 chiffres de votre application.</p>
+          <h1 className="text-2xl font-bold text-[var(--cc-text)]">Double authentification</h1>
+          <p className="mt-2 text-sm text-[var(--cc-text-muted)]">Entrez le code à 6 chiffres de votre application.</p>
           <form onSubmit={handleVerifyTotp} className="mt-6 space-y-4">
             <div>
-              <label htmlFor="totp-code" className="mb-1 block text-sm font-bold text-[#161616]">Code à 6 chiffres</label>
+              <label htmlFor="totp-code" className="mb-1 block text-sm font-bold text-[var(--cc-text)]">Code à 6 chiffres</label>
               <input
                 id="totp-code"
                 type="text"
@@ -225,7 +225,7 @@ export default function LoginPage() {
           </form>
           <p className="mt-5 text-center text-sm">
             <button onClick={() => { setMode("login"); setError(null); setTotpCode(""); }}
-              className="text-[#000091] hover:underline font-medium">
+              className="text-[var(--cc-primary)] hover:underline font-medium">
               Retour à la connexion
             </button>
           </p>
@@ -246,11 +246,11 @@ export default function LoginPage() {
         <>
           <BackLink />
           <span className="cc-badge cc-badge-info mb-4 inline-block">Mot de passe oublié</span>
-          <h1 className="text-2xl font-bold text-[#161616]">Réinitialiser le mot de passe</h1>
-          <p className="mt-2 text-sm text-[#666666]">Vous recevrez un code à 8 chiffres — aucun lien à cliquer.</p>
+          <h1 className="text-2xl font-bold text-[var(--cc-text)]">Réinitialiser le mot de passe</h1>
+          <p className="mt-2 text-sm text-[var(--cc-text-muted)]">Vous recevrez un code à 8 chiffres — aucun lien à cliquer.</p>
           <form onSubmit={handleSendOtp} className="mt-6 space-y-4">
             <div>
-              <label htmlFor="forgot-email" className="mb-1 block text-sm font-bold text-[#161616]">Adresse email</label>
+              <label htmlFor="forgot-email" className="mb-1 block text-sm font-bold text-[var(--cc-text)]">Adresse email</label>
               <input id="forgot-email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="votre@email.fr" className="w-full" />
             </div>
             {error && <ErrorNotice message={error} />}
@@ -260,7 +260,7 @@ export default function LoginPage() {
           </form>
           <p className="mt-5 text-center text-sm">
             <button onClick={() => { setMode("login"); setError(null); setSuccess(null); }}
-              className="text-[#000091] hover:underline font-medium">
+              className="text-[var(--cc-primary)] hover:underline font-medium">
               Retour à la connexion
             </button>
           </p>
@@ -281,11 +281,11 @@ export default function LoginPage() {
         <>
           <BackLink />
           <span className="cc-badge cc-badge-info mb-4 inline-block">Code envoyé</span>
-          <h1 className="text-2xl font-bold text-[#161616]">Entrez votre code</h1>
+          <h1 className="text-2xl font-bold text-[var(--cc-text)]">Entrez votre code</h1>
           {success && <SuccessNotice message={success} />}
           <form onSubmit={handleVerifyOtp} className="mt-6 space-y-4">
             <div>
-              <label htmlFor="otp-code" className="mb-1 block text-sm font-bold text-[#161616]">Code à 8 chiffres</label>
+              <label htmlFor="otp-code" className="mb-1 block text-sm font-bold text-[var(--cc-text)]">Code à 8 chiffres</label>
               <input id="otp-code" type="text" required value={otp} onChange={e => setOtp(e.target.value)}
                 placeholder="12345678" maxLength={8}
                 className="text-center text-2xl tracking-[0.5em] w-full" />
@@ -295,10 +295,10 @@ export default function LoginPage() {
               {loading ? "Vérification…" : "Valider le code"}
             </button>
           </form>
-          <p className="mt-5 text-center text-sm text-[#666666]">
+          <p className="mt-5 text-center text-sm text-[var(--cc-text-muted)]">
             Code non reçu ?{" "}
             <button onClick={() => { setMode("forgot"); setError(null); setSuccess(null); }}
-              className="text-[#000091] hover:underline font-medium">
+              className="text-[var(--cc-primary)] hover:underline font-medium">
               Renvoyer
             </button>
           </p>
@@ -319,10 +319,10 @@ export default function LoginPage() {
         <>
           <BackLink />
           <span className="cc-badge cc-badge-success mb-4 inline-block">Code validé</span>
-          <h1 className="text-2xl font-bold text-[#161616]">Nouveau mot de passe</h1>
+          <h1 className="text-2xl font-bold text-[var(--cc-text)]">Nouveau mot de passe</h1>
           <form onSubmit={handleNewPassword} className="mt-6 space-y-4">
             <div>
-              <label htmlFor="new-password" className="mb-1 block text-sm font-bold text-[#161616]">Nouveau mot de passe</label>
+              <label htmlFor="new-password" className="mb-1 block text-sm font-bold text-[var(--cc-text)]">Nouveau mot de passe</label>
               <input id="new-password" type="password" required minLength={8} value={newPassword}
                 onChange={e => setNewPassword(e.target.value)} placeholder="8 caractères minimum" className="w-full" />
             </div>
@@ -352,30 +352,30 @@ export default function LoginPage() {
       <>
         <BackLink />
         <span className="cc-badge cc-badge-info mb-4 inline-block">Espace citoyen</span>
-        <h1 className="text-2xl font-bold text-[#161616]">Connexion</h1>
-        <p className="mt-2 text-sm text-[#666666]">
+        <h1 className="text-2xl font-bold text-[var(--cc-text)]">Connexion</h1>
+        <p className="mt-2 text-sm text-[var(--cc-text-muted)]">
           Connectez-vous pour accéder à votre espace de préparation.
         </p>
 
-        <div className="mt-5 rounded border-l-4 border-[#dddddd] bg-[#f6f6f6] px-4 py-3 text-xs text-[#666666]">
+        <div className="mt-5 rounded border-l-4 border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-xs text-[var(--cc-text-muted)]">
           Vos données personnelles sont traitées conformément au RGPD.{" "}
-          <Link href="/privacy" className="text-[#000091] hover:underline">
+          <Link href="/privacy" className="text-[var(--cc-primary)] hover:underline">
             En savoir plus
           </Link>
         </div>
 
         <form onSubmit={handleLogin} className="mt-6 space-y-4">
           <div>
-            <label htmlFor="login-email" className="mb-1 block text-sm font-bold text-[#161616]">Adresse email</label>
+            <label htmlFor="login-email" className="mb-1 block text-sm font-bold text-[var(--cc-text)]">Adresse email</label>
             <input id="login-email" type="email" required value={email} onChange={e => setEmail(e.target.value)}
               placeholder="votre@email.fr" autoComplete="email" className="w-full" />
           </div>
 
           <div>
             <div className="mb-1 flex items-center justify-between gap-3">
-              <label htmlFor="login-password" className="block text-sm font-bold text-[#161616]">Mot de passe</label>
+              <label htmlFor="login-password" className="block text-sm font-bold text-[var(--cc-text)]">Mot de passe</label>
               <button type="button" onClick={() => { setMode("forgot"); setError(null); }}
-                className="text-xs text-[#000091] hover:underline">
+                className="text-xs text-[var(--cc-primary)] hover:underline">
                 Mot de passe oublié ?
               </button>
             </div>
@@ -391,7 +391,7 @@ export default function LoginPage() {
                 className="w-full pr-12"
               />
               <button type="button" onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#666666] hover:text-[#161616] transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] transition-colors"
                 aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}>
                 {showPassword ? (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -407,13 +407,13 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="cc-notice cc-notice-error text-sm text-[#161616]">
+            <div className="cc-notice cc-notice-error text-sm text-[var(--cc-text)]">
               {error}
               {error.includes("Aucun compte") && (
-                <> — <Link href="/register" className="font-bold text-[#000091] hover:underline">Créer un compte</Link></>
+                <> — <Link href="/register" className="font-bold text-[var(--cc-primary)] hover:underline">Créer un compte</Link></>
               )}
               {error.includes("incorrect") && (
-                <> — <button type="button" onClick={() => { setMode("forgot"); setError(null); }} className="font-bold text-[#000091] hover:underline">Mot de passe oublié ?</button></>
+                <> — <button type="button" onClick={() => { setMode("forgot"); setError(null); }} className="font-bold text-[var(--cc-primary)] hover:underline">Mot de passe oublié ?</button></>
               )}
             </div>
           )}
@@ -423,9 +423,9 @@ export default function LoginPage() {
           </button>
 
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-[#dddddd]" />
-            <span className="text-xs text-[#929292]">ou</span>
-            <div className="flex-1 h-px bg-[#dddddd]" />
+            <div className="flex-1 h-px bg-[var(--cc-border)]" />
+            <span className="text-xs text-[var(--cc-text-disabled)]">ou</span>
+            <div className="flex-1 h-px bg-[var(--cc-border)]" />
           </div>
 
           <button type="button" onClick={handleGoogleLogin}
@@ -440,9 +440,9 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-[#666666]">
+        <p className="mt-6 text-center text-sm text-[var(--cc-text-muted)]">
           Pas encore de compte ?{" "}
-          <Link href="/register" className="font-bold text-[#000091] hover:underline">
+          <Link href="/register" className="font-bold text-[var(--cc-primary)] hover:underline">
             Créer un compte gratuitement
           </Link>
         </p>

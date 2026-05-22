@@ -13,7 +13,7 @@ import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalShell from "@/components/ConditionalShell";
 
 export const viewport = {
-  colorScheme: "light",
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -66,6 +66,8 @@ export default function RootLayout({
   return (
     <html lang="fr" className="h-full">
       <head>
+        {/* Initialisation du thème avant rendu — évite le flash (FOUC) */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('cc-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();` }} />
         <meta property="og:title" content="Cap Citoyen" />
         <meta property="og:description" content="Préparez votre test civique français — QCM, audio, examen blanc" />
         <meta property="og:image" content="https://cap-citoyen.fr/cap-citoyen.png" />
@@ -76,7 +78,7 @@ export default function RootLayout({
         <meta name="twitter:image" content="https://cap-citoyen.fr/cap-citoyen.png" />
       </head>
       <link rel="privacy-policy" href="https://cap-citoyen.fr/mentions-legales" />
-      <body className="min-h-full bg-white text-[#161616] antialiased">
+      <body className="min-h-full antialiased">
         <UserProvider>
         <CapacitorProvider>
         <Suspense fallback={null}>

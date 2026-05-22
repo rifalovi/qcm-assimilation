@@ -11,7 +11,7 @@ export default function ConditionalFooter() {
     <footer
       role="contentinfo"
       aria-label="Pied de page Cap Citoyen"
-      className="mt-auto border-t border-[#dddddd] bg-[#f6f6f6]"
+      className="mt-auto border-t border-[var(--cc-border)] bg-[var(--cc-surface-alt)]"
     >
       {/* Bandeau principal */}
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -19,18 +19,18 @@ export default function ConditionalFooter() {
 
           {/* Identité */}
           <div>
-            <p className="text-sm font-bold uppercase tracking-widest text-[#666666]">Cap Citoyen</p>
-            <p className="mt-2 text-sm leading-6 text-[#666666]">
+            <p className="text-sm font-bold uppercase tracking-widest text-[var(--cc-text-muted)]">Cap Citoyen</p>
+            <p className="mt-2 text-sm leading-6 text-[var(--cc-text-muted)]">
               Plateforme de préparation à l'entretien d'intégration républicaine.
             </p>
-            <p className="mt-3 text-xs text-[#929292]">
+            <p className="mt-3 text-xs text-[var(--cc-text-disabled)]">
               Service indépendant, non affilié à l'État.
             </p>
           </div>
 
           {/* Préparation */}
           <div>
-            <p className="text-sm font-bold text-[#161616] mb-3">Se préparer</p>
+            <p className="text-sm font-bold text-[var(--cc-text)] mb-3">Se préparer</p>
             <ul className="space-y-2">
               {[
                 { href: "/scroll", label: "Révision par fiches" },
@@ -40,7 +40,7 @@ export default function ConditionalFooter() {
                 { href: "/resources", label: "Ressources officielles" },
               ].map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="text-sm text-[#000091] hover:text-[#1212ff] no-underline hover:underline">
+                  <Link href={href} className="text-sm text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)] no-underline hover:underline">
                     {label}
                   </Link>
                 </li>
@@ -50,7 +50,7 @@ export default function ConditionalFooter() {
 
           {/* Informations */}
           <div>
-            <p className="text-sm font-bold text-[#161616] mb-3">Informations</p>
+            <p className="text-sm font-bold text-[var(--cc-text)] mb-3">Informations</p>
             <ul className="space-y-2">
               {[
                 { href: "/info", label: "À propos de l'examen" },
@@ -59,7 +59,7 @@ export default function ConditionalFooter() {
                 { href: "/communaute", label: "Espace communauté" },
               ].map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="text-sm text-[#000091] hover:text-[#1212ff] no-underline hover:underline">
+                  <Link href={href} className="text-sm text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)] no-underline hover:underline">
                     {label}
                   </Link>
                 </li>
@@ -69,7 +69,7 @@ export default function ConditionalFooter() {
                   href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#000091] hover:text-[#1212ff] no-underline hover:underline"
+                  className="text-sm text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)] no-underline hover:underline"
                 >
                   Trouver un centre agréé
                 </a>
@@ -79,7 +79,7 @@ export default function ConditionalFooter() {
 
           {/* Légal */}
           <div>
-            <p className="text-sm font-bold text-[#161616] mb-3">Légal</p>
+            <p className="text-sm font-bold text-[var(--cc-text)] mb-3">Légal</p>
             <ul className="space-y-2">
               {[
                 { href: "/mentions-legales", label: "Mentions légales" },
@@ -87,18 +87,18 @@ export default function ConditionalFooter() {
                 { href: "/cgv", label: "Conditions générales" },
               ].map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="text-sm text-[#000091] hover:text-[#1212ff] no-underline hover:underline">
+                  <Link href={href} className="text-sm text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)] no-underline hover:underline">
                     {label}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/mentions-legales#accessibilite" className="text-sm text-[#000091] hover:text-[#1212ff] no-underline hover:underline">
+                <Link href="/mentions-legales#accessibilite" className="text-sm text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)] no-underline hover:underline">
                   Accessibilité : non évaluée
                 </Link>
               </li>
               <li>
-                <Link href="/privacy#rgpd" className="text-sm text-[#000091] hover:text-[#1212ff] no-underline hover:underline">
+                <Link href="/privacy#rgpd" className="text-sm text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)] no-underline hover:underline">
                   Données personnelles (RGPD)
                 </Link>
               </li>
@@ -108,12 +108,12 @@ export default function ConditionalFooter() {
       </div>
 
       {/* Barre inférieure */}
-      <div className="border-t border-[#dddddd] bg-[#ececfe]">
+      <div className="border-t border-[var(--cc-border)] bg-[var(--cc-primary-soft)]">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
-          <p className="text-xs text-[#666666]">
+          <p className="text-xs text-[var(--cc-text-muted)]">
             © {new Date().getFullYear()} Cap Citoyen — Tous droits réservés
           </p>
-          <p className="text-xs text-[#666666]">
+          <p className="text-xs text-[var(--cc-text-muted)]">
             Données hébergées en France &middot; Conforme RGPD
           </p>
         </div>
