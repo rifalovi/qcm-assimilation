@@ -55,23 +55,23 @@ export type PricingFeature = {
 export type PricingCardProps = {
   /** Nom du plan */
   name: string;
-  /** Sous-titre court */
+  /** Sous-titre court (ex: "Examen imminent") */
   tagline?: string;
-  /** Badge affiché au-dessus du nom (ex: "Recommandé") */
+  /** Badge affiché en tête de carte (ex: "Recommandé") */
   badge?: string;
-  /** Prix affiché (ex: "19,99 €") */
+  /** Prix affiché (ex: "9,99 €", "Offert") */
   price: string;
-  /** Période (ex: "pour 3 mois", "une fois", "gratuit") */
+  /** Période (ex: "/ 7 jours", "/ 30 jours") */
   period?: string;
-  /** Note sous le prix (ex: "puis 9,99 €/mois") */
-  priceNote?: string;
+  /** Callout mis en valeur sous le prix (ex: "4× plus de temps pour 2× le prix") */
+  mention?: string;
   /** Liste de fonctionnalités */
   features: PricingFeature[];
   /** Label du CTA */
   ctaLabel?: string;
   /** Action du CTA */
   onCta?: () => void;
-  /** Mise en avant (border primary + fond légèrement teinté) */
+  /** Mise en avant (border primary + fond teinté) */
   highlighted?: boolean;
   /** Désactiver le CTA (ex: plan actuel) */
   ctaDisabled?: boolean;
@@ -86,9 +86,9 @@ export default function PricingCard({
   badge,
   price,
   period,
-  priceNote,
+  mention,
   features,
-  ctaLabel = "Choisir ce plan",
+  ctaLabel = "Choisir ce pass",
   onCta,
   highlighted = false,
   ctaDisabled = false,
@@ -102,7 +102,9 @@ export default function PricingCard({
       {/* Badge */}
       {badge && (
         <div className="cc-pricing-card-badge-row">
-          <span className="cc-badge cc-badge-info">{badge}</span>
+          <span className={`cc-badge ${highlighted ? "cc-badge-info" : "cc-badge-neutral"}`}>
+            {badge}
+          </span>
         </div>
       )}
 
@@ -117,7 +119,11 @@ export default function PricingCard({
         <span className="cc-pricing-card-price">{price}</span>
         {period && <span className="cc-pricing-card-period">{period}</span>}
       </div>
-      {priceNote && <p className="cc-pricing-card-price-note">{priceNote}</p>}
+
+      {/* Callout mention */}
+      {mention && (
+        <p className="cc-pricing-card-mention">{mention}</p>
+      )}
 
       {/* CTA */}
       <button
@@ -142,7 +148,6 @@ export default function PricingCard({
             <span
               style={{
                 color: f.included ? "var(--cc-text)" : "var(--cc-text-disabled)",
-                textDecoration: f.included ? "none" : "none",
               }}
             >
               {f.label}

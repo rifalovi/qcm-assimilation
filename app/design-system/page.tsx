@@ -20,6 +20,13 @@ function useTheme() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
+    // Param URL ?mode=light|dark permet de forcer le thème pour les captures
+    const urlParam = new URLSearchParams(window.location.search).get("mode");
+    if (urlParam === "light" || urlParam === "dark") {
+      document.documentElement.setAttribute("data-theme", urlParam);
+      setTheme(urlParam);
+      return;
+    }
     const current = document.documentElement.getAttribute("data-theme");
     setTheme(current === "dark" ? "dark" : "light");
   }, []);
@@ -94,59 +101,53 @@ function ShadowSwatch({ label, value }: { label: string; value: string }) {
 const PRICING_PLANS = [
   {
     name: "Découverte",
-    tagline: "Pour commencer à votre rythme",
-    price: "Gratuit",
-    period: "pour toujours",
+    tagline: "Pour commencer sans engagement",
+    badge: "Pour commencer",
+    price: "Offert",
     features: [
-      { label: "10 questions par jour", included: true },
-      { label: "Niveau 1 uniquement", included: true },
-      { label: "5 cartes Scroll par session", included: true },
-      { label: "3 questions IA par jour", included: true },
-      { label: "Tous les niveaux (1, 2, 3)", included: false },
-      { label: "Examen blanc illimité", included: false },
-      { label: "Podcasts thématiques", included: false },
-      { label: "Espace communauté", included: false },
+      { label: "20 questions de quiz", included: true },
+      { label: "1 examen blanc", included: true },
+      { label: "Audio & Scroll en accès limité", included: true },
+      { label: "Quiz illimité", included: false },
+      { label: "Examens blancs illimités", included: false },
+      { label: "Audio & Scroll complets", included: false },
+      { label: "Coach IA inclus", included: false },
     ],
     ctaLabel: "Commencer gratuitement",
     highlighted: false,
   },
   {
-    name: "Premium",
-    tagline: "La préparation complète et sérieuse",
-    badge: "Recommandé",
-    price: "19,99 €",
-    period: "pour 3 mois",
-    priceNote: "soit 6,66 €/mois — sans engagement",
+    name: "Pass Express",
+    tagline: "Examen imminent",
+    badge: "Révision intensive",
+    price: "4,99 €",
+    period: "/ 7 jours",
     features: [
-      { label: "40 questions par session", included: true },
-      { label: "Tous les niveaux (1, 2, 3)", included: true },
-      { label: "400 cartes Scroll illimitées", included: true },
-      { label: "IA illimitée (coach personnalisé)", included: true },
-      { label: "Examen blanc illimité + corrections", included: true },
-      { label: "Podcasts thématiques", included: true },
-      { label: "Espace communauté membres", included: true },
-      { label: "Contenu expert exclusif", included: false },
+      { label: "Quiz illimité", included: true },
+      { label: "Examens blancs illimités", included: true },
+      { label: "Audio & Scroll complets", included: true },
+      { label: "Coach IA inclus", included: true },
+      { label: "Accès complet pendant 7 jours", included: true },
     ],
-    ctaLabel: "Choisir Premium",
-    highlighted: true,
+    ctaLabel: "Choisir Express",
+    highlighted: false,
   },
   {
-    name: "Élite",
-    tagline: "L'accès complet, une seule fois",
-    price: "49,99 €",
-    period: "accès à vie",
-    priceNote: "paiement unique — mises à jour incluses",
+    name: "Pass Sérénité",
+    tagline: "La préparation sans stress",
+    badge: "Recommandé",
+    price: "9,99 €",
+    period: "/ 30 jours",
+    mention: "4× plus de temps pour 2× le prix",
     features: [
-      { label: "Tout ce qu'inclut Premium", included: true },
-      { label: "Contenu expert exclusif", included: true },
-      { label: "Mises à jour à vie incluses", included: true },
-      { label: "Support prioritaire", included: true },
-      { label: "Badge Élite dans la communauté", included: true },
-      { label: "Accès anticipé aux nouvelles fonctions", included: true },
-      { label: "Sessions live mensuelles (à venir)", included: true },
+      { label: "Quiz illimité", included: true },
+      { label: "Examens blancs illimités", included: true },
+      { label: "Audio & Scroll complets", included: true },
+      { label: "Coach IA inclus", included: true },
+      { label: "Accès complet pendant 30 jours", included: true },
     ],
-    ctaLabel: "Choisir Élite",
-    highlighted: false,
+    ctaLabel: "Choisir Sérénité",
+    highlighted: true,
   },
 ] as const;
 
@@ -669,6 +670,7 @@ export default function DesignSystemPage() {
         </Section>
 
         {/* ══ PRICING CARDS ════════════════════════════════════ */}
+        <div id="pricing" />
         <Section title="Composants — PricingCard">
           <div className="grid gap-5 sm:grid-cols-3">
             {PRICING_PLANS.map((plan) => (
@@ -678,14 +680,33 @@ export default function DesignSystemPage() {
                 tagline={plan.tagline}
                 badge={"badge" in plan ? plan.badge : undefined}
                 price={plan.price}
-                period={plan.period}
-                priceNote={"priceNote" in plan ? plan.priceNote : undefined}
+                period={"period" in plan ? plan.period : undefined}
+                mention={"mention" in plan ? plan.mention : undefined}
                 features={[...plan.features]}
                 ctaLabel={plan.ctaLabel}
                 highlighted={plan.highlighted}
                 onCta={() => {}}
               />
             ))}
+          </div>
+
+          {/* Mentions légales sous les cartes */}
+          <div
+            className="mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-1"
+          >
+            <span className="flex items-center gap-1.5 text-xs" style={{ color: "var(--cc-text-muted)" }}>
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+                <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" fill="currentColor" opacity="0.5"/>
+                <path d="M8 6.5a.75.75 0 01.75.75v4a.75.75 0 01-1.5 0v-4A.75.75 0 018 6.5zM8 4.5a.875.875 0 110 1.75A.875.875 0 018 4.5z" fill="currentColor"/>
+              </svg>
+              Sans renouvellement automatique
+            </span>
+            <span className="flex items-center gap-1.5 text-xs" style={{ color: "var(--cc-text-muted)" }}>
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+                <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" fill="currentColor" opacity="0.7"/>
+              </svg>
+              Satisfait ou remboursé 14 jours
+            </span>
           </div>
         </Section>
 

@@ -574,6 +574,16 @@ textarea::placeholder { color: var(--cc-text-disabled); }
 .cc-pricing-card-price       { font-size: 2rem; font-weight: 800; color: var(--cc-text); letter-spacing: -0.03em; }
 .cc-pricing-card-period      { font-size: 0.875rem; color: var(--cc-text-muted); font-weight: 500; }
 .cc-pricing-card-price-note  { font-size: 0.75rem; color: var(--cc-text-disabled); margin-top: 0.25rem; }
+.cc-pricing-card-mention {
+  margin-top: 0.5rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--cc-radius);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--cc-primary);
+  background: var(--cc-primary-soft);
+  border: 1px solid color-mix(in srgb, var(--cc-primary) 20%, transparent);
+}
 
 .cc-pricing-card-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.625rem; }
 .cc-pricing-card-feature  { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.875rem; }
