@@ -1,9 +1,12 @@
 "use client";
 import ScrollDemo from "./components/ScrollDemo";
+import { BookOpen, Bot, ChevronRight, Headphones, X } from "lucide-react";
 
 import { useRouter } from "next/navigation";
+import Alert from "../components/Alert";
 import Card from "../components/Card";
 import Button from "../components/Button";
+import ProgressBar from "../components/ProgressBar";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { hasAnyResult } from "../src/lib/saveResult";
 import { createClient } from "@/lib/supabase/client";
@@ -343,13 +346,13 @@ async function clearPseudo() {
           className={`border border-[var(--cc-border)] bg-[var(--cc-surface)] transition-all duration-500 ${
             heroVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
           }`}
-          style={{ borderRadius: "4px" }}
+          style={{ borderRadius: "var(--cc-radius-lg)" }}
         >
           {/* Bandeau tricolore */}
-          <div className="flex h-1 w-full">
-            <div className="flex-1 bg-[var(--cc-primary)]" />
-            <div className="flex-1 bg-white border-y border-[var(--cc-border)]" />
-            <div className="flex-1 bg-[var(--cc-danger)]" />
+          <div className="flex h-1 w-full overflow-hidden" style={{ borderRadius: "var(--cc-radius-lg) var(--cc-radius-lg) 0 0" }}>
+            <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
+            <div className="flex-1 bg-white" />
+            <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
           </div>
 
           <div className="px-5 py-7 sm:px-8 sm:py-9">
@@ -358,9 +361,9 @@ async function clearPseudo() {
             <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <span className="flex h-6 w-9 overflow-hidden rounded-sm border border-[var(--cc-border)]" aria-hidden="true">
-                  <span className="flex-1 bg-[var(--cc-primary)]" />
+                  <span className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
                   <span className="flex-1 bg-white" />
-                  <span className="flex-1 bg-[var(--cc-danger)]" />
+                  <span className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
                 </span>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--cc-text-muted)]">Cap Citoyen</p>
@@ -456,28 +459,27 @@ async function clearPseudo() {
 
             {/* Alerte si non connecté */}
             {!isAuthenticated && (
-              <div className="mb-6 cc-notice">
-                <p className="text-sm text-[var(--cc-text)]">
-                  Chaque année, des milliers de candidats se présentent sans préparation. Entraînez-vous dès aujourd'hui pour mettre toutes les chances de votre côté.
-                </p>
-              </div>
+              <Alert variant="info" className="mb-6" noIcon>
+                Chaque année, des milliers de candidats se présentent sans préparation. Entraînez-vous dès aujourd'hui pour mettre toutes les chances de votre côté.
+              </Alert>
             )}
 
-            {/* Révision consécutive */}
+            {/* Streak de révision */}
             {isAuthenticated && streak > 0 && (
-              <div className="mb-6 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
-                <p className="text-sm font-medium text-[var(--cc-text)]">
-                  {streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""}. Continuez aujourd'hui pour maintenir votre rythme.
-                </p>
+              <div className="mb-6">
+                <Alert variant="success" noIcon>
+                  <span className="font-semibold">{streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""}</span>{" "}
+                  — Continuez aujourd'hui pour maintenir votre rythme.
+                </Alert>
+                <ProgressBar value={Math.min(streak, 7)} total={7} variant="success" size="sm"
+                  label={`Série en cours · ${streak}/7 jours`} showLabel className="mt-2" />
               </div>
             )}
 
             {isAuthenticated && streak === 0 && (
-              <div className="mb-6 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
-                <p className="text-sm text-[var(--cc-text-muted)]">
-                  Commencez un exercice aujourd'hui pour démarrer votre série de révisions.
-                </p>
-              </div>
+              <Alert variant="info" className="mb-6" noIcon>
+                Commencez un exercice aujourd'hui pour démarrer votre série de révisions.
+              </Alert>
             )}
 
             {/* Badge + Titre */}
@@ -492,19 +494,32 @@ async function clearPseudo() {
               Valeurs de la République · Institutions · Histoire · Vie en société — entraînement progressif conforme à l'examen civique officiel.
             </p>
 
-            {/* Chiffres clés */}
-            <div className="mt-5 flex flex-wrap justify-center gap-3">
-              {[
-                { val: "93 %",    label: "taux de réussite" },
-                { val: "800 +",   label: "questions" },
-                { val: "2 sem.",  label: "pour être prêt" },
-              ].map(s => (
-                <div key={s.label} className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-2 text-center">
-                  <div className="text-base font-bold text-[var(--cc-primary)]">{s.val}</div>
-                  <div className="text-[10px] text-[var(--cc-text-muted)]">{s.label}</div>
+            {/* Chiffres clés — ligne éditoriale, sans fond */}
+            {(() => {
+              const stats = [
+                { val: "32 / 40", label: "score requis pour réussir" },
+                { val: "45 min",  label: "durée de l'examen officiel" },
+                { val: "800 +",   label: "questions d'entraînement" },
+              ];
+              return (
+                <div className="mt-6 flex flex-wrap justify-center">
+                  {stats.map((s, i) => (
+                    <div
+                      key={s.label}
+                      className="flex flex-col items-center px-5 py-1"
+                      style={{
+                        borderRight: i < stats.length - 1
+                          ? "1px solid var(--cc-border)"
+                          : "none",
+                      }}
+                    >
+                      <span className="text-xl font-bold leading-tight" style={{ color: "var(--cc-primary)" }}>{s.val}</span>
+                      <span className="mt-0.5 text-[11px] leading-snug" style={{ color: "var(--cc-text-muted)" }}>{s.label}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              );
+            })()}
 
             {/* Tags */}
             <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -537,29 +552,20 @@ async function clearPseudo() {
 
             {/* Actions secondaires */}
             <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <button onClick={() => router.push("/audio")}
-                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
-                Bibliothèque audio
-              </button>
-              <button onClick={() => { const el = document.getElementById("avis-section"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
-                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
-                Avis des utilisateurs
-              </button>
-              <button onClick={() => router.push("/leaderboard")}
-                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
-                Classement
-              </button>
-              <button onClick={() => router.push("/resources")}
-                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
-                Ressources officielles
-              </button>
-              <button onClick={() => router.push("/assistant")}
-                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
-                Assistant IA démarches
-              </button>
+              {[
+                { label: "Bibliothèque audio", onClick: () => router.push("/audio") },
+                { label: "Avis des utilisateurs", onClick: () => { const el = document.getElementById("avis-section"); if (el) el.scrollIntoView({ behavior: "smooth" }); } },
+                { label: "Classement", onClick: () => router.push("/leaderboard") },
+                { label: "Ressources officielles", onClick: () => router.push("/resources") },
+                { label: "Assistant IA démarches", onClick: () => router.push("/assistant") },
+              ].map(({ label, onClick }) => (
+                <button key={label} onClick={onClick}
+                  className="cc-btn cc-btn-tertiary cc-btn-sm">
+                  {label}
+                </button>
+              ))}
               {!isAuthenticated && (
-                <button onClick={() => setShowOnboarding(true)}
-                  className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-xs font-medium text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors">
+                <button onClick={() => setShowOnboarding(true)} className="cc-btn cc-btn-tertiary cc-btn-sm">
                   Guide de démarrage
                 </button>
               )}
@@ -617,8 +623,8 @@ async function clearPseudo() {
             </div>
             {!(['premium','elite','moderator','admin','super_admin'].includes(role ?? '')) && (
               <button onClick={() => router.push("/pricing")}
-                className="mt-4 w-full rounded border border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] px-4 py-3 text-left text-sm font-bold text-[var(--cc-primary)] hover:bg-[var(--cc-primary)] hover:text-white transition-colors">
-                Accéder aux niveaux 2 et 3 avec un abonnement
+                className="cc-btn cc-btn-primary mt-4 w-full justify-start text-sm">
+                Accéder aux niveaux 2 et 3 →
               </button>
             )}
           </Card>
@@ -667,13 +673,13 @@ async function clearPseudo() {
                 </div>
               ))}
               {role !== "premium" && role !== "elite" && (
-                <div className="mt-3 cc-notice cc-notice-warning">
-                  <p className="text-xs text-[var(--cc-text)]">
+                <Alert variant="warning" noIcon className="mt-3">
+                  <p className="text-xs">
                     {role === "anonymous"
                       ? "Créez un compte gratuit pour accéder à 20 questions."
-                      : "Abonnez-vous pour accéder à 40 questions et tous les niveaux."}
+                      : "Passez à un pass pour accéder à 40 questions et tous les niveaux."}
                   </p>
-                </div>
+                </Alert>
               )}
             </div>
             <div className="mt-6 flex flex-col gap-3">
@@ -704,28 +710,31 @@ async function clearPseudo() {
         ══════════════════════════════════════════ */}
         <section>
           <h2 className="mb-6 text-xl font-bold text-[var(--cc-text)]">Une préparation complète et progressive</h2>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-3">
             {[
               {
                 num: "01",
                 title: "Comprendre ses erreurs pour progresser",
                 text: "Chaque question est accompagnée d'une explication détaillée pour transformer chaque erreur en véritable leçon.",
+                variant: "cc-badge-info",
               },
               {
                 num: "02",
                 title: "Concentrer ses révisions sur les points faibles",
                 text: "Sélectionnez les thèmes qui vous manquent, ajustez le niveau de difficulté et optimisez votre temps de préparation.",
+                variant: "cc-badge-success",
               },
               {
                 num: "03",
                 title: "Simuler les conditions réelles de l'entretien",
                 text: "La simulation d'examen blanc reproduit les conditions officielles — durée, nombre de questions, format — pour arriver préparé le jour J.",
+                variant: "cc-badge-warning",
               },
             ].map(item => (
-              <div key={item.title} className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] p-5">
-                <div className="mb-3 text-2xl font-bold text-[var(--cc-primary)]">{item.num}</div>
-                <h3 className="text-base font-bold text-[var(--cc-text)]">{item.title}</h3>
-                <p className="mt-2 text-sm leading-7 text-[var(--cc-text)]">{item.text}</p>
+              <div key={item.title} className="cc-card cc-card-elevated">
+                <span className={`cc-badge ${item.variant} cc-badge-sm mb-4`}>{item.num}</span>
+                <h3 className="text-base font-bold" style={{ color: "var(--cc-text)" }}>{item.title}</h3>
+                <p className="mt-2 text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>{item.text}</p>
               </div>
             ))}
           </div>
@@ -734,11 +743,21 @@ async function clearPseudo() {
         {/* ══════════════════════════════════════════
             SECTION 5 — LIEN CENTRE AGRÉÉ
         ══════════════════════════════════════════ */}
-        <section className="rounded border-l-4 border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] p-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <section
+          className="cc-card cc-card-featured"
+          style={{ borderTopColor: "var(--cc-flag-blue)" }}
+        >
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-bold text-[var(--cc-text)]">Prêt à vous présenter à l'entretien ?</p>
-              <p className="mt-0.5 text-xs text-[var(--cc-text)]">Trouvez le centre CCI agréé le plus proche de chez vous.</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="flex h-4 w-6 overflow-hidden rounded-sm border" style={{ borderColor: "var(--cc-border)" }}>
+                  <span className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
+                  <span className="flex-1 bg-white" />
+                  <span className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
+                </span>
+                <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Prêt à vous présenter à l'entretien ?</p>
+              </div>
+              <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>Trouvez le centre CCI agréé le plus proche de chez vous.</p>
             </div>
             <a
               href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
@@ -764,28 +783,58 @@ async function clearPseudo() {
       {/* ══ MODAL — Mode de révision ════════════════ */}
       {showReviseModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[var(--cc-text)]/50" onClick={() => setShowReviseModal(false)} />
-          <div className="relative z-[101] w-full max-w-sm rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] p-6 shadow-lg">
-            <button onClick={() => setShowReviseModal(false)}
-              className="absolute right-4 top-4 text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-xl leading-none" aria-label="Fermer">×</button>
-            <h3 className="text-lg font-bold text-[var(--cc-text)]">Mode de révision</h3>
-            <p className="mt-1 text-sm text-[var(--cc-text-muted)]">Choisissez votre format de révision préféré.</p>
+          <div
+            className="absolute inset-0"
+            style={{ background: "color-mix(in srgb, var(--cc-text) 50%, transparent)" }}
+            onClick={() => setShowReviseModal(false)}
+          />
+          <div
+            className="relative z-[101] w-full max-w-sm rounded-2xl border p-6 shadow-xl"
+            style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}
+          >
+            <button
+              onClick={() => setShowReviseModal(false)}
+              className="absolute right-4 top-4 rounded-lg p-1 transition-colors"
+              style={{ color: "var(--cc-text-muted)" }}
+              aria-label="Fermer"
+            >
+              <X size={18} />
+            </button>
+            <h3 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>
+              Comment voulez-vous réviser ?
+            </h3>
+            <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>
+              Choisissez votre format de révision préféré.
+            </p>
             <div className="mt-5 flex flex-col gap-3">
-              {[
-                { label: "Révision par fiches", desc: "Défilement vertical des questions — rapide et efficace.", href: "/scroll" },
-                { label: "Bibliothèque audio",  desc: "Épisodes guidés au format entretien réel, voix naturelle.", href: "/audio" },
-                { label: "Assistant IA démarches", desc: "Posez vos questions sur la naturalisation et l'entretien civique.", href: "/assistant" },
-              ].map(({ label, desc, href }) => (
-                <button key={href}
+              {([
+                { label: "Révision par fiches",     desc: "Défilement vertical des questions — rapide et efficace.", href: "/scroll",    Icon: BookOpen   },
+                { label: "Bibliothèque audio",       desc: "Épisodes guidés au format entretien réel, voix naturelle.", href: "/audio",  Icon: Headphones },
+                { label: "Assistant IA démarches",   desc: "Posez vos questions sur la naturalisation et l'entretien civique.", href: "/assistant", Icon: Bot },
+              ] as const).map(({ label, desc, href, Icon }) => (
+                <button
+                  key={href}
                   onClick={() => { setShowReviseModal(false); router.push(href); }}
-                  className="flex items-start gap-4 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] p-4 text-left hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
+                  className="flex items-start gap-3 rounded-xl border p-4 text-left transition-colors hover:opacity-90"
+                  style={{
+                    borderColor: "var(--cc-border)",
+                    background: "var(--cc-surface-alt)",
+                  }}
+                >
+                  <span
+                    className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                    style={{
+                      background: "color-mix(in srgb, var(--cc-primary) 12%, var(--cc-surface))",
+                      color: "var(--cc-primary)",
+                    }}
+                  >
+                    <Icon size={18} />
+                  </span>
                   <div className="flex-1">
-                    <p className="font-bold text-[var(--cc-text)] text-sm">{label}</p>
-                    <p className="mt-0.5 text-xs text-[var(--cc-text-muted)]">{desc}</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>{label}</p>
+                    <p className="mt-0.5 text-xs" style={{ color: "var(--cc-text-muted)" }}>{desc}</p>
                   </div>
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="mt-0.5 shrink-0 text-[var(--cc-primary)]" aria-hidden="true">
-                    <path d="M5 4l6 4-6 4V4z" fill="currentColor"/>
-                  </svg>
+                  <ChevronRight size={14} className="mt-1 shrink-0" style={{ color: "var(--cc-primary)" }} />
                 </button>
               ))}
             </div>

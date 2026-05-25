@@ -12,6 +12,8 @@ import { generateQuiz, generateQuizAsync, scoreQuiz, markQuestionsAsSeen } from 
 
 import Card from "../../components/Card";
 import Button from "../../components/Button";
+import Alert from "../../components/Alert";
+import ProgressBar from "../../components/ProgressBar";
 
 
 
@@ -89,6 +91,10 @@ export default function QuizPage() {
   const [globalTime, setGlobalTime] = useState<number | null>(null);
   const [focusWarn, setFocusWarn] = useState(0);
   const [showBurst, setShowBurst] = useState(false);
+  // Correction post-réponse (mode entraînement uniquement)
+  const [showCorrection, setShowCorrection] = useState(false);
+  const [lastChoice, setLastChoice] = useState<ChoiceKey | null>(null);
+  const correctionTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (mode !== "exam") return;
@@ -162,7 +168,6 @@ export default function QuizPage() {
 
   // Applique la limite de questions
   const allowedCount = Math.min(parsed.count, limits.quizCount);
-  console.log('role:', role, 'limits:', limits.quizCount, 'allowedCount:', allowedCount)
 
   // Tentative async (base), fallback automatique sur les fichiers si vide
   generateQuizAsync({
@@ -256,11 +261,16 @@ useEffect(() => {
     const perQuestionSeconds = mode === "exam" ? 30 : 20;
     setRemaining(perQuestionSeconds);
 
+    // ?freeze=1 : pas de minuterie — utile pour screenshots / démo
+    const freezeMode = new URLSearchParams(window.location.search).get("freeze") === "1";
+    if (freezeMode) return;
+
     if (tickRef.current) window.clearInterval(tickRef.current);
     tickRef.current = window.setInterval(() => {
       setRemaining((r) => {
         if (r <= 1) {
           const q = questions[idx];
+          if (!q) return 0;
           if (!answers[q.id]) {
             setAnswers((prev) => ({ ...prev, [q.id]: null }));
           }
@@ -290,17 +300,52 @@ useEffect(() => {
     if (idx < questions.length - 1) setIdx((i) => i + 1);
   }, [remaining, idx, questions.length]);
 
+  // Réinitialise l'état de correction à chaque changement de question
+  // (évite la teinte rosée/rouge résiduelle sur la nouvelle question)
+  useEffect(() => {
+    setShowCorrection(false);
+    setLastChoice(null);
+  }, [idx]);
+
+function advanceAfterCorrection() {
+  setShowCorrection(false);
+  setLastChoice(null);
+  setRemaining(20);
+  if (idx < questions.length - 1) {
+    setIdx((i) => i + 1);
+  } else {
+    submit();
+  }
+}
+
 function selectAnswer(choice: ChoiceKey) {
   if (!current) return;
+  if (showCorrection) return; // Bloquer le double-clic pendant la correction
+
   setAnswers((prev) => ({ ...prev, [current.id]: choice }));
-  // Burst si bonne réponse en mode train
-  if (mode !== "exam" && choice === current.answer) {
-    setShowBurst(true);
-    setTimeout(() => setShowBurst(false), 1000);
+
+  if (tickRef.current) { window.clearInterval(tickRef.current); tickRef.current = null; }
+
+  if (mode === "exam") {
+    // Examen : avance immédiatement, pas de correction affichée
+    setRemaining(30);
+    if (idx < questions.length - 1) setIdx((i) => i + 1);
+    else submit();
+  } else {
+    // Entraînement : affiche la correction 1,5 s puis avance
+    setLastChoice(choice);
+    setShowCorrection(true);
+    if (choice === current.answer) {
+      setShowBurst(true);
+      setTimeout(() => setShowBurst(false), 1000);
+    }
+    if (correctionTimerRef.current) window.clearTimeout(correctionTimerRef.current);
+    // ?freeze=1 : maintient la correction affichée indéfiniment (démo / screenshot)
+    const freezeMode = new URLSearchParams(window.location.search).get("freeze") === "1";
+    if (!freezeMode) {
+      correctionTimerRef.current = window.setTimeout(advanceAfterCorrection, 1500);
+    }
   }
-  if (tickRef.current) window.clearInterval(tickRef.current);
-  setRemaining(mode === "exam" ? 30 : 20);
-  if (idx < questions.length - 1) setIdx(idx + 1);
 }
 
   async function submit() {
@@ -309,6 +354,7 @@ function selectAnswer(choice: ChoiceKey) {
 
     if (tickRef.current) window.clearInterval(tickRef.current);
     if (globalRef.current) window.clearInterval(globalRef.current);
+    if (correctionTimerRef.current) window.clearTimeout(correctionTimerRef.current);
 
     const result = scoreQuiz({ questions, answers });
     markQuestionsAsSeen(questions.map(q => q.id));
@@ -415,7 +461,7 @@ function selectAnswer(choice: ChoiceKey) {
 }
 
   return (
-    <main className="mx-auto max-w-4xl px-3 py-2 sm:px-6 sm:py-4">
+    <main className="mx-auto max-w-4xl px-3 py-2 pb-24 sm:px-6 sm:py-4 sm:pb-4">
       <div className="space-y-4">
         {/* Bandeau compact */}
         <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)", boxShadow: "var(--cc-shadow)" }}>
@@ -424,8 +470,8 @@ function selectAnswer(choice: ChoiceKey) {
     <button
       type="button"
       onClick={leaveQuiz}
-      className="rounded-full border px-3 py-1.5 text-xs font-semibold transition"
-      style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
+      className="text-xs transition hover:opacity-70"
+      style={{ color: "var(--cc-text-disabled)", background: "none", border: "none", padding: "0" }}
     >
       ← Quitter
     </button>
@@ -445,44 +491,33 @@ function selectAnswer(choice: ChoiceKey) {
 
   <div className="flex items-center gap-2 rounded-full border px-3 py-1.5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
     <div
-      className={`h-2.5 w-2.5 rounded-full ${
-        remaining <= 3 ? "bg-red-500 animate-pulse" : "bg-emerald-400"
-      }`}
+      className={remaining <= 5 ? "animate-pulse" : ""}
+      style={{
+        width: "10px", height: "10px", borderRadius: "50%", flexShrink: 0,
+        background: remaining <= 5 ? "var(--cc-danger)" : "var(--cc-success)",
+      }}
     />
     <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{Math.max(0, remaining)}s</span>
   </div>
 </div>
 
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
-            <div>
-              <div className="mb-1 flex items-center justify-between text-[11px]" style={{ color: "var(--cc-text-muted)" }}>
-                <span>Progression</span>
-                <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{progressPct}%</span>
-              </div>
-              <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: "var(--cc-border)" }}>
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 transition-all duration-300"
-                  style={{ width: `${progressPct}%` }}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="mb-1 flex items-center justify-between text-[11px]" style={{ color: "var(--cc-text-muted)" }}>
-                <span>Temps question</span>
-                <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{timeRatio}%</span>
-              </div>
-              <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: "var(--cc-border)" }}>
-                <div
-                  className={`h-full rounded-full transition-all duration-300 ${
-                    remaining <= 5
-                      ? "bg-gradient-to-r from-red-600 to-rose-500"
-                      : "bg-gradient-to-r from-emerald-500 to-green-400"
-                  }`}
-                  style={{ width: `${timeRatio}%` }}
-                />
-              </div>
-            </div>
+            <ProgressBar
+              value={idx + 1}
+              total={questions.length}
+              variant="primary"
+              size="sm"
+              label={`Progression · ${progressPct}%`}
+              showLabel
+            />
+            <ProgressBar
+              value={timeRatio}
+              total={100}
+              variant={remaining <= 5 ? "danger" : "success"}
+              size="sm"
+              label={`Temps question · ${timeRatio}%`}
+              showLabel
+            />
           </div>
 
           <div className="mt-3 flex items-center justify-between gap-3 flex-wrap text-xs" style={{ color: "var(--cc-text-muted)" }}>
@@ -494,15 +529,21 @@ function selectAnswer(choice: ChoiceKey) {
             </span>
             {mode === "exam" && globalTime !== null && (
               <span>
-                Temps global : <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{formatGlobalTime(globalTime)}</span>
+                Temps global :{" "}
+                <span
+                  className={globalTime < 300 ? "animate-pulse" : ""}
+                  style={{ fontWeight: 600, color: globalTime < 300 ? "var(--cc-danger)" : "var(--cc-text)" }}
+                >
+                  {formatGlobalTime(globalTime)}
+                </span>
               </span>
             )}
           </div>
 
           {mode === "exam" && focusWarn > 0 && (
-            <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-700">
-              Onglet quitté : <span className="font-semibold">{focusWarn}</span>/3
-            </div>
+            <Alert variant="warning" className="mt-3" noIcon>
+              <span className="text-xs">Onglet quitté : <strong>{focusWarn}</strong>/3 — au 3e départ l'examen est soumis automatiquement.</span>
+            </Alert>
           )}
         </div>
 
@@ -521,23 +562,58 @@ function selectAnswer(choice: ChoiceKey) {
           <div className="mt-2 space-y-1.5">
             {current.choices.map((c) => {
               const selected = answers[current.id] === c.key;
+              const isCorrectKey = c.key === current.answer;
+              const isWrongSelected = showCorrection && selected && !isCorrectKey;
+
+              // Couleurs de correction
+              const borderColor = showCorrection
+                ? isCorrectKey
+                  ? "var(--cc-success)"
+                  : isWrongSelected
+                  ? "var(--cc-danger)"
+                  : "var(--cc-border)"
+                : selected
+                ? "var(--cc-primary)"
+                : "var(--cc-border)";
+
+              const bgColor = showCorrection
+                ? isCorrectKey
+                  ? "color-mix(in srgb, var(--cc-success) 12%, var(--cc-surface))"
+                  : isWrongSelected
+                  ? "color-mix(in srgb, var(--cc-danger) 12%, var(--cc-surface))"
+                  : "var(--cc-surface)"
+                : selected
+                ? "var(--cc-primary-soft)"
+                : "var(--cc-surface)";
+
+              const keyBg = showCorrection
+                ? isCorrectKey
+                  ? "var(--cc-success)"
+                  : isWrongSelected
+                  ? "var(--cc-danger)"
+                  : "var(--cc-surface-alt)"
+                : selected
+                ? "var(--cc-primary)"
+                : "var(--cc-surface-alt)";
+
+              const keyColor =
+                showCorrection && (isCorrectKey || isWrongSelected)
+                  ? "#fff"
+                  : selected
+                  ? "#fff"
+                  : "var(--cc-text-muted)";
+
               return (
                 <button
                   key={c.key}
                   onClick={() => selectAnswer(c.key)}
-                  className="w-full rounded-xl border px-3 py-2 text-left transition-all duration-200"
-                  style={{
-                    borderColor: selected ? "var(--cc-primary)" : "var(--cc-border)",
-                    background: selected ? "var(--cc-primary-soft)" : "var(--cc-surface)",
-                    color: "var(--cc-text)",
-                  }}
+                  disabled={showCorrection}
+                  className="w-full rounded-xl border px-3 py-2 text-left transition-all duration-200 disabled:cursor-default"
+                  style={{ borderColor, background: bgColor, color: "var(--cc-text)" }}
                 >
                   <span
-                    className="mr-3 inline-flex h-8 w-8 items-center justify-center rounded-xl text-sm font-bold"
-                    style={{
-                      background: selected ? "var(--cc-primary)" : "var(--cc-surface-alt)",
-                      color: selected ? "#fff" : "var(--cc-text-muted)",
-                    }}
+                    className="mr-3 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-sm font-bold transition-all duration-200"
+                    style={{ background: keyBg, color: keyColor }}
                   >
                     {c.key}
                   </span>
@@ -547,13 +623,43 @@ function selectAnswer(choice: ChoiceKey) {
             })}
           </div>
 
+          {/* Correction feedback — mode entraînement uniquement */}
+          {showCorrection && (
+            <div
+              className="mt-3 rounded-xl border px-4 py-3 transition-all duration-300"
+              style={{
+                borderColor: lastChoice === current.answer ? "var(--cc-success)" : "var(--cc-danger)",
+                background: lastChoice === current.answer
+                  ? "color-mix(in srgb, var(--cc-success) 8%, var(--cc-surface))"
+                  : "color-mix(in srgb, var(--cc-danger) 8%, var(--cc-surface))",
+              }}
+            >
+              <p className="text-sm font-semibold" style={{ color: lastChoice === current.answer ? "var(--cc-success)" : "var(--cc-danger)" }}>
+                {lastChoice === current.answer
+                  ? "✓ Bonne réponse !"
+                  : `✗ Mauvaise réponse — la bonne réponse était ${current.answer}`}
+              </p>
+              {/* Explication : premium/elite uniquement */}
+              {ROLE_LIMITS[role].canSeeExplanations && current.explanation && (
+                <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--cc-text-muted)" }}>
+                  {current.explanation}
+                </p>
+              )}
+              {!ROLE_LIMITS[role].canSeeExplanations && (
+                <p className="mt-1 text-xs" style={{ color: "var(--cc-text-disabled)" }}>
+                  Explication disponible avec un Pass →{" "}
+                  <a href="/pricing" className="underline" style={{ color: "var(--cc-primary)" }}>Voir les offres</a>
+                </p>
+              )}
+            </div>
+          )}
+
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
   <div className="flex items-center gap-3">
     <button
       type="button"
       onClick={leaveQuiz}
-      className="rounded-xl border px-4 py-2 transition"
-      style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
+      className="cc-btn cc-btn-tertiary cc-btn-sm"
     >
       Quitter
     </button>
@@ -582,10 +688,9 @@ function selectAnswer(choice: ChoiceKey) {
 
           <StarBurstQuiz show={showBurst} />
           {!canSubmit && (
-            <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-700">
-              ⚠️ Validation possible uniquement si vous avez répondu à au moins{" "}
-              <strong>{minToSubmit}</strong> questions.
-            </div>
+            <Alert variant="warning" className="mt-4" noIcon>
+              <span className="text-sm">Validation possible à partir de <strong>{minToSubmit}</strong> réponses — encore {minToSubmit - answeredCount} à compléter.</span>
+            </Alert>
           )}
 
           {score && (
@@ -622,12 +727,17 @@ function selectAnswer(choice: ChoiceKey) {
       <div className="space-y-3">
         {role === "anonymous" ? (
           <>
-            <a href={`/register?redirect=/results?mode=${mode}`}
-              className="cc-btn cc-btn-primary w-full justify-center rounded-xl py-3"
+            {/* Bug corrigé : emoji en contenu, pas en attribut */}
+            <a
+              href={`/register?redirect=/results?mode=${mode}`}
+              className="cc-btn cc-btn-primary w-full justify-center"
+            >
               🚀 Créer un compte pour sauvegarder
             </a>
-            <a href={`/login?redirect=/results?mode=${mode}`}
-              className="cc-btn cc-btn-secondary w-full justify-center rounded-xl py-3">
+            <a
+              href={`/login?redirect=/results?mode=${mode}`}
+              className="cc-btn cc-btn-secondary w-full justify-center"
+            >
               J'ai déjà un compte
             </a>
             {!showAnonForm ? (
@@ -636,12 +746,10 @@ function selectAnswer(choice: ChoiceKey) {
                   const u = (() => { try { return JSON.parse(localStorage.getItem('qcm_user') ?? '{}'); } catch { return {}; } })();
                   const count = parseInt(localStorage.getItem('anon_test_count') ?? '0', 10);
                   if (count >= 3 && !u.email) {
-                    // Forcer création compte après 3 tests
                     window.location.href = '/register';
                     return;
                   }
                   if (u.pseudo && u.email) {
-                    // Déjà saisi → aller directement aux résultats
                     localStorage.setItem('anon_test_count', String(count + 1));
                     setShowPremiumCTA(false);
                     router.push('/results?mode=' + mode);
@@ -649,8 +757,8 @@ function selectAnswer(choice: ChoiceKey) {
                     setShowAnonForm(true);
                   }
                 }}
-                className="block w-full rounded-xl border px-4 py-2.5 text-center text-xs font-medium transition"
-                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-disabled)" }}>
+                className="cc-btn cc-btn-tertiary cc-btn-sm w-full justify-center"
+              >
                 {(() => { const c = parseInt(typeof window !== 'undefined' ? localStorage.getItem('anon_test_count') ?? '0' : '0', 10); return c >= 3 ? '🔒 Créer un compte pour continuer' : 'Voir mes résultats sans compte →'; })()}
               </button>
             ) : (
@@ -661,14 +769,14 @@ function selectAnswer(choice: ChoiceKey) {
                   placeholder="Ton prénom"
                   value={anonPrenom}
                   onChange={(e) => setAnonPrenom(e.target.value)}
-                  className="w-full"
+                  className="cc-input w-full"
                 />
                 <input
                   type="email"
                   placeholder="Ton email"
                   value={anonEmail}
                   onChange={(e) => setAnonEmail(e.target.value)}
-                  className="w-full"
+                  className="cc-input w-full"
                 />
                 <p className="text-center text-[10px]" style={{ color: "var(--cc-text-disabled)" }}>Pas de spam, jamais.</p>
                 <button
@@ -680,39 +788,35 @@ function selectAnswer(choice: ChoiceKey) {
                     setShowPremiumCTA(false);
                     router.push(`/results?mode=${mode}`);
                   }}
-                  className="block w-full rounded-2xl bg-teal-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-teal-500 disabled:opacity-40">
+                  className="cc-btn cc-btn-primary w-full justify-center disabled:opacity-40"
+                >
                   Voir mes résultats →
                 </button>
               </div>
             )}
           </>
         ) : (
-          <button
-            onClick={() => router.push("/account")}
-            className="block w-full rounded-2xl bg-amber-500 px-5 py-3 text-center text-sm font-bold text-slate-950 transition hover:bg-amber-400">
-            👑 Passer en Premium — 19,99€/3 mois
-            <a href="/pricing" className="block text-center text-xs text-amber-400/70 hover:text-amber-300 transition mt-1">
-  Voir les tarifs →
-</a>
-          </button>
-          
+          /* Utilisateur freemium : CTA vers /pricing (pas "Premium 19,99€" retiré) */
+          <a href="/pricing" className="cc-btn cc-btn-primary w-full justify-center">
+            Choisir un Pass →
+          </a>
         )}
         <div className="flex gap-2">
-  <button
-    onClick={() => router.push("/pricing")}
-    className="flex-1 rounded-xl border px-4 py-3 text-center text-xs font-medium transition"
-    style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
-  >
-    Voir les tarifs
-  </button>
-  <button
-    onClick={() => { setShowPremiumCTA(false); router.push(`/results?mode=${mode}`); }}
-    className={`flex-1 rounded-xl border px-4 py-3 text-center text-sm font-medium transition ${role === "anonymous" ? "hidden" : ""}`}
-    style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
-  >
-    Mes résultats →
-  </button>
-</div>
+          <button
+            onClick={() => router.push("/pricing")}
+            className="cc-btn cc-btn-secondary cc-btn-sm flex-1 justify-center"
+          >
+            Voir les tarifs
+          </button>
+          {role !== "anonymous" && (
+            <button
+              onClick={() => { setShowPremiumCTA(false); router.push(`/results?mode=${mode}`); }}
+              className="cc-btn cc-btn-tertiary cc-btn-sm flex-1 justify-center"
+            >
+              Mes résultats →
+            </button>
+          )}
+        </div>
       </div>
     </div>
   </div>

@@ -66,7 +66,7 @@ export default async function ScrollPage({ searchParams }: PageProps) {
   if (error || !data) {
     return (
       <main className="mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-5xl items-center justify-center px-4 py-8">
-        <p className="text-red-400">Erreur de chargement : {error?.message}</p>
+        <p style={{ color: "var(--cc-danger)" }}>Erreur de chargement : {error?.message}</p>
       </main>
     );
   }

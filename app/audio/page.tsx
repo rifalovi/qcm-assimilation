@@ -14,6 +14,20 @@ import {
   type AudioComingSoonRow,
 } from "@/lib/audioContent";
 import { useEffect, useMemo, useState } from "react";
+import {
+  Crown,
+  GraduationCap,
+  Headphones,
+  Lock,
+  Mic,
+  Music,
+  Rocket,
+  Sparkles,
+  Star,
+  Timer,
+  User,
+  X,
+} from "lucide-react";
 
 // Icônes de secours si une série DB n'a pas d'emoji défini.
 const THEME_ICON_FALLBACK: Record<string, string> = {
@@ -73,25 +87,26 @@ function AlbumCard({
         {/* Badge locked */}
         {locked && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="rounded-2xl border border-amber-400/30 bg-amber-500/20 px-4 py-2 text-center backdrop-blur-sm">
-              <p className="text-lg">🔒</p>
-              <p className="text-xs font-bold text-amber-300">Premium</p>
+            <div className="rounded-2xl px-4 py-2 text-center backdrop-blur-sm" style={{ border: "1px solid color-mix(in srgb, var(--cc-warning) 30%, transparent)", background: "color-mix(in srgb, var(--cc-warning) 20%, transparent)" }}>
+              <Lock size={20} style={{ color: "var(--cc-warning)", margin: "0 auto 4px" }} />
+              <p className="text-xs font-bold" style={{ color: "var(--cc-warning)" }}>Premium</p>
             </div>
           </div>
         )}
 
         {/* Badge freemium */}
         {isFreemium && !isPremium && (
-          <div className="absolute right-2 top-2 rounded-full border border-emerald-400/30 bg-emerald-500/20 px-2 py-0.5 backdrop-blur-sm">
-            <p className="text-[10px] font-bold text-emerald-300">2 gratuits</p>
+          <div className="absolute right-2 top-2 rounded-full px-2 py-0.5 backdrop-blur-sm" style={{ border: "1px solid color-mix(in srgb, var(--cc-success) 30%, transparent)", background: "color-mix(in srgb, var(--cc-success) 20%, transparent)" }}>
+            <p className="text-[10px] font-bold" style={{ color: "var(--cc-success)" }}>2 gratuits</p>
           </div>
         )}
 
         {/* Play overlay on hover */}
         {!locked && (
           <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
-              <svg width="20" height="20" viewBox="0 0 14 14" fill="#0f172a">
+            {/* White circle is intentional on dark album art — icon must always be dark */}
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-[0_8px_24px_rgba(0,0,0,0.4)]" style={{ color: "#0f172a" }}>
+              <svg width="20" height="20" viewBox="0 0 14 14" fill="currentColor">
                 <path d="M3 1.5l10 5.5-10 5.5V1.5z"/>
               </svg>
             </div>
@@ -250,11 +265,14 @@ export default function AudioLibraryPage() {
 
         {/* ── HERO ────────────────────────────────────────────────────── */}
         <section className="relative overflow-hidden rounded-[2rem] shadow-[0_25px_70px_rgba(2,8,23,0.42)]" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)" }}>
+          {/* Tricolore */}
           <div className="flex h-1.5 w-full">
-            <div className="flex-1 bg-blue-600"/><div className="flex-1 bg-white"/><div className="flex-1 bg-red-600"/>
+            <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
+            <div className="flex-1" style={{ background: "white" }} />
+            <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
           </div>
-          <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl"/>
-          <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-emerald-400/8 blur-3xl"/>
+          <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full blur-3xl" style={{ background: "color-mix(in srgb, var(--cc-flag-blue) 15%, transparent)" }} />
+          <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full blur-3xl" style={{ background: "color-mix(in srgb, var(--cc-success) 8%, transparent)" }} />
 
           <div className="relative px-5 py-7 sm:px-8 sm:py-9 text-center">
             {/* Bouton retour */}
@@ -265,8 +283,8 @@ export default function AudioLibraryPage() {
               </button>
             </div>
 
-            <div className="mb-3 inline-flex items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300">
-              🎧 Bibliothèque audio
+            <div className="mb-3 inline-flex items-center justify-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold uppercase tracking-widest" style={{ borderColor: "color-mix(in srgb, var(--cc-primary) 20%, transparent)", background: "color-mix(in srgb, var(--cc-primary) 10%, transparent)", color: "var(--cc-primary)" }}>
+              <Headphones size={12} /> Bibliothèque audio
             </div>
             <h1 className="mx-auto max-w-2xl text-2xl font-extrabold leading-tight sm:text-3xl" style={{ color: "var(--cc-text)" }}>
               Préparez-vous à l&apos;oral
@@ -277,15 +295,27 @@ export default function AudioLibraryPage() {
 
             {/* Badge rôle */}
             <div className="mt-3 flex justify-center">
-              {isAnonymous && <span className="rounded-full border px-3 py-1 text-xs font-medium" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>👤 Sans compte — créez un compte gratuit</span>}
-              {isFreemium && <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">✨ Freemium — 2 épisodes gratuits par thème</span>}
-              {isPremium && <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">👑 Premium — accès complet</span>}
+              {isAnonymous && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
+                  <User size={11} /> Sans compte — créez un compte gratuit
+                </span>
+              )}
+              {isFreemium && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium" style={{ borderColor: "color-mix(in srgb, var(--cc-primary) 20%, transparent)", background: "color-mix(in srgb, var(--cc-primary) 10%, transparent)", color: "var(--cc-primary)" }}>
+                  <Sparkles size={11} /> Freemium — 2 épisodes gratuits par thème
+                </span>
+              )}
+              {isPremium && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium" style={{ borderColor: "color-mix(in srgb, var(--cc-warning) 20%, transparent)", background: "color-mix(in srgb, var(--cc-warning) 10%, transparent)", color: "var(--cc-warning)" }}>
+                  <Crown size={11} /> Premium — accès complet
+                </span>
+              )}
             </div>
 
             {/* CTA anonymous */}
             {isAnonymous && (
               <div className="mt-5 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                <button onClick={() => router.push("/register")} className="inline-flex items-center justify-center rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 px-5 py-2.5 text-sm font-bold text-white transition hover:brightness-105">
+                <button onClick={() => router.push("/register")} className="inline-flex items-center justify-center rounded-2xl px-5 py-2.5 text-sm font-bold text-white transition hover:opacity-90" style={{ background: "var(--cc-primary)" }}>
                   Créer un compte gratuit
                 </button>
                 <button onClick={() => router.push("/login")} className="inline-flex items-center justify-center rounded-2xl px-5 py-2.5 text-sm font-semibold transition" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
@@ -296,8 +326,8 @@ export default function AudioLibraryPage() {
 
             {/* CTA freemium upgrade */}
             {isFreemium && (
-              <button onClick={handleUpgrade} className="mt-4 inline-flex items-center justify-center rounded-2xl border border-amber-400/20 bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:brightness-105">
-                👑 Débloquer les 100 épisodes
+              <button onClick={handleUpgrade} className="mt-4 inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-bold text-white transition hover:opacity-90" style={{ background: "var(--cc-warning)" }}>
+                <Crown size={13} /> Débloquer les 100 épisodes
               </button>
             )}
           </div>
@@ -336,6 +366,7 @@ export default function AudioLibraryPage() {
                         unoptimized={album.image_url.startsWith("http")}
                       />
                     )}
+                    {/* Intentional dark overlay for Netflix-style readability */}
                     <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/60 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                   </div>
@@ -343,8 +374,8 @@ export default function AudioLibraryPage() {
                   {/* Contenu */}
                   <div className="relative flex h-full min-h-[360px] flex-col justify-end px-6 py-8 sm:px-10 sm:py-10 lg:justify-center">
                     <div className="max-w-lg">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-blue-300 backdrop-blur-sm">
-                        ⭐ En vedette
+                      <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur-sm" style={{ borderColor: "color-mix(in srgb, var(--cc-primary) 30%, transparent)", background: "color-mix(in srgb, var(--cc-primary) 20%, transparent)", color: "var(--cc-primary)" }}>
+                        <Star size={10} /> En vedette
                       </span>
                       <h2 className="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl" style={{ color: "var(--cc-text)" }}>
                         {album.subtheme_label}
@@ -413,7 +444,9 @@ export default function AudioLibraryPage() {
           <section>
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>🎓 Thématiques</h2>
+                <h2 className="flex items-center gap-2 text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>
+                  <GraduationCap size={18} /> Thématiques
+                </h2>
                 <p className="mt-0.5 text-xs" style={{ color: "var(--cc-text-disabled)" }}>Préparation civique • Entretien de naturalisation</p>
               </div>
               {!loading && (
@@ -451,7 +484,9 @@ export default function AudioLibraryPage() {
           <section>
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>🎵 Hymnes & Chants</h2>
+                <h2 className="flex items-center gap-2 text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>
+                  <Music size={18} /> Hymnes & Chants
+                </h2>
                 <p className="mt-0.5 text-xs" style={{ color: "var(--cc-text-disabled)" }}>Écouter et mémoriser les symboles sonores de la République</p>
               </div>
             </div>
@@ -465,7 +500,9 @@ export default function AudioLibraryPage() {
         {isAnonymous && (
           <section>
             <div className="mb-4">
-              <h2 className="text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>🎓 Thématiques</h2>
+              <h2 className="flex items-center gap-2 text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>
+                <GraduationCap size={18} /> Thématiques
+              </h2>
               <p className="mt-0.5 text-xs" style={{ color: "var(--cc-text-disabled)" }}>Créez un compte pour accéder aux épisodes</p>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
@@ -489,7 +526,7 @@ export default function AudioLibraryPage() {
                       </div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-                      <span className="text-3xl">🔒</span>
+                      <Lock size={28} style={{ color: "white" }} />
                     </div>
                   </div>
                   <div className="px-3 py-3" style={{ background: "var(--cc-surface-raised)" }}>
@@ -506,7 +543,9 @@ export default function AudioLibraryPage() {
         {comingSoonRows.length > 0 && (
           <section>
             <div className="mb-4">
-              <h2 className="text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>🚀 Bientôt disponible</h2>
+              <h2 className="flex items-center gap-2 text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>
+                <Rocket size={18} /> Bientôt disponible
+              </h2>
               <p className="mt-0.5 text-xs" style={{ color: "var(--cc-text-disabled)" }}>De nouvelles collections arrivent prochainement</p>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
@@ -533,11 +572,25 @@ export default function AudioLibraryPage() {
                   unoptimized={featuredAlbum.image_url.startsWith("http")}
                 />
               )}
+              {/* Intentional dark overlay for modal image */}
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
-              <button onClick={() => setShowInfo(false)} className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 transition hover:bg-black/70" style={{ color: "var(--cc-text)" }}>✕</button>
+              <button
+                onClick={() => setShowInfo(false)}
+                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 transition hover:bg-black/70"
+                style={{ color: "white" }}
+              >
+                <X size={14} />
+              </button>
             </div>
             <div className="px-6 pb-6">
-              <span className={`inline-flex items-center rounded-full border border-blue-400/30 bg-blue-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${featuredAlbum.accent_text ?? "text-blue-300"}`}>
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${featuredAlbum.accent_text ?? ""}`}
+                style={{
+                  border: "1px solid color-mix(in srgb, var(--cc-primary) 30%, transparent)",
+                  background: "color-mix(in srgb, var(--cc-primary) 10%, transparent)",
+                  ...(featuredAlbum.accent_text ? {} : { color: "var(--cc-primary)" }),
+                }}
+              >
                 {featuredAlbum.theme_label}
               </span>
               <h3 className="mt-2 text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>{featuredAlbum.subtheme_label}</h3>
@@ -545,9 +598,9 @@ export default function AudioLibraryPage() {
                 <p className="mt-3 text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>{featuredAlbum.description}</p>
               )}
               <div className="mt-3 flex gap-4 text-xs" style={{ color: "var(--cc-text-muted)" }}>
-                <span>🎙️ {featuredAlbum.episodeCount} épisodes</span>
-                <span>⏱️ ~{featuredAlbum.totalMinutes} min</span>
-                <span>🎧 Voix naturelle</span>
+                <span className="flex items-center gap-1"><Mic size={12} /> {featuredAlbum.episodeCount} épisodes</span>
+                <span className="flex items-center gap-1"><Timer size={12} /> ~{featuredAlbum.totalMinutes} min</span>
+                <span className="flex items-center gap-1"><Headphones size={12} /> Voix naturelle</span>
               </div>
               <button
                 onClick={() => {
@@ -574,7 +627,7 @@ function MediaCard({ media }: { media: AudioMediaRow }) {
       : null;
 
   return (
-    <div className="overflow-hidden rounded-[1.5rem] border border-blue-400/20" style={{ background: "var(--cc-surface-raised)" }}>
+    <div className="overflow-hidden rounded-[1.5rem] border" style={{ borderColor: "color-mix(in srgb, var(--cc-primary) 20%, transparent)", background: "var(--cc-surface-raised)" }}>
       <div className="relative aspect-video w-full overflow-hidden rounded-t-[1.5rem]" style={{ background: "var(--cc-surface)" }}>
         {media.media_type === "youtube" && (
           <iframe
@@ -616,7 +669,10 @@ function MediaCard({ media }: { media: AudioMediaRow }) {
         )}
       </div>
       <div className="px-4 py-3">
-        <p className={`text-[10px] font-bold uppercase tracking-widest ${media.accent ?? "text-blue-300"}`}>
+        <p
+          className={`text-[10px] font-bold uppercase tracking-widest ${media.accent ?? ""}`}
+          style={media.accent ? {} : { color: "var(--cc-primary)" }}
+        >
           {media.icon ?? "🎵"} {media.section === "hymnes" ? "Hymne national" : media.section === "podcasts" ? "Podcast" : "Média"}
         </p>
         <p className="mt-0.5 text-sm font-bold" style={{ color: "var(--cc-text)" }}>{media.title}</p>
@@ -632,7 +688,8 @@ function MediaCard({ media }: { media: AudioMediaRow }) {
               href={youtubeWatchUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-500/10 px-3 py-1.5 text-[11px] font-bold text-red-300 transition hover:bg-red-500/20"
+              className="inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-[11px] font-bold transition hover:opacity-80"
+              style={{ borderColor: "color-mix(in srgb, var(--cc-danger) 20%, transparent)", background: "color-mix(in srgb, var(--cc-danger) 10%, var(--cc-surface))", color: "var(--cc-danger)" }}
             >
               <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
               Voir sur YouTube
@@ -644,7 +701,8 @@ function MediaCard({ media }: { media: AudioMediaRow }) {
               download
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-[11px] font-bold text-blue-300 transition hover:bg-blue-500/20"
+              className="inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-[11px] font-bold transition hover:opacity-80"
+              style={{ borderColor: "color-mix(in srgb, var(--cc-primary) 20%, transparent)", background: "color-mix(in srgb, var(--cc-primary) 10%, var(--cc-surface))", color: "var(--cc-primary)" }}
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Télécharger le PDF

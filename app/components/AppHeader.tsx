@@ -236,7 +236,12 @@ export default function AppHeader() {
             ) : (
               <Link
                 href="/login"
-                className="inline-flex items-center rounded border border-[var(--cc-primary)] bg-[var(--cc-primary)] px-3 py-1.5 text-xs font-bold text-white no-underline hover:bg-[var(--cc-primary-hover)] transition-colors"
+                className="inline-flex items-center rounded border px-3 py-1.5 text-xs font-bold no-underline transition hover:opacity-90"
+                style={{
+                  borderColor: "var(--cc-primary)",
+                  background: "var(--cc-primary)",
+                  color: "white",
+                }}
               >
                 Se connecter
               </Link>

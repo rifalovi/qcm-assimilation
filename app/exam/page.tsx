@@ -2,6 +2,22 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  Timer,
+  CheckCircle2,
+  BookOpen,
+  PenLine,
+  BarChart2,
+  Trophy,
+  AlertTriangle,
+  Compass,
+  Flag,
+  Crown,
+  Sparkles,
+  Lock,
+  Zap,
+  Target,
+} from "lucide-react";
 import { hasAnyResult } from "../../src/lib/saveResult";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -155,7 +171,7 @@ export default function ExamPage() {
     localStorage.setItem("quiz_settings", JSON.stringify({
       level,
       themes,
-      count: limits.quizCount,
+      count: COUNT, // toujours 40 questions pour l'examen blanc
       mode: "exam",
       perQuestion: 30,
       maxDuration: 900,
@@ -165,7 +181,7 @@ export default function ExamPage() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+    <main className="mx-auto max-w-5xl px-4 py-6 pb-24 sm:px-6 sm:py-8 sm:pb-8">
       <div className="space-y-6">
 
         {/* ===== HERO ===== */}
@@ -175,9 +191,10 @@ export default function ExamPage() {
           }`}
           style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)", boxShadow: "var(--cc-shadow)" }}
         >
+          {/* Tricolore */}
           <div className="flex h-1.5 w-full overflow-hidden rounded-t-2xl">
             <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
-            <div className="flex-1 bg-white" />
+            <div className="flex-1" style={{ background: "white" }} />
             <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
           </div>
 
@@ -195,7 +212,7 @@ export default function ExamPage() {
                     <span className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px]" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
                       <span className="inline-flex h-2.5 w-4 overflow-hidden rounded-sm border" style={{ borderColor: "var(--cc-border)" }}>
                         <span className="w-1/3" style={{ background: "var(--cc-flag-blue)" }} />
-                        <span className="w-1/3 bg-white" />
+                        <span className="w-1/3" style={{ background: "white" }} />
                         <span className="w-1/3" style={{ background: "var(--cc-flag-red)" }} />
                       </span>
                       FR
@@ -231,18 +248,22 @@ export default function ExamPage() {
             {/* Pills info */}
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <span className="cc-badge cc-badge-info">40 questions</span>
-              <span className="cc-badge cc-badge-warning">⏱️ 30s / question</span>
-              <span className="cc-badge cc-badge-success">✓ Requis : 32/40</span>
+              <span className="inline-flex items-center gap-1 cc-badge cc-badge-warning">
+                <Timer size={11} /> 30s / question
+              </span>
+              <span className="inline-flex items-center gap-1 cc-badge cc-badge-success">
+                <CheckCircle2 size={11} /> Requis : 32/40
+              </span>
             </div>
 
             {/* Boutons */}
             <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center">
               <PremiumButton onClick={smartStartExam} label="Démarrer l'examen blanc" />
               <Button variant="secondary" onClick={() => router.push("/info")}>
-                📖 Comprendre l'examen
+                <BookOpen size={15} className="mr-1.5 inline-block" /> Comprendre l'examen
               </Button>
               <Button variant="secondary" onClick={() => router.push("/")}>
-                ✏️ Entraînement
+                <PenLine size={15} className="mr-1.5 inline-block" /> Entraînement
               </Button>
             </div>
           </div>
@@ -250,12 +271,20 @@ export default function ExamPage() {
 
         {/* ===== NAVIGATION ===== */}
         <section className="flex flex-wrap justify-center gap-3">
-          <Button variant="secondary" onClick={() => router.push("/info")}>📘 Guide</Button>
+          <Button variant="secondary" onClick={() => router.push("/info")}>
+            <BookOpen size={15} className="mr-1.5 inline-block" /> Guide
+          </Button>
           {hasLastResult && (
-            <Button variant="secondary" onClick={() => router.push("/results?mode=exam")}>📊 Dernier résultat</Button>
+            <Button variant="secondary" onClick={() => router.push("/results?mode=exam")}>
+              <BarChart2 size={15} className="mr-1.5 inline-block" /> Dernier résultat
+            </Button>
           )}
-          <Button variant="secondary" onClick={() => router.push("/")}>✏️ Entraînement</Button>
-          <Button variant="secondary" onClick={() => router.push("/leaderboard")}>🏆 Classement</Button>
+          <Button variant="secondary" onClick={() => router.push("/")}>
+            <PenLine size={15} className="mr-1.5 inline-block" /> Entraînement
+          </Button>
+          <Button variant="secondary" onClick={() => router.push("/leaderboard")}>
+            <Trophy size={15} className="mr-1.5 inline-block" /> Classement
+          </Button>
         </section>
 
         {/* ===== CONFIGURATION ===== */}
@@ -265,7 +294,14 @@ export default function ExamPage() {
           <Card>
             <div className="flex items-center justify-between gap-3">
               <h3 className="text-base font-bold" style={{ color: "var(--cc-text)" }}>Niveau de difficulté</h3>
-              <span className="rounded-full border border-red-400/20 bg-red-500/10 px-2.5 py-0.5 text-xs font-semibold text-red-300">
+              <span
+                className="rounded-full border px-2.5 py-0.5 text-xs font-semibold"
+                style={{
+                  borderColor: "color-mix(in srgb, var(--cc-danger) 25%, transparent)",
+                  background: "color-mix(in srgb, var(--cc-danger) 10%, var(--cc-surface))",
+                  color: "var(--cc-danger)",
+                }}
+              >
                 Difficile
               </span>
             </div>
@@ -309,7 +345,9 @@ export default function ExamPage() {
               <Button variant="secondary" onClick={() => setThemes([])}>Aucun</Button>
             </div>
             {!canStart && (
-              <p className="mt-3 text-xs text-red-400">⚠️ Sélectionnez au moins un thème.</p>
+              <p className="mt-3 flex items-center gap-1.5 text-xs" style={{ color: "var(--cc-danger)" }}>
+                <AlertTriangle size={13} /> Sélectionnez au moins un thème.
+              </p>
             )}
           </Card>
 
@@ -323,11 +361,11 @@ export default function ExamPage() {
             </div>
             <div className="mt-4 space-y-2.5 text-sm">
               {[
-                { label: "Questions",       value: "40",                                           color: "var(--cc-text)" },
-                { label: "Temps / question",value: "30 s",                                         color: "var(--cc-warning)" },
-                { label: "Validation",      value: "≥ 32 réponses",                                color: "var(--cc-success)" },
-                { label: "Niveau",          value: `Niveau ${level}`,                              color: "var(--cc-primary)" },
-                { label: "Thèmes",          value: `${themes.length} thème${themes.length > 1 ? "s" : ""}`, color: "var(--cc-text)" },
+                { label: "Questions",        value: "40",                                                    color: "var(--cc-text)" },
+                { label: "Temps / question", value: "30 s",                                                  color: "var(--cc-warning)" },
+                { label: "Validation",       value: "≥ 32 réponses",                                         color: "var(--cc-success)" },
+                { label: "Niveau",           value: `Niveau ${level}`,                                       color: "var(--cc-primary)" },
+                { label: "Thèmes",           value: `${themes.length} thème${themes.length > 1 ? "s" : ""}`, color: "var(--cc-text)" },
               ].map(({ label, value, color }) => (
                 <div key={label} className="flex items-center justify-between">
                   <span style={{ color: "var(--cc-text-muted)" }}>{label}</span>
@@ -344,12 +382,41 @@ export default function ExamPage() {
         {/* ===== FEATURES ===== */}
         <section className="grid gap-4 sm:grid-cols-3">
           {[
-            { icon: "⏱️", title: "Rythme soutenu", text: "Chronométrage serré pour simuler les conditions réelles.", color: "border-amber-400/20" },
-            { icon: "🧭", title: "Vision réaliste", text: "Ambiance proche de l'évaluation officielle.", color: "border-blue-400/20" },
-            { icon: "🏁", title: "Mesure de niveau", text: "Score précis pour cibler vos révisions.", color: "border-emerald-400/20" },
+            {
+              icon: <Zap size={20} />,
+              title: "Rythme soutenu",
+              text: "Chronométrage serré pour simuler les conditions réelles.",
+              color: "var(--cc-warning)",
+            },
+            {
+              icon: <Compass size={20} />,
+              title: "Vision réaliste",
+              text: "Ambiance proche de l'évaluation officielle.",
+              color: "var(--cc-primary)",
+            },
+            {
+              icon: <Target size={20} />,
+              title: "Mesure de niveau",
+              text: "Score précis pour cibler vos révisions.",
+              color: "var(--cc-success)",
+            },
           ].map((item) => (
-            <div key={item.title} className="rounded-xl border p-5 transition" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)", boxShadow: "var(--cc-shadow-sm)" }}>
-              <div className="mb-2 text-2xl">{item.icon}</div>
+            <div
+              key={item.title}
+              className="rounded-xl border p-5 transition"
+              style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)", boxShadow: "var(--cc-shadow-sm)" }}
+            >
+              <div
+                className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl"
+                style={{
+                  borderColor: `color-mix(in srgb, ${item.color} 25%, transparent)`,
+                  border: "1px solid",
+                  background: `color-mix(in srgb, ${item.color} 10%, var(--cc-surface))`,
+                  color: item.color,
+                }}
+              >
+                {item.icon}
+              </div>
               <h3 className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>{item.title}</h3>
               <p className="mt-1 text-xs leading-6" style={{ color: "var(--cc-text-muted)" }}>{item.text}</p>
             </div>
@@ -358,7 +425,7 @@ export default function ExamPage() {
 
       </div>
 
-      {/* ===== MODAL IDENTITÉ ===== */}
+      {/* ===== MODAL UPGRADE EXAM ===== */}
       {openExamUpgrade && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
           <div
@@ -366,27 +433,71 @@ export default function ExamPage() {
             onClick={() => setOpenExamUpgrade(false)}
           />
           <div className="relative w-full max-w-md overflow-hidden rounded-2xl border p-6" style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)", boxShadow: "var(--cc-shadow-lg)" }}>
-            <div className="text-center">
-              <div className="text-4xl mb-3">👑</div>
+            {/* Tricolore */}
+            <div className="absolute top-0 left-0 right-0 flex h-1 overflow-hidden rounded-t-2xl">
+              <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
+              <div className="flex-1" style={{ background: "white" }} />
+              <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
+            </div>
+
+            <div className="mt-2 text-center">
+              <div
+                className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl"
+                style={{ background: "color-mix(in srgb, var(--cc-primary) 12%, var(--cc-surface))", color: "var(--cc-primary)" }}
+              >
+                <Lock size={26} />
+              </div>
               <h3 className="text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>
-                Créez un compte pour commencer l’examen blanc
+                Examen blanc — accès Pass requis
               </h3>
-              <p className="mt-2 text-sm leading-7" style={{ color: "var(--cc-text-muted)" }}>
-                Les comptes Freemium bénéficient d’un essai gratuit limité de l’examen blanc. Les comptes Premium débloquent l’accès complet ainsi que les résultats détaillés et les corrections.
+              <p className="mt-2 text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>
+                Créez un compte et choisissez un Pass pour débloquer l'examen blanc, les corrections détaillées et le coach IA.
               </p>
             </div>
 
-            <div className="mt-6 space-y-3">
+            {/* Plans rapides */}
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <div
+                className="rounded-xl border p-3 text-center"
+                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
+              >
+                <div className="text-xs font-semibold mb-1" style={{ color: "var(--cc-text-muted)" }}>Pass Express</div>
+                <div className="text-lg font-extrabold" style={{ color: "var(--cc-primary)" }}>4,99 €</div>
+                <div className="text-[11px]" style={{ color: "var(--cc-text-disabled)" }}>7 jours</div>
+              </div>
+              <div
+                className="rounded-xl border p-3 text-center relative"
+                style={{ borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)" }}
+              >
+                <div
+                  className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full px-2 py-0.5 text-[10px] font-bold"
+                  style={{ background: "var(--cc-primary)", color: "var(--cc-surface)" }}
+                >
+                  Recommandé
+                </div>
+                <div className="text-xs font-semibold mb-1" style={{ color: "var(--cc-text)" }}>Pass Sérénité</div>
+                <div className="text-lg font-extrabold" style={{ color: "var(--cc-primary)" }}>9,99 €</div>
+                <div className="text-[11px]" style={{ color: "var(--cc-text-muted)" }}>30 jours</div>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-3">
               <button
                 onClick={() => { setOpenExamUpgrade(false); router.push("/pricing"); }}
                 className="cc-btn cc-btn-primary w-full justify-center py-3 rounded-xl"
               >
-                ✨ Créer un compte / Voir les offres
+                <Sparkles size={15} className="mr-1.5 inline-block" /> Voir les Pass
               </button>
-
+              <button
+                onClick={() => { setOpenExamUpgrade(false); router.push("/register"); }}
+                className="cc-btn cc-btn-secondary w-full justify-center py-3 rounded-xl"
+              >
+                Créer un compte gratuit
+              </button>
               <button
                 onClick={() => setOpenExamUpgrade(false)}
-                className="cc-btn cc-btn-secondary w-full justify-center py-3 rounded-xl"
+                className="w-full text-center text-sm transition hover:opacity-70"
+                style={{ color: "var(--cc-text-disabled)", background: "none", border: "none" }}
               >
                 Fermer
               </button>

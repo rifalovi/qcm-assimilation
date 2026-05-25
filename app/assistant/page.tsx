@@ -3,35 +3,50 @@
 import { useState } from "react";
 import { useUser } from "../components/UserContext";
 import AiPaywall from "../components/AiPaywall";
+import {
+  BarChart2,
+  Bot,
+  ClipboardList,
+  FileText,
+  Mail,
+  Mic,
+  X,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-const CATEGORIES = [
+const CATEGORIES: Array<{
+  id: string;
+  icon: LucideIcon;
+  label: string;
+  description: string;
+}> = [
   {
     id: "deposer",
-    icon: "📝",
+    icon: FileText,
     label: "Déposer une demande",
     description: "Comment constituer et déposer un dossier",
   },
   {
     id: "suivre",
-    icon: "📊",
+    icon: BarChart2,
     label: "Suivre mon dossier",
     description: "Vérifier l'état d'avancement de votre demande",
   },
   {
     id: "entretien",
-    icon: "🎤",
+    icon: Mic,
     label: "Préparer l'entretien",
     description: "Conseils pour l'entretien de naturalisation",
   },
   {
     id: "courrier",
-    icon: "📬",
+    icon: Mail,
     label: "Comprendre un courrier",
     description: "Décrypter une lettre de la préfecture",
   },
   {
     id: "examen",
-    icon: "📋",
+    icon: ClipboardList,
     label: "Question sur l'examen civique",
     description: "Informations sur l'épreuve et les modalités",
   },
@@ -123,6 +138,8 @@ export default function AssistantPage() {
     setShowSignupCta(false);
   }
 
+  const selectedCat = CATEGORIES.find(c => c.id === selectedCategory);
+
   return (
     <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8 space-y-6">
 
@@ -134,12 +151,12 @@ export default function AssistantPage() {
         {/* Bande tricolore */}
         <div className="flex h-1">
           <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
-          <div className="flex-1" style={{ background: "var(--cc-surface)" }} />
+          <div className="flex-1" style={{ background: "white" }} />
           <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
         </div>
         <div className="p-5 sm:p-6">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">🤖</span>
+            <Bot size={24} style={{ color: "var(--cc-primary)", flexShrink: 0 }} />
             <div>
               <h1 className="text-xl font-extrabold sm:text-2xl" style={{ color: "var(--cc-text)" }}>
                 Assistant démarches
@@ -159,26 +176,29 @@ export default function AssistantPage() {
             Choisissez une catégorie :
           </p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className="flex items-start gap-3 rounded-xl border p-4 text-left transition hover:-translate-y-0.5"
-                style={{
-                  background: "var(--cc-surface)",
-                  borderColor: "var(--cc-border)",
-                  boxShadow: "var(--cc-shadow-sm)",
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--cc-primary)")}
-                onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--cc-border)")}
-              >
-                <span className="text-2xl">{cat.icon}</span>
-                <div>
-                  <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>{cat.label}</p>
-                  <p className="mt-0.5 text-xs" style={{ color: "var(--cc-text-muted)" }}>{cat.description}</p>
-                </div>
-              </button>
-            ))}
+            {CATEGORIES.map((cat) => {
+              const Icon = cat.icon;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className="flex items-start gap-3 rounded-xl border p-4 text-left transition hover:-translate-y-0.5"
+                  style={{
+                    background: "var(--cc-surface)",
+                    borderColor: "var(--cc-border)",
+                    boxShadow: "var(--cc-shadow-sm)",
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--cc-primary)")}
+                  onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--cc-border)")}
+                >
+                  <Icon size={22} style={{ color: "var(--cc-primary)", flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>{cat.label}</p>
+                    <p className="mt-0.5 text-xs" style={{ color: "var(--cc-text-muted)" }}>{cat.description}</p>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </section>
       ) : (
@@ -190,9 +210,11 @@ export default function AssistantPage() {
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <span className="text-lg">{CATEGORIES.find(c => c.id === selectedCategory)?.icon}</span>
+                {selectedCat && (
+                  <selectedCat.icon size={18} style={{ color: "var(--cc-primary)" }} />
+                )}
                 <span className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>
-                  {CATEGORIES.find(c => c.id === selectedCategory)?.label}
+                  {selectedCat?.label}
                 </span>
               </div>
               <button
@@ -222,10 +244,10 @@ export default function AssistantPage() {
                 </div>
                 <button
                   onClick={() => setOffTopicMsg(false)}
-                  className="shrink-0 text-xs"
+                  className="shrink-0 transition"
                   style={{ color: "var(--cc-text-disabled)" }}
                 >
-                  ✕
+                  <X size={14} />
                 </button>
               </div>
             )}
@@ -312,7 +334,7 @@ export default function AssistantPage() {
               style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)", boxShadow: "var(--cc-shadow)" }}
             >
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-lg">🤖</span>
+                <Bot size={18} style={{ color: "var(--cc-primary)" }} />
                 <span className="text-base font-bold" style={{ color: "var(--cc-primary)" }}>
                   Réponse de l'assistant
                 </span>
@@ -433,26 +455,29 @@ export default function AssistantPage() {
             Historique de la session
           </p>
           <div className="space-y-2">
-            {history.slice(1).map((h, i) => (
-              <div
-                key={i}
-                className="flex items-start gap-2 rounded-xl border p-3 cursor-pointer transition"
-                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
-                onClick={() => { setSelectedCategory(h.category); setQuestion(h.question); setData(h.data); }}
-                onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--cc-primary)")}
-                onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--cc-border)")}
-              >
-                <span className="text-sm">{CATEGORIES.find(c => c.id === h.category)?.icon}</span>
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold truncate" style={{ color: "var(--cc-text)" }}>
-                    {h.question}
-                  </p>
-                  <p className="text-xs truncate" style={{ color: "var(--cc-text-muted)" }}>
-                    {h.data.summary}
-                  </p>
+            {history.slice(1).map((h, i) => {
+              const HistIcon = CATEGORIES.find(c => c.id === h.category)?.icon;
+              return (
+                <div
+                  key={i}
+                  className="flex items-start gap-2 rounded-xl border p-3 cursor-pointer transition"
+                  style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
+                  onClick={() => { setSelectedCategory(h.category); setQuestion(h.question); setData(h.data); }}
+                  onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--cc-primary)")}
+                  onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--cc-border)")}
+                >
+                  {HistIcon && <HistIcon size={14} style={{ color: "var(--cc-primary)", flexShrink: 0, marginTop: 2 }} />}
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold truncate" style={{ color: "var(--cc-text)" }}>
+                      {h.question}
+                    </p>
+                    <p className="text-xs truncate" style={{ color: "var(--cc-text-muted)" }}>
+                      {h.data.summary}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}

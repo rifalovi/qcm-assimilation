@@ -17,6 +17,10 @@ export default function EligibilityModalLauncher({
   const pathname = usePathname();
 
   useEffect(() => {
+    // ?preview=1 désactive la modale (screenshots, tests)
+    const isPreview = new URLSearchParams(window.location.search).get("preview") === "1";
+    if (isPreview) return;
+
     function onOpen() {
       setOpen(true);
     }
@@ -29,7 +33,8 @@ export default function EligibilityModalLauncher({
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) return;
+    const isPreview = new URLSearchParams(window.location.search).get("preview") === "1";
+    if (isAuthenticated || isPreview) return;
 
     const storageKey = `eligibility_modal_seen:${pathname}`;
     const alreadySeen = sessionStorage.getItem(storageKey);

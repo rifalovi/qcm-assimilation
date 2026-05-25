@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 // app/scroll/ScrollStudyClient.tsx — CLIENT COMPONENT
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { BookOpen, Crown, GraduationCap, Search, Unlock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { Question, MCQVariant } from "@/types/questions";
 import { useUser, ROLE_LIMITS } from "../components/UserContext";
@@ -60,13 +61,14 @@ function CTACard({ ctaRole, hasTheme, cardsCount }: { ctaRole: "anonymous" | "fr
   return (
     <div className="flex h-full flex-col items-center justify-center gap-6 p-6 text-center">
       <div
-        className="flex h-16 w-16 items-center justify-center rounded-2xl text-3xl"
+        className="flex h-16 w-16 items-center justify-center rounded-2xl"
         style={{
           background: isAnon ? "rgba(96,165,250,0.15)" : "rgba(251,191,36,0.15)",
           border: isAnon ? "1px solid rgba(96,165,250,0.30)" : "1px solid rgba(251,191,36,0.30)",
+          color: isAnon ? "#93c5fd" : "#fbbf24",
         }}
       >
-        {isAnon ? "🔓" : "👑"}
+        {isAnon ? <Unlock size={28} /> : <Crown size={28} />}
       </div>
 
       <div>
@@ -350,9 +352,7 @@ function MCQView({
   const [showBurst, setShowBurst] = useState(false);
   const revealed = selected !== null;
   useEffect(() => {
-    console.log("burst check:", { revealed, selected, correct: variant.correct, match: selected === variant.correct });
     if (revealed && selected !== null && selected === variant.correct) {
-      console.log("🎉 BURST TRIGGERED!");
       setShowBurst(true);
       const t = setTimeout(() => setShowBurst(false), 1000);
       return () => clearTimeout(t);
@@ -809,7 +809,7 @@ function ExamModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-center">
-          <div className="mb-3 text-4xl">🎓</div>
+          <div className="mb-3 flex justify-center" style={{ color: "#93c5fd" }}><GraduationCap size={40} /></div>
           <p className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Passer en mode Examen ?</p>
           <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>
             Questions chronométrées, sans correction immédiate.
@@ -1057,10 +1057,10 @@ useEffect(() => {
           }}
         >
           <span
-            className="text-xs font-semibold"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold"
             style={{ color: themeColor(activeTheme).accent }}
           >
-            📚 Révision ciblée · {activeTheme} · {filteredQuestions.length} question
+            <BookOpen size={12} /> Révision ciblée · {activeTheme} · {filteredQuestions.length} question
             {filteredQuestions.length > 1 ? "s" : ""}
           </span>
 
@@ -1088,7 +1088,7 @@ useEffect(() => {
         {filteredQuestions.length === 0 ? (
           <div className="flex h-full items-center justify-center px-8 text-center">
             <div>
-              <p className="mb-4 text-4xl">🔍</p>
+              <div className="mb-4 flex justify-center" style={{ color: "rgba(255,255,255,0.30)" }}><Search size={40} /></div>
               <p className="font-semibold" style={{ color: "var(--cc-text)" }}>Aucune question pour ce thème</p>
               <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>
                 Essaie un autre thème ou reviens plus tard.

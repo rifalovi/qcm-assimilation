@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Bot } from "lucide-react";
 import { useUser } from "./UserContext";
 import AiPaywall from "./AiPaywall";
 
@@ -78,9 +79,14 @@ export default function AiCoachCard({
     return (
       <button
         onClick={fetchCoaching}
-        className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-sky-400/20 bg-sky-500/10 px-5 py-3.5 text-sm font-bold text-sky-700 transition hover:bg-sky-500/20"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3.5 text-sm font-bold transition hover:opacity-90"
+        style={{
+          borderColor: "color-mix(in srgb, var(--cc-primary) 25%, transparent)",
+          background: "color-mix(in srgb, var(--cc-primary) 8%, var(--cc-surface))",
+          color: "var(--cc-primary)",
+        }}
       >
-        <span>🧠</span>
+        <Bot size={16} />
         Obtenir mon coaching IA personnalisé
       </button>
     );
@@ -88,10 +94,21 @@ export default function AiCoachCard({
 
   if (loading) {
     return (
-      <div className="mt-4 rounded-2xl border border-sky-400/20 bg-sky-500/10 p-5">
+      <div
+        className="mt-4 rounded-2xl border p-5"
+        style={{
+          borderColor: "color-mix(in srgb, var(--cc-primary) 25%, transparent)",
+          background: "color-mix(in srgb, var(--cc-primary) 8%, var(--cc-surface))",
+        }}
+      >
         <div className="flex items-center justify-center gap-3">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
-          <span className="text-sm text-sky-700">Analyse de vos résultats...</span>
+          <div
+            className="h-5 w-5 animate-spin rounded-full border-2 border-t-transparent"
+            style={{ borderColor: "var(--cc-primary)", borderTopColor: "transparent" }}
+          />
+          <span className="text-sm" style={{ color: "var(--cc-primary)" }}>
+            Analyse de vos résultats…
+          </span>
         </div>
       </div>
     );
@@ -99,7 +116,14 @@ export default function AiCoachCard({
 
   if (error && !showPaywall) {
     return (
-      <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-700">
+      <div
+        className="mt-4 rounded-2xl border p-4 text-sm"
+        style={{
+          borderColor: "color-mix(in srgb, var(--cc-danger) 25%, transparent)",
+          background: "color-mix(in srgb, var(--cc-danger) 8%, var(--cc-surface))",
+          color: "var(--cc-danger)",
+        }}
+      >
         {error}
       </div>
     );
@@ -108,40 +132,100 @@ export default function AiCoachCard({
   if (!data) return null;
 
   return (
-    <div className="mt-4 rounded-[1.6rem] border border-sky-400/20 bg-gradient-to-b from-sky-500/10 to-sky-900/10 p-5 space-y-4">
+    <div
+      className="mt-4 rounded-[1.6rem] border p-5 space-y-4"
+      style={{
+        borderColor: "color-mix(in srgb, var(--cc-primary) 25%, transparent)",
+        background: "color-mix(in srgb, var(--cc-primary) 6%, var(--cc-surface))",
+      }}
+    >
       <div className="flex items-center gap-2 mb-1">
-        <span className="text-xl">🧠</span>
-        <span className="text-base font-bold text-sky-700">Coaching IA personnalisé</span>
+        <Bot size={18} style={{ color: "var(--cc-primary)" }} />
+        <span className="text-base font-bold" style={{ color: "var(--cc-primary)" }}>
+          Coaching IA personnalisé
+        </span>
       </div>
 
       {/* Diagnostic */}
-      <div className="rounded-xl border p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-        <p className="text-xs font-bold text-sky-700 uppercase tracking-wider mb-2">Diagnostic</p>
-        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.diagnosis}</p>
+      <div
+        className="rounded-xl border p-4"
+        style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
+      >
+        <p
+          className="text-xs font-bold uppercase tracking-wider mb-2"
+          style={{ color: "var(--cc-primary)" }}
+        >
+          Diagnostic
+        </p>
+        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>
+          {data.diagnosis}
+        </p>
       </div>
 
       {/* Forces & Faiblesses */}
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4">
-          <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">Point fort</p>
-          <p className="text-sm text-emerald-800 leading-relaxed text-justify">{data.strength}</p>
+        <div
+          className="rounded-xl border p-4"
+          style={{
+            borderColor: "color-mix(in srgb, var(--cc-success) 25%, transparent)",
+            background: "color-mix(in srgb, var(--cc-success) 8%, var(--cc-surface))",
+          }}
+        >
+          <p
+            className="text-xs font-bold uppercase tracking-wider mb-1"
+            style={{ color: "var(--cc-success)" }}
+          >
+            Point fort
+          </p>
+          <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>
+            {data.strength}
+          </p>
         </div>
-        <div className="rounded-xl border border-red-400/20 bg-red-500/10 p-4">
-          <p className="text-xs font-bold text-red-700 uppercase tracking-wider mb-1">Point faible</p>
-          <p className="text-sm text-red-800 leading-relaxed text-justify">{data.weakness}</p>
+        <div
+          className="rounded-xl border p-4"
+          style={{
+            borderColor: "color-mix(in srgb, var(--cc-danger) 25%, transparent)",
+            background: "color-mix(in srgb, var(--cc-danger) 8%, var(--cc-surface))",
+          }}
+        >
+          <p
+            className="text-xs font-bold uppercase tracking-wider mb-1"
+            style={{ color: "var(--cc-danger)" }}
+          >
+            Point faible
+          </p>
+          <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>
+            {data.weakness}
+          </p>
         </div>
       </div>
 
       {/* Plan d'action */}
-      <div className="rounded-xl border p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-        <p className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-3">Plan d'action</p>
+      <div
+        className="rounded-xl border p-4"
+        style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
+      >
+        <p
+          className="text-xs font-bold uppercase tracking-wider mb-3"
+          style={{ color: "var(--cc-warning)" }}
+        >
+          Plan d'action
+        </p>
         <div className="space-y-2.5">
           {data.plan.map((step, i) => (
             <div key={i} className="flex items-start gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-xs font-bold text-amber-700">
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                style={{
+                  background: "color-mix(in srgb, var(--cc-warning) 15%, var(--cc-surface))",
+                  color: "var(--cc-warning)",
+                }}
+              >
                 {i + 1}
               </span>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--cc-text)" }}>{step}</p>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--cc-text)" }}>
+                {step}
+              </p>
             </div>
           ))}
         </div>
