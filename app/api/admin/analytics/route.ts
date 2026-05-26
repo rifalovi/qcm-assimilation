@@ -108,6 +108,7 @@ export async function GET(req: NextRequest) {
     audioPlaysRes,
     resultsRes,
     authUsers,
+    passesRes,
   ] = await Promise.all([
     gate.admin
       .from('profiles')
@@ -130,6 +131,9 @@ export async function GET(req: NextRequest) {
       .gte('created_at', since)
       .limit(5000),
     listAllAuthUsers(gate.admin),
+    gate.admin
+      .from('passes')
+      .select('type, amount_eur, created_at, status, expires_at'),
   ])
 
   if (profilesRes.error) {
@@ -145,6 +149,24 @@ export async function GET(req: NextRequest) {
   const nonAnonymous = totalUsers - counts.anonymous
   const paidUsers = counts.premium + counts.elite
   const conversionRate = nonAnonymous > 0 ? (paidUsers / nonAnonymous) * 100 : 0
+
+  // ─── 1b. KPIs Passes ──────────────────────────────────────────────────
+  type PassRow = { type: string; amount_eur: number | null; created_at: string; status: string; expires_at: string }
+  const passes = (passesRes.data ?? []) as PassRow[]
+  const now = new Date()
+  const passesActives = passes.filter(p => p.status === 'active' && new Date(p.expires_at) > now)
+  const passesExpress  = passesActives.filter(p => p.type === 'express').length
+  const passesSerenite = passesActives.filter(p => p.type === 'serenite').length
+
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+  const revenusMonth = passes
+    .filter(p => p.created_at >= startOfMonth)
+    .reduce((sum, p) => sum + (p.amount_eur ?? 0), 0)
+
+  const totalPassActifs = passesExpress + passesSerenite
+  const conversionPassRate = nonAnonymous > 0
+    ? Math.round((totalPassActifs / nonAnonymous) * 1000) / 10
+    : 0
 
   // ─── 2. Évolution des inscriptions ─────────────────────────────────────
   // Toutes les inscriptions filtrées par fenêtre puis bucketing
@@ -212,6 +234,10 @@ export async function GET(req: NextRequest) {
       totalPageviews,
       quizTotal,
       avgScore,
+      passesExpress,
+      passesSerenite,
+      revenusMonth: Math.round(revenusMonth * 100) / 100,
+      conversionPassRate,
     },
     signups: {
       timeline: signupsTimeline,

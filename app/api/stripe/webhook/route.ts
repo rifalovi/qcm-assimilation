@@ -17,6 +17,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
+import { sendPassEmail } from "../../../../src/lib/email/sendPassEmail";
 
 export const dynamic = "force-dynamic";
 
@@ -150,7 +151,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Erreur base de données" }, { status: 500 });
   }
 
-  // 9. Synchroniser le cache profil (best-effort — non critique)
+  // 9. Email de confirmation (best-effort — non bloquant)
+  const recipientEmail = session.customer_email ?? undefined
+  if (recipientEmail) {
+    sendPassEmail(recipientEmail, passType, expiresAt).catch((err: unknown) =>
+      console.warn("[stripe/webhook] Email de confirmation non envoyé :", err)
+    );
+  }
+
+  // 11. Synchroniser le cache profil (best-effort — non critique)
   //
   // Architecture : get_access_level() lit la table passes directement comme
   // source de vérité. profiles.pass_type / pass_expires_at sont un cache

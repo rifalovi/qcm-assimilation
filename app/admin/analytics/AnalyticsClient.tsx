@@ -6,6 +6,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   BarChart, Bar,
 } from 'recharts'
+import { Euro, Leaf, Target, Zap } from 'lucide-react'
 
 // ─── Types ───────────────────────────────────────────────────────────────
 type Granularity = 'day' | 'week' | 'month'
@@ -22,6 +23,10 @@ type AnalyticsPayload = {
     totalPageviews: number
     quizTotal: number
     avgScore: number
+    passesExpress: number
+    passesSerenite: number
+    revenusMonth: number
+    conversionPassRate: number
   }
   signups: { timeline: { date: string; count: number }[]; total: number; allTime: number }
   pages: { total: number; top: { path: string; count: number }[] }
@@ -67,7 +72,7 @@ function KPICard({
   label: string
   value: string | number
   sub?: string
-  icon: string
+  icon: React.ReactNode
   color: 'blue' | 'amber' | 'emerald' | 'yellow' | 'violet' | 'rose'
 }) {
   const colors: Record<string, string> = {
@@ -80,7 +85,7 @@ function KPICard({
   }
   return (
     <div className={`rounded-2xl border p-5 ${colors[color]}`}>
-      <div className="text-2xl">{icon}</div>
+      <div className="flex h-7 w-7 items-center justify-center text-slate-300">{icon}</div>
       <div className="mt-3 text-3xl font-extrabold text-white">{value}</div>
       <div className="mt-1 text-xs font-semibold text-slate-300">{label}</div>
       {sub && <div className="mt-1 text-[10px] text-slate-500">{sub}</div>}
@@ -196,28 +201,60 @@ export default function AnalyticsClient() {
               label="Utilisateurs total"
               value={data.kpis.totalUsers}
               sub={`${data.kpis.allTimeSignups} comptes auth depuis le début`}
-              icon="👥"
+              icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>}
               color="blue"
             />
             <KPICard
               label="Comptes payants"
               value={data.kpis.paidUsers}
               sub={`${data.kpis.counts.premium ?? 0} Premium · ${data.kpis.counts.elite ?? 0} Élite`}
-              icon="👑"
+              icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>}
               color="amber"
             />
             <KPICard
               label="Taux de conversion"
               value={`${data.kpis.conversionRate}%`}
               sub="freemium → premium/élite"
-              icon="📈"
+              icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>}
               color="emerald"
             />
             <KPICard
               label="Quiz complétés"
               value={data.kpis.quizTotal}
               sub={`Score moyen ${data.kpis.avgScore}% · sur ${data.range.days} j`}
-              icon="✅"
+              icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
+              color="violet"
+            />
+          </div>
+
+          {/* ─── KPIs Passes ───────────────────────────────────────────── */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <KPICard
+              label="Pass Express actifs"
+              value={data.kpis.passesExpress}
+              sub="7 jours · 4,99 €"
+              icon={<Zap size={20} />}
+              color="amber"
+            />
+            <KPICard
+              label="Pass Sérénité actifs"
+              value={data.kpis.passesSerenite}
+              sub="30 jours · 9,99 €"
+              icon={<Leaf size={20} />}
+              color="emerald"
+            />
+            <KPICard
+              label="Revenus ce mois"
+              value={`${data.kpis.revenusMonth.toFixed(2)} €`}
+              sub="Passes achetés ce mois"
+              icon={<Euro size={20} />}
+              color="yellow"
+            />
+            <KPICard
+              label="Conv. freemium → Pass"
+              value={`${data.kpis.conversionPassRate}%`}
+              sub="Passes actifs / comptes non-anonymes"
+              icon={<Target size={20} />}
               color="violet"
             />
           </div>
