@@ -10,6 +10,9 @@ import PricingCard from "@/components/PricingCard";
 import ProgressBar from "@/components/ProgressBar";
 import Radio, { RadioGroup } from "@/components/Radio";
 import Select from "@/components/Select";
+import QuotaBar from "@/components/QuotaBar";
+import UpgradeNudge from "@/components/UpgradeNudge";
+import PassCard from "@/components/PassCard";
 
 /* ────────────────────────────────────────────────────────────
    /design-system — Page de démonstration des tokens & composants
@@ -158,6 +161,11 @@ export default function DesignSystemPage() {
   const [checked1, setChecked1] = useState(true);
   const [checked2, setChecked2] = useState(false);
 
+  // États pour les démos dismissibles (Phase 4.4)
+  const [showBannerThreshold, setShowBannerThreshold] = useState(true);
+  const [showBannerExhausted, setShowBannerExhausted] = useState(true);
+  const [showNudgeModal, setShowNudgeModal] = useState(false);
+
   return (
     <div
       className="min-h-screen"
@@ -177,7 +185,7 @@ export default function DesignSystemPage() {
               className="ml-2 rounded px-2 py-0.5 text-[11px] font-semibold"
               style={{ background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }}
             >
-              Étape 2
+              Étape 4.4
             </span>
           </div>
           <button
@@ -710,6 +718,144 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
+        {/* ══ MONÉTISATION — Phase 4.4 ════════════════════════ */}
+        <Section title="Composants — Monétisation (Phase 4.4)">
+
+          {/* ── QuotaBar ─────────────────────────────────────── */}
+          <p className="mb-3 text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>
+            QuotaBar — états selon le % restant
+          </p>
+          <div className="grid gap-5 sm:grid-cols-2 max-w-2xl mb-10">
+            <div className="rounded-xl border p-4 space-y-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+              <span className="cc-badge cc-badge-success cc-badge-sm">Vert — 70 % restants</span>
+              <QuotaBar credits={14} max={20} />
+            </div>
+            <div className="rounded-xl border p-4 space-y-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+              <span className="cc-badge cc-badge-warning cc-badge-sm">Orange — 30 % restants</span>
+              <QuotaBar credits={6} max={20} />
+            </div>
+            <div className="rounded-xl border p-4 space-y-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+              <span className="cc-badge cc-badge-danger cc-badge-sm">Rouge — 15 % restants</span>
+              <QuotaBar credits={3} max={20} rechargeDate="24 juin" />
+            </div>
+            <div className="rounded-xl border p-4 space-y-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+              <span className="cc-badge cc-badge-outline-danger cc-badge-sm">Épuisé — 0 crédit</span>
+              <QuotaBar credits={0} max={20} rechargeDate="24 juin" />
+            </div>
+          </div>
+
+          {/* ── UpgradeNudge inline ───────────────────────────── */}
+          <p className="mb-3 text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>
+            UpgradeNudge — variante <code className="font-mono rounded px-1" style={{ background: "var(--cc-surface-alt)" }}>inline</code>
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 mb-10">
+            <div>
+              <p className="mb-2 text-[11px]" style={{ color: "var(--cc-text-disabled)" }}>trigger="threshold" — seuil 80 %</p>
+              <UpgradeNudge variant="inline" trigger="threshold" />
+            </div>
+            <div>
+              <p className="mb-2 text-[11px]" style={{ color: "var(--cc-text-disabled)" }}>trigger="exhausted" — crédits épuisés</p>
+              <UpgradeNudge variant="inline" trigger="exhausted" rechargeDate="24 juin" />
+            </div>
+          </div>
+
+          {/* ── UpgradeNudge banner ───────────────────────────── */}
+          <p className="mb-3 text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>
+            UpgradeNudge — variante <code className="font-mono rounded px-1" style={{ background: "var(--cc-surface-alt)" }}>banner</code>
+            <span className="ml-2 font-normal" style={{ color: "var(--cc-text-disabled)" }}>(sticky désactivé dans ce cadre)</span>
+          </p>
+          <div className="space-y-3 mb-3">
+            {/* Conteneur overflow:hidden pour désactiver le sticky dans la page */}
+            <div className="overflow-hidden rounded-xl border" style={{ borderColor: "var(--cc-border)" }}>
+              {showBannerThreshold ? (
+                <UpgradeNudge
+                  variant="banner"
+                  trigger="threshold"
+                  onDismiss={() => setShowBannerThreshold(false)}
+                />
+              ) : (
+                <div className="flex items-center justify-between px-4 py-2.5">
+                  <span className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>Banner threshold — dismissed</span>
+                  <button
+                    className="text-xs underline"
+                    style={{ color: "var(--cc-primary)", background: "none", border: "none" }}
+                    onClick={() => setShowBannerThreshold(true)}
+                  >
+                    Réafficher
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="overflow-hidden rounded-xl border" style={{ borderColor: "var(--cc-border)" }}>
+              {showBannerExhausted ? (
+                <UpgradeNudge
+                  variant="banner"
+                  trigger="exhausted"
+                  rechargeDate="24 juin"
+                  onDismiss={() => setShowBannerExhausted(false)}
+                />
+              ) : (
+                <div className="flex items-center justify-between px-4 py-2.5">
+                  <span className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>Banner exhausted — dismissed</span>
+                  <button
+                    className="text-xs underline"
+                    style={{ color: "var(--cc-primary)", background: "none", border: "none" }}
+                    onClick={() => setShowBannerExhausted(true)}
+                  >
+                    Réafficher
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── UpgradeNudge modal ────────────────────────────── */}
+          <p className="mt-8 mb-3 text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>
+            UpgradeNudge — variante <code className="font-mono rounded px-1" style={{ background: "var(--cc-surface-alt)" }}>modal</code>
+          </p>
+          <div className="flex flex-wrap gap-3 mb-10">
+            <button
+              className="cc-btn cc-btn-secondary cc-btn-sm"
+              onClick={() => setShowNudgeModal(true)}
+            >
+              Ouvrir modal (exhausted)
+            </button>
+            <p className="self-center text-xs" style={{ color: "var(--cc-text-muted)" }}>
+              Fond flouté · Escape pour fermer · focus piégé sur le CTA
+            </p>
+          </div>
+          {showNudgeModal && (
+            <UpgradeNudge
+              variant="modal"
+              trigger="exhausted"
+              rechargeDate="24 juin"
+              onDismiss={() => setShowNudgeModal(false)}
+            />
+          )}
+
+          {/* ── PassCard ─────────────────────────────────────── */}
+          <p className="text-xs font-semibold mb-1" style={{ color: "var(--cc-text-muted)" }}>
+            PassCard — Pass Express / Pass Sérénité
+          </p>
+          <p className="text-[11px] mb-4" style={{ color: "var(--cc-text-disabled)" }}>
+            Le CTA appelle <code className="font-mono">/api/stripe/checkout</code> — retourne une erreur 401 sans session (normal en design system).
+          </p>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <PassCard type="express" />
+            <PassCard type="serenite" highlighted />
+          </div>
+
+          {/* PassCard — état actif */}
+          <p className="mt-6 mb-3 text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>
+            PassCard — état <code className="font-mono rounded px-1" style={{ background: "var(--cc-surface-alt)" }}>isActive</code>
+          </p>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <PassCard type="express" isActive />
+            <PassCard type="serenite" highlighted isActive />
+          </div>
+
+        </Section>
+
         {/* ══ ACCESSIBILITÉ ════════════════════════════════════ */}
         <Section title="Accessibilité — Focus visible">
           <div className="flex flex-wrap gap-4">
@@ -752,8 +898,8 @@ export default function DesignSystemPage() {
         style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
       >
         <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>
-          Cap Citoyen Design System — Étape 2 · Composants de base ·{" "}
-          <span className="font-mono">Button · Input · Select · Checkbox · Radio · Card · Badge · Alert · ProgressBar · Header · Footer · PremiumGate · PricingCard</span>
+          Cap Citoyen Design System — Étape 4.4 · Composants de base + Monétisation ·{" "}
+          <span className="font-mono">Button · Input · Select · Checkbox · Radio · Card · Badge · Alert · ProgressBar · Header · Footer · PremiumGate · PricingCard · QuotaBar · UpgradeNudge · PassCard</span>
         </p>
       </div>
     </div>
