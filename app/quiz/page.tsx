@@ -6,7 +6,10 @@ import { useRouter } from "next/navigation";
 import { saveResultToSupabase } from "../../src/lib/saveResult";
 import { trackEvent } from "../../src/lib/posthog";
 import { useUser } from "../components/UserContext";
-import { getAccessQuota } from "../../src/lib/access";
+import { getAccessQuota, formatRechargeDate } from "../../src/lib/access";
+import { useAccessLevel } from "../../src/hooks/useAccessLevel";
+import QuotaBar from "../../src/components/QuotaBar";
+import UpgradeNudge from "../../src/components/UpgradeNudge";
 
 import type { ChoiceKey, Level, Theme, Question } from "../../src/data/questions";
 import { generateQuiz, generateQuizAsync, scoreQuiz, markQuestionsAsSeen } from "../../src/lib/quizEngine";
@@ -63,6 +66,20 @@ export default function QuizPage() {
   const router = useRouter();
   const { role, loading: authLoading } = useUser();
   const limits = getAccessQuota(role);
+
+  // Crédits live depuis la RPC get_access_level() — uniquement pour freemium
+  const {
+    mode:             accessMode,
+    quiz_credits:     quizCredits,
+    date_epuisement,
+    consumeQuizCredit,
+  } = useAccessLevel();
+
+  // Seuil de nudge : 80 % du quota consommé (4 crédits restants pour freemium/20)
+  const QUOTA_MAX    = 20;
+  const NUDGE_THRESHOLD = Math.floor(QUOTA_MAX * 0.2); // 4
+
+  const [nudge, setNudge] = useState<"threshold" | "exhausted" | null>(null);
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showPremiumCTA, setShowPremiumCTA] = useState(false);
@@ -326,6 +343,18 @@ function selectAnswer(choice: ChoiceKey) {
 
   if (tickRef.current) { window.clearInterval(tickRef.current); tickRef.current = null; }
 
+  // ── Décrémenter les crédits pour les comptes freemium en mode entraînement ──
+  // N'appelle pas consumeQuizCredit en mode examen (session blanche distincte).
+  if (accessMode === "freemium" && mode !== "exam") {
+    consumeQuizCredit().then((result) => {
+      if (!result.success) {
+        setNudge("exhausted");
+      } else if (result.quiz_credits <= NUDGE_THRESHOLD && nudge === null) {
+        setNudge("threshold");
+      }
+    });
+  }
+
   if (mode === "exam") {
     // Examen : avance immédiatement, pas de correction affichée
     setRemaining(30);
@@ -461,6 +490,26 @@ function selectAnswer(choice: ChoiceKey) {
 }
 
   return (
+    <>
+      {/* UpgradeNudge — banner au seuil (non-bloquant) */}
+      {accessMode === "freemium" && nudge === "threshold" && mode !== "exam" && (
+        <UpgradeNudge
+          variant="banner"
+          trigger="threshold"
+          onDismiss={() => setNudge(null)}
+        />
+      )}
+
+      {/* UpgradeNudge — modal à l'épuisement (bloquant, doit agir) */}
+      {accessMode === "freemium" && nudge === "exhausted" && (
+        <UpgradeNudge
+          variant="modal"
+          trigger="exhausted"
+          rechargeDate={formatRechargeDate(date_epuisement)}
+          onDismiss={() => setNudge(null)}
+        />
+      )}
+
     <main className="mx-auto max-w-4xl px-3 py-2 pb-24 sm:px-6 sm:py-4 sm:pb-4">
       <div className="space-y-4">
         {/* Bandeau compact */}
@@ -519,6 +568,16 @@ function selectAnswer(choice: ChoiceKey) {
               showLabel
             />
           </div>
+
+          {/* QuotaBar — freemium uniquement, mode entraînement */}
+          {accessMode === "freemium" && mode !== "exam" && (
+            <QuotaBar
+              credits={quizCredits}
+              max={QUOTA_MAX}
+              rechargeDate={formatRechargeDate(date_epuisement)}
+              className="mt-3"
+            />
+          )}
 
           <div className="mt-3 flex items-center justify-between gap-3 flex-wrap text-xs" style={{ color: "var(--cc-text-muted)" }}>
             <span>
@@ -822,5 +881,6 @@ function selectAnswer(choice: ChoiceKey) {
   </div>
 )}
     </main>
+    </>
   );
 }
