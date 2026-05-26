@@ -1,9 +1,10 @@
 'use client'
-import { useUser, ROLE_LIMITS } from '../components/UserContext'
+import { useUser } from '../components/UserContext'
+import { getAccessQuota } from '../../src/lib/access'
 
 export default function DebugRole() {
   const { role, username, email } = useUser()
-  const limits = ROLE_LIMITS[role as keyof typeof ROLE_LIMITS]
+  const limits = getAccessQuota(role)
   return (
     <div style={{ padding: 40, fontFamily: 'monospace', color: 'var(--cc-text)', background: 'var(--cc-surface)', minHeight: '100vh' }}>
       <h1>Debug Role</h1>

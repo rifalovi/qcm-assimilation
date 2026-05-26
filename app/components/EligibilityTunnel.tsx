@@ -12,7 +12,8 @@ import {
   buildQuizSettings,
 } from "@/lib/eligibility";
 
-import { useUser, ROLE_LIMITS } from "./UserContext";
+import { useUser } from "./UserContext";
+import { getAccessQuota } from "../../src/lib/access";
 
 type Props = {
   onClose: () => void;
@@ -23,7 +24,7 @@ type Step = 1 | 2 | 3;
 export default function EligibilityTunnel({ onClose }: Props) {
   const router = useRouter();
   const { role } = useUser();
-  const limits = ROLE_LIMITS[role];
+  const limits = getAccessQuota(role);
 
   const [step, setStep] = useState<Step>(1);
   const [goal, setGoal] = useState<EligibilityGoal | null>(null);
@@ -77,7 +78,7 @@ const allowedLevel: 1 | 2 | 3 = limits.levels.includes(
 const settings = buildQuizSettings({
   level: allowedLevel,
   themes: recommendation.themes,
-  count: limits.quizCount,
+  count: limits.quiz,
 });
 
     localStorage.setItem(
@@ -99,7 +100,7 @@ const settings = buildQuizSettings({
     const settings = buildQuizSettings({
       level: 1,
       themes: ["Valeurs", "Société"],
-      count: limits.quizCount,
+      count: limits.quiz,
     });
 
     localStorage.setItem("quiz_settings", JSON.stringify(settings));

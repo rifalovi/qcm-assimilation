@@ -5,7 +5,8 @@ import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { saveResultToSupabase } from "../../src/lib/saveResult";
 import { trackEvent } from "../../src/lib/posthog";
-import { useUser, ROLE_LIMITS } from "../components/UserContext";
+import { useUser } from "../components/UserContext";
+import { getAccessQuota } from "../../src/lib/access";
 
 import type { ChoiceKey, Level, Theme, Question } from "../../src/data/questions";
 import { generateQuiz, generateQuizAsync, scoreQuiz, markQuestionsAsSeen } from "../../src/lib/quizEngine";
@@ -61,6 +62,7 @@ function StarBurstQuiz({ show }: { show: boolean }) {
 export default function QuizPage() {
   const router = useRouter();
   const { role, loading: authLoading } = useUser();
+  const limits = getAccessQuota(role);
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showPremiumCTA, setShowPremiumCTA] = useState(false);
@@ -152,8 +154,6 @@ export default function QuizPage() {
     });
 
     try {
-  const limits = ROLE_LIMITS[role];
-
   // Bloque le mode examen selon le rôle
   if (m === "exam" && !limits.canExam && role !== "anonymous") {
     router.push("/?blocked=exam");
@@ -167,7 +167,7 @@ export default function QuizPage() {
   }
 
   // Applique la limite de questions
-  const allowedCount = Math.min(parsed.count, limits.quizCount);
+  const allowedCount = Math.min(parsed.count, limits.quiz);
 
   // Tentative async (base), fallback automatique sur les fichiers si vide
   generateQuizAsync({
@@ -640,12 +640,12 @@ function selectAnswer(choice: ChoiceKey) {
                   : `✗ Mauvaise réponse — la bonne réponse était ${current.answer}`}
               </p>
               {/* Explication : premium/elite uniquement */}
-              {ROLE_LIMITS[role].canSeeExplanations && current.explanation && (
+              {limits.canSeeExplanations && current.explanation && (
                 <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--cc-text-muted)" }}>
                   {current.explanation}
                 </p>
               )}
-              {!ROLE_LIMITS[role].canSeeExplanations && (
+              {!limits.canSeeExplanations && (
                 <p className="mt-1 text-xs" style={{ color: "var(--cc-text-disabled)" }}>
                   Explication disponible avec un Pass →{" "}
                   <a href="/pricing" className="underline" style={{ color: "var(--cc-primary)" }}>Voir les offres</a>

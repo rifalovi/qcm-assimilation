@@ -21,7 +21,8 @@ import {
 import { hasAnyResult } from "../../src/lib/saveResult";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { useUser, ROLE_LIMITS } from "../components/UserContext";
+import { useUser } from "../components/UserContext";
+import { getAccessQuota } from "../../src/lib/access";
 import PremiumButton from "@/components/PremiumButton";
 
 type Level = 1 | 2 | 3;
@@ -87,7 +88,7 @@ function Pill({ children, active = false, onClick }: {
 export default function ExamPage() {
   const router = useRouter();
   const { role, username: authUsername, loading: authLoading, isAuthenticated, logout } = useUser();
-  const limits = ROLE_LIMITS[role];
+  const limits = getAccessQuota(role);
 
   const [user, setUser] = useState<QcmUser | null>(null);
   const [hasLastResult, setHasLastResult] = useState(false);

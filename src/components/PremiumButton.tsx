@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { Lock } from "lucide-react";
-import { useUser, ROLE_LIMITS } from "../../app/components/UserContext";
+import { useUser } from "../../app/components/UserContext";
+import { getAccessQuota } from "../../src/lib/access";
 import Button from "../../components/Button";
 
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
 export default function PremiumButton({ onClick, label }: Props) {
   const { role } = useUser();
   const router = useRouter();
-  const limits = ROLE_LIMITS[role];
+  const limits = getAccessQuota(role);
 
   if (limits.canExam) {
     return <Button onClick={onClick}>{label}</Button>;

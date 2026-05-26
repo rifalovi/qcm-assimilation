@@ -10,7 +10,8 @@ import ProgressBar from "../components/ProgressBar";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { hasAnyResult } from "../src/lib/saveResult";
 import { createClient } from "@/lib/supabase/client";
-import { useUser, ROLE_LIMITS } from "./components/UserContext";
+import { useUser } from "./components/UserContext";
+import { getAccessQuota } from "../src/lib/access";
 import EligibilityModalLauncher from "./components/EligibilityModalLauncher";
 import AvisSection from "./components/AvisSection";
 import FeedbackModal from "./components/FeedbackModal";
@@ -211,7 +212,7 @@ function OnboardingModal({ onClose, onAction, role = "anonymous" }: {
 export default function HomePage() {
   const router = useRouter();
   const { role, username: authUsername, loading: authLoading, isAuthenticated, logout } = useUser();
-  const limits = ROLE_LIMITS[role];
+  const limits = getAccessQuota(role);
 
   const [pseudo, setPseudo] = useState("");
   const [email, setEmail] = useState("");
@@ -593,7 +594,7 @@ async function clearPseudo() {
               <span className="cc-badge cc-badge-neutral">3 niveaux</span>
             </div>
             <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-              {[1, 2, 3].map((n) => {
+              {([1, 2, 3] as const).map((n) => {
                 const active = level === n;
                 const locked = !limits.levels.includes(n);
                 return (
@@ -663,7 +664,7 @@ async function clearPseudo() {
             </div>
             <div className="mt-5 space-y-3 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] p-4 text-sm">
               {[
-                ["Questions",        `${limits.quizCount} questions`],
+                ["Questions",        `${limits.quiz} questions`],
                 ["Temps / question", `${PER_QUESTION_SECONDS}s`],
                 ["Niveau",          `Niveau ${level}`],
               ].map(([label, value]) => (

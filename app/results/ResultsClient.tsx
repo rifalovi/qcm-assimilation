@@ -32,7 +32,8 @@ import Button from "../../components/Button";
 import StatsDashboard from "../../components/StatsDashboard";
 import type { ChoiceKey, Question, Theme } from "../../src/data/questions";
 import { loadUser } from "../../src/lib/qcmUser";
-import { useUser, ROLE_LIMITS } from "../components/UserContext";
+import { useUser } from "../components/UserContext";
+import { getAccessQuota } from "../../src/lib/access";
 import AiExplanationCard from "../components/AiExplanationCard";
 import AiCoachCard from "../components/AiCoachCard";
 
@@ -204,7 +205,7 @@ export default function ResultsClient() {
   const [sendingFeedback, setSendingFeedback] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
   const { role } = useUser();
-  const limits = ROLE_LIMITS[role];
+  const limits = getAccessQuota(role);
 
   const PUBLIC_URL = "https://cap-citoyen.fr";
 

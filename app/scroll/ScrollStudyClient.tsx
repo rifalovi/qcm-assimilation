@@ -7,7 +7,6 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { BookOpen, Crown, GraduationCap, Search, Unlock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { Question, MCQVariant } from "@/types/questions";
-import { useUser, ROLE_LIMITS } from "../components/UserContext";
 import { trackEvent } from "@/lib/posthog";
 
 // Type union : question normale OU carte CTA
@@ -847,7 +846,6 @@ function ExamModal({
   
 export default function ScrollStudyClient({ questions, themes, preselectedTheme, role, cardsPerTheme, totalCards }: Props) {
 const router = useRouter();
-const limits = ROLE_LIMITS[role];
 const visibleQuestions = questions;
 
 const [userId, setUserId] = useState<string | undefined>(undefined);
