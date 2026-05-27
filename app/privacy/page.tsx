@@ -73,7 +73,7 @@ export default function PrivacyPage() {
             <li>Droit à la portabilité</li>
             <li>Droit d'opposition et de limitation du traitement</li>
           </ul>
-          <p className="text-sm leading-6 mt-3" style={{ color: "var(--cc-text-muted)" }}>Pour exercer ces droits : <a href="mailto:contact@cap-citoyen.fr" className="text-blue-500 hover:text-blue-400 underline">contact@cap-citoyen.fr</a></p>
+          <p className="text-sm leading-6 mt-3" style={{ color: "var(--cc-text-muted)" }}>Pour exercer ces droits : <a href="mailto:contact@cap-citoyen.fr" style={{ color: "var(--cc-primary)" }} className="hover:opacity-80 underline">contact@cap-citoyen.fr</a></p>
         </section>
 
         <section className="mb-8">
@@ -83,8 +83,8 @@ export default function PrivacyPage() {
 
         <section>
           <h2 className="text-base font-bold mb-3" style={{ color: "var(--cc-text)" }}>9. Contact et réclamations</h2>
-          <p className="text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>Pour toute question : <a href="mailto:contact@cap-citoyen.fr" className="text-blue-500 hover:text-blue-400 underline">contact@cap-citoyen.fr</a></p>
-          <p className="text-sm leading-6 mt-2" style={{ color: "var(--cc-text-muted)" }}>Vous pouvez également introduire une réclamation auprès de la CNIL : <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 underline">www.cnil.fr</a></p>
+          <p className="text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>Pour toute question : <a href="mailto:contact@cap-citoyen.fr" style={{ color: "var(--cc-primary)" }} className="hover:opacity-80 underline">contact@cap-citoyen.fr</a></p>
+          <p className="text-sm leading-6 mt-2" style={{ color: "var(--cc-text-muted)" }}>Vous pouvez également introduire une réclamation auprès de la CNIL : <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" style={{ color: "var(--cc-primary)" }} className="hover:opacity-80 underline">www.cnil.fr</a></p>
         </section>
       </div>
     </main>
