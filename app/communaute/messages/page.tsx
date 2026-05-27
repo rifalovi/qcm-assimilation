@@ -199,12 +199,12 @@ export default function MessagesPage() {
     return () => clearTimeout(timer)
   }, [searchQuery, currentUserId, supabase])
 
-  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
+  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</p></main>
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
-        <Link href="/communaute" className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors">
+        <Link href="/communaute" className="inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: "var(--cc-text-muted)" }}>
           <ArrowLeft size={15} />Communauté
         </Link>
         <button onClick={() => setShowSearch(!showSearch)}
@@ -213,33 +213,34 @@ export default function MessagesPage() {
         </button>
       </div>
 
-      <h1 className="text-2xl font-medium text-white mb-6">Messages privés</h1>
+      <h1 className="text-2xl font-medium mb-6" style={{ color: "var(--cc-text)" }}>Messages privés</h1>
 
       {/* Recherche membre */}
       {showSearch && (
-        <div className="mb-6 bg-slate-800 border border-slate-700 rounded-2xl p-4">
-          <p className="text-sm text-slate-300 mb-3">Rechercher un membre</p>
+        <div className="mb-6 rounded-2xl border p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+          <p className="text-sm mb-3" style={{ color: "var(--cc-text-muted)" }}>Rechercher un membre</p>
           <div className="relative mb-3">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--cc-text-disabled)" }} />
             <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Prénom, nom ou pseudo…"
-              className="w-full pl-8 pr-4 py-2.5 text-sm bg-slate-700 border border-slate-600 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30" />
+              className="w-full pl-8 pr-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-teal-500/30"
+              style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)", color: "var(--cc-text)" }} />
           </div>
-          {searching && <p className="text-xs text-slate-500 text-center py-2">Recherche…</p>}
+          {searching && <p className="text-xs text-center py-2" style={{ color: "var(--cc-text-disabled)" }}>Recherche…</p>}
           {searchResults.map((member) => (
             <button key={member.id} onClick={() => router.push(`/communaute/messages/${member.id}`)}
-              className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl hover:bg-slate-700 transition-colors">
+              className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${avatarColor(member.id)}`}>
                 {getInitials(member.first_name, member.last_name)}
               </div>
               <div className="text-left">
-                <p className="text-sm font-medium text-white">{formatName(member.first_name, member.last_name, member.username)}</p>
-                <p className="text-xs text-slate-500">@{member.username}</p>
+                <p className="text-sm font-medium" style={{ color: "var(--cc-text)" }}>{formatName(member.first_name, member.last_name, member.username)}</p>
+                <p className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>@{member.username}</p>
               </div>
             </button>
           ))}
           {!searching && searchQuery && searchResults.length === 0 && (
-            <p className="text-xs text-slate-500 text-center py-2">Aucun membre trouvé</p>
+            <p className="text-xs text-center py-2" style={{ color: "var(--cc-text-disabled)" }}>Aucun membre trouvé</p>
           )}
         </div>
       )}
@@ -247,14 +248,14 @@ export default function MessagesPage() {
       {/* Liste conversations */}
       {conversations.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-slate-500 text-sm mb-2">Aucune conversation</p>
-          <p className="text-slate-600 text-xs">Contactez un membre depuis un témoignage ou le forum</p>
+          <p className="text-sm mb-2" style={{ color: "var(--cc-text-disabled)" }}>Aucune conversation</p>
+          <p className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>Contactez un membre depuis un témoignage ou le forum</p>
         </div>
       ) : (
         <div className="space-y-1">
           {conversations.map((conv) => (
             <Link key={conv.other_user_id} href={`/communaute/messages/${conv.other_user_id}`}
-              className="flex items-center gap-3 px-3 py-3.5 rounded-xl hover:bg-slate-800 transition-colors">
+              className="flex items-center gap-3 px-3 py-3.5 rounded-xl hover:bg-white/5 transition-colors">
               <div className="relative">
                 <div className={`w-11 h-11 rounded-full flex items-center justify-center text-sm font-medium ${avatarColor(conv.other_user_id)}`}>
                   {getInitials(conv.other_first_name, conv.other_last_name)}
@@ -267,12 +268,12 @@ export default function MessagesPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline justify-between mb-0.5">
-                  <p className={`text-sm ${conv.unread_count > 0 ? 'font-semibold text-white' : 'font-medium text-white'}`}>
+                  <p className={`text-sm ${conv.unread_count > 0 ? 'font-semibold' : 'font-medium'}`} style={{ color: "var(--cc-text)" }}>
                     {formatName(conv.other_first_name, conv.other_last_name, conv.other_username)}
                   </p>
-                  <span className="text-xs text-slate-500 flex-shrink-0 ml-2">{timeAgo(conv.last_message_at)}</span>
+                  <span className="text-xs flex-shrink-0 ml-2" style={{ color: "var(--cc-text-disabled)" }}>{timeAgo(conv.last_message_at)}</span>
                 </div>
-                <p className={`text-xs truncate ${conv.unread_count > 0 ? 'text-slate-300' : 'text-slate-500'}`}>
+                <p className="text-xs truncate" style={{ color: conv.unread_count > 0 ? "var(--cc-text-muted)" : "var(--cc-text-disabled)" }}>
                   {conv.last_message}
                 </p>
               </div>

@@ -96,8 +96,8 @@ export default function AiExplanationCard({
   if (showSignupCta) {
     return (
       <div className="mt-3 rounded-2xl border border-blue-400/20 bg-gradient-to-b from-blue-500/10 to-blue-900/10 p-4 text-center">
-        <p className="text-sm font-bold text-white mb-1">Vos 3 explications gratuites sont utilisées</p>
-        <p className="text-xs text-slate-400 mb-3">Créez un compte gratuit pour obtenir 10 explications IA par jour.</p>
+        <p className="text-sm font-bold mb-1" style={{ color: "var(--cc-text)" }}>Vos 3 explications gratuites sont utilisées</p>
+        <p className="text-xs mb-3" style={{ color: "var(--cc-text-muted)" }}>Créez un compte gratuit pour obtenir 10 explications IA par jour.</p>
         <a href="/register" className="inline-block rounded-xl bg-blue-600 px-5 py-2 text-sm font-bold text-white transition hover:bg-blue-500">
           Créer un compte gratuit
         </a>
@@ -130,7 +130,7 @@ export default function AiExplanationCard({
 
   if (error && !showPaywall) {
     return (
-      <div className="mt-3 rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-200">
+      <div className="mt-3 rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-700">
         {error}
       </div>
     );
@@ -145,29 +145,29 @@ export default function AiExplanationCard({
         <span className="text-sm font-bold text-violet-200">Explication IA</span>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+      <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
         <p className="text-xs font-bold text-blue-300 uppercase tracking-wider mb-1">Explication simple</p>
-        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.simple_explanation}</p>
+        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.simple_explanation}</p>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+      <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
         <p className="text-xs font-bold text-red-300 uppercase tracking-wider mb-1">Pourquoi c'est faux</p>
-        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.why_wrong}</p>
+        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.why_wrong}</p>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+      <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
         <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Exemple concret</p>
-        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.example}</p>
+        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.example}</p>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+      <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
         <p className="text-xs font-bold text-amber-300 uppercase tracking-wider mb-1">Piège à éviter</p>
-        <p className="text-sm text-slate-200 leading-relaxed text-justify">{data.trap}</p>
+        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.trap}</p>
       </div>
 
       <div className="rounded-xl border border-violet-400/20 bg-violet-500/10 p-3">
         <p className="text-xs font-bold text-violet-300 uppercase tracking-wider mb-1">À retenir</p>
-        <p className="text-sm font-semibold text-white leading-relaxed">{data.remember}</p>
+        <p className="text-sm font-semibold leading-relaxed" style={{ color: "var(--cc-text)" }}>{data.remember}</p>
       </div>
     </div>
   );

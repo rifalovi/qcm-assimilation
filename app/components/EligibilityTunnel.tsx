@@ -12,7 +12,8 @@ import {
   buildQuizSettings,
 } from "@/lib/eligibility";
 
-import { useUser, ROLE_LIMITS } from "./UserContext";
+import { useUser } from "./UserContext";
+import { getAccessQuota } from "../../src/lib/access";
 
 type Props = {
   onClose: () => void;
@@ -23,7 +24,7 @@ type Step = 1 | 2 | 3;
 export default function EligibilityTunnel({ onClose }: Props) {
   const router = useRouter();
   const { role } = useUser();
-  const limits = ROLE_LIMITS[role];
+  const limits = getAccessQuota(role);
 
   const [step, setStep] = useState<Step>(1);
   const [goal, setGoal] = useState<EligibilityGoal | null>(null);
@@ -77,7 +78,7 @@ const allowedLevel: 1 | 2 | 3 = limits.levels.includes(
 const settings = buildQuizSettings({
   level: allowedLevel,
   themes: recommendation.themes,
-  count: limits.quizCount,
+  count: limits.quiz,
 });
 
     localStorage.setItem(
@@ -99,7 +100,7 @@ const settings = buildQuizSettings({
     const settings = buildQuizSettings({
       level: 1,
       themes: ["Valeurs", "Société"],
-      count: limits.quizCount,
+      count: limits.quiz,
     });
 
     localStorage.setItem("quiz_settings", JSON.stringify(settings));
@@ -108,18 +109,18 @@ const settings = buildQuizSettings({
   }
 
   return (
-    <div className="relative w-full max-w-lg sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-[1.5rem] sm:rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-4 sm:p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
+    <div className="relative w-full max-w-lg sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-[1.5rem] sm:rounded-[2rem] border p-4 sm:p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
       <div className="mb-4 flex items-start justify-between gap-3 sm:mb-5 sm:gap-4">
         <div>
           <div className="mb-2 inline-flex rounded-full border border-blue-400/20 bg-blue-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300 sm:px-3 sm:text-[11px]">
             Parcours personnalisé
           </div>
 
-          <h2 className="text-lg font-extrabold leading-snug text-white sm:text-2xl">
+          <h2 className="text-lg font-extrabold leading-snug sm:text-2xl" style={{ color: "var(--cc-text)" }}>
             En 30 secondes, découvre ton niveau et ton plan de révision
           </h2>
 
-          <p className="mt-2 text-xs leading-5 text-slate-400 sm:text-sm sm:leading-6">
+          <p className="mt-2 text-xs leading-5 sm:text-sm sm:leading-6" style={{ color: "var(--cc-text-muted)" }}>
             Réponse rapide, parcours guidé, entraînement préconfiguré.
           </p>
         </div>
@@ -127,7 +128,7 @@ const settings = buildQuizSettings({
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 hover:text-white sm:px-3 sm:py-2 sm:text-sm"
+          className="rounded-full border px-2.5 py-1.5 text-xs transition hover:bg-white/10 hover:opacity-80 sm:px-3 sm:py-2 sm:text-sm" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
           aria-label="Fermer"
         >
           ✕
@@ -138,10 +139,10 @@ const settings = buildQuizSettings({
 
       {step === 1 && (
         <section className="mt-5 sm:mt-6">
-          <h3 className="text-base font-bold text-white sm:text-lg">
+          <h3 className="text-base font-bold sm:text-lg" style={{ color: "var(--cc-text)" }}>
             Pourquoi passes-tu cet examen ?
           </h3>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>
             Choisis la démarche qui correspond le mieux à ta situation.
           </p>
 
@@ -151,12 +152,13 @@ const settings = buildQuizSettings({
                 key={option.value}
                 type="button"
                 onClick={() => handleGoalSelect(option.value)}
-                className="rounded-2xl border border-white/10 bg-white/5 p-3.5 sm:p-4 text-left transition hover:border-blue-400/20 hover:bg-white/10"
+                className="rounded-2xl border p-3.5 sm:p-4 text-left transition hover:border-blue-400/20 hover:bg-white/10"
+                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
               >
-                <div className="text-sm font-semibold text-white sm:text-base">
+                <div className="text-sm font-semibold sm:text-base" style={{ color: "var(--cc-text)" }}>
                   {option.label}
                 </div>
-                <div className="mt-1 text-xs leading-5 text-slate-400 sm:text-sm sm:leading-6">
+                <div className="mt-1 text-xs leading-5 sm:text-sm sm:leading-6" style={{ color: "var(--cc-text-muted)" }}>
                   {option.description}
                 </div>
               </button>
@@ -167,10 +169,10 @@ const settings = buildQuizSettings({
 
       {step === 2 && (
         <section className="mt-5 sm:mt-6">
-          <h3 className="text-base font-bold text-white sm:text-lg">
+          <h3 className="text-base font-bold sm:text-lg" style={{ color: "var(--cc-text)" }}>
             Depuis combien de temps es-tu en France ?
           </h3>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>
             Cette réponse nous aide à mieux te guider.
           </p>
 
@@ -180,9 +182,10 @@ const settings = buildQuizSettings({
                 key={option.value}
                 type="button"
                 onClick={() => handleStaySelect(option.value)}
-                className="rounded-2xl border border-white/10 bg-white/5 p-3.5 sm:p-4 text-center transition hover:border-blue-400/20 hover:bg-white/10"
+                className="rounded-2xl border p-3.5 sm:p-4 text-center transition hover:border-blue-400/20 hover:bg-white/10"
+                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
               >
-                <span className="text-xs font-semibold text-white sm:text-sm">
+                <span className="text-xs font-semibold sm:text-sm" style={{ color: "var(--cc-text)" }}>
                   {option.label}
                 </span>
               </button>
@@ -193,7 +196,7 @@ const settings = buildQuizSettings({
             <button
               type="button"
               onClick={handleBack}
-              className="text-sm font-medium text-slate-400 transition hover:text-white"
+              className="text-sm font-medium transition hover:opacity-80" style={{ color: "var(--cc-text-muted)" }}
             >
               ← Retour
             </button>
@@ -204,27 +207,27 @@ const settings = buildQuizSettings({
       {step === 3 && (
         <section className="mt-5 sm:mt-6">
           {goal === "unknown" || !recommendation ? (
-            <div className="rounded-[1.25rem] sm:rounded-[1.6rem] border border-white/10 bg-white/5 p-4 sm:p-5">
+            <div className="rounded-[1.25rem] sm:rounded-[1.6rem] border p-4 sm:p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
               <div className="inline-flex rounded-full border border-amber-400/20 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-300 sm:px-3 sm:text-xs">
                 Orientation
               </div>
 
-              <h3 className="mt-4 text-xl font-bold text-white">
+              <h3 className="mt-4 text-xl font-bold" style={{ color: "var(--cc-text)" }}>
                 On va t’aider à y voir plus clair
               </h3>
 
-              <p className="mt-2 text-xs leading-5 text-slate-400 sm:text-sm sm:leading-6">
+              <p className="mt-2 text-xs leading-5 sm:text-sm sm:leading-6" style={{ color: "var(--cc-text-muted)" }}>
                 Commence par les bases : valeurs de la République et vie en
                 société. Tu pourras affiner ensuite selon ton évolution.
               </p>
 
-              <div className="mt-4 rounded-2xl border border-white/10 bg-slate-900/50 p-4 text-sm text-slate-300">
+              <div className="mt-4 rounded-2xl border p-4 text-sm" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
                 <div>
-                  Niveau conseillé : <strong className="text-white">Niveau 1</strong>
+                  Niveau conseillé : <strong style={{ color: "var(--cc-text)" }}>Niveau 1</strong>
                 </div>
                 <div className="mt-1">
                   Thèmes conseillés :{" "}
-                  <strong className="text-white">Valeurs + Société</strong>
+                  <strong style={{ color: "var(--cc-text)" }}>Valeurs + Société</strong>
                 </div>
               </div>
 
@@ -240,25 +243,25 @@ const settings = buildQuizSettings({
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white sm:px-5"
+                  className="rounded-2xl border px-4 py-3 text-sm font-semibold transition hover:bg-white/10 hover:text-white sm:px-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                 >
                   Modifier mes réponses
                 </button>
               </div>
             </div>
           ) : (
-            <div className="rounded-[1.25rem] sm:rounded-[1.6rem] border border-white/10 bg-white/5 p-4 sm:p-5">
+            <div className="rounded-[1.25rem] sm:rounded-[1.6rem] border p-4 sm:p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
               <div className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-300 sm:px-3 sm:text-xs">
                 {recommendation.badge}
               </div>
 
               {(recommendation as any).natEarlyWarning && (
-                <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4 text-sm text-amber-100">
-                  <div className="font-bold text-amber-300 mb-2">⚠️ Attention — durée de résidence insuffisante</div>
-                  <p className="text-xs leading-5 text-amber-200 mb-3">
+                <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4 text-sm text-amber-700">
+                  <div className="font-bold text-amber-700 mb-2">⚠️ Attention — durée de résidence insuffisante</div>
+                  <p className="text-xs leading-5 text-amber-700 mb-3">
                     La naturalisation requiert en général <strong>5 ans de résidence</strong> en France. Des exceptions existent si vous êtes dans l'une de ces situations :
                   </p>
-                  <ul className="text-xs leading-6 text-amber-100 space-y-1 mb-3">
+                  <ul className="text-xs leading-6 text-amber-700 space-y-1 mb-3">
                     <li>• Statut de réfugié reconnu</li>
                     <li>• Langue maternelle française (pays francophone)</li>
                     <li>• Scolarisé 5 ans+ dans un établissement francophone</li>
@@ -273,15 +276,15 @@ const settings = buildQuizSettings({
                 </div>
               )}
 
-              <h3 className="mt-4 text-lg font-bold leading-snug text-white sm:text-2xl">
+              <h3 className="mt-4 text-lg font-bold leading-snug sm:text-2xl" style={{ color: "var(--cc-text)" }}>
                 {recommendation.title}
               </h3>
 
-              <p className="mt-2 text-xs leading-5 text-slate-400 sm:text-sm sm:leading-6">
+              <p className="mt-2 text-xs leading-5 sm:text-sm sm:leading-6" style={{ color: "var(--cc-text-muted)" }}>
                 {recommendation.description}
               </p>
 
-              <div className="mt-4 rounded-2xl border border-white/10 bg-slate-900/50 p-3.5 sm:p-4 text-sm leading-6 text-slate-300">
+              <div className="mt-4 rounded-2xl border p-3.5 sm:p-4 text-sm leading-6" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
                 {recommendation.confidenceText}
               </div>
 
@@ -305,7 +308,7 @@ const settings = buildQuizSettings({
               </div>
 
               <div className="mt-4 sm:mt-5">
-                <div className="text-xs font-semibold text-white sm:text-sm">
+                <div className="text-xs font-semibold sm:text-sm" style={{ color: "var(--cc-text)" }}>
                   Ce que tu dois surtout connaître
                 </div>
 
@@ -313,7 +316,7 @@ const settings = buildQuizSettings({
                   {recommendation.keyPoints.map((item) => (
                     <div
                       key={item}
-                      className="rounded-2xl border border-white/10 bg-slate-900/40 px-3.5 py-3 sm:px-4 text-sm text-slate-300"
+                      className="rounded-2xl border px-3.5 py-3 sm:px-4 text-sm" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                     >
                       {item}
                     </div>
@@ -325,7 +328,7 @@ const settings = buildQuizSettings({
   ((limits.levels.includes(recommendation.recommendedLevel)
     ? recommendation.recommendedLevel
     : (limits.levels[limits.levels.length - 1] ?? 1)) as 1 | 2 | 3) && (
-                <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+                <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-700">
                   Ton offre actuelle ne débloque pas entièrement ce niveau.
                   L’entraînement sera lancé avec le meilleur niveau disponible
                   pour ton compte.
@@ -338,7 +341,7 @@ const settings = buildQuizSettings({
               {goal === "nat" && (
                 <div className="mt-4 rounded-2xl border border-violet-400/20 bg-violet-500/10 p-4">
                   <div className="text-xs font-bold text-violet-300 mb-1">🎧 Bibliothèque Audio recommandée</div>
-                  <p className="text-xs leading-5 text-slate-300 mb-3">
+                  <p className="text-xs leading-5 mb-3" style={{ color: "var(--cc-text-muted)" }}>
                     Préparez l'oral de votre entretien avec nos épisodes audio dédiés à la naturalisation — valeurs, institutions, histoire et la question clé : <em>Pourquoi voulez-vous devenir français(e) ?</em>
                   </p>
                   <button
@@ -363,7 +366,7 @@ const settings = buildQuizSettings({
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white sm:px-5"
+                  className="rounded-2xl border px-4 py-3 text-sm font-semibold transition hover:bg-white/10 hover:text-white sm:px-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                 >
                   Modifier mes réponses
                 </button>
@@ -396,17 +399,16 @@ function ProgressIndicator({ step }: { step: Step }) {
                 "flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full text-[11px] sm:text-xs font-bold",
                 done || active
                   ? "bg-blue-600 text-white"
-                  : "bg-white/5 text-slate-500 border border-white/10",
+                  : "border",
               ].join(" ")}
+              style={!(done || active) ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" } : undefined}
             >
               {item.id}
             </div>
 
             <div
-              className={[
-                "text-[11px] sm:text-xs font-medium",
-                done || active ? "text-white" : "text-slate-500",
-              ].join(" ")}
+              className="text-[11px] sm:text-xs font-medium"
+              style={{ color: done || active ? "var(--cc-text)" : "var(--cc-text-disabled)" }}
             >
               {item.label}
             </div>
@@ -423,11 +425,11 @@ function ProgressIndicator({ step }: { step: Step }) {
 
 function InfoCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 sm:p-4">
-      <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+    <div className="rounded-2xl border p-3.5 sm:p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+      <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--cc-text-disabled)" }}>
         {label}
       </div>
-      <div className="mt-2 text-sm font-semibold leading-5 sm:leading-6 text-white">
+      <div className="mt-2 text-sm font-semibold leading-5 sm:leading-6" style={{ color: "var(--cc-text)" }}>
         {value}
       </div>
     </div>

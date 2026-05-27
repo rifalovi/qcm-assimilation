@@ -37,23 +37,23 @@ export default function AdminSidebar({ role, username, logoutButton }: Props) {
 
   const sidebarContent = (
     <div className="w-60 flex flex-col h-full">
-      <div className="px-5 py-5 border-b border-slate-800 flex items-center justify-between">
+      <div className="px-5 py-5 border-b flex items-center justify-between" style={{ borderColor: "var(--cc-border)" }}>
         <div>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-0.5">Cap Citoyen</p>
-          <p className="text-sm font-medium text-white">Administration</p>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-0.5" style={{ color: "var(--cc-text-disabled)" }}>Cap Citoyen</p>
+          <p className="text-sm font-medium" style={{ color: "var(--cc-text)" }}>Administration</p>
         </div>
-        <button onClick={() => setOpen(false)} className="lg:hidden text-slate-400 hover:text-white">
+        <button onClick={() => setOpen(false)} className="lg:hidden transition hover:opacity-80" style={{ color: "var(--cc-text-muted)" }}>
           <X size={18} />
         </button>
       </div>
 
-      <div className="px-4 py-3 border-b border-slate-800">
+      <div className="px-4 py-3 border-b" style={{ borderColor: "var(--cc-border)" }}>
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-full bg-teal-900/60 text-teal-300 flex items-center justify-center text-xs font-medium">
             {username.charAt(0).toUpperCase()}
           </div>
           <div>
-            <p className="text-xs font-medium text-white">{username}</p>
+            <p className="text-xs font-medium" style={{ color: "var(--cc-text)" }}>{username}</p>
             <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
               role === 'super_admin' ? 'bg-amber-900/40 text-amber-400' :
               role === 'admin'       ? 'bg-blue-900/40 text-blue-400' :
@@ -72,10 +72,9 @@ export default function AdminSidebar({ role, username, logoutButton }: Props) {
           return (
             <Link key={href} href={href} onClick={() => setOpen(false)}
               className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors group ${
-                isActive
-                  ? 'bg-slate-700 text-white'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
-              }`}>
+                isActive ? 'bg-white/10' : 'hover:bg-white/5'
+              }`}
+              style={{ color: isActive ? "var(--cc-text)" : "var(--cc-text-muted)" }}>
               <Icon size={15} />
               {label}
               <ChevronRight size={12} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -84,8 +83,8 @@ export default function AdminSidebar({ role, username, logoutButton }: Props) {
         })}
       </nav>
 
-      <div className="px-3 py-4 border-t border-slate-800 space-y-1">
-        <Link href="/" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-slate-500 hover:text-slate-300 transition-colors">
+      <div className="px-3 py-4 border-t space-y-1" style={{ borderColor: "var(--cc-border)" }}>
+        <Link href="/" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors hover:opacity-80" style={{ color: "var(--cc-text-disabled)" }}>
           <LogOut size={15} />
           Retour au site
         </Link>
@@ -98,7 +97,8 @@ export default function AdminSidebar({ role, username, logoutButton }: Props) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-white"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-xl border transition hover:opacity-80"
+        style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)", color: "var(--cc-text-muted)" }}
         aria-label="Ouvrir le menu"
       >
         <Menu size={18} />
@@ -113,14 +113,14 @@ export default function AdminSidebar({ role, username, logoutButton }: Props) {
 
       <aside className={`
         lg:hidden fixed inset-y-0 left-0 z-50
-        bg-slate-900 border-r border-slate-800
+        border-r
         transform transition-transform duration-300 ease-in-out
         ${open ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      `} style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)" }}>
         {sidebarContent}
       </aside>
 
-      <aside className="hidden lg:flex flex-col flex-shrink-0 w-60 bg-slate-900 border-r border-slate-800">
+      <aside className="hidden lg:flex flex-col flex-shrink-0 w-60 border-r" style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)" }}>
         {sidebarContent}
       </aside>
     </>

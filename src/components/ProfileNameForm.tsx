@@ -48,14 +48,14 @@ export default function ProfileNameForm({ userId, initialFirstName, initialLastN
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-      <h2 className="text-sm font-medium text-white mb-1">Informations personnelles</h2>
-      <p className="text-xs text-slate-400 mb-4">
+      <h2 className="text-sm font-medium mb-1" style={{ color: "var(--cc-text)" }}>Informations personnelles</h2>
+      <p className="text-xs mb-4" style={{ color: "var(--cc-text-muted)" }}>
         Utilisées dans la communauté sous la forme <span className="font-medium text-slate-200">Prénom N.</span>
       </p>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div>
-          <label className="block text-xs text-slate-400 mb-1.5">Prénom</label>
+          <label className="block text-xs mb-1.5" style={{ color: "var(--cc-text-muted)" }}>Prénom</label>
           <input
             type="text"
             value={firstName}
@@ -65,7 +65,7 @@ export default function ProfileNameForm({ userId, initialFirstName, initialLastN
           />
         </div>
         <div>
-          <label className="block text-xs text-slate-400 mb-1.5">Nom</label>
+          <label className="block text-xs mb-1.5" style={{ color: "var(--cc-text-muted)" }}>Nom</label>
           <input
             type="text"
             value={lastName}
@@ -78,9 +78,9 @@ export default function ProfileNameForm({ userId, initialFirstName, initialLastN
 
       {/* Aperçu temps réel */}
       {(firstName || lastName) && (
-        <p className="text-xs text-slate-400 mb-4">
+        <p className="text-xs mb-4" style={{ color: "var(--cc-text-muted)" }}>
           Apparaîtra comme :{' '}
-          <span className="font-medium text-white">
+          <span className="font-medium" style={{ color: "var(--cc-text)" }}>
             {firstName} {lastName.charAt(0).toUpperCase()}{lastName ? '.' : ''}
           </span>
         </p>
@@ -88,7 +88,7 @@ export default function ProfileNameForm({ userId, initialFirstName, initialLastN
 
       {/* Toggle préférence d'affichage */}
       <div className="mb-4">
-        <p className="text-xs text-slate-400 mb-2">Afficher dans la communauté :</p>
+        <p className="text-xs mb-2" style={{ color: "var(--cc-text-muted)" }}>Afficher dans la communauté :</p>
         <div className="flex gap-2">
           <button type="button" onClick={() => setPreference('firstname')}
             className={`flex-1 py-2 rounded-xl text-xs font-medium border transition-colors ${preference === 'firstname' ? 'border-teal-400/40 bg-teal-500/10 text-teal-300' : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10'}`}>
@@ -99,8 +99,8 @@ export default function ProfileNameForm({ userId, initialFirstName, initialLastN
             Pseudo
           </button>
         </div>
-        <p className="text-xs text-slate-500 mt-1.5">
-          Apparaîtra comme : <span className="text-slate-300 font-medium">
+        <p className="text-xs mt-1.5" style={{ color: "var(--cc-text-disabled)" }}>
+          Apparaîtra comme : <span className="font-medium" style={{ color: "var(--cc-text-muted)" }}>
             {preference === 'username' ? '(votre pseudo)' : `${firstName || 'Prénom'} ${lastName ? lastName.charAt(0).toUpperCase() + '.' : ''}`}
           </span>
         </p>
@@ -109,7 +109,7 @@ export default function ProfileNameForm({ userId, initialFirstName, initialLastN
       <button
         onClick={handleSave}
         disabled={status === 'saving'}
-        className="w-full py-2 rounded-xl text-sm font-medium border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 transition-colors disabled:opacity-50"
+        className="w-full py-2 rounded-xl text-sm font-medium border border-white/10 bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" style={{ color: "var(--cc-text-muted)" }}
       >
         {status === 'saving' && 'Enregistrement…'}
         {status === 'saved'  && '✓ Enregistré'}

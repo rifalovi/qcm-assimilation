@@ -214,7 +214,7 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
   return (
     <article
       id={testimony.id}
-      className="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 hover:border-slate-600 transition-colors"
+      className="rounded-2xl p-5 transition-colors" style={{ background: "var(--cc-surface-alt)", border: "1px solid var(--cc-border)" }}
     >
       {/* En-tête auteur */}
       <div className="flex items-start justify-between gap-3 mb-4">
@@ -223,8 +223,8 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
             {getInitials(testimony.profiles)}
           </div>
           <div>
-            <p className="text-sm font-medium text-white">{formatName(testimony.profiles)}</p>
-            <p className="text-xs text-slate-500">
+            <p className="text-sm font-medium" style={{ color: "var(--cc-text)" }}>{formatName(testimony.profiles)}</p>
+            <p className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>
               {testimony.type === 'test_civique' ? 'Test civique' : 'Entretien naturalisation'}
               {testimony.city ? ` · ${testimony.city}` : ''}
               {` · ${timeAgo}`}
@@ -268,7 +268,7 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
           <p className="text-xs text-slate-500 mb-1.5">Questions posées :</p>
           <div className="flex flex-wrap gap-1.5">
             {testimony.questions_asked.map((q: string, i: number) => (
-              <span key={i} className="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-600">
+              <span key={i} className="text-xs px-2.5 py-1 rounded-lg" style={{ background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)", border: "1px solid var(--cc-border)" }}>
                 {q}
               </span>
             ))}
@@ -278,13 +278,13 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
 
       {/* Témoignage libre */}
       {testimony.free_text && (
-        <p className="text-sm text-slate-300 leading-relaxed mb-4">
+        <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--cc-text-muted)" }}>
           {testimony.free_text}
         </p>
       )}
 
       {/* Barre de réactions */}
-      <div className="flex items-center justify-between pt-3 border-t border-slate-700">
+      <div className="flex items-center justify-between pt-3 border-t" style={{ borderColor: "var(--cc-border)" }}>
         <div className="flex items-center gap-1 flex-wrap">
           {EMOJIS.map(({ emoji, label }) => {
             const count = reactionCounts[emoji] ?? 0
@@ -327,7 +327,7 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
           {/* Bouton commentaires */}
           <button
             onClick={toggleComments}
-            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-gray-600 transition-colors px-2 py-1 rounded-lg hover:bg-gray-50"
+            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-gray-600 transition-colors px-2 py-1 rounded-lg hover:bg-white/5"
           >
             <MessageCircle size={14} />
             {commentCount > 0 ? commentCount : ''}
@@ -342,7 +342,7 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
             className={`p-1.5 rounded-lg transition-colors ${
               reported
                 ? 'text-red-300 cursor-default'
-                : 'text-gray-200 hover:text-gray-400 hover:bg-gray-50'
+                : 'text-slate-400 hover:text-slate-300 hover:bg-white/5'
             } disabled:opacity-40`}
           >
             <Flag size={13} />
@@ -352,10 +352,10 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
 
       {/* Section commentaires (dépliable) */}
       {showComments && (
-        <div className="mt-4 pt-4 border-t border-slate-700">
+        <div className="mt-4 pt-4 border-t" style={{ borderColor: "var(--cc-border)" }}>
           {/* Liste commentaires */}
           {comments.length === 0 && commentsLoaded ? (
-            <p className="text-xs text-slate-500 text-center py-2">
+            <p className="text-xs text-center py-2" style={{ color: "var(--cc-text-disabled)" }}>
               Aucun commentaire — soyez le premier !
             </p>
           ) : (
@@ -365,12 +365,12 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0 ${avatarColor(c.user_id)}`}>
                     {getInitials(c.profiles)}
                   </div>
-                  <div className="flex-1 bg-slate-700 rounded-xl px-3 py-2">
+                  <div className="flex-1 rounded-xl px-3 py-2" style={{ background: "var(--cc-surface-raised)" }}>
                     <div className="flex items-baseline gap-2 mb-0.5">
-                      <span className="text-xs font-medium text-white">{formatName(c.profiles)}</span>
-                      <span className="text-[10px] text-slate-500">{timeAgoShort(c.created_at)}</span>
+                      <span className="text-xs font-medium" style={{ color: "var(--cc-text)" }}>{formatName(c.profiles)}</span>
+                      <span className="text-[10px]" style={{ color: "var(--cc-text-disabled)" }}>{timeAgoShort(c.created_at)}</span>
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed">{c.content}</p>
+                    <p className="text-xs leading-relaxed" style={{ color: "var(--cc-text-muted)" }}>{c.content}</p>
                   </div>
                 </div>
               ))}
@@ -386,7 +386,7 @@ export default function TestimonyCard({ testimony, currentUserId, timeAgo }: Pro
               onKeyDown={(e) => e.key === 'Enter' && handleSubmitComment()}
               placeholder="Ajouter un commentaire…"
               maxLength={1000}
-              className="flex-1 text-xs bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400"
+              className="flex-1 text-xs rounded-xl px-3 py-2 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400" style={{ background: "var(--cc-surface-raised)", border: "1px solid var(--cc-border)", color: "var(--cc-text)" }}
             />
             <button
               onClick={handleSubmitComment}

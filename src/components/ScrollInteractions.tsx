@@ -228,7 +228,7 @@ useEffect(() => {
     >
       {/* Header fixe */}
       <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10">
-        <p className="text-sm font-semibold text-white">Commentaires ({counts.comments})</p>
+        <p className="text-sm font-semibold" style={{ color: "var(--cc-text)" }}>Commentaires ({counts.comments})</p>
         <button onClick={() => setShowComments(false)} className="text-slate-400 hover:text-white">✕</button>
       </div>
 

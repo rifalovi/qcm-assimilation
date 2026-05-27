@@ -22,7 +22,7 @@ export default function SharePage() {
       <main className="max-w-3xl mx-auto p-6">
         <Card>
           <h1 className="text-xl font-bold">Partager</h1>
-          <p className="mt-2 text-slate-600">Aucune donnée à partager.</p>
+          <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>Aucune donnée à partager.</p>
           <Button className="mt-4" onClick={() => router.push("/")}>Retour</Button>
         </Card>
       </main>
@@ -46,7 +46,7 @@ export default function SharePage() {
     <main className="max-w-4xl mx-auto p-6 space-y-6">
       <Card>
         <h1 className="text-2xl font-extrabold">Partager la simulation</h1>
-        <p className="mt-2 text-slate-600">Choisis un réseau social :</p>
+        <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>Choisis un réseau social :</p>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {links.map((l) => (
@@ -55,7 +55,7 @@ export default function SharePage() {
               href={l.href}
               target="_blank"
               rel="noreferrer"
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold hover:bg-slate-50"
+              className="rounded-2xl border px-4 py-3 font-semibold transition" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}
             >
               {l.name}
             </a>

@@ -79,7 +79,7 @@ export default function UpgradeCTA({ featureName = 'cette fonctionnalité', onCl
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)' }}>
-      <div className="relative w-full max-w-lg rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/98 to-slate-900/98 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]">
+      <div className="relative w-full max-w-lg rounded-[2rem] border p-6 shadow-[0_25px_70px_rgba(2,8,23,0.6)]" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
 
         {/* Fermer */}
         {onClose && (
@@ -92,9 +92,9 @@ export default function UpgradeCTA({ featureName = 'cette fonctionnalité', onCl
         {/* Header */}
         <div className="text-center mb-6">
           <div className="text-3xl mb-2">🔒</div>
-          <h2 className="text-xl font-extrabold text-white mb-1">Fonctionnalité Premium</h2>
-          <p className="text-sm text-slate-400">
-            Accédez à <span className="text-white font-medium">{featureName}</span> en passant à Premium ou Élite
+          <h2 className="text-xl font-extrabold mb-1" style={{ color: "var(--cc-text)" }}>Fonctionnalité Premium</h2>
+          <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>
+            Accédez à <span className="font-medium" style={{ color: "var(--cc-text)" }}>{featureName}</span> en passant à Premium ou Élite
           </p>
         </div>
 
@@ -108,9 +108,9 @@ export default function UpgradeCTA({ featureName = 'cette fonctionnalité', onCl
                 {plan.badge}
               </div>
               <div className="text-2xl mb-1.5">{plan.icon}</div>
-              <p className="text-sm font-bold text-white">{plan.label}</p>
-              <p className="text-lg font-extrabold text-white">{plan.price}<span className="text-xs font-normal text-slate-400 ml-1">{plan.period}</span></p>
-              <p className="text-[10px] text-slate-500 mt-0.5">{plan.sub}</p>
+              <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>{plan.label}</p>
+              <p className="text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>{plan.price}<span className="text-xs font-normal ml-1" style={{ color: "var(--cc-text-muted)" }}>{plan.period}</span></p>
+              <p className="text-[10px] mt-0.5" style={{ color: "var(--cc-text-disabled)" }}>{plan.sub}</p>
             </div>
           ))}
         </div>
@@ -118,12 +118,12 @@ export default function UpgradeCTA({ featureName = 'cette fonctionnalité', onCl
         {/* Features du plan sélectionné */}
         {selected && (
           <div className="mb-5 bg-white/5 rounded-2xl p-4">
-            <p className="text-xs font-semibold text-slate-300 mb-2">
+            <p className="text-xs font-semibold mb-2" style={{ color: "var(--cc-text-muted)" }}>
               {PLANS.find(p => p.id === selected)?.label} inclut :
             </p>
             <ul className="space-y-1.5">
               {PLANS.find(p => p.id === selected)?.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-xs text-slate-300">
+                <li key={f} className="flex items-center gap-2 text-xs" style={{ color: "var(--cc-text-muted)" }}>
                   <Check size={12} className="text-emerald-400 flex-shrink-0" />
                   {f}
                 </li>
@@ -154,7 +154,7 @@ export default function UpgradeCTA({ featureName = 'cette fonctionnalité', onCl
             </>
           )}
           <button onClick={() => router.push('/pricing')}
-            className="w-full py-2 text-xs text-slate-500 hover:text-slate-300 transition">
+            className="w-full py-2 text-xs transition" style={{ color: "var(--cc-text-disabled)" }}>
             Voir le comparatif complet →
           </button>
         </div>

@@ -37,34 +37,36 @@ export default function NewForumPostPage() {
     if (!error && data) router.push(`/communaute/forum/${data.id}`)
   }
 
-  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
+  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</p></main>
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8">
       <button onClick={() => router.push('/communaute/forum')}
-        className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors mb-6">
+        className="inline-flex items-center gap-1.5 text-sm transition-colors mb-6 hover:opacity-80" style={{ color: "var(--cc-text-muted)" }}>
         <ArrowLeft size={15} />Retour au forum
       </button>
 
-      <h1 className="text-xl font-medium text-white mb-6">Nouvelle discussion</h1>
+      <h1 className="text-xl font-medium mb-6" style={{ color: "var(--cc-text)" }}>Nouvelle discussion</h1>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm text-slate-300 mb-1.5">Titre <span className="text-red-400">*</span></label>
+          <label className="block text-sm mb-1.5" style={{ color: "var(--cc-text-muted)" }}>Titre <span className="text-red-400">*</span></label>
           <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}
             placeholder="Ex: Comment se préparer à l'entretien de naturalisation ?"
             maxLength={150}
-            className="w-full border border-slate-600 rounded-xl px-4 py-2.5 text-sm bg-slate-800 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400" />
-          <p className="text-xs text-slate-600 mt-1 text-right">{title.length}/150</p>
+            className="w-full rounded-xl px-4 py-2.5 text-sm border focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400"
+            style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }} />
+          <p className="text-xs mt-1 text-right" style={{ color: "var(--cc-text-disabled)" }}>{title.length}/150</p>
         </div>
 
         <div>
-          <label className="block text-sm text-slate-300 mb-1.5">Message <span className="text-red-400">*</span></label>
+          <label className="block text-sm mb-1.5" style={{ color: "var(--cc-text-muted)" }}>Message <span className="text-red-400">*</span></label>
           <textarea value={content} onChange={(e) => setContent(e.target.value)}
             placeholder="Décrivez votre question ou partagez votre expérience…"
             rows={8} maxLength={2000}
-            className="w-full border border-slate-600 rounded-2xl px-4 py-3 text-sm bg-slate-800 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 resize-none leading-relaxed" />
-          <p className="text-xs text-slate-600 mt-1 text-right">{content.length}/2000</p>
+            className="w-full rounded-2xl px-4 py-3 text-sm border focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 resize-none leading-relaxed"
+            style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }} />
+          <p className="text-xs mt-1 text-right" style={{ color: "var(--cc-text-disabled)" }}>{content.length}/2000</p>
         </div>
 
         <button onClick={handleSubmit} disabled={!title.trim() || content.trim().length < 10 || submitting}

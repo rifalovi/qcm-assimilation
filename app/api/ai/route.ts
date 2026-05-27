@@ -42,14 +42,18 @@ export async function POST(req: NextRequest) {
     // Anonymes : autorisés mais quotas gérés côté client (localStorage)
     // L'API ne bloque plus les anonymes — elle traite la requête sans tracker
     let role: 'anonymous' | 'freemium' | 'premium' | 'elite' | 'moderator' | 'admin' | 'super_admin' = 'anonymous'
+    let passExpiresAt: string | null = null
     if (user) {
       const { data: profile } = await supabase
         .from('profiles')
-        .select('role, username')
+        .select('role, username, pass_expires_at')
         .eq('id', user.id)
         .single()
       role = (profile?.role as typeof role) ?? 'freemium'
+      passExpiresAt = (profile?.pass_expires_at as string | null) ?? null
     }
+    // Un freemium avec un pass actif est traité comme illimité
+    const hasActivePass = passExpiresAt != null && new Date(passExpiresAt) > new Date()
     const body = await req.json()
     const { mode, question, userAnswer, correctAnswer, explanation, choices, theme,
             scorePercent, strengths, weaknesses, totalQuestions, correctCount,
@@ -75,25 +79,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Mode invalide' }, { status: 400 })
     }
 
-    // Vérifier le quota (authentifiés uniquement — anonymes gérés côté client)
+    // ── Vérification et décrément des crédits IA ─────────────────────────────
+    // Freemium sans pass actif → RPCs atomiques (source de vérité DB)
+    // Pass actif / premium / élite / admin → illimité, pas de décrément
     const quota = getQuotaForRole(role, mode)
-    if (user && quota < 999) {
-      const todayStart = new Date()
-      todayStart.setHours(0, 0, 0, 0)
+    const isUnlimited = hasActivePass || quota >= 999
 
-      const { count } = await supabase
-        .from('user_events')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .eq('event_type', 'ai_usage')
-        .gte('created_at', todayStart.toISOString())
-        .filter('properties->>mode', 'eq', mode)
+    if (user && !isUnlimited) {
+      // Décrément atomique via RPC — couvre freemium sans pass actif
+      // (isUnlimited est true pour pass, premium, élite, admin)
+      const rpcName = (mode === 'explain' || mode === 'coach')
+        ? 'decrement_ia_explain_credit'
+        : 'decrement_ia_assistant_credit'
 
-      if ((count ?? 0) >= quota) {
+      const { data: creditResult, error: creditError } = await supabase
+        .rpc(rpcName, { p_user_id: user.id })
+
+      if (creditError) {
+        // Erreur RPC : log mais on laisse passer (best-effort, évite de bloquer l'utilisateur)
+        console.warn(`[ai/${mode}] Erreur RPC ${rpcName}:`, creditError)
+      } else if (creditResult && creditResult.success === false) {
         return NextResponse.json({
           error: 'quota_exceeded',
-          quota,
-          used: count ?? 0,
+          reason: creditResult.reason as string,
           mode,
           role,
         }, { status: 429 })

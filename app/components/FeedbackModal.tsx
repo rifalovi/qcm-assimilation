@@ -46,7 +46,7 @@ export default function FeedbackModal({
           className="absolute inset-0 bg-black/70 backdrop-blur-md"
           onClick={onClose}
         />
-        <div className="relative z-10 w-full max-w-xs overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 shadow-[0_32px_80px_rgba(0,0,0,0.7)]">
+        <div className="relative z-10 w-full max-w-xs overflow-hidden rounded-[2rem] border shadow-[0_32px_80px_rgba(0,0,0,0.7)]" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
           <div className="flex h-1 w-full">
             <div className="flex-1 bg-blue-600" />
             <div className="flex-1 bg-white/90" />
@@ -54,16 +54,16 @@ export default function FeedbackModal({
           </div>
           <button
             onClick={onClose}
-            className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white/8 text-xs text-slate-500 transition hover:text-white"
+            className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white/8 text-xs transition hover:opacity-80" style={{ color: "var(--cc-text-disabled)" }}
           >
             ✕
           </button>
           <div className="p-6 text-center">
             <div className="mb-3 text-3xl">🔒</div>
-            <h3 className="text-sm font-extrabold text-white">
+            <h3 className="text-sm font-extrabold" style={{ color: "var(--cc-text)" }}>
               Connectez-vous pour noter
             </h3>
-            <p className="mt-1.5 text-xs leading-5 text-slate-400">
+            <p className="mt-1.5 text-xs leading-5" style={{ color: "var(--cc-text-muted)" }}>
               Votre avis nous aide à améliorer Cap Citoyen.
             </p>
             <div className="mt-4 flex flex-col gap-2">
@@ -77,7 +77,7 @@ export default function FeedbackModal({
               <a
                 href="/login"
                 onClick={onClose}
-                className="block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-medium text-slate-300 transition hover:bg-white/10"
+                className="block w-full rounded-xl border px-4 py-2.5 text-xs font-medium transition hover:bg-white/10" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
               >
                 Se connecter
               </a>
@@ -129,7 +129,7 @@ export default function FeedbackModal({
         className="absolute inset-0 bg-black/70 backdrop-blur-md"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full max-w-xs overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 shadow-[0_32px_80px_rgba(0,0,0,0.7)]">
+      <div className="relative z-10 w-full max-w-xs overflow-hidden rounded-[2rem] border shadow-[0_32px_80px_rgba(0,0,0,0.7)]" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
         <div className="flex h-1 w-full">
           <div className="flex-1 bg-blue-600" />
           <div className="flex-1 bg-white/90" />
@@ -138,7 +138,7 @@ export default function FeedbackModal({
 
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white/8 text-xs text-slate-500 transition hover:bg-white/15 hover:text-white"
+          className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white/8 text-xs transition hover:bg-white/15 hover:opacity-80" style={{ color: "var(--cc-text-disabled)" }}
         >
           ✕
         </button>
@@ -148,10 +148,10 @@ export default function FeedbackModal({
             <div className="flex flex-col items-center gap-3 py-6 text-center">
               <div className="text-5xl">🎉</div>
               <div>
-                <p className="text-base font-extrabold text-white">
+                <p className="text-base font-extrabold" style={{ color: "var(--cc-text)" }}>
                   Merci {resolvedPseudo} !
                 </p>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs" style={{ color: "var(--cc-text-muted)" }}>
                   Votre avis a bien été enregistré.
                 </p>
               </div>
@@ -159,13 +159,13 @@ export default function FeedbackModal({
           ) : (
             <>
               <div className="mb-4 text-center">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--cc-text-disabled)" }}>
                   Cap Citoyen
                 </p>
-                <h3 className="mt-1 text-base font-extrabold tracking-tight text-white">
+                <h3 className="mt-1 text-base font-extrabold tracking-tight" style={{ color: "var(--cc-text)" }}>
                   Notez votre expérience
                 </h3>
-                <p className="mt-1 text-xs leading-5 text-slate-400">
+                <p className="mt-1 text-xs leading-5" style={{ color: "var(--cc-text-muted)" }}>
                   Votre avis nous aide à améliorer la plateforme.
                 </p>
               </div>
@@ -210,14 +210,14 @@ export default function FeedbackModal({
                     {label.emoji} {label.text}
                   </p>
                 ) : (
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>
                     Touchez une étoile pour noter
                   </p>
                 )}
               </div>
 
               <textarea
-                className="min-h-[80px] w-full resize-none rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-600 transition focus:border-blue-400/30 focus:outline-none focus:ring-1 focus:ring-blue-400/20"
+                className="min-h-[80px] w-full resize-none rounded-2xl border px-4 py-3 text-sm placeholder:opacity-40 transition focus:border-blue-400/30 focus:outline-none focus:ring-1 focus:ring-blue-400/20" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}
                 placeholder="Un commentaire ? (optionnel)"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
@@ -239,7 +239,7 @@ export default function FeedbackModal({
                     setComment("");
                     onClose();
                   }}
-                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-medium text-slate-400 transition hover:bg-white/10 hover:text-white"
+                  className="rounded-xl border px-3 py-2.5 text-xs font-medium transition hover:bg-white/10 hover:text-white" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                 >
                   Annuler
                 </button>

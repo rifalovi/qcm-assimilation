@@ -89,7 +89,7 @@ export default function AvisSection() {
 
   if (loading) {
     return (
-      <div id="avis-section" className="py-8 text-center text-sm text-slate-500">
+      <div id="avis-section" className="py-8 text-center text-sm" style={{ color: "var(--cc-text-disabled)" }}>
         Chargement des avis...
       </div>
     );
@@ -100,12 +100,12 @@ export default function AvisSection() {
   const visibleAvis = showAll ? avis : avis.slice(0, 3);
 
   return (
-    <section id="avis-section" className="mt-4 space-y-5 border-t border-white/10 pt-8">
+    <section id="avis-section" className="mt-4 space-y-5 border-t pt-8" style={{ borderColor: "var(--cc-border)" }}>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-extrabold text-white">Ce qu&apos;ils en pensent</h2>
-            <p className="mt-1 text-sm text-slate-400">
+            <h2 className="text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>Ce qu&apos;ils en pensent</h2>
+            <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>
               Avis de candidats préparant leur naturalisation avec Cap Citoyen
             </p>
           </div>
@@ -115,13 +115,13 @@ export default function AvisSection() {
               <div className="text-center">
                 <p className="text-2xl font-extrabold leading-none text-amber-300">
                   {avgRating}
-                  <span className="text-sm text-slate-400">/5</span>
+                  <span className="text-sm" style={{ color: "var(--cc-text-muted)" }}>/5</span>
                 </p>
                 <Stars rating={Math.round(avgRating)} />
               </div>
-              <div className="border-l border-white/10 pl-3">
-                <p className="text-xs font-semibold text-white">{avis.length} avis</p>
-                <p className="text-xs text-slate-400">Note moyenne</p>
+              <div className="border-l pl-3" style={{ borderColor: "var(--cc-border)" }}>
+                <p className="text-xs font-semibold" style={{ color: "var(--cc-text)" }}>{avis.length} avis</p>
+                <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>Note moyenne</p>
               </div>
             </div>
           </div>
@@ -132,7 +132,7 @@ export default function AvisSection() {
         {visibleAvis.map((a) => (
           <div
             key={a.id}
-            className="rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-slate-800/80 to-slate-900/80 p-5 backdrop-blur-sm transition hover:border-white/20"
+            className="rounded-[1.5rem] border p-5 backdrop-blur-sm transition hover:border-white/20" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
@@ -140,8 +140,8 @@ export default function AvisSection() {
                   {(a.pseudo || "A")[0].toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-white">{a.pseudo || "Anonyme"}</p>
-                  <p className="text-[10px] text-slate-500">
+                  <p className="text-sm font-semibold" style={{ color: "var(--cc-text)" }}>{a.pseudo || "Anonyme"}</p>
+                  <p className="text-[10px]" style={{ color: "var(--cc-text-disabled)" }}>
                     {new Date(a.created_at).toLocaleDateString("fr-FR", {
                       day: "2-digit",
                       month: "short",
@@ -153,7 +153,7 @@ export default function AvisSection() {
               <Stars rating={a.rating} />
             </div>
 
-            <p className="mt-3 text-sm leading-6 text-slate-300">
+            <p className="mt-3 text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>
               &ldquo;{a.comment}&rdquo;
             </p>
           </div>
@@ -164,7 +164,7 @@ export default function AvisSection() {
         <div className="flex justify-center">
           <button
             onClick={() => setShowAll((prev) => !prev)}
-            className="rounded-2xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="rounded-2xl border px-5 py-2.5 text-sm font-semibold transition hover:bg-white/10" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
           >
             {showAll ? "Voir moins" : "Voir plus"}
           </button>

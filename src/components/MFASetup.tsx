@@ -102,22 +102,22 @@ export default function MFASetup() {
   if (step === "qr") {
     return (
       <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-4">
-        <p className="text-sm font-semibold text-white">📱 Scanner le QR code</p>
-        <p className="text-xs text-slate-400">
+        <p className="text-sm font-semibold" style={{ color: "var(--cc-text)" }}>📱 Scanner le QR code</p>
+        <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>
           Ouvre Google Authenticator, Authy ou toute app TOTP et scanne ce code.
         </p>
         <div className="flex justify-center bg-white p-3 rounded-xl">
           <QRCode value={qrUrl} size={180} />
         </div>
         <div>
-          <label className="text-xs font-medium text-slate-300 mb-2 block">
+          <label className="text-xs font-medium mb-2 block" style={{ color: "var(--cc-text-muted)" }}>
             Entre le code à 6 chiffres généré par l'app
           </label>
           <input
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
             placeholder="000000"
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-xl font-bold tracking-[0.5em] text-white outline-none focus:border-blue-400/30"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-xl font-bold tracking-[0.5em] outline-none focus:border-blue-400/30" style={{ color: "var(--cc-text)" }}
             maxLength={6}
           />
         </div>
@@ -125,7 +125,7 @@ export default function MFASetup() {
         <div className="flex gap-2">
           <button
             onClick={() => setStep("idle")}
-            className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 text-sm text-slate-400 hover:text-white transition"
+            className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 text-sm hover:text-white transition" style={{ color: "var(--cc-text-muted)" }}
           >
             Annuler
           </button>
@@ -147,8 +147,8 @@ export default function MFASetup() {
         <div className="flex items-center gap-3">
           <span className="text-2xl">🔓</span>
           <div>
-            <p className="text-sm font-semibold text-white">Double authentification</p>
-            <p className="text-xs text-slate-400">Renforcez la sécurité de votre compte</p>
+            <p className="text-sm font-semibold" style={{ color: "var(--cc-text)" }}>Double authentification</p>
+            <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>Renforcez la sécurité de votre compte</p>
           </div>
         </div>
         <button

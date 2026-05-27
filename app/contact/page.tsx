@@ -82,24 +82,24 @@ export default function ContactPage() {
   return (
     <main className="mx-auto max-w-2xl px-4 py-12">
       <div className="mb-8 text-center">
-        <div className="inline-flex rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-300 mb-4">
+        <div className="inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-widest mb-4" style={{ borderColor: "var(--cc-primary)", color: "var(--cc-primary)", background: "var(--cc-primary-soft)" }}>
           Contact
         </div>
-        <h1 className="text-3xl font-extrabold text-white">Nous contacter</h1>
-        <p className="mt-2 text-sm text-slate-400">
+        <h1 className="text-3xl font-extrabold" style={{ color: "var(--cc-text)" }}>Nous contacter</h1>
+        <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>
           Une question, un problème ou une suggestion ? Écrivez-nous.
         </p>
       </div>
 
-      <div className="rounded-[1.8rem] border border-white/10 bg-white/5 p-6 sm:p-8">
+      <div className="rounded-[1.8rem] border p-6 sm:p-8" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
         {status === "success" ? (
           <div className="text-center py-8">
             <div className="text-4xl mb-4">✅</div>
-            <h2 className="text-xl font-bold text-white mb-2">Message envoyé !</h2>
-            <p className="text-sm text-slate-400 mb-6">Nous vous répondrons dans les plus brefs délais à l'adresse indiquée.</p>
+            <h2 className="text-xl font-bold mb-2" style={{ color: "var(--cc-text)" }}>Message envoyé !</h2>
+            <p className="text-sm mb-6" style={{ color: "var(--cc-text-muted)" }}>Nous vous répondrons dans les plus brefs délais à l'adresse indiquée.</p>
             <button
               onClick={() => setStatus("idle")}
-              className="rounded-2xl border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-semibold text-slate-300 transition hover:bg-white/10"
+              className="cc-btn cc-btn-secondary px-6 py-2.5 text-sm"
             >
               Envoyer un autre message
             </button>
@@ -108,38 +108,38 @@ export default function ContactPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Nom */}
             <div>
-              <label className="mb-1.5 block text-xs font-semibold text-slate-300">Nom complet</label>
+              <label className="mb-1.5 block text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>Nom complet</label>
               <input
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
                 required
                 placeholder="Votre nom"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-blue-400/40 focus:outline-none"
+                className="w-full"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label className="mb-1.5 block text-xs font-semibold text-slate-300">Adresse email</label>
+              <label className="mb-1.5 block text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>Adresse email</label>
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
                 placeholder="votre@email.com"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-blue-400/40 focus:outline-none"
+                className="w-full"
               />
             </div>
 
             {/* Objet */}
             <div>
-              <label className="mb-1.5 block text-xs font-semibold text-slate-300">Objet</label>
+              <label className="mb-1.5 block text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>Objet</label>
               <select
                 value={subject}
                 onChange={e => setSubject(e.target.value)}
                 required
-                className="w-full rounded-xl border border-white/10 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-blue-400/40 focus:outline-none"
+                className="w-full"
               >
                 <option value="">-- Sélectionnez un objet --</option>
                 {SUBJECTS.map(group => (
@@ -155,28 +155,28 @@ export default function ContactPage() {
             {/* Objet personnalisé si Autre */}
             {isOther && (
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-slate-300">Précisez votre demande</label>
+                <label className="mb-1.5 block text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>Précisez votre demande</label>
                 <input
                   type="text"
                   value={customSubject}
                   onChange={e => setCustomSubject(e.target.value)}
                   required
                   placeholder="Décrivez brièvement votre demande"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-blue-400/40 focus:outline-none"
+                  className="w-full"
                 />
               </div>
             )}
 
             {/* Message */}
             <div>
-              <label className="mb-1.5 block text-xs font-semibold text-slate-300">Message</label>
+              <label className="mb-1.5 block text-xs font-semibold" style={{ color: "var(--cc-text-muted)" }}>Message</label>
               <textarea
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 required
                 rows={5}
                 placeholder="Décrivez votre demande en détail..."
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-blue-400/40 focus:outline-none resize-none"
+                className="w-full resize-none"
               />
             </div>
 
@@ -193,7 +193,7 @@ export default function ContactPage() {
             </div>
 
             {status === "error" && (
-              <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              <div className="cc-notice cc-notice-danger text-sm">
                 Une erreur est survenue. Réessayez ou écrivez directement à contact@cap-citoyen.fr
               </div>
             )}
@@ -201,14 +201,14 @@ export default function ContactPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-500 disabled:opacity-50"
+              className="cc-btn cc-btn-primary w-full py-3 text-sm font-bold disabled:opacity-50"
             >
               {loading ? "Envoi en cours..." : "Envoyer le message"}
             </button>
 
-            <p className="text-center text-xs text-slate-500">
+            <p className="text-center text-xs" style={{ color: "var(--cc-text-disabled)" }}>
               Ou écrivez directement à{" "}
-              <a href="mailto:contact@cap-citoyen.fr" className="text-blue-400 hover:underline">
+              <a href="mailto:contact@cap-citoyen.fr" className="text-blue-500 hover:underline">
                 contact@cap-citoyen.fr
               </a>
             </p>
@@ -220,10 +220,10 @@ export default function ContactPage() {
         <StoreButtons />
       </div>
 
-      <div className="mt-6 flex justify-center gap-6 text-xs text-slate-500">
-        <Link href="/mentions-legales" className="hover:text-slate-300 transition">Mentions légales</Link>
-        <Link href="/cgv" className="hover:text-slate-300 transition">CGV</Link>
-        <Link href="/" className="hover:text-slate-300 transition">Retour à l'accueil</Link>
+      <div className="mt-6 flex justify-center gap-6 text-xs" style={{ color: "var(--cc-text-disabled)" }}>
+        <Link href="/mentions-legales" className="hover:underline transition">Mentions légales</Link>
+        <Link href="/cgv" className="hover:underline transition">CGV</Link>
+        <Link href="/" className="hover:underline transition">Retour à l'accueil</Link>
       </div>
     </main>
   );

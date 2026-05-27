@@ -55,7 +55,7 @@ function StarRating({ rating }: { rating: number | null }) {
         <Star
           key={i}
           size={12}
-          className={i <= rating ? 'text-amber-400 fill-amber-400' : 'text-gray-200'}
+          className={i <= rating ? 'text-amber-400 fill-amber-400' : 'opacity-30'} style={i <= rating ? {} : { color: "var(--cc-text-muted)" }}
         />
       ))}
     </div>
@@ -164,8 +164,8 @@ export default async function CommunautePage() {
           <Star size={11} className="fill-amber-400 text-amber-400" />
           Espace Premium
         </div>
-        <h1 className="text-2xl font-extrabold tracking-tight text-white mb-1">Communauté</h1>
-        <p className="text-sm text-slate-400">
+        <h1 className="text-2xl font-extrabold tracking-tight mb-1" style={{ color: "var(--cc-text)" }}>Communauté</h1>
+        <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>
           Échangez avec d'autres candidats à la naturalisation
         </p>
       </div>
@@ -177,9 +177,13 @@ export default async function CommunautePage() {
           { num: stats.forumPostCount, label: 'Discussions', color: 'text-orange-300' },
           { num: stats.activeMembersCount, label: 'Membres actifs', color: 'text-blue-300' },
         ].map(({ num, label, color }) => (
-          <div key={label} className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/60 to-slate-900/60 px-3 py-3 text-center backdrop-blur-sm">
+          <div
+            key={label}
+            className="overflow-hidden rounded-2xl border px-3 py-3 text-center backdrop-blur-sm"
+            style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
+          >
             <p className={`text-xl font-extrabold ${color}`}>{num}</p>
-            <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">{label}</p>
+            <p className="text-[10px] mt-0.5 leading-tight" style={{ color: "var(--cc-text-disabled)" }}>{label}</p>
           </div>
         ))}
       </div>
@@ -190,60 +194,63 @@ export default async function CommunautePage() {
         {/* Témoignages */}
         <Link
           href="/communaute/temoignages"
-          className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/60 to-slate-900/60 p-5 hover:border-white/20 hover:bg-white/5 transition-all group backdrop-blur-sm"
+          className="overflow-hidden rounded-2xl border p-5 hover:bg-white/5 transition-all group backdrop-blur-sm"
+          style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
         >
           <div className="w-10 h-10 rounded-xl border border-teal-400/20 bg-teal-500/10 flex items-center justify-center mb-3">
             <BookOpen size={18} className="text-teal-400" />
           </div>
-          <h2 className="text-sm font-medium text-white mb-1">Retours d'expériences</h2>
-          <p className="text-xs text-slate-400 leading-relaxed mb-3">
+          <h2 className="text-sm font-medium mb-1" style={{ color: "var(--cc-text)" }}>Retours d'expériences</h2>
+          <p className="text-xs leading-relaxed mb-3" style={{ color: "var(--cc-text-muted)" }}>
             Témoignages de candidats ayant passé le test ou l'entretien
           </p>
           <div className="flex items-center justify-between">
             <span className="text-xs border border-teal-400/20 bg-teal-500/10 text-teal-300 px-2.5 py-1 rounded-full font-medium">
               {stats.testimonialCount} témoignages
             </span>
-            <ArrowRight size={14} className="text-slate-500 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" style={{ color: "var(--cc-text-disabled)" }} />
           </div>
         </Link>
 
         {/* Forum */}
         <Link
           href="/communaute/forum"
-          className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/60 to-slate-900/60 p-5 hover:border-white/20 hover:bg-white/5 transition-all group backdrop-blur-sm"
+          className="overflow-hidden rounded-2xl border p-5 hover:bg-white/5 transition-all group backdrop-blur-sm"
+          style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
         >
           <div className="w-10 h-10 rounded-xl border border-orange-400/20 bg-orange-500/10 flex items-center justify-center mb-3">
             <MessageSquare size={18} className="text-orange-400" />
           </div>
-          <h2 className="text-sm font-medium text-white mb-1">Forum</h2>
-          <p className="text-xs text-slate-400 leading-relaxed mb-3">
+          <h2 className="text-sm font-medium mb-1" style={{ color: "var(--cc-text)" }}>Forum</h2>
+          <p className="text-xs leading-relaxed mb-3" style={{ color: "var(--cc-text-muted)" }}>
             Posez vos questions, partagez vos conseils
           </p>
           <div className="flex items-center justify-between">
             <span className="text-xs border border-orange-400/20 bg-orange-500/10 text-orange-300 px-2.5 py-1 rounded-full font-medium">
               {stats.forumPostCount} discussions
             </span>
-            <ArrowRight size={14} className="text-slate-500 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" style={{ color: "var(--cc-text-disabled)" }} />
           </div>
         </Link>
 
         {/* Messages */}
         <Link
           href="/communaute/messages"
-          className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/60 to-slate-900/60 p-5 hover:border-white/20 hover:bg-white/5 transition-all group backdrop-blur-sm"
+          className="overflow-hidden rounded-2xl border p-5 hover:bg-white/5 transition-all group backdrop-blur-sm"
+          style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
         >
           <div className="w-10 h-10 rounded-xl border border-blue-400/20 bg-blue-500/10 flex items-center justify-center mb-3">
             <Users size={18} className="text-blue-400" />
           </div>
-          <h2 className="text-sm font-medium text-white mb-1">Messages privés</h2>
-          <p className="text-xs text-slate-400 leading-relaxed mb-3">
+          <h2 className="text-sm font-medium mb-1" style={{ color: "var(--cc-text)" }}>Messages privés</h2>
+          <p className="text-xs leading-relaxed mb-3" style={{ color: "var(--cc-text-muted)" }}>
             Échangez en privé avec d'autres membres
           </p>
           <div className="flex items-center justify-between">
             <span className="text-xs border border-blue-400/20 bg-blue-500/10 text-blue-300 px-2.5 py-1 rounded-full font-medium">
               {(unreadMessages ?? 0) > 0 ? `${unreadMessages} non lus` : 'Aucun non lu'}
             </span>
-            <ArrowRight size={14} className="text-slate-500 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" style={{ color: "var(--cc-text-disabled)" }} />
           </div>
         </Link>
 
@@ -251,16 +258,16 @@ export default async function CommunautePage() {
 
       {/* Feed — derniers témoignages */}
       <div>
-        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
+        <h3 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "var(--cc-text-disabled)" }}>
           Derniers témoignages
         </h3>
 
-        <div className="divide-y divide-slate-700/50">
+        <div className="divide-y" style={{ borderColor: "var(--cc-border)" }}>
           {(recentTestimonies as unknown as RecentTestimony[] ?? []).map((t) => (
             <Link
               key={t.id}
               href={`/communaute/temoignages#${t.id}`}
-              className="flex gap-3 py-4 hover:bg-slate-800 -mx-2 px-2 rounded-xl transition-colors"
+              className="flex gap-3 py-4 -mx-2 px-2 rounded-xl transition-colors hover:bg-white/5"
             >
               {/* Avatar */}
               <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${avatarColor(t.user_id)}`}>
@@ -269,17 +276,17 @@ export default async function CommunautePage() {
 
               {/* Contenu */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white">
+                <p className="text-sm font-medium" style={{ color: "var(--cc-text)" }}>
                   {formatDisplayName(t.profiles)}
                 </p>
-                <p className="text-xs text-slate-500 mb-1">
+                <p className="text-xs mb-1" style={{ color: "var(--cc-text-disabled)" }}>
                   {t.type === 'test_civique' ? 'Test civique' : 'Entretien naturalisation'}
                   {t.city ? ` · ${t.city}` : ''}
                   {` · ${timeAgo(t.created_at)}`}
                 </p>
                 <StarRating rating={t.welcome_rating} />
                 {t.free_text && (
-                  <p className="text-sm text-slate-300 truncate">
+                  <p className="text-sm truncate" style={{ color: "var(--cc-text-muted)" }}>
                     {t.free_text}
                   </p>
                 )}
@@ -291,7 +298,8 @@ export default async function CommunautePage() {
         {/* CTA partager */}
         <Link
           href="/communaute/temoignages/new"
-          className="mt-4 flex items-center justify-center gap-2 w-full rounded-2xl border border-white/10 bg-white/5 py-3 text-sm font-semibold text-slate-300 hover:bg-white/10 transition-colors"
+          className="mt-4 flex items-center justify-center gap-2 w-full rounded-2xl border py-3 text-sm font-semibold hover:bg-white/10 transition-colors"
+          style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}
         >
           <Plus size={15} />
           Partager mon expérience
@@ -306,7 +314,7 @@ export default async function CommunautePage() {
           title="Cap Citoyen — Espace communauté"
           text="Rejoins la communauté Cap Citoyen pour préparer ta naturalisation 🇫🇷"
           size={18}
-          className="bg-slate-800 border border-slate-700 rounded-full p-1 shadow-lg"
+          className="rounded-full p-1 shadow-lg border"
         />
       </div>
     </main>

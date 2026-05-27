@@ -179,14 +179,15 @@ export default function FloatingChat() {
         <>
           <button
             onClick={() => setOpen(true)}
-            className="fixed z-[60] bottom-20 right-4 h-14 w-14 flex items-center justify-center rounded-full bg-slate-900 border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-300 hover:scale-105 hover:border-white/20 active:scale-95 md:bottom-6"
+            className="fixed z-[60] bottom-20 right-4 h-14 w-14 flex items-center justify-center rounded-full border shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-300 hover:scale-105 hover:border-white/20 active:scale-95 md:bottom-6"
+            style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)" }}
             aria-label="Ouvrir l'assistant IA"
           >
             <Image src="/cap-citoyen.png" alt="Assistant" width={36} height={36} className="rounded-full" />
           </button>
           {messages.length === 0 && isAuthenticated && (
             <div className="fixed z-[59] bottom-[88px] right-3 md:bottom-[52px] pointer-events-none">
-              <div className="rounded-xl bg-slate-800 border border-white/10 px-3 py-1.5 text-xs text-slate-300 shadow-lg animate-pulse">
+              <div className="rounded-xl border px-3 py-1.5 text-xs shadow-lg animate-pulse" style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)", color: "var(--cc-text-muted)" }}>
                 Une question ?
               </div>
             </div>
@@ -205,7 +206,7 @@ export default function FloatingChat() {
 
           {/* Panel */}
           <div
-            className="fixed z-[59] inset-x-0 bottom-0 sm:inset-auto sm:right-4 sm:bottom-4 sm:w-[400px] flex flex-col overflow-hidden sm:rounded-2xl sm:border sm:border-white/10 sm:shadow-[0_25px_70px_rgba(0,0,0,0.5)]"
+            className="fixed z-[59] inset-x-0 bottom-0 sm:inset-auto sm:right-4 sm:bottom-4 sm:w-[400px] flex flex-col overflow-hidden sm:rounded-2xl sm:border sm:shadow-[0_25px_70px_rgba(0,0,0,0.5)]"
             style={{
               // Mobile: plein écran moins le clavier
               height: keyboardH > 0
@@ -215,20 +216,21 @@ export default function FloatingChat() {
               ...(typeof window !== 'undefined' && window.innerWidth >= 640
                 ? { height: 'min(480px, calc(100vh - 40px))' }
                 : {}),
-              background: '#0b141a',
+              background: 'var(--cc-surface-alt)',
+              borderColor: 'var(--cc-border)',
               transition: 'height 0.15s ease',
             }}
           >
             {/* Header */}
-            <div className="flex flex-none items-center gap-2.5 border-b border-white/10 bg-[#0f172a] px-4 py-3">
+            <div className="flex flex-none items-center gap-2.5 border-b px-4 py-3" style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)" }}>
               <Image src="/cap-citoyen.png" alt="" width={28} height={28} className="rounded-lg" />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-white">Assistant Cap Citoyen</p>
-                <p className="text-[10px] text-slate-400">Démarches, naturalisation, examen civique</p>
+                <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Assistant Cap Citoyen</p>
+                <p className="text-[10px]" style={{ color: "var(--cc-text-muted)" }}>Démarches, naturalisation, examen civique</p>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 text-slate-400 transition hover:bg-white/10 hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-white/10 hover:opacity-80" style={{ background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                   <path d="M18 6L6 18M6 6l12 12" />
@@ -244,10 +246,10 @@ export default function FloatingChat() {
               {messages.length === 0 && !loading && (
                 <div className="flex flex-col items-center justify-center h-full text-center px-4">
                   <span className="text-3xl mb-3">🇫🇷</span>
-                  <p className="text-sm font-semibold text-white mb-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "var(--cc-text)" }}>
                     Bonjour ! Comment puis-je vous aider ?
                   </p>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-xs leading-relaxed" style={{ color: "var(--cc-text-muted)" }}>
                     Posez-moi vos questions sur les démarches de naturalisation, l'examen civique, ou votre préparation.
                   </p>
                   <div className="mt-4 flex flex-wrap justify-center gap-1.5">
@@ -259,7 +261,7 @@ export default function FloatingChat() {
                       <button
                         key={q}
                         onClick={() => { setInput(q); inputRef.current?.focus(); }}
-                        className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-[11px] text-slate-300 transition hover:bg-white/10 hover:text-white"
+                        className="rounded-lg border px-2.5 py-1.5 text-[11px] transition hover:bg-white/10" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                       >
                         {q}
                       </button>
@@ -272,11 +274,11 @@ export default function FloatingChat() {
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   {msg.role === "user" ? (
                     <div className="max-w-[85%] rounded-2xl rounded-br-md bg-blue-600/20 border border-blue-400/20 px-3 py-2">
-                      <p className="text-sm text-blue-100">{msg.content}</p>
+                      <p className="text-sm text-blue-700">{msg.content}</p>
                     </div>
                   ) : (
-                    <div className="max-w-[92%] rounded-2xl rounded-bl-md bg-white/5 border border-white/10 px-3 py-2.5">
-                      <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-line">{msg.content}</p>
+                    <div className="max-w-[92%] rounded-2xl rounded-bl-md border px-3 py-2.5" style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)" }}>
+                      <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "var(--cc-text)" }}>{msg.content}</p>
                     </div>
                   )}
                 </div>
@@ -284,14 +286,14 @@ export default function FloatingChat() {
 
               {loading && (
                 <div className="flex justify-start">
-                  <div className="rounded-2xl rounded-bl-md bg-white/5 border border-white/10 px-4 py-3">
+                  <div className="rounded-2xl rounded-bl-md border px-4 py-3" style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)" }}>
                     <div className="flex items-center gap-2">
                       <div className="flex gap-1">
                         <div className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "0ms" }} />
                         <div className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "150ms" }} />
                         <div className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "300ms" }} />
                       </div>
-                      <span className="text-xs text-slate-400">Réflexion...</span>
+                      <span className="text-xs" style={{ color: "var(--cc-text-muted)" }}>Réflexion...</span>
                     </div>
                   </div>
                 </div>
@@ -306,10 +308,10 @@ export default function FloatingChat() {
               {showSignupCta && (
                 <div className="px-1">
                   <div className="rounded-2xl border border-blue-400/20 bg-gradient-to-b from-blue-500/10 to-blue-900/10 p-4 text-center">
-                    <p className="text-sm font-bold text-white mb-1">
+                    <p className="text-sm font-bold mb-1" style={{ color: "var(--cc-text)" }}>
                       Vous avez utilisé vos 3 questions gratuites
                     </p>
-                    <p className="text-xs text-slate-400 mb-4 leading-relaxed">
+                    <p className="text-xs mb-4 leading-relaxed" style={{ color: "var(--cc-text-muted)" }}>
                       Créez un compte gratuit pour continuer à poser vos questions et sauvegarder vos conversations.
                     </p>
                     <div className="flex flex-col gap-2">
@@ -321,7 +323,7 @@ export default function FloatingChat() {
                       </a>
                       <a
                         href="/login"
-                        className="block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-400 transition hover:text-white"
+                        className="block w-full rounded-xl border px-4 py-2 text-xs transition hover:text-white" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                       >
                         J'ai déjà un compte
                       </a>
@@ -336,10 +338,8 @@ export default function FloatingChat() {
             {/* Footer input — flex-none, collé au clavier */}
             <form
               onSubmit={send}
-              className="flex flex-none items-end gap-2 border-t border-white/10 bg-[#0f172a] px-3 py-2.5"
-              style={{
-                paddingBottom: keyboardH > 0 ? '8px' : 'max(10px, env(safe-area-inset-bottom))',
-              }}
+              className="flex flex-none items-end gap-2 border-t px-3 py-2.5"
+              style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)", paddingBottom: keyboardH > 0 ? '8px' : 'max(10px, env(safe-area-inset-bottom))' }}
             >
               <textarea
                 ref={inputRef}
@@ -349,8 +349,8 @@ export default function FloatingChat() {
                 placeholder={isAuthenticated ? "Votre question..." : "Connectez-vous pour poser une question"}
                 disabled={!isAuthenticated || loading}
                 rows={1}
-                className="flex-1 resize-none rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-400/30 disabled:opacity-40 max-h-20"
-                style={{ fontSize: '16px' }}
+                className="flex-1 resize-none rounded-xl border px-3 py-2 text-sm placeholder:opacity-40 focus:outline-none focus:border-blue-400/30 disabled:opacity-40 max-h-20"
+                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)", fontSize: '16px' }}
               />
               <button
                 type="submit"

@@ -2,10 +2,27 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  Timer,
+  CheckCircle2,
+  BookOpen,
+  PenLine,
+  BarChart2,
+  Trophy,
+  AlertTriangle,
+  Compass,
+  Flag,
+  Crown,
+  Sparkles,
+  Lock,
+  Zap,
+  Target,
+} from "lucide-react";
 import { hasAnyResult } from "../../src/lib/saveResult";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { useUser, ROLE_LIMITS } from "../components/UserContext";
+import { useUser } from "../components/UserContext";
+import { getAccessQuota } from "../../src/lib/access";
 import PremiumButton from "@/components/PremiumButton";
 
 type Level = 1 | 2 | 3;
@@ -36,8 +53,11 @@ function saveUser(u: QcmUser) {
 
 function MarianneMark() {
   return (
-    <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-slate-200">
+    <div
+      className="flex h-11 w-11 items-center justify-center rounded-2xl border"
+      style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
+    >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ color: "var(--cc-text-muted)" }}>
         <path d="M20 21a8 8 0 0 0-16 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
         <path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
       </svg>
@@ -54,11 +74,11 @@ function Pill({ children, active = false, onClick }: {
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-3 py-2 text-sm font-semibold transition-all duration-200 ${
-        active
-          ? "border-blue-400/30 bg-blue-500/15 text-blue-200"
-          : "border-white/10 bg-white/5 text-slate-300 hover:border-blue-400/20 hover:bg-white/10 hover:text-white"
-      }`}
+      className="rounded-full border px-3 py-2 text-sm font-semibold transition-all duration-200"
+      style={active
+        ? { borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }
+        : { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }
+      }
     >
       {children}
     </button>
@@ -68,7 +88,7 @@ function Pill({ children, active = false, onClick }: {
 export default function ExamPage() {
   const router = useRouter();
   const { role, username: authUsername, loading: authLoading, isAuthenticated, logout } = useUser();
-  const limits = ROLE_LIMITS[role];
+  const limits = getAccessQuota(role);
 
   const [user, setUser] = useState<QcmUser | null>(null);
   const [hasLastResult, setHasLastResult] = useState(false);
@@ -152,7 +172,7 @@ export default function ExamPage() {
     localStorage.setItem("quiz_settings", JSON.stringify({
       level,
       themes,
-      count: limits.quizCount,
+      count: COUNT, // toujours 40 questions pour l'examen blanc
       mode: "exam",
       perQuestion: 30,
       maxDuration: 900,
@@ -162,20 +182,22 @@ export default function ExamPage() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+    <main className="mx-auto max-w-5xl px-4 py-6 pb-24 sm:px-6 sm:py-8 sm:pb-8">
       <div className="space-y-6">
 
         {/* ===== HERO ===== */}
-        <section className={`relative overflow-visible rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/92 to-slate-800/92 shadow-[0_25px_70px_rgba(2,8,23,0.42)] backdrop-blur-xl transition-all duration-700 ${
-          heroVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-        }`}>
-          <div className="flex h-1.5 w-full">
-            <div className="flex-1 bg-blue-600"/>
-            <div className="flex-1 bg-white"/>
-            <div className="flex-1 bg-red-600"/>
+        <section
+          className={`relative overflow-visible rounded-2xl border transition-all duration-700 ${
+            heroVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+          }`}
+          style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)", boxShadow: "var(--cc-shadow)" }}
+        >
+          {/* Tricolore */}
+          <div className="flex h-1.5 w-full overflow-hidden rounded-t-2xl">
+            <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
+            <div className="flex-1" style={{ background: "white" }} />
+            <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
           </div>
-          <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl"/>
-          <div className="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl"/>
 
           <div className="relative px-5 py-7 sm:px-8 sm:py-9">
 
@@ -185,55 +207,53 @@ export default function ExamPage() {
                 <MarianneMark />
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] sm:tracking-[0.22em] text-slate-400">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] sm:tracking-[0.22em]" style={{ color: "var(--cc-text-muted)" }}>
                       République française
                     </span>
-                    <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] text-slate-300">
-                      <span className="inline-flex h-2.5 w-4 overflow-hidden rounded-sm border border-white/10">
-                        <span className="w-1/3 bg-blue-600"/>
-                        <span className="w-1/3 bg-white"/>
-                        <span className="w-1/3 bg-red-600"/>
+                    <span className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px]" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
+                      <span className="inline-flex h-2.5 w-4 overflow-hidden rounded-sm border" style={{ borderColor: "var(--cc-border)" }}>
+                        <span className="w-1/3" style={{ background: "var(--cc-flag-blue)" }} />
+                        <span className="w-1/3" style={{ background: "white" }} />
+                        <span className="w-1/3" style={{ background: "var(--cc-flag-red)" }} />
                       </span>
                       FR
                     </span>
                   </div>
-                  <div className="mt-0.5 text-xs text-slate-400">Examen blanc • Simulation 2026</div>
+                  <div className="mt-0.5 text-xs" style={{ color: "var(--cc-text-muted)" }}>Examen blanc • Simulation 2026</div>
                 </div>
               </div>
               {!authLoading && !isAuthenticated && user?.pseudo?.trim() && (
-                <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
-                  <span>Bonjour <span className="font-semibold text-white">{authUsername?.trim() || user?.pseudo?.trim() || "Utilisateur"}</span> 👋</span>
-                  <span className="text-slate-500">•</span>
-                  <button onClick={clearIdentity} className="text-slate-400 hover:text-red-400 hover:underline">Déconnexion</button>
+                <div className="flex flex-wrap items-center gap-2 rounded-xl border px-3 py-2 text-sm" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}>
+                  <span>Bonjour <span className="font-semibold" style={{ color: "var(--cc-text)" }}>{authUsername?.trim() || user?.pseudo?.trim() || "Utilisateur"}</span> 👋</span>
+                  <span style={{ color: "var(--cc-text-disabled)" }}>•</span>
+                  <button onClick={clearIdentity} className="transition hover:underline" style={{ color: "var(--cc-text-muted)" }}>Déconnexion</button>
                 </div>
               )}
             </div>
 
             {/* Titre + CTA */}
-            <div className="mb-3 mx-auto block text-center w-fit items-center justify-center rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-300 lg:mx-0">
+            <div className="cc-badge cc-badge-info mb-3 mx-auto block text-center w-fit lg:mx-0">
               Conditions proches de l'épreuve
             </div>
 
-            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl text-center lg:text-left">
+            <h1 className="text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl lg:text-4xl text-center lg:text-left" style={{ color: "var(--cc-text)" }}>
               Testez-vous en{" "}
-              <span className="text-blue-400">conditions</span>{" "}
-              d'<span className="text-blue-400">examen blanc</span>.
+              <span style={{ color: "var(--cc-primary)" }}>conditions</span>{" "}
+              d'<span style={{ color: "var(--cc-primary)" }}>examen blanc</span>.
             </h1>
 
-            <p className="mt-3 text-sm leading-relaxed text-slate-400 text-center max-w-xl mx-auto lg:mx-0 lg:text-left">
+            <p className="mt-3 text-sm leading-relaxed text-center max-w-xl mx-auto lg:mx-0 lg:text-left" style={{ color: "var(--cc-text-muted)" }}>
               Simulation complète du test civique français — questions chronométrées, niveau exigeant, score requis 32/40.
             </p>
 
             {/* Pills info */}
             <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">
-                40 questions
+              <span className="cc-badge cc-badge-info">40 questions</span>
+              <span className="inline-flex items-center gap-1 cc-badge cc-badge-warning">
+                <Timer size={11} /> 30s / question
               </span>
-              <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">
-                ⏱️ 30s / question
-              </span>
-              <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
-                ✓ Requis : 32/40
+              <span className="inline-flex items-center gap-1 cc-badge cc-badge-success">
+                <CheckCircle2 size={11} /> Requis : 32/40
               </span>
             </div>
 
@@ -241,10 +261,10 @@ export default function ExamPage() {
             <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap justify-center">
               <PremiumButton onClick={smartStartExam} label="Démarrer l'examen blanc" />
               <Button variant="secondary" onClick={() => router.push("/info")}>
-                📖 Comprendre l'examen
+                <BookOpen size={15} className="mr-1.5 inline-block" /> Comprendre l'examen
               </Button>
               <Button variant="secondary" onClick={() => router.push("/")}>
-                ✏️ Entraînement
+                <PenLine size={15} className="mr-1.5 inline-block" /> Entraînement
               </Button>
             </div>
           </div>
@@ -252,12 +272,20 @@ export default function ExamPage() {
 
         {/* ===== NAVIGATION ===== */}
         <section className="flex flex-wrap justify-center gap-3">
-          <Button variant="secondary" onClick={() => router.push("/info")}>📘 Guide</Button>
+          <Button variant="secondary" onClick={() => router.push("/info")}>
+            <BookOpen size={15} className="mr-1.5 inline-block" /> Guide
+          </Button>
           {hasLastResult && (
-            <Button variant="secondary" onClick={() => router.push("/results?mode=exam")}>📊 Dernier résultat</Button>
+            <Button variant="secondary" onClick={() => router.push("/results?mode=exam")}>
+              <BarChart2 size={15} className="mr-1.5 inline-block" /> Dernier résultat
+            </Button>
           )}
-          <Button variant="secondary" onClick={() => router.push("/")}>✏️ Entraînement</Button>
-          <Button variant="secondary" onClick={() => router.push("/leaderboard")}>🏆 Classement</Button>
+          <Button variant="secondary" onClick={() => router.push("/")}>
+            <PenLine size={15} className="mr-1.5 inline-block" /> Entraînement
+          </Button>
+          <Button variant="secondary" onClick={() => router.push("/leaderboard")}>
+            <Trophy size={15} className="mr-1.5 inline-block" /> Classement
+          </Button>
         </section>
 
         {/* ===== CONFIGURATION ===== */}
@@ -266,8 +294,15 @@ export default function ExamPage() {
           {/* Niveau */}
           <Card>
             <div className="flex items-center justify-between gap-3">
-              <h3 className="text-base font-bold text-white">Niveau de difficulté</h3>
-              <span className="rounded-full border border-red-400/20 bg-red-500/10 px-2.5 py-0.5 text-xs font-semibold text-red-300">
+              <h3 className="text-base font-bold" style={{ color: "var(--cc-text)" }}>Niveau de difficulté</h3>
+              <span
+                className="rounded-full border px-2.5 py-0.5 text-xs font-semibold"
+                style={{
+                  borderColor: "color-mix(in srgb, var(--cc-danger) 25%, transparent)",
+                  background: "color-mix(in srgb, var(--cc-danger) 10%, var(--cc-surface))",
+                  color: "var(--cc-danger)",
+                }}
+              >
                 Difficile
               </span>
             </div>
@@ -276,28 +311,28 @@ export default function ExamPage() {
                 <button
                   key={n}
                   onClick={() => setLevel(n as Level)}
-                  className={`rounded-xl border py-3 text-sm font-semibold transition ${
-                    level === n
-                      ? "border-blue-400/30 bg-blue-500/15 text-blue-200"
-                      : "border-white/10 bg-white/5 text-slate-400 hover:text-white"
-                  }`}
+                  className="rounded-xl border py-3 text-sm font-semibold transition"
+                  style={level === n
+                    ? { borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }
+                    : { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }
+                  }
                 >
                   Niveau {n}
                 </button>
               ))}
             </div>
-            <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3 text-xs text-slate-400 space-y-1">
+            <div className="mt-4 rounded-xl border p-3 text-xs space-y-1" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
               <p>• Niveau 1 — prise en main</p>
               <p>• Niveau 2 — entraînement intermédiaire</p>
-              <p>• <span className="text-blue-300 font-medium">Niveau 3 — simulation réaliste ✓</span></p>
+              <p>• <span className="font-medium" style={{ color: "var(--cc-primary)" }}>Niveau 3 — simulation réaliste ✓</span></p>
             </div>
           </Card>
 
           {/* Thèmes */}
           <Card>
             <div className="flex items-center justify-between gap-3">
-              <h3 className="text-base font-bold text-white">Thèmes</h3>
-              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-semibold text-slate-300">
+              <h3 className="text-base font-bold" style={{ color: "var(--cc-text)" }}>Thèmes</h3>
+              <span className="cc-badge cc-badge-neutral">
                 {themes.length}/{THEMES.length}
               </span>
             </div>
@@ -311,29 +346,31 @@ export default function ExamPage() {
               <Button variant="secondary" onClick={() => setThemes([])}>Aucun</Button>
             </div>
             {!canStart && (
-              <p className="mt-3 text-xs text-red-400">⚠️ Sélectionnez au moins un thème.</p>
+              <p className="mt-3 flex items-center gap-1.5 text-xs" style={{ color: "var(--cc-danger)" }}>
+                <AlertTriangle size={13} /> Sélectionnez au moins un thème.
+              </p>
             )}
           </Card>
 
           {/* Résumé */}
           <Card>
             <div className="flex items-center justify-between gap-3">
-              <h3 className="text-base font-bold text-white">Résumé</h3>
-              <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-300">
+              <h3 className="text-base font-bold" style={{ color: "var(--cc-text)" }}>Résumé</h3>
+              <span className="cc-badge cc-badge-warning">
                 Chronométré
               </span>
             </div>
             <div className="mt-4 space-y-2.5 text-sm">
               {[
-                ["Questions", "40", "text-white"],
-                ["Temps / question", "30 s", "text-amber-300"],
-                ["Validation", "≥ 32 réponses", "text-emerald-300"],
-                ["Niveau", `Niveau ${level}`, "text-blue-300"],
-                ["Thèmes", `${themes.length} thème${themes.length > 1 ? "s" : ""}`, "text-white"],
-              ].map(([label, value, color]) => (
+                { label: "Questions",        value: "40",                                                    color: "var(--cc-text)" },
+                { label: "Temps / question", value: "30 s",                                                  color: "var(--cc-warning)" },
+                { label: "Validation",       value: "≥ 32 réponses",                                         color: "var(--cc-success)" },
+                { label: "Niveau",           value: `Niveau ${level}`,                                       color: "var(--cc-primary)" },
+                { label: "Thèmes",           value: `${themes.length} thème${themes.length > 1 ? "s" : ""}`, color: "var(--cc-text)" },
+              ].map(({ label, value, color }) => (
                 <div key={label} className="flex items-center justify-between">
-                  <span className="text-slate-400">{label}</span>
-                  <span className={`font-semibold ${color}`}>{value}</span>
+                  <span style={{ color: "var(--cc-text-muted)" }}>{label}</span>
+                  <span className="font-semibold" style={{ color }}>{value}</span>
                 </div>
               ))}
             </div>
@@ -346,52 +383,122 @@ export default function ExamPage() {
         {/* ===== FEATURES ===== */}
         <section className="grid gap-4 sm:grid-cols-3">
           {[
-            { icon: "⏱️", title: "Rythme soutenu", text: "Chronométrage serré pour simuler les conditions réelles.", color: "border-amber-400/20" },
-            { icon: "🧭", title: "Vision réaliste", text: "Ambiance proche de l'évaluation officielle.", color: "border-blue-400/20" },
-            { icon: "🏁", title: "Mesure de niveau", text: "Score précis pour cibler vos révisions.", color: "border-emerald-400/20" },
+            {
+              icon: <Zap size={20} />,
+              title: "Rythme soutenu",
+              text: "Chronométrage serré pour simuler les conditions réelles.",
+              color: "var(--cc-warning)",
+            },
+            {
+              icon: <Compass size={20} />,
+              title: "Vision réaliste",
+              text: "Ambiance proche de l'évaluation officielle.",
+              color: "var(--cc-primary)",
+            },
+            {
+              icon: <Target size={20} />,
+              title: "Mesure de niveau",
+              text: "Score précis pour cibler vos révisions.",
+              color: "var(--cc-success)",
+            },
           ].map((item) => (
-            <div key={item.title} className={`rounded-2xl border ${item.color} bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 transition hover:brightness-110`}>
-              <div className="mb-2 text-2xl">{item.icon}</div>
-              <h3 className="text-sm font-bold text-white">{item.title}</h3>
-              <p className="mt-1 text-xs leading-6 text-slate-400">{item.text}</p>
+            <div
+              key={item.title}
+              className="rounded-xl border p-5 transition"
+              style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)", boxShadow: "var(--cc-shadow-sm)" }}
+            >
+              <div
+                className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl"
+                style={{
+                  borderColor: `color-mix(in srgb, ${item.color} 25%, transparent)`,
+                  border: "1px solid",
+                  background: `color-mix(in srgb, ${item.color} 10%, var(--cc-surface))`,
+                  color: item.color,
+                }}
+              >
+                {item.icon}
+              </div>
+              <h3 className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>{item.title}</h3>
+              <p className="mt-1 text-xs leading-6" style={{ color: "var(--cc-text-muted)" }}>{item.text}</p>
             </div>
           ))}
         </section>
 
       </div>
 
-      {/* ===== MODAL IDENTITÉ ===== */}
+      {/* ===== MODAL UPGRADE EXAM ===== */}
       {openExamUpgrade && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setOpenExamUpgrade(false)}
           />
-          <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
-            <div className="text-center">
-              <div className="text-4xl mb-3">👑</div>
-              <h3 className="text-xl font-extrabold text-white">
-                Créez un compte pour commencer l'examen blanc
+          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border p-6" style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)", boxShadow: "var(--cc-shadow-lg)" }}>
+            {/* Tricolore */}
+            <div className="absolute top-0 left-0 right-0 flex h-1 overflow-hidden rounded-t-2xl">
+              <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
+              <div className="flex-1" style={{ background: "white" }} />
+              <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
+            </div>
+
+            <div className="mt-2 text-center">
+              <div
+                className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl"
+                style={{ background: "color-mix(in srgb, var(--cc-primary) 12%, var(--cc-surface))", color: "var(--cc-primary)" }}
+              >
+                <Lock size={26} />
+              </div>
+              <h3 className="text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>
+                Examen blanc — accès Pass requis
               </h3>
-              <p className="mt-2 text-sm leading-7 text-slate-400">
-                Les comptes Freemium bénéficient d’un essai gratuit limité de l’examen blanc. Les comptes Premium débloquent l’accès complet ainsi que les résultats détaillés et les corrections.
+              <p className="mt-2 text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>
+                Créez un compte et choisissez un Pass pour débloquer l'examen blanc, les corrections détaillées et le coach IA.
               </p>
             </div>
 
-            <div className="mt-6 space-y-3">
-              <button
-                onClick={() => {
-                  setOpenExamUpgrade(false);
-                  router.push("/pricing");
-                }}
-                className="w-full rounded-2xl bg-amber-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-400"
+            {/* Plans rapides */}
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <div
+                className="rounded-xl border p-3 text-center"
+                style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
               >
-                ✨ Créer un compte / Voir les offres
-              </button>
+                <div className="text-xs font-semibold mb-1" style={{ color: "var(--cc-text-muted)" }}>Pass Express</div>
+                <div className="text-lg font-extrabold" style={{ color: "var(--cc-primary)" }}>4,99 €</div>
+                <div className="text-[11px]" style={{ color: "var(--cc-text-disabled)" }}>7 jours</div>
+              </div>
+              <div
+                className="rounded-xl border p-3 text-center relative"
+                style={{ borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)" }}
+              >
+                <div
+                  className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full px-2 py-0.5 text-[10px] font-bold"
+                  style={{ background: "var(--cc-primary)", color: "var(--cc-surface)" }}
+                >
+                  Recommandé
+                </div>
+                <div className="text-xs font-semibold mb-1" style={{ color: "var(--cc-text)" }}>Pass Sérénité</div>
+                <div className="text-lg font-extrabold" style={{ color: "var(--cc-primary)" }}>9,99 €</div>
+                <div className="text-[11px]" style={{ color: "var(--cc-text-muted)" }}>30 jours</div>
+              </div>
+            </div>
 
+            <div className="mt-5 space-y-3">
+              <button
+                onClick={() => { setOpenExamUpgrade(false); router.push("/pricing"); }}
+                className="cc-btn cc-btn-primary w-full justify-center py-3 rounded-xl"
+              >
+                <Sparkles size={15} className="mr-1.5 inline-block" /> Voir les Pass
+              </button>
+              <button
+                onClick={() => { setOpenExamUpgrade(false); router.push("/register"); }}
+                className="cc-btn cc-btn-secondary w-full justify-center py-3 rounded-xl"
+              >
+                Créer un compte gratuit
+              </button>
               <button
                 onClick={() => setOpenExamUpgrade(false)}
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10"
+                className="w-full text-center text-sm transition hover:opacity-70"
+                style={{ color: "var(--cc-text-disabled)", background: "none", border: "none" }}
               >
                 Fermer
               </button>
@@ -403,14 +510,14 @@ export default function ExamPage() {
       {pseudoOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setPseudoOpen(false)}/>
-          <div className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]">
-            <h3 className="text-lg font-bold text-white">Avant de commencer</h3>
-            <p className="mt-1 text-sm text-slate-400">Entrez un pseudo et une adresse email valide.</p>
+          <div className="relative w-full max-w-lg overflow-hidden rounded-2xl border p-6" style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)", boxShadow: "var(--cc-shadow-lg)" }}>
+            <h3 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>Avant de commencer</h3>
+            <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>Entrez un pseudo et une adresse email valide.</p>
             <input
               value={pseudoDraft}
               onChange={(e) => setPseudoDraft(e.target.value)}
               placeholder="Pseudo (ex : Carlos)"
-              className="mt-4 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30"
+              className="mt-4 w-full"
               maxLength={20}
             />
             <input
@@ -418,7 +525,7 @@ export default function ExamPage() {
               value={emailDraft}
               onChange={(e) => setEmailDraft(e.target.value)}
               placeholder="Adresse email"
-              className="mt-3 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/30"
+              className="mt-3 w-full"
             />
             <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-end">
               <Button variant="secondary" type="button" onClick={() => setPseudoOpen(false)}>Annuler</Button>

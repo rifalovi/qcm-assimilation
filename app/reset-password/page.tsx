@@ -26,18 +26,18 @@ function ResetForm() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 bg-white dark:bg-slate-900">
+    <main className="min-h-screen flex items-center justify-center px-4" style={{ background: "var(--cc-surface)" }}>
       <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+        <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--cc-text)" }}>
           Nouveau mot de passe
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+        <p className="text-sm mb-8" style={{ color: "var(--cc-text-muted)" }}>
           Choisis un nouveau mot de passe pour ton compte.
         </p>
 
         <form onSubmit={handleReset} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-sm font-medium mb-1" style={{ color: "var(--cc-text-muted)" }}>
               Nouveau mot de passe
             </label>
             <input
@@ -47,7 +47,8 @@ function ResetForm() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="8 caractères minimum"
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }}
             />
           </div>
 
@@ -76,7 +77,7 @@ function ResetForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-500">Chargement...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{ color: "var(--cc-text-disabled)" }}>Chargement...</div>}>
       <ResetForm />
     </Suspense>
   )

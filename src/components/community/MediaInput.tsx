@@ -161,7 +161,7 @@ export default function MediaInput({
   const canSubmit = (content.trim().length >= minLength || attachments.length > 0) && !submitting && !disabled
 
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden">
+    <div className="rounded-2xl overflow-hidden" style={{ background: "var(--cc-surface-alt)", border: "1px solid var(--cc-border)" }}>
 
       {/* Préview images sélectionnées */}
       {attachments.length > 0 && (
@@ -169,7 +169,7 @@ export default function MediaInput({
           {attachments.map((url) => (
             <div key={url} className="relative group">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={url} alt="" className="w-20 h-20 object-cover rounded-xl border border-slate-600" />
+              <img src={url} alt="" className="w-20 h-20 object-cover rounded-xl" style={{ border: "1px solid var(--cc-border)" }} />
               <button
                 onClick={() => removeAttachment(url)}
                 className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -182,11 +182,11 @@ export default function MediaInput({
 
       {/* Préview lien détecté */}
       {linkPreview && (
-        <div className="mx-3 mt-3 flex items-center gap-2 bg-slate-700 rounded-xl px-3 py-2">
+        <div className="mx-3 mt-3 flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "var(--cc-surface-raised)" }}>
           <LinkIcon size={12} className="text-slate-400 flex-shrink-0" />
           {linkPreview.loading
             ? <Loader size={12} className="text-slate-400 animate-spin" />
-            : <p className="text-xs text-slate-300 truncate">{linkPreview.title}</p>
+            : <p className="text-xs truncate" style={{ color: "var(--cc-text-muted)" }}>{linkPreview.title}</p>
           }
           <button onClick={() => setLinkPreview(null)} className="ml-auto text-slate-500 hover:text-slate-300">
             <X size={12} />
@@ -204,7 +204,7 @@ export default function MediaInput({
         rows={rows}
         maxLength={maxLength}
         disabled={disabled}
-        className="w-full px-4 pt-3 pb-2 text-sm bg-transparent text-white placeholder:text-slate-500 focus:outline-none resize-none leading-relaxed"
+        className="w-full px-4 pt-3 pb-2 text-sm bg-transparent placeholder:text-slate-500 focus:outline-none resize-none leading-relaxed" style={{ color: "var(--cc-text)" }}
         onInput={(e) => {
           if (rows > 2) return
           const t = e.target as HTMLTextAreaElement
@@ -215,7 +215,7 @@ export default function MediaInput({
 
       {/* Picker emoji */}
       {showEmoji && (
-        <div className="border-t border-slate-700 p-3">
+        <div className="border-t border-white/10 p-3">
           {/* Onglets groupes */}
           <div className="flex gap-1 mb-2">
             {EMOJI_GROUPS.map((g, i) => (
@@ -237,7 +237,7 @@ export default function MediaInput({
       )}
 
       {/* Barre d'outils */}
-      <div className="flex items-center justify-between px-2 py-2 border-t border-slate-700 gap-2">
+      <div className="flex items-center justify-between px-2 py-2 border-t border-white/10 gap-2">
         <div className="flex items-center gap-1">
 
           {/* Upload image */}

@@ -65,20 +65,20 @@ export default async function ForumPage() {
     const profile = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles
     return (
       <Link href={`/communaute/forum/${post.id}`}
-        className="flex items-center gap-3 px-4 py-3.5 hover:bg-slate-800/60 transition-colors rounded-xl -mx-1">
+        className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 transition-colors rounded-xl -mx-1">
         <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${avatarColor(post.user_id)}`}>
           {getInitials(profile?.first_name ?? null, profile?.last_name ?? null)}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
             {post.is_pinned && <Pin size={11} className="text-amber-400 flex-shrink-0" />}
-            <p className="text-sm font-medium text-white truncate">{post.title}</p>
+            <p className="text-sm font-medium truncate" style={{ color: "var(--cc-text)" }}>{post.title}</p>
           </div>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>
             {formatName(profile?.first_name ?? null, profile?.last_name ?? null)} · {timeAgo(post.created_at)}
           </p>
         </div>
-        <div className="flex items-center gap-1 text-slate-500 flex-shrink-0">
+        <div className="flex items-center gap-1 flex-shrink-0" style={{ color: "var(--cc-text-disabled)" }}>
           <MessageSquare size={13} />
           <span className="text-xs">{post.reply_count ?? 0}</span>
         </div>
@@ -89,7 +89,7 @@ export default async function ForumPage() {
   return (
     <main className="max-w-5xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
-        <Link href="/communaute" className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors">
+        <Link href="/communaute" className="inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: "var(--cc-text-muted)" }}>
           <ArrowLeft size={15} />Communauté
         </Link>
         <Link href="/communaute/forum/new"
@@ -99,13 +99,13 @@ export default async function ForumPage() {
       </div>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-medium text-white mb-1">Forum</h1>
-        <p className="text-sm text-slate-400">{(posts ?? []).length} discussion{(posts ?? []).length > 1 ? 's' : ''}</p>
+        <h1 className="text-2xl font-medium mb-1" style={{ color: "var(--cc-text)" }}>Forum</h1>
+        <p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>{(posts ?? []).length} discussion{(posts ?? []).length > 1 ? 's' : ''}</p>
       </div>
 
       {(posts ?? []).length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-slate-500 text-sm mb-4">Aucune discussion pour l&apos;instant.</p>
+          <p className="text-sm mb-4" style={{ color: "var(--cc-text-disabled)" }}>Aucune discussion pour l&apos;instant.</p>
           <Link href="/communaute/forum/new"
             className="inline-flex items-center gap-2 bg-teal-600 text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-teal-700 transition-colors">
             <Plus size={15} />Lancer la première discussion
@@ -115,13 +115,13 @@ export default async function ForumPage() {
         <div className="space-y-0.5">
           {pinned.length > 0 && (
             <div className="mb-3">
-              <p className="text-xs text-slate-500 uppercase tracking-wider mb-2 px-1">Épinglés</p>
+              <p className="text-xs uppercase tracking-wider mb-2 px-1" style={{ color: "var(--cc-text-disabled)" }}>Épinglés</p>
               {pinned.map((post) => <PostRow key={post.id} post={post} />)}
             </div>
           )}
           {regular.length > 0 && (
             <div>
-              {pinned.length > 0 && <p className="text-xs text-slate-500 uppercase tracking-wider mb-2 px-1 mt-4">Discussions</p>}
+              {pinned.length > 0 && <p className="text-xs uppercase tracking-wider mb-2 px-1 mt-4" style={{ color: "var(--cc-text-disabled)" }}>Discussions</p>}
               {regular.map((post) => <PostRow key={post.id} post={post} />)}
             </div>
           )}

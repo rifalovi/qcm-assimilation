@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useUser, ROLE_LIMITS } from "../../app/components/UserContext";
+import { Lock } from "lucide-react";
+import { useUser } from "../../app/components/UserContext";
+import { getAccessQuota } from "../../src/lib/access";
 import Button from "../../components/Button";
 
 interface Props {
@@ -12,7 +14,7 @@ interface Props {
 export default function PremiumButton({ onClick, label }: Props) {
   const { role } = useUser();
   const router = useRouter();
-  const limits = ROLE_LIMITS[role];
+  const limits = getAccessQuota(role);
 
   if (limits.canExam) {
     return <Button onClick={onClick}>{label}</Button>;
@@ -20,14 +22,21 @@ export default function PremiumButton({ onClick, label }: Props) {
 
   return (
     <button
-      onClick={() => router.push("/account")}
-      className="rounded-2xl border border-amber-400/20 bg-amber-500/10 px-5 py-3 text-sm font-semibold text-amber-200 transition hover:bg-amber-500/20 cursor-pointer"
+      onClick={() => router.push("/pricing")}
+      className="flex items-center gap-2 rounded-2xl border px-5 py-3 text-sm font-semibold transition hover:opacity-90 cursor-pointer"
+      style={{
+        borderColor: "color-mix(in srgb, var(--cc-warning) 30%, transparent)",
+        background: "color-mix(in srgb, var(--cc-warning) 10%, var(--cc-surface))",
+        color: "var(--cc-warning)",
+      }}
     >
-      🔒 {label} — (Mode Premium)
-      <a href="/pricing" className="block text-center text-xs text-amber-400/70 hover:text-amber-300 transition mt-1">
-  Voir les tarifs →
-</a>
+      <Lock size={15} />
+      <span>
+        {label}
+        <span className="block text-center text-[11px] transition mt-0.5" style={{ color: "color-mix(in srgb, var(--cc-warning) 70%, transparent)" }}>
+          Voir les Pass →
+        </span>
+      </span>
     </button>
-    
   );
 }

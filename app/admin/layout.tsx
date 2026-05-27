@@ -36,7 +36,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const username = profile?.username ?? ''
 
   return (
-    <div className="min-h-screen flex bg-slate-950">
+    <div className="min-h-screen flex" style={{ background: "var(--cc-surface-alt)" }}>
       <AdminSidebar
         role={role}
         username={username}

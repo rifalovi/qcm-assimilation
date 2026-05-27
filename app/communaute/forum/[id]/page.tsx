@@ -67,16 +67,16 @@ function ReplyCard({ reply, currentUserId, supabase }: { reply: Reply; currentUs
   }
 
   return (
-    <div className="flex gap-3 py-4 border-b border-slate-700/50 last:border-0">
+    <div className="flex gap-3 py-4 border-b last:border-0" style={{ borderColor: "var(--cc-border)" }}>
       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${avatarColor(reply.user_id)}`}>
         {getInitials(reply.profiles)}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2 mb-1">
-          <span className="text-sm font-medium text-white">{formatName(reply.profiles)}</span>
-          <span className="text-xs text-slate-500">{timeAgo(reply.created_at)}</span>
+          <span className="text-sm font-medium" style={{ color: "var(--cc-text)" }}>{formatName(reply.profiles)}</span>
+          <span className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>{timeAgo(reply.created_at)}</span>
         </div>
-        <p className="text-sm text-slate-300 leading-relaxed mb-2">{renderTextWithLinks(reply.content)}</p>
+        <p className="text-sm leading-relaxed mb-2" style={{ color: "var(--cc-text-muted)" }}>{renderTextWithLinks(reply.content)}</p>
         <MediaDisplay attachments={(reply as Reply & { attachments?: string[] }).attachments ?? []} content={reply.content} />
         <div className="flex items-center justify-between">
           <div className="flex gap-1">
@@ -85,7 +85,8 @@ function ReplyCard({ reply, currentUserId, supabase }: { reply: Reply; currentUs
               const isActive = myReaction === emoji
               return (
                 <button key={emoji} onClick={() => handleReaction(emoji)}
-                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs transition-all ${isActive ? 'bg-teal-900/50 border border-teal-600 text-teal-300' : count > 0 ? 'bg-slate-700 border border-slate-600 text-slate-300 hover:bg-slate-600' : 'text-slate-600 hover:text-slate-400 hover:bg-slate-800'}`}>
+                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs transition-all ${isActive ? 'bg-teal-900/50 border border-teal-600 text-teal-300' : count > 0 ? 'border hover:bg-white/10' : 'hover:bg-white/5'}`}
+                  style={!isActive && count > 0 ? { borderColor: "var(--cc-border)", color: "var(--cc-text-muted)" } : !isActive ? { color: "var(--cc-text-disabled)" } : {}}>
                   <span style={{ fontSize: 13 }}>{emoji}</span>
                   {count > 0 && <span>{count}</span>}
                 </button>
@@ -94,7 +95,8 @@ function ReplyCard({ reply, currentUserId, supabase }: { reply: Reply; currentUs
           </div>
           <button onClick={async () => { if (reported) return; await supabase.from('reports').insert({ reporter_id: currentUserId, target_type: 'comment', target_id: reply.id }); setReported(true) }}
             disabled={reported || reply.user_id === currentUserId}
-            className={`p-1 rounded transition-colors ${reported ? 'text-red-400' : 'text-slate-600 hover:text-slate-400'} disabled:opacity-40`}>
+            className={`p-1 rounded transition-colors ${reported ? 'text-red-400' : ''} disabled:opacity-40`}
+            style={!reported ? { color: "var(--cc-text-disabled)" } : {}}>
             <Flag size={12} />
           </button>
         </div>
@@ -159,18 +161,18 @@ export default function ForumPostPage() {
     setSubmitting(false)
   }
 
-  if (loading) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Chargement…</p></main>
-  if (!post) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><p className="text-slate-400 text-sm">Discussion introuvable.</p></main>
+  if (loading) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</p></main>
+  if (!post) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Discussion introuvable.</p></main>
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <button onClick={() => router.push('/communaute/forum')}
-        className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors mb-6">
+        className="inline-flex items-center gap-1.5 text-sm transition-colors mb-6 hover:opacity-80" style={{ color: "var(--cc-text-muted)" }}>
         <ArrowLeft size={15} />Forum
       </button>
 
       {/* Post principal */}
-      <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 mb-6">
+      <div className="rounded-2xl border p-5 mb-6" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
         <div className="flex items-start gap-3 mb-4">
           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${avatarColor(post.user_id)}`}>
             {getInitials(post.profiles)}
@@ -178,17 +180,17 @@ export default function ForumPostPage() {
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               {post.is_pinned && <Pin size={12} className="text-amber-400" />}
-              <p className="text-sm font-medium text-white">{formatName(post.profiles)}</p>
-              <span className="text-xs text-slate-500">{timeAgo(post.created_at)}</span>
+              <p className="text-sm font-medium" style={{ color: "var(--cc-text)" }}>{formatName(post.profiles)}</p>
+              <span className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>{timeAgo(post.created_at)}</span>
             </div>
-            <h1 className="text-lg font-medium text-white mt-1">{post.title}</h1>
+            <h1 className="text-lg font-medium mt-1" style={{ color: "var(--cc-text)" }}>{post.title}</h1>
           </div>
         </div>
-        <p className="text-sm text-slate-300 leading-relaxed mb-4">{post.content}</p>
+        <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--cc-text-muted)" }}>{post.content}</p>
         {post.user_id !== currentUserId && (
           <button
             onClick={() => router.push(`/communaute/messages/${post.user_id}`)}
-            className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-teal-400 transition-colors">
+            className="inline-flex items-center gap-1.5 text-xs transition-colors hover:text-teal-400" style={{ color: "var(--cc-text-muted)" }}>
             <Mail size={13} />
             Contacter {formatName(post.profiles)}
           </button>
@@ -203,13 +205,13 @@ export default function ForumPostPage() {
 
       {/* Réponses */}
       <div className="mb-6">
-        <p className="text-xs text-slate-500 uppercase tracking-wider mb-3">
+        <p className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--cc-text-disabled)" }}>
           {replies.length} réponse{replies.length > 1 ? 's' : ''}
         </p>
         {replies.length === 0 ? (
-          <p className="text-sm text-slate-500 text-center py-6">Aucune réponse — soyez le premier !</p>
+          <p className="text-sm text-center py-6" style={{ color: "var(--cc-text-disabled)" }}>Aucune réponse — soyez le premier !</p>
         ) : (
-          <div className="bg-slate-800 border border-slate-700 rounded-2xl px-5">
+          <div className="rounded-2xl border px-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
             {replies.map((reply) => (
               <ReplyCard key={reply.id} reply={reply} currentUserId={currentUserId} supabase={supabase} />
             ))}

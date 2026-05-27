@@ -7,164 +7,158 @@ import { useUser } from "../../app/components/UserContext";
 import FeedbackModal from "../../app/components/FeedbackModal";
 
 const tabs = [
-  { href: "/", label: "Accueil", icon: "🏠" },
-  { href: null, label: "Préparation", icon: "📚" },
-  { href: null, label: "Audio", icon: "🎧" },
-  { href: null, label: "Communauté", icon: "👥" },
-  { href: null, label: "Info", icon: "ℹ️" },
+  { label: "Accueil",      href: "/" },
+  { label: "Préparation",  href: null },
+  { label: "Audio",        href: null },
+  { label: "Communauté",   href: null },
+  { label: "Info",         href: null },
 ];
+
+function NavIcon({ name }: { name: string }) {
+  if (name === "Accueil") return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  );
+  if (name === "Préparation") return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+    </svg>
+  );
+  if (name === "Audio") return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+    </svg>
+  );
+  if (name === "Communauté") return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+    </svg>
+  );
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+  );
+}
 
 export default function BottomNav() {
   const pathname = usePathname();
   const router = useRouter();
   const { role } = useUser();
-  const [showStatsMenu, setShowStatsMenu] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
-  const [showHomeMenu, setShowHomeMenu] = useState(false);
-  const [showAudioMenu, setShowAudioMenu] = useState(false);
-  const [showResultsMenu, setShowResultsMenu] = useState(false);
   const [showTrainMenu, setShowTrainMenu] = useState(false);
-  const [showInfoMenu, setShowInfoMenu] = useState(false);
+  const [showAudioMenu, setShowAudioMenu] = useState(false);
   const [showCommunityMenu, setShowCommunityMenu] = useState(false);
+  const [showInfoMenu, setShowInfoMenu] = useState(false);
 
-  if (pathname.startsWith('/admin')) return null
-  if (['/login', '/register', '/reset-password'].includes(pathname)) return null
-  if (pathname.match(/^\/communaute\/messages\/.+/)) return null
-  const isPremium = ['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '')
+  if (pathname.startsWith('/admin')) return null;
+  if (['/login', '/register', '/reset-password'].includes(pathname)) return null;
+  if (pathname.match(/^\/communaute\/messages\/.+/)) return null;
 
+  const isPremium = ['premium', 'elite', 'moderator', 'admin', 'super_admin'].includes(role ?? '');
 
+  function isTabActive(label: string) {
+    if (label === "Accueil") return pathname === "/";
+    if (label === "Préparation") return ["/quiz", "/scroll", "/exam", "/results"].some(p => pathname.startsWith(p));
+    if (label === "Audio") return pathname.startsWith("/audio");
+    if (label === "Communauté") return pathname.startsWith("/communaute");
+    if (label === "Info") return ["/leaderboard", "/resources", "/info", "/assistant"].some(p => pathname.startsWith(p));
+    return false;
+  }
+
+  function handleTabPress(label: string) {
+    if (label === "Accueil") router.push("/");
+    else if (label === "Préparation") setShowTrainMenu(true);
+    else if (label === "Audio") setShowAudioMenu(true);
+    else if (label === "Communauté") isPremium ? setShowCommunityMenu(true) : router.push('/pricing');
+    else if (label === "Info") setShowInfoMenu(true);
+  }
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-slate-900/95 backdrop-blur-xl md:hidden">
-        <div className="mx-auto flex max-w-lg relative">
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--cc-border)] bg-[var(--cc-surface)] md:hidden"
+        aria-label="Navigation principale mobile"
+      >
+        <div className="mx-auto flex max-w-lg">
           {tabs.map((tab) => {
-            const active = tab.href
-              ? pathname === tab.href
-              : tab.label === "Préparation"
-              ? pathname === "/quiz" || pathname === "/scroll" || pathname === "/audio"
-              : tab.label === "Communauté"
-              ? pathname.startsWith("/communaute")
-              : tab.label === "Info"
-              ? pathname === "/results" || pathname === "/leaderboard" || pathname === "/resources" || pathname === "/info"
-              : false;
-
-            if (tab.label === "Préparation") {
-              return (
-                <button key="train" onClick={() => setShowTrainMenu(true)}
-                  className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
-                  <span className="text-xl">{tab.icon}</span>
-                  <span className={active ? "font-semibold" : ""}>{tab.label}</span>
-                  {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
-                </button>
-              );
-            }
-
-            if (tab.label === "Communauté") {
-              return (
-                <button key="community" onClick={() => isPremium ? setShowCommunityMenu(true) : router.push('/pricing')}
-                  className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-teal-400" : "text-slate-400 hover:text-slate-200"}`}>
-                  <span className="text-xl">{tab.icon}</span>
-                  <span className={active ? "font-semibold" : ""}>{tab.label}</span>
-                  {!isPremium && <span className="absolute top-1.5 right-3 text-[8px] bg-amber-500 text-black px-1 rounded-full font-bold">PRO</span>}
-                  {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-teal-400" />}
-                </button>
-              );
-            }
-
-            if (tab.label === "Audio") {
-              return (
-                <button key="audio" onClick={() => setShowAudioMenu(true)}
-                  className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-emerald-400" : "text-slate-400 hover:text-slate-200"}`}>
-                  <span className="text-xl">{tab.icon}</span>
-                  <span className={active ? "font-semibold" : ""}>{tab.label}</span>
-                  {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-emerald-400" />}
-                </button>
-              );
-            }
-
-            if (tab.label === "Info") {
-              return (
-                <button key="info" onClick={() => setShowInfoMenu(true)}
-                  className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
-                  <span className="text-xl">{tab.icon}</span>
-                  <span className={active ? "font-semibold" : ""}>{tab.label}</span>
-                  {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
-                </button>
-              );
-            }
-
+            const active = isTabActive(tab.label);
             return (
-              <button key={tab.href} onClick={() => setShowHomeMenu(true)}
-                className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs transition relative ${active ? "text-blue-400" : "text-slate-400 hover:text-slate-200"}`}>
-                <span className="text-xl">{tab.icon}</span>
-                <span className={active ? "font-semibold" : ""}>{tab.label}</span>
-                {active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 rounded-full bg-blue-400" />}
+              <button
+                key={tab.label}
+                onClick={() => handleTabPress(tab.label)}
+                className={`relative flex flex-1 flex-col items-center gap-1 py-2 text-[10px] font-medium transition-colors ${
+                  active ? "text-[var(--cc-primary)]" : "text-[var(--cc-text-muted)] hover:text-[var(--cc-text)]"
+                }`}
+                aria-label={tab.label}
+                aria-current={active ? "page" : undefined}
+              >
+                <NavIcon name={tab.label} />
+                <span>{tab.label}</span>
+                {tab.label === "Communauté" && !isPremium && (
+                  <span className="absolute right-2 top-1.5 rounded bg-[var(--cc-primary)] px-1 py-0.5 text-[8px] font-bold text-white leading-none">
+                    PRO
+                  </span>
+                )}
+                {active && (
+                  <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[var(--cc-primary)]" />
+                )}
               </button>
             );
           })}
         </div>
       </nav>
 
-      {/* Popup Accueil */}
-      {showHomeMenu && (
-        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowHomeMenu(false)}>
-          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
+      {/* Popup Préparation */}
+      {showTrainMenu && (
+        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowTrainMenu(false)}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-[var(--cc-surface)] p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-white">🏠 Accueil</p>
-              <button onClick={() => setShowHomeMenu(false)} className="text-slate-400 hover:text-white">✕</button>
+              <p className="text-sm font-bold text-[var(--cc-text)]">Se préparer</p>
+              <button onClick={() => setShowTrainMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
             </div>
-            <div className="flex flex-col gap-3">
-              <button onClick={() => { router.push("/"); setShowHomeMenu(false); }}
-                className="flex items-center gap-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-blue-200">
-                <span className="text-xl">🏠</span>
-                <div className="text-left">
-                  <p className="font-semibold">Page d'accueil</p>
-                  <p className="text-xs text-slate-400">Retour au menu principal</p>
-                </div>
-              </button>
-              <button onClick={() => { setShowHomeMenu(false); setShowFeedback(true); }}
-                className="flex w-full items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-500 hover:text-slate-300">
-                <span className="text-xs">⭐</span>
-                <p className="text-xs">Noter l'application</p>
-              </button>
+            <div className="flex flex-col gap-2">
+              {[
+                { label: "Révision par fiches",   desc: "Flash-cards thématiques", href: "/scroll" },
+                { label: "Entraînement QCM",       desc: "Tests chronométrés",       href: "/quiz" },
+                { label: "Examen blanc",           desc: "Simulation officielle",    href: "/exam" },
+                { label: "Mes résultats",          desc: "Entraînement et examens",  href: "/results" },
+              ].map(({ label, desc, href }) => (
+                <button key={href} onClick={() => { router.push(href); setShowTrainMenu(false); }}
+                  className="flex items-start gap-3 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
+                  <div>
+                    <p className="text-sm font-bold text-[var(--cc-text)]">{label}</p>
+                    <p className="text-xs text-[var(--cc-text-muted)]">{desc}</p>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
         </div>
       )}
 
-      {/* Popup Préparation */}
-      {showTrainMenu && (
-        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowTrainMenu(false)}>
-          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
+      {/* Popup Audio */}
+      {showAudioMenu && (
+        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowAudioMenu(false)}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-[var(--cc-surface)] p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-white">Préparation</p>
-              <button onClick={() => setShowTrainMenu(false)} className="text-slate-400 hover:text-white">✕</button>
+              <p className="text-sm font-bold text-[var(--cc-text)]">Bibliothèque audio</p>
+              <button onClick={() => setShowAudioMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               {[
-                { icon: "📱", label: "Réviser les cartes", desc: "Flash-cards thématiques", href: "/scroll", color: "border-amber-400/20 bg-amber-500/10 text-amber-200" },
-                { icon: "🎯", label: "Passer un test", desc: "QCM chronométré", href: "/quiz", color: "border-blue-400/20 bg-blue-500/10 text-blue-200" },
-                { icon: "📝", label: "Examen blanc", desc: "Simulation officielle", href: "/exam", color: "border-violet-400/20 bg-violet-500/10 text-violet-200" },
-              ].map(({ icon, label, desc, href, color }) => (
-                <button key={href} onClick={() => { router.push(href); setShowTrainMenu(false); }}
-                  className={`flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 ${color}`}>
-                  <span className="text-xl">{icon}</span>
-                  <div className="text-left">
-                    <p className="font-semibold">{label}</p>
-                    <p className="text-xs text-slate-400">{desc}</p>
+                { label: "Quiz audio guidé",    desc: "Questions d'intégration en voix",   href: "/audio/Quiz%20Audio/quiz_audio" },
+                { label: "Séries thématiques",  desc: "100 épisodes, format entretien réel", href: "/audio" },
+              ].map(({ label, desc, href }) => (
+                <button key={href} onClick={() => { router.push(href); setShowAudioMenu(false); }}
+                  className="flex items-start gap-3 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
+                  <div>
+                    <p className="text-sm font-bold text-[var(--cc-text)]">{label}</p>
+                    <p className="text-xs text-[var(--cc-text-muted)]">{desc}</p>
                   </div>
                 </button>
               ))}
-              {/* Résultats avec sous-choix */}
-              <button onClick={() => { setShowTrainMenu(false); setShowResultsMenu(true); }}
-                className="flex items-center gap-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-blue-200">
-                <span className="text-xl">📈</span>
-                <div className="text-left">
-                  <p className="font-semibold">Mes résultats</p>
-                  <p className="text-xs text-slate-400">Entraînement ou Examen</p>
-                </div>
-              </button>
             </div>
           </div>
         </div>
@@ -173,25 +167,21 @@ export default function BottomNav() {
       {/* Popup Communauté */}
       {showCommunityMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowCommunityMenu(false)}>
-          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-[var(--cc-surface)] p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-white">Communauté</p>
-              <button onClick={() => setShowCommunityMenu(false)} className="text-slate-400 hover:text-white">✕</button>
+              <p className="text-sm font-bold text-[var(--cc-text)]">Espace communauté</p>
+              <button onClick={() => setShowCommunityMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               {[
-                { icon: "🏠", label: "Espace communauté", desc: "Hub & statistiques", href: "/communaute", color: "border-teal-400/20 bg-teal-500/10 text-teal-200" },
-                { icon: "💬", label: "Retours d'expériences", desc: "Témoignages de candidats", href: "/communaute/temoignages", color: "border-teal-400/20 bg-teal-500/10 text-teal-200" },
-                { icon: "🗣️", label: "Forum", desc: "Questions & conseils", href: "/communaute/forum", color: "border-orange-400/20 bg-orange-500/10 text-orange-200" },
-                { icon: "✉️", label: "Messages privés", desc: "Échangez en privé", href: "/communaute/messages", color: "border-blue-400/20 bg-blue-500/10 text-blue-200" },
-              ].map(({ icon, label, desc, href, color }) => (
+                { label: "Hub communauté",       href: "/communaute" },
+                { label: "Témoignages",          href: "/communaute/temoignages" },
+                { label: "Forum",                href: "/communaute/forum" },
+                { label: "Messages privés",      href: "/communaute/messages" },
+              ].map(({ label, href }) => (
                 <button key={href} onClick={() => { router.push(href); setShowCommunityMenu(false); }}
-                  className={`flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 ${color}`}>
-                  <span className="text-xl">{icon}</span>
-                  <div className="text-left">
-                    <p className="font-semibold">{label}</p>
-                    <p className="text-xs text-slate-400">{desc}</p>
-                  </div>
+                  className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left text-sm font-bold text-[var(--cc-text)] hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
+                  {label}
                 </button>
               ))}
             </div>
@@ -202,86 +192,31 @@ export default function BottomNav() {
       {/* Popup Info */}
       {showInfoMenu && (
         <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowInfoMenu(false)}>
-          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full rounded-t border-t border-[var(--cc-border)] bg-[var(--cc-surface)] p-5 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-white">Point info</p>
-              <button onClick={() => setShowInfoMenu(false)} className="text-slate-400 hover:text-white">✕</button>
+              <p className="text-sm font-bold text-[var(--cc-text)]">Informations</p>
+              <button onClick={() => setShowInfoMenu(false)} className="text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] text-lg leading-none" aria-label="Fermer">×</button>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               {[
-                { icon: "🤖", label: "Assistant IA", desc: "Aide aux démarches", href: "/assistant", color: "border-violet-400/20 bg-violet-500/10 text-violet-200" },
-                { icon: "🏛️", label: "Ressources", desc: "Documents officiels", href: "/resources", color: "border-blue-400/20 bg-blue-500/10 text-blue-200" },
-                { icon: "📖", label: "À propos du QCM", desc: "Comprendre l'examen", href: "/info", color: "border-violet-400/20 bg-violet-500/10 text-violet-200" },
-                { icon: "👑", label: "Tarifs & Abonnements", desc: "Voir les plans", href: "/pricing", color: "border-amber-400/20 bg-amber-500/10 text-amber-200" },
-              ].map(({ icon, label, desc, href, color }) => (
+                { label: "Assistant IA démarches", desc: "Questions sur la naturalisation", href: "/assistant" },
+                { label: "Ressources officielles", desc: "Documents et liens utiles",       href: "/resources" },
+                { label: "À propos de l'examen",   desc: "Comprendre l'entretien civique", href: "/info" },
+                { label: "Abonnements",             desc: "Plans et tarifs",                href: "/pricing" },
+              ].map(({ label, desc, href }) => (
                 <button key={href} onClick={() => { router.push(href); setShowInfoMenu(false); }}
-                  className={`flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 ${color}`}>
-                  <span className="text-xl">{icon}</span>
-                  <div className="text-left">
-                    <p className="font-semibold">{label}</p>
-                    <p className="text-xs text-slate-400">{desc}</p>
+                  className="flex items-start gap-3 rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors">
+                  <div>
+                    <p className="text-sm font-bold text-[var(--cc-text)]">{label}</p>
+                    <p className="text-xs text-[var(--cc-text-muted)]">{desc}</p>
                   </div>
                 </button>
               ))}
-
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Popup Audio */}
-      {showAudioMenu && (
-        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowAudioMenu(false)}>
-          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-white">🎧 Audio</p>
-              <button onClick={() => setShowAudioMenu(false)} className="text-slate-400 hover:text-white">✕</button>
-            </div>
-            <div className="flex flex-col gap-3">
-              <button onClick={() => { router.push("/audio/Quiz%20Audio/quiz_audio"); setShowAudioMenu(false); }}
-                className="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-amber-200">
-                <span className="text-xl">🎯</span>
-                <div className="text-left">
-                  <p className="font-semibold">Quiz Audio</p>
-                  <p className="text-xs text-slate-400">Questions d'intégration guidées</p>
-                </div>
-              </button>
-              <button onClick={() => { router.push("/audio"); setShowAudioMenu(false); }}
-                className="flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-emerald-200">
-                <span className="text-xl">🎧</span>
-                <div className="text-left">
-                  <p className="font-semibold">Séries thématiques</p>
-                  <p className="text-xs text-slate-400">100 épisodes guidés</p>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Popup Résultats */}
-      {showResultsMenu && (
-        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setShowResultsMenu(false)}>
-          <div className="w-full rounded-t-[2rem] border border-white/10 bg-slate-900/98 p-5 pb-8 backdrop-blur-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-white">📈 Mes résultats</p>
-              <button onClick={() => setShowResultsMenu(false)} className="text-slate-400 hover:text-white">✕</button>
-            </div>
-            <div className="flex flex-col gap-3">
-              <button onClick={() => { router.push("/results?mode=train"); setShowResultsMenu(false); }}
-                className="flex items-center gap-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-blue-200">
-                <span className="text-xl">🎯</span>
-                <div className="text-left">
-                  <p className="font-semibold">Résultats entraînement</p>
-                  <p className="text-xs text-slate-400">Tests et QCM</p>
-                </div>
-              </button>
-              <button onClick={() => { router.push("/results?mode=exam"); setShowResultsMenu(false); }}
-                className="flex items-center gap-3 rounded-2xl border border-violet-400/20 bg-violet-500/10 px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 text-violet-200">
-                <span className="text-xl">📝</span>
-                <div className="text-left">
-                  <p className="font-semibold">Résultats examen</p>
-                  <p className="text-xs text-slate-400">Examens blancs</p>
-                </div>
+              <button
+                onClick={() => { setShowInfoMenu(false); setShowFeedback(true); }}
+                className="rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3 text-left text-sm text-[var(--cc-text-muted)] hover:border-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)] transition-colors"
+              >
+                Évaluer le service
               </button>
             </div>
           </div>
