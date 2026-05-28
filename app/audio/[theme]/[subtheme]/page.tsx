@@ -724,13 +724,8 @@ export default function AudioSeriesPage() {
     setIsSelectionMode(false);
   }, [selectedEpisodes]);
 
-  const handleUpgrade = async () => {
-    try {
-      const res = await fetch("/api/create-checkout", { method: "POST" });
-      const { url, error } = await res.json();
-      if (error) { router.push("/pricing"); return; }
-      window.location.href = url;
-    } catch { router.push("/pricing"); }
+  const handleUpgrade = () => {
+    router.push("/pricing");
   };
 
   // Metadata visuelle : priorité Supabase, fallback THEME_META

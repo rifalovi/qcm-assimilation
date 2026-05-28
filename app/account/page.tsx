@@ -136,17 +136,21 @@ export default function AccountPage() {
   }
 
   async function handleUpgrade() {
-    const res = await fetch("/api/create-checkout", { method: "POST" });
+    const res = await fetch("/api/stripe/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "express" }),
+    });
     const { url, error } = await res.json();
     if (error) return;
     window.location.href = url;
   }
 
   async function handleUpgradeElite() {
-    const res = await fetch("/api/create-checkout", {
+    const res = await fetch("/api/stripe/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan: "elite" }),
+      body: JSON.stringify({ type: "serenite" }),
     });
     const { url, error } = await res.json();
     if (error) return;
