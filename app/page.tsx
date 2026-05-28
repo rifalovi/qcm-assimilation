@@ -465,23 +465,6 @@ async function clearPseudo() {
               </Alert>
             )}
 
-            {/* Streak de révision */}
-            {isAuthenticated && streak > 0 && (
-              <div className="mb-6">
-                <Alert variant="success" noIcon>
-                  <span className="font-semibold">{streak} jour{streak > 1 ? "s" : ""} de révision consécutif{streak > 1 ? "s" : ""}</span>{" "}
-                  — Continuez aujourd'hui pour maintenir votre rythme.
-                </Alert>
-                <ProgressBar value={Math.min(streak, 7)} total={7} variant="success" size="sm"
-                  label={`Série en cours · ${streak}/7 jours`} showLabel className="mt-2" />
-              </div>
-            )}
-
-            {isAuthenticated && streak === 0 && (
-              <Alert variant="info" className="mb-6" noIcon>
-                Commencez un exercice aujourd'hui pour démarrer votre série de révisions.
-              </Alert>
-            )}
 
             {/* Badge + Titre */}
             <div className="mb-2 flex justify-center">
