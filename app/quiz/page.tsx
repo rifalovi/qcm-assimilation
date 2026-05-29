@@ -777,9 +777,7 @@ function selectAnswer(choice: ChoiceKey) {
           {role === "anonymous" ? <Sparkles size={40} /> : <GraduationCap size={40} />}
         </div>
         <h2 className="text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>
-          {role === "anonymous"
-            ? "Crée un compte gratuit !"
-            : "Continue ta préparation !"}
+          Débloque l&apos;accès complet
         </h2>
         <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>
           {role === "anonymous"
