@@ -359,7 +359,7 @@ async function clearPseudo() {
           <div className="px-5 py-7 sm:px-8 sm:py-9">
 
             {/* Nav du hero */}
-            <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+            <div className="mb-8 flex items-center justify-between gap-2">
               <div className="flex items-center gap-3">
                 <span className="flex h-6 w-9 overflow-hidden rounded-sm border border-[var(--cc-border)]" aria-hidden="true">
                   <span className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
@@ -395,7 +395,7 @@ async function clearPseudo() {
                   {homeMenuOpen && (
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setHomeMenuOpen(false)} />
-                      <div className="absolute right-0 top-full z-50 mt-1 w-64 rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md">
+                      <div className="absolute left-0 sm:left-auto sm:right-0 top-full z-50 mt-1 w-72 max-w-[calc(100vw-1rem)] rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md">
                         <div className="border-b border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
                           <p className="text-sm font-bold text-[var(--cc-text)]">{displayName}</p>
                           {role && role !== "anonymous" && (

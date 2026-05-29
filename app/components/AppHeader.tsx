@@ -123,7 +123,7 @@ export default function AppHeader() {
 
                 {open && (
                   <div
-                    className="absolute right-0 top-full mt-1 w-56 sm:w-72 overflow-hidden rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md"
+                    className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1 w-72 max-w-[calc(100vw-1rem)] overflow-hidden rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md"
                     role="menu"
                     aria-label="Menu utilisateur"
                   >
