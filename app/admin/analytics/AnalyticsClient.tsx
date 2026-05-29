@@ -274,11 +274,11 @@ export default function AnalyticsClient() {
                     <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickMargin={6} />
                     <YAxis stroke="#64748b" fontSize={11} allowDecimals={false} />
                     <Tooltip
-                      contentStyle={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 12, fontSize: 12 }}
-                      labelStyle={{ color: '#cbd5e1' }}
-                      itemStyle={{ color: '#5eead4' }}
+                      contentStyle={{ background: 'var(--cc-surface)', border: '1px solid var(--cc-border)', borderRadius: 12, fontSize: 12, color: 'var(--cc-text)' }}
+                      labelStyle={{ color: 'var(--cc-text-muted)' }}
+                      itemStyle={{ color: 'var(--cc-primary)' }}
                     />
-                    <Line type="monotone" dataKey="count" stroke="#14b8a6" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                    <Line type="monotone" dataKey="count" stroke="var(--cc-primary)" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 5 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -340,11 +340,11 @@ export default function AnalyticsClient() {
                     <XAxis dataKey="label" stroke="#64748b" fontSize={11} tickMargin={6} />
                     <YAxis stroke="#64748b" fontSize={11} allowDecimals={false} />
                     <Tooltip
-                      contentStyle={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 12, fontSize: 12 }}
-                      labelStyle={{ color: '#cbd5e1' }}
-                      itemStyle={{ color: '#a78bfa' }}
+                      contentStyle={{ background: 'var(--cc-surface)', border: '1px solid var(--cc-border)', borderRadius: 12, fontSize: 12, color: 'var(--cc-text)' }}
+                      labelStyle={{ color: 'var(--cc-text-muted)' }}
+                      itemStyle={{ color: 'var(--cc-primary)' }}
                     />
-                    <Bar dataKey="count" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="count" fill="var(--cc-primary)" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

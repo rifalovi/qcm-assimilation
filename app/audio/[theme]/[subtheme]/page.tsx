@@ -22,13 +22,15 @@ const SUBTHEME_IMAGES: Record<string, string> = {
 
 const FREE_EPISODE_NUMBERS = new Set([1, 2]);
 
+// Tokens harmonisés : on garde les noms pour compatibilité mais on cible les variables CSS.
+// `accentText` et `border` sont des classes vides — on style via inline style basé sur tokens.
 const THEME_META: Record<AudioThemeKey, { icon: string; accent: string; accentText: string; border: string; glow: string }> = {
-  Valeurs:      { icon: "🇫🇷", accent: "from-blue-500/20 via-indigo-500/10 to-sky-500/20",       accentText: "text-blue-300",    border: "border-blue-400/30",    glow: "rgba(37,99,235,0.3)"   },
-  Institutions: { icon: "🏛️", accent: "from-violet-500/20 via-purple-500/10 to-fuchsia-500/20", accentText: "text-violet-300",  border: "border-violet-400/30",  glow: "rgba(139,92,246,0.3)"  },
-  Histoire:     { icon: "📜", accent: "from-amber-500/20 via-orange-500/10 to-yellow-500/20",    accentText: "text-amber-300",   border: "border-amber-400/30",   glow: "rgba(245,158,11,0.3)"  },
-  Société:      { icon: "👥", accent: "from-emerald-500/20 via-green-500/10 to-teal-500/20",     accentText: "text-emerald-300", border: "border-emerald-400/30", glow: "rgba(16,185,129,0.3)"  },
-  "Devenir français(e)": { icon: "🎖️", accent: "from-rose-500/20 via-red-500/10 to-pink-500/20", accentText: "text-rose-300",    border: "border-rose-400/30",    glow: "rgba(244,63,94,0.3)"   },
-  "Quiz Audio":          { icon: "🎯", accent: "from-teal-500/20 via-cyan-500/10 to-emerald-500/20", accentText: "text-teal-300", border: "border-teal-400/30",    glow: "rgba(20,184,166,0.3)"  },
+  Valeurs:      { icon: "🇫🇷", accent: "",  accentText: "", border: "", glow: "rgba(37,99,235,0.3)"   },
+  Institutions: { icon: "🏛️", accent: "",  accentText: "", border: "", glow: "rgba(139,92,246,0.3)"  },
+  Histoire:     { icon: "📜", accent: "",  accentText: "", border: "", glow: "rgba(245,158,11,0.3)"  },
+  Société:      { icon: "👥", accent: "",  accentText: "", border: "", glow: "rgba(16,185,129,0.3)"  },
+  "Devenir français(e)": { icon: "🎖️", accent: "", accentText: "", border: "", glow: "rgba(244,63,94,0.3)"   },
+  "Quiz Audio":          { icon: "🎯", accent: "", accentText: "", border: "", glow: "rgba(20,184,166,0.3)"  },
 };
 
 function fmt(s: number) {
@@ -437,7 +439,14 @@ function StickyPlayer({
   const isLoading = !loaded && !fetchError;
 
   return (
-    <div className={`sticky top-14 z-40 rounded-[1.5rem] border ${meta.border} bg-gradient-to-r ${meta.accent} backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]`}>
+    <div
+      className="sticky top-14 z-40 rounded-[1.5rem] border backdrop-blur-xl"
+      style={{
+        borderColor: "var(--cc-border)",
+        background: "var(--cc-surface-raised)",
+        boxShadow: "var(--cc-shadow-lg)",
+      }}
+    >
       {/* Ligne 1 : pochette + info + play */}
       <div className="flex items-center gap-3 px-4 pt-3">
         {subthemeImage ? (
@@ -449,7 +458,10 @@ function StickyPlayer({
         )}
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <p className={`text-[10px] font-bold uppercase tracking-widest ${meta.accentText}`}>
+            <p
+              className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest"
+              style={{ background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }}
+            >
               Épisode {episode.episodeNumber}/{episodes.length}
               {repeatMode === "one" && <span className="ml-1 opacity-70">· 🔂</span>}
               {repeatMode === "queue" && selectedEpisodes.size > 0 && <span className="ml-1 opacity-70">· {selectedEpisodes.size} sélect.</span>}
@@ -473,12 +485,13 @@ function StickyPlayer({
         <button
           onClick={togglePlay}
           disabled={isLoading || fetchError}
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border text-white shadow-lg transition active:scale-95 disabled:opacity-40 ${meta.border} bg-gradient-to-br from-white/20 to-white/5`}
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl transition active:scale-95 disabled:opacity-40"
+          style={{ background: "var(--cc-primary)", color: "#FFFFFF", boxShadow: "var(--cc-shadow)" }}
         >
           {fetchError
             ? <span className="text-xs">⚠️</span>
             : isLoading
-            ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+            ? <div className="h-4 w-4 animate-spin rounded-full" style={{ border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#FFFFFF" }} />
             : playing
             ? <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
             : <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
@@ -489,29 +502,37 @@ function StickyPlayer({
       {/* Ligne 2 : contrôles secondaires */}
       <div className="flex items-center justify-between gap-1 px-4 py-2">
         <button onClick={onPrev} disabled={currentIdx === 0}
-          className="flex h-8 w-8 items-center justify-center rounded-xl border transition hover:bg-white/10 disabled:opacity-30" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
+          className="flex h-8 w-8 items-center justify-center rounded-xl transition hover:opacity-80 disabled:opacity-30"
+          style={{ background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
         </button>
         <button onClick={() => skip(-10)} disabled={!loaded}
-          className="flex h-8 w-8 items-center justify-center rounded-xl border text-[10px] font-bold transition hover:bg-white/10 disabled:opacity-30" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
+          className="flex h-8 w-8 items-center justify-center rounded-xl text-[10px] font-bold transition hover:opacity-80 disabled:opacity-30"
+          style={{ background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }}>
           −10
         </button>
         <button onClick={() => skip(10)} disabled={!loaded}
-          className="flex h-8 w-8 items-center justify-center rounded-xl border text-[10px] font-bold transition hover:bg-white/10 disabled:opacity-30" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
+          className="flex h-8 w-8 items-center justify-center rounded-xl text-[10px] font-bold transition hover:opacity-80 disabled:opacity-30"
+          style={{ background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }}>
           +10
         </button>
         <button onClick={() => { setAutoPlayImmediate(true); onNext(); }} disabled={currentIdx === episodes.length - 1}
-          className="flex h-8 w-8 items-center justify-center rounded-xl border transition hover:bg-white/10 disabled:opacity-30" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
+          className="flex h-8 w-8 items-center justify-center rounded-xl transition hover:opacity-80 disabled:opacity-30"
+          style={{ background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 4V8l-5.5 4zM16 6h2v12h-2z"/></svg>
         </button>
         <button onClick={() => setAutoPlayImmediate(!autoPlay)}
-          className={`flex h-8 items-center gap-1 rounded-xl border px-2 text-[10px] font-bold transition ${autoPlay ? `${meta.border} ${meta.accentText} bg-white/10` : "border"}`}
-          style={!autoPlay ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-disabled)" } : {}}>
+          className="flex h-8 items-center gap-1 rounded-xl border px-2 text-[10px] font-bold transition hover:opacity-90"
+          style={autoPlay
+            ? { borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }
+            : { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
           AUTO
         </button>
         <button onClick={cycleRepeat}
-          className={`flex h-8 w-8 items-center justify-center rounded-xl border transition ${repeatMode !== "none" ? `${meta.border} ${meta.accentText} bg-white/10` : "border"}`}
-          style={repeatMode === "none" ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-disabled)" } : {}}
+          className="flex h-8 w-8 items-center justify-center rounded-xl border transition hover:opacity-90"
+          style={repeatMode !== "none"
+            ? { borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }
+            : { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
           title={repeatMode === "none" ? "Pas de répétition" : repeatMode === "one" ? "Répéter cet épisode" : "Boucler la sélection"}>
           {repeatMode === "one" ? (
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -543,9 +564,10 @@ function StickyPlayer({
             setProgress(Number(e.target.value));
           }}
           disabled={!loaded}
-          className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/10 accent-white disabled:opacity-30"
+          className="h-1 w-full cursor-pointer appearance-none rounded-full disabled:opacity-30"
+          style={{ background: "var(--cc-border)", accentColor: "var(--cc-primary)" }}
         />
-        <div className="mt-1 flex justify-between text-[10px]" style={{ color: "var(--cc-text-disabled)" }}>
+        <div className="mt-1 flex justify-between text-[10px]" style={{ color: "var(--cc-text)" }}>
           <span>{fmt(currentTime)}</span>
           <span>{fmt(duration)}</span>
         </div>
@@ -575,7 +597,8 @@ function StickyPlayer({
             setVolume(val);
             localStorage.setItem("audio_volume", String(val));
           }}
-          className="flex-1 h-1 cursor-pointer appearance-none rounded-full bg-white/10 accent-white"
+          className="flex-1 h-1 cursor-pointer appearance-none rounded-full"
+          style={{ background: "var(--cc-border)", accentColor: "var(--cc-primary)" }}
         />
       </div>
     </div>
@@ -728,13 +751,15 @@ export default function AudioSeriesPage() {
     router.push("/pricing");
   };
 
-  // Metadata visuelle : priorité Supabase, fallback THEME_META
+  // Metadata visuelle : priorité Supabase pour l'icône, mais TOUTES les classes
+  // de couleur (accent gradient/text/border) sont neutralisées au profit des tokens
+  // du design system pour garantir lisibilité jour/nuit + WCAG AA.
   const baseMeta = THEME_META[themeKey] ?? THEME_META.Valeurs;
   const meta = useMemo(() => ({
-    icon:        seriesRow?.icon             ?? baseMeta.icon,
-    accent:      seriesRow?.accent_gradient  ?? baseMeta.accent,
-    accentText:  seriesRow?.accent_text      ?? baseMeta.accentText,
-    border:      seriesRow?.accent_border    ?? baseMeta.border,
+    icon:        seriesRow?.icon ?? baseMeta.icon,
+    accent:      "",
+    accentText:  "",
+    border:      "",
     glow:        baseMeta.glow,
   }), [seriesRow, baseMeta]);
 
@@ -759,7 +784,7 @@ export default function AudioSeriesPage() {
     return (
       <main className="mx-auto max-w-3xl px-4 py-12 text-center">
         <p style={{ color: "var(--cc-text-muted)" }}>Série introuvable.</p>
-        <Link href="/audio" className="mt-6 inline-flex rounded-2xl border px-4 py-3 text-sm font-semibold transition hover:bg-white/10" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text)" }}>← Retour</Link>
+        <Link href="/audio" className="mt-6 inline-flex rounded-2xl border px-4 py-3 text-sm font-semibold transition hover:opacity-90" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text)" }}>← Retour</Link>
       </main>
     );
   }
@@ -771,7 +796,7 @@ export default function AudioSeriesPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6 sm:py-6">
       <div className="fixed top-16 left-3 z-50">
-        <Link href="/audio" className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold shadow-lg backdrop-blur-md transition hover:bg-white/10" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
+        <Link href="/audio" className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold shadow-lg backdrop-blur-md transition hover:opacity-90" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text)" }}>
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           Séries
         </Link>
@@ -779,17 +804,20 @@ export default function AudioSeriesPage() {
       <div className="space-y-4">
 
         {/* ── HEADER ── */}
-        <div className={`relative overflow-hidden rounded-[1.8rem] border ${meta.border} shadow-[0_20px_50px_rgba(2,8,23,0.4)]`}>
+        {/* Quand il y a une image de fond, on garde l'overlay sombre intentionnel (Netflix style)
+            et le texte au-dessus DOIT être blanc. Quand il n'y a pas d'image, on est sur surface
+            claire et on utilise les tokens normaux. */}
+        <div className="relative overflow-hidden rounded-[1.8rem] border" style={{ borderColor: "var(--cc-border)", background: subthemeImage ? undefined : "var(--cc-surface-raised)", boxShadow: "var(--cc-shadow-lg)" }}>
           {subthemeImage && (
             <div className="absolute inset-0">
-              <Image src={subthemeImage} alt={subthemeLabel} fill className="object-cover opacity-20" unoptimized={subthemeImage.startsWith("http")} />
-              <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/80 to-slate-900/95" />
+              <Image src={subthemeImage} alt={subthemeLabel} fill className="object-cover" unoptimized={subthemeImage.startsWith("http")} />
+              {/* Overlay sombre intentionnel pour lisibilité du texte blanc */}
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.75), rgba(0,0,0,0.9))" }} />
             </div>
           )}
-          {!subthemeImage && <div className={`absolute inset-0 bg-gradient-to-br ${meta.accent}`} />}
 
           <div className="relative px-5 py-5 sm:px-6">
-            <div className="mb-4 flex items-center gap-2 text-xs" style={{ color: "var(--cc-text-muted)" }}>
+            <div className="mb-4 flex items-center gap-2 text-xs" style={{ color: subthemeImage ? "rgba(255,255,255,0.85)" : "var(--cc-text-muted)" }}>
               <button onClick={() => router.back()} className="inline-flex items-center gap-1 transition hover:opacity-80">
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 Retour
@@ -797,23 +825,29 @@ export default function AudioSeriesPage() {
               <span>/</span>
               <Link href="/audio" className="transition hover:opacity-80">Séries</Link>
               <span>/</span>
-              <span className={meta.accentText}>{themeLabel}</span>
+              <span style={{ color: subthemeImage ? "#FFFFFF" : "var(--cc-primary)", fontWeight: 600 }}>{themeLabel}</span>
             </div>
 
             <div className="flex items-center gap-4">
               {subthemeImage ? (
-                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border shadow-[0_8px_24px_rgba(0,0,0,0.4)]" style={{ borderColor: "var(--cc-border)" }}>
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border shadow-[0_8px_24px_rgba(0,0,0,0.4)]" style={{ borderColor: "rgba(255,255,255,0.2)" }}>
                   <Image src={subthemeImage} alt={subthemeLabel} fill className="object-cover" unoptimized={subthemeImage.startsWith("http")} />
                 </div>
               ) : (
                 <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border text-4xl" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>{meta.icon}</div>
               )}
               <div className="min-w-0 flex-1">
-                <p className={`text-xs font-bold uppercase tracking-widest ${meta.accentText}`}>{themeLabel}</p>
-                <h1 className="mt-1 text-xl font-extrabold leading-tight sm:text-2xl" style={{ color: "var(--cc-text)" }}>{subthemeLabel}</h1>
+                <p className="text-xs font-bold uppercase tracking-widest" style={{ color: subthemeImage ? "rgba(255,255,255,0.85)" : "var(--cc-primary)" }}>{themeLabel}</p>
+                {/* Titre : couleur PLEINE (jamais bg-clip-text/text-transparent qui rendait
+                    le titre creux ou barré en mode jour). */}
+                <h1 className="mt-1 text-xl font-extrabold leading-tight sm:text-2xl" style={{ color: subthemeImage ? "#FFFFFF" : "var(--cc-text)" }}>{subthemeLabel}</h1>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <span className="rounded-full border px-2.5 py-0.5 text-xs font-medium" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>{episodes.length} épisodes</span>
-                  <span className="rounded-full border px-2.5 py-0.5 text-xs font-medium" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>~{totalMinutes} min</span>
+                  <span className="rounded-full border px-2.5 py-0.5 text-xs font-medium" style={subthemeImage
+                    ? { borderColor: "rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.15)", color: "#FFFFFF" }
+                    : { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>{episodes.length} épisodes</span>
+                  <span className="rounded-full border px-2.5 py-0.5 text-xs font-medium" style={subthemeImage
+                    ? { borderColor: "rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.15)", color: "#FFFFFF" }
+                    : { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>~{totalMinutes} min</span>
                 </div>
               </div>
             </div>
@@ -821,35 +855,36 @@ export default function AudioSeriesPage() {
             {isPremium && (
               <div className="mt-4 flex gap-2">
                 <button onClick={playAll}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border py-2.5 text-sm font-bold transition hover:brightness-110 active:scale-95 ${
-                    autoPlay && !playQueue
-                      ? "border-blue-400/50 bg-blue-500/20 text-blue-700 shadow-[0_0_16px_rgba(37,99,235,0.3)]"
-                      : `${meta.border} bg-white/10 text-white`
-                  }`}>
+                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl py-2.5 text-sm font-bold transition hover:opacity-90 active:scale-95"
+                  style={autoPlay && !playQueue
+                    ? { background: "var(--cc-primary)", color: "#FFFFFF", boxShadow: "var(--cc-shadow)" }
+                    : { background: "var(--cc-primary)", color: "#FFFFFF" }}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
                   {autoPlay && !playQueue ? "▶ En lecture..." : "Tout écouter"}
                 </button>
                 <button
                   onClick={() => { setIsSelectionMode(v => !v); if (isSelectionMode) setSelectedEpisodes(new Set()); }}
-                  className={`inline-flex items-center justify-center gap-1.5 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition ${
-                    isSelectionMode ? `${meta.border} ${meta.accentText} bg-white/10` : "hover:bg-white/10"
-                  }`}
-                  style={!isSelectionMode ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" } : {}}>
+                  className="inline-flex items-center justify-center gap-1.5 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition hover:opacity-90"
+                  style={isSelectionMode
+                    ? { borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }
+                    : { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="18" height="18" rx="3"/><path d="m9 12 2 2 4-4"/>
                   </svg>
-                  <span style={!isSelectionMode ? { color: "var(--cc-text-muted)" } : {}}>{isSelectionMode ? "Annuler" : "Sélectionner"}</span>
+                  <span>{isSelectionMode ? "Annuler" : "Sélectionner"}</span>
                 </button>
               </div>
             )}
 
             {isSelectionMode && selectedEpisodes.size > 0 && (
-              <div className={`mt-3 flex items-center justify-between rounded-2xl border ${meta.border} px-4 py-2.5`} style={{ background: "var(--cc-surface-alt)" }}>
-                <span className={`text-sm font-semibold ${meta.accentText}`}>
+              <div className="mt-3 flex items-center justify-between rounded-2xl border px-4 py-2.5"
+                style={{ borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)" }}>
+                <span className="text-sm font-semibold" style={{ color: "var(--cc-primary)" }}>
                   {selectedEpisodes.size} épisode{selectedEpisodes.size > 1 ? "s" : ""} sélectionné{selectedEpisodes.size > 1 ? "s" : ""}
                 </span>
                 <button onClick={playSelection}
-                  className={`inline-flex items-center gap-1.5 rounded-xl border ${meta.border} bg-white/10 px-3 py-1.5 text-xs font-bold transition hover:bg-white/20`} style={{ color: "var(--cc-text)" }}>
+                  className="inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition hover:opacity-90"
+                  style={{ background: "var(--cc-primary)", color: "#FFFFFF" }}>
                   <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
                   Écouter la sélection
                 </button>
@@ -882,11 +917,11 @@ export default function AudioSeriesPage() {
 
         {/* ── LOCK PREMIUM ── */}
         {!isPremium && !isFreemium && (
-          <div className="rounded-[1.5rem] border border-amber-400/20 bg-gradient-to-br from-amber-500/10 to-orange-500/10 p-5 text-center">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-2xl">👑</div>
+          <div className="rounded-[1.5rem] border p-5 text-center" style={{ borderColor: "var(--cc-warning)", background: "var(--cc-warning-soft)" }}>
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border text-2xl" style={{ borderColor: "var(--cc-warning)", background: "var(--cc-surface-raised)", color: "var(--cc-warning)" }}>👑</div>
             <h3 className="text-lg font-extrabold" style={{ color: "var(--cc-text)" }}>Contenu Premium</h3>
             <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--cc-text-muted)" }}>Débloquez cette série pour écouter les {episodes.length} épisodes.</p>
-            <button onClick={handleUpgrade} className="mt-4 inline-flex items-center justify-center rounded-2xl border border-amber-400/20 bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:brightness-105">
+            <button onClick={handleUpgrade} className="mt-4 inline-flex items-center justify-center rounded-2xl px-5 py-2.5 text-sm font-bold transition hover:opacity-90" style={{ background: "var(--cc-warning)", color: "#FFFFFF" }}>
               Passer en Premium
             </button>
           </div>
@@ -894,10 +929,10 @@ export default function AudioSeriesPage() {
 
         {/* ── BANNIÈRE FREEMIUM ── */}
         {isFreemium && (
-          <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-3">
+          <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-warning)", background: "var(--cc-warning-soft)" }}>
             <div className="flex items-center justify-between gap-3">
               <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>✨ <span className="font-semibold" style={{ color: "var(--cc-text)" }}>Freemium</span> — 2 épisodes gratuits par thème. Débloquez tout.</p>
-              <button onClick={handleUpgrade} className="shrink-0 rounded-xl border border-amber-400/20 bg-amber-500 px-3 py-1.5 text-xs font-bold text-slate-900 transition hover:bg-amber-400">Premium</button>
+              <button onClick={handleUpgrade} className="shrink-0 rounded-xl px-3 py-1.5 text-xs font-bold transition hover:opacity-90" style={{ background: "var(--cc-warning)", color: "#FFFFFF" }}>Premium</button>
             </div>
           </div>
         )}
@@ -905,7 +940,7 @@ export default function AudioSeriesPage() {
         {isPremium && (
           <div className="rounded-xl border px-4 py-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)" }}>
             <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>
-              📱 <span className="font-semibold" style={{ color: "var(--cc-text-muted)" }}>Lecture en arrière-plan</span> — Utilisez les contrôles de l'écran de verrouillage pour naviguer entre les épisodes.
+              📱 <span className="font-semibold" style={{ color: "var(--cc-text)" }}>Lecture en arrière-plan</span> — Utilisez les contrôles de l&apos;écran de verrouillage pour naviguer entre les épisodes.
             </p>
           </div>
         )}
@@ -926,18 +961,17 @@ export default function AudioSeriesPage() {
               const locked    = !isPremium && !isFree;
               const isActive  = currentIdx === idx && (isPremium || isFree);
               const isSelected = selectedEpisodes.has(idx);
+              const rowStyle: React.CSSProperties = isActive
+                ? { borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)", boxShadow: "var(--cc-shadow)" }
+                : isSelected
+                ? { borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)" }
+                : isFree
+                ? { borderColor: "var(--cc-success)", background: "var(--cc-success-soft)" }
+                : locked
+                ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", opacity: 0.7 }
+                : { borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)" };
               return (
-                <div key={ep.id} className={`rounded-xl border transition-all duration-200 ${
-                  isActive
-                    ? `${meta.border} bg-white/15 shadow-[0_4px_20px_rgba(0,0,0,0.5)] ring-1 ring-white/20`
-                    : isSelected
-                    ? `${meta.border} bg-white/8`
-                    : isFree
-                    ? "border-emerald-400/20 bg-emerald-500/5 hover:bg-emerald-500/8"
-                    : locked
-                    ? "border-white/5 bg-white/[0.02] opacity-60"
-                    : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
-                }`}>
+                <div key={ep.id} className="rounded-xl border transition-all duration-200" style={rowStyle}>
                   <div role="button" tabIndex={0}
                     onClick={() => {
                       if (locked) { handleUpgrade(); return; }
@@ -955,8 +989,11 @@ export default function AudioSeriesPage() {
                     }}
                     className="flex cursor-pointer items-center gap-3 px-4 py-3">
                     {isSelectionMode && isPremium && (
-                      <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition ${isSelected ? `${meta.border} bg-white/20` : "border-white/20 bg-transparent"}`}>
-                        {isSelected && <svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white"><polyline points="2 7 6 11 12 3"/></svg>}
+                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition"
+                        style={isSelected
+                          ? { borderColor: "var(--cc-primary)", background: "var(--cc-primary)", color: "#FFFFFF" }
+                          : { borderColor: "var(--cc-border)", background: "transparent" }}>
+                        {isSelected && <svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="2 7 6 11 12 3"/></svg>}
                       </div>
                     )}
                     {!isSelectionMode && (
@@ -965,19 +1002,19 @@ export default function AudioSeriesPage() {
                         : <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border text-lg" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>{meta.icon}</div>
                     )}
                     <div className="min-w-0 flex-1">
-                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--cc-text-disabled)" }}>{String(ep.episodeNumber).padStart(2, "0")}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--cc-text-muted)" }}>{String(ep.episodeNumber).padStart(2, "0")}</p>
                       <p className="mt-0.5 text-sm font-semibold leading-5" style={{ color: "var(--cc-text)" }}>{ep.episodeTitle}</p>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
-                      <span className="text-xs" style={{ color: "var(--cc-text-disabled)" }}>{Math.round(ep.durationTargetSeconds / 60)}m</span>
+                      <span className="text-xs" style={{ color: "var(--cc-text-muted)" }}>{Math.round(ep.durationTargetSeconds / 60)}m</span>
                       {isActive ? (
-                        <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold ${meta.border} ${meta.accentText}`}>▶ En cours</span>
+                        <span className="rounded-full border px-2 py-0.5 text-[10px] font-bold" style={{ borderColor: "var(--cc-primary)", background: "var(--cc-primary-soft)", color: "var(--cc-primary)" }}>▶ En cours</span>
                       ) : isFree ? (
-                        <span className="text-xs text-emerald-400">✓</span>
+                        <span className="rounded-full border px-2 py-0.5 text-[10px] font-bold" style={{ borderColor: "var(--cc-success)", background: "var(--cc-success-soft)", color: "var(--cc-success)" }}>✓ Gratuit</span>
                       ) : locked ? (
-                        <span className="text-xs text-amber-400">🔒</span>
+                        <span className="text-xs" style={{ color: "var(--cc-warning)" }}>🔒</span>
                       ) : (
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ color: "var(--cc-text-disabled)" }}><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ color: "var(--cc-text-muted)" }}><path d="M5 4l6 4-6 4V4z" fill="currentColor"/></svg>
                       )}
                       <button
                         onClick={(e) => {
@@ -986,7 +1023,7 @@ export default function AudioSeriesPage() {
                           if (navigator.share) navigator.share({ title: ep.episodeTitle, text: `Cap Citoyen — ${ep.episodeTitle}`, url });
                           else navigator.clipboard.writeText(url);
                         }}
-                        className="flex h-6 w-6 items-center justify-center rounded-full transition hover:opacity-80" style={{ color: "var(--cc-text-disabled)" }}
+                        className="flex h-6 w-6 items-center justify-center rounded-full transition hover:opacity-80" style={{ color: "var(--cc-text-muted)" }}
                         title="Partager">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
@@ -1003,31 +1040,31 @@ export default function AudioSeriesPage() {
 
         {/* ── NAVIGATION ── */}
         <div className="flex gap-3 pt-2">
-          <Link href="/audio" className="flex-1 inline-flex flex-col items-center justify-center rounded-xl border px-3 py-2.5 text-xs font-semibold transition hover:bg-white/10 gap-1" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text)" }}>
+          <Link href="/audio" className="flex-1 inline-flex flex-col items-center justify-center rounded-xl border px-3 py-2.5 text-xs font-semibold transition hover:opacity-90 gap-1" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text)" }}>
             <span className="text-lg">←</span>
             <span>Séries</span>
           </Link>
           <button
             onClick={() => !isDevenir && router.push(scrollReviseUrl)}
             disabled={isDevenir}
-            className={`flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl px-3 py-2.5 text-xs font-bold transition active:scale-95 ${
-              isDevenir
-                ? "border cursor-not-allowed opacity-50"
-                : "bg-blue-600 text-white hover:bg-blue-500"
-            }`}>
+            className="flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl px-3 py-2.5 text-xs font-bold transition active:scale-95 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            style={isDevenir
+              ? { border: "1px solid var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }
+              : { background: "var(--cc-primary)", color: "#FFFFFF" }}>
             <span className="text-lg">📖</span>
             <span>Réviser</span>
           </button>
           <button
             onClick={() => navigator.share?.({ title: subthemeLabel, url: window.location.href }) ?? navigator.clipboard.writeText(window.location.href)}
-            className="flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl border px-3 py-2.5 text-xs font-semibold transition hover:bg-white/10"
+            className="flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl border px-3 py-2.5 text-xs font-semibold transition hover:opacity-90"
             style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text)" }}>
             <span className="text-lg">🔗</span>
             <span>Partager</span>
           </button>
           <button
             onClick={() => router.push(nextSeriesUrl)}
-            className="flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-500 active:scale-95">
+            className="flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl px-3 py-2.5 text-xs font-bold transition active:scale-95 hover:opacity-90"
+            style={{ background: "var(--cc-success)", color: "#FFFFFF" }}>
             <span className="text-lg">▶▶</span>
             <span>Suivante</span>
           </button>
