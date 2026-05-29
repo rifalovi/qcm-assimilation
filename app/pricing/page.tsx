@@ -104,10 +104,10 @@ export default function PricingPage() {
       return;
     }
 
-    const res = await fetch("/api/create-checkout", {
+    const res = await fetch("/api/stripe/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan: action }),
+      body: JSON.stringify({ type: action }),
     });
     const { url, error } = await res.json();
     if (error) { setLoading(null); return; }
