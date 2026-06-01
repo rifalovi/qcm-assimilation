@@ -349,13 +349,6 @@ async function clearPseudo() {
           }`}
           style={{ borderRadius: "var(--cc-radius-lg)" }}
         >
-          {/* Bandeau tricolore */}
-          <div className="flex h-1 w-full overflow-hidden" style={{ borderRadius: "var(--cc-radius-lg) var(--cc-radius-lg) 0 0" }}>
-            <div className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
-            <div className="flex-1 bg-white" />
-            <div className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
-          </div>
-
           <div className="px-5 py-7 sm:px-8 sm:py-9">
 
             {/* Nav du hero */}
@@ -447,23 +440,17 @@ async function clearPseudo() {
               ) : (
                 <div className="flex items-center gap-2">
                   <button onClick={() => router.push("/login")}
-                    className="cc-btn cc-btn-secondary px-4 py-2 text-sm">
+                    className="cc-btn cc-btn-secondary px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm">
                     Se connecter
                   </button>
                   <button onClick={() => router.push("/register")}
-                    className="cc-btn cc-btn-primary px-4 py-2 text-sm">
+                    className="cc-btn cc-btn-primary px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm">
                     Créer un compte
                   </button>
                 </div>
               )}
             </div>
 
-            {/* Alerte si non connecté */}
-            {!isAuthenticated && (
-              <Alert variant="info" className="mb-6" noIcon>
-                Chaque année, des milliers de candidats se présentent sans préparation. Entraînez-vous dès aujourd'hui pour mettre toutes les chances de votre côté.
-              </Alert>
-            )}
 
 
             {/* Badge + Titre */}
@@ -472,10 +459,10 @@ async function clearPseudo() {
             </div>
 
             <h1 className="text-center text-2xl font-bold leading-tight text-[var(--cc-text)] sm:text-3xl lg:text-[2.25rem]">
-              Préparez votre entretien d'intégration républicaine
+              Réussissez l&apos;examen civique et votre parcours de naturalisation
             </h1>
-            <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-7 text-[var(--cc-text)]">
-              Valeurs de la République · Institutions · Histoire · Vie en société — entraînement progressif conforme à l'examen civique officiel.
+            <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-7 text-[var(--cc-text-muted)]">
+              Programme 2026 · Conforme à la réforme du 1er janvier 2026 · 800+ questions
             </p>
 
             {/* Chiffres clés — ligne éditoriale, sans fond */}
@@ -725,23 +712,16 @@ async function clearPseudo() {
         </section>
 
         {/* ══════════════════════════════════════════
-            SECTION 5 — LIEN CENTRE AGRÉÉ
+            SECTION 5 — LIEN EXAMEN OFFICIEL
         ══════════════════════════════════════════ */}
         <section
           className="cc-card cc-card-featured"
-          style={{ borderTopColor: "var(--cc-flag-blue)" }}
+          style={{ borderTopColor: "var(--cc-primary)" }}
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="flex h-4 w-6 overflow-hidden rounded-sm border" style={{ borderColor: "var(--cc-border)" }}>
-                  <span className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
-                  <span className="flex-1 bg-white" />
-                  <span className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
-                </span>
-                <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Prêt à vous présenter à l'entretien ?</p>
-              </div>
-              <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>Trouvez le centre CCI agréé le plus proche de chez vous.</p>
+              <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Prêt à passer l'examen officiel ?</p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--cc-text-muted)" }}>Retrouvez les centres d'examen CCI et les informations officielles sur le site du ministère.</p>
             </div>
             <a
               href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
@@ -749,7 +729,7 @@ async function clearPseudo() {
               rel="noopener noreferrer"
               className="cc-btn cc-btn-primary shrink-0 no-underline"
             >
-              Trouver un centre agréé
+              Trouver un centre d'examen
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                 <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
               </svg>

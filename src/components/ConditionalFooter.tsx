@@ -71,7 +71,7 @@ export default function ConditionalFooter() {
                   rel="noopener noreferrer"
                   className="text-sm text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)] no-underline hover:underline"
                 >
-                  Trouver un centre agréé
+                  Trouver un centre d'examen
                 </a>
               </li>
             </ul>

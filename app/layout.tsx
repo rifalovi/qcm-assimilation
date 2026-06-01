@@ -22,8 +22,8 @@ export const viewport = {
 }
 
 export const metadata: Metadata = {
-  title: "Cap Citoyen",
-  description: "Préparez votre test civique français — QCM, audio, examen blanc",
+  title: "Cap Citoyen — Examen civique & naturalisation 2026",
+  description: "Réussissez l'examen civique et votre parcours de naturalisation. Programme 2026 conforme à la réforme du 1er janvier 2026 — 800+ questions, audio, examen blanc.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     apple: "/cap-citoyen.png",
   },
   openGraph: {
-    title: "Cap Citoyen",
-    description: "Préparez votre test civique français — QCM, audio, examen blanc",
+    title: "Cap Citoyen — Examen civique & naturalisation 2026",
+    description: "Réussissez l'examen civique et votre parcours de naturalisation. Programme 2026 conforme à la réforme du 1er janvier 2026 — 800+ questions, audio, examen blanc.",
     url: "https://cap-citoyen.fr",
     siteName: "Cap Citoyen",
     images: [
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Cap Citoyen",
-    description: "Préparez votre test civique français — QCM, audio, examen blanc",
+    title: "Cap Citoyen — Examen civique & naturalisation 2026",
+    description: "Réussissez l'examen civique et votre parcours de naturalisation. Programme 2026 conforme à la réforme du 1er janvier 2026 — 800+ questions, audio, examen blanc.",
     images: ["https://cap-citoyen.fr/cap-citoyen.png"],
   },
 };

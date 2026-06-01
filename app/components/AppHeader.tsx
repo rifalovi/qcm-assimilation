@@ -75,16 +75,6 @@ export default function AppHeader() {
             </Link>
           )}
 
-          {/* Centre agréé */}
-          <a
-            href="https://www.cci.fr/formation/cci-formez-vous-avec-le-test-dintegration-republicaine"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center rounded border border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-3 py-1.5 text-xs font-medium text-[var(--cc-text)] no-underline hover:border-[var(--cc-primary)] hover:text-[var(--cc-primary)] transition-colors"
-          >
-            Centre agréé
-          </a>
-
           {/* Tarifs */}
           {pathname !== "/pricing" && (
             <Link

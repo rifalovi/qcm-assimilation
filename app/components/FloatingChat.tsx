@@ -245,7 +245,6 @@ export default function FloatingChat() {
             >
               {messages.length === 0 && !loading && (
                 <div className="flex flex-col items-center justify-center h-full text-center px-4">
-                  <span className="text-3xl mb-3">🇫🇷</span>
                   <p className="text-sm font-semibold mb-1" style={{ color: "var(--cc-text)" }}>
                     Bonjour ! Comment puis-je vous aider ?
                   </p>

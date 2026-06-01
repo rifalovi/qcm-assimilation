@@ -96,11 +96,6 @@ export default function BottomNav() {
               >
                 <NavIcon name={tab.label} />
                 <span>{tab.label}</span>
-                {tab.label === "Communauté" && !isPremium && (
-                  <span className="absolute right-2 top-1.5 rounded bg-[var(--cc-primary)] px-1 py-0.5 text-[8px] font-bold text-white leading-none">
-                    PRO
-                  </span>
-                )}
                 {active && (
                   <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[var(--cc-primary)]" />
                 )}
