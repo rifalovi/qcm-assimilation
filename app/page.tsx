@@ -361,7 +361,7 @@ async function clearPseudo() {
                 </span>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--cc-text-muted)]">Cap Citoyen</p>
-                  <p className="text-xs text-[var(--cc-text-muted)]">Plateforme de préparation civique 2026</p>
+                  <p className="hidden sm:block text-xs text-[var(--cc-text-muted)]">Plateforme de préparation civique 2026</p>
                 </div>
               </div>
 

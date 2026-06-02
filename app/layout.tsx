@@ -67,7 +67,7 @@ export default function RootLayout({
     <html lang="fr" className="h-full">
       <head>
         {/* Initialisation du thème avant rendu — évite le flash (FOUC) */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=new URLSearchParams(window.location.search).get('mode');if(p==='dark'){document.documentElement.setAttribute('data-theme','dark');return;}if(p==='light'){document.documentElement.removeAttribute('data-theme');return;}var t=localStorage.getItem('cc-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=new URLSearchParams(window.location.search).get('mode');if(p==='dark'){document.documentElement.setAttribute('data-theme','dark');return;}if(p==='light'){document.documentElement.removeAttribute('data-theme');return;}var t=localStorage.getItem('cc-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();` }} />
         <meta property="og:title" content="Cap Citoyen" />
         <meta property="og:description" content="Préparez votre test civique français — QCM, audio, examen blanc" />
         <meta property="og:image" content="https://cap-citoyen.fr/cap-citoyen.png" />
