@@ -200,7 +200,7 @@ export default function FloatingChat() {
         <>
           {/* Overlay opaque — bloque le contenu derrière (mobile uniquement) */}
           <div
-            className="fixed inset-0 z-[58] bg-[#0b141a] sm:hidden"
+            className="fixed inset-0 z-[58] bg-black/60 backdrop-blur-sm sm:hidden"
             onClick={() => setOpen(false)}
           />
 
@@ -230,7 +230,7 @@ export default function FloatingChat() {
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-white/10 hover:opacity-80" style={{ background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
+                className="flex h-8 w-8 items-center justify-center rounded-lg transition hover:opacity-70" style={{ background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                   <path d="M18 6L6 18M6 6l12 12" />
@@ -245,7 +245,6 @@ export default function FloatingChat() {
             >
               {messages.length === 0 && !loading && (
                 <div className="flex flex-col items-center justify-center h-full text-center px-4">
-                  <span className="text-3xl mb-3">🇫🇷</span>
                   <p className="text-sm font-semibold mb-1" style={{ color: "var(--cc-text)" }}>
                     Bonjour ! Comment puis-je vous aider ?
                   </p>
@@ -261,7 +260,7 @@ export default function FloatingChat() {
                       <button
                         key={q}
                         onClick={() => { setInput(q); inputRef.current?.focus(); }}
-                        className="rounded-lg border px-2.5 py-1.5 text-[11px] transition hover:bg-white/10" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
+                        className="rounded-lg border px-2.5 py-1.5 text-[11px] transition hover:opacity-80" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                       >
                         {q}
                       </button>
@@ -273,8 +272,14 @@ export default function FloatingChat() {
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   {msg.role === "user" ? (
-                    <div className="max-w-[85%] rounded-2xl rounded-br-md bg-blue-600/20 border border-blue-400/20 px-3 py-2">
-                      <p className="text-sm text-blue-700">{msg.content}</p>
+                    <div
+                      className="max-w-[85%] rounded-2xl rounded-br-md border px-3 py-2"
+                      style={{
+                        background: "var(--cc-primary-soft)",
+                        borderColor: "color-mix(in srgb, var(--cc-primary) 25%, transparent)",
+                      }}
+                    >
+                      <p className="text-sm" style={{ color: "var(--cc-primary)" }}>{msg.content}</p>
                     </div>
                   ) : (
                     <div className="max-w-[92%] rounded-2xl rounded-bl-md border px-3 py-2.5" style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)" }}>
@@ -289,9 +294,9 @@ export default function FloatingChat() {
                   <div className="rounded-2xl rounded-bl-md border px-4 py-3" style={{ background: "var(--cc-surface-alt)", borderColor: "var(--cc-border)" }}>
                     <div className="flex items-center gap-2">
                       <div className="flex gap-1">
-                        <div className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "0ms" }} />
-                        <div className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "150ms" }} />
-                        <div className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                        <div className="h-1.5 w-1.5 rounded-full animate-bounce" style={{ background: "var(--cc-primary)", animationDelay: "0ms" }} />
+                        <div className="h-1.5 w-1.5 rounded-full animate-bounce" style={{ background: "var(--cc-primary)", animationDelay: "150ms" }} />
+                        <div className="h-1.5 w-1.5 rounded-full animate-bounce" style={{ background: "var(--cc-primary)", animationDelay: "300ms" }} />
                       </div>
                       <span className="text-xs" style={{ color: "var(--cc-text-muted)" }}>Réflexion...</span>
                     </div>
@@ -307,7 +312,13 @@ export default function FloatingChat() {
 
               {showSignupCta && (
                 <div className="px-1">
-                  <div className="rounded-2xl border border-blue-400/20 bg-gradient-to-b from-blue-500/10 to-blue-900/10 p-4 text-center">
+                  <div
+                    className="rounded-2xl border p-4 text-center"
+                    style={{
+                      background: "var(--cc-primary-soft)",
+                      borderColor: "color-mix(in srgb, var(--cc-primary) 25%, transparent)",
+                    }}
+                  >
                     <p className="text-sm font-bold mb-1" style={{ color: "var(--cc-text)" }}>
                       Vous avez utilisé vos 3 questions gratuites
                     </p>
@@ -317,13 +328,15 @@ export default function FloatingChat() {
                     <div className="flex flex-col gap-2">
                       <a
                         href="/register"
-                        className="block w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-500"
+                        className="block w-full rounded-xl px-4 py-2.5 text-sm font-bold transition hover:opacity-90"
+                        style={{ background: "var(--cc-primary)", color: "#fff" }}
                       >
                         Créer un compte gratuit
                       </a>
                       <a
                         href="/login"
-                        className="block w-full rounded-xl border px-4 py-2 text-xs transition hover:text-white" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
+                        className="block w-full rounded-xl border px-4 py-2 text-xs transition hover:opacity-80"
+                        style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                       >
                         J'ai déjà un compte
                       </a>
@@ -349,13 +362,14 @@ export default function FloatingChat() {
                 placeholder={isAuthenticated ? "Votre question..." : "Connectez-vous pour poser une question"}
                 disabled={!isAuthenticated || loading}
                 rows={1}
-                className="flex-1 resize-none rounded-xl border px-3 py-2 text-sm placeholder:opacity-40 focus:outline-none focus:border-blue-400/30 disabled:opacity-40 max-h-20"
+                className="flex-1 resize-none rounded-xl border px-3 py-2 text-sm placeholder:opacity-40 focus:outline-none disabled:opacity-40 max-h-20"
                 style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)", fontSize: '16px' }}
               />
               <button
                 type="submit"
                 disabled={!input.trim() || loading || !isAuthenticated}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition hover:bg-blue-500 disabled:opacity-30"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition hover:opacity-90 disabled:opacity-30"
+                style={{ background: "var(--cc-primary)", color: "#fff" }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 2L11 13" /><path d="M22 2L15 22L11 13L2 9L22 2Z" />

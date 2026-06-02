@@ -22,17 +22,29 @@ type Entry = {
 type Props = { entries: Entry[] };
 
 export default function ProgressionChart({ entries }: Props) {
-  const gridColor = "rgba(148,163,184,0.14)";
-  const tickColor = "#94a3b8";
-  const tooltipBg = "#0f172a";
-  const tooltipBorder = "rgba(148,163,184,0.18)";
-  const tooltipText = "#f8fafc";
+  // Recharts requires concrete color strings — these reference CSS vars at runtime.
+  const gridColor = "var(--cc-border)";
+  const tickColor = "var(--cc-text-muted)";
+  const tooltipBg = "var(--cc-surface)";
+  const tooltipBorder = "var(--cc-border)";
+  const tooltipText = "var(--cc-text)";
+  const lineColor = "var(--cc-primary)";
+  const successColor = "var(--cc-success)";
 
   if (entries.length < 2) {
     return (
-      <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] sm:p-6">
-        <h2 className="text-lg font-bold text-white">Progression</h2>
-        <p className="mt-2 text-sm text-slate-400">
+      <div
+        className="rounded-[1.8rem] border p-5 sm:p-6"
+        style={{
+          background: "var(--cc-surface)",
+          borderColor: "var(--cc-border)",
+          boxShadow: "var(--cc-shadow)",
+        }}
+      >
+        <h2 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>
+          Progression
+        </h2>
+        <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>
           Fais au moins 2 tests pour voir ta progression.
         </p>
       </div>
@@ -49,9 +61,18 @@ export default function ProgressionChart({ entries }: Props) {
   }));
 
   return (
-    <div className="rounded-[1.8rem] border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)] sm:p-6">
-      <h2 className="text-lg font-bold text-white">Progression</h2>
-      <p className="mt-1 text-sm text-slate-400">
+    <div
+      className="rounded-[1.8rem] border p-5 sm:p-6"
+      style={{
+        background: "var(--cc-surface)",
+        borderColor: "var(--cc-border)",
+        boxShadow: "var(--cc-shadow)",
+      }}
+    >
+      <h2 className="text-lg font-bold" style={{ color: "var(--cc-text)" }}>
+        Progression
+      </h2>
+      <p className="mt-1 text-sm" style={{ color: "var(--cc-text-muted)" }}>
         Évolution de ton score sur tes derniers tests
       </p>
 
@@ -83,27 +104,27 @@ export default function ProgressionChart({ entries }: Props) {
                 backgroundColor: tooltipBg,
                 color: tooltipText,
                 fontSize: "12px",
-                boxShadow: "0 18px 45px rgba(2,8,23,0.35)",
+                boxShadow: "var(--cc-shadow)",
               }}
             />
             <ReferenceLine
               y={80}
-              stroke="#22c55e"
+              stroke={successColor}
               strokeDasharray="4 4"
               label={{
                 value: "Seuil validation",
                 position: "insideTopRight",
                 fontSize: 11,
-                fill: "#22c55e",
+                fill: successColor,
               }}
             />
             <Line
               type="monotone"
               dataKey="score"
-              stroke="#3b82f6"
+              stroke={lineColor}
               strokeWidth={3}
-              dot={{ fill: "#3b82f6", r: 4 }}
-              activeDot={{ r: 6, fill: "#60a5fa" }}
+              dot={{ fill: lineColor, r: 4 }}
+              activeDot={{ r: 6, fill: lineColor }}
             />
           </LineChart>
         </ResponsiveContainer>

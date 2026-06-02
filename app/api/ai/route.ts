@@ -181,7 +181,7 @@ Analyse ces résultats comme un vrai coach — pas juste les chiffres, mais ce q
           return NextResponse.json({ error: 'Catégorie et question requises' }, { status: 400 })
         }
         systemPrompt = `Tu es l'Assistant Cap Citoyen, spécialisé dans :
-- L'examen civique 2026 (format, questions types, préparation, centres agréés CCI, tarifs, déroulement)
+- L'examen civique 2026 (format, questions types, préparation, centres d'examen CCI, tarifs, déroulement)
 - L'entretien de naturalisation (déroulement, questions fréquentes, conseils, ce que l'agent évalue)
 - Le titre de séjour pluriannuel (démarches, documents, délais, renouvellement)
 - Les valeurs et institutions de la République française (devise, symboles, principes, organisation)
@@ -222,7 +222,7 @@ Rappel : Réponds avec expertise et bienveillance. Si la question porte sur l'ex
           return NextResponse.json({ error: 'Question requise' }, { status: 400 })
         }
         systemPrompt = `Tu es l'Assistant Cap Citoyen en mode conversation. Tu es spécialisé dans :
-- L'examen civique 2026 (format, questions, préparation, centres agréés, tarifs)
+- L'examen civique 2026 (format, questions, préparation, centres d'examen, tarifs)
 - L'entretien de naturalisation (déroulement, questions fréquentes, conseils)
 - Le titre de séjour pluriannuel (démarches, documents, délais)
 - Les valeurs et institutions de la République française (devise, symboles, principes)

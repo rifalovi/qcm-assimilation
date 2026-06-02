@@ -18,25 +18,27 @@ import Card from "../../components/Card";
 import Button from "../../components/Button";
 import Alert from "../../components/Alert";
 import ProgressBar from "../../components/ProgressBar";
+import { GraduationCap, Sparkles } from "lucide-react";
 
 
 
 // ── StarBurst — burst plein écran bonne réponse ──────────────
-const EMOJIS_Q = ["⭐","✨","💫","🌟","✦","·","*","★","✩","⚡"];
+// Particules pures CSS (disques colorés) — aucun emoji
 const BURST_PARTICLES_Q = Array.from({ length: 60 }, (_, i) => {
   const angle = Math.random() * 360;
   const rad = (angle * Math.PI) / 180;
   const dist = 80 + Math.random() * 280;
+  const size = `${8 + Math.floor(Math.random() * 10)}px`;
   return {
     tx: `${Math.cos(rad) * dist}px`,
     ty: `${Math.sin(rad) * dist}px`,
     delay: `${Math.floor(Math.random() * 200)}ms`,
     dur: `${0.5 + Math.random() * 0.7}s`,
-    fs: `${8 + Math.floor(Math.random() * 10)}px`,
+    fs: size,
     rot: `${Math.floor(Math.random() * 720)}deg`,
     sz: `${0.3 + Math.random() * 0.6}`,
     glow: i % 4 === 0 ? "rgba(251,191,36,0.9)" : i % 4 === 1 ? "rgba(167,243,208,0.9)" : i % 4 === 2 ? "rgba(196,181,253,0.9)" : "rgba(251,146,60,0.9)",
-    emoji: EMOJIS_Q[i % EMOJIS_Q.length],
+    size,
   };
 });
 
@@ -54,7 +56,8 @@ function StarBurstQuiz({ show }: { show: boolean }) {
             "--dur": p.dur, "--fs": p.fs, "--rot": p.rot,
             "--sz": p.sz, "--glow": p.glow,
           } as React.CSSProperties}>
-          {p.emoji}
+          {/* Disque CSS pur — aucun emoji */}
+          <i style={{ display: "inline-block", width: p.size, height: p.size, borderRadius: "50%", background: p.glow, boxShadow: `0 0 5px ${p.glow}` }} />
         </span>
       ))}
     </div>,
@@ -770,16 +773,16 @@ function selectAnswer(choice: ChoiceKey) {
   <div className="w-full max-w-md rounded-2xl border p-6" style={{ background: "var(--cc-surface)", borderColor: "var(--cc-border)", boxShadow: "var(--cc-shadow-lg)" }}>
 
       <div className="text-center mb-5">
-        <div className="text-4xl mb-3">{role === "anonymous" ? "✨" : "👑"}</div>
+        <div className="mb-3 flex justify-center" style={{ color: "var(--cc-primary)" }}>
+          {role === "anonymous" ? <Sparkles size={40} /> : <GraduationCap size={40} />}
+        </div>
         <h2 className="text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>
-          {role === "anonymous"
-            ? "Crée un compte gratuit !"
-            : "Passe en Premium !"}
+          Débloque l&apos;accès complet
         </h2>
         <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>
           {role === "anonymous"
-            ? "Tu viens de faire 10 questions 🎉. Crée un compte gratuit pour sauvegarder tes résultats et accéder à 20 questions."
-            : "Tu viens de terminer tes 20 questions 😉. Passe en Premium pour accéder à 40 questions, tous les niveaux, l'examen blanc et les statistiques détaillées."}
+            ? "Tu viens de faire 10 questions ! Crée un compte gratuit pour sauvegarder tes résultats et accéder à 20 questions."
+            : "Tu viens de terminer tes 20 questions. Choisis un Pass pour accéder à toutes les questions, tous les niveaux, l'examen blanc et les statistiques détaillées."}
         </p>
       </div>
 
@@ -791,7 +794,7 @@ function selectAnswer(choice: ChoiceKey) {
               href={`/register?redirect=/results?mode=${mode}`}
               className="cc-btn cc-btn-primary w-full justify-center"
             >
-              🚀 Créer un compte pour sauvegarder
+              Créer un compte pour sauvegarder
             </a>
             <a
               href={`/login?redirect=/results?mode=${mode}`}
@@ -818,7 +821,7 @@ function selectAnswer(choice: ChoiceKey) {
                 }}
                 className="cc-btn cc-btn-tertiary cc-btn-sm w-full justify-center"
               >
-                {(() => { const c = parseInt(typeof window !== 'undefined' ? localStorage.getItem('anon_test_count') ?? '0' : '0', 10); return c >= 3 ? '🔒 Créer un compte pour continuer' : 'Voir mes résultats sans compte →'; })()}
+                {(() => { const c = parseInt(typeof window !== 'undefined' ? localStorage.getItem('anon_test_count') ?? '0' : '0', 10); return c >= 3 ? 'Créer un compte pour continuer' : 'Voir mes résultats sans compte →'; })()}
               </button>
             ) : (
               <div className="mt-2 space-y-2">

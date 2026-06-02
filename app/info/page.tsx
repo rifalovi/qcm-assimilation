@@ -248,7 +248,7 @@ export default function InfoPage() {
                       <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700">
                         🏛️ Ressources officielles
                       </div>
-                      <p className="mt-3 text-sm font-semibold" style={{ color: "var(--cc-text)" }}>Centres agréés et informations officielles</p>
+                      <p className="mt-3 text-sm font-semibold" style={{ color: "var(--cc-text)" }}>Ressources et informations officielles</p>
                       <p className="mt-1 text-xs leading-6" style={{ color: "var(--cc-text-muted)" }}>Retrouvez les liens officiels pour mieux comprendre l'examen.</p>
                     </div>
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[200px]">
@@ -259,7 +259,7 @@ export default function InfoPage() {
                       <a href="https://www.service-public.gouv.fr/particuliers/vosdroits/R74875" target="_blank" rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-2 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10"
                         style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>
-                        Centres agréés ↗
+                        Centres d'examen ↗
                       </a>
                     </div>
                   </div>

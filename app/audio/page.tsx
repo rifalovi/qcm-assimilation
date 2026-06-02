@@ -79,14 +79,14 @@ function AlbumCard({
             <div className={`absolute inset-0 bg-gradient-to-b ${album.accent_gradient ?? ""} opacity-60`} />
           </>
         ) : (
-          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${album.accent_gradient ?? "from-slate-700 to-slate-800"}`}>
+          <div className={`flex h-full w-full items-center justify-center ${album.accent_gradient ? `bg-gradient-to-br ${album.accent_gradient}` : ""}`} style={!album.accent_gradient ? { background: "linear-gradient(to bottom right, var(--cc-surface-alt), var(--cc-surface-raised))" } : {}}>
             <span className="text-5xl">{album.icon ?? THEME_ICON_FALLBACK[album.theme_key] ?? "🎧"}</span>
           </div>
         )}
 
         {/* Badge locked */}
         {locked && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm" style={{ background: "rgba(0,0,0,0.55)" }}>
             <div className="rounded-2xl px-4 py-2 text-center backdrop-blur-sm" style={{ border: "1px solid color-mix(in srgb, var(--cc-warning) 30%, transparent)", background: "color-mix(in srgb, var(--cc-warning) 20%, transparent)" }}>
               <Lock size={20} style={{ color: "var(--cc-warning)", margin: "0 auto 4px" }} />
               <p className="text-xs font-bold" style={{ color: "var(--cc-warning)" }}>Premium</p>
@@ -116,7 +116,9 @@ function AlbumCard({
 
       {/* Infos */}
       <div className="px-3 py-3" style={{ background: "var(--cc-surface-raised)" }}>
-        <p className={`text-[10px] font-bold uppercase tracking-widest ${album.accent_text ?? ""}`} style={!album.accent_text ? { color: "var(--cc-text-muted)" } : {}}>
+        {/* Le label de thème utilise toujours le token primaire (WCAG AA garanti),
+            on ignore la classe `accent_text` DB qui pouvait être un pastel illisible en jour. */}
+        <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--cc-primary)" }}>
           {album.theme_label}
         </p>
         <p className="mt-0.5 text-sm font-bold leading-tight line-clamp-2" style={{ color: "var(--cc-text)" }}>
@@ -366,39 +368,41 @@ export default function AudioLibraryPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                   </div>
 
-                  {/* Contenu */}
+                  {/* Contenu — placé sur un overlay sombre intentionnel : texte FORCÉ blanc */}
                   <div className="relative flex h-full min-h-[360px] flex-col justify-end px-6 py-8 sm:px-10 sm:py-10 lg:justify-center">
                     <div className="max-w-lg">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur-sm" style={{ borderColor: "color-mix(in srgb, var(--cc-primary) 30%, transparent)", background: "color-mix(in srgb, var(--cc-primary) 20%, transparent)", color: "var(--cc-primary)" }}>
+                      <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur-sm" style={{ borderColor: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.15)", color: "#FFFFFF" }}>
                         <Star size={10} /> En vedette
                       </span>
-                      <h2 className="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl" style={{ color: "var(--cc-text)" }}>
+                      <h2 className="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl" style={{ color: "#FFFFFF" }}>
                         {album.subtheme_label}
                       </h2>
                       {album.description && (
-                        <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: "var(--cc-text-muted)" }}>
+                        <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.85)" }}>
                           {album.description}
                         </p>
                       )}
-                      <div className="mt-2 flex gap-3 text-xs" style={{ color: "var(--cc-text-muted)" }}>
+                      <div className="mt-2 flex gap-3 text-xs" style={{ color: "rgba(255,255,255,0.85)" }}>
                         <span>{album.episodeCount} épisodes</span>
                         <span>•</span>
                         <span>~{album.totalMinutes} min</span>
                         <span>•</span>
-                        <span style={{ color: "var(--cc-success)" }}>Disponible</span>
+                        <span style={{ color: "#86EFAC" }}>Disponible</span>
                       </div>
 
                       <div className="mt-5 flex flex-wrap gap-3">
                         <button
                           onClick={() => router.push(`/audio/${encodeURIComponent(album.theme_key)}/${encodeURIComponent(album.subtheme_key)}`)}
-                          className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-bold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.2)] transition hover:bg-slate-100 active:scale-95"
+                          className="inline-flex items-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-bold shadow-[0_8px_24px_rgba(255,255,255,0.2)] transition hover:opacity-90 active:scale-95"
+                          style={{ background: "#FFFFFF", color: "#1A1D24" }}
                         >
                           <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor"><path d="M3 1.5l10 5.5-10 5.5V1.5z"/></svg>
                           Écouter maintenant
                         </button>
                         <button
                           onClick={() => setShowInfo(true)}
-                          className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20 active:scale-95"
+                          className="inline-flex items-center gap-2 rounded-2xl border px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition active:scale-95 hover:opacity-90"
+                          style={{ borderColor: "rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.1)", color: "#FFFFFF" }}
                         >
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
                           + Infos
@@ -516,11 +520,11 @@ export default function AudioLibraryPage() {
                         <div className={`absolute inset-0 bg-gradient-to-b ${album.accent_gradient ?? ""}`} />
                       </>
                     ) : (
-                      <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${album.accent_gradient ?? "from-slate-700 to-slate-800"}`}>
+                      <div className={`flex h-full w-full items-center justify-center ${album.accent_gradient ? `bg-gradient-to-br ${album.accent_gradient}` : ""}`} style={!album.accent_gradient ? { background: "linear-gradient(to bottom right, var(--cc-surface-alt), var(--cc-surface-raised))" } : {}}>
                         <span className="text-5xl">{album.icon ?? THEME_ICON_FALLBACK[album.theme_key] ?? "🎧"}</span>
                       </div>
                     )}
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                    <div className="absolute inset-0 flex items-center justify-center backdrop-blur-[2px]" style={{ background: "rgba(0,0,0,0.55)" }}>
                       <Lock size={28} style={{ color: "white" }} />
                     </div>
                   </div>
@@ -568,22 +572,22 @@ export default function AudioLibraryPage() {
                 />
               )}
               {/* Intentional dark overlay for modal image */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
               <button
                 onClick={() => setShowInfo(false)}
-                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 transition hover:bg-black/70"
-                style={{ color: "white" }}
+                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full transition hover:opacity-80"
+                style={{ background: "rgba(0,0,0,0.55)", color: "white" }}
               >
                 <X size={14} />
               </button>
             </div>
             <div className="px-6 pb-6">
               <span
-                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${featuredAlbum.accent_text ?? ""}`}
+                className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest"
                 style={{
                   border: "1px solid color-mix(in srgb, var(--cc-primary) 30%, transparent)",
-                  background: "color-mix(in srgb, var(--cc-primary) 10%, transparent)",
-                  ...(featuredAlbum.accent_text ? {} : { color: "var(--cc-primary)" }),
+                  background: "var(--cc-primary-soft)",
+                  color: "var(--cc-primary)",
                 }}
               >
                 {featuredAlbum.theme_label}
@@ -602,7 +606,8 @@ export default function AudioLibraryPage() {
                   setShowInfo(false);
                   router.push(`/audio/${encodeURIComponent(featuredAlbum.theme_key)}/${encodeURIComponent(featuredAlbum.subtheme_key)}`);
                 }}
-                className="mt-5 w-full rounded-2xl bg-white py-3 text-sm font-bold text-slate-950 transition hover:bg-slate-100"
+                className="mt-5 w-full rounded-2xl py-3 text-sm font-bold transition hover:opacity-90"
+                style={{ background: "var(--cc-primary)", color: "#FFFFFF" }}
               >
                 ▶ Écouter maintenant
               </button>
@@ -665,8 +670,8 @@ function MediaCard({ media }: { media: AudioMediaRow }) {
       </div>
       <div className="px-4 py-3">
         <p
-          className={`text-[10px] font-bold uppercase tracking-widest ${media.accent ?? ""}`}
-          style={media.accent ? {} : { color: "var(--cc-primary)" }}
+          className="text-[10px] font-bold uppercase tracking-widest"
+          style={{ color: "var(--cc-primary)" }}
         >
           {media.icon ?? "🎵"} {media.section === "hymnes" ? "Hymne national" : media.section === "podcasts" ? "Podcast" : "Média"}
         </p>

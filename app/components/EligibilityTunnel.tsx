@@ -112,7 +112,14 @@ const settings = buildQuizSettings({
     <div className="relative w-full max-w-lg sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-[1.5rem] sm:rounded-[2rem] border p-4 sm:p-6 shadow-[0_25px_70px_rgba(2,8,23,0.55)]" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
       <div className="mb-4 flex items-start justify-between gap-3 sm:mb-5 sm:gap-4">
         <div>
-          <div className="mb-2 inline-flex rounded-full border border-blue-400/20 bg-blue-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300 sm:px-3 sm:text-[11px]">
+          <div
+            className="mb-2 inline-flex rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] sm:px-3 sm:text-[11px]"
+            style={{
+              borderColor: "color-mix(in srgb, var(--cc-primary) 25%, transparent)",
+              background: "var(--cc-primary-soft)",
+              color: "var(--cc-primary)",
+            }}
+          >
             Parcours personnalisé
           </div>
 
@@ -128,7 +135,7 @@ const settings = buildQuizSettings({
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full border px-2.5 py-1.5 text-xs transition hover:bg-white/10 hover:opacity-80 sm:px-3 sm:py-2 sm:text-sm" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
+          className="rounded-full border px-2.5 py-1.5 text-xs transition hover:opacity-80 sm:px-3 sm:py-2 sm:text-sm" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
           aria-label="Fermer"
         >
           ✕
@@ -152,7 +159,7 @@ const settings = buildQuizSettings({
                 key={option.value}
                 type="button"
                 onClick={() => handleGoalSelect(option.value)}
-                className="rounded-2xl border p-3.5 sm:p-4 text-left transition hover:border-blue-400/20 hover:bg-white/10"
+                className="rounded-2xl border p-3.5 sm:p-4 text-left transition hover:opacity-90"
                 style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
               >
                 <div className="text-sm font-semibold sm:text-base" style={{ color: "var(--cc-text)" }}>
@@ -182,7 +189,7 @@ const settings = buildQuizSettings({
                 key={option.value}
                 type="button"
                 onClick={() => handleStaySelect(option.value)}
-                className="rounded-2xl border p-3.5 sm:p-4 text-center transition hover:border-blue-400/20 hover:bg-white/10"
+                className="rounded-2xl border p-3.5 sm:p-4 text-center transition hover:opacity-90"
                 style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}
               >
                 <span className="text-xs font-semibold sm:text-sm" style={{ color: "var(--cc-text)" }}>
@@ -208,7 +215,14 @@ const settings = buildQuizSettings({
         <section className="mt-5 sm:mt-6">
           {goal === "unknown" || !recommendation ? (
             <div className="rounded-[1.25rem] sm:rounded-[1.6rem] border p-4 sm:p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-              <div className="inline-flex rounded-full border border-amber-400/20 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-300 sm:px-3 sm:text-xs">
+              <div
+                className="inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold sm:px-3 sm:text-xs"
+                style={{
+                  borderColor: "color-mix(in srgb, var(--cc-warning) 25%, transparent)",
+                  background: "var(--cc-warning-soft)",
+                  color: "var(--cc-warning)",
+                }}
+              >
                 Orientation
               </div>
 
@@ -235,7 +249,8 @@ const settings = buildQuizSettings({
                 <button
                   type="button"
                   onClick={handleUnknownTraining}
-                  className="rounded-2xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-500 sm:px-5"
+                  className="rounded-2xl px-4 py-3 text-sm font-bold transition hover:opacity-90 sm:px-5"
+                  style={{ background: "var(--cc-primary)", color: "#fff" }}
                 >
                   Commencer un entraînement de base
                 </button>
@@ -243,7 +258,7 @@ const settings = buildQuizSettings({
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="rounded-2xl border px-4 py-3 text-sm font-semibold transition hover:bg-white/10 hover:text-white sm:px-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
+                  className="rounded-2xl border px-4 py-3 text-sm font-semibold transition hover:opacity-80 sm:px-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                 >
                   Modifier mes réponses
                 </button>
@@ -251,17 +266,31 @@ const settings = buildQuizSettings({
             </div>
           ) : (
             <div className="rounded-[1.25rem] sm:rounded-[1.6rem] border p-4 sm:p-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-              <div className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-300 sm:px-3 sm:text-xs">
+              <div
+                className="inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold sm:px-3 sm:text-xs"
+                style={{
+                  borderColor: "color-mix(in srgb, var(--cc-success) 25%, transparent)",
+                  background: "var(--cc-success-soft)",
+                  color: "var(--cc-success)",
+                }}
+              >
                 {recommendation.badge}
               </div>
 
               {(recommendation as any).natEarlyWarning && (
-                <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4 text-sm text-amber-700">
-                  <div className="font-bold text-amber-700 mb-2">⚠️ Attention — durée de résidence insuffisante</div>
-                  <p className="text-xs leading-5 text-amber-700 mb-3">
+                <div
+                  className="mt-4 rounded-2xl border p-4 text-sm"
+                  style={{
+                    borderColor: "color-mix(in srgb, var(--cc-warning) 25%, transparent)",
+                    background: "var(--cc-warning-soft)",
+                    color: "var(--cc-warning)",
+                  }}
+                >
+                  <div className="font-bold mb-2" style={{ color: "var(--cc-warning)" }}>⚠️ Attention — durée de résidence insuffisante</div>
+                  <p className="text-xs leading-5 mb-3" style={{ color: "var(--cc-warning)" }}>
                     La naturalisation requiert en général <strong>5 ans de résidence</strong> en France. Des exceptions existent si vous êtes dans l'une de ces situations :
                   </p>
-                  <ul className="text-xs leading-6 text-amber-700 space-y-1 mb-3">
+                  <ul className="text-xs leading-6 space-y-1 mb-3" style={{ color: "var(--cc-warning)" }}>
                     <li>• Statut de réfugié reconnu</li>
                     <li>• Langue maternelle française (pays francophone)</li>
                     <li>• Scolarisé 5 ans+ dans un établissement francophone</li>
@@ -270,7 +299,13 @@ const settings = buildQuizSettings({
                     <li>• Services exceptionnels rendus à la France</li>
                     <li>• Parcours exceptionnel d'intégration</li>
                   </ul>
-                  <a href="https://www.service-public.fr/particuliers/vosdroits/F2213" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-semibold text-blue-300 underline hover:text-blue-200">
+                  <a
+                    href="https://www.service-public.fr/particuliers/vosdroits/F2213"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-semibold underline hover:opacity-80"
+                    style={{ color: "var(--cc-primary)" }}
+                  >
                     Voir toutes les conditions sur Service-Public.fr →
                   </a>
                 </div>
@@ -328,7 +363,14 @@ const settings = buildQuizSettings({
   ((limits.levels.includes(recommendation.recommendedLevel)
     ? recommendation.recommendedLevel
     : (limits.levels[limits.levels.length - 1] ?? 1)) as 1 | 2 | 3) && (
-                <div className="mt-4 rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-700">
+                <div
+                  className="mt-4 rounded-2xl border px-4 py-3 text-sm"
+                  style={{
+                    borderColor: "color-mix(in srgb, var(--cc-warning) 25%, transparent)",
+                    background: "var(--cc-warning-soft)",
+                    color: "var(--cc-warning)",
+                  }}
+                >
                   Ton offre actuelle ne débloque pas entièrement ce niveau.
                   L’entraînement sera lancé avec le meilleur niveau disponible
                   pour ton compte.
@@ -339,15 +381,22 @@ const settings = buildQuizSettings({
 
               {/* Recommandation Bibliothèque Audio pour naturalisation */}
               {goal === "nat" && (
-                <div className="mt-4 rounded-2xl border border-violet-400/20 bg-violet-500/10 p-4">
-                  <div className="text-xs font-bold text-violet-300 mb-1">🎧 Bibliothèque Audio recommandée</div>
+                <div
+                  className="mt-4 rounded-2xl border p-4"
+                  style={{
+                    borderColor: "color-mix(in srgb, var(--cc-primary) 25%, transparent)",
+                    background: "var(--cc-primary-soft)",
+                  }}
+                >
+                  <div className="text-xs font-bold mb-1" style={{ color: "var(--cc-primary)" }}>🎧 Bibliothèque Audio recommandée</div>
                   <p className="text-xs leading-5 mb-3" style={{ color: "var(--cc-text-muted)" }}>
                     Préparez l'oral de votre entretien avec nos épisodes audio dédiés à la naturalisation — valeurs, institutions, histoire et la question clé : <em>Pourquoi voulez-vous devenir français(e) ?</em>
                   </p>
                   <button
                     type="button"
                     onClick={() => { onClose(); router.push("/audio"); }}
-                    className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-3 py-2 text-xs font-bold text-white transition hover:bg-violet-500"
+                    className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition hover:opacity-90"
+                    style={{ background: "var(--cc-primary)", color: "#fff" }}
                   >
                     Découvrir la bibliothèque audio →
                   </button>
@@ -358,7 +407,8 @@ const settings = buildQuizSettings({
                 <button
                   type="button"
                   onClick={handleStartTraining}
-                  className="rounded-2xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-500 sm:px-5"
+                  className="rounded-2xl px-4 py-3 text-sm font-bold transition hover:opacity-90 sm:px-5"
+                  style={{ background: "var(--cc-primary)", color: "#fff" }}
                 >
                   {recommendation.ctaLabel}
                 </button>
@@ -366,7 +416,7 @@ const settings = buildQuizSettings({
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="rounded-2xl border px-4 py-3 text-sm font-semibold transition hover:bg-white/10 hover:text-white sm:px-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
+                  className="rounded-2xl border px-4 py-3 text-sm font-semibold transition hover:opacity-80 sm:px-5" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
                 >
                   Modifier mes réponses
                 </button>
@@ -397,11 +447,13 @@ function ProgressIndicator({ step }: { step: Step }) {
             <div
               className={[
                 "flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full text-[11px] sm:text-xs font-bold",
-                done || active
-                  ? "bg-blue-600 text-white"
-                  : "border",
+                done || active ? "" : "border",
               ].join(" ")}
-              style={!(done || active) ? { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" } : undefined}
+              style={
+                done || active
+                  ? { background: "var(--cc-primary)", color: "#fff" }
+                  : { borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }
+              }
             >
               {item.id}
             </div>
@@ -414,7 +466,7 @@ function ProgressIndicator({ step }: { step: Step }) {
             </div>
 
             {index < items.length - 1 ? (
-              <div className="h-px min-w-[12px] flex-1 bg-white/10" />
+              <div className="h-px min-w-[12px] flex-1" style={{ background: "var(--cc-border)" }} />
             ) : null}
           </div>
         );

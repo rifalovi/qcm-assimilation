@@ -3,7 +3,7 @@ export default function CGVPage() {
     <main className="mx-auto max-w-3xl px-4 py-12">
       <div className="rounded-[1.8rem] border p-6 sm:p-10" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
         <h1 className="text-2xl font-extrabold mb-2" style={{ color: "var(--cc-text)" }}>Conditions Générales de Vente</h1>
-        <p className="text-xs mb-8" style={{ color: "var(--cc-text-disabled)" }}>Dernière mise à jour : mars 2026</p>
+        <p className="text-xs mb-8" style={{ color: "var(--cc-text-disabled)" }}>Dernière mise à jour : mai 2026</p>
         <section className="mb-8">
           <h2 className="text-base font-bold mb-3" style={{ color: "var(--cc-text)" }}>1. Objet</h2>
           <p className="text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>Les présentes CGV régissent les ventes de services numériques proposés par Cap Citoyen (Vignon Carlos Hounsinou, SIREN 918 107 848) via cap-citoyen.fr.</p>
@@ -12,13 +12,16 @@ export default function CGVPage() {
           <h2 className="text-base font-bold mb-3" style={{ color: "var(--cc-text)" }}>2. Services et tarifs</h2>
           <div className="space-y-3 text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>
             <div className="rounded-xl border p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-              <p className="font-semibold" style={{ color: "var(--cc-text)" }}>Premium — 19,99€ TTC / 3 mois</p>
-              <p>Accès complet pendant 3 mois. Abonnement résiliable à tout moment.</p>
+              <p className="font-semibold" style={{ color: "var(--cc-text)" }}>Pass Express — 4,99€ TTC / 7 jours</p>
+              <p>Accès complet pendant 7 jours. Paiement unique, <strong style={{ color: "var(--cc-text)" }}>pas de renouvellement automatique</strong>.</p>
             </div>
             <div className="rounded-xl border p-4" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-              <p className="font-semibold" style={{ color: "var(--cc-text)" }}>Élite — 49,99€ TTC — accès à vie</p>
-              <p>Accès permanent, mises à jour incluses. Paiement unique.</p>
+              <p className="font-semibold" style={{ color: "var(--cc-text)" }}>Pass Sérénité — 9,99€ TTC / 30 jours</p>
+              <p>Accès complet pendant 30 jours. Paiement unique, <strong style={{ color: "var(--cc-text)" }}>pas de renouvellement automatique</strong>.</p>
             </div>
+            <p className="text-xs mt-2" style={{ color: "var(--cc-text-disabled)" }}>
+              Les passes sont à durée déterminée et ne se renouvellent pas sans action explicite de votre part. Aucun prélèvement récurrent n'est effectué.
+            </p>
           </div>
         </section>
         <section className="mb-8">
@@ -27,11 +30,11 @@ export default function CGVPage() {
         </section>
         <section className="mb-8">
           <h2 className="text-base font-bold mb-3" style={{ color: "var(--cc-text)" }}>4. Droit de rétractation</h2>
-          <p className="text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>Vous disposez de <strong style={{ color: "var(--cc-text)" }}>14 jours</strong> pour vous rétracter (art. L221-18 Code de la consommation). Contactez-nous à <a href="mailto:contact@cap-citoyen.fr" className="text-blue-500 underline">contact@cap-citoyen.fr</a>. Remboursement sous 14 jours.</p>
+          <p className="text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>Vous disposez de <strong style={{ color: "var(--cc-text)" }}>14 jours</strong> pour vous rétracter (art. L221-18 Code de la consommation). Contactez-nous à <a href="mailto:contact@cap-citoyen.fr" style={{ color: "var(--cc-primary)" }} className="underline">contact@cap-citoyen.fr</a>. Remboursement sous 14 jours.</p>
         </section>
         <section className="mb-8">
-          <h2 className="text-base font-bold mb-3" style={{ color: "var(--cc-text)" }}>5. Résiliation</h2>
-          <p className="text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>L'abonnement Premium est résiliable depuis votre espace compte. Effet à la fin de la période en cours.</p>
+          <h2 className="text-base font-bold mb-3" style={{ color: "var(--cc-text)" }}>5. Expiration du Pass</h2>
+          <p className="text-sm leading-6" style={{ color: "var(--cc-text-muted)" }}>Les passes sont valables pour une durée limitée à compter de la date d'achat. À expiration, l'accès repasse automatiquement en mode freemium. Aucun remboursement n'est accordé pour la durée restante non utilisée, sauf exercice du droit de rétractation dans le délai légal.</p>
         </section>
         <section className="mb-8">
           <h2 className="text-base font-bold mb-3" style={{ color: "var(--cc-text)" }}>6. Responsabilité</h2>

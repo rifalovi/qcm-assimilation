@@ -344,7 +344,7 @@ export default function ResourcesPage() {
               <MindNode title="3. Réviser intelligemment" items={["Utiliser le scroll régulièrement", "Écouter les épisodes audio", "Relire les explications après erreur"]} />
               <MindNode title="4. Consolider" items={["Suivre ses progrès", "Comparer ses nouveaux scores", "Renforcer les thèmes fragiles"]} />
               <MindNode title="5. Se projeter" items={["Faire un examen blanc", "Gérer son rythme", "Gagner en confiance"]} />
-              <MindNode title="6. Passer à l'étape suivante" items={["Consulter les ressources officielles", "Vérifier le centre agréé", "Choisir le bon moment"]} />
+              <MindNode title="6. Passer à l'étape suivante" items={["Consulter les ressources officielles", "Planifier le passage de l'examen", "Choisir le bon moment"]} />
             </div>
           </SectionCard>
 
@@ -377,7 +377,7 @@ export default function ResourcesPage() {
                 <div className="flex items-center gap-3 mb-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-500/10 text-2xl">📍</div>
                   <div>
-                    <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Trouver un centre agréé</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--cc-text)" }}>Trouver un centre d'examen</p>
                     <p className="text-xs text-blue-600">CCI France</p>
                   </div>
                 </div>
@@ -429,7 +429,7 @@ export default function ResourcesPage() {
           {/* ── RESSOURCES OFFICIELLES ── */}
           <SectionCard icon="🏛️" title="Ressources utiles à consulter au bon moment" subtitle="Des compléments officiels à utiliser sans quitter trop tôt votre parcours de révision.">
             <div className="grid gap-5 lg:grid-cols-4">
-              <ResourceLinkCard icon="📍" title="Centre agréé" source="Service-Public" text="À consulter lorsque votre préparation est déjà bien avancée, pour vérifier les centres, les dates et les disponibilités." href={OFFICIAL_LINKS.centers} note="Tarifs et disponibilités variables selon le centre." />
+              <ResourceLinkCard icon="📍" title="Centres d'examen" source="CCI France" text="À consulter lorsque votre préparation est déjà bien avancée, pour vérifier les centres, les dates et les disponibilités." href={OFFICIAL_LINKS.centers} note="Tarifs et disponibilités variables selon le centre." />
               <ResourceLinkCard icon="📘" title="Informations officielles" source="Immigration / Intérieur" text="Pour relire le cadre officiel, vérifier certains points et compléter votre compréhension du dispositif." href={OFFICIAL_LINKS.examInfo} note="Source utile pour vérifier les modalités officielles de l'examen." />
               <ResourceLinkCard icon="📝" title="Questions / ressources officielles" source="Immigration / Intérieur" text="En complément de l'application, pour recouper vos révisions avec les ressources publiques disponibles." href={OFFICIAL_LINKS.officialQuestions} note="À utiliser comme complément, pas comme point de départ principal." />
               <ResourceLinkCard icon="📜" title="Charte des droits et devoirs" source="République française" text="Document officiel remis lors de la naturalisation. Il résume les valeurs, principes et responsabilités du citoyen français." href={OFFICIAL_LINKS.charter} note="PDF officiel — à lire pour bien comprendre les valeurs de la République." />

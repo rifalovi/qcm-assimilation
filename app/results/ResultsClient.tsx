@@ -677,7 +677,7 @@ ${errorsText}
           </button>
         </div>
 
-        {/* ===== BLOC CENTRE AGRÉÉ ===== */}
+        {/* ===== BLOC CENTRE D'EXAMEN ===== */}
         <div className="mt-6 rounded-[1.5rem] p-5" style={{ border: "1px solid color-mix(in srgb, var(--cc-warning) 30%, transparent)", background: "color-mix(in srgb, var(--cc-warning) 6%, var(--cc-surface))" }}>
           <div className="flex items-center gap-3 mb-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl flex-shrink-0" style={{ border: "1px solid color-mix(in srgb, var(--cc-warning) 30%, transparent)", background: "color-mix(in srgb, var(--cc-warning) 12%, var(--cc-surface))", color: "var(--cc-warning)" }}>
@@ -688,7 +688,7 @@ ${errorsText}
                 Passer l'examen dans un centre
               </p>
               <p className="text-xs" style={{ color: "var(--cc-text-muted)" }}>
-                Consulte la carte officielle pour trouver un centre agréé proche de chez toi.
+                Consulte la carte officielle pour trouver un centre d'examen proche de chez toi.
               </p>
             </div>
           </div>
@@ -700,7 +700,7 @@ ${errorsText}
             className="flex items-center justify-center gap-2 w-full rounded-2xl px-4 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-95"
             style={{ background: "var(--cc-warning)", color: "var(--cc-surface)", border: "none" }}
           >
-            <MapPin size={14} /> Trouver un centre agréé ↗
+            <MapPin size={14} /> Trouver un centre d'examen ↗
           </a>
 
           <p className="mt-3 text-xs text-center" style={{ color: "var(--cc-text-disabled)" }}>
