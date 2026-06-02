@@ -359,9 +359,9 @@ async function clearPseudo() {
                   <span className="flex-1 bg-white" />
                   <span className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
                 </span>
-                <div>
+                <div className="hidden sm:block">
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--cc-text-muted)]">Cap Citoyen</p>
-                  <p className="hidden sm:block text-xs text-[var(--cc-text-muted)]">Plateforme de préparation civique 2026</p>
+                  <p className="text-xs text-[var(--cc-text-muted)]">Plateforme de préparation civique 2026</p>
                 </div>
               </div>
 
@@ -440,12 +440,13 @@ async function clearPseudo() {
               ) : (
                 <div className="flex items-center gap-2">
                   <button onClick={() => router.push("/login")}
-                    className="cc-btn cc-btn-secondary px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm">
+                    className="cc-btn cc-btn-secondary cc-btn-sm sm:!px-[1.125rem] sm:!py-[0.625rem] sm:!text-[0.9375rem]">
                     Se connecter
                   </button>
                   <button onClick={() => router.push("/register")}
-                    className="cc-btn cc-btn-primary px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm">
-                    Créer un compte
+                    className="cc-btn cc-btn-primary cc-btn-sm sm:!px-[1.125rem] sm:!py-[0.625rem] sm:!text-[0.9375rem]">
+                    <span className="sm:hidden">S&apos;inscrire</span>
+                    <span className="hidden sm:inline">Créer un compte</span>
                   </button>
                 </div>
               )}
