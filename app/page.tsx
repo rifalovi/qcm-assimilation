@@ -352,21 +352,20 @@ async function clearPseudo() {
           <div className="px-5 py-7 sm:px-8 sm:py-9">
 
             {/* Nav du hero */}
-            <div className="mb-8 flex items-center justify-between gap-2">
-              <div className="flex items-center gap-3">
-                <span className="flex h-6 w-9 overflow-hidden rounded-sm border border-[var(--cc-border)]" aria-hidden="true">
+            <div className="mb-8">
+              {/* Logo centré */}
+              <div className="mb-4 flex items-center justify-center gap-3">
+                <span className="flex h-8 w-12 overflow-hidden rounded border border-[var(--cc-border)] shadow-sm" aria-hidden="true">
                   <span className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
                   <span className="flex-1 bg-white" />
                   <span className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
                 </span>
-                <div className="hidden sm:block">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--cc-text-muted)]">Cap Citoyen</p>
-                  <p className="text-xs text-[var(--cc-text-muted)]">Plateforme de préparation civique 2026</p>
-                </div>
+                <span className="text-xl font-bold text-[var(--cc-primary)]">Cap Citoyen</span>
               </div>
 
+              {/* Boutons ou menu utilisateur — centrés */}
               {!authLoading && isAuthenticated ? (
-                <div className="relative flex justify-end">
+                <div className="relative flex justify-center">
                   <button
                     onClick={() => setHomeMenuOpen(!homeMenuOpen)}
                     className="flex items-center gap-2 rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm text-[var(--cc-text)] hover:border-[var(--cc-primary)] transition-colors"
@@ -388,7 +387,7 @@ async function clearPseudo() {
                   {homeMenuOpen && (
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setHomeMenuOpen(false)} />
-                      <div className="absolute right-0 top-full z-50 mt-1 w-72 max-w-[calc(100vw-1rem)] rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md">
+                      <div className="absolute top-full z-50 mt-1 w-72 max-w-[calc(100vw-1rem)] rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md">
                         <div className="border-b border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
                           <p className="text-sm font-bold text-[var(--cc-text)]">{displayName}</p>
                           {role && role !== "anonymous" && (
@@ -438,15 +437,14 @@ async function clearPseudo() {
                   )}
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center gap-3">
                   <button onClick={() => router.push("/login")}
-                    className="cc-btn cc-btn-secondary cc-btn-sm sm:!px-[1.125rem] sm:!py-[0.625rem] sm:!text-[0.9375rem]">
+                    className="cc-btn cc-btn-secondary">
                     Se connecter
                   </button>
                   <button onClick={() => router.push("/register")}
-                    className="cc-btn cc-btn-primary cc-btn-sm sm:!px-[1.125rem] sm:!py-[0.625rem] sm:!text-[0.9375rem]">
-                    <span className="sm:hidden">S&apos;inscrire</span>
-                    <span className="hidden sm:inline">Créer un compte</span>
+                    className="cc-btn cc-btn-primary">
+                    Créer un compte
                   </button>
                 </div>
               )}
