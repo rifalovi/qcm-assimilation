@@ -459,20 +459,22 @@ async function clearPseudo() {
 
 
             {/* Badge */}
-            <span className="cc-badge cc-badge-info">Plus de 800 questions-réponses</span>
+            <div className="flex justify-center">
+              <span className="cc-badge cc-badge-info">Plus de 800 questions-réponses</span>
+            </div>
 
             {/* Titre */}
-            <h1 className="mt-3 text-[1.75rem] font-extrabold leading-[1.15] tracking-tight text-[var(--cc-text)] sm:text-4xl">
+            <h1 className="mt-3 mx-auto max-w-3xl text-center text-[1.75rem] font-extrabold leading-[1.15] tracking-tight text-[var(--cc-text)] sm:text-4xl">
               Réussissez l&apos;examen civique et votre{" "}
               <span className="text-[var(--cc-primary)]">parcours de naturalisation</span>
             </h1>
-            <p className="mt-3 max-w-xl text-sm leading-7 text-[var(--cc-text-muted)]">
+            <p className="mt-3 mx-auto max-w-xl text-center text-sm leading-7 text-[var(--cc-text-muted)]">
               Programme 2026 · Conforme à la réforme du 1er janvier 2026.
             </p>
 
             {/* Chiffres clés */}
             <div
-              className="mt-6 grid grid-cols-3 py-4"
+              className="mt-6 mx-auto grid w-full max-w-md grid-cols-3 py-4"
               style={{
                 borderRadius: "var(--cc-radius-xl)",
                 border: "1px solid var(--cc-border)",
@@ -500,7 +502,7 @@ async function clearPseudo() {
             </div>
 
             {/* Atouts */}
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
               {[
                 { label: "Entraînement progressif", color: "var(--cc-primary)" },
                 { label: "Corrections détaillées",  color: "var(--cc-success)" },
@@ -517,7 +519,7 @@ async function clearPseudo() {
             </div>
 
             {/* CTA principaux */}
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:justify-center">
               <button
                 onClick={start}
                 className="cc-btn cc-btn-primary w-full sm:w-auto justify-center gap-2.5 px-6 py-3.5 text-base font-bold"
@@ -544,7 +546,7 @@ async function clearPseudo() {
 
             {/* Réassurance / inscription */}
             {!isAuthenticated && (
-              <p className="mt-4 text-center sm:text-left text-xs text-[var(--cc-text-muted)]">
+              <p className="mt-4 text-center text-xs text-[var(--cc-text-muted)]">
                 Pas encore de compte ?{" "}
                 <button
                   onClick={() => router.push("/register")}
