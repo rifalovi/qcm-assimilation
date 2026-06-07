@@ -8,9 +8,9 @@ import BottomNav from "@/components/BottomNav"
 import FloatingChat from "./components/FloatingChat"
 import PushNotificationManager from "./components/PushNotificationManager"
 import PwaInstallBanner from "./components/PwaInstallBanner"
-import CapacitorProvider from "@/components/CapacitorProvider"
 import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalShell from "@/components/ConditionalShell";
+import CapacitorProvider from "@/components/CapacitorProvider"
 
 export const viewport = {
   colorScheme: "light dark",
@@ -41,20 +41,20 @@ export const metadata: Metadata = {
     siteName: "Cap Citoyen",
     images: [
       {
-        url: "https://cap-citoyen.fr/cap-citoyen.png",
-        width: 512,
-        height: 512,
-        alt: "Cap Citoyen",
+        url: "https://cap-citoyen.fr/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Cap Citoyen — Examen civique & naturalisation 2026",
       },
     ],
     locale: "fr_FR",
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Cap Citoyen — Examen civique & naturalisation 2026",
     description: "Réussissez l'examen civique et votre parcours de naturalisation. Programme 2026 conforme à la réforme du 1er janvier 2026 — 800+ questions, audio, examen blanc.",
-    images: ["https://cap-citoyen.fr/cap-citoyen.png"],
+    images: ["https://cap-citoyen.fr/og-image.png"],
   },
 };
 
@@ -68,14 +68,6 @@ export default function RootLayout({
       <head>
         {/* Initialisation du thème avant rendu — évite le flash (FOUC) */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=new URLSearchParams(window.location.search).get('mode');if(p==='dark'){document.documentElement.setAttribute('data-theme','dark');return;}if(p==='light'){document.documentElement.removeAttribute('data-theme');return;}var t=localStorage.getItem('cc-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();` }} />
-        <meta property="og:title" content="Cap Citoyen" />
-        <meta property="og:description" content="Préparez votre test civique français — QCM, audio, examen blanc" />
-        <meta property="og:image" content="https://cap-citoyen.fr/cap-citoyen.png" />
-        <meta property="og:url" content="https://cap-citoyen.fr" />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Cap Citoyen" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:image" content="https://cap-citoyen.fr/cap-citoyen.png" />
       </head>
       <link rel="privacy-policy" href="https://cap-citoyen.fr/mentions-legales" />
       <body className="min-h-full antialiased">
