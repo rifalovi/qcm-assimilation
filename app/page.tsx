@@ -517,10 +517,10 @@ async function clearPseudo() {
             </div>
 
             {/* CTA principaux */}
-            <div className="mt-7 flex flex-col gap-3">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <button
                 onClick={start}
-                className="cc-btn cc-btn-primary w-full justify-center gap-2.5 px-6 py-3.5 text-base font-bold"
+                className="cc-btn cc-btn-primary w-full sm:w-auto justify-center gap-2.5 px-6 py-3.5 text-base font-bold"
                 style={{
                   background: "linear-gradient(180deg, color-mix(in srgb, var(--cc-primary) 82%, #fff), var(--cc-primary))",
                   boxShadow: "0 8px 20px color-mix(in srgb, var(--cc-primary) 26%, transparent)",
@@ -533,7 +533,7 @@ async function clearPseudo() {
               </button>
               <button
                 onClick={() => setShowReviseModal(true)}
-                className="cc-btn cc-btn-secondary w-full justify-center gap-2.5 px-6 py-3.5 text-base font-semibold"
+                className="cc-btn cc-btn-secondary w-full sm:w-auto justify-center gap-2.5 px-6 py-3.5 text-base font-semibold"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <rect width="14" height="20" x="5" y="2" rx="2" /><path d="M12 18h.01" />
@@ -544,7 +544,7 @@ async function clearPseudo() {
 
             {/* Réassurance / inscription */}
             {!isAuthenticated && (
-              <p className="mt-4 text-center text-xs text-[var(--cc-text-muted)]">
+              <p className="mt-4 text-center sm:text-left text-xs text-[var(--cc-text-muted)]">
                 Pas encore de compte ?{" "}
                 <button
                   onClick={() => router.push("/register")}
