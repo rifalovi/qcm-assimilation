@@ -1,6 +1,6 @@
 "use client";
 import ScrollDemo from "./components/ScrollDemo";
-import { BookOpen, Bot, ChevronRight, Headphones, X } from "lucide-react";
+import { BookOpen, Bot, ChevronRight, Headphones, X, Target, Clock, ListChecks } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import Alert from "../components/Alert";
@@ -344,28 +344,40 @@ async function clearPseudo() {
             SECTION 1 — HERO
         ══════════════════════════════════════════ */}
         <section
-          className={`border border-[var(--cc-border)] bg-[var(--cc-surface)] transition-all duration-500 ${
+          className={`relative overflow-hidden border border-[var(--cc-border)] bg-[var(--cc-surface)] transition-all duration-500 ${
             heroVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
           }`}
           style={{ borderRadius: "var(--cc-radius-lg)" }}
         >
-          <div className="px-5 py-7 sm:px-8 sm:py-9">
+          {/* Filet tricolore */}
+          <div className="absolute inset-x-0 top-0 z-10 flex h-1" aria-hidden="true">
+            <span className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
+            <span className="flex-1 bg-white" />
+            <span className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
+          </div>
+          {/* Dégradé d'ambiance */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            aria-hidden="true"
+            style={{ background: "linear-gradient(180deg, var(--cc-primary-soft) 0%, transparent 38%)", opacity: 0.7 }}
+          />
+          <div className="relative px-5 py-7 sm:px-8 sm:py-9">
 
             {/* Nav du hero */}
-            <div className="mb-8">
-              {/* Logo centré */}
-              <div className="mb-4 flex items-center justify-center gap-3">
-                <span className="flex h-8 w-12 overflow-hidden rounded border border-[var(--cc-border)] shadow-sm" aria-hidden="true">
+            <div className="mb-7 flex items-center justify-between gap-3">
+              {/* Logo */}
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-7 w-10 overflow-hidden rounded border border-[var(--cc-border)] shadow-sm" aria-hidden="true">
                   <span className="flex-1" style={{ background: "var(--cc-flag-blue)" }} />
                   <span className="flex-1 bg-white" />
                   <span className="flex-1" style={{ background: "var(--cc-flag-red)" }} />
                 </span>
-                <span className="text-xl font-bold text-[var(--cc-primary)]">Cap Citoyen</span>
+                <span className="text-lg font-bold text-[var(--cc-primary)]">Cap Citoyen</span>
               </div>
 
-              {/* Boutons ou menu utilisateur — centrés */}
+              {/* Accès compte */}
               {!authLoading && isAuthenticated ? (
-                <div className="relative flex justify-center">
+                <div className="relative flex justify-end">
                   <button
                     onClick={() => setHomeMenuOpen(!homeMenuOpen)}
                     className="flex items-center gap-2 rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm text-[var(--cc-text)] hover:border-[var(--cc-primary)] transition-colors"
@@ -387,7 +399,7 @@ async function clearPseudo() {
                   {homeMenuOpen && (
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setHomeMenuOpen(false)} />
-                      <div className="absolute top-full z-50 mt-1 w-72 max-w-[calc(100vw-1rem)] rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md">
+                      <div className="absolute right-0 top-full z-50 mt-1 w-72 max-w-[calc(100vw-1rem)] rounded border border-[var(--cc-border)] bg-[var(--cc-surface)] shadow-md">
                         <div className="border-b border-[var(--cc-border)] bg-[var(--cc-surface-alt)] px-4 py-3">
                           <p className="text-sm font-bold text-[var(--cc-text)]">{displayName}</p>
                           {role && role !== "anonymous" && (
@@ -437,72 +449,82 @@ async function clearPseudo() {
                   )}
                 </div>
               ) : (
-                <div className="flex items-center justify-center gap-3">
-                  <button onClick={() => router.push("/login")}
-                    className="cc-btn cc-btn-secondary">
-                    Se connecter
-                  </button>
-                  <button onClick={() => router.push("/register")}
-                    className="cc-btn cc-btn-primary">
-                    Créer un compte
-                  </button>
-                </div>
+                <button onClick={() => router.push("/login")}
+                  className="shrink-0 text-sm font-semibold text-[var(--cc-primary)] underline-offset-4 hover:underline">
+                  Se connecter
+                </button>
               )}
             </div>
 
 
 
-            {/* Badge + Titre */}
-            <div className="mb-2 flex justify-center">
-              <span className="cc-badge cc-badge-info">Plus de 800 questions-réponses</span>
-            </div>
+            {/* Badge */}
+            <span className="cc-badge cc-badge-info">Plus de 800 questions-réponses</span>
 
-            <h1 className="text-center text-2xl font-bold leading-tight text-[var(--cc-text)] sm:text-3xl lg:text-[2.25rem]">
-              Réussissez l&apos;examen civique et votre parcours de naturalisation
+            {/* Titre */}
+            <h1 className="mt-3 text-[1.75rem] font-extrabold leading-[1.15] tracking-tight text-[var(--cc-text)] sm:text-4xl">
+              Réussissez l&apos;examen civique et votre{" "}
+              <span className="text-[var(--cc-primary)]">parcours de naturalisation</span>
             </h1>
-            <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-7 text-[var(--cc-text-muted)]">
-              Programme 2026 · Conforme à la réforme du 1er janvier 2026 · 800+ questions
+            <p className="mt-3 max-w-xl text-sm leading-7 text-[var(--cc-text-muted)]">
+              Programme 2026 · Conforme à la réforme du 1er janvier 2026.
             </p>
 
-            {/* Chiffres clés — ligne éditoriale, sans fond */}
-            {(() => {
-              const stats = [
-                { val: "32 / 40", label: "score requis pour réussir" },
-                { val: "45 min",  label: "durée de l'examen officiel" },
-                { val: "800 +",   label: "questions d'entraînement" },
-              ];
-              return (
-                <div className="mt-6 flex flex-wrap justify-center">
-                  {stats.map((s, i) => (
-                    <div
-                      key={s.label}
-                      className="flex flex-col items-center px-5 py-1"
-                      style={{
-                        borderRight: i < stats.length - 1
-                          ? "1px solid var(--cc-border)"
-                          : "none",
-                      }}
-                    >
-                      <span className="text-xl font-bold leading-tight" style={{ color: "var(--cc-primary)" }}>{s.val}</span>
-                      <span className="mt-0.5 text-[11px] leading-snug" style={{ color: "var(--cc-text-muted)" }}>{s.label}</span>
-                    </div>
-                  ))}
+            {/* Chiffres clés */}
+            <div
+              className="mt-6 grid grid-cols-3 py-4"
+              style={{
+                borderRadius: "var(--cc-radius-xl)",
+                border: "1px solid var(--cc-border)",
+                background: "var(--cc-surface)",
+                boxShadow: "var(--cc-shadow-sm)",
+              }}
+            >
+              {[
+                { Icon: Target,     val: "32 / 40", label: "score requis" },
+                { Icon: Clock,      val: "45 min",  label: "durée de l'examen" },
+                { Icon: ListChecks, val: "800 +",   label: "questions" },
+              ].map((s, i) => (
+                <div
+                  key={s.label}
+                  className="flex flex-col items-center px-1.5 text-center"
+                  style={{ borderRight: i < 2 ? "1px solid var(--cc-border)" : "none" }}
+                >
+                  <span className="mb-1.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--cc-primary-soft)] text-[var(--cc-primary)]">
+                    <s.Icon size={15} strokeWidth={2.2} aria-hidden="true" />
+                  </span>
+                  <span className="text-lg font-extrabold leading-none text-[var(--cc-primary)]">{s.val}</span>
+                  <span className="mt-1 text-[10.5px] leading-tight text-[var(--cc-text-muted)]">{s.label}</span>
                 </div>
-              );
-            })()}
+              ))}
+            </div>
 
-            {/* Tags */}
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <span className="cc-badge cc-badge-neutral">Entraînement progressif</span>
-              <span className="cc-badge cc-badge-success">Corrections détaillées</span>
-              <span className="cc-badge cc-badge-info">Simulation réaliste</span>
+            {/* Atouts */}
+            <div className="mt-5 flex flex-wrap gap-2">
+              {[
+                { label: "Entraînement progressif", color: "var(--cc-primary)" },
+                { label: "Corrections détaillées",  color: "var(--cc-success)" },
+                { label: "Simulation réaliste",     color: "var(--cc-warning)" },
+              ].map((c) => (
+                <span
+                  key={c.label}
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--cc-text)]"
+                >
+                  <span className="h-2 w-2 rounded-full" style={{ background: c.color }} />
+                  {c.label}
+                </span>
+              ))}
             </div>
 
             {/* CTA principaux */}
-            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <div className="mt-7 flex flex-col gap-3">
               <button
                 onClick={start}
-                className="cc-btn cc-btn-primary w-full max-w-xs sm:w-auto px-6 py-3 text-base gap-3"
+                className="cc-btn cc-btn-primary w-full justify-center gap-2.5 px-6 py-3.5 text-base font-bold"
+                style={{
+                  background: "linear-gradient(180deg, color-mix(in srgb, var(--cc-primary) 82%, #fff), var(--cc-primary))",
+                  boxShadow: "0 8px 20px color-mix(in srgb, var(--cc-primary) 26%, transparent)",
+                }}
               >
                 <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
                   <path d="M3 1.5l10 5.5-10 5.5V1.5z" />
@@ -511,7 +533,7 @@ async function clearPseudo() {
               </button>
               <button
                 onClick={() => setShowReviseModal(true)}
-                className="cc-btn cc-btn-secondary w-full max-w-xs sm:w-auto px-6 py-3 text-base gap-3"
+                className="cc-btn cc-btn-secondary w-full justify-center gap-2.5 px-6 py-3.5 text-base font-semibold"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <rect width="14" height="20" x="5" y="2" rx="2" /><path d="M12 18h.01" />
@@ -520,8 +542,21 @@ async function clearPseudo() {
               </button>
             </div>
 
+            {/* Réassurance / inscription */}
+            {!isAuthenticated && (
+              <p className="mt-4 text-center text-xs text-[var(--cc-text-muted)]">
+                Pas encore de compte ?{" "}
+                <button
+                  onClick={() => router.push("/register")}
+                  className="font-semibold text-[var(--cc-primary)] underline-offset-2 hover:underline"
+                >
+                  Créer un compte gratuit
+                </button>
+              </p>
+            )}
+
             {/* Actions secondaires */}
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <div className="mt-6 flex flex-wrap justify-center gap-2 border-t border-[var(--cc-border)] pt-5">
               {[
                 { label: "Bibliothèque audio", onClick: () => router.push("/audio") },
                 { label: "Avis des utilisateurs", onClick: () => { const el = document.getElementById("avis-section"); if (el) el.scrollIntoView({ behavior: "smooth" }); } },
