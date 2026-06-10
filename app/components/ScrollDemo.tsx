@@ -13,7 +13,7 @@ function StatusBar() {
   return (
     <div style={{ height: 18, display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--cc-surface-alt)", borderBottom: "1px solid var(--cc-border)", padding: "0 10px", flexShrink: 0 }}>
       <span style={{ fontSize: 7.5, color: "var(--cc-text-disabled)", fontWeight: 600 }}>Cap Citoyen</span>
-      <span style={{ fontSize: 7.5, color: "var(--cc-text-disabled)" }}>Carlos</span>
+      <span style={{ fontSize: 7.5, color: "var(--cc-text-disabled)" }}>Martin</span>
     </div>
   );
 }
@@ -154,7 +154,7 @@ function Screen3() {
             <div style={{ width: 20, height: 20, borderRadius: 6, background: "var(--cc-surface-alt)", border: "1px solid var(--cc-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11 }}>👤</div>
             <div style={{ fontSize: 6.5, color: "var(--cc-text-muted)", lineHeight: 1.4 }}><span style={{ color: "var(--cc-text-muted)", fontWeight: 600 }}>RÉPUBLIQUE FRANÇAISE</span><br />Mode entraînement · 2026</div>
           </div>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "var(--cc-text)", lineHeight: 1.2, marginBottom: 3 }}>Carlos, voici ton résultat</div>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "var(--cc-text)", lineHeight: 1.2, marginBottom: 3 }}>Martin, voici ton résultat</div>
           <div style={{ fontSize: 7, color: "var(--cc-text-disabled)", marginBottom: 6 }}>Niveau 1 · Valeurs · 40 questions</div>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 3, background: "color-mix(in srgb, var(--cc-success) 12%, var(--cc-surface))", border: "1px solid color-mix(in srgb, var(--cc-success) 35%, transparent)", borderRadius: 999, padding: "2px 8px", fontSize: 7.5, fontWeight: 700, color: "var(--cc-success)" }}>VALIDÉ ✓</span>
         </div>
