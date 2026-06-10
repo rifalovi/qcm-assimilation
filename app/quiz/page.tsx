@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { saveResultToSupabase } from "../../src/lib/saveResult";
 import { trackEvent } from "../../src/lib/posthog";
 import { useUser } from "../components/UserContext";
-import { getAccessQuota, formatRechargeDate } from "../../src/lib/access";
+import { getAccessQuota, formatRechargeDate, isRechargeAvailable } from "../../src/lib/access";
 import { useAccessLevel } from "../../src/hooks/useAccessLevel";
 import QuotaBar from "../../src/components/QuotaBar";
 import UpgradeNudge from "../../src/components/UpgradeNudge";
@@ -74,9 +74,18 @@ export default function QuizPage() {
   const {
     mode:             accessMode,
     quiz_credits:     quizCredits,
+    exam_trials:      examTrials,
     date_epuisement,
+    isLoading:        accessLoading,
     consumeQuizCredit,
+    consumeExamTrial,
   } = useAccessLevel();
+
+  // Accès refusé (verrou dur) — null tant que l'accès n'est pas tranché
+  const [blocked, setBlocked] = useState<null | "credits" | "exam">(null);
+  // Garde l'initialisation à un seul passage (évite de régénérer le quiz quand
+  // les crédits changent en cours de partie)
+  const didInitRef = useRef(false);
 
   // Seuil de nudge : 80 % du quota consommé (4 crédits restants pour freemium/20)
   const QUOTA_MAX    = 20;
@@ -134,7 +143,13 @@ export default function QuizPage() {
   }, [mode, focusWarn]);
 
   useEffect(() => {
-    if (authLoading) return;
+    // Attendre que l'authentification ET le niveau d'accès (crédits live) soient résolus
+    if (authLoading || accessLoading) return;
+    // N'initialiser qu'une seule fois — sinon le quiz se régénère quand les
+    // crédits sont décrémentés en cours de partie.
+    if (didInitRef.current) return;
+    didInitRef.current = true;
+
     const raw = localStorage.getItem("quiz_settings");
     if (!raw) {
       router.push("/");
@@ -152,6 +167,24 @@ export default function QuizPage() {
 
     const parsed = JSON.parse(raw) as Settings;
     const m = parsed.mode ?? "train";
+
+    // ── VERROU DUR — solde réel (et non quota statique) ───────────────────────
+    // Freemium sans crédit quiz et hors fenêtre de recharge → paywall.
+    const rechargeReady = isRechargeAvailable(date_epuisement);
+    if (accessMode === "freemium" && m !== "exam" && quizCredits <= 0 && !rechargeReady) {
+      trackEvent("quiz_blocked", { reason: "credits_exhausted" });
+      setMode(m);
+      setBlocked("credits");
+      return;
+    }
+    // Freemium ayant déjà consommé son examen blanc d'essai → paywall.
+    if (accessMode === "freemium" && m === "exam" && examTrials <= 0) {
+      trackEvent("quiz_blocked", { reason: "exam_exhausted" });
+      setMode(m);
+      setBlocked("exam");
+      return;
+    }
+
     setMode(m);
 
     const pq = parsed.perQuestion ?? (m === "exam" ? 30 : 20);
@@ -173,6 +206,11 @@ export default function QuizPage() {
       mode: m,
     });
 
+    // Consomme un essai d'examen blanc (freemium) au démarrage de l'examen.
+    if (accessMode === "freemium" && m === "exam") {
+      consumeExamTrial();
+    }
+
     try {
   // Bloque le mode examen selon le rôle
   if (m === "exam" && !limits.canExam && role !== "anonymous") {
@@ -186,8 +224,11 @@ export default function QuizPage() {
     return;
   }
 
-  // Applique la limite de questions
-  const allowedCount = Math.min(parsed.count, limits.quiz);
+  // Plafond du nombre de questions : pour un freemium en entraînement, on
+  // s'aligne sur le SOLDE RÉEL de crédits (et non le quota statique du rôle),
+  // afin qu'un test ne puisse jamais dépasser ce qu'il reste réellement.
+  const creditCap = accessMode === "freemium" && m !== "exam" ? quizCredits : limits.quiz;
+  const allowedCount = Math.min(parsed.count, creditCap);
 
   // Tentative async (base), fallback automatique sur les fichiers si vide
   generateQuizAsync({
@@ -214,7 +255,8 @@ export default function QuizPage() {
 } catch (e: any) {
   setError(e?.message ?? "Erreur lors de la génération du test.");
 }
-  }, [router, role, authLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, role, authLoading, accessLoading]);
 
   useEffect(() => {
     if (mode !== "exam") return;
@@ -435,6 +477,37 @@ function selectAnswer(choice: ChoiceKey) {
     setGoResults(true);
   }
 
+  if (blocked) {
+    const isCredits = blocked === "credits";
+    const recharge = formatRechargeDate(date_epuisement);
+    return (
+      <main className="mx-auto max-w-xl px-4 py-10 sm:px-6">
+        <Card>
+          <div className="text-center">
+            <div className="mb-4 flex justify-center" style={{ color: "var(--cc-primary)" }}>
+              {isCredits ? <Sparkles size={40} /> : <GraduationCap size={40} />}
+            </div>
+            <h1 className="text-xl font-extrabold" style={{ color: "var(--cc-text)" }}>
+              {isCredits ? "Vos 20 questions gratuites sont épuisées" : "Votre examen blanc d'essai a été utilisé"}
+            </h1>
+            <p className="mt-2 text-sm" style={{ color: "var(--cc-text-muted)" }}>
+              {isCredits
+                ? (recharge
+                    ? `Votre quota gratuit se recharge le ${recharge}. En attendant, un Pass vous donne un accès illimité à toutes les questions, tous les niveaux et les examens blancs.`
+                    : "Un Pass vous donne un accès illimité à toutes les questions, tous les niveaux et les examens blancs.")
+                : "Les examens blancs illimités sont inclus dans les Passes — avec correction détaillée et statistiques par thème."}
+            </p>
+          </div>
+          <div className="mt-6 flex flex-col gap-2">
+            <a href="/pricing" className="cc-btn cc-btn-primary w-full justify-center">Voir les Passes →</a>
+            <button onClick={() => router.push(`/results?mode=${blocked === "exam" ? "exam" : "train"}`)} className="cc-btn cc-btn-secondary w-full justify-center">Voir mes derniers résultats</button>
+            <button onClick={() => router.push("/")} className="cc-btn cc-btn-tertiary cc-btn-sm w-full justify-center">Retour à l&apos;accueil</button>
+          </div>
+        </Card>
+      </main>
+    );
+  }
+
   if (error) {
     return (
       <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8">
@@ -503,13 +576,15 @@ function selectAnswer(choice: ChoiceKey) {
         />
       )}
 
-      {/* UpgradeNudge — modal à l'épuisement (bloquant, doit agir) */}
+      {/* UpgradeNudge — modal à l'épuisement (bloquant : sortie vers résultats,
+          jamais de retour dans un nouveau test sans Pass) */}
       {accessMode === "freemium" && nudge === "exhausted" && (
         <UpgradeNudge
           variant="modal"
           trigger="exhausted"
           rechargeDate={formatRechargeDate(date_epuisement)}
-          onDismiss={() => setNudge(null)}
+          dismissLabel="Voir mes résultats"
+          onDismiss={() => { setNudge(null); router.push(`/results?mode=${mode}`); }}
         />
       )}
 

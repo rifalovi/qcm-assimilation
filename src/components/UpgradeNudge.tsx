@@ -33,6 +33,8 @@ export type UpgradeNudgeProps = {
   rechargeDate?: string | null;
   /** Callback quand l'utilisateur ferme le nudge (banner et modal) */
   onDismiss?: () => void;
+  /** Libellé du bouton secondaire du modal (défaut : "Continuer sans pass") */
+  dismissLabel?: string;
   className?: string;
 };
 
@@ -63,6 +65,7 @@ export default function UpgradeNudge({
   trigger = "threshold",
   rechargeDate = null,
   onDismiss,
+  dismissLabel = "Continuer sans pass",
   className = "",
 }: UpgradeNudgeProps) {
   const { headline, body, cta } = useNudgeContent(trigger, rechargeDate);
@@ -248,7 +251,7 @@ export default function UpgradeNudge({
                 color: "var(--cc-text-muted)",
               }}
             >
-              Continuer sans pass
+              {dismissLabel}
             </button>
           )}
         </div>

@@ -70,6 +70,13 @@ export type AccessLevel = {
   consumeQuizCredit: () => Promise<ConsumeResult>;
 
   /**
+   * Décrémente exam_trials de 1 via RPC decrement_exam_trial().
+   * À appeler au démarrage d'un examen blanc pour un utilisateur freemium.
+   * Ne pas appeler pour les modes pass / premium.
+   */
+  consumeExamTrial: () => Promise<{ success: boolean; exam_trials: number }>;
+
+  /**
    * Force un rechargement des crédits depuis la DB.
    * Utile après un achat de pass.
    */
@@ -210,6 +217,29 @@ export function useAccessLevel(): AccessLevel {
     }
   }, [credits.quiz_credits, supabase]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // ── consumeExamTrial ───────────────────────────────────────────────────────
+
+  const consumeExamTrial = useCallback(async (): Promise<{ success: boolean; exam_trials: number }> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false, exam_trials: 0 };
+
+    const prev = credits.exam_trials;
+    setCredits(p => ({ ...p, exam_trials: Math.max(0, p.exam_trials - 1) }));
+
+    try {
+      const { data, error } = await supabase.rpc('decrement_exam_trial', { p_user_id: user.id });
+      if (error || !data) {
+        setCredits(p => ({ ...p, exam_trials: prev }));
+        return { success: false, exam_trials: prev };
+      }
+      setCredits(p => ({ ...p, exam_trials: data.exam_trials }));
+      return { success: data.success, exam_trials: data.exam_trials };
+    } catch {
+      setCredits(p => ({ ...p, exam_trials: prev }));
+      return { success: false, exam_trials: prev };
+    }
+  }, [credits.exam_trials, supabase]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Retour ────────────────────────────────────────────────────────────────
 
   return {
@@ -218,6 +248,7 @@ export function useAccessLevel(): AccessLevel {
     ...credits,
     isLoading,
     consumeQuizCredit,
+    consumeExamTrial,
     refresh:         fetchAccessLevel,
   };
 }
