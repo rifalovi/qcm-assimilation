@@ -19,7 +19,7 @@ export default async function UsersPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-medium text-white mb-1">Utilisateurs</h1>
+        <h1 className="adm-title">Utilisateurs</h1>
       </div>
       <UserActionsWrapper bannedIds={bannedIds} currentRole={currentProfile?.role ?? ''} />
     </div>

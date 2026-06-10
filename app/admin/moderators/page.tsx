@@ -70,31 +70,31 @@ export default function ModeratorsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-medium text-white mb-1">Modérateurs</h1>
-        <p className="text-sm text-slate-400">{moderators.length} modérateur{moderators.length > 1 ? 's' : ''} actif{moderators.length > 1 ? 's' : ''}</p>
+        <h1 className="adm-title">Modérateurs</h1>
+        <p className="adm-subtitle">{moderators.length} modérateur{moderators.length > 1 ? 's' : ''} actif{moderators.length > 1 ? 's' : ''}</p>
       </div>
 
       {/* Ajouter un modérateur */}
-      <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 mb-6">
-        <h2 className="text-sm font-medium text-white mb-3">Désigner un modérateur</h2>
+      <div className="adm-panel p-5 mb-6">
+        <h2 className="text-sm font-semibold mb-3" style={{ color: 'var(--cc-text)' }}>Désigner un modérateur</h2>
         <div className="relative">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--cc-text-disabled)' }} />
           <input value={search} onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher un membre Premium…"
-            className="w-full pl-8 pr-4 py-2.5 text-sm bg-slate-700 border border-slate-600 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500" />
+            className="w-full pl-8 pr-4 py-2.5 text-sm rounded-xl" />
         </div>
-        {searching && <p className="text-xs text-slate-500 mt-2">Recherche…</p>}
+        {searching && <p className="text-xs mt-2" style={{ color: 'var(--cc-text-disabled)' }}>Recherche…</p>}
         {searchResults.map((u) => (
-          <div key={u.id} className="flex items-center gap-3 mt-2 p-3 bg-slate-700 rounded-xl">
-            <div className="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-xs text-slate-300">
+          <div key={u.id} className="flex items-center gap-3 mt-2 p-3 rounded-xl" style={{ background: 'var(--cc-surface-alt)' }}>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs" style={{ background: 'var(--cc-surface-raised)', color: 'var(--cc-text)' }}>
               {u.username.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1">
-              <p className="text-sm text-white">{u.username}</p>
-              <p className="text-xs text-slate-500">{u.role}</p>
+              <p className="text-sm" style={{ color: 'var(--cc-text)' }}>{u.username}</p>
+              <p className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>{u.role}</p>
             </div>
             <button onClick={() => promoteToModerator(u)} disabled={processing === u.id}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-600 text-white text-xs rounded-xl hover:bg-teal-700 disabled:opacity-40 transition-colors">
+              className="cc-btn cc-btn-primary cc-btn-sm">
               <UserPlus size={12} />Désigner
             </button>
           </div>
@@ -103,42 +103,42 @@ export default function ModeratorsPage() {
 
       {/* Liste modérateurs */}
       {loading ? (
-        <p className="text-slate-400 text-sm text-center py-8">Chargement…</p>
+        <p className="text-sm text-center py-8" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>
       ) : moderators.length === 0 ? (
-        <div className="text-center py-12 bg-slate-800 border border-slate-700 rounded-2xl">
-          <Shield size={24} className="text-slate-600 mx-auto mb-3" />
-          <p className="text-slate-400 text-sm">Aucun modérateur désigné</p>
+        <div className="adm-empty">
+          <Shield size={24} className="adm-empty-icon" />
+          <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Aucun modérateur désigné</p>
         </div>
       ) : (
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden">
-          <table className="w-full">
+        <div className="adm-panel overflow-hidden">
+          <table className="adm-table">
             <thead>
-              <tr className="border-b border-slate-700">
+              <tr>
                 {['Membre', 'Rôle', 'Depuis', 'Action'].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">{h}</th>
+                  <th key={h}>{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700/50">
+            <tbody>
               {moderators.map((mod) => (
-                <tr key={mod.id} className="hover:bg-slate-700/30 transition-colors">
-                  <td className="px-4 py-3">
+                <tr key={mod.id}>
+                  <td>
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-teal-900/60 flex items-center justify-center text-xs text-teal-300">
+                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs" style={{ background: 'var(--cc-primary-soft)', color: 'var(--cc-primary)' }}>
                         {mod.username.charAt(0).toUpperCase()}
                       </div>
-                      <p className="text-sm text-white">{mod.username}</p>
+                      <p className="text-sm" style={{ color: 'var(--cc-text)' }}>{mod.username}</p>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${mod.role === 'admin' ? 'bg-purple-900/40 text-purple-400' : 'bg-teal-900/40 text-teal-400'}`}>
+                  <td>
+                    <span className={`cc-badge cc-badge-sm ${mod.role === 'admin' ? 'cc-badge-info' : 'cc-badge-success'}`}>
                       {mod.role}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-slate-500">{timeAgo(mod.created_at)}</td>
-                  <td className="px-4 py-3">
+                  <td style={{ color: 'var(--cc-text-disabled)' }}>{timeAgo(mod.created_at)}</td>
+                  <td>
                     <button onClick={() => removeModerator(mod.id)} disabled={processing === mod.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-900/20 border border-red-500/30 text-red-400 text-xs rounded-xl hover:bg-red-900/30 disabled:opacity-40 transition-colors">
+                      className="adm-action adm-action-danger">
                       <UserMinus size={12} />Retirer
                     </button>
                   </td>

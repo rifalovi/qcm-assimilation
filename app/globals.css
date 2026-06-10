@@ -588,6 +588,106 @@ textarea::placeholder { color: var(--cc-text-disabled); }
 .cc-pricing-card-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.625rem; }
 .cc-pricing-card-feature  { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.875rem; }
 
+/* ═══════════════════════════════════════════════════════════════
+   ADMINISTRATION — surcouche cohérente avec les tokens --cc-*
+   Classes .adm-* : thème jour/nuit automatique, zéro couleur figée
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── En-tête de page ─────────────────────────────────────────── */
+.adm-title    { font-size: 1.5rem; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; color: var(--cc-text); }
+.adm-subtitle { font-size: 0.875rem; color: var(--cc-text-muted); margin-top: 0.2rem; }
+
+/* ── Panneau / carte ─────────────────────────────────────────── */
+.adm-panel {
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-xl);
+  box-shadow: var(--cc-shadow-sm);
+}
+
+/* ── Carte statistique ───────────────────────────────────────── */
+.adm-stat {
+  position: relative;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-xl);
+  padding: 1.125rem;
+  box-shadow: var(--cc-shadow-sm);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.adm-stat:hover     { border-color: var(--cc-border-strong); box-shadow: var(--cc-shadow); }
+.adm-stat-icon      { width: 2.25rem; height: 2.25rem; border-radius: var(--cc-radius-lg); display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; }
+.adm-stat-value     { font-size: 1.5rem; font-weight: 600; color: var(--cc-text); line-height: 1.1; }
+.adm-stat-label     { font-size: 0.75rem; color: var(--cc-text-muted); margin-top: 0.25rem; }
+.adm-stat-sub       { font-size: 0.6875rem; color: var(--cc-text-disabled); margin-top: 0.125rem; }
+.adm-stat-alert     { border-color: color-mix(in srgb, var(--cc-danger) 45%, transparent); }
+
+/* ── État vide ───────────────────────────────────────────────── */
+.adm-empty {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-xl);
+  color: var(--cc-text-muted);
+}
+.adm-empty-icon { color: var(--cc-text-disabled); margin: 0 auto 0.75rem; }
+
+/* ── Tableau ─────────────────────────────────────────────────── */
+.adm-table { width: 100%; border-collapse: collapse; }
+.adm-table thead th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--cc-text-disabled);
+  border-bottom: 1px solid var(--cc-border);
+}
+.adm-table tbody td  { padding: 0.75rem 1rem; font-size: 0.875rem; color: var(--cc-text); }
+.adm-table tbody tr  { border-bottom: 1px solid var(--cc-border); transition: background 120ms ease; }
+.adm-table tbody tr:last-child { border-bottom: none; }
+.adm-table tbody tr:hover      { background: var(--cc-surface-alt); }
+
+/* ── Filtres segmentés ───────────────────────────────────────── */
+.adm-chip {
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--cc-radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--cc-surface-alt);
+  color: var(--cc-text-muted);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.adm-chip:hover   { background: var(--cc-surface-raised); color: var(--cc-text); }
+.adm-chip-active  { background: var(--cc-primary); color: #fff; }
+.adm-chip-active:hover { background: var(--cc-primary-hover); color: #fff; }
+
+/* ── Boutons d'action discrets ───────────────────────────────── */
+.adm-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--cc-radius);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--cc-border-strong);
+  background: var(--cc-surface);
+  color: var(--cc-text-muted);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.adm-action:hover:not(:disabled)    { background: var(--cc-surface-alt); color: var(--cc-text); }
+.adm-action:disabled                { opacity: 0.4; cursor: not-allowed; }
+.adm-action-danger  { border-color: color-mix(in srgb, var(--cc-danger) 40%, transparent);  color: var(--cc-danger); }
+.adm-action-danger:hover:not(:disabled)  { background: var(--cc-danger-soft);  color: var(--cc-danger); }
+.adm-action-success { border-color: color-mix(in srgb, var(--cc-success) 40%, transparent); color: var(--cc-success); }
+.adm-action-success:hover:not(:disabled) { background: var(--cc-success-soft); color: var(--cc-success); }
+
 /* ── Capacitor / Safe areas ──────────────────────────────────── */
 body.capacitor-ios {
   padding-top: var(--safe-area-top);

@@ -47,9 +47,9 @@ export default function AdminLoginPage() {
             <span className="text-2xl">🇫🇷</span>
             <span className="text-lg font-semibold" style={{ color: "var(--cc-text)" }}>Cap Citoyen</span>
           </div>
-          <div className="inline-flex items-center gap-2 bg-red-900/20 border border-red-500/20 rounded-full px-4 py-1.5 mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-            <span className="text-xs font-medium text-red-400 uppercase tracking-widest">Zone réservée</span>
+          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-4 border" style={{ background: 'var(--cc-danger-soft)', borderColor: 'color-mix(in srgb, var(--cc-danger) 30%, transparent)' }}>
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--cc-danger)' }} />
+            <span className="text-xs font-medium uppercase tracking-widest" style={{ color: 'var(--cc-danger)' }}>Zone réservée</span>
           </div>
           <h1 className="text-xl font-medium mb-1" style={{ color: "var(--cc-text)" }}>Administration</h1>
           <p className="text-sm" style={{ color: "var(--cc-text-disabled)" }}>Accès réservé aux équipes autorisées</p>
@@ -73,8 +73,8 @@ export default function AdminLoginPage() {
               style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text)" }} />
           </div>
           {error && (
-            <div className="flex items-center gap-2 bg-red-900/20 border border-red-500/20 rounded-xl px-3 py-2.5">
-              <p className="text-xs text-red-400">⚠ {error}</p>
+            <div className="flex items-center gap-2 rounded-xl px-3 py-2.5 border" style={{ background: 'var(--cc-danger-soft)', borderColor: 'color-mix(in srgb, var(--cc-danger) 30%, transparent)' }}>
+              <p className="text-xs" style={{ color: 'var(--cc-danger)' }}>⚠ {error}</p>
             </div>
           )}
           <button onClick={handleLogin} disabled={!email.trim() || !password.trim() || loading}

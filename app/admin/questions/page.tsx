@@ -127,31 +127,34 @@ export default function AdminQuestionsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-white">Flashcards & QCM</h1>
-        <p className="mt-1 text-sm text-slate-400">{total} flashcards, chacune avec jusqu&apos;à 3 variantes QCM</p>
+        <h1 className="adm-title">Flashcards & QCM</h1>
+        <p className="adm-subtitle">{total} flashcards, chacune avec jusqu&apos;à 3 variantes QCM</p>
       </div>
 
       <div className="flex flex-wrap gap-2">
         <input placeholder="Rechercher (énoncé, réponse)..." value={search} onChange={e => setSearch(e.target.value)}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none flex-1 min-w-[260px]" />
+          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none flex-1 min-w-[260px]"
+          style={{ color: 'var(--cc-text)' }} />
         {distinctThemes.length > 0 && (
           <select value={filterTheme} onChange={e => { setFilterTheme(e.target.value); setPage(0); }}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none max-w-[260px]">
-            <option value="" className="bg-slate-800">Tous thèmes</option>
-            {distinctThemes.map(t => <option key={t} value={t} className="bg-slate-800">{t}</option>)}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none max-w-[260px]"
+            style={{ color: 'var(--cc-text)' }}>
+            <option value="" style={{ background: 'var(--cc-surface-alt)' }}>Tous thèmes</option>
+            {distinctThemes.map(t => <option key={t} value={t} style={{ background: 'var(--cc-surface-alt)' }}>{t}</option>)}
           </select>
         )}
         <select value={sort} onChange={e => { setSort(e.target.value as typeof sort); setPage(0); }}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-          <option value="id_asc" className="bg-slate-800">ID ↑</option>
-          <option value="id_desc" className="bg-slate-800">ID ↓</option>
-          <option value="theme" className="bg-slate-800">Par thème</option>
+          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+          style={{ color: 'var(--cc-text)' }}>
+          <option value="id_asc" style={{ background: 'var(--cc-surface-alt)' }}>ID ↑</option>
+          <option value="id_desc" style={{ background: 'var(--cc-surface-alt)' }}>ID ↓</option>
+          <option value="theme" style={{ background: 'var(--cc-surface-alt)' }}>Par thème</option>
         </select>
         <button onClick={() => setEditing(emptyQuestion())}
-          className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-500">+ Nouvelle</button>
+          className="cc-btn cc-btn-primary cc-btn-sm">+ Nouvelle</button>
         <button onClick={exportCSV}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-300 hover:text-white">Export CSV</button>
-        <label className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-300 hover:text-white cursor-pointer">
+          className="cc-btn cc-btn-secondary cc-btn-sm">Export CSV</button>
+        <label className="cc-btn cc-btn-secondary cc-btn-sm cursor-pointer">
           Import CSV
           <input type="file" accept=".csv" hidden onChange={e => { const f = e.target.files?.[0]; if (f) importCSV(f); }} />
         </label>
@@ -168,36 +171,36 @@ export default function AdminQuestionsPage() {
       ) : (
         <div className="space-y-2">
           {questions.map(q => (
-            <div key={q.id} className="rounded-2xl border border-white/10 bg-slate-800/60 p-4">
+            <div key={q.id} className="adm-panel p-4">
               <div className="flex items-start justify-between gap-3 flex-wrap">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-700 text-slate-400 font-mono">#{q.id}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-700 text-slate-300">{q.theme}</span>
+                    <span className="cc-badge cc-badge-sm cc-badge-neutral font-mono">#{q.id}</span>
+                    <span className="cc-badge cc-badge-sm cc-badge-neutral">{q.theme}</span>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-900/40 text-violet-300">
                       {(q.mcq_variants ?? []).length} variante{((q.mcq_variants ?? []).length) > 1 ? "s" : ""} QCM
                     </span>
                   </div>
-                  <p className="text-sm text-white font-medium">{q.question}</p>
-                  {q.best_answer && <p className="text-xs text-slate-400 mt-1 line-clamp-2">💡 {q.best_answer}</p>}
+                  <p className="text-sm font-medium" style={{ color: 'var(--cc-text)' }}>{q.question}</p>
+                  {q.best_answer && <p className="text-xs mt-1 line-clamp-2" style={{ color: 'var(--cc-text-muted)' }}>💡 {q.best_answer}</p>}
                 </div>
                 <div className="flex gap-1.5 shrink-0">
-                  <button onClick={() => setEditing(q)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:text-white">Éditer</button>
-                  <button onClick={() => del(q.id)} className="rounded-lg border border-red-400/20 bg-red-500/10 px-3 py-1.5 text-xs text-red-300">Supprimer</button>
+                  <button onClick={() => setEditing(q)} className="adm-action">Éditer</button>
+                  <button onClick={() => del(q.id)} className="adm-action adm-action-danger">Supprimer</button>
                 </div>
               </div>
             </div>
           ))}
           {questions.length === 0 && !error && (
-            <p className="text-center text-sm text-slate-400 py-8">Aucune question trouvée</p>
+            <p className="text-center text-sm py-8" style={{ color: 'var(--cc-text-muted)' }}>Aucune question trouvée</p>
           )}
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-2 pt-2">
               <button onClick={() => setPage(Math.max(0, page - 1))} disabled={page === 0}
-                className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 hover:text-white disabled:opacity-30">← Précédent</button>
-              <span className="text-xs text-slate-400">Page {page + 1} / {totalPages}</span>
+                className="adm-action">← Précédent</button>
+              <span className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Page {page + 1} / {totalPages}</span>
               <button onClick={() => setPage(Math.min(totalPages - 1, page + 1))} disabled={page >= totalPages - 1}
-                className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 hover:text-white disabled:opacity-30">Suivant →</button>
+                className="adm-action">Suivant →</button>
             </div>
           )}
         </div>
@@ -205,32 +208,35 @@ export default function AdminQuestionsPage() {
 
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-slate-900 p-6 space-y-4">
-            <div className="flex items-center justify-between sticky top-0 bg-slate-900 py-2">
-              <h2 className="text-lg font-bold text-white">{("id" in editing) ? `Éditer #${editing.id}` : "Nouvelle flashcard"}</h2>
-              <button onClick={() => setEditing(null)} className="text-slate-400 hover:text-white">✕</button>
+          <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto adm-panel p-6 space-y-4">
+            <div className="flex items-center justify-between sticky top-0 py-2" style={{ background: 'var(--cc-surface)' }}>
+              <h2 className="text-lg font-bold" style={{ color: 'var(--cc-text)' }}>{("id" in editing) ? `Éditer #${editing.id}` : "Nouvelle flashcard"}</h2>
+              <button onClick={() => setEditing(null)} style={{ color: 'var(--cc-text-muted)' }}>✕</button>
             </div>
 
             <div>
-              <label className="text-xs text-slate-400">Thème</label>
+              <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Thème</label>
               <input value={editing.theme ?? ""} onChange={e => setEditing({ ...editing, theme: e.target.value })}
                 list="themes-list"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                style={{ color: 'var(--cc-text)' }} />
               <datalist id="themes-list">
                 {distinctThemes.map(t => <option key={t} value={t} />)}
               </datalist>
             </div>
 
             <div>
-              <label className="text-xs text-slate-400">Question / Recto</label>
+              <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Question / Recto</label>
               <textarea value={editing.question ?? ""} onChange={e => setEditing({ ...editing, question: e.target.value })}
-                className="w-full min-h-[70px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
+                className="w-full min-h-[70px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                style={{ color: 'var(--cc-text)' }} />
             </div>
 
             <div>
-              <label className="text-xs text-slate-400">Meilleure réponse / Verso</label>
+              <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Meilleure réponse / Verso</label>
               <textarea value={editing.best_answer ?? ""} onChange={e => setEditing({ ...editing, best_answer: e.target.value })}
-                className="w-full min-h-[100px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
+                className="w-full min-h-[100px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                style={{ color: 'var(--cc-text)' }} />
             </div>
 
             {/* Variantes QCM */}
@@ -251,29 +257,34 @@ export default function AdminQuestionsPage() {
                     }} className="text-xs text-red-300 hover:text-red-200">Supprimer</button>
                   </div>
                   <input placeholder="Titre" value={v.title ?? ""} onChange={e => updateVariant(vIdx, "title", e.target.value)}
-                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white focus:outline-none" />
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs focus:outline-none"
+                    style={{ color: 'var(--cc-text)' }} />
                   <textarea placeholder="Énoncé de la question" value={v.prompt ?? ""} onChange={e => updateVariant(vIdx, "prompt", e.target.value)}
-                    className="w-full min-h-[50px] rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white focus:outline-none" />
+                    className="w-full min-h-[50px] rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs focus:outline-none"
+                    style={{ color: 'var(--cc-text)' }} />
                   {[0, 1, 2, 3].map(oIdx => (
                     <div key={oIdx} className="flex gap-2 items-center">
                       <button onClick={() => updateVariant(vIdx, "correct", oIdx)}
-                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${v.correct === oIdx ? "bg-emerald-500/20 border border-emerald-400/40 text-emerald-200" : "bg-white/5 border border-white/10 text-slate-400"}`}>
+                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${v.correct === oIdx ? "bg-emerald-500/20 border border-emerald-400/40 text-emerald-200" : "bg-white/5 border border-white/10"}`}
+                        style={v.correct === oIdx ? undefined : { color: 'var(--cc-text-muted)' }}>
                         {String.fromCharCode(65 + oIdx)}
                       </button>
                       <input value={(v.options ?? [])[oIdx] ?? ""} onChange={e => updateVariantOption(vIdx, oIdx, e.target.value)}
                         placeholder={`Option ${String.fromCharCode(65 + oIdx)}`}
-                        className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white focus:outline-none" />
+                        className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs focus:outline-none"
+                        style={{ color: 'var(--cc-text)' }} />
                     </div>
                   ))}
                   <textarea placeholder="Explication" value={v.explanation ?? ""} onChange={e => updateVariant(vIdx, "explanation", e.target.value)}
-                    className="w-full min-h-[50px] rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white focus:outline-none" />
+                    className="w-full min-h-[50px] rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs focus:outline-none"
+                    style={{ color: 'var(--cc-text)' }} />
                 </div>
               ))}
             </div>
 
-            <div className="flex justify-end gap-2 sticky bottom-0 bg-slate-900 pt-3 border-t border-white/10">
-              <button onClick={() => setEditing(null)} className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">Annuler</button>
-              <button onClick={save} className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-500">Enregistrer</button>
+            <div className="flex justify-end gap-2 sticky bottom-0 pt-3 border-t border-white/10" style={{ background: 'var(--cc-surface)' }}>
+              <button onClick={() => setEditing(null)} className="cc-btn cc-btn-secondary cc-btn-sm">Annuler</button>
+              <button onClick={save} className="cc-btn cc-btn-primary cc-btn-sm">Enregistrer</button>
             </div>
           </div>
         </div>

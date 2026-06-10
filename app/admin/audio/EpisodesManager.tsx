@@ -116,7 +116,7 @@ export default function EpisodesManager() {
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"
+          className="rounded-xl px-3 py-2 text-sm"
         >
           <option value="">Toutes les séries</option>
           {series.map((s) => (
@@ -128,7 +128,7 @@ export default function EpisodesManager() {
             setCreating(true)
             setEditing({ id: '', ...EMPTY, series_id: filter || null })
           }}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-medium hover:bg-teal-700"
+          className="cc-btn cc-btn-primary cc-btn-sm"
         >
           <Plus size={14} /> Nouvel épisode
         </button>
@@ -145,21 +145,21 @@ export default function EpisodesManager() {
         />
       )}
 
-      {loading && <p className="text-sm text-slate-400">Chargement…</p>}
+      {loading && <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>}
       {error && <p className="text-sm text-red-400">Erreur : {error}</p>}
 
       <div className="space-y-2">
         {items.map((ep) => (
-          <div key={ep.id} className="bg-slate-800 border border-slate-700 rounded-2xl p-4 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center text-xs text-slate-400 flex-shrink-0">
+          <div key={ep.id} className="adm-panel p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center text-xs flex-shrink-0" style={{ background: 'var(--cc-surface-alt)', color: 'var(--cc-text-muted)' }}>
               #{ep.episode_number}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{ep.episode_title}</p>
-              <p className="text-xs text-slate-500 truncate">
+              <p className="text-sm font-medium truncate" style={{ color: 'var(--cc-text)' }}>{ep.episode_title}</p>
+              <p className="text-xs truncate" style={{ color: 'var(--cc-text-disabled)' }}>
                 {ep.series_id ? seriesMap.get(ep.series_id)?.subtheme_label ?? '—' : '—'}
                 {' · '}
-                <code className="text-slate-400">{ep.episode_slug}</code>
+                <code style={{ color: 'var(--cc-text-muted)' }}>{ep.episode_slug}</code>
                 {ep.is_free && <span className="ml-2 text-emerald-400">gratuit</span>}
                 {!ep.published && <span className="ml-2 text-rose-400">masqué</span>}
                 {!ep.audio_male_url && !ep.audio_female_url && <span className="ml-2 text-amber-400">pas de fichier</span>}
@@ -167,13 +167,13 @@ export default function EpisodesManager() {
             </div>
             <button
               onClick={() => { setEditing(ep); setCreating(false) }}
-              className="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-xs text-white"
+              className="adm-action"
             >
               Éditer
             </button>
             <button
               onClick={() => remove(ep.id)}
-              className="p-1.5 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300"
+              className="adm-action adm-action-danger"
               aria-label="Supprimer"
             >
               <Trash2 size={14} />
@@ -181,7 +181,7 @@ export default function EpisodesManager() {
           </div>
         ))}
         {!loading && items.length === 0 && (
-          <p className="text-sm text-slate-500 text-center py-6">Aucun épisode.</p>
+          <p className="text-sm text-center py-6" style={{ color: 'var(--cc-text-disabled)' }}>Aucun épisode.</p>
         )}
       </div>
     </div>
@@ -228,12 +228,12 @@ function EpisodeForm({
   }
 
   return (
-    <div className="bg-slate-800 border border-teal-500/40 rounded-2xl p-5">
+    <div className="adm-panel p-5" style={{ borderColor: 'var(--cc-primary)' }}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-white">
+        <h3 className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>
           {creating ? 'Nouvel épisode' : `Édition : ${value.episode_title}`}
         </h3>
-        <button onClick={onCancel} className="text-slate-400 hover:text-white">
+        <button onClick={onCancel} style={{ color: 'var(--cc-text-muted)' }}>
           <X size={16} />
         </button>
       </div>
@@ -269,7 +269,7 @@ function EpisodeForm({
         <Field label="Audio — voix homme" full>
           <div className="flex gap-2">
             <input value={form.audio_male_url ?? ''} onChange={(e) => patch('audio_male_url', e.target.value)} className={inputCls + ' flex-1'} placeholder="episodes/slug-male.mp3" />
-            <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs text-white cursor-pointer">
+            <label className="adm-action cursor-pointer">
               {uploadingKey === 'male' ? '…' : <Upload size={12} />} Upload
               <input type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadAudio('male', f) }} />
             </label>
@@ -281,7 +281,7 @@ function EpisodeForm({
         <Field label="Audio — voix femme" full>
           <div className="flex gap-2">
             <input value={form.audio_female_url ?? ''} onChange={(e) => patch('audio_female_url', e.target.value)} className={inputCls + ' flex-1'} placeholder="episodes/slug-female.mp3" />
-            <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs text-white cursor-pointer">
+            <label className="adm-action cursor-pointer">
               {uploadingKey === 'female' ? '…' : <Upload size={12} />} Upload
               <input type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadAudio('female', f) }} />
             </label>
@@ -298,15 +298,15 @@ function EpisodeForm({
         </Field>
 
         <div className="flex items-center gap-4 sm:col-span-2 mt-1">
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs" style={{ color: 'var(--cc-text)' }}>
             <input type="checkbox" checked={form.premium} onChange={(e) => patch('premium', e.target.checked)} />
             Premium
           </label>
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs" style={{ color: 'var(--cc-text)' }}>
             <input type="checkbox" checked={form.is_free} onChange={(e) => patch('is_free', e.target.checked)} />
             Gratuit (freemium)
           </label>
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs" style={{ color: 'var(--cc-text)' }}>
             <input type="checkbox" checked={form.published} onChange={(e) => patch('published', e.target.checked)} />
             Publié
           </label>
@@ -314,11 +314,11 @@ function EpisodeForm({
       </div>
 
       <div className="flex justify-end gap-2 mt-5">
-        <button onClick={onCancel} className="px-4 py-2 rounded-xl bg-slate-700 text-slate-300 text-sm hover:bg-slate-600">Annuler</button>
+        <button onClick={onCancel} className="cc-btn cc-btn-secondary cc-btn-sm">Annuler</button>
         <button
           disabled={saving}
           onClick={() => onSave(creating ? { ...form, id: undefined } : form)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 disabled:opacity-40"
+          className="cc-btn cc-btn-primary cc-btn-sm"
         >
           <Save size={14} /> {saving ? 'Enregistrement…' : 'Enregistrer'}
         </button>
@@ -328,12 +328,12 @@ function EpisodeForm({
 }
 
 const inputCls =
-  'w-full bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500'
+  'w-full rounded-xl px-3 py-2 text-sm focus:outline-none'
 
 function Field({ label, children, required, full }: { label: string; children: ReactNode; required?: boolean; full?: boolean }) {
   return (
     <div className={full ? 'sm:col-span-2' : ''}>
-      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+      <label className="block text-[11px] font-medium mb-1" style={{ color: 'var(--cc-text-muted)' }}>
         {label}{required && <span className="text-rose-400"> *</span>}
       </label>
       {children}
@@ -379,7 +379,7 @@ function EpisodePreview({ slug, voice }: { slug: string; voice: 'male' | 'female
           type="button"
           onClick={load}
           disabled={loading}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 px-3 py-1.5 text-[11px] font-medium text-white disabled:opacity-40"
+          className="adm-action"
         >
           {loading ? 'Chargement…' : '▶ Écouter'}
         </button>
@@ -388,7 +388,7 @@ function EpisodePreview({ slug, voice }: { slug: string; voice: 'male' | 'female
         <button
           type="button"
           onClick={load}
-          className="rounded-lg bg-slate-700 hover:bg-slate-600 px-2 py-1 text-[10px] text-slate-300"
+          className="adm-action"
           title="Rafraîchir l'URL signée"
         >
           ↻

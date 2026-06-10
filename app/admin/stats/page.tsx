@@ -67,19 +67,19 @@ export default async function StatsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-medium text-white mb-1">Statistiques</h1>
-        <p className="text-sm text-slate-400">Vue d'ensemble de la plateforme</p>
+        <h1 className="adm-title">Statistiques</h1>
+        <p className="adm-subtitle">Vue d'ensemble de la plateforme</p>
       </div>
 
       <div className="space-y-6">
         {sections.map(({ title, color, stats }) => (
-          <div key={title} className={`bg-slate-800 border ${color} rounded-2xl p-5`}>
-            <h2 className="text-sm font-medium text-white mb-4">{title}</h2>
+          <div key={title} className={`adm-panel border ${color} p-5`}>
+            <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--cc-text)' }}>{title}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {stats.map(({ label, value }) => (
-                <div key={label} className="bg-slate-700/50 rounded-xl p-3">
-                  <p className="text-xl font-medium text-white">{value}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">{label}</p>
+                <div key={label} className="rounded-xl p-3" style={{ background: 'var(--cc-surface-alt)' }}>
+                  <p className="text-xl font-medium" style={{ color: 'var(--cc-text)' }}>{value}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--cc-text-muted)' }}>{label}</p>
                 </div>
               ))}
             </div>

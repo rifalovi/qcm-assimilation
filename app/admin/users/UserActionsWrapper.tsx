@@ -23,7 +23,7 @@ export default function UserActionsWrapper({ bannedIds, currentRole }: { bannedI
       .catch(() => setLoading(false))
   }, [])
 
-  if (loading) return <p className="text-slate-400 text-sm py-8 text-center">Chargement des utilisateurs…</p>
+  if (loading) return <p className="text-sm py-8 text-center" style={{ color: 'var(--cc-text-muted)' }}>Chargement des utilisateurs…</p>
 
   return <UserActions users={users} bannedIds={bannedIds} currentRole={currentRole} />
 }
