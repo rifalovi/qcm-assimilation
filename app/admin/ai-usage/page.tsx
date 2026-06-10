@@ -57,7 +57,7 @@ export default function AiUsagePage() {
   }
 
   if (!data) {
-    return <p className="text-center text-slate-400 py-20">Impossible de charger les données</p>;
+    return <p className="text-center py-20" style={{ color: 'var(--cc-text-muted)' }}>Impossible de charger les données</p>;
   }
 
   const { overview, byMode, topUsers, timeline } = data;
@@ -67,8 +67,8 @@ export default function AiUsagePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-white">Usage IA</h1>
-        <p className="mt-1 text-sm text-slate-400">Suivi des tokens OpenAI, coûts et quotas</p>
+        <h1 className="adm-title">Usage IA</h1>
+        <p className="adm-subtitle">Suivi des tokens OpenAI, coûts et quotas</p>
       </div>
 
       {/* KPI principaux */}
@@ -93,29 +93,29 @@ export default function AiUsagePage() {
       {/* Stats secondaires */}
       <div className="grid gap-3 sm:grid-cols-3">
         <StatCard label="Questions hors-sujet bloquées" value={String(overview.offTopicCount)} sub="Tokens économisés" accent="border-red-400/20 bg-red-500/10 text-red-100" />
-        <StatCard label="Coût moyen / requête" value={overview.totalRequests > 0 ? `${((overview.estimatedCostTotal / overview.totalRequests) * 100).toFixed(3)}¢` : '—'} accent="border-slate-400/20 bg-slate-500/10 text-slate-100" />
-        <StatCard label="Tokens moyen / requête" value={overview.totalRequests > 0 ? String(Math.round(overview.totalTokens / overview.totalRequests)) : '—'} accent="border-slate-400/20 bg-slate-500/10 text-slate-100" />
+        <StatCard label="Coût moyen / requête" value={overview.totalRequests > 0 ? `${((overview.estimatedCostTotal / overview.totalRequests) * 100).toFixed(3)}¢` : '—'} accent="adm-stat" />
+        <StatCard label="Tokens moyen / requête" value={overview.totalRequests > 0 ? String(Math.round(overview.totalTokens / overview.totalRequests)) : '—'} accent="adm-stat" />
       </div>
 
       {/* Usage par mode */}
-      <div className="rounded-2xl border border-white/10 bg-slate-800/60 p-5">
-        <h2 className="text-sm font-bold text-white mb-4">Répartition par mode</h2>
+      <div className="adm-panel p-5">
+        <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--cc-text)' }}>Répartition par mode</h2>
         <div className="space-y-3">
           {Object.entries(byMode).sort((a, b) => b[1].tokens - a[1].tokens).map(([mode, stats]) => {
             const pct = overview.totalTokens > 0 ? (stats.tokens / overview.totalTokens) * 100 : 0;
-            const meta = MODE_LABELS[mode] ?? { label: mode, color: "bg-slate-500" };
+            const meta = MODE_LABELS[mode] ?? { label: mode, color: "bg-zinc-500" };
             return (
               <div key={mode}>
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
                     <div className={`h-2.5 w-2.5 rounded-full ${meta.color}`} />
-                    <span className="text-xs font-medium text-white">{meta.label}</span>
+                    <span className="text-xs font-medium" style={{ color: 'var(--cc-text)' }}>{meta.label}</span>
                   </div>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>
                     {formatTokens(stats.tokens)} tokens · {stats.requests} req · {pct.toFixed(1)}%
                   </span>
                 </div>
-                <div className="h-2 w-full rounded-full bg-white/10">
+                <div className="h-2 w-full rounded-full" style={{ background: 'var(--cc-surface-alt)' }}>
                   <div className={`h-full rounded-full ${meta.color} transition-all`} style={{ width: `${pct}%` }} />
                 </div>
               </div>
@@ -125,9 +125,9 @@ export default function AiUsagePage() {
       </div>
 
       {/* Timeline 30 jours — Tokens */}
-      <div className="rounded-2xl border border-white/10 bg-slate-800/60 p-5">
-        <h2 className="text-sm font-bold text-white mb-1">Tokens consommés — 30 derniers jours</h2>
-        <p className="text-xs text-slate-500 mb-4">Barres = tokens · Ligne = requêtes</p>
+      <div className="adm-panel p-5">
+        <h2 className="text-sm font-semibold mb-1" style={{ color: 'var(--cc-text)' }}>Tokens consommés — 30 derniers jours</h2>
+        <p className="text-xs mb-4" style={{ color: 'var(--cc-text-disabled)' }}>Barres = tokens · Ligne = requêtes</p>
         <div className="flex items-end gap-[2px] h-32">
           {timeline.map((d) => (
             <div key={d.date} className="flex-1 flex flex-col items-center gap-0.5 group relative">
@@ -137,7 +137,7 @@ export default function AiUsagePage() {
               />
               {/* Tooltip */}
               <div className="absolute bottom-full mb-2 hidden group-hover:block z-10">
-                <div className="rounded-lg bg-slate-700 px-2 py-1 text-[10px] text-white whitespace-nowrap shadow-lg">
+                <div className="rounded-lg px-2 py-1 text-[10px] whitespace-nowrap shadow-lg" style={{ background: 'var(--cc-surface-alt)', color: 'var(--cc-text)' }}>
                   <p className="font-bold">{d.date.slice(5)}</p>
                   <p>{formatTokens(d.tokens)} tokens</p>
                   <p>{d.requests} requêtes</p>
@@ -146,47 +146,47 @@ export default function AiUsagePage() {
             </div>
           ))}
         </div>
-        <div className="flex justify-between mt-1 text-[9px] text-slate-600">
+        <div className="flex justify-between mt-1 text-[9px]" style={{ color: 'var(--cc-text-disabled)' }}>
           <span>{timeline[0]?.date.slice(5)}</span>
           <span>{timeline[timeline.length - 1]?.date.slice(5)}</span>
         </div>
       </div>
 
       {/* Top utilisateurs */}
-      <div className="rounded-2xl border border-white/10 bg-slate-800/60 p-5">
-        <h2 className="text-sm font-bold text-white mb-4">Top utilisateurs par consommation</h2>
+      <div className="adm-panel p-5">
+        <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--cc-text)' }}>Top utilisateurs par consommation</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="border-b border-white/10">
-                <th className="text-left py-2 text-slate-400 font-medium">Utilisateur</th>
-                <th className="text-right py-2 text-slate-400 font-medium">Requêtes</th>
-                <th className="text-right py-2 text-slate-400 font-medium">Tokens</th>
-                <th className="text-right py-2 text-slate-400 font-medium">Coût estimé</th>
-                <th className="text-right py-2 text-slate-400 font-medium">% total</th>
+              <tr className="border-b border-[var(--cc-border)]">
+                <th className="text-left py-2 font-medium" style={{ color: 'var(--cc-text-muted)' }}>Utilisateur</th>
+                <th className="text-right py-2 font-medium" style={{ color: 'var(--cc-text-muted)' }}>Requêtes</th>
+                <th className="text-right py-2 font-medium" style={{ color: 'var(--cc-text-muted)' }}>Tokens</th>
+                <th className="text-right py-2 font-medium" style={{ color: 'var(--cc-text-muted)' }}>Coût estimé</th>
+                <th className="text-right py-2 font-medium" style={{ color: 'var(--cc-text-muted)' }}>% total</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody>
               {topUsers.map((u, i) => {
                 const pct = overview.totalTokens > 0 ? (u.tokens / overview.totalTokens) * 100 : 0;
                 const cost = u.tokens * 0.0000003;
                 return (
-                  <tr key={u.id} className="hover:bg-white/5">
+                  <tr key={u.id} className="border-b border-[var(--cc-border)] last:border-0">
                     <td className="py-2">
                       <div className="flex items-center gap-2">
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-700 text-[10px] text-slate-300">{i + 1}</span>
-                        <span className="text-white font-medium">{u.username ?? (u.id === 'anonymous' ? 'Anonymes' : u.id.slice(0, 8))}</span>
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full text-[10px]" style={{ background: 'var(--cc-surface-alt)', color: 'var(--cc-text-muted)' }}>{i + 1}</span>
+                        <span className="font-medium" style={{ color: 'var(--cc-text)' }}>{u.username ?? (u.id === 'anonymous' ? 'Anonymes' : u.id.slice(0, 8))}</span>
                       </div>
                     </td>
-                    <td className="py-2 text-right text-slate-300">{u.requests}</td>
-                    <td className="py-2 text-right text-slate-300">{formatTokens(u.tokens)}</td>
-                    <td className="py-2 text-right text-slate-300">{cost < 0.01 ? '<0.01$' : `${cost.toFixed(2)}$`}</td>
+                    <td className="py-2 text-right" style={{ color: 'var(--cc-text)' }}>{u.requests}</td>
+                    <td className="py-2 text-right" style={{ color: 'var(--cc-text)' }}>{formatTokens(u.tokens)}</td>
+                    <td className="py-2 text-right" style={{ color: 'var(--cc-text)' }}>{cost < 0.01 ? '<0.01$' : `${cost.toFixed(2)}$`}</td>
                     <td className="py-2 text-right">
                       <div className="flex items-center justify-end gap-1.5">
-                        <div className="h-1.5 w-12 rounded-full bg-white/10">
+                        <div className="h-1.5 w-12 rounded-full" style={{ background: 'var(--cc-surface-alt)' }}>
                           <div className="h-full rounded-full bg-blue-400" style={{ width: `${Math.min(pct, 100)}%` }} />
                         </div>
-                        <span className="text-slate-400 w-10 text-right">{pct.toFixed(1)}%</span>
+                        <span className="w-10 text-right" style={{ color: 'var(--cc-text-muted)' }}>{pct.toFixed(1)}%</span>
                       </div>
                     </td>
                   </tr>
@@ -198,38 +198,38 @@ export default function AiUsagePage() {
       </div>
 
       {/* Info quotas */}
-      <div className="rounded-2xl border border-white/10 bg-slate-800/60 p-5">
-        <h2 className="text-sm font-bold text-white mb-3">Quotas configurés</h2>
+      <div className="adm-panel p-5">
+        <h2 className="text-sm font-semibold mb-3" style={{ color: 'var(--cc-text)' }}>Quotas configurés</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="border-b border-white/10">
-                <th className="text-left py-2 text-slate-400">Rôle</th>
-                <th className="text-center py-2 text-slate-400">Explain</th>
-                <th className="text-center py-2 text-slate-400">Coach</th>
-                <th className="text-center py-2 text-slate-400">Assistant</th>
-                <th className="text-center py-2 text-slate-400">Chatbot</th>
+              <tr className="border-b border-[var(--cc-border)]">
+                <th className="text-left py-2" style={{ color: 'var(--cc-text-muted)' }}>Rôle</th>
+                <th className="text-center py-2" style={{ color: 'var(--cc-text-muted)' }}>Explain</th>
+                <th className="text-center py-2" style={{ color: 'var(--cc-text-muted)' }}>Coach</th>
+                <th className="text-center py-2" style={{ color: 'var(--cc-text-muted)' }}>Assistant</th>
+                <th className="text-center py-2" style={{ color: 'var(--cc-text-muted)' }}>Chatbot</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody>
               {[
                 { role: "Anonyme", e: "3/j", c: "—", a: "3/j", ch: "3/j" },
                 { role: "Freemium", e: "10/j", c: "3/j", a: "10/j", ch: "10/j" },
                 { role: "Premium", e: "Illimité", c: "Illimité", a: "Illimité", ch: "Illimité" },
                 { role: "Élite", e: "Illimité", c: "Illimité", a: "Illimité", ch: "Illimité" },
               ].map(r => (
-                <tr key={r.role}>
-                  <td className="py-2 text-white font-medium">{r.role}</td>
-                  <td className="py-2 text-center text-slate-300">{r.e}</td>
-                  <td className="py-2 text-center text-slate-300">{r.c}</td>
-                  <td className="py-2 text-center text-slate-300">{r.a}</td>
-                  <td className="py-2 text-center text-slate-300">{r.ch}</td>
+                <tr key={r.role} className="border-b border-[var(--cc-border)] last:border-0">
+                  <td className="py-2 font-medium" style={{ color: 'var(--cc-text)' }}>{r.role}</td>
+                  <td className="py-2 text-center" style={{ color: 'var(--cc-text)' }}>{r.e}</td>
+                  <td className="py-2 text-center" style={{ color: 'var(--cc-text)' }}>{r.c}</td>
+                  <td className="py-2 text-center" style={{ color: 'var(--cc-text)' }}>{r.a}</td>
+                  <td className="py-2 text-center" style={{ color: 'var(--cc-text)' }}>{r.ch}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-xs text-slate-500">Modifier les quotas dans <code className="text-slate-400">src/lib/aiQuota.ts</code></p>
+        <p className="mt-3 text-xs" style={{ color: 'var(--cc-text-disabled)' }}>Modifier les quotas dans <code style={{ color: 'var(--cc-text-muted)' }}>src/lib/aiQuota.ts</code></p>
       </div>
     </div>
   );

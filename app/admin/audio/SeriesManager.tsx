@@ -97,7 +97,7 @@ export default function SeriesManager() {
     await load()
   }
 
-  if (loading) return <p className="text-sm text-slate-400">Chargement…</p>
+  if (loading) return <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>
   if (error)   return <p className="text-sm text-red-400">Erreur : {error}</p>
 
   return (
@@ -105,7 +105,7 @@ export default function SeriesManager() {
       <div className="flex justify-end">
         <button
           onClick={() => { setCreating(true); setEditing({ id: '', ...EMPTY }) }}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-medium hover:bg-teal-700"
+          className="cc-btn cc-btn-primary cc-btn-sm"
         >
           <Plus size={14} /> Nouvelle série
         </button>
@@ -123,30 +123,30 @@ export default function SeriesManager() {
 
       <div className="space-y-2">
         {items.map((s) => (
-          <div key={s.id} className="bg-slate-800 border border-slate-700 rounded-2xl p-4 flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-900 overflow-hidden flex items-center justify-center text-xl flex-shrink-0">
+          <div key={s.id} className="adm-panel p-4 flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center text-xl flex-shrink-0" style={{ background: 'var(--cc-surface-alt)' }}>
               {s.image_url
                 ? <img src={s.image_url} alt="" className="w-full h-full object-cover" />
                 : <span>{s.icon ?? '🎧'}</span>}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{s.subtheme_label}</p>
-              <p className="text-xs text-slate-500 truncate">
-                {s.theme_label} · <code className="text-slate-400">{s.subtheme_key}</code>
+              <p className="text-sm font-medium truncate" style={{ color: 'var(--cc-text)' }}>{s.subtheme_label}</p>
+              <p className="text-xs truncate" style={{ color: 'var(--cc-text-disabled)' }}>
+                {s.theme_label} · <code style={{ color: 'var(--cc-text-muted)' }}>{s.subtheme_key}</code>
                 {s.featured && <span className="ml-2 text-amber-400">★ vedette</span>}
                 {!s.published && <span className="ml-2 text-rose-400">masqué</span>}
               </p>
             </div>
-            <span className="text-xs text-slate-500">#{s.position}</span>
+            <span className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>#{s.position}</span>
             <button
               onClick={() => { setEditing(s); setCreating(false) }}
-              className="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-xs text-white"
+              className="adm-action"
             >
               Éditer
             </button>
             <button
               onClick={() => remove(s.id)}
-              className="p-1.5 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300"
+              className="adm-action adm-action-danger"
               aria-label="Supprimer"
             >
               <Trash2 size={14} />
@@ -154,7 +154,7 @@ export default function SeriesManager() {
           </div>
         ))}
         {items.length === 0 && (
-          <p className="text-sm text-slate-500 text-center py-6">Aucune série pour l'instant.</p>
+          <p className="text-sm text-center py-6" style={{ color: 'var(--cc-text-disabled)' }}>Aucune série pour l'instant.</p>
         )}
       </div>
     </div>
@@ -202,12 +202,12 @@ function SeriesForm({
   }
 
   return (
-    <div className="bg-slate-800 border border-teal-500/40 rounded-2xl p-5">
+    <div className="adm-panel p-5" style={{ borderColor: 'var(--cc-primary)' }}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-white">
+        <h3 className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>
           {creating ? 'Nouvelle série' : `Édition : ${value.subtheme_label}`}
         </h3>
-        <button onClick={onCancel} className="text-slate-400 hover:text-white">
+        <button onClick={onCancel} style={{ color: 'var(--cc-text-muted)' }}>
           <X size={16} />
         </button>
       </div>
@@ -237,7 +237,7 @@ function SeriesForm({
         <Field label="Image (URL ou upload)" full>
           <div className="flex gap-2">
             <input value={form.image_url ?? ''} onChange={(e) => patch('image_url', e.target.value)} className={inputCls + ' flex-1'} placeholder="/themes/valeurs_republique.jpg" />
-            <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs text-white cursor-pointer">
+            <label className="adm-action cursor-pointer">
               {uploading ? '…' : uploaded ? <Check size={12} /> : <Upload size={12} />}
               Upload
               <input
@@ -249,7 +249,7 @@ function SeriesForm({
             </label>
           </div>
           {form.image_url && (
-            <img src={form.image_url} alt="" className="mt-2 h-20 w-20 object-cover rounded-lg border border-slate-700" />
+            <img src={form.image_url} alt="" className="mt-2 h-20 w-20 object-cover rounded-lg border border-[var(--cc-border)]" />
           )}
         </Field>
         <Field label="Gradient (accent_gradient)">
@@ -262,11 +262,11 @@ function SeriesForm({
           <input value={form.accent_text ?? ''} onChange={(e) => patch('accent_text', e.target.value)} className={inputCls} placeholder="text-blue-300" />
         </Field>
         <div className="flex items-center gap-4 mt-1">
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs" style={{ color: 'var(--cc-text)' }}>
             <input type="checkbox" checked={form.featured} onChange={(e) => patch('featured', e.target.checked)} />
             En vedette
           </label>
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs" style={{ color: 'var(--cc-text)' }}>
             <input type="checkbox" checked={form.published} onChange={(e) => patch('published', e.target.checked)} />
             Publié
           </label>
@@ -274,11 +274,11 @@ function SeriesForm({
       </div>
 
       <div className="flex justify-end gap-2 mt-5">
-        <button onClick={onCancel} className="px-4 py-2 rounded-xl bg-slate-700 text-slate-300 text-sm hover:bg-slate-600">Annuler</button>
+        <button onClick={onCancel} className="cc-btn cc-btn-secondary cc-btn-sm">Annuler</button>
         <button
           disabled={saving}
           onClick={() => onSave(creating ? { ...form, id: undefined } : form)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 disabled:opacity-40"
+          className="cc-btn cc-btn-primary cc-btn-sm"
         >
           <Save size={14} /> {saving ? 'Enregistrement…' : 'Enregistrer'}
         </button>
@@ -288,12 +288,12 @@ function SeriesForm({
 }
 
 const inputCls =
-  'w-full bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500'
+  'w-full rounded-xl px-3 py-2 text-sm focus:outline-none'
 
 function Field({ label, children, required, full }: { label: string; children: ReactNode; required?: boolean; full?: boolean }) {
   return (
     <div className={full ? 'sm:col-span-2' : ''}>
-      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+      <label className="block text-[11px] font-medium mb-1" style={{ color: 'var(--cc-text-muted)' }}>
         {label}{required && <span className="text-rose-400"> *</span>}
       </label>
       {children}

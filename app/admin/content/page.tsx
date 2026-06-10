@@ -52,25 +52,25 @@ export default function ContentPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-medium text-white mb-1">Édition de contenu</h1>
-        <p className="text-sm text-slate-400">Modifiez les textes de la plateforme sans toucher au code</p>
+        <h1 className="adm-title">Édition de contenu</h1>
+        <p className="adm-subtitle">Modifiez les textes de la plateforme sans toucher au code</p>
       </div>
 
       <div className="space-y-4">
         {CONTENT_PAGES.map(({ key, label, type }) => (
-          <div key={key} className="bg-slate-800 border border-slate-700 rounded-2xl p-5">
-            <label className="block text-sm font-medium text-white mb-2">{label}</label>
+          <div key={key} className="adm-panel p-5">
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--cc-text)' }}>{label}</label>
             {type === 'textarea' ? (
               <textarea value={values[key]} onChange={(e) => setValues((v) => ({ ...v, [key]: e.target.value }))}
                 rows={3}
-                className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500 resize-none" />
+                className="w-full rounded-xl px-4 py-3 text-sm resize-none" />
             ) : (
               <input type="text" value={values[key]} onChange={(e) => setValues((v) => ({ ...v, [key]: e.target.value }))}
-                className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-teal-500" />
+                className="w-full rounded-xl px-4 py-2.5 text-sm" />
             )}
             <div className="flex justify-end mt-3">
               <button onClick={() => handleSave(key)} disabled={saving === key}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-colors ${saved[key] ? 'bg-teal-900/40 text-teal-400' : 'bg-teal-600 text-white hover:bg-teal-700'} disabled:opacity-40`}>
+                className={saved[key] ? 'cc-btn cc-btn-secondary cc-btn-sm' : 'cc-btn cc-btn-primary cc-btn-sm'}>
                 {saved[key] ? <><Check size={12} />Sauvegardé</> : <><Save size={12} />Sauvegarder</>}
               </button>
             </div>
@@ -81,8 +81,8 @@ export default function ContentPage() {
       <div className="mt-6 bg-amber-900/20 border border-amber-500/30 rounded-2xl p-4">
         <p className="text-xs text-amber-400 font-medium mb-1">Note</p>
         <p className="text-xs text-amber-300/70">
-          Cette section nécessite la création d'une table <code className="bg-slate-800 px-1 rounded">site_content</code> dans Supabase.
-          Exécutez : <code className="bg-slate-800 px-1 rounded">CREATE TABLE site_content (key TEXT PRIMARY KEY, value TEXT, updated_at TIMESTAMPTZ DEFAULT NOW());</code>
+          Cette section nécessite la création d'une table <code className="px-1 rounded" style={{ background: 'var(--cc-surface-alt)' }}>site_content</code> dans Supabase.
+          Exécutez : <code className="px-1 rounded" style={{ background: 'var(--cc-surface-alt)' }}>CREATE TABLE site_content (key TEXT PRIMARY KEY, value TEXT, updated_at TIMESTAMPTZ DEFAULT NOW());</code>
         </p>
       </div>
     </div>

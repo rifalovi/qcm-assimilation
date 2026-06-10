@@ -85,20 +85,20 @@ function KPICard({
   }
   return (
     <div className={`rounded-2xl border p-5 ${colors[color]}`}>
-      <div className="flex h-7 w-7 items-center justify-center text-slate-300">{icon}</div>
-      <div className="mt-3 text-3xl font-extrabold text-white">{value}</div>
-      <div className="mt-1 text-xs font-semibold text-slate-300">{label}</div>
-      {sub && <div className="mt-1 text-[10px] text-slate-500">{sub}</div>}
+      <div className="flex h-7 w-7 items-center justify-center" style={{ color: 'var(--cc-text)' }}>{icon}</div>
+      <div className="mt-3 text-3xl font-extrabold" style={{ color: 'var(--cc-text)' }}>{value}</div>
+      <div className="mt-1 text-xs font-semibold" style={{ color: 'var(--cc-text)' }}>{label}</div>
+      {sub && <div className="mt-1 text-[10px]" style={{ color: 'var(--cc-text-disabled)' }}>{sub}</div>}
     </div>
   )
 }
 
 function SectionCard({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+    <div className="adm-panel p-5">
       <div className="mb-4">
-        <h2 className="text-sm font-bold text-white">{title}</h2>
-        {subtitle && <p className="mt-0.5 text-[11px] text-slate-500">{subtitle}</p>}
+        <h2 className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>{title}</h2>
+        {subtitle && <p className="mt-0.5 text-[11px]" style={{ color: 'var(--cc-text-disabled)' }}>{subtitle}</p>}
       </div>
       {children}
     </div>
@@ -149,22 +149,20 @@ export default function AnalyticsClient() {
     <div>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-medium text-white mb-1">Analytics</h1>
-          <p className="text-sm text-slate-400">Activité, conversion et usage de Cap Citoyen</p>
+          <h1 className="adm-title">Analytics</h1>
+          <p className="adm-subtitle">Activité, conversion et usage de Cap Citoyen</p>
         </div>
 
         {/* Sélecteurs */}
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <span className="text-[11px] font-medium text-slate-500">Période</span>
-            <div className="flex gap-1 rounded-xl border border-white/10 bg-white/5 p-1">
+            <span className="text-[11px] font-medium" style={{ color: 'var(--cc-text-disabled)' }}>Période</span>
+            <div className="flex gap-1">
               {RANGE_OPTIONS.map((opt) => (
                 <button
                   key={opt.days}
                   onClick={() => setDays(opt.days)}
-                  className={`rounded-lg px-3 py-1 text-xs font-medium transition ${
-                    days === opt.days ? 'bg-teal-600 text-white' : 'text-slate-400 hover:text-white'
-                  }`}
+                  className={`adm-chip ${days === opt.days ? 'adm-chip-active' : ''}`}
                 >
                   {opt.label}
                 </button>
@@ -172,15 +170,13 @@ export default function AnalyticsClient() {
             </div>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="text-[11px] font-medium text-slate-500">Granularité</span>
-            <div className="flex gap-1 rounded-xl border border-white/10 bg-white/5 p-1">
+            <span className="text-[11px] font-medium" style={{ color: 'var(--cc-text-disabled)' }}>Granularité</span>
+            <div className="flex gap-1">
               {GRANULARITY_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => setGranularity(opt.value)}
-                  className={`rounded-lg px-3 py-1 text-xs font-medium transition ${
-                    granularity === opt.value ? 'bg-teal-600 text-white' : 'text-slate-400 hover:text-white'
-                  }`}
+                  className={`adm-chip ${granularity === opt.value ? 'adm-chip-active' : ''}`}
                 >
                   {opt.label}
                 </button>
@@ -190,7 +186,7 @@ export default function AnalyticsClient() {
         </div>
       </div>
 
-      {loading && <p className="text-sm text-slate-400">Chargement…</p>}
+      {loading && <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>}
       {error && <p className="text-sm text-red-400">Erreur : {error}</p>}
 
       {data && (
@@ -265,7 +261,7 @@ export default function AnalyticsClient() {
             subtitle={`Source : auth.users · Granularité : ${granularity}`}
           >
             {signupsChart.length === 0 ? (
-              <p className="text-sm text-slate-500 text-center py-12">Aucune inscription dans la période</p>
+              <p className="text-sm text-center py-12" style={{ color: 'var(--cc-text-disabled)' }}>Aucune inscription dans la période</p>
             ) : (
               <div className="h-64 w-full">
                 <ResponsiveContainer>
@@ -298,7 +294,7 @@ export default function AnalyticsClient() {
                       strokeDasharray={`${data.kpis.conversionRate}, 100`}
                     />
                   </svg>
-                  <div className="absolute inset-0 flex items-center justify-center text-2xl font-extrabold text-white">
+                  <div className="absolute inset-0 flex items-center justify-center text-2xl font-extrabold" style={{ color: 'var(--cc-text)' }}>
                     {data.kpis.conversionRate}%
                   </div>
                 </div>
@@ -318,9 +314,9 @@ export default function AnalyticsClient() {
                 <Stat label="Mode train" value={data.quiz.train.toString()} dot="bg-blue-400" />
                 <Stat label="Mode exam" value={data.quiz.exam.toString()} dot="bg-violet-400" />
               </div>
-              <div className="mt-4 rounded-xl border border-white/5 bg-white/5 p-3">
-                <p className="text-[11px] text-slate-400">Score moyen</p>
-                <p className="text-2xl font-extrabold text-white">{data.quiz.avgScore}%</p>
+              <div className="mt-4 rounded-xl border border-[var(--cc-border)] p-3" style={{ background: 'var(--cc-surface-alt)' }}>
+                <p className="text-[11px]" style={{ color: 'var(--cc-text-muted)' }}>Score moyen</p>
+                <p className="text-2xl font-extrabold" style={{ color: 'var(--cc-text)' }}>{data.quiz.avgScore}%</p>
               </div>
             </SectionCard>
           </div>
@@ -331,7 +327,7 @@ export default function AnalyticsClient() {
             subtitle={`Source : table results · Granularité : ${granularity}`}
           >
             {quizChart.length === 0 ? (
-              <p className="text-sm text-slate-500 text-center py-12">Aucun quiz complété dans la période</p>
+              <p className="text-sm text-center py-12" style={{ color: 'var(--cc-text-disabled)' }}>Aucun quiz complété dans la période</p>
             ) : (
               <div className="h-64 w-full">
                 <ResponsiveContainer>
@@ -386,12 +382,12 @@ export default function AnalyticsClient() {
 // ─── Sub-components ──────────────────────────────────────────────────────
 function Stat({ label, value, dot }: { label: string; value: string; dot?: string }) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-white/5 bg-white/5 px-3 py-2">
-      <span className="flex items-center gap-2 text-xs text-slate-400">
+    <div className="flex items-center justify-between rounded-lg border border-[var(--cc-border)] px-3 py-2" style={{ background: 'var(--cc-surface-alt)' }}>
+      <span className="flex items-center gap-2 text-xs" style={{ color: 'var(--cc-text-muted)' }}>
         {dot && <span className={`h-2 w-2 rounded-full ${dot}`} />}
         {label}
       </span>
-      <span className="text-sm font-bold text-white">{value}</span>
+      <span className="text-sm font-bold" style={{ color: 'var(--cc-text)' }}>{value}</span>
     </div>
   )
 }
@@ -405,20 +401,20 @@ function TopList({
   emptyMsg: string
 }) {
   if (items.length === 0) {
-    return <p className="text-sm text-slate-500 text-center py-6">{emptyMsg}</p>
+    return <p className="text-sm text-center py-6" style={{ color: 'var(--cc-text-disabled)' }}>{emptyMsg}</p>
   }
   const max = Math.max(...items.map((i) => i.count), 1)
   return (
     <div className="space-y-2">
       {items.map((item, i) => (
         <div key={item.key} className="flex items-center gap-3">
-          <span className="w-4 text-xs text-slate-500">{i + 1}</span>
+          <span className="w-4 text-xs" style={{ color: 'var(--cc-text-disabled)' }}>{i + 1}</span>
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex items-baseline justify-between gap-2">
               <span className={`truncate text-sm ${accent}`}>{item.label}</span>
-              <span className="shrink-0 text-xs text-slate-400">{item.count}</span>
+              <span className="shrink-0 text-xs" style={{ color: 'var(--cc-text-muted)' }}>{item.count}</span>
             </div>
-            <div className="h-1.5 rounded-full bg-white/10">
+            <div className="h-1.5 rounded-full" style={{ background: 'var(--cc-surface-alt)' }}>
               <div className={`h-1.5 rounded-full ${bar}`} style={{ width: `${(item.count / max) * 100}%` }} />
             </div>
           </div>

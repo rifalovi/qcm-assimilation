@@ -38,10 +38,10 @@ export default async function AdminDashboard() {
   ])
 
   const stats = [
-    { label: 'Utilisateurs', value: totalUsers ?? 0, sub: `${premiumUsers ?? 0} premium`, icon: Users, color: 'text-blue-400', bg: 'bg-blue-900/20' },
-    { label: 'Témoignages', value: totalTestimonies ?? 0, sub: 'publiés', icon: BookOpen, color: 'text-teal-400', bg: 'bg-teal-900/20' },
-    { label: 'Discussions', value: totalPosts ?? 0, sub: 'forum', icon: MessageSquare, color: 'text-purple-400', bg: 'bg-purple-900/20' },
-    { label: 'Signalements', value: pendingReports ?? 0, sub: `${activeBans ?? 0} bannis`, icon: Flag, color: 'text-red-400', bg: 'bg-red-900/20', alert: (pendingReports ?? 0) > 0 },
+    { label: 'Utilisateurs', value: totalUsers ?? 0, sub: `${premiumUsers ?? 0} premium`, icon: Users, tone: 'var(--cc-info)' },
+    { label: 'Témoignages', value: totalTestimonies ?? 0, sub: 'publiés', icon: BookOpen, tone: 'var(--cc-success)' },
+    { label: 'Discussions', value: totalPosts ?? 0, sub: 'forum', icon: MessageSquare, tone: 'var(--cc-primary)' },
+    { label: 'Signalements', value: pendingReports ?? 0, sub: `${activeBans ?? 0} bannis`, icon: Flag, tone: 'var(--cc-danger)', alert: (pendingReports ?? 0) > 0 },
   ]
 
   function timeAgo(d: string) {
@@ -55,21 +55,21 @@ export default async function AdminDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-medium text-white mb-1">Vue globale</h1>
-        <p className="text-sm text-slate-400">Tableau de bord Cap Citoyen</p>
+        <h1 className="adm-title">Vue globale</h1>
+        <p className="adm-subtitle">Tableau de bord Cap Citoyen</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {stats.map(({ label, value, sub, icon: Icon, color, bg, alert }) => (
-          <div key={label} className={`relative bg-slate-800 border ${alert ? 'border-red-500/50' : 'border-slate-700'} rounded-2xl p-4`}>
-            {alert && <span className="absolute top-3 right-3"><AlertTriangle size={14} className="text-red-400" /></span>}
-            <div className={`w-9 h-9 ${bg} rounded-xl flex items-center justify-center mb-3`}>
-              <Icon size={16} className={color} />
+        {stats.map(({ label, value, sub, icon: Icon, tone, alert }) => (
+          <div key={label} className={`adm-stat ${alert ? 'adm-stat-alert' : ''}`}>
+            {alert && <span className="absolute top-3 right-3"><AlertTriangle size={14} style={{ color: 'var(--cc-danger)' }} /></span>}
+            <div className="adm-stat-icon" style={{ background: `color-mix(in srgb, ${tone} 14%, transparent)`, color: tone }}>
+              <Icon size={16} />
             </div>
-            <p className="text-2xl font-medium text-white">{value}</p>
-            <p className="text-xs text-slate-400 mt-0.5">{label}</p>
-            <p className="text-xs text-slate-600 mt-0.5">{sub}</p>
+            <p className="adm-stat-value">{value}</p>
+            <p className="adm-stat-label">{label}</p>
+            <p className="adm-stat-sub">{sub}</p>
           </div>
         ))}
       </div>
@@ -77,27 +77,27 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* Signalements récents */}
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5">
+        <div className="adm-panel p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-medium text-white">Signalements récents</h2>
-            <Link href="/admin/reports" className="text-xs text-teal-400 hover:text-teal-300">Voir tout →</Link>
+            <h2 className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>Signalements récents</h2>
+            <Link href="/admin/reports" className="text-xs font-medium no-underline" style={{ color: 'var(--cc-primary)' }}>Voir tout →</Link>
           </div>
           {(recentReports ?? []).length === 0 ? (
-            <p className="text-xs text-slate-500 py-4 text-center">Aucun signalement</p>
+            <p className="text-xs py-4 text-center" style={{ color: 'var(--cc-text-disabled)' }}>Aucun signalement</p>
           ) : (
             <div className="space-y-3">
               {(recentReports ?? []).map((r) => {
                 const reporter = Array.isArray(r.profiles) ? r.profiles[0] : r.profiles
                 return (
                   <div key={r.id} className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 flex-shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: 'var(--cc-danger)' }} />
                     <div>
-                      <p className="text-xs text-slate-300">
+                      <p className="text-xs" style={{ color: 'var(--cc-text)' }}>
                         <span className="font-medium">{(reporter as { username?: string })?.username ?? 'Membre'}</span>
                         {' → '}{r.target_type}
                       </p>
-                      {r.reason && <p className="text-xs text-slate-500 mt-0.5">{r.reason}</p>}
-                      <p className="text-[10px] text-slate-600 mt-0.5">{timeAgo(r.created_at)}</p>
+                      {r.reason && <p className="text-xs mt-0.5" style={{ color: 'var(--cc-text-muted)' }}>{r.reason}</p>}
+                      <p className="text-[10px] mt-0.5" style={{ color: 'var(--cc-text-disabled)' }}>{timeAgo(r.created_at)}</p>
                     </div>
                   </div>
                 )
@@ -107,25 +107,25 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Nouveaux membres */}
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5">
+        <div className="adm-panel p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-medium text-white">Nouveaux membres</h2>
-            <Link href="/admin/users" className="text-xs text-teal-400 hover:text-teal-300">Voir tout →</Link>
+            <h2 className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>Nouveaux membres</h2>
+            <Link href="/admin/users" className="text-xs font-medium no-underline" style={{ color: 'var(--cc-primary)' }}>Voir tout →</Link>
           </div>
           <div className="space-y-3">
             {(recentUsers ?? []).map((u) => (
               <div key={u.id} className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-xs text-slate-300">
+                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs" style={{ background: 'var(--cc-surface-raised)', color: 'var(--cc-text-muted)' }}>
                   {u.username?.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-white truncate">{u.username}</p>
-                  <p className="text-[10px] text-slate-500">{timeAgo(u.created_at)}</p>
+                  <p className="text-xs font-medium truncate" style={{ color: 'var(--cc-text)' }}>{u.username}</p>
+                  <p className="text-[10px]" style={{ color: 'var(--cc-text-disabled)' }}>{timeAgo(u.created_at)}</p>
                 </div>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full ${
-                  u.role === 'premium' ? 'bg-amber-900/40 text-amber-400' :
-                  u.role === 'elite' ? 'bg-yellow-900/40 text-yellow-400' :
-                  'bg-slate-700 text-slate-400'
+                <span className={`cc-badge cc-badge-sm ${
+                  u.role === 'premium' ? 'cc-badge-warning' :
+                  u.role === 'elite' ? 'cc-badge-warning' :
+                  'cc-badge-neutral'
                 }`}>{u.role}</span>
               </div>
             ))}
@@ -144,9 +144,13 @@ export default async function AdminDashboard() {
           { href: '/admin/content', label: 'Éditer contenu', icon: BookOpen, urgent: false },
         ].map(({ href, label, icon: Icon, urgent }) => (
           <Link key={href} href={href}
-            className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-colors text-center ${urgent ? 'border-red-500/50 bg-red-900/10 hover:bg-red-900/20' : 'border-slate-700 bg-slate-800 hover:border-slate-600'}`}>
-            <Icon size={18} className={urgent ? 'text-red-400' : 'text-slate-400'} />
-            <p className="text-xs text-slate-300 leading-tight">{label}</p>
+            className="flex flex-col items-center gap-2 p-4 rounded-2xl border transition-colors text-center no-underline"
+            style={{
+              borderColor: urgent ? 'color-mix(in srgb, var(--cc-danger) 45%, transparent)' : 'var(--cc-border)',
+              background: urgent ? 'var(--cc-danger-soft)' : 'var(--cc-surface)',
+            }}>
+            <Icon size={18} style={{ color: urgent ? 'var(--cc-danger)' : 'var(--cc-text-muted)' }} />
+            <p className="text-xs leading-tight" style={{ color: 'var(--cc-text)' }}>{label}</p>
           </Link>
         ))}
       </div>

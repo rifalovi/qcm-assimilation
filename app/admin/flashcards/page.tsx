@@ -107,46 +107,51 @@ export default function AdminFlashcardsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-white">Flashcards</h1>
-        <p className="mt-1 text-sm text-slate-400">Gestion des flashcards ({total} total)</p>
+        <h1 className="adm-title">Flashcards</h1>
+        <p className="adm-subtitle">Gestion des flashcards ({total} total)</p>
       </div>
 
       <div className="flex flex-wrap gap-2">
         <input placeholder="Rechercher (recto, verso)..." value={search} onChange={e => setSearch(e.target.value)}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none flex-1 min-w-[240px]" />
+          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none flex-1 min-w-[240px]"
+          style={{ color: 'var(--cc-text)' }} />
         {availableCols.has('level') && (
           <select value={filterLevel} onChange={e => { setFilterLevel(e.target.value); setPage(0); }}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-            <option value="" className="bg-slate-800">Tous niveaux</option>
-            {LEVELS.map(l => <option key={l} value={l} className="bg-slate-800">Niveau {l}</option>)}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+            style={{ color: 'var(--cc-text)' }}>
+            <option value="" style={{ background: 'var(--cc-surface-alt)' }}>Tous niveaux</option>
+            {LEVELS.map(l => <option key={l} value={l} style={{ background: 'var(--cc-surface-alt)' }}>Niveau {l}</option>)}
           </select>
         )}
         {availableCols.has('theme') && distinctThemes.length > 0 && (
           <select value={filterTheme} onChange={e => { setFilterTheme(e.target.value); setPage(0); }}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none max-w-[240px]">
-            <option value="" className="bg-slate-800">Tous thèmes</option>
-            {distinctThemes.map(t => <option key={t} value={t} className="bg-slate-800">{t}</option>)}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none max-w-[240px]"
+            style={{ color: 'var(--cc-text)' }}>
+            <option value="" style={{ background: 'var(--cc-surface-alt)' }}>Tous thèmes</option>
+            {distinctThemes.map(t => <option key={t} value={t} style={{ background: 'var(--cc-surface-alt)' }}>{t}</option>)}
           </select>
         )}
         {availableCols.has('status') && (
           <select value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setPage(0); }}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-            <option value="" className="bg-slate-800">Tous statuts</option>
-            {STATUSES.map(s => <option key={s} value={s} className="bg-slate-800">{s}</option>)}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+            style={{ color: 'var(--cc-text)' }}>
+            <option value="" style={{ background: 'var(--cc-surface-alt)' }}>Tous statuts</option>
+            {STATUSES.map(s => <option key={s} value={s} style={{ background: 'var(--cc-surface-alt)' }}>{s}</option>)}
           </select>
         )}
         <select value={sort} onChange={e => { setSort(e.target.value as typeof sort); setPage(0); }}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-          <option value="newest" className="bg-slate-800">Plus récent</option>
-          {levelCol && <option value="level_asc" className="bg-slate-800">Niveau ↑</option>}
-          {levelCol && <option value="level_desc" className="bg-slate-800">Niveau ↓</option>}
-          {availableCols.has('theme') && <option value="theme" className="bg-slate-800">Par thème</option>}
+          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+          style={{ color: 'var(--cc-text)' }}>
+          <option value="newest" style={{ background: 'var(--cc-surface-alt)' }}>Plus récent</option>
+          {levelCol && <option value="level_asc" style={{ background: 'var(--cc-surface-alt)' }}>Niveau ↑</option>}
+          {levelCol && <option value="level_desc" style={{ background: 'var(--cc-surface-alt)' }}>Niveau ↓</option>}
+          {availableCols.has('theme') && <option value="theme" style={{ background: 'var(--cc-surface-alt)' }}>Par thème</option>}
         </select>
         <button onClick={() => setEditing(empty())}
-          className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-500">+ Nouvelle</button>
+          className="cc-btn cc-btn-primary cc-btn-sm">+ Nouvelle</button>
         <button onClick={exportCSV}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-300 hover:text-white">Export CSV</button>
-        <label className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-300 hover:text-white cursor-pointer">
+          className="cc-btn cc-btn-secondary cc-btn-sm">Export CSV</button>
+        <label className="cc-btn cc-btn-secondary cc-btn-sm cursor-pointer">
           Import CSV
           <input type="file" accept=".csv" hidden onChange={e => { const f = e.target.files?.[0]; if (f) importCSV(f); }} />
         </label>
@@ -163,28 +168,28 @@ export default function AdminFlashcardsPage() {
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
           {cards.map(c => (
-            <div key={c.id} className="rounded-2xl border border-white/10 bg-slate-800/60 p-4">
+            <div key={c.id} className="adm-panel p-4">
               <div className="flex items-center gap-2 mb-2 flex-wrap">
                 {levelCol && (c as unknown as Record<string, unknown>)[levelCol] != null && (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-900/40 text-blue-300">N{String((c as unknown as Record<string, unknown>)[levelCol])}</span>
+                  <span className="cc-badge cc-badge-sm cc-badge-info">N{String((c as unknown as Record<string, unknown>)[levelCol])}</span>
                 )}
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-700 text-slate-300">{c.theme}</span>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full ${
-                  c.status === 'active' ? 'bg-emerald-900/40 text-emerald-300' :
-                  c.status === 'draft' ? 'bg-amber-900/40 text-amber-300' :
-                  'bg-slate-700 text-slate-500'
+                <span className="cc-badge cc-badge-sm cc-badge-neutral">{c.theme}</span>
+                <span className={`cc-badge cc-badge-sm ${
+                  c.status === 'active' ? 'cc-badge-success' :
+                  c.status === 'draft' ? 'cc-badge-warning' :
+                  'cc-badge-neutral'
                 }`}>{c.status}</span>
               </div>
-              <p className="text-sm font-semibold text-white">{c.recto}</p>
-              <p className="text-xs text-slate-400 mt-1 line-clamp-2">{c.verso}</p>
+              <p className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>{c.recto}</p>
+              <p className="text-xs mt-1 line-clamp-2" style={{ color: 'var(--cc-text-muted)' }}>{c.verso}</p>
               <div className="mt-3 flex gap-1.5">
-                <button onClick={() => setEditing(c)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300 hover:text-white">Éditer</button>
-                <button onClick={() => del(c.id)} className="rounded-lg border border-red-400/20 bg-red-500/10 px-3 py-1 text-xs text-red-300">Supprimer</button>
+                <button onClick={() => setEditing(c)} className="adm-action">Éditer</button>
+                <button onClick={() => del(c.id)} className="adm-action adm-action-danger">Supprimer</button>
               </div>
             </div>
           ))}
           {cards.length === 0 && !error && (
-            <p className="col-span-full text-center text-sm text-slate-400 py-8">Aucune flashcard trouvée</p>
+            <p className="col-span-full text-center text-sm py-8" style={{ color: 'var(--cc-text-muted)' }}>Aucune flashcard trouvée</p>
           )}
         </div>
       )}
@@ -192,56 +197,61 @@ export default function AdminFlashcardsPage() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={() => setPage(Math.max(0, page - 1))} disabled={page === 0}
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 hover:text-white disabled:opacity-30">← Précédent</button>
-          <span className="text-xs text-slate-400">Page {page + 1} / {totalPages}</span>
+            className="adm-action">← Précédent</button>
+          <span className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Page {page + 1} / {totalPages}</span>
           <button onClick={() => setPage(Math.min(totalPages - 1, page + 1))} disabled={page >= totalPages - 1}
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 hover:text-white disabled:opacity-30">Suivant →</button>
+            className="adm-action">Suivant →</button>
         </div>
       )}
 
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-slate-900 p-6 space-y-4">
+          <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto adm-panel p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">{("id" in editing) ? "Éditer" : "Nouvelle"} flashcard</h2>
-              <button onClick={() => setEditing(null)} className="text-slate-400 hover:text-white">✕</button>
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--cc-text)' }}>{("id" in editing) ? "Éditer" : "Nouvelle"} flashcard</h2>
+              <button onClick={() => setEditing(null)} style={{ color: 'var(--cc-text-muted)' }}>✕</button>
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="text-xs text-slate-400">Niveau</label>
+                <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Niveau</label>
                 <select value={editing.level} onChange={e => setEditing({ ...editing, level: Number(e.target.value) })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-                  {LEVELS.map(l => <option key={l} value={l} className="bg-slate-800">Niveau {l}</option>)}
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                  style={{ color: 'var(--cc-text)' }}>
+                  {LEVELS.map(l => <option key={l} value={l} style={{ background: 'var(--cc-surface-alt)' }}>Niveau {l}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-xs text-slate-400">Thème</label>
+                <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Thème</label>
                 <select value={editing.theme} onChange={e => setEditing({ ...editing, theme: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-                  {THEMES.map(t => <option key={t} value={t} className="bg-slate-800">{t}</option>)}
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                  style={{ color: 'var(--cc-text)' }}>
+                  {THEMES.map(t => <option key={t} value={t} style={{ background: 'var(--cc-surface-alt)' }}>{t}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-xs text-slate-400">Statut</label>
+                <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Statut</label>
                 <select value={editing.status} onChange={e => setEditing({ ...editing, status: e.target.value as Flashcard["status"] })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none">
-                  {STATUSES.map(s => <option key={s} value={s} className="bg-slate-800">{s}</option>)}
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                  style={{ color: 'var(--cc-text)' }}>
+                  {STATUSES.map(s => <option key={s} value={s} style={{ background: 'var(--cc-surface-alt)' }}>{s}</option>)}
                 </select>
               </div>
             </div>
             <div>
-              <label className="text-xs text-slate-400">Recto (question / terme)</label>
+              <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Recto (question / terme)</label>
               <textarea value={editing.recto ?? ""} onChange={e => setEditing({ ...editing, recto: e.target.value })}
-                className="w-full min-h-[70px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
+                className="w-full min-h-[70px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                style={{ color: 'var(--cc-text)' }} />
             </div>
             <div>
-              <label className="text-xs text-slate-400">Verso (réponse / définition)</label>
+              <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Verso (réponse / définition)</label>
               <textarea value={editing.verso ?? ""} onChange={e => setEditing({ ...editing, verso: e.target.value })}
-                className="w-full min-h-[100px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none" />
+                className="w-full min-h-[100px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                style={{ color: 'var(--cc-text)' }} />
             </div>
             <div className="flex justify-end gap-2">
-              <button onClick={() => setEditing(null)} className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">Annuler</button>
-              <button onClick={save} className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-500">Enregistrer</button>
+              <button onClick={() => setEditing(null)} className="cc-btn cc-btn-secondary cc-btn-sm">Annuler</button>
+              <button onClick={save} className="cc-btn cc-btn-primary cc-btn-sm">Enregistrer</button>
             </div>
           </div>
         </div>

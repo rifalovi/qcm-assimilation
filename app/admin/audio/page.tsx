@@ -21,8 +21,8 @@ export default function AdminAudioPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-medium text-white mb-1">Contenu audio</h1>
-        <p className="text-sm text-slate-400">
+        <h1 className="adm-title">Contenu audio</h1>
+        <p className="adm-subtitle">
           Ajoutez, modifiez ou supprimez les séries, épisodes et médias affichés sur la page /audio.
         </p>
       </div>
@@ -32,18 +32,14 @@ export default function AdminAudioPage() {
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-              tab === t.key
-                ? 'bg-teal-600 text-white'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-            }`}
+            className={`adm-chip ${tab === t.key ? 'adm-chip-active' : ''}`}
           >
             {t.label}
           </button>
         ))}
       </div>
 
-      <p className="mb-4 text-xs text-slate-500">
+      <p className="mb-4 text-xs" style={{ color: 'var(--cc-text-disabled)' }}>
         {TABS.find((t) => t.key === tab)?.desc}
       </p>
 

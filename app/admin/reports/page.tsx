@@ -61,56 +61,54 @@ export default function ReportsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-medium text-white mb-1">Signalements</h1>
-        <p className="text-sm text-slate-400">{reports.length} signalement{reports.length > 1 ? 's' : ''} en attente</p>
+        <h1 className="adm-title">Signalements</h1>
+        <p className="adm-subtitle">{reports.length} signalement{reports.length > 1 ? 's' : ''} en attente</p>
       </div>
 
       {/* Filtres */}
       <div className="flex gap-2 mb-4">
         {[['all','Tous'],['testimonial','Témoignages'],['comment','Commentaires']].map(([val, label]) => (
           <button key={val} onClick={() => setFilter(val as typeof filter)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${filter === val ? 'bg-slate-200 text-slate-900' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}`}>
+            className={`adm-chip ${filter === val ? 'adm-chip-active' : ''}`}>
             {label}
           </button>
         ))}
       </div>
 
       {loading ? (
-        <p className="text-slate-400 text-sm text-center py-8">Chargement…</p>
+        <p className="text-sm text-center py-8" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-16 bg-slate-800 border border-slate-700 rounded-2xl">
-          <Flag size={24} className="text-slate-600 mx-auto mb-3" />
-          <p className="text-slate-400 text-sm">Aucun signalement</p>
+        <div className="adm-empty">
+          <Flag size={24} className="adm-empty-icon" />
+          <p className="text-sm">Aucun signalement</p>
         </div>
       ) : (
         <div className="space-y-3">
           {filtered.map((r) => {
             const reporter = Array.isArray(r.profiles) ? (r.profiles as unknown as { username: string }[])[0] : r.profiles
             return (
-              <div key={r.id} className="bg-slate-800 border border-slate-700 rounded-2xl p-4">
+              <div key={r.id} className="adm-panel p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${r.target_type === 'testimonial' ? 'bg-teal-900/40 text-teal-400' : 'bg-orange-900/40 text-orange-400'}`}>
+                      <span className={`cc-badge cc-badge-sm ${r.target_type === 'testimonial' ? 'cc-badge-success' : 'cc-badge-warning'}`}>
                         {r.target_type}
                       </span>
-                      <span className="text-xs text-slate-500">{timeAgo(r.created_at)}</span>
+                      <span className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>{timeAgo(r.created_at)}</span>
                     </div>
-                    <p className="text-sm text-white mb-1">
+                    <p className="text-sm mb-1" style={{ color: 'var(--cc-text)' }}>
                       Signalé par <span className="font-medium">{reporter?.username ?? 'Membre'}</span>
                     </p>
-                    {r.reason && <p className="text-xs text-slate-400">Raison : {r.reason}</p>}
-                    <p className="text-xs text-slate-600 mt-1 font-mono">ID : {r.target_id.slice(0, 8)}…</p>
+                    {r.reason && <p className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Raison : {r.reason}</p>}
+                    <p className="text-xs mt-1 font-mono" style={{ color: 'var(--cc-text-disabled)' }}>ID : {r.target_id.slice(0, 8)}…</p>
                   </div>
                   <div className="flex gap-2">
                     <button onClick={() => handleHide(r)} disabled={processing === r.id}
-                      title="Masquer le contenu"
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-900/20 border border-red-500/30 text-red-400 text-xs rounded-xl hover:bg-red-900/30 disabled:opacity-40 transition-colors">
+                      title="Masquer le contenu" className="adm-action adm-action-danger">
                       <EyeOff size={12} />Masquer
                     </button>
                     <button onClick={() => handleDismiss(r.id)} disabled={processing === r.id}
-                      title="Ignorer le signalement"
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-700 text-slate-300 text-xs rounded-xl hover:bg-slate-600 disabled:opacity-40 transition-colors">
+                      title="Ignorer le signalement" className="adm-action">
                       <Check size={12} />Ignorer
                     </button>
                   </div>

@@ -68,35 +68,35 @@ export default async function UserProfilePage({ params }: { params: { id: string
     .limit(20)
 
   const ROLE_COLORS: Record<string, string> = {
-    anonymous: 'bg-slate-700 text-slate-300',
-    freemium: 'bg-blue-900/40 text-blue-300',
-    premium: 'bg-amber-900/40 text-amber-300',
-    elite: 'bg-yellow-900/40 text-yellow-300',
-    moderator: 'bg-teal-900/40 text-teal-300',
-    admin: 'bg-purple-900/40 text-purple-300',
-    super_admin: 'bg-red-900/40 text-red-300',
+    anonymous: 'cc-badge cc-badge-sm cc-badge-neutral',
+    freemium: 'cc-badge cc-badge-sm cc-badge-info',
+    premium: 'cc-badge cc-badge-sm cc-badge-warning',
+    elite: 'cc-badge cc-badge-sm cc-badge-warning',
+    moderator: 'cc-badge cc-badge-sm cc-badge-success',
+    admin: 'cc-badge cc-badge-sm cc-badge-info',
+    super_admin: 'cc-badge cc-badge-sm cc-badge-danger',
   }
 
   return (
     <div>
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <Link href="/admin/users" className="text-slate-400 hover:text-white transition">
+        <Link href="/admin/users" className="transition no-underline" style={{ color: 'var(--cc-text-muted)' }}>
           <ArrowLeft size={18} />
         </Link>
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-lg font-medium text-white">
+          <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-medium" style={{ background: 'var(--cc-surface-alt)', color: 'var(--cc-text)' }}>
             {profile?.username?.charAt(0).toUpperCase() ?? 'M'}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-medium text-white">{profile?.username}</h1>
-              <span className={`text-xs px-2 py-0.5 rounded-full ${ROLE_COLORS[profile?.role] ?? 'bg-slate-700 text-slate-300'}`}>
+              <h1 className="text-xl font-medium" style={{ color: 'var(--cc-text)' }}>{profile?.username}</h1>
+              <span className={`${ROLE_COLORS[profile?.role] ?? 'cc-badge cc-badge-sm cc-badge-neutral'}`}>
                 {profile?.role}
               </span>
-              {ban && <span className="text-xs px-2 py-0.5 rounded-full bg-red-900/40 text-red-400">Banni</span>}
+              {ban && <span className="cc-badge cc-badge-sm cc-badge-danger">Banni</span>}
             </div>
-            <p className="text-sm text-slate-400">{profile?.city ?? 'Ville non renseignée'}</p>
+            <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>{profile?.city ?? 'Ville non renseignée'}</p>
           </div>
         </div>
       </div>
@@ -109,9 +109,9 @@ export default async function UserProfilePage({ params }: { params: { id: string
           { label: 'Posts forum', value: forumPosts?.length ?? 0 },
           { label: 'Messages envoyés', value: messages?.length ?? 0 },
         ].map(({ label, value }) => (
-          <div key={label} className="bg-slate-800 border border-slate-700 rounded-2xl p-4">
-            <p className="text-2xl font-medium text-white">{value}</p>
-            <p className="text-xs text-slate-400 mt-0.5">{label}</p>
+          <div key={label} className="adm-panel p-4">
+            <p className="text-2xl font-medium" style={{ color: 'var(--cc-text)' }}>{value}</p>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--cc-text-muted)' }}>{label}</p>
           </div>
         ))}
       </div>
@@ -119,8 +119,8 @@ export default async function UserProfilePage({ params }: { params: { id: string
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
         {/* Infos profil */}
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5">
-          <h2 className="text-sm font-medium text-white mb-4">Informations</h2>
+        <div className="adm-panel p-5">
+          <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--cc-text)' }}>Informations</h2>
           <table className="w-full text-sm">
             {[
               { label: 'Email', value: userEmail || '—' },
@@ -134,34 +134,34 @@ export default async function UserProfilePage({ params }: { params: { id: string
               { label: 'Expire le', value: subscription?.expires_at ? new Date(subscription.expires_at).toLocaleDateString('fr-FR') : '—' },
               { label: 'Inscrit', value: profile?.updated_at ? timeAgo(profile.updated_at) : '—' },
             ].map(({ label, value }) => (
-              <tr key={label} className="border-b border-slate-700/50 last:border-0">
-                <td className="py-2 text-slate-400 pr-4">{label}</td>
-                <td className="py-2 text-white">{value}</td>
+              <tr key={label} className="border-b border-[var(--cc-border)] last:border-0">
+                <td className="py-2 pr-4" style={{ color: 'var(--cc-text-muted)' }}>{label}</td>
+                <td className="py-2" style={{ color: 'var(--cc-text)' }}>{value}</td>
               </tr>
             ))}
           </table>
         </div>
 
         {/* Derniers résultats */}
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5">
-          <h2 className="text-sm font-medium text-white mb-4">Derniers tests</h2>
+        <div className="adm-panel p-5">
+          <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--cc-text)' }}>Derniers tests</h2>
           {!resultsData?.length ? (
-            <p className="text-slate-500 text-sm">Aucun test effectué</p>
+            <p className="text-sm" style={{ color: 'var(--cc-text-disabled)' }}>Aucun test effectué</p>
           ) : (
             <div className="space-y-2">
               {resultsData.slice(0, 8).map((r) => (
                 <div key={r.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className={`text-xs px-2 py-0.5 rounded-lg ${r.mode === 'exam' ? 'bg-red-900/30 text-red-300' : 'bg-blue-900/30 text-blue-300'}`}>
+                    <span className={`cc-badge cc-badge-sm ${r.mode === 'exam' ? 'cc-badge-danger' : 'cc-badge-info'}`}>
                       {r.mode === 'exam' ? 'Exam' : 'Train'}
                     </span>
-                    <span className="text-sm text-white">{(r.score_percent ?? 0).toFixed(0)}%</span>
+                    <span className="text-sm" style={{ color: 'var(--cc-text)' }}>{(r.score_percent ?? 0).toFixed(0)}%</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={`text-xs ${r.passed ? 'text-emerald-400' : 'text-red-400'}`}>
                       {r.passed ? '✓' : '✗'}
                     </span>
-                    <span className="text-xs text-slate-500">{timeAgo(r.created_at)}</span>
+                    <span className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>{timeAgo(r.created_at)}</span>
                   </div>
                 </div>
               ))}
@@ -170,19 +170,19 @@ export default async function UserProfilePage({ params }: { params: { id: string
         </div>
 
         {/* Témoignages */}
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5">
-          <h2 className="text-sm font-medium text-white mb-4">Témoignages publiés</h2>
+        <div className="adm-panel p-5">
+          <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--cc-text)' }}>Témoignages publiés</h2>
           {!testimonials?.length ? (
-            <p className="text-slate-500 text-sm">Aucun témoignage</p>
+            <p className="text-sm" style={{ color: 'var(--cc-text-disabled)' }}>Aucun témoignage</p>
           ) : (
             <div className="space-y-2">
               {testimonials.map((t) => (
-                <div key={t.id} className="flex items-center justify-between py-2 border-b border-slate-700/50 last:border-0">
+                <div key={t.id} className="flex items-center justify-between py-2 border-b border-[var(--cc-border)] last:border-0">
                   <div>
-                    <p className="text-sm text-white">{t.type === 'test_civique' ? 'Test civique' : 'Entretien'}</p>
-                    <p className="text-xs text-slate-400">{t.city ?? '—'} · {timeAgo(t.created_at)}</p>
+                    <p className="text-sm" style={{ color: 'var(--cc-text)' }}>{t.type === 'test_civique' ? 'Test civique' : 'Entretien'}</p>
+                    <p className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>{t.city ?? '—'} · {timeAgo(t.created_at)}</p>
                   </div>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${t.passed ? 'bg-emerald-900/30 text-emerald-400' : 'bg-red-900/30 text-red-400'}`}>
+                  <span className={`cc-badge cc-badge-sm ${t.passed ? 'cc-badge-success' : 'cc-badge-danger'}`}>
                     {t.passed ? 'Réussi' : 'Non réussi'}
                   </span>
                 </div>
@@ -192,19 +192,19 @@ export default async function UserProfilePage({ params }: { params: { id: string
         </div>
 
         {/* Posts forum */}
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5">
-          <h2 className="text-sm font-medium text-white mb-4">Activité forum</h2>
+        <div className="adm-panel p-5">
+          <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--cc-text)' }}>Activité forum</h2>
           {!forumPosts?.length ? (
-            <p className="text-slate-500 text-sm">Aucun post</p>
+            <p className="text-sm" style={{ color: 'var(--cc-text-disabled)' }}>Aucun post</p>
           ) : (
             <div className="space-y-2">
               {forumPosts.map((post) => (
-                <div key={post.id} className="py-2 border-b border-slate-700/50 last:border-0">
+                <div key={post.id} className="py-2 border-b border-[var(--cc-border)] last:border-0">
                   <Link href={`/communaute/forum/${post.id}`} target="_blank"
-                    className="text-sm text-teal-400 hover:text-teal-300 transition truncate block">
+                    className="text-sm transition truncate block no-underline" style={{ color: 'var(--cc-primary)' }}>
                     {post.title}
                   </Link>
-                  <p className="text-xs text-slate-500">{post.reply_count} réponses · {timeAgo(post.created_at)}</p>
+                  <p className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>{post.reply_count} réponses · {timeAgo(post.created_at)}</p>
                 </div>
               ))}
             </div>
@@ -213,8 +213,8 @@ export default async function UserProfilePage({ params }: { params: { id: string
 
         {/* Activité Audio & Scroll */}
         {(userEvents?.filter(e => ['audio_played','scroll_card_viewed','quiz_started','quiz_completed'].includes(e.event_type)).length ?? 0) > 0 && (
-          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5">
-            <h2 className="text-sm font-medium text-white mb-4">🎧 Activité Audio & Scroll</h2>
+          <div className="adm-panel p-5">
+            <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--cc-text)' }}>🎧 Activité Audio & Scroll</h2>
             <div className="max-h-60 overflow-y-auto space-y-2">
               {userEvents?.filter(e => ['audio_played','scroll_card_viewed','quiz_started','quiz_completed'].includes(e.event_type)).map((e, i) => {
                 const icons: Record<string,string> = { audio_played: '🎧', scroll_card_viewed: '🃏', quiz_started: '📝', quiz_completed: '✅' }
@@ -222,15 +222,15 @@ export default async function UserProfilePage({ params }: { params: { id: string
                 const detail = e.event_type === 'audio_played' ? (e.properties?.episode_title ?? e.properties?.episodeTitle ?? '') :
                                e.event_type === 'quiz_completed' ? `Score: ${e.properties?.score ?? '—'}` : ''
                 return (
-                  <div key={i} className="flex items-center justify-between py-1.5 border-b border-slate-700/50 last:border-0">
+                  <div key={i} className="flex items-center justify-between py-1.5 border-b border-[var(--cc-border)] last:border-0">
                     <div className="flex items-center gap-2">
                       <span>{icons[e.event_type]}</span>
                       <div>
-                        <p className="text-xs text-white">{labels[e.event_type]}</p>
-                        {detail && <p className="text-[10px] text-slate-400">{String(detail)}</p>}
+                        <p className="text-xs" style={{ color: 'var(--cc-text)' }}>{labels[e.event_type]}</p>
+                        {detail && <p className="text-[10px]" style={{ color: 'var(--cc-text-muted)' }}>{String(detail)}</p>}
                       </div>
                     </div>
-                    <span className="text-[10px] text-slate-500">{new Date(e.created_at).toLocaleString('fr-FR')}</span>
+                    <span className="text-[10px]" style={{ color: 'var(--cc-text-disabled)' }}>{new Date(e.created_at).toLocaleString('fr-FR')}</span>
                   </div>
                 )
               })}
@@ -240,13 +240,13 @@ export default async function UserProfilePage({ params }: { params: { id: string
 
         {/* Signalements émis */}
         {(reports?.length ?? 0) > 0 && (
-          <div className="bg-slate-800 border border-red-500/20 rounded-2xl p-5">
+          <div className="adm-panel adm-stat-alert p-5">
             <h2 className="text-sm font-medium text-red-400 mb-4">⚠ Signalements émis ({reports?.length})</h2>
             <div className="space-y-2">
               {reports?.map((r) => (
                 <div key={r.id} className="flex items-center justify-between py-1">
-                  <span className="text-xs text-slate-400">{r.target_type}</span>
-                  <span className="text-xs text-slate-500">{timeAgo(r.created_at)}</span>
+                  <span className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>{r.target_type}</span>
+                  <span className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>{timeAgo(r.created_at)}</span>
                 </div>
               ))}
             </div>

@@ -96,7 +96,7 @@ export default function MediaManager() {
     await load()
   }
 
-  if (loading) return <p className="text-sm text-slate-400">Chargement…</p>
+  if (loading) return <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>
   if (error)   return <p className="text-sm text-red-400">Erreur : {error}</p>
 
   return (
@@ -104,7 +104,7 @@ export default function MediaManager() {
       <div className="flex justify-end">
         <button
           onClick={() => { setCreating(true); setEditing({ id: '', ...EMPTY }) }}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-medium hover:bg-teal-700"
+          className="cc-btn cc-btn-primary cc-btn-sm"
         >
           <Plus size={14} /> Nouveau média
         </button>
@@ -122,28 +122,28 @@ export default function MediaManager() {
 
       <div className="space-y-2">
         {items.map((m) => (
-          <div key={m.id} className="bg-slate-800 border border-slate-700 rounded-2xl p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-lg flex-shrink-0">
+          <div key={m.id} className="adm-panel p-4 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style={{ background: 'var(--cc-surface-alt)' }}>
               {m.icon ?? (m.media_type === 'youtube' ? '▶' : m.media_type === 'pdf' ? '📄' : '🎵')}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{m.title}</p>
-              <p className="text-xs text-slate-500 truncate">
-                <span className="uppercase text-slate-400">{m.media_type}</span> · {m.section}
-                {' · '}<code className="text-slate-400">{m.media_key}</code>
+              <p className="text-sm font-medium truncate" style={{ color: 'var(--cc-text)' }}>{m.title}</p>
+              <p className="text-xs truncate" style={{ color: 'var(--cc-text-disabled)' }}>
+                <span className="uppercase" style={{ color: 'var(--cc-text-muted)' }}>{m.media_type}</span> · {m.section}
+                {' · '}<code style={{ color: 'var(--cc-text-muted)' }}>{m.media_key}</code>
                 {!m.published && <span className="ml-2 text-rose-400">masqué</span>}
               </p>
             </div>
-            <span className="text-xs text-slate-500">#{m.position}</span>
+            <span className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>#{m.position}</span>
             <button
               onClick={() => { setEditing(m); setCreating(false) }}
-              className="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-xs text-white"
+              className="adm-action"
             >
               Éditer
             </button>
             <button
               onClick={() => remove(m.id)}
-              className="p-1.5 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300"
+              className="adm-action adm-action-danger"
               aria-label="Supprimer"
             >
               <Trash2 size={14} />
@@ -151,7 +151,7 @@ export default function MediaManager() {
           </div>
         ))}
         {items.length === 0 && (
-          <p className="text-sm text-slate-500 text-center py-6">Aucun média.</p>
+          <p className="text-sm text-center py-6" style={{ color: 'var(--cc-text-disabled)' }}>Aucun média.</p>
         )}
       </div>
     </div>
@@ -197,12 +197,12 @@ function MediaForm({
   }
 
   return (
-    <div className="bg-slate-800 border border-teal-500/40 rounded-2xl p-5">
+    <div className="adm-panel p-5" style={{ borderColor: 'var(--cc-primary)' }}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-white">
+        <h3 className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>
           {creating ? 'Nouveau média' : `Édition : ${value.title}`}
         </h3>
-        <button onClick={onCancel} className="text-slate-400 hover:text-white">
+        <button onClick={onCancel} style={{ color: 'var(--cc-text-muted)' }}>
           <X size={16} />
         </button>
       </div>
@@ -236,7 +236,7 @@ function MediaForm({
           <div className="flex gap-2">
             <input value={form.media_url} onChange={(e) => patch('media_url', e.target.value)} className={inputCls + ' flex-1'} placeholder="https://www.youtube.com/embed/…" />
             {form.media_type !== 'youtube' && (
-              <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs text-white cursor-pointer">
+              <label className="adm-action cursor-pointer">
                 {uploading === 'media' ? '…' : <Upload size={12} />} Upload
                 <input
                   type="file"
@@ -252,7 +252,7 @@ function MediaForm({
         <Field label="Miniature (thumbnail_url)" full>
           <div className="flex gap-2">
             <input value={form.thumbnail_url ?? ''} onChange={(e) => patch('thumbnail_url', e.target.value)} className={inputCls + ' flex-1'} />
-            <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs text-white cursor-pointer">
+            <label className="adm-action cursor-pointer">
               {uploading === 'thumb' ? '…' : <Upload size={12} />} Upload
               <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadFile('thumb', f) }} />
             </label>
@@ -261,7 +261,7 @@ function MediaForm({
         <Field label="PDF (optionnel)" full>
           <div className="flex gap-2">
             <input value={form.pdf_url ?? ''} onChange={(e) => patch('pdf_url', e.target.value)} className={inputCls + ' flex-1'} />
-            <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs text-white cursor-pointer">
+            <label className="adm-action cursor-pointer">
               {uploading === 'pdf' ? '…' : <Upload size={12} />} Upload
               <input type="file" accept="application/pdf" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadFile('pdf', f) }} />
             </label>
@@ -280,7 +280,7 @@ function MediaForm({
           <input type="number" value={form.position} onChange={(e) => patch('position', Number(e.target.value))} className={inputCls} />
         </Field>
         <div className="flex items-center gap-4 sm:col-span-2 mt-1">
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs" style={{ color: 'var(--cc-text)' }}>
             <input type="checkbox" checked={form.published} onChange={(e) => patch('published', e.target.checked)} />
             Publié
           </label>
@@ -288,11 +288,11 @@ function MediaForm({
       </div>
 
       <div className="flex justify-end gap-2 mt-5">
-        <button onClick={onCancel} className="px-4 py-2 rounded-xl bg-slate-700 text-slate-300 text-sm hover:bg-slate-600">Annuler</button>
+        <button onClick={onCancel} className="cc-btn cc-btn-secondary cc-btn-sm">Annuler</button>
         <button
           disabled={saving}
           onClick={() => onSave(creating ? { ...form, id: undefined } : form)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 disabled:opacity-40"
+          className="cc-btn cc-btn-primary cc-btn-sm"
         >
           <Save size={14} /> {saving ? 'Enregistrement…' : 'Enregistrer'}
         </button>
@@ -302,12 +302,12 @@ function MediaForm({
 }
 
 const inputCls =
-  'w-full bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500'
+  'w-full rounded-xl px-3 py-2 text-sm focus:outline-none'
 
 function Field({ label, children, required, full }: { label: string; children: ReactNode; required?: boolean; full?: boolean }) {
   return (
     <div className={full ? 'sm:col-span-2' : ''}>
-      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+      <label className="block text-[11px] font-medium mb-1" style={{ color: 'var(--cc-text-muted)' }}>
         {label}{required && <span className="text-rose-400"> *</span>}
       </label>
       {children}
@@ -327,8 +327,8 @@ function MediaPreview({
   thumbnail: string | null
 }) {
   return (
-    <div className="mt-3 rounded-xl border border-slate-700 bg-slate-900/60 p-3">
-      <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">Aperçu</p>
+    <div className="mt-3 rounded-xl border border-[var(--cc-border)] p-3" style={{ background: 'var(--cc-surface-alt)' }}>
+      <p className="mb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--cc-text-disabled)' }}>Aperçu</p>
       {mediaType === 'youtube' && (
         <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg bg-black">
           <iframe

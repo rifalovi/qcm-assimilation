@@ -88,7 +88,7 @@ export default function ComingSoonManager() {
     await load()
   }
 
-  if (loading) return <p className="text-sm text-slate-400">Chargement…</p>
+  if (loading) return <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>
   if (error)   return <p className="text-sm text-red-400">Erreur : {error}</p>
 
   return (
@@ -96,7 +96,7 @@ export default function ComingSoonManager() {
       <div className="flex justify-end">
         <button
           onClick={() => { setCreating(true); setEditing({ id: '', ...EMPTY }) }}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-medium hover:bg-teal-700"
+          className="cc-btn cc-btn-primary cc-btn-sm"
         >
           <Plus size={14} /> Nouvelle carte
         </button>
@@ -114,28 +114,28 @@ export default function ComingSoonManager() {
 
       <div className="space-y-2">
         {items.map((c) => (
-          <div key={c.id} className="bg-slate-800 border border-slate-700 rounded-2xl p-4 flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-lg border ${c.icon_bg ?? 'bg-slate-900 border-slate-700'} flex items-center justify-center text-lg flex-shrink-0`}>
+          <div key={c.id} className="adm-panel p-4 flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-lg border ${c.icon_bg ?? 'border-[var(--cc-border)]'} flex items-center justify-center text-lg flex-shrink-0`} style={c.icon_bg ? undefined : { background: 'var(--cc-surface-alt)' }}>
               {c.icon ?? '✨'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{c.title}</p>
-              <p className="text-xs text-slate-500 truncate">
-                <code className="text-slate-400">{c.key}</code>
-                <span className="ml-2 text-slate-500">· {c.count_label}</span>
+              <p className="text-sm font-medium truncate" style={{ color: 'var(--cc-text)' }}>{c.title}</p>
+              <p className="text-xs truncate" style={{ color: 'var(--cc-text-disabled)' }}>
+                <code style={{ color: 'var(--cc-text-muted)' }}>{c.key}</code>
+                <span className="ml-2" style={{ color: 'var(--cc-text-disabled)' }}>· {c.count_label}</span>
                 {!c.published && <span className="ml-2 text-rose-400">masqué</span>}
               </p>
             </div>
-            <span className="text-xs text-slate-500">#{c.position}</span>
+            <span className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>#{c.position}</span>
             <button
               onClick={() => { setEditing(c); setCreating(false) }}
-              className="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-xs text-white"
+              className="adm-action"
             >
               Éditer
             </button>
             <button
               onClick={() => remove(c.id)}
-              className="p-1.5 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300"
+              className="adm-action adm-action-danger"
               aria-label="Supprimer"
             >
               <Trash2 size={14} />
@@ -143,7 +143,7 @@ export default function ComingSoonManager() {
           </div>
         ))}
         {items.length === 0 && (
-          <p className="text-sm text-slate-500 text-center py-6">Aucune carte.</p>
+          <p className="text-sm text-center py-6" style={{ color: 'var(--cc-text-disabled)' }}>Aucune carte.</p>
         )}
       </div>
     </div>
@@ -167,33 +167,33 @@ function ComingSoonForm({
   }
 
   return (
-    <div className="bg-slate-800 border border-teal-500/40 rounded-2xl p-5">
+    <div className="adm-panel p-5" style={{ borderColor: 'var(--cc-primary)' }}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-white">
+        <h3 className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>
           {creating ? 'Nouvelle carte' : `Édition : ${value.title}`}
         </h3>
-        <button onClick={onCancel} className="text-slate-400 hover:text-white">
+        <button onClick={onCancel} style={{ color: 'var(--cc-text-muted)' }}>
           <X size={16} />
         </button>
       </div>
 
       {/* Aperçu live de la carte */}
       <div className="mb-5">
-        <p className="text-[11px] font-medium text-slate-400 mb-2">Aperçu</p>
+        <p className="text-[11px] font-medium mb-2" style={{ color: 'var(--cc-text-muted)' }}>Aperçu</p>
         <div className={`relative overflow-hidden rounded-[1.5rem] border bg-gradient-to-br ${form.color ?? ''} opacity-70 max-w-[180px]`}>
-          <div className="aspect-square w-full flex items-center justify-center bg-gradient-to-br from-slate-800/50 to-slate-900/50">
+          <div className="aspect-square w-full flex items-center justify-center" style={{ background: 'var(--cc-surface-alt)' }}>
             <div className={`flex h-16 w-16 items-center justify-center rounded-2xl border ${form.icon_bg ?? ''} text-3xl`}>
               {form.icon ?? '✨'}
             </div>
           </div>
-          <div className="bg-slate-900/95 px-3 py-3">
+          <div className="px-3 py-3" style={{ background: 'var(--cc-surface)' }}>
             <div className="flex items-center justify-between">
-              <p className="text-sm font-bold text-white">{form.title || '—'}</p>
-              <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-400">
+              <p className="text-sm font-bold" style={{ color: 'var(--cc-text)' }}>{form.title || '—'}</p>
+              <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--cc-text-muted)' }}>
                 {form.count_label || 'Bientôt'}
               </span>
             </div>
-            <p className="mt-1 text-[11px] leading-4 text-slate-500 line-clamp-2">
+            <p className="mt-1 text-[11px] leading-4 line-clamp-2" style={{ color: 'var(--cc-text-disabled)' }}>
               {form.description || '—'}
             </p>
           </div>
@@ -226,7 +226,7 @@ function ComingSoonForm({
           <input type="number" value={form.position} onChange={(e) => patch('position', Number(e.target.value))} className={inputCls} />
         </Field>
         <div className="flex items-center gap-4 mt-1">
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs" style={{ color: 'var(--cc-text)' }}>
             <input type="checkbox" checked={form.published} onChange={(e) => patch('published', e.target.checked)} />
             Publié
           </label>
@@ -234,11 +234,11 @@ function ComingSoonForm({
       </div>
 
       <div className="flex justify-end gap-2 mt-5">
-        <button onClick={onCancel} className="px-4 py-2 rounded-xl bg-slate-700 text-slate-300 text-sm hover:bg-slate-600">Annuler</button>
+        <button onClick={onCancel} className="cc-btn cc-btn-secondary cc-btn-sm">Annuler</button>
         <button
           disabled={saving}
           onClick={() => onSave(creating ? { ...form, id: undefined } : form)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 disabled:opacity-40"
+          className="cc-btn cc-btn-primary cc-btn-sm"
         >
           <Save size={14} /> {saving ? 'Enregistrement…' : 'Enregistrer'}
         </button>
@@ -248,12 +248,12 @@ function ComingSoonForm({
 }
 
 const inputCls =
-  'w-full bg-slate-700 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500'
+  'w-full rounded-xl px-3 py-2 text-sm focus:outline-none'
 
 function Field({ label, children, required, full }: { label: string; children: ReactNode; required?: boolean; full?: boolean }) {
   return (
     <div className={full ? 'sm:col-span-2' : ''}>
-      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+      <label className="block text-[11px] font-medium mb-1" style={{ color: 'var(--cc-text-muted)' }}>
         {label}{required && <span className="text-rose-400"> *</span>}
       </label>
       {children}
