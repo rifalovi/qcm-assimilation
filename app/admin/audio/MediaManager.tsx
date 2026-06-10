@@ -97,7 +97,7 @@ export default function MediaManager() {
   }
 
   if (loading) return <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>
-  if (error)   return <p className="text-sm text-red-400">Erreur : {error}</p>
+  if (error)   return <p className="text-sm text-[var(--cc-danger)]">Erreur : {error}</p>
 
   return (
     <div className="space-y-4">
@@ -274,7 +274,7 @@ function MediaForm({
           <input value={form.icon ?? ''} onChange={(e) => patch('icon', e.target.value)} className={inputCls} />
         </Field>
         <Field label="Accent (Tailwind)">
-          <input value={form.accent ?? ''} onChange={(e) => patch('accent', e.target.value)} className={inputCls} placeholder="text-blue-300" />
+          <input value={form.accent ?? ''} onChange={(e) => patch('accent', e.target.value)} className={inputCls} placeholder="text-[var(--cc-primary)]" />
         </Field>
         <Field label="Position">
           <input type="number" value={form.position} onChange={(e) => patch('position', Number(e.target.value))} className={inputCls} />
@@ -361,7 +361,7 @@ function MediaPreview({
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg border border-blue-400/30 bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-300 hover:bg-blue-500/20"
+          className="inline-flex items-center gap-2 rounded-lg border border-[var(--cc-primary)] bg-[var(--cc-info-soft)] px-3 py-2 text-xs font-bold text-[var(--cc-primary)] hover:bg-[var(--cc-info-soft)]"
         >
           📄 Ouvrir le PDF dans un nouvel onglet
         </a>

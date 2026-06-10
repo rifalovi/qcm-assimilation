@@ -216,12 +216,12 @@ export default function AdminEmailsPage() {
       {stats && (
         <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {[
-            { l: "Utilisateurs", v: stats.total_users, c: "border-blue-400/20 bg-blue-500/10 text-blue-100" },
-            { l: "Avec séquence", v: stats.with_sequence, c: "border-emerald-400/20 bg-emerald-500/10 text-emerald-100" },
-            { l: "Sans séquence", v: stats.without_sequence, c: "border-amber-400/20 bg-amber-500/10 text-amber-100" },
-            { l: "Emails envoyés", v: stats.total_sent, c: "border-sky-400/20 bg-sky-500/10 text-sky-100" },
+            { l: "Utilisateurs", v: stats.total_users, c: "border-[var(--cc-primary)] bg-[var(--cc-info-soft)] text-[var(--cc-primary)]" },
+            { l: "Avec séquence", v: stats.with_sequence, c: "border-[var(--cc-success)] bg-[var(--cc-success-soft)] text-[var(--cc-success)]" },
+            { l: "Sans séquence", v: stats.without_sequence, c: "border-[var(--cc-warning)] bg-[var(--cc-warning-soft)] text-[var(--cc-warning)]" },
+            { l: "Emails envoyés", v: stats.total_sent, c: "border-[var(--cc-primary)] bg-[var(--cc-info-soft)] text-[var(--cc-primary)]" },
             { l: "En attente", v: stats.total_pending, c: "border-[var(--cc-border)] bg-[var(--cc-surface-alt)] text-[var(--cc-text)]" },
-            { l: "Échoués", v: stats.total_failed, c: "border-red-400/20 bg-red-500/10 text-red-100" },
+            { l: "Échoués", v: stats.total_failed, c: "border-[var(--cc-danger)] bg-[var(--cc-danger-soft)] text-[var(--cc-danger)]" },
           ].map(s => (
             <div key={s.l} className={`rounded-2xl border p-3 ${s.c}`}>
               <p className="text-xs opacity-80">{s.l}</p>
@@ -232,7 +232,7 @@ export default function AdminEmailsPage() {
       )}
 
       {/* Onglets */}
-      <div className="flex gap-1.5 border-b border-white/10 pb-2">
+      <div className="flex gap-1.5 border-b border-[var(--cc-border)] pb-2">
         {([
           { id: "users" as Tab, label: "Utilisateurs" },
           { id: "templates" as Tab, label: "Templates" },
@@ -241,7 +241,7 @@ export default function AdminEmailsPage() {
           { id: "share" as Tab, label: "Lien de partage" },
         ]).map(t => (
           <button key={t.id} onClick={() => { setTab(t.id); if (t.id === "capture") loadCaptured(); if (t.id === "templates") loadSavedTemplates(); }}
-            className={`rounded-xl px-4 py-2 text-xs font-semibold transition ${tab === t.id ? "bg-blue-500/15 border border-blue-400/20 text-blue-200" : "text-[var(--cc-text-muted)] hover:text-[var(--cc-text)]"}`}>
+            className={`rounded-xl px-4 py-2 text-xs font-semibold transition ${tab === t.id ? "bg-[var(--cc-info-soft)] border border-[var(--cc-primary)] text-[var(--cc-primary)]" : "text-[var(--cc-text-muted)] hover:text-[var(--cc-text)]"}`}>
             {t.label}
           </button>
         ))}
@@ -252,17 +252,17 @@ export default function AdminEmailsPage() {
         <div className="space-y-4">
           <div className="flex flex-wrap items-center gap-3">
             <input type="text" placeholder="Rechercher..." value={search} onChange={e => setSearch(e.target.value)}
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm w-full sm:w-64 focus:outline-none focus:border-blue-400/30" style={{ color: 'var(--cc-text)' }} />
+              className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-4 py-2 text-sm w-full sm:w-64 focus:outline-none focus:border-[var(--cc-primary)]" style={{ color: 'var(--cc-text)' }} />
             <button onClick={() => {
               if (selectedUsers.size === filtered.length) setSelectedUsers(new Set());
               else setSelectedUsers(new Set(filtered.map(u => u.id)));
-            }} className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs hover:text-[var(--cc-text)] transition" style={{ color: 'var(--cc-text-muted)' }}>
+            }} className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-1.5 text-xs hover:text-[var(--cc-text)] transition" style={{ color: 'var(--cc-text-muted)' }}>
               {selectedUsers.size === filtered.length && filtered.length > 0 ? "Tout désélectionner" : "Tout sélectionner"}
             </button>
             <div className="flex gap-1.5">
               {(["all", "no_sequence", "active", "completed"] as const).map(f => (
                 <button key={f} onClick={() => setFilter(f)}
-                  className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition ${filter === f ? "bg-blue-500/15 border border-blue-400/20 text-blue-200" : "border border-white/10 bg-white/5 text-[var(--cc-text-muted)] hover:text-[var(--cc-text)]"}`}>
+                  className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition ${filter === f ? "bg-[var(--cc-info-soft)] border border-[var(--cc-primary)] text-[var(--cc-primary)]" : "border border-[var(--cc-border)] bg-[var(--cc-surface)] text-[var(--cc-text-muted)] hover:text-[var(--cc-text)]"}`}>
                   {f === "all" ? "Tous" : f === "no_sequence" ? "Sans séquence" : f === "active" ? "Actifs" : "Terminés"}
                 </button>
               ))}
@@ -270,13 +270,13 @@ export default function AdminEmailsPage() {
           </div>
 
           {apiError && (
-            <div className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            <div className="rounded-xl border border-[var(--cc-danger)] bg-[var(--cc-danger-soft)] px-4 py-3 text-sm text-[var(--cc-danger)]">
               Erreur API : {apiError}
             </div>
           )}
 
           {loading ? (
-            <div className="flex justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" /></div>
+            <div className="flex justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--cc-primary)] border-t-transparent" /></div>
           ) : (
             <div className="space-y-2">
               {filtered.map(user => (
@@ -286,7 +286,7 @@ export default function AdminEmailsPage() {
                       <div className="flex items-center gap-2">
                         <input type="checkbox" checked={selectedUsers.has(user.id)}
                           onChange={e => { const s = new Set(selectedUsers); e.target.checked ? s.add(user.id) : s.delete(user.id); setSelectedUsers(s); }}
-                          className="rounded border-white/20 bg-white/5" />
+                          className="rounded border-[var(--cc-border-strong)] bg-[var(--cc-surface)]" />
                         <p className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>{user.username ?? "—"}</p>
                         <span className={`cc-badge cc-badge-sm ${user.role === 'premium' || user.role === 'elite' ? 'cc-badge-warning' : 'cc-badge-neutral'}`}>{user.role}</span>
                       </div>
@@ -295,13 +295,13 @@ export default function AdminEmailsPage() {
                     <div className="flex items-center gap-2 shrink-0">
                       {user.steps.every(s => !s.status) && (
                         <button onClick={() => triggerSequence(user.id)} disabled={sending === `seq-${user.id}`}
-                          className="rounded-xl border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-200 hover:bg-blue-500/20 disabled:opacity-50">
+                          className="rounded-xl border border-[var(--cc-primary)] bg-[var(--cc-info-soft)] px-3 py-1.5 text-xs font-semibold text-[var(--cc-primary)] hover:bg-[var(--cc-info-soft)] disabled:opacity-50">
                           {sending === `seq-${user.id}` ? "..." : "Lancer séquence"}
                         </button>
                       )}
                       <select
                         onChange={e => { const step = Number(e.target.value) as EmailStep; if (step) sendEmail(user.id, step); e.target.value = ""; }}
-                        className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-2 py-1.5 text-xs font-semibold text-emerald-200 focus:outline-none cursor-pointer"
+                        className="rounded-xl border border-[var(--cc-success)] bg-[var(--cc-success-soft)] px-2 py-1.5 text-xs font-semibold text-[var(--cc-success)] focus:outline-none cursor-pointer"
                         defaultValue=""
                       >
                         <option value="" disabled style={{ background: 'var(--cc-surface-alt)' }}>Envoyer ▾</option>
@@ -319,10 +319,10 @@ export default function AdminEmailsPage() {
                       return (
                         <div key={s.step} className="flex items-center gap-1">
                           <div className={`rounded-lg border px-2 py-1 text-[10px] ${
-                            s.status === 'sent' ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300' :
-                            s.status === 'pending' ? 'border-amber-400/20 bg-amber-500/10 text-amber-300' :
-                            s.status === 'failed' ? 'border-red-400/20 bg-red-500/10 text-red-300' :
-                            'border-white/10 bg-white/5 text-[var(--cc-text-disabled)]'
+                            s.status === 'sent' ? 'border-[var(--cc-success)] bg-[var(--cc-success-soft)] text-[var(--cc-success)]' :
+                            s.status === 'pending' ? 'border-[var(--cc-warning)] bg-[var(--cc-warning-soft)] text-[var(--cc-warning)]' :
+                            s.status === 'failed' ? 'border-[var(--cc-danger)] bg-[var(--cc-danger-soft)] text-[var(--cc-danger)]' :
+                            'border-[var(--cc-border)] bg-[var(--cc-surface)] text-[var(--cc-text-disabled)]'
                           }`}>
                             <span className="font-bold">J{[1,3,7,14,30][s.step-1]}</span>
                             {s.status === 'sent' && <span className="ml-1">✓</span>}
@@ -331,7 +331,7 @@ export default function AdminEmailsPage() {
                             )}
                           </div>
                           <button onClick={() => sendEmail(user.id, s.step as EmailStep)} disabled={isSending}
-                            className="rounded-lg border border-white/10 bg-white/5 px-1.5 py-1 text-[10px] text-[var(--cc-text-muted)] hover:bg-white/10 hover:text-[var(--cc-text)] disabled:opacity-50"
+                            className="rounded-lg border border-[var(--cc-border)] bg-[var(--cc-surface)] px-1.5 py-1 text-[10px] text-[var(--cc-text-muted)] hover:bg-[var(--cc-surface-raised)] hover:text-[var(--cc-text)] disabled:opacity-50"
                             title={`Envoyer ${STEP_LABELS[s.step]}`}>
                             {isSending ? "..." : "→"}
                           </button>
@@ -348,10 +348,10 @@ export default function AdminEmailsPage() {
               {totalPages > 1 && (
                 <div className="flex items-center justify-center gap-2 pt-2">
                   <button onClick={() => setPage(Math.max(0, page - 1))} disabled={page === 0}
-                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] disabled:opacity-30">← Précédent</button>
+                    className="rounded-lg border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-1.5 text-xs text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] disabled:opacity-30">← Précédent</button>
                   <span className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Page {page + 1} / {totalPages}</span>
                   <button onClick={() => setPage(Math.min(totalPages - 1, page + 1))} disabled={page >= totalPages - 1}
-                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] disabled:opacity-30">Suivant →</button>
+                    className="rounded-lg border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-1.5 text-xs text-[var(--cc-text-muted)] hover:text-[var(--cc-text)] disabled:opacity-30">Suivant →</button>
                 </div>
               )}
             </div>
@@ -359,9 +359,9 @@ export default function AdminEmailsPage() {
 
           {/* Barre d'action — sélection */}
           {selectedUsers.size > 0 && (
-            <div className="rounded-2xl border border-blue-400/20 bg-blue-500/10 p-4 space-y-3">
+            <div className="rounded-2xl border border-[var(--cc-primary)] bg-[var(--cc-info-soft)] p-4 space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
-                <p className="text-sm font-bold text-blue-200">{selectedUsers.size} utilisateur(s) sélectionné(s)</p>
+                <p className="text-sm font-bold text-[var(--cc-primary)]">{selectedUsers.size} utilisateur(s) sélectionné(s)</p>
                 <div className="flex gap-1.5">
                   <button onClick={() => setSendMode("template")}
                     className={`adm-chip ${sendMode === "template" ? "adm-chip-active" : ""}`}>
@@ -379,7 +379,7 @@ export default function AdminEmailsPage() {
                   <div className="flex-1 min-w-[180px]">
                     <label className="text-xs mb-1 block" style={{ color: 'var(--cc-text-muted)' }}>Template</label>
                     <select value={selectedStep} onChange={e => setSelectedStep(Number(e.target.value) as EmailStep)}
-                      className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
+                      className="w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
                       {([1,2,3,4,5] as EmailStep[]).map(s => (
                         <option key={s} value={s} style={{ background: 'var(--cc-surface-alt)' }}>{STEP_LABELS[s]}</option>
                       ))}
@@ -393,9 +393,9 @@ export default function AdminEmailsPage() {
               ) : (
                 <>
                   <input type="text" placeholder="Objet de l'email..." value={customSubject} onChange={e => setCustomSubject(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
+                    className="w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
                   <textarea placeholder="Contenu HTML de l'email..." value={customContent} onChange={e => setCustomContent(e.target.value)}
-                    className="w-full min-h-[80px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ resize: 'vertical', color: 'var(--cc-text)' }} />
+                    className="w-full min-h-[80px] rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ resize: 'vertical', color: 'var(--cc-text)' }} />
                   <button onClick={sendCustomEmail} disabled={!customSubject.trim() || !customContent.trim() || sending === "custom"}
                     className="cc-btn cc-btn-primary cc-btn-sm">
                     {sending === "custom" ? "Envoi..." : "Envoyer l'email personnalisé →"}
@@ -419,10 +419,10 @@ export default function AdminEmailsPage() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {templates.map(t => (
               <button key={t.step} onClick={() => previewTemplate(t.step as EmailStep)}
-                className="adm-panel p-4 text-left hover:border-blue-400/20 transition">
+                className="adm-panel p-4 text-left hover:border-[var(--cc-primary)] transition">
                 <div className="flex items-center gap-2 mb-2">
                   <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-bold ${
-                    t.step <= 2 ? 'bg-blue-900/40 text-blue-300' : t.step <= 4 ? 'bg-amber-900/40 text-amber-300' : 'bg-emerald-900/40 text-emerald-300'
+                    t.step <= 2 ? 'bg-[var(--cc-info-soft)] text-[var(--cc-primary)]' : t.step <= 4 ? 'bg-[var(--cc-warning-soft)] text-[var(--cc-warning)]' : 'bg-[var(--cc-success-soft)] text-[var(--cc-success)]'
                   }`}>{t.step}</span>
                   <div>
                     <p className="text-sm font-semibold" style={{ color: 'var(--cc-text)' }}>{t.label}</p>
@@ -440,20 +440,20 @@ export default function AdminEmailsPage() {
                 <p className="text-sm font-bold" style={{ color: 'var(--cc-text)' }}>Aperçu : {previewSubject}</p>
                 <button onClick={() => setPreviewHtml(null)} className="text-xs hover:text-[var(--cc-text)]" style={{ color: 'var(--cc-text-muted)' }}>✕ Fermer</button>
               </div>
-              <div className="rounded-xl border border-white/10 bg-white overflow-hidden">
+              <div className="rounded-xl border border-[var(--cc-border)] bg-white overflow-hidden">
                 <iframe srcDoc={previewHtml} sandbox="" className="w-full h-[500px] border-0" title="Preview" />
               </div>
             </div>
           )}
 
           {/* Générer un template avec IA */}
-          <div className="rounded-2xl border border-violet-400/20 bg-violet-500/10 p-5 space-y-3">
-            <h2 className="text-sm font-bold text-violet-200">Générer un template avec IA</h2>
+          <div className="rounded-2xl border border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] p-5 space-y-3">
+            <h2 className="text-sm font-bold text-[var(--cc-primary)]">Générer un template avec IA</h2>
             <div className="flex flex-wrap items-end gap-3">
               <div className="flex-1 min-w-[180px]">
                 <label className="text-xs mb-1 block" style={{ color: 'var(--cc-text-muted)' }}>Thème</label>
                 <select value={aiTheme} onChange={e => setAiTheme(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
+                  className="w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
                   <option value="bienvenue" style={{ background: 'var(--cc-surface-alt)' }}>Bienvenue / Onboarding</option>
                   <option value="relance" style={{ background: 'var(--cc-surface-alt)' }}>Relance utilisateur inactif</option>
                   <option value="promotion" style={{ background: 'var(--cc-surface-alt)' }}>Promotion Premium</option>
@@ -488,7 +488,7 @@ export default function AdminEmailsPage() {
             {aiGenerated && (
               <div className="space-y-2 mt-3">
                 <p className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Objet : <span className="font-medium" style={{ color: 'var(--cc-text)' }}>{aiGenerated.subject}</span></p>
-                <div className="rounded-xl border border-white/10 bg-white overflow-hidden">
+                <div className="rounded-xl border border-[var(--cc-border)] bg-white overflow-hidden">
                   <iframe srcDoc={aiGenerated.html} sandbox="" className="w-full h-[350px] border-0" title="AI Preview" />
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -502,7 +502,7 @@ export default function AdminEmailsPage() {
                     Sauvegarder
                   </button>
                   <button onClick={() => { setCustomSubject(aiGenerated.subject); setCustomContent(aiGenerated.html); setTab("users"); setSendMode("custom"); }}
-                    className="rounded-xl border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-xs font-semibold text-violet-200 hover:bg-violet-500/20">
+                    className="rounded-xl border border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] px-4 py-2 text-xs font-semibold text-[var(--cc-primary)] hover:bg-[var(--cc-primary-soft)]">
                     Utiliser comme email →
                   </button>
                 </div>
@@ -516,16 +516,16 @@ export default function AdminEmailsPage() {
               <h2 className="text-sm font-bold" style={{ color: 'var(--cc-text)' }}>Templates IA sauvegardés ({savedTemplates.length})</h2>
               <div className="space-y-2">
                 {savedTemplates.map(t => (
-                  <div key={t.id} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
+                  <div key={t.id} className="flex items-center justify-between gap-3 rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] p-3">
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium truncate" style={{ color: 'var(--cc-text)' }}>{t.subject}</p>
                       <p className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>{t.theme} · {new Date(t.created_at).toLocaleDateString('fr-FR')}</p>
                     </div>
                     <div className="flex gap-1.5 shrink-0">
                       <button onClick={() => { setPreviewSubject(t.subject); setPreviewHtml(t.html_content); }}
-                        className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] hover:text-[var(--cc-text)]" style={{ color: 'var(--cc-text-muted)' }}>Voir</button>
+                        className="rounded-lg border border-[var(--cc-border)] bg-[var(--cc-surface)] px-2.5 py-1 text-[10px] hover:text-[var(--cc-text)]" style={{ color: 'var(--cc-text-muted)' }}>Voir</button>
                       <button onClick={() => { setCustomSubject(t.subject); setCustomContent(t.html_content); setTab("users"); setSendMode("custom"); }}
-                        className="rounded-lg border border-blue-400/20 bg-blue-500/10 px-2.5 py-1 text-[10px] text-blue-200">Utiliser</button>
+                        className="rounded-lg border border-[var(--cc-primary)] bg-[var(--cc-info-soft)] px-2.5 py-1 text-[10px] text-[var(--cc-primary)]">Utiliser</button>
                       <button onClick={async () => {
                         if (!confirm("Supprimer ce template ?")) return;
                         await fetch("/api/admin/email-sequences", {
@@ -533,7 +533,7 @@ export default function AdminEmailsPage() {
                           body: JSON.stringify({ action: "delete_template", template_id: t.id }),
                         });
                         loadSavedTemplates();
-                      }} className="rounded-lg border border-red-400/20 bg-red-500/10 px-2.5 py-1 text-[10px] text-red-300">✕</button>
+                      }} className="rounded-lg border border-[var(--cc-danger)] bg-[var(--cc-danger-soft)] px-2.5 py-1 text-[10px] text-[var(--cc-danger)]">✕</button>
                     </div>
                   </div>
                 ))}
@@ -553,7 +553,7 @@ export default function AdminEmailsPage() {
               <div>
                 <label className="text-xs mb-1 block" style={{ color: 'var(--cc-text-muted)' }}>Email à envoyer</label>
                 <select value={bulkStep} onChange={e => setBulkStep(Number(e.target.value) as EmailStep)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
+                  className="w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
                   {([1,2,3,4,5] as EmailStep[]).map(s => (
                     <option key={s} value={s} style={{ background: 'var(--cc-surface-alt)' }}>{STEP_LABELS[s]}</option>
                   ))}
@@ -562,7 +562,7 @@ export default function AdminEmailsPage() {
               <div>
                 <label className="text-xs mb-1 block" style={{ color: 'var(--cc-text-muted)' }}>Cible</label>
                 <select value={bulkTarget} onChange={e => setBulkTarget(e.target.value as typeof bulkTarget)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
+                  className="w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
                   <option value="no_sequence" style={{ background: 'var(--cc-surface-alt)' }}>Sans cette étape</option>
                   <option value="all" style={{ background: 'var(--cc-surface-alt)' }}>Tous les utilisateurs</option>
                   <option value="freemium" style={{ background: 'var(--cc-surface-alt)' }}>Freemium uniquement</option>
@@ -583,7 +583,7 @@ export default function AdminEmailsPage() {
             </div>
 
             {bulkResult && (
-              <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+              <div className="rounded-xl border border-[var(--cc-success)] bg-[var(--cc-success-soft)] px-4 py-3 text-sm text-[var(--cc-success)]">
                 {bulkResult}
               </div>
             )}
@@ -596,7 +596,7 @@ export default function AdminEmailsPage() {
                 <p className="text-sm font-bold" style={{ color: 'var(--cc-text)' }}>{previewSubject}</p>
                 <button onClick={() => setPreviewHtml(null)} className="text-xs hover:text-[var(--cc-text)]" style={{ color: 'var(--cc-text-muted)' }}>✕</button>
               </div>
-              <div className="rounded-xl border border-white/10 bg-white overflow-hidden">
+              <div className="rounded-xl border border-[var(--cc-border)] bg-white overflow-hidden">
                 <iframe srcDoc={previewHtml} sandbox="" className="w-full h-[400px] border-0" title="Preview" />
               </div>
             </div>
@@ -608,17 +608,17 @@ export default function AdminEmailsPage() {
             <p className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Copiez ce lien et partagez-le dans vos groupes pour inviter des candidats à tester Cap Citoyen.</p>
             <div className="flex items-center gap-2">
               <input type="text" readOnly value="https://cap-citoyen.fr/?utm_source=email&utm_campaign=invite"
-                className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
+                className="flex-1 rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
               <button onClick={() => navigator.clipboard.writeText("https://cap-citoyen.fr/?utm_source=email&utm_campaign=invite")}
                 className="cc-btn cc-btn-primary cc-btn-sm shrink-0">
                 Copier
               </button>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+            <div className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] p-3">
               <p className="text-xs mb-1" style={{ color: 'var(--cc-text-muted)' }}>Message prêt à coller (WhatsApp / Facebook)</p>
               <p className="text-sm whitespace-pre-line" style={{ color: 'var(--cc-text)' }}>{"🇫🇷 Tu prépares ton examen civique ou ta naturalisation ?\n\nTeste Cap Citoyen gratuitement : quiz, audio, assistant IA démarches.\n\n👉 https://cap-citoyen.fr/?utm_source=email&utm_campaign=invite"}</p>
               <button onClick={() => navigator.clipboard.writeText("🇫🇷 Tu prépares ton examen civique ou ta naturalisation ?\n\nTeste Cap Citoyen gratuitement : quiz, audio, assistant IA démarches.\n\n👉 https://cap-citoyen.fr/?utm_source=email&utm_campaign=invite")}
-                className="mt-2 text-xs text-blue-300 hover:text-blue-200">Copier ce message</button>
+                className="mt-2 text-xs text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)]">Copier ce message</button>
             </div>
           </div>
         </div>
@@ -632,9 +632,9 @@ export default function AdminEmailsPage() {
             <p className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Ajoutez des emails récupérés sur les forums, réseaux sociaux ou événements.</p>
             <div className="flex flex-wrap gap-3">
               <input type="email" placeholder="email@exemple.com" value={captureEmail} onChange={e => setCaptureEmail(e.target.value)}
-                className="flex-1 min-w-[200px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
+                className="flex-1 min-w-[200px] rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
               <select value={captureSource} onChange={e => setCaptureSource(e.target.value)}
-                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
+                className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
                 <option value="forum" style={{ background: 'var(--cc-surface-alt)' }}>Forum</option>
                 <option value="facebook" style={{ background: 'var(--cc-surface-alt)' }}>Facebook</option>
                 <option value="whatsapp" style={{ background: 'var(--cc-surface-alt)' }}>WhatsApp</option>
@@ -654,7 +654,7 @@ export default function AdminEmailsPage() {
               <h3 className="text-sm font-bold mb-3" style={{ color: 'var(--cc-text)' }}>Emails capturés ({capturedEmails.length})</h3>
               <div className="space-y-1.5 max-h-[300px] overflow-y-auto">
                 {capturedEmails.map((e, i) => (
-                  <div key={i} className="flex items-center justify-between rounded-lg border border-white/5 bg-white/5 px-3 py-2">
+                  <div key={i} className="flex items-center justify-between rounded-lg border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2">
                     <div>
                       <p className="text-sm" style={{ color: 'var(--cc-text)' }}>{e.email}</p>
                       <p className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>{e.source} · {timeAgo(e.created_at)}</p>
@@ -677,7 +677,7 @@ export default function AdminEmailsPage() {
             <div>
               <label className="text-xs mb-1 block" style={{ color: 'var(--cc-text-muted)' }}>Campagne / Source</label>
               <select value={shareCampaign} onChange={e => setShareCampaign(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
+                className="w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }}>
                 <option value="whatsapp_group" style={{ background: 'var(--cc-surface-alt)' }}>Groupe WhatsApp</option>
                 <option value="facebook_group" style={{ background: 'var(--cc-surface-alt)' }}>Groupe Facebook</option>
                 <option value="forum_immigration" style={{ background: 'var(--cc-surface-alt)' }}>Forum immigration</option>
@@ -688,7 +688,7 @@ export default function AdminEmailsPage() {
               </select>
               {shareCampaign === "custom" && (
                 <input type="text" placeholder="Nom de la campagne..." value={shareCampaign} onChange={e => setShareCampaign(e.target.value)}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
+                  className="mt-2 w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
               )}
             </div>
 
@@ -703,11 +703,11 @@ export default function AdminEmailsPage() {
           </div>
 
           {shareLink && (
-            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-5 space-y-4">
-              <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider">Lien généré</p>
+            <div className="rounded-2xl border border-[var(--cc-success)] bg-[var(--cc-success-soft)] p-5 space-y-4">
+              <p className="text-xs font-bold text-[var(--cc-success)] uppercase tracking-wider">Lien généré</p>
               <div className="flex items-center gap-2">
                 <input type="text" readOnly value={shareLink}
-                  className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
+                  className="flex-1 rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none" style={{ color: 'var(--cc-text)' }} />
                 <button onClick={() => { navigator.clipboard.writeText(shareLink); }}
                   className="cc-btn cc-btn-primary cc-btn-sm">
                   Copier
@@ -717,18 +717,18 @@ export default function AdminEmailsPage() {
               <div className="space-y-2">
                 <p className="text-xs font-bold" style={{ color: 'var(--cc-text)' }}>Messages prêts à copier :</p>
 
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                <div className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] p-3">
                   <p className="text-xs mb-1" style={{ color: 'var(--cc-text-muted)' }}>WhatsApp / Telegram</p>
                   <p className="text-sm whitespace-pre-line" style={{ color: 'var(--cc-text)' }}>{"🇫🇷 Tu prépares ton examen civique ou ta naturalisation ?\n\nJ'ai trouvé une super app gratuite — Cap Citoyen.\n800+ questions, audio guidé, examen blanc, et un assistant IA qui répond à tes questions sur les démarches.\n\n👉 " + shareLink}</p>
                   <button onClick={() => navigator.clipboard.writeText("🇫🇷 Tu prépares ton examen civique ou ta naturalisation ?\n\nJ'ai trouvé une super app gratuite — Cap Citoyen.\n800+ questions, audio guidé, examen blanc, et un assistant IA qui répond à tes questions sur les démarches.\n\n👉 " + shareLink)}
-                    className="mt-2 text-xs text-blue-300 hover:text-blue-200">Copier ce message</button>
+                    className="mt-2 text-xs text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)]">Copier ce message</button>
                 </div>
 
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                <div className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] p-3">
                   <p className="text-xs mb-1" style={{ color: 'var(--cc-text-muted)' }}>Facebook</p>
                   <p className="text-sm whitespace-pre-line" style={{ color: 'var(--cc-text)' }}>{"Vous préparez votre entretien civique pour la naturalisation ? 🇫🇷\n\nCap Citoyen est une plateforme gratuite avec :\n✅ Quiz et examen blanc\n✅ 100 épisodes audio\n✅ Assistant IA pour vos démarches\n✅ Coach IA personnalisé\n\nTestez gratuitement → " + shareLink}</p>
                   <button onClick={() => navigator.clipboard.writeText("Vous préparez votre entretien civique pour la naturalisation ? 🇫🇷\n\nCap Citoyen est une plateforme gratuite avec :\n✅ Quiz et examen blanc\n✅ 100 épisodes audio\n✅ Assistant IA pour vos démarches\n✅ Coach IA personnalisé\n\nTestez gratuitement → " + shareLink)}
-                    className="mt-2 text-xs text-blue-300 hover:text-blue-200">Copier ce message</button>
+                    className="mt-2 text-xs text-[var(--cc-primary)] hover:text-[var(--cc-primary-hover)]">Copier ce message</button>
                 </div>
               </div>
             </div>

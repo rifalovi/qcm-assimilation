@@ -89,7 +89,7 @@ export default function ComingSoonManager() {
   }
 
   if (loading) return <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>
-  if (error)   return <p className="text-sm text-red-400">Erreur : {error}</p>
+  if (error)   return <p className="text-sm text-[var(--cc-danger)]">Erreur : {error}</p>
 
   return (
     <div className="space-y-4">
@@ -189,7 +189,7 @@ function ComingSoonForm({
           <div className="px-3 py-3" style={{ background: 'var(--cc-surface)' }}>
             <div className="flex items-center justify-between">
               <p className="text-sm font-bold" style={{ color: 'var(--cc-text)' }}>{form.title || '—'}</p>
-              <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--cc-text-muted)' }}>
+              <span className="rounded-full border border-[var(--cc-border)] bg-[var(--cc-surface)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--cc-text-muted)' }}>
                 {form.count_label || 'Bientôt'}
               </span>
             </div>

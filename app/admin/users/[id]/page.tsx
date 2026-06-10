@@ -158,7 +158,7 @@ export default async function UserProfilePage({ params }: { params: { id: string
                     <span className="text-sm" style={{ color: 'var(--cc-text)' }}>{(r.score_percent ?? 0).toFixed(0)}%</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`text-xs ${r.passed ? 'text-emerald-400' : 'text-red-400'}`}>
+                    <span className={`text-xs ${r.passed ? 'text-[var(--cc-success)]' : 'text-[var(--cc-danger)]'}`}>
                       {r.passed ? '✓' : '✗'}
                     </span>
                     <span className="text-xs" style={{ color: 'var(--cc-text-disabled)' }}>{timeAgo(r.created_at)}</span>
@@ -241,7 +241,7 @@ export default async function UserProfilePage({ params }: { params: { id: string
         {/* Signalements émis */}
         {(reports?.length ?? 0) > 0 && (
           <div className="adm-panel adm-stat-alert p-5">
-            <h2 className="text-sm font-medium text-red-400 mb-4">⚠ Signalements émis ({reports?.length})</h2>
+            <h2 className="text-sm font-medium text-[var(--cc-danger)] mb-4">⚠ Signalements émis ({reports?.length})</h2>
             <div className="space-y-2">
               {reports?.map((r) => (
                 <div key={r.id} className="flex items-center justify-between py-1">

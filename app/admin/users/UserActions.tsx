@@ -114,7 +114,7 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
                     <div>
                       <p className="text-sm" style={{ color: 'var(--cc-text)' }}>{u.first_name ? `${u.first_name} ${u.last_name?.charAt(0) ?? ''}.` : u.username}</p>
                       <p className="text-[10px]" style={{ color: 'var(--cc-text-disabled)' }}>@{u.username} · {u.email}</p>
-                      {banned.has(u.id) && <span className="text-[10px] text-red-400">Banni</span>}
+                      {banned.has(u.id) && <span className="text-[10px] text-[var(--cc-danger)]">Banni</span>}
                     </div>
                   </div>
                 </td>

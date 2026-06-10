@@ -76,11 +76,11 @@ function KPICard({
   color: 'blue' | 'amber' | 'emerald' | 'yellow' | 'violet' | 'rose'
 }) {
   const colors: Record<string, string> = {
-    blue:    'border-blue-400/20 bg-blue-500/10',
-    amber:   'border-amber-400/20 bg-amber-500/10',
-    emerald: 'border-emerald-400/20 bg-emerald-500/10',
-    yellow:  'border-yellow-400/20 bg-yellow-500/10',
-    violet:  'border-violet-400/20 bg-violet-500/10',
+    blue:    'border-[var(--cc-primary)] bg-[var(--cc-info-soft)]',
+    amber:   'border-[var(--cc-warning)] bg-[var(--cc-warning-soft)]',
+    emerald: 'border-[var(--cc-success)] bg-[var(--cc-success-soft)]',
+    yellow:  'border-[var(--cc-warning)] bg-[var(--cc-warning-soft)]',
+    violet:  'border-[var(--cc-primary)] bg-[var(--cc-primary-soft)]',
     rose:    'border-rose-400/20 bg-rose-500/10',
   }
   return (
@@ -187,7 +187,7 @@ export default function AnalyticsClient() {
       </div>
 
       {loading && <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>}
-      {error && <p className="text-sm text-red-400">Erreur : {error}</p>}
+      {error && <p className="text-sm text-[var(--cc-danger)]">Erreur : {error}</p>}
 
       {data && (
         <div className="space-y-6">
@@ -355,7 +355,7 @@ export default function AnalyticsClient() {
             >
               <TopList
                 items={data.pages.top.map((p) => ({ key: p.path, label: p.path, count: p.count }))}
-                accent="text-blue-300"
+                accent="text-[var(--cc-primary)]"
                 bar="bg-blue-500"
                 emptyMsg="Aucun pageview enregistré"
               />
@@ -367,7 +367,7 @@ export default function AnalyticsClient() {
             >
               <TopList
                 items={data.episodes.top.map((e) => ({ key: e.slug, label: e.title, count: e.count }))}
-                accent="text-purple-300"
+                accent="text-[var(--cc-primary)]"
                 bar="bg-purple-500"
                 emptyMsg="Aucun épisode encore écouté"
               />

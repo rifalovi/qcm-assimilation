@@ -146,7 +146,7 @@ export default function EpisodesManager() {
       )}
 
       {loading && <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>}
-      {error && <p className="text-sm text-red-400">Erreur : {error}</p>}
+      {error && <p className="text-sm text-[var(--cc-danger)]">Erreur : {error}</p>}
 
       <div className="space-y-2">
         {items.map((ep) => (
@@ -160,9 +160,9 @@ export default function EpisodesManager() {
                 {ep.series_id ? seriesMap.get(ep.series_id)?.subtheme_label ?? '—' : '—'}
                 {' · '}
                 <code style={{ color: 'var(--cc-text-muted)' }}>{ep.episode_slug}</code>
-                {ep.is_free && <span className="ml-2 text-emerald-400">gratuit</span>}
+                {ep.is_free && <span className="ml-2 text-[var(--cc-success)]">gratuit</span>}
                 {!ep.published && <span className="ml-2 text-rose-400">masqué</span>}
-                {!ep.audio_male_url && !ep.audio_female_url && <span className="ml-2 text-amber-400">pas de fichier</span>}
+                {!ep.audio_male_url && !ep.audio_female_url && <span className="ml-2 text-[var(--cc-warning)]">pas de fichier</span>}
               </p>
             </div>
             <button

@@ -113,11 +113,11 @@ export default function AdminFlashcardsPage() {
 
       <div className="flex flex-wrap gap-2">
         <input placeholder="Rechercher (recto, verso)..." value={search} onChange={e => setSearch(e.target.value)}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none flex-1 min-w-[240px]"
+          className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none flex-1 min-w-[240px]"
           style={{ color: 'var(--cc-text)' }} />
         {availableCols.has('level') && (
           <select value={filterLevel} onChange={e => { setFilterLevel(e.target.value); setPage(0); }}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+            className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none"
             style={{ color: 'var(--cc-text)' }}>
             <option value="" style={{ background: 'var(--cc-surface-alt)' }}>Tous niveaux</option>
             {LEVELS.map(l => <option key={l} value={l} style={{ background: 'var(--cc-surface-alt)' }}>Niveau {l}</option>)}
@@ -125,7 +125,7 @@ export default function AdminFlashcardsPage() {
         )}
         {availableCols.has('theme') && distinctThemes.length > 0 && (
           <select value={filterTheme} onChange={e => { setFilterTheme(e.target.value); setPage(0); }}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none max-w-[240px]"
+            className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none max-w-[240px]"
             style={{ color: 'var(--cc-text)' }}>
             <option value="" style={{ background: 'var(--cc-surface-alt)' }}>Tous thèmes</option>
             {distinctThemes.map(t => <option key={t} value={t} style={{ background: 'var(--cc-surface-alt)' }}>{t}</option>)}
@@ -133,14 +133,14 @@ export default function AdminFlashcardsPage() {
         )}
         {availableCols.has('status') && (
           <select value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setPage(0); }}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+            className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none"
             style={{ color: 'var(--cc-text)' }}>
             <option value="" style={{ background: 'var(--cc-surface-alt)' }}>Tous statuts</option>
             {STATUSES.map(s => <option key={s} value={s} style={{ background: 'var(--cc-surface-alt)' }}>{s}</option>)}
           </select>
         )}
         <select value={sort} onChange={e => { setSort(e.target.value as typeof sort); setPage(0); }}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+          className="rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none"
           style={{ color: 'var(--cc-text)' }}>
           <option value="newest" style={{ background: 'var(--cc-surface-alt)' }}>Plus récent</option>
           {levelCol && <option value="level_asc" style={{ background: 'var(--cc-surface-alt)' }}>Niveau ↑</option>}
@@ -158,13 +158,13 @@ export default function AdminFlashcardsPage() {
       </div>
 
       {error && (
-        <div className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-xl border border-[var(--cc-danger)] bg-[var(--cc-danger-soft)] px-4 py-3 text-sm text-[var(--cc-danger)]">
           Erreur : {error}
         </div>
       )}
 
       {loading ? (
-        <div className="flex justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" /></div>
+        <div className="flex justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--cc-primary)] border-t-transparent" /></div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
           {cards.map(c => (
@@ -215,7 +215,7 @@ export default function AdminFlashcardsPage() {
               <div>
                 <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Niveau</label>
                 <select value={editing.level} onChange={e => setEditing({ ...editing, level: Number(e.target.value) })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none"
                   style={{ color: 'var(--cc-text)' }}>
                   {LEVELS.map(l => <option key={l} value={l} style={{ background: 'var(--cc-surface-alt)' }}>Niveau {l}</option>)}
                 </select>
@@ -223,7 +223,7 @@ export default function AdminFlashcardsPage() {
               <div>
                 <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Thème</label>
                 <select value={editing.theme} onChange={e => setEditing({ ...editing, theme: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none"
                   style={{ color: 'var(--cc-text)' }}>
                   {THEMES.map(t => <option key={t} value={t} style={{ background: 'var(--cc-surface-alt)' }}>{t}</option>)}
                 </select>
@@ -231,7 +231,7 @@ export default function AdminFlashcardsPage() {
               <div>
                 <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Statut</label>
                 <select value={editing.status} onChange={e => setEditing({ ...editing, status: e.target.value as Flashcard["status"] })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none"
                   style={{ color: 'var(--cc-text)' }}>
                   {STATUSES.map(s => <option key={s} value={s} style={{ background: 'var(--cc-surface-alt)' }}>{s}</option>)}
                 </select>
@@ -240,13 +240,13 @@ export default function AdminFlashcardsPage() {
             <div>
               <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Recto (question / terme)</label>
               <textarea value={editing.recto ?? ""} onChange={e => setEditing({ ...editing, recto: e.target.value })}
-                className="w-full min-h-[70px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                className="w-full min-h-[70px] rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none"
                 style={{ color: 'var(--cc-text)' }} />
             </div>
             <div>
               <label className="text-xs" style={{ color: 'var(--cc-text-muted)' }}>Verso (réponse / définition)</label>
               <textarea value={editing.verso ?? ""} onChange={e => setEditing({ ...editing, verso: e.target.value })}
-                className="w-full min-h-[100px] rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:outline-none"
+                className="w-full min-h-[100px] rounded-xl border border-[var(--cc-border)] bg-[var(--cc-surface)] px-3 py-2 text-sm focus:outline-none"
                 style={{ color: 'var(--cc-text)' }} />
             </div>
             <div className="flex justify-end gap-2">

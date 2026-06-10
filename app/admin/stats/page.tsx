@@ -34,7 +34,7 @@ export default async function StatsPage() {
   const sections = [
     {
       title: 'Utilisateurs',
-      color: 'border-blue-500/30',
+      color: 'border-[var(--cc-primary)]',
       stats: [
         { label: 'Total membres', value: totalUsers ?? 0 },
         { label: 'Premium', value: premiumUsers ?? 0 },
@@ -54,7 +54,7 @@ export default async function StatsPage() {
     },
     {
       title: 'Engagement',
-      color: 'border-amber-500/30',
+      color: 'border-[var(--cc-warning)]',
       stats: [
         { label: 'Réactions', value: reactions ?? 0 },
         { label: 'Commentaires', value: comments ?? 0 },

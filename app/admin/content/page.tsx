@@ -78,9 +78,9 @@ export default function ContentPage() {
         ))}
       </div>
 
-      <div className="mt-6 bg-amber-900/20 border border-amber-500/30 rounded-2xl p-4">
-        <p className="text-xs text-amber-400 font-medium mb-1">Note</p>
-        <p className="text-xs text-amber-300/70">
+      <div className="mt-6 bg-[var(--cc-warning-soft)] border border-[var(--cc-warning)] rounded-2xl p-4">
+        <p className="text-xs text-[var(--cc-warning)] font-medium mb-1">Note</p>
+        <p className="text-xs text-[var(--cc-warning)]">
           Cette section nécessite la création d'une table <code className="px-1 rounded" style={{ background: 'var(--cc-surface-alt)' }}>site_content</code> dans Supabase.
           Exécutez : <code className="px-1 rounded" style={{ background: 'var(--cc-surface-alt)' }}>CREATE TABLE site_content (key TEXT PRIMARY KEY, value TEXT, updated_at TIMESTAMPTZ DEFAULT NOW());</code>
         </p>

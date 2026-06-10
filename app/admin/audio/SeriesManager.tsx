@@ -98,7 +98,7 @@ export default function SeriesManager() {
   }
 
   if (loading) return <p className="text-sm" style={{ color: 'var(--cc-text-muted)' }}>Chargement…</p>
-  if (error)   return <p className="text-sm text-red-400">Erreur : {error}</p>
+  if (error)   return <p className="text-sm text-[var(--cc-danger)]">Erreur : {error}</p>
 
   return (
     <div className="space-y-4">
@@ -133,7 +133,7 @@ export default function SeriesManager() {
               <p className="text-sm font-medium truncate" style={{ color: 'var(--cc-text)' }}>{s.subtheme_label}</p>
               <p className="text-xs truncate" style={{ color: 'var(--cc-text-disabled)' }}>
                 {s.theme_label} · <code style={{ color: 'var(--cc-text-muted)' }}>{s.subtheme_key}</code>
-                {s.featured && <span className="ml-2 text-amber-400">★ vedette</span>}
+                {s.featured && <span className="ml-2 text-[var(--cc-warning)]">★ vedette</span>}
                 {!s.published && <span className="ml-2 text-rose-400">masqué</span>}
               </p>
             </div>
@@ -256,10 +256,10 @@ function SeriesForm({
           <input value={form.accent_gradient ?? ''} onChange={(e) => patch('accent_gradient', e.target.value)} className={inputCls} placeholder="from-blue-600/30 to-indigo-600/20" />
         </Field>
         <Field label="Bordure (accent_border)">
-          <input value={form.accent_border ?? ''} onChange={(e) => patch('accent_border', e.target.value)} className={inputCls} placeholder="border-blue-400/20" />
+          <input value={form.accent_border ?? ''} onChange={(e) => patch('accent_border', e.target.value)} className={inputCls} placeholder="border-[var(--cc-primary)]" />
         </Field>
         <Field label="Texte accent (accent_text)">
-          <input value={form.accent_text ?? ''} onChange={(e) => patch('accent_text', e.target.value)} className={inputCls} placeholder="text-blue-300" />
+          <input value={form.accent_text ?? ''} onChange={(e) => patch('accent_text', e.target.value)} className={inputCls} placeholder="text-[var(--cc-primary)]" />
         </Field>
         <div className="flex items-center gap-4 mt-1">
           <label className="flex items-center gap-2 text-xs" style={{ color: 'var(--cc-text)' }}>

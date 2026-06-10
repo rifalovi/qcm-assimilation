@@ -51,7 +51,7 @@ export default function AiUsagePage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--cc-primary)] border-t-transparent" />
       </div>
     );
   }
@@ -73,26 +73,26 @@ export default function AiUsagePage() {
 
       {/* KPI principaux */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Tokens aujourd'hui" value={formatTokens(overview.todayTokens)} sub={`${overview.todayRequests} requêtes`} accent="border-blue-400/20 bg-blue-500/10 text-blue-100" />
-        <StatCard label="Tokens cette semaine" value={formatTokens(overview.weekTokens)} sub={`${overview.weekRequests} requêtes`} accent="border-emerald-400/20 bg-emerald-500/10 text-emerald-100" />
-        <StatCard label="Tokens ce mois" value={formatTokens(overview.monthTokens)} sub={`${overview.monthRequests} req · ~${overview.estimatedCostMonth}$`} accent="border-violet-400/20 bg-violet-500/10 text-violet-100" />
-        <StatCard label="Total cumulé" value={formatTokens(overview.totalTokens)} sub={`${overview.totalRequests} req · ~${overview.estimatedCostTotal}$`} accent="border-amber-400/20 bg-amber-500/10 text-amber-100" />
+        <StatCard label="Tokens aujourd'hui" value={formatTokens(overview.todayTokens)} sub={`${overview.todayRequests} requêtes`} accent="border-[var(--cc-primary)] bg-[var(--cc-info-soft)] text-[var(--cc-primary)]" />
+        <StatCard label="Tokens cette semaine" value={formatTokens(overview.weekTokens)} sub={`${overview.weekRequests} requêtes`} accent="border-[var(--cc-success)] bg-[var(--cc-success-soft)] text-[var(--cc-success)]" />
+        <StatCard label="Tokens ce mois" value={formatTokens(overview.monthTokens)} sub={`${overview.monthRequests} req · ~${overview.estimatedCostMonth}$`} accent="border-[var(--cc-primary)] bg-[var(--cc-primary-soft)] text-[var(--cc-primary)]" />
+        <StatCard label="Total cumulé" value={formatTokens(overview.totalTokens)} sub={`${overview.totalRequests} req · ~${overview.estimatedCostTotal}$`} accent="border-[var(--cc-warning)] bg-[var(--cc-warning-soft)] text-[var(--cc-warning)]" />
       </div>
 
       {/* Alerte coût */}
       {overview.estimatedCostMonth > 5 && (
-        <div className="rounded-2xl border border-red-400/30 bg-red-500/10 p-4 flex items-center gap-3">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-sm">!</span>
+        <div className="rounded-2xl border border-[var(--cc-danger)] bg-[var(--cc-danger-soft)] p-4 flex items-center gap-3">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--cc-danger-soft)] text-sm">!</span>
           <div>
-            <p className="text-sm font-bold text-red-200">Coût mensuel élevé : ~{overview.estimatedCostMonth}$</p>
-            <p className="text-xs text-red-300/70">Pensez à ajuster les quotas dans src/lib/aiQuota.ts si nécessaire.</p>
+            <p className="text-sm font-bold text-[var(--cc-danger)]">Coût mensuel élevé : ~{overview.estimatedCostMonth}$</p>
+            <p className="text-xs text-[var(--cc-danger)]">Pensez à ajuster les quotas dans src/lib/aiQuota.ts si nécessaire.</p>
           </div>
         </div>
       )}
 
       {/* Stats secondaires */}
       <div className="grid gap-3 sm:grid-cols-3">
-        <StatCard label="Questions hors-sujet bloquées" value={String(overview.offTopicCount)} sub="Tokens économisés" accent="border-red-400/20 bg-red-500/10 text-red-100" />
+        <StatCard label="Questions hors-sujet bloquées" value={String(overview.offTopicCount)} sub="Tokens économisés" accent="border-[var(--cc-danger)] bg-[var(--cc-danger-soft)] text-[var(--cc-danger)]" />
         <StatCard label="Coût moyen / requête" value={overview.totalRequests > 0 ? `${((overview.estimatedCostTotal / overview.totalRequests) * 100).toFixed(3)}¢` : '—'} accent="adm-stat" />
         <StatCard label="Tokens moyen / requête" value={overview.totalRequests > 0 ? String(Math.round(overview.totalTokens / overview.totalRequests)) : '—'} accent="adm-stat" />
       </div>
@@ -132,7 +132,7 @@ export default function AiUsagePage() {
           {timeline.map((d) => (
             <div key={d.date} className="flex-1 flex flex-col items-center gap-0.5 group relative">
               <div
-                className="w-full bg-blue-500/60 rounded-t-sm transition-all hover:bg-blue-400/80"
+                className="w-full bg-[var(--cc-primary)] rounded-t-sm transition-all hover:bg-[var(--cc-primary-hover)]"
                 style={{ height: `${Math.max(2, (d.tokens / maxTokensDay) * 100)}%` }}
               />
               {/* Tooltip */}
