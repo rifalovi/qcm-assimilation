@@ -858,8 +858,8 @@ ${errorsText}
 
           {/* Overlay CTA */}
           <div className="absolute inset-0 flex flex-col items-center justify-center rounded-[1.8rem] p-6 text-center" style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(2px)" }}>
-            <Lock size={40} className="mx-auto mb-3" style={{ color: "var(--cc-text-muted)" }} />
-            <h2 className="text-xl font-bold mb-2" style={{ color: "var(--cc-text)" }}>
+            <Lock size={40} className="mx-auto mb-3" style={{ color: "rgba(255,255,255,0.85)" }} />
+            <h2 className="text-xl font-bold mb-2" style={{ color: "#fff" }}>
               <span className="flex items-center justify-center gap-2">
                 {role === "anonymous"
                   ? score.percent === 100
@@ -870,7 +870,7 @@ ${errorsText}
                   : <><Sparkles size={18} /> Choisissez un Pass pour tout débloquer</>}
               </span>
             </h2>
-            <p className="text-sm mb-6 max-w-md mx-auto" style={{ color: "var(--cc-text-muted)" }}>
+            <p className="text-sm mb-6 max-w-md mx-auto" style={{ color: "rgba(255,255,255,0.78)" }}>
               {role === "anonymous"
                 ? score.percent === 100
                   ? "Tu viens de faire un sans-faute ! Crée un compte pour sauvegarder ce résultat et suivre ta progression."
@@ -894,7 +894,7 @@ ${errorsText}
                   <a href="/pricing" className="cc-btn cc-btn-primary">
                     <Sparkles size={15} /> Choisir un Pass
                   </a>
-                  <a href="/login" className="text-xs transition hover:opacity-80" style={{ color: "var(--cc-text-disabled)" }}>
+                  <a href="/login" className="text-xs transition hover:opacity-80" style={{ color: "rgba(255,255,255,0.6)" }}>
                     J'ai déjà un compte →
                   </a>
                 </div>

@@ -22,10 +22,13 @@ interface Props {
   theme: string;
 }
 
+// Accent violet de l'explication IA (pas de token dédié) — lisible en thème clair et sombre.
+const AI = "#7C3AED";
+
 export default function AiExplanationCard({
   questionId, question, userAnswer, correctAnswer, explanation, choices, theme,
 }: Props) {
-  const { role, isAuthenticated } = useUser();
+  const { isAuthenticated } = useUser();
   const [data, setData] = useState<ExplanationData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,9 +70,7 @@ export default function AiExplanationCard({
       });
 
       if (res.status === 429) {
-        const body = await res.json();
         setShowPaywall(true);
-        setError(`Quota atteint : ${body.used}/${body.quota}`);
         setLoading(false);
         return;
       }
@@ -95,10 +96,17 @@ export default function AiExplanationCard({
 
   if (showSignupCta) {
     return (
-      <div className="mt-3 rounded-2xl border border-blue-400/20 bg-gradient-to-b from-blue-500/10 to-blue-900/10 p-4 text-center">
+      <div
+        className="mt-3 rounded-2xl border p-4 text-center"
+        style={{ borderColor: "color-mix(in srgb, var(--cc-primary) 25%, transparent)", background: "var(--cc-primary-soft)" }}
+      >
         <p className="text-sm font-bold mb-1" style={{ color: "var(--cc-text)" }}>Vos 3 explications gratuites sont utilisées</p>
-        <p className="text-xs mb-3" style={{ color: "var(--cc-text-muted)" }}>Créez un compte gratuit pour obtenir 10 explications IA par jour.</p>
-        <a href="/register" className="inline-block rounded-xl bg-blue-600 px-5 py-2 text-sm font-bold text-white transition hover:bg-blue-500">
+        <p className="text-xs mb-3" style={{ color: "var(--cc-text-muted)" }}>Créez un compte gratuit pour obtenir 10 explications IA (recharge tous les 30 jours).</p>
+        <a
+          href="/register"
+          className="inline-block rounded-xl px-5 py-2 text-sm font-bold transition hover:opacity-90"
+          style={{ background: "var(--cc-primary)", color: "#fff" }}
+        >
           Créer un compte gratuit
         </a>
       </div>
@@ -109,7 +117,12 @@ export default function AiExplanationCard({
     return (
       <button
         onClick={fetchExplanation}
-        className="mt-3 flex items-center gap-2 rounded-xl border border-violet-400/20 bg-violet-500/10 px-4 py-2.5 text-sm font-semibold text-violet-200 transition hover:bg-violet-500/20"
+        className="mt-3 flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition hover:opacity-80"
+        style={{
+          borderColor: `color-mix(in srgb, ${AI} 30%, transparent)`,
+          background: `color-mix(in srgb, ${AI} 10%, var(--cc-surface))`,
+          color: AI,
+        }}
       >
         <span>🤖</span>
         Explication IA détaillée
@@ -119,10 +132,16 @@ export default function AiExplanationCard({
 
   if (loading) {
     return (
-      <div className="mt-3 rounded-2xl border border-violet-400/20 bg-violet-500/10 p-4">
+      <div
+        className="mt-3 rounded-2xl border p-4"
+        style={{ borderColor: `color-mix(in srgb, ${AI} 25%, transparent)`, background: `color-mix(in srgb, ${AI} 8%, var(--cc-surface))` }}
+      >
         <div className="flex items-center gap-3">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-violet-400 border-t-transparent" />
-          <span className="text-sm text-violet-200">Analyse en cours...</span>
+          <div
+            className="h-5 w-5 animate-spin rounded-full border-2"
+            style={{ borderColor: AI, borderTopColor: "transparent" }}
+          />
+          <span className="text-sm font-medium" style={{ color: AI }}>Analyse en cours...</span>
         </div>
       </div>
     );
@@ -130,7 +149,10 @@ export default function AiExplanationCard({
 
   if (error && !showPaywall) {
     return (
-      <div className="mt-3 rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-700">
+      <div
+        className="mt-3 rounded-2xl border p-4 text-sm"
+        style={{ borderColor: "color-mix(in srgb, var(--cc-danger) 25%, transparent)", background: "var(--cc-danger-soft)", color: "var(--cc-danger)" }}
+      >
         {error}
       </div>
     );
@@ -138,35 +160,38 @@ export default function AiExplanationCard({
 
   if (!data) return null;
 
+  const block = (label: string, tone: string, text: string, emphasis = false) => (
+    <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
+      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: tone }}>{label}</p>
+      <p
+        className={`text-sm leading-relaxed text-justify${emphasis ? " font-semibold" : ""}`}
+        style={{ color: "var(--cc-text)" }}
+      >
+        {text}
+      </p>
+    </div>
+  );
+
   return (
-    <div className="mt-3 rounded-2xl border border-violet-400/20 bg-gradient-to-b from-violet-500/10 to-violet-900/10 p-4 space-y-3">
+    <div
+      className="mt-3 rounded-2xl border p-4 space-y-3"
+      style={{ borderColor: `color-mix(in srgb, ${AI} 25%, transparent)`, background: `color-mix(in srgb, ${AI} 7%, var(--cc-surface))` }}
+    >
       <div className="flex items-center gap-2 mb-2">
         <span className="text-lg">🤖</span>
-        <span className="text-sm font-bold text-violet-200">Explication IA</span>
+        <span className="text-sm font-bold" style={{ color: AI }}>Explication IA</span>
       </div>
 
-      <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-        <p className="text-xs font-bold text-blue-300 uppercase tracking-wider mb-1">Explication simple</p>
-        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.simple_explanation}</p>
-      </div>
+      {block("Explication simple", "var(--cc-info)", data.simple_explanation)}
+      {block("Pourquoi c'est faux", "var(--cc-danger)", data.why_wrong)}
+      {block("Exemple concret", "var(--cc-success)", data.example)}
+      {block("Piège à éviter", "var(--cc-warning)", data.trap)}
 
-      <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-        <p className="text-xs font-bold text-red-300 uppercase tracking-wider mb-1">Pourquoi c'est faux</p>
-        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.why_wrong}</p>
-      </div>
-
-      <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-        <p className="text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Exemple concret</p>
-        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.example}</p>
-      </div>
-
-      <div className="rounded-xl border p-3" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-        <p className="text-xs font-bold text-amber-300 uppercase tracking-wider mb-1">Piège à éviter</p>
-        <p className="text-sm leading-relaxed text-justify" style={{ color: "var(--cc-text)" }}>{data.trap}</p>
-      </div>
-
-      <div className="rounded-xl border border-violet-400/20 bg-violet-500/10 p-3">
-        <p className="text-xs font-bold text-violet-300 uppercase tracking-wider mb-1">À retenir</p>
+      <div
+        className="rounded-xl border p-3"
+        style={{ borderColor: `color-mix(in srgb, ${AI} 25%, transparent)`, background: `color-mix(in srgb, ${AI} 12%, var(--cc-surface))` }}
+      >
+        <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: AI }}>À retenir</p>
         <p className="text-sm font-semibold leading-relaxed" style={{ color: "var(--cc-text)" }}>{data.remember}</p>
       </div>
     </div>

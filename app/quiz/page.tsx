@@ -400,13 +400,14 @@ function selectAnswer(choice: ChoiceKey) {
     });
   }
 
-  if (mode === "exam") {
-    // Examen : avance immédiatement, pas de correction affichée
-    setRemaining(30);
+  // Examen OU anonyme : avance sans afficher la bonne réponse.
+  // (la correction est réservée aux comptes connectés → incite à l'inscription)
+  if (mode === "exam" || role === "anonymous") {
+    setRemaining(mode === "exam" ? 30 : 20);
     if (idx < questions.length - 1) setIdx((i) => i + 1);
     else submit();
   } else {
-    // Entraînement : affiche la correction 1,5 s puis avance
+    // Entraînement (connecté) : affiche la correction 4 s puis avance
     setLastChoice(choice);
     setShowCorrection(true);
     if (choice === current.answer) {
@@ -417,7 +418,7 @@ function selectAnswer(choice: ChoiceKey) {
     // ?freeze=1 : maintient la correction affichée indéfiniment (démo / screenshot)
     const freezeMode = new URLSearchParams(window.location.search).get("freeze") === "1";
     if (!freezeMode) {
-      correctionTimerRef.current = window.setTimeout(advanceAfterCorrection, 1500);
+      correctionTimerRef.current = window.setTimeout(advanceAfterCorrection, 4000);
     }
   }
 }
