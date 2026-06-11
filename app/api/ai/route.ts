@@ -96,14 +96,37 @@ export async function POST(req: NextRequest) {
         .rpc(rpcName, { p_user_id: user.id })
 
       if (creditError) {
-        // Erreur RPC : log mais on laisse passer (best-effort, évite de bloquer l'utilisateur)
-        console.warn(`[ai/${mode}] Erreur RPC ${rpcName}:`, creditError)
-      } else if (creditResult && creditResult.success === false) {
+        // Fail-closed : en cas d'erreur RPC, on REFUSE (pas d'IA gratuite par défaut)
+        console.error(`[ai/${mode}] Erreur RPC ${rpcName}:`, creditError)
+        return NextResponse.json({ error: 'quota_check_failed' }, { status: 503 })
+      }
+      if (creditResult && creditResult.success === false) {
         return NextResponse.json({
           error: 'quota_exceeded',
           reason: creditResult.reason as string,
+          recharge_at: (creditResult.recharge_at as string | null) ?? null,
           mode,
           role,
+        }, { status: 429 })
+      }
+    } else if (!user) {
+      // Anonyme : gate serveur par IP/jour (anti-abus + coût OpenAI).
+      // Le quota anonyme provient de la même source unique (ACCESS_QUOTAS).
+      const anonLimit = getQuotaForRole('anonymous', mode)
+      const { data: anonResult, error: anonError } = await supabase
+        .rpc('consume_anon_ai_credit', { p_ip: ip, p_limit: anonLimit })
+
+      if (anonError) {
+        // Fail-closed également pour l'anonyme
+        console.error(`[ai/${mode}] Erreur RPC consume_anon_ai_credit:`, anonError)
+        return NextResponse.json({ error: 'quota_check_failed' }, { status: 503 })
+      }
+      if (anonResult && anonResult.success === false) {
+        return NextResponse.json({
+          error: 'quota_exceeded',
+          reason: 'anon_limit',
+          mode,
+          role: 'anonymous',
         }, { status: 429 })
       }
     }

@@ -14,10 +14,10 @@ export default function AiPaywall({ mode }: Props) {
     <div className="mt-4 rounded-[1.6rem] border border-amber-400/25 bg-gradient-to-br from-amber-500/12 via-orange-500/10 to-amber-500/12 p-5 shadow-[0_18px_45px_rgba(2,8,23,0.28)]">
       <div className="text-center">
         <p className="text-lg font-extrabold mb-2" style={{ color: "var(--cc-text)" }}>
-          Vous avez utilisé vos {label} aujourd'hui
+          Vous avez utilisé tous vos {label} gratuits
         </p>
         <p className="text-sm mb-5" style={{ color: "var(--cc-text-muted)" }}>
-          Les membres Premium ont accès à :
+          Votre quota gratuit se recharge dans 30 jours. Pour continuer sans attendre, les membres Premium ont accès à :
         </p>
 
         <div className="space-y-2.5 text-left max-w-sm mx-auto mb-6">
