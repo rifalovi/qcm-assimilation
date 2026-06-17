@@ -8,6 +8,7 @@ import { validateContent } from '@/lib/contentSafety'
 import ShareButton from '@/components/ShareButton'
 import MediaInput from '@/components/community/MediaInput'
 import MediaDisplay, { renderTextWithLinks } from '@/components/community/MediaDisplay'
+import Spinner from '@/components/Spinner'
 
 type Post = {
   id: string; user_id: string; title: string; content: string
@@ -161,7 +162,7 @@ export default function ForumPostPage() {
     setSubmitting(false)
   }
 
-  if (loading) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</p></main>
+  if (loading) return <main className="max-w-4xl mx-auto px-4 py-16"><Spinner /></main>
   if (!post) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Discussion introuvable.</p></main>
 
   return (

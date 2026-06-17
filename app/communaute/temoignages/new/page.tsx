@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import NameGuard from '@/components/NameGuard'
 import { ArrowLeft, ArrowRight, Star, X, Check } from 'lucide-react'
+import Spinner from '@/components/Spinner'
 
 type TestimonyType = 'test_civique' | 'entretien_naturalisation'
 
@@ -140,7 +141,7 @@ export default function NewTestimonyPage() {
     if (!error) setSubmitted(true)
   }
 
-  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</p></main>
+  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16"><Spinner /></main>
 
   if (submitted) return (
     <main className="max-w-2xl mx-auto px-4 py-16 text-center">

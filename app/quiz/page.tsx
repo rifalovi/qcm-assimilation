@@ -18,6 +18,7 @@ import Card from "../../components/Card";
 import Button from "../../components/Button";
 import Alert from "../../components/Alert";
 import ProgressBar from "../../components/ProgressBar";
+import Spinner from "../../components/Spinner";
 import { GraduationCap, Sparkles } from "lucide-react";
 
 
@@ -301,19 +302,6 @@ useEffect(() => {
     [answers]
   );
 
-  const result = useMemo(() => {
-    if (!questions.length) return null;
-    return scoreQuiz({ questions, answers });
-  }, [questions, answers]);
-
-  const score = useMemo(() => {
-    if (!result) return null;
-    const { correct, total } = result;
-    const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
-    const passed = correct >= 32;
-    return { correct, total, percent, passed };
-  }, [result]);
-
   const minToSubmit = Math.ceil(questions.length * 0.8);
   const canSubmit = answeredCount >= minToSubmit;
 
@@ -418,7 +406,7 @@ function selectAnswer(choice: ChoiceKey) {
     // ?freeze=1 : maintient la correction affichée indéfiniment (démo / screenshot)
     const freezeMode = new URLSearchParams(window.location.search).get("freeze") === "1";
     if (!freezeMode) {
-      correctionTimerRef.current = window.setTimeout(advanceAfterCorrection, 4000);
+      correctionTimerRef.current = window.setTimeout(advanceAfterCorrection, 5000);
     }
   }
 }
@@ -526,13 +514,7 @@ function selectAnswer(choice: ChoiceKey) {
   }
 
   if (!questions.length || !current || !meta) {
-    return (
-      <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8" style={{ color: "var(--cc-text)" }}>
-        <div className="rounded-xl border p-6" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)" }}>
-          Chargement…
-        </div>
-      </main>
-    );
+    return <Spinner fullScreen label={mode === "exam" ? "Préparation de l'examen blanc…" : "Préparation de votre test…"} />;
   }
 
   const progressPct = questions.length
@@ -829,16 +811,6 @@ function selectAnswer(choice: ChoiceKey) {
             <Alert variant="warning" className="mt-4" noIcon>
               <span className="text-sm">Validation possible à partir de <strong>{minToSubmit}</strong> réponses — encore {minToSubmit - answeredCount} à compléter.</span>
             </Alert>
-          )}
-
-          {score && (
-            <div className="mt-5 rounded-xl border px-4 py-3 text-sm" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}>
-              Score provisoire :{" "}
-              <span className="font-semibold" style={{ color: "var(--cc-text)" }}>
-                {score.correct}/{score.total}
-              </span>{" "}
-              — {score.percent}%
-            </div>
           )}
         </Card>
       </div>

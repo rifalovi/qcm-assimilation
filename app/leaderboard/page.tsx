@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { loadLeaderboard } from "../../src/lib/saveResult";
 import Button from "../../components/Button";
+import Spinner from "@/components/Spinner";
 
 type Entry = {
   pseudo: string;
@@ -83,7 +84,7 @@ export default function LeaderboardPage() {
 
         <section className="overflow-hidden rounded-[1.8rem] border shadow-md" style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface)" }}>
           {loading ? (
-            <div className="p-6 text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</div>
+            <Spinner label="Chargement du classement…" />
           ) : data.length === 0 ? (
             <div className="p-6 text-sm" style={{ color: "var(--cc-text-muted)" }}>
               Aucun résultat validé pour le moment.

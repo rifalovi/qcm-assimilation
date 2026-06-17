@@ -243,7 +243,38 @@ export default function FloatingChat() {
               className="flex-1 overflow-y-auto px-3 py-3 space-y-3 [scrollbar-width:none]"
               style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}
             >
-              {messages.length === 0 && !loading && (
+              {/* Anonyme : le chat nécessite un compte → invitation à s'inscrire */}
+              {!isAuthenticated && (
+                <div className="flex flex-col items-center justify-center h-full text-center px-4">
+                  <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full" style={{ background: "var(--cc-primary-soft)" }}>
+                    <Image src="/cap-citoyen.png" alt="" width={36} height={36} className="rounded-full" />
+                  </div>
+                  <p className="text-sm font-bold mb-1" style={{ color: "var(--cc-text)" }}>
+                    Discutez avec l'assistant Cap Citoyen
+                  </p>
+                  <p className="text-xs leading-relaxed mb-4 max-w-[260px]" style={{ color: "var(--cc-text-muted)" }}>
+                    Le chat est disponible une fois votre compte créé. Inscrivez-vous gratuitement pour poser vos questions sur la naturalisation et l'examen civique.
+                  </p>
+                  <div className="flex flex-col gap-2 w-full max-w-[240px]">
+                    <a
+                      href="/register"
+                      className="block w-full rounded-xl px-4 py-2.5 text-sm font-bold transition hover:opacity-90"
+                      style={{ background: "var(--cc-primary)", color: "#fff" }}
+                    >
+                      Créer un compte gratuit
+                    </a>
+                    <a
+                      href="/login"
+                      className="block w-full rounded-xl border px-4 py-2 text-xs transition hover:opacity-80"
+                      style={{ borderColor: "var(--cc-border)", background: "var(--cc-surface-alt)", color: "var(--cc-text-muted)" }}
+                    >
+                      J'ai déjà un compte
+                    </a>
+                  </div>
+                </div>
+              )}
+
+              {isAuthenticated && messages.length === 0 && !loading && (
                 <div className="flex flex-col items-center justify-center h-full text-center px-4">
                   <p className="text-sm font-semibold mb-1" style={{ color: "var(--cc-text)" }}>
                     Bonjour ! Comment puis-je vous aider ?
@@ -348,7 +379,8 @@ export default function FloatingChat() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Footer input — flex-none, collé au clavier */}
+            {/* Footer input — flex-none, collé au clavier. Masqué pour l'anonyme. */}
+            {isAuthenticated && (
             <form
               onSubmit={send}
               className="flex flex-none items-end gap-2 border-t px-3 py-2.5"
@@ -376,6 +408,7 @@ export default function FloatingChat() {
                 </svg>
               </button>
             </form>
+            )}
           </div>
         </>
       )}

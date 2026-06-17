@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import MFASetup from "../../src/components/MFASetup";
 import { VoiceSelector } from "@/components/VoiceSelector";
 import ProfileNameForm from "@/components/ProfileNameForm";
+import Spinner from "@/components/Spinner";
 
 type Role = "anonymous" | "freemium" | "premium" | "elite";
 
@@ -220,9 +221,7 @@ export default function AccountPage() {
   if (loading) {
     return (
       <main className="mx-auto flex min-h-[calc(100vh-120px)] max-w-5xl items-center justify-center px-4 py-8">
-        <div className="w-full rounded-[2rem] p-8 text-center" style={{ border: "1px solid var(--cc-border)", background: "var(--cc-surface-raised)", color: "var(--cc-text-muted)" }}>
-          Chargement...
-        </div>
+        <Spinner label="Chargement de votre compte…" />
       </main>
     );
   }

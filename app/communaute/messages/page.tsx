@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { ArrowLeft, Plus, Search } from 'lucide-react'
 import type { RealtimePostgresInsertPayload } from '@supabase/supabase-js'
+import Spinner from '@/components/Spinner'
 
 type Conversation = {
   other_user_id: string
@@ -199,7 +200,7 @@ export default function MessagesPage() {
     return () => clearTimeout(timer)
   }, [searchQuery, currentUserId, supabase])
 
-  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</p></main>
+  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16"><Spinner /></main>
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8">

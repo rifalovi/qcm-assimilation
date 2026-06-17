@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { ArrowLeft } from 'lucide-react'
+import Spinner from '@/components/Spinner'
 
 export default function NewForumPostPage() {
   const router = useRouter()
@@ -37,7 +38,7 @@ export default function NewForumPostPage() {
     if (!error && data) router.push(`/communaute/forum/${data.id}`)
   }
 
-  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16 text-center"><p className="text-sm" style={{ color: "var(--cc-text-muted)" }}>Chargement…</p></main>
+  if (loading) return <main className="max-w-2xl mx-auto px-4 py-16"><Spinner /></main>
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8">
