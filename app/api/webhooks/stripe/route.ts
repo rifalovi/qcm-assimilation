@@ -53,7 +53,8 @@ export async function POST(req: NextRequest) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session
     const userId = session.client_reference_id
-    const plan = session.metadata?.plan ?? "premium"
+    // Whitelist du plan : seules les valeurs connues sont acceptées (metadata non fiable)
+    const plan = session.metadata?.plan === "elite" ? "elite" : "premium"
 
     console.log(`[webhook] session completed - mode:${session.mode} plan:${plan} userId:${userId}`)
 

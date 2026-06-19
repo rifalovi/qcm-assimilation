@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import webpush from 'web-push'
@@ -26,11 +27,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'VAPID non configuré' }, { status: 500 })
     }
 
+    // Authentification : seul un utilisateur connecté peut déclencher un envoi
+    // (empêche l'usage de l'endpoint comme relais de push ouvert).
     const cookieStore = await cookies()
-    const supabase = createServerClient(
+    const authClient = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      { cookies: { getAll() { return cookieStore.getAll() }, setAll() {} } }
+    )
+    const { data: { user } } = await authClient.auth.getUser()
+    if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+
+    // Client admin (service_role) pour lire les abonnements et envoyer.
+    const supabase = createAdminClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      { cookies: { getAll() { return cookieStore.getAll() }, setAll() {} } }
+      { auth: { persistSession: false, autoRefreshToken: false } }
     )
 
     const { user_id, title, body, url, tag } = await req.json()
