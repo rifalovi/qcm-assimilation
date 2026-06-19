@@ -37,14 +37,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Signature manquante" }, { status: 401 })
   }
 
-  if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    console.error('[Stripe] STRIPE_WEBHOOK_SECRET not configured')
+  // Cet endpoint (abonnements premium/elite) est DISTINCT de /api/stripe/webhook
+  // (Pass). Chaque endpoint Stripe a son propre secret de signature → on utilise
+  // une variable dédiée, avec repli sur STRIPE_WEBHOOK_SECRET pour compat.
+  const webhookSecret =
+    process.env.STRIPE_WEBHOOK_SECRET_SUBSCRIPTIONS ?? process.env.STRIPE_WEBHOOK_SECRET
+  if (!webhookSecret) {
+    console.error('[Stripe] STRIPE_WEBHOOK_SECRET_SUBSCRIPTIONS / STRIPE_WEBHOOK_SECRET non configuré')
     return NextResponse.json({ error: "Webhook mal configuré" }, { status: 500 })
   }
 
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET)
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
   } catch (err) {
     console.error('[Stripe] Signature verification failed:', err)
     return NextResponse.json({ error: "Signature invalide" }, { status: 400 })
