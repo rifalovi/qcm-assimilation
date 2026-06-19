@@ -30,7 +30,9 @@ function CallbackHandler() {
         }
         if (type === 'recovery') { router.push('/reset-password'); return }
         if (data.session?.user) {
-          await supabase.from('profiles').update({ role: 'freemium' }).eq('id', data.session.user.id)
+          // Promotion anonymous → freemium via RPC sécurisée (le client ne peut
+          // plus écrire profiles.role directement — verrou colonnes).
+          await supabase.rpc('promote_self_to_freemium')
         }
         router.push('/account')
         return

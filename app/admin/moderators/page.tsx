@@ -46,7 +46,11 @@ export default function ModeratorsPage() {
 
   async function promoteToModerator(user: Profile) {
     setProcessing(user.id)
-    await supabase.from('profiles').update({ role: 'moderator' }).eq('id', user.id)
+    await fetch('/api/admin/set-role', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: user.id, role: 'moderator' }),
+    })
     setModerators((m) => [...m, { ...user, role: 'moderator' }])
     setSearchResults((r) => r.filter((u) => u.id !== user.id))
     setSearch('')
@@ -55,7 +59,11 @@ export default function ModeratorsPage() {
 
   async function removeModerator(userId: string) {
     setProcessing(userId)
-    await supabase.from('profiles').update({ role: 'premium' }).eq('id', userId)
+    await fetch('/api/admin/set-role', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, role: 'premium' }),
+    })
     setModerators((m) => m.filter((mod) => mod.id !== userId))
     setProcessing(null)
   }

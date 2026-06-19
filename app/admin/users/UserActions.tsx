@@ -53,8 +53,12 @@ export default function UserActions({ users, bannedIds, currentRole }: Props) {
 
   async function changeRole(userId: string, newRole: string) {
     setLoading(userId)
-    const { error } = await supabase.from('profiles').update({ role: newRole }).eq('id', userId)
-    if (!error) setRoles((r) => ({ ...r, [userId]: newRole }))
+    const res = await fetch('/api/admin/set-role', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, role: newRole }),
+    })
+    if (res.ok) setRoles((r) => ({ ...r, [userId]: newRole }))
     setLoading(null)
   }
 
