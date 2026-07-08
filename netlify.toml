@@ -5,6 +5,11 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# « La question de la semaine » — lundi ~9h (Europe/Paris).
+# NB : Netlify planifie en UTC. 07:02 UTC = 09:02 Paris en été (CEST) / 08:02 en hiver (CET).
+[functions."weekly-question"]
+  schedule = "2 7 * * 1"
+
 [[headers]]
   for = "/*"
   [headers.values]
